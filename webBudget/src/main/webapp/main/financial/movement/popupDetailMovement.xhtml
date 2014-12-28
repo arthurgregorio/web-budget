@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:ui="http://java.sun.com/jsf/facelets"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:pe="http://primefaces.org/ui/extensions"
+          id="detailMovementPopup" widgetVar="popupDetailMovement" 
+          header="#{i18n['movement.dialog.details'].concat(': ')
+                    .concat(movementBean.selectedMovement.code)}"
+          resizable="false" showEffect="fade" modal="true" closable="false">
+
+    <script type="text/javascript">
+        PrimeFaces.widget.Dialog.prototype.applyFocus = function() {
+            jQuery('#closeButton').focus();
+        };
+    </script>
+
+    <div style="width: 400px">
+
+        <div class="attibute-row">
+            <div class="attibute-cell">
+                <h:outputText styleClass="attibute-label"
+                              value="#{i18n['movement.dialog.value']}: "/>
+                <br/>
+                <h:outputText value="R$ #{movementBean.selectedMovement.value}" />
+            </div>
+            <div class="attibute-cell">
+                <h:outputText styleClass="attibute-label"
+                              value="#{i18n['movement.dialog.due-date']}: "/>
+                <br/>
+                <h:outputText value="#{movementBean.selectedMovement.dueDate}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </div>
+        </div>
+
+        <div class="attibute-row">
+            <div class="attibute-cell">
+                <h:outputText styleClass="attibute-label"
+                              value="#{i18n['movement.dialog.cost-center']}: "/>
+                <br/>
+                <h:outputText value="#{movementBean.selectedMovement.movementClass.costCenter.name}" />
+            </div>
+            <div class="attibute-cell">
+                <h:outputText styleClass="attibute-label"
+                              value="#{i18n['movement.dialog.movement-class']}: "/>
+                <br/>
+                <h:outputText value="#{movementBean.selectedMovement.movementClass.name}" />
+            </div>
+        </div>
+
+        <div class="attibute-row">
+            <h:outputText styleClass="attibute-label"
+                          value="#{i18n['movement.dialog.description']}: "/>
+            <br/>
+            <p:inputTextarea readonly="true" 
+                             style="width: 388px; height: 100px"
+                             value="#{movementBean.selectedMovement.description}" />
+        </div>
+        <h:panelGroup layout="block" 
+                      rendered="#{movementBean.selectedMovement.payment ne null}">
+
+            <div class="attibute-row">
+                <div class="attibute-cell">
+                    <h:outputText styleClass="attibute-label"
+                                  value="#{i18n['movement.dialog.payment-date']}: "/>
+                    <br/>
+                    <h:outputText value="#{movementBean.selectedMovement.payment.paymentDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </div>
+                <div class="attibute-cell">
+                    <h:outputText styleClass="attibute-label"
+                                  value="#{i18n['movement.dialog.payment-code']}: "/>
+                    <br/>
+                    <h:outputText value="#{movementBean.selectedMovement.payment.code}"/>
+                </div>
+            </div>
+
+            <div class="attibute-row">
+                <div class="attibute-cell">
+                    <h:outputText styleClass="attibute-label"
+                                  value="#{i18n['movement.dialog.payment-method']}: "/>
+                    <br/>
+                    <h:outputText value="#{i18n[movementBean.selectedMovement.payment.paymentMethodType]}"/>
+                </div>
+                <div class="attibute-cell">
+                    <h:outputText styleClass="attibute-label"
+                                  value="#{i18n['movement.dialog.payment-source']}: "/>
+                    <br/>
+                    <h:outputText value="#{movementBean.selectedMovement.payment.wallet.friendlyName}"
+                                  rendered="#{movementBean.selectedMovement.payment.paymentMethodType eq 'IN_CASH'}"/>
+                    <h:outputText value="#{movementBean.selectedMovement.payment.card.readableName}"
+                                  rendered="#{movementBean.selectedMovement.payment.paymentMethodType ne 'IN_CASH'}"/>
+                </div>
+            </div>
+        </h:panelGroup>
+        <div class="control-row">
+            <p:commandButton id="closeButton"
+                             immediate="true"
+                             styleClass="red-button"
+                             value="#{i18n['form.close']}"
+                             actionListener="#{movementBean.closeDetailsPopup()}"/>
+        </div>
+    </div>
+</p:dialog>

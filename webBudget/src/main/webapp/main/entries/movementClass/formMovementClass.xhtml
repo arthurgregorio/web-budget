@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/template/default.xhtml">
+
+    <ui:define name="head">
+        <f:event type="preRenderView" 
+                 listener="#{movementClassBean.initializeForm(param.movementClassId)}" />
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="movementClassForm" prependId="false">
+            
+            <p:messages id="messages" closable="true" globalOnly="true"/>
+            <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+            
+            <div class="form-cell">
+                <p:selectBooleanCheckbox id="inBlocked" 
+                                         value="#{movementClassBean.movementClass.blocked}"
+                                         itemLabel="#{i18n['movement-class.form.blocked']}"/>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inName" 
+                               value="#{i18n['movement-class.form.name']}: "/>
+                <br/>
+                <p:inputText id="inName" 
+                             style="width: 320px"
+                             value="#{movementClassBean.movementClass.name}" 
+                             title="#{component.valid ? '' : movementClassBean.getErrorMessage(component.clientId)}"/>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inCostCenter" 
+                               value="#{i18n['movement-class.form.cost-center']}: "/>
+                <br/>
+                <p:selectOneMenu id="inCostCenter" 
+                                 style="width: 328px"
+                                 converter="omnifaces.SelectItemsConverter"
+                                 value="#{movementClassBean.movementClass.costCenter}" >
+                    <f:selectItem itemValue="#{null}"
+                                  noSelectionOption="true"
+                                  itemLabel="#{i18n['movement-class.form.select-one']}" />
+                    <f:selectItems var="costCenter" 
+                                   itemValue="#{costCenter}"
+                                   itemLabel="#{costCenter.name}"
+                                   value="#{movementClassBean.costCenters}" /> 
+                </p:selectOneMenu>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inBudget" 
+                               value="#{i18n['movement-class.form.budget']}: "/>
+                <br/>
+                <pe:inputNumber id="inBudget" 
+                                decimalPlaces="2" 
+                                decimalSeparator="," 
+                                thousandSeparator="." 
+                                style="text-align: right; width: 100px"
+                                value="#{movementClassBean.movementClass.budget}"
+                                title="#{component.valid ? '' : movementClassBean.getErrorMessage(component.clientId)}">
+                    <pe:keyFilter regEx="/[0-9_,]/i"/>
+                    <f:converter converterId="javax.faces.BigDecimal" />
+                </pe:inputNumber>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inMovementClassType" 
+                               value="#{i18n['movement-class.form.movement-class-type']}: "/>
+                <p:selectOneRadio id="inMovementClassType" 
+                                  columns="1"
+                                  layout="grid" 
+                                  converter="omnifaces.GenericEnumConverter"
+                                  value="#{movementClassBean.movementClass.movementClassType}">
+                    <f:selectItems var="movementClassType"
+                                   itemValue="#{movementClassType}"
+                                   itemLabel="#{i18n[movementClassType]}"
+                                   value="#{movementClassBean.availableMovementsTypes}"/>
+                </p:selectOneRadio>
+            </div>
+            <div class="form-controls-box">
+                <p:commandButton update="movementClassForm"
+                                 process="movementClassForm"
+                                 styleClass="green-button"
+                                 value="#{i18n['form.save']}"
+                                 action="#{movementClassBean.doSave()}"
+                                 rendered="#{movementClassBean.viewState eq 'ADD'}"/>
+                <p:commandButton update="movementClassForm"
+                                 process="movementClassForm"
+                                 styleClass="green-button"
+                                 value="#{i18n['form.update']}"
+                                 action="#{movementClassBean.doUpdate()}"
+                                 rendered="#{movementClassBean.viewState eq 'EDIT'}"/>
+                <p:spacer width="10"/>
+                <p:commandButton immediate="true"
+                                 styleClass="red-button"
+                                 value="#{i18n['form.back']}"
+                                 action="#{movementClassBean.doCancel()}"/>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

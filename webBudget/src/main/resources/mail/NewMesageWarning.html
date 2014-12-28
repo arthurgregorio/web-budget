@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:remove="all">Template de aviso de nova mensagem</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <p>
+            <img th:src="@{${logo}}" width="150" height="50" />
+        </p>
+        <p th:text="${greeting}">
+            Mensagem de saudacao
+        </p>
+        <p th:text="${message}">
+            A mensagem
+        </p>
+        <a th:href='@{${appUrl}}' th:text="${urlDescription}"></a>
+    </body>
+</html>

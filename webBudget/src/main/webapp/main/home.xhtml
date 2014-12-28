@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:of="http://omnifaces.org/functions"
+                template="/template/default.xhtml">
+
+    <ui:define name="head">
+        <f:event type="preRenderView" listener="#{dashboardBean.initialize()}"/>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <p:messages id="messages" closable="true" globalOnly="true" />
+
+        <div class="home-wrapper">
+            <div class="graphs-box">
+                <p:carousel numVisible="1" 
+                            effect="easeInStrong" 
+                            headerText="#{i18n['home.graphs']}"
+                            itemStyle="height:290px;width:580px;">
+                    <p:tab> 
+                        <h:panelGroup layout="block">
+                            <p:pieChart diameter="240"
+                                        shadow="false"
+                                        legendCols="3"
+                                        legendRows="10"
+                                        legendPosition="e"
+                                        showDataLabels="true" 
+                                        style="height: 300px;"
+                                        value="#{dashboardBean.consumeModel}"/>
+                        </h:panelGroup>
+                    </p:tab>
+                    <p:tab>
+                        <p:pieChart diameter="240"
+                                    shadow="false"
+                                    legendCols="3"
+                                    legendRows="10"
+                                    legendPosition="e"
+                                    showDataLabels="true"
+                                    style="height: 300px"
+                                    value="#{dashboardBean.revenueModel}"/>
+                    </p:tab>
+                </p:carousel>
+            </div>
+            <div class="messages-box">
+                <p:fieldset legend="#{i18n['home.private-messages']}" style="height: 100%">
+                    <div style="margin: 10px 0 10px 0">
+                        <h:form id="messagesForm" prependId="false">
+                            <p:dataTable id="messagesList" 
+                                         rows="8"
+                                         paginator="true" 
+                                         var="userMessage"
+                                         selectionMode="single"
+                                         paginatorPosition="bottom" 
+                                         rowKey="#{userMessage.id}"
+                                         paginatorAlwaysVisible="false"
+                                         value="#{dashboardBean.userPrivateMessages}"
+                                         selection="#{dashboardBean.selectedPrivateMessage}"
+                                         emptyMessage="#{i18n['home.private-message.list.no-messages']}"
+                                         rowStyleClass="#{userMessage.wasRead eq false ? 'unread-message' : ''}">
+
+                                <p:ajax event="rowSelect" 
+                                        listener="#{dashboardBean.displayMessage()}" />
+
+                                <p:column headerText="#{i18n['home.private-message.list.title']}">
+                                    #{userMessage.privateMessage.title}
+                                </p:column>
+                                <p:column width="40%" 
+                                          style="text-align: center" 
+                                          headerText="#{i18n['home.private-message.list.received']}">
+                                    <h:outputText value="#{userMessage.privateMessage.inclusion}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+                </p:fieldset>
+            </div>
+            <div class="movements-box">
+                <p:fieldset legend="#{i18n['home.movements']}">
+                    <h:panelGroup layout="block" 
+                                  styleClass="hint-box"
+                                  rendered="#{dashboardBean.movements eq null or empty dashboardBean.movements}">
+                        <h:outputText value="#{i18n['home.movements.list.no-movements']}" />
+                    </h:panelGroup>
+                    <div style="margin: 10px 0 10px 0">
+                        <p:dataTable id="movementsList" 
+                                     rows="6"
+                                     var="movement"
+                                     paginator="true" 
+                                     paginatorPosition="bottom"
+                                     value="#{dashboardBean.movements}"
+                                     paginatorAlwaysVisible="false"
+                                     rendered="#{dashboardBean.movements.size() gt 0}"
+                                     rowStyleClass="#{movement.overdue eq true ? 'overdue-movement' : ''}">
+
+                            <p:column width="10%" 
+                                      style="text-align: center" 
+                                      headerText="#{i18n['home.movements.list.code']}">
+                                #{movement.code}
+                            </p:column>
+                            <p:column headerText="#{i18n['home.movements.list.description']}">
+                                #{of:abbreviate(movement.description,50)}
+                            </p:column>
+                            <p:column width="15%"
+                                      style="text-align: center" 
+                                      headerText="#{i18n['home.movements.list.value']}">
+                                <h:outputText value="R$ #{movement.value}" />
+                            </p:column>
+                            <p:column width="15%"
+                                      style="text-align: center" 
+                                      headerText="#{i18n['home.movements.list.due-date']}">
+                                <h:outputText value="#{movement.dueDate}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column width="10%" 
+                                      style="text-align: center"
+                                      headerText="#{i18n['list.action']}">
+                                <p:commandButton icon="icon-pay"
+                                                 title="#{i18n['list.label.pay']}"
+                                                 rendered="#{movement.payable eq true}"
+                                                 action="#{dashboardBean.changeToPay(movement.id)}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </p:fieldset>
+            </div>
+        </div>
+    </ui:define>
+    
+    <ui:define name="popups">
+        <ui:include src="popupDisplayPrivateMessage.xhtml" />
+    </ui:define>
+</ui:composition>

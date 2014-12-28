@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+    
+    <!-- habilita @secured --> 
+    <security:global-method-security pre-post-annotations="enabled"/>
+
+    <!-- regras de seguranca --> 
+    <security:http pattern="/favicon.ico*" security="none"/>
+    <security:http pattern="/javax.faces.resource/**" security="none"/>
+    
+    <security:http auto-config="true" use-expressions="true" access-denied-page="/denied.xhtml">
+
+        <!-- url's default -->        
+        <security:form-login login-page="/home.xhtml" />
+        <security:intercept-url pattern="/home.xhtml" access="permitAll" />
+        
+        <!-- url's dos forms -->
+        <security:intercept-url pattern="/main/entries/cards/**" access="hasRole('card.authority.view')" />
+        <security:intercept-url pattern="/main/entries/wallets/**" access="hasRole('wallet.authority.view')" />
+        <security:intercept-url pattern="/main/entries/contacts/**" access="hasRole('contact.authority.view')" />
+        <security:intercept-url pattern="/main/entries/costCenter/**" access="hasRole('cost-center.authority.view')" />
+        <security:intercept-url pattern="/main/entries/movementClass/**" access="hasRole('movement-class.authority.view')" />
+        
+        <security:intercept-url pattern="/main/miscellany/closing/**" access="hasRole('closing.authority.view')" />
+        <security:intercept-url pattern="/main/miscellany/financialPeriod/**" access="hasRole('financial-period.authority.view')" />
+        
+        <security:intercept-url pattern="/main/movements/cardInvoice/**" access="hasRole('card-invoice.authority.view')" />
+        <security:intercept-url pattern="/main/movements/maintenance/**" access="hasRole('movement.authority.view')" />
+        <security:intercept-url pattern="/main/movements/transfer/**" access="hasRole('balance-transfer.authority.view')" />
+        
+        <security:intercept-url pattern="/main/tools/privateMessages/**" access="hasRole('private-message.authority.view')" />
+        <security:intercept-url pattern="/main/tools/users/**" access="hasRole('account.authority.view')" />
+        
+        <!-- mapeamento da url para redirect de logout -->
+        <security:logout logout-url="/main/logout" logout-success-url="/home.xhtml?expired=true" />
+    </security:http>
+</beans>

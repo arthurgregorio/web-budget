@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+    <application>
+        <!-- integracao JSF x Spring para ler as EL expressions -->
+        <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+        
+        <!-- configuracao da locale -->
+        <locale-config>  
+            <default-locale>pt_BR</default-locale>  
+            <supported-locale>pt_BR</supported-locale>
+            <supported-locale>en_US</supported-locale>
+        </locale-config>  
+        
+        <!-- bundle -->
+        <resource-bundle>  
+            <base-name>i18n.messages</base-name>  
+            <var>i18n</var>
+        </resource-bundle>  
+    </application>
+</faces-config>

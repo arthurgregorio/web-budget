@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                template="/template/default.xhtml">
+
+    <ui:define name="head">
+        <f:event type="preRenderView" 
+                 listener="#{movementClassBean.initializeListing()}" />
+    </ui:define>
+
+    <ui:define name="content">
+        
+        <p:messages id="messages" closable="true" globalOnly="true"/>
+        
+        <h:form id="controlsForm" prependId="false">
+            <div class="controls-box">
+                <div class="filter-box">
+                    <div class="filter-cell">
+
+                    </div>
+                </div>
+                <div class="button-box">
+                    <p:commandButton immediate="true"
+                                     styleClass="green-button" 
+                                     value="#{i18n['list.add']}"
+                                     action="#{movementClassBean.changeToAdd()}"/>
+                </div>
+            </div>
+        </h:form>
+
+        <div style="float: left; width: 100%">
+            <p:dataTable id="movementClassesList" 
+                         rows="15"
+                         paginator="true"
+                         var="movementClass"
+                         paginatorPosition="bottom"
+                         paginatorAlwaysVisible="false"
+                         value="#{movementClassBean.movementClasses}"
+                         emptyMessage="#{i18n['movement-class.list.empty']}">
+
+                <p:column width="10%" 
+                          style="text-align: center"
+                          headerText="#{i18n['movement-class.list.blocked']}">
+                    <p:selectBooleanCheckbox disabled="true" value="#{movementClass.blocked}" />
+                </p:column>
+                <p:column headerText="#{i18n['movement-class.list.name']}">
+                    #{movementClass.name}
+                </p:column>
+                <p:column width="20%"
+                          headerText="#{i18n['movement-class.list.cost-center']}">
+                    #{movementClass.costCenter.name}
+                </p:column>
+                <p:column width="15%" 
+                          style="text-align: center"
+                          headerText="#{i18n['movement-class.list.budget']}">
+                    <h:outputText value="R$ #{movementClass.budget}"/>
+                </p:column>
+                <p:column width="15%" 
+                          style="text-align: center"
+                          headerText="#{i18n['list.action']}">
+                    <p:commandButton icon="icon-edit"
+                                     title="#{i18n['list.label.edit']}"
+                                     action="#{movementClassBean.changeToEdit(movementClass.id)}" />
+                    <p:spacer width="10"/>
+                    <p:commandButton icon="icon-delete"
+                                     title="#{i18n['list.label.delete']}"
+                                     actionListener="#{movementClassBean.changeToDelete(movementClass.id)}" />
+                </p:column>
+            </p:dataTable>
+        </div>
+    </ui:define>
+
+    <ui:define name="popups">
+        <ui:include src="popupDeleteMovementClass.xhtml"/>
+    </ui:define>
+</ui:composition>

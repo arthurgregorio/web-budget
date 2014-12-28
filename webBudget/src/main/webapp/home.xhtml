@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="author" content="Arthur Gregório"/>
+        
+        <script type="text/javascript" src="#{resource['js:locale.js']}"></script>
+
+        <title>#{i18n['application.title']}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['images:favicon.ico']}"/>
+        
+        <h:outputStylesheet library="css" name="login.css" />
+        <h:outputStylesheet library="css" name="custom.css" />
+    </h:head>
+    
+    <h:body>
+        <div class="login">
+            
+            <div style="text-align: center; padding-bottom: 30px">
+                <p:graphicImage library="images" name="ui-webbudget.png"/>
+            </div>
+            
+            <h:form id="authenticationForm" prependId="false">
+                 
+                <p:messages id="messages" closable="true" globalOnly="true" />
+                
+                <p:watermark for="inUser"
+                             value="#{i18n['authentication.input.user']}" />
+                <p:inputText id="inUser"
+                             styleClass="input" 
+                             value="#{authenticationBean.user.username}" />
+                
+                <p:watermark for="inPassword" 
+                             value="#{i18n['authentication.input.password']}" />
+                <p:password id="inPassword" 
+                            styleClass="input" 
+                            value="#{authenticationBean.user.password}" />
+                
+                <div style="text-align: center;">
+                    <p:commandButton update="authenticationForm"
+                                     process="authenticationForm"
+                                     action="#{authenticationBean.doLogin()}"
+                                     value="#{i18n['authentication.button.authenticate']}" />
+                </div>
+                
+                <h:panelGroup layout="block"
+                              rendered="#{param.expired eq true}"
+                              style="text-align: center; margin-top: 20px">
+                    <h:outputText style="color: red; font-size: 14px"
+                                  value="#{i18n['authentication.expired']}" />              
+                </h:panelGroup>
+            </h:form>
+        </div>  
+    </h:body>
+</html>
+

@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:of="http://omnifaces.org/functions"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                template="/template/default.xhtml">
+
+    <ui:define name="head">
+        <f:event type="preRenderView" 
+                 listener="#{movementBean.initializeListing()}" />
+    </ui:define>
+
+    <ui:define name="content">
+        
+        <p:messages id="messages" closable="true" globalOnly="true"/>
+
+        <h:form id="controlsForm" prependId="false">
+            <div class="controls-box">
+                <div class="filter-box">
+                    <div class="filter-cell" >
+                        <p:watermark for="inFilter"
+                                     value="#{i18n['movement.filter.types']}"/>
+                        <p:inputText id="inFilter" 
+                                     styleClass="input-filter"
+                                     value="#{movementBean.filter}" />
+                    </div>
+                    <div class="filter-cell checkbox-filter-cell">
+                        <p:selectBooleanCheckbox id="inIsPaid" 
+                                                 value="#{movementBean.filterPaid}"
+                                                 itemLabel="#{i18n['movement.filter.set-paid']}"/>
+                    </div>
+                </div>
+                <div class="button-box">
+                    <p:commandButton styleClass="yellow-button" 
+                                     value="#{i18n['list.filter']}"
+                                     action="#{movementBean.filterList()}"/>
+                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_INSERT}">
+                        <p:spacer width="10" />
+                        <p:commandButton immediate="true"
+                                         styleClass="green-button" 
+                                         value="#{i18n['list.add']}"
+                                         action="#{movementBean.changeToAdd()}"/>
+                    </sec:authorize>
+                </div>
+            </div>
+        </h:form>
+
+        <div style="float: left; width: 100%">
+            <h:form prependId="false">
+                <p:dataTable id="movementsList" 
+                             rows="15"
+                             var="movement"
+                             paginator="true"
+                             selectionMode="single"
+                             rowKey="#{movement.id}"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{movementBean.movements}"
+                             selection="#{movementBean.selectedMovement}"
+                             emptyMessage="#{i18n['movement.list.empty']}">
+
+                    <p:ajax event="rowSelect" 
+                            listener="#{movementBean.displayDetailsPopup()}" />
+
+                    <p:column width="7%" 
+                              style="text-align: center"
+                              headerText="#{i18n['movement.list.direction']}">
+                        <p:graphicImage width="24"
+                                        height="24"
+                                        library="images" 
+                                        name="ui-income.png" 
+                                        title="#{i18n['movement.list.income']}"
+                                        rendered="#{movement.movementDirection eq 'IN'}"/>
+                        <p:graphicImage  width="24"
+                                        height="24"
+                                        library="images" 
+                                        name="ui-outcome.png" 
+                                        title="#{i18n['movement.list.outcome']}"
+                                        rendered="#{movement.movementDirection eq 'OUT'}"/>
+                    </p:column>
+                    <p:column width="8%" 
+                              style="text-align: center"
+                              headerText="#{i18n['movement.list.code']}">
+                        #{movement.code}
+                    </p:column>
+                    <p:column headerText="#{i18n['movement.list.description']}">
+                        #{of:abbreviate(movement.description,50)}
+                    </p:column>
+                    <p:column width="15%"
+                              style="text-align: center" 
+                              headerText="#{i18n['movement.list.movement-state-type']}">
+                        <h:outputText style="color: green; font-weight: bold;"
+                                      value="#{i18n[movement.movementStateType]}"
+                                      rendered="#{movement.movementStateType eq 'PAID'}" />
+                        <h:outputText style="color: red; font-weight: bold;"
+                                      value="#{i18n[movement.movementStateType]}"
+                                      rendered="#{movement.movementStateType eq 'OPEN'}" />
+                        <h:outputText style="color: #0081c2; font-weight: bold;"
+                                      value="#{i18n[movement.movementStateType]}"
+                                      rendered="#{movement.movementStateType eq 'CALCULATED'}" />
+                        <h:outputText style="color: #ed9c28; font-weight: bold;"
+                                      value="#{i18n[movement.movementStateType]}"
+                                      rendered="#{movement.movementStateType eq 'CANCELED'}" />
+                    </p:column>
+                    <p:column width="15%"
+                              style="text-align: center" 
+                              headerText="#{i18n['movement.list.value']}">
+                        <h:outputText value="R$ #{movement.value}" />
+                    </p:column>
+                    <p:column width="10%"
+                              style="text-align: center" 
+                              headerText="#{i18n['movement.list.due-date']}">
+                        <h:outputText value="#{movement.dueDate}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText> 
+                    </p:column>
+                    <p:column width="16%" 
+                              style="text-align: center"
+                              headerText="#{i18n['list.action']}">
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_PAY}">
+                            <p:commandButton icon="icon-pay"
+                                             title="#{i18n['list.label.pay']}"
+                                             rendered="#{movement.payable eq true}"
+                                             action="#{movementBean.changeToPay(movement.id)}" />
+                        </sec:authorize>
+                        <p:spacer width="10" 
+                                  rendered="#{movement.payable eq true}"/>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_UPDATE}">
+                            <p:commandButton icon="icon-edit"
+                                             title="#{i18n['list.label.edit']}"
+                                             rendered="#{movement.editable eq true}"
+                                             action="#{movementBean.changeToEdit(movement.id)}" />
+                        </sec:authorize>
+                        <p:spacer width="10" 
+                                  rendered="#{movement.editable eq true}"/>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_DELETE}">
+                            <p:commandButton icon="icon-delete"
+                                             title="#{i18n['list.label.delete']}"
+                                             rendered="#{movement.deletable eq true}"
+                                             actionListener="#{movementBean.changeToDelete(movement.id)}" />
+                        </sec:authorize>
+                        <h:outputText value="-" 
+                                      rendered="#{movement.movementStateType eq 'CALCULATED'}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+
+    <ui:define name="popups">
+        <ui:include src="popupConfirmPayment.xhtml" />
+        <ui:include src="popupDeleteMovement.xhtml" />
+        <ui:include src="popupDetailMovement.xhtml" />
+    </ui:define>
+</ui:composition>

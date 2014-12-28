@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="/template/default.xhtml">
+
+    <ui:define name="head">
+        <f:event type="preRenderView" 
+                 listener="#{userAccountBean.initializeForm(param.userId)}" />
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="userAccountForm" prependId="false">
+
+            <p:messages id="messages" closable="true" globalOnly="true" />
+            <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+
+            <div style="user-account-wrapper">
+                <div class="user-account-form-left">
+                    <div class="form-cell">
+                        <p:selectBooleanCheckbox id="inBlocked" 
+                                                 value="#{userAccountBean.user.blocked}"
+                                                 itemLabel="#{i18n['user-account.form.blocked']}"/>
+                    </div>
+                    <div class="form-cell">
+                        <p:outputLabel for="inName" 
+                                       value="#{i18n['user-account.form.name']}: "/>
+                        <br/>
+                        <p:inputText id="inName" 
+                                     maxlength="90"
+                                     style="width: 300px"
+                                     value="#{userAccountBean.user.name}" 
+                                     title="#{component.valid ? '' : userAccountBean.getErrorMessage(component.clientId)}"/>
+                    </div>
+                    <div class="form-cell">
+                        <p:outputLabel for="inEmail" 
+                                       value="#{i18n['user-account.form.email']}: "/>
+                        <br/>
+                        <p:inputText id="inEmail" 
+                                     maxlength="90"
+                                     style="width: 300px"
+                                     value="#{userAccountBean.user.email}" 
+                                     title="#{component.valid ? '' : userAccountBean.getErrorMessage(component.clientId)}"/>
+                    </div>
+                    <div class="form-cell">
+                        <p:outputLabel for="inUsername" 
+                                       value="#{i18n['user-account.form.username']}: "/>
+                        <br/>
+                        <p:inputText id="inUsername" 
+                                     maxlength="45"
+                                     style="width: 150px"
+                                     value="#{userAccountBean.user.username}" 
+                                     readonly="#{userAccountBean.user.saved}"
+                                     title="#{component.valid ? '' : userAccountBean.getErrorMessage(component.clientId)}"/>
+                    </div>
+                    <div class="form-cell">
+                        <p:outputLabel for="inNewPassword" 
+                                       value="#{i18n['user-account.form.password']}: "/>
+                        <br/>
+                        <p:password id="inNewPassword" 
+                                    maxlength="16"
+                                    style="width: 150px"
+                                    match="inConfirmPassword"
+                                    value="#{userAccountBean.user.newPassword}"
+                                    title="#{component.valid ? '' : userAccountBean.getErrorMessage(component.clientId)}">
+                            <f:validator binding="#{passwordValidator}"/>
+                            <f:validateRegex pattern="[\x21-\x7E]{5,16}"/>
+                            <f:attribute name="saved" value="#{userAccountBean.user.saved}" /> 
+                        </p:password>
+                    </div>
+                    <div class="form-cell">
+                        <p:outputLabel for="inConfirmPassword" 
+                                       value="#{i18n['user-account.form.confirm-password']}: "/>
+                        <br/>
+                        <p:password id="inConfirmPassword"
+                                    maxlength="16"
+                                    style="width: 150px"
+                                    value="#{userAccountBean.user.newPassword}"
+                                    title="#{component.valid ? '' : userAccountBean.getErrorMessage(component.clientId)}">
+                            <f:validator binding="#{passwordValidator}"/>
+                            <f:validateRegex pattern="[\x21-\x7E]{5,16}"/>
+                            <f:attribute name="saved" value="#{userAccountBean.user.saved}" /> 
+                        </p:password>
+                    </div>
+                    <div class="form-cell" style="margin-top: 15px">
+                        <span class="password-hint">
+                            #{i18n['user-account.form.password.hint']}
+                        </span> 
+                    </div>
+                </div>
+                <div class="user-account-form-right">
+                    <div class="form-cell" style="margin-bottom: 10px">
+                        <h:outputText value="#{i18n['user-account.form.permissions-tree']}" />
+                    </div>
+                    <p:tree id="permissionTree"
+                            var="node"  
+                            cache="false" 
+                            animate="true"
+                            dynamic="true"
+                            highlight="false" 
+                            selectionMode="checkbox"
+                            value="#{userAccountBean.authorityNodes}"
+                            style="width: 100%; height: 280px; overflow: auto"
+                            selection="#{userAccountBean.selectedAuthorities}">
+                        <p:treeNode>
+                            <h:outputText value="#{i18n[node]}"/>
+                        </p:treeNode>
+                    </p:tree>
+                </div>
+            </div>
+
+            <div class="form-controls-box" style="float: left; width: 100%;">
+                <p:commandButton update="userAccountForm"
+                                 process="userAccountForm"
+                                 styleClass="green-button"
+                                 value="#{i18n['form.save']}"
+                                 action="#{userAccountBean.doSave()}"
+                                 rendered="#{userAccountBean.viewState eq 'ADD'}"
+                                 onsuccess="setTimeout('$(\'#messages\').slideUp(300)', 3000)"/>
+                <p:commandButton update="userAccountForm"
+                                 process="userAccountForm"
+                                 styleClass="green-button"
+                                 value="#{i18n['form.update']}"
+                                 action="#{userAccountBean.doUpdate()}"
+                                 rendered="#{userAccountBean.viewState eq 'EDIT'}"
+                                 onsuccess="setTimeout('$(\'#messages\').slideUp(300)', 3000)"/>
+                <p:spacer width="10"/>
+                <p:commandButton immediate="true"
+                                 styleClass="red-button"
+                                 value="#{i18n['form.back']}"
+                                 action="#{userAccountBean.doCancel()}"/>
+            </div>            
+        </h:form>
+    </ui:define>
+</ui:composition>

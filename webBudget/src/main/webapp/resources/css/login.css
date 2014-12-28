@@ -1,0 +1,51 @@
+/* 
+    Created on : 05/11/2013, 18:43:16
+    Author     : Arthur Gregorio
+*/
+
+/* tamanho da fonte e pagina */
+html, body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+body {
+    font-family: Arial;
+    font-size: 12px;
+    line-height: 1.4em;
+    min-width: 600px;
+}
+
+/* area de login */
+.login {
+    width: 320px;
+    padding: 60px 0px 0px;
+    margin: auto;
+}
+.login form {
+    padding: 26px 24px 24px;
+    font-weight: normal;
+    background: none repeat scroll 0% 0% rgb(255, 255, 255);
+    border: 1px solid rgb(229, 229, 229);
+    box-shadow: 0px 4px 10px -1px rgba(200, 200, 200, 0.7);
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+.input {
+    color: rgb(61, 61, 61);
+    font-size: 24px;
+    width: 230px;
+    border: 1px solid rgb(229, 229, 229);
+    background: none repeat scroll 0% 0% rgb(251, 251, 251);
+    box-shadow: 1px 1px 2px rgba(200, 200, 200, 0.2) inset;
+}
+#inUser {
+    background: url("/webBudget/javax.faces.resource/ui-icon-user.png.xhtml?ln=images") no-repeat scroll 7px 9px;
+    padding-left: 35px;
+    margin-bottom: 10px;
+}
+#inPassword {
+    background: url("/webBudget/javax.faces.resource/ui-icon-key.png.xhtml?ln=images") no-repeat scroll 7px 9px;
+    padding-left: 35px;
+    margin-bottom: 20px;
+}

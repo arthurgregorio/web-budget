@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/template/default.xhtml">
+
+    <ui:define name="head">
+        <f:event type="preRenderView" 
+                 listener="#{costCenterBean.initializeForm(param.costCenterId)}" />
+    </ui:define>
+    
+
+    <ui:define name="content">
+
+        <h:form id="costCenterForm" prependId="false">
+
+            <p:messages id="messages" closable="true" globalOnly="true" />
+            <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+
+            <div class="form-cell">
+                <p:selectBooleanCheckbox id="inBlocked" 
+                                         value="#{costCenterBean.costCenter.blocked}"
+                                         itemLabel="#{i18n['cost-center.form.blocked']}"/>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inName" 
+                               value="#{i18n['cost-center.form.name']}: "/>
+                <br/>
+                <p:inputText id="inName" 
+                             maxlength="45"
+                             style="width: 320px"
+                             value="#{costCenterBean.costCenter.name}" 
+                             title="#{component.valid ? '' : costCenterBean.getErrorMessage(component.clientId)}"/>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inCostCenter" 
+                               value="#{i18n['cost-center.form.cost-center']}: "/>
+                <br/>
+                <p:selectOneMenu id="inCostCenter" 
+                                 style="width: 328px"
+                                 converter="omnifaces.SelectItemsConverter"
+                                 value="#{costCenterBean.costCenter.parentCostCenter}" >
+                    <f:selectItem itemValue="#{null}"
+                                  noSelectionOption="true"
+                                  itemLabel="#{i18n['cost-center.form.select-one']}" />
+                    <f:selectItems var="costCenter" 
+                                   itemValue="#{costCenter}"
+                                   itemLabel="#{costCenter.name}"
+                                   value="#{costCenterBean.costCenters}" /> 
+                </p:selectOneMenu>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inBudget" 
+                               value="#{i18n['cost-center.form.budget']}: "/>
+                <br/>
+                <pe:inputNumber id="inBudget" 
+                                decimalPlaces="2" 
+                                decimalSeparator="," 
+                                thousandSeparator="." 
+                                style="text-align: right; width: 100px"
+                                value="#{costCenterBean.costCenter.budget}"
+                                title="#{component.valid ? '' : costCenterBean.getErrorMessage(component.clientId)}">
+                    <pe:keyFilter regEx="/[0-9_,]/i"/>
+                    <f:converter converterId="javax.faces.BigDecimal" />
+                </pe:inputNumber>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inDescription" 
+                               value="#{i18n['cost-center.form.description']}: "/>
+                <br/>
+                <p:inputTextarea id="inDescription" 
+                                 maxlength="255"
+                                 style="width: 320px"
+                                 value="#{costCenterBean.costCenter.description}" />
+            </div>
+            <div class="form-controls-box">
+                <p:commandButton update="costCenterForm"
+                                 process="costCenterForm"
+                                 styleClass="green-button"
+                                 value="#{i18n['form.save']}"
+                                 action="#{costCenterBean.doSave()}"
+                                 rendered="#{costCenterBean.viewState eq 'ADD'}"/>
+                <p:commandButton update="costCenterForm"
+                                 process="costCenterForm"
+                                 styleClass="green-button"
+                                 value="#{i18n['form.update']}"
+                                 action="#{costCenterBean.doUpdate()}"
+                                 rendered="#{costCenterBean.viewState eq 'EDIT'}"/>
+                <p:spacer width="10"/>
+                <p:commandButton immediate="true"
+                                 styleClass="red-button"
+                                 value="#{i18n['form.back']}"
+                                 action="#{costCenterBean.doCancel()}"/>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

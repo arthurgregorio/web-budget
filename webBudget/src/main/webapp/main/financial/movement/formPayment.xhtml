@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/template/default.xhtml">
+
+    <ui:define name="head">
+        <f:event type="preRenderView" 
+                 listener="#{movementBean.initializePayment(param.movementId)}" />
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="paymentForm" prependId="false">
+
+            <p:messages id="messages" closable="true" globalOnly="true" />
+            <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/> 
+            
+            <h:panelGroup layout="block"
+                          styleClass="form-cell">
+                <p:outputLabel for="inPaymentDate" 
+                               value="#{i18n['maintenance.form.payment-date']}: "/>
+                <br/>
+                <p:calendar id="inPaymentDate" 
+                            size="10"
+                            showOn="button"
+                            pattern="dd/MM/yyyy"
+                            value="#{movementBean.payment.paymentDate}" 
+                            title="#{component.valid ? '' : movementBean.getErrorMessage(component.clientId)}"/>
+            </h:panelGroup>
+            <h:panelGroup layout="block"
+                          styleClass="form-cell" 
+                          rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
+                <p:outputLabel for="inPaymentMethod" 
+                               value="#{i18n['maintenance.form.payment-method']}: "/>
+                <br/>
+                <p:selectOneMenu id="inPaymentMethod" 
+                                 style="width: 250px"
+                                 converter="omnifaces.GenericEnumConverter"
+                                 value="#{movementBean.payment.paymentMethodType}">
+                    <p:ajax event="change"  
+                            listener="#{movementBean.loadPaymentMethodFont()}" />
+                    <f:selectItem itemValue="#{null}"
+                                  noSelectionOption="true"
+                                  itemLabel="#{i18n['maintenance.form.select-one']}" />
+                    <f:selectItems var="paymentType"
+                                   itemValue="#{paymentType}"
+                                   itemLabel="#{i18n[paymentType]}"
+                                   value="#{movementBean.availablePaymentMethods}"/>
+                </p:selectOneMenu>
+            </h:panelGroup>
+            <h:panelGroup layout="block"
+                          styleClass="form-cell">
+                <p:outputLabel for="inWallet" 
+                               value="#{i18n['maintenance.form.wallet']}: "/>
+                <br/>
+                <p:selectOneMenu id="inWallet" 
+                                 style="width: 250px"
+                                 value="#{movementBean.payment.wallet}" 
+                                 converter="omnifaces.SelectItemsConverter"
+                                 disabled="#{movementBean.payment.paymentMethodType ne 'IN_CASH'}">
+                    <f:selectItem itemValue="#{null}"
+                                  noSelectionOption="true"
+                                  itemLabel="#{i18n['maintenance.form.select-one']}" />
+                    <f:selectItems var="wallet"
+                                   itemValue="#{wallet}"
+                                   itemLabel="#{wallet.friendlyName}"
+                                   value="#{movementBean.wallets}"/>
+                </p:selectOneMenu>
+            </h:panelGroup>
+            <h:panelGroup layout="block"
+                          styleClass="form-cell" 
+                          rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
+                <p:outputLabel for="inCreditCard" 
+                               value="#{i18n['maintenance.form.credit-card']}: "/>
+                <br/>
+                <p:selectOneMenu id="inCreditCard" 
+                                 style="width: 250px"
+                                 value="#{movementBean.payment.card}" 
+                                 converter="omnifaces.SelectItemsConverter"
+                                 disabled="#{movementBean.payment.paymentMethodType ne 'CREDIT_CARD'}">
+                    <f:selectItem itemValue="#{null}"
+                                  noSelectionOption="true"
+                                  itemLabel="#{i18n['maintenance.form.select-one']}" />
+                    <f:selectItems var="creditCard"
+                                   itemValue="#{creditCard}"
+                                   itemLabel="#{creditCard.readableName}"
+                                   value="#{movementBean.creditCards}"/>
+                </p:selectOneMenu>
+            </h:panelGroup>
+            <h:panelGroup layout="block"
+                          styleClass="form-cell" 
+                          rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
+                <p:outputLabel for="inDebitCard" 
+                               value="#{i18n['maintenance.form.debit-card']}: "/>
+                <br/>
+                <p:selectOneMenu id="inDebitCard" 
+                                 style="width: 250px"
+                                 value="#{movementBean.payment.card}" 
+                                 converter="omnifaces.SelectItemsConverter"
+                                 disabled="#{movementBean.payment.paymentMethodType ne 'DEBIT_CARD'}">
+                    <f:selectItem itemValue="#{null}"
+                                  noSelectionOption="true"
+                                  itemLabel="#{i18n['maintenance.form.select-one']}" />
+                    <f:selectItems var="debitCard"
+                                   itemValue="#{debitCard}"
+                                   itemLabel="#{debitCard.readableName}"
+                                   value="#{movementBean.debitCards}"/>
+                </p:selectOneMenu>
+            </h:panelGroup>
+
+            <div style="margin-top: 10px; text-align: right">
+                <p:commandButton update="paymentForm"
+                                 process="paymentForm"
+                                 styleClass="green-button"
+                                 value="#{i18n['form.pay']}"
+                                 style="width: 100px !important"
+                                 actionListener="#{movementBean.doPayment()}"/>
+                <p:spacer width="10"/>
+                <p:commandButton immediate="true"
+                                 styleClass="red-button"
+                                 value="#{i18n['form.back']}"
+                                 style="width: 100px !important"
+                                 action="#{movementBean.doCancel()}"/>
+            </div>
+        </h:form>
+    </ui:define>
+    
+    <ui:define name="popups">
+        <ui:include src="popupConfirmPayment.xhtml" />
+    </ui:define>
+</ui:composition>

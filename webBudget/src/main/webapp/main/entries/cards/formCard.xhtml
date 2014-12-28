@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/template/default.xhtml">
+
+    <ui:define name="head">
+        <f:event type="preRenderView" 
+                 listener="#{cardBean.initializeForm(param.cardId)}" />
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{i18n['breadcrumb.entries']}" />
+        <p:menuitem url="listCards.xhtml"
+                    value="#{i18n['breadcrumb.entries.cards']}" />
+        <p:menuitem url="formCard.xhtml"
+                    rendered="#{cardBean.viewState eq 'ADD'}"
+                    value="#{i18n['breadcrumb.entries.inclusion']}" />
+        <p:menuitem url="#"
+                    rendered="#{cardBean.viewState eq 'EDIT'}"
+                    value="#{i18n['breadcrumb.entries.edition']}" />
+    </ui:define>
+    
+    <ui:define name="content">
+        <h:form id="cardForm" prependId="false">
+
+            <p:messages id="messages" closable="true" globalOnly="true" />
+            <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+
+            <div class="form-cell">
+                <p:selectBooleanCheckbox id="inBlocked" 
+                                         value="#{cardBean.card.blocked}"
+                                         itemLabel="#{i18n['card.form.blocked']}"/>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inName" 
+                               value="#{i18n['card.form.name']}: "/>
+                <br/>
+                <p:inputText id="inName" 
+                             maxlength="45"
+                             style="width: 300px"
+                             value="#{cardBean.card.name}" 
+                             title="#{component.valid ? '' : cardBean.getErrorMessage(component.clientId)}"/>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inNumber" 
+                               value="#{i18n['card.form.number']}: "/>
+                <br/>
+                <p:inputText id="inNumber" 
+                             maxlength="45"
+                             style="width: 300px"
+                             value="#{cardBean.card.number}" 
+                             title="#{component.valid ? '' : cardBean.getErrorMessage(component.clientId)}"/>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inOwner" 
+                               value="#{i18n['card.form.owner']}: "/>
+                <br/>
+                <p:inputText id="inOwner" 
+                             maxlength="45"
+                             style="width: 300px"
+                             value="#{cardBean.card.owner}" 
+                             title="#{component.valid ? '' : cardBean.getErrorMessage(component.clientId)}"/>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inFlag" 
+                               value="#{i18n['card.form.flag']}: "/>
+                <br/>
+                <p:inputText id="inFlag" 
+                             maxlength="45"
+                             style="width: 155px"
+                             value="#{cardBean.card.flag}" 
+                             title="#{component.valid ? '' : cardBean.getErrorMessage(component.clientId)}"/>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inCardType" 
+                               value="#{i18n['card.form.card-type']}: "/>
+                <br/>
+                <p:selectOneMenu id="inCardType" 
+                                 style="width: 163px"
+                                 value="#{cardBean.card.cardType}"
+                                 converter="omnifaces.GenericEnumConverter">
+                    <p:ajax event="change" 
+                            update="inCreditLimit,inExpirationDay,inWallet" />
+                    <f:selectItem itemValue="#{null}"
+                                  noSelectionOption="true"
+                                  itemLabel="#{i18n['card.form.select-one']}" />
+                    <f:selectItems var="cardType"
+                                   itemValue="#{cardType}"
+                                   itemLabel="#{i18n[cardType]}"
+                                   value="#{cardBean.availableCardTypes}"/> 
+                </p:selectOneMenu>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inCreditLimit" 
+                               value="#{i18n['card.form.credit-limit']}: "/>
+                <br/>
+                <pe:inputNumber id="inCreditLimit" 
+                                decimalPlaces="2" 
+                                decimalSeparator="," 
+                                thousandSeparator="." 
+                                value="#{cardBean.card.creditLimit}"
+                                style="text-align: right; width: 155px"
+                                disabled="#{cardBean.card.cardType ne 'CREDIT'}"
+                                title="#{component.valid ? '' : cardBean.getErrorMessage(component.clientId)}">
+                    <pe:keyFilter regEx="/[0-9_,]/i"/>
+                    <f:converter converterId="javax.faces.BigDecimal" />
+                </pe:inputNumber>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inExpirationDay" 
+                               value="#{i18n['card.form.expiration-day']}: "/>
+                <br/>
+                <p:inputText id="inExpirationDay" 
+                            style="width: 155px"
+                            value="#{cardBean.card.expirationDay}" 
+                            disabled="#{cardBean.card.cardType ne 'CREDIT'}"
+                            title="#{component.valid ? '' : cardBean.getErrorMessage(component.clientId)}" >
+                    <pe:keyFilter regEx="/[a-z0-9_]/i"/>
+                </p:inputText>
+            </div>
+            <div class="form-cell">
+                <p:outputLabel for="inWallet" 
+                               value="#{i18n['card.form.wallet']}: "/>
+                <br/>
+                <p:selectOneMenu id="inWallet" 
+                                 style="width: 300px"
+                                 value="#{cardBean.card.wallet}"
+                                 converter="omnifaces.SelectItemsConverter"
+                                 disabled="#{cardBean.card.cardType ne 'DEBIT'}">
+                    <f:selectItem itemValue="#{null}"
+                                  noSelectionOption="true"
+                                  itemLabel="#{i18n['card.form.select-one']}" />
+                    <f:selectItems var="wallet"
+                                   itemValue="#{wallet}"
+                                   value="#{cardBean.wallets}"
+                                   itemLabel="#{wallet.friendlyName}"/>
+                </p:selectOneMenu>
+            </div>
+            <div class="form-controls-box">
+                <p:commandButton update="cardForm"
+                                 process="cardForm"
+                                 styleClass="green-button"
+                                 value="#{i18n['form.save']}"
+                                 action="#{cardBean.doSave()}"
+                                 rendered="#{cardBean.viewState eq 'ADD'}"/>
+                <p:commandButton update="cardForm"
+                                 process="cardForm"
+                                 styleClass="green-button"
+                                 value="#{i18n['form.update']}"
+                                 action="#{cardBean.doUpdate()}"
+                                 rendered="#{cardBean.viewState eq 'EDIT'}"/>
+                <p:spacer width="10"/>
+                <p:commandButton immediate="true"
+                                 styleClass="red-button"
+                                 value="#{i18n['form.back']}"
+                                 action="#{cardBean.doCancel()}"/>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-autowire="byName">
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- auto-scan componentes, servicos ou repositorios -->
+    <context:component-scan base-package="br.com.webbudget.domain" />
+    <context:component-scan base-package="br.com.webbudget.application" />
+    <context:component-scan base-package="br.com.webbudget.infraestructure" />
+    
+    <!-- arquivos de configuracao do contexto -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations"> 
+            <list>
+                <value>classpath:config/webbudget.properties</value>
+                <value>classpath:config/webbudget-persistence.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="false" />
+    </bean>
+
+    <!-- Datasource -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+          destroy-method="close" p:defaultAutoCommit="false"
+          p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
+          p:username="${jdbc.username}" p:password="${jdbc.password}" />
+    
+    <!-- Persistence Unit config -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          p:dataSource-ref="dataSource">
+        <property name="persistenceUnitName" value="${jpa.persistenceUnitName}"/>
+        <property name="packagesToScan" value="br.com.webbudget.domain.entity"/>
+        <property name="persistenceProviderClass" value="org.hibernate.jpa.HibernatePersistenceProvider"/>
+        <property name="loadTimeWeaver">
+            <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />
+        </property>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+                  p:databasePlatform="${jpa.databaseDialect}"/>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <!-- geral -->
+                <prop key="hibernate.hbm2ddl.auto">${jpa.generateDdl}</prop>
+                <prop key="hibernate.format_sql">false</prop>
+                <prop key="hibernate.show_sql">${jpa.showSql}</prop>
+                
+                <!-- Pool -->
+                <prop key="hibernate.c3p0.minPoolSize">5</prop>
+                <prop key="hibernate.c3p0.maxPoolSize">10</prop>
+                <prop key="hibernate.c3p0.timeout">1800</prop>
+                <prop key="hibernate.c3p0.max_statement">50</prop>
+                <prop key="hibernate.c3p0.testConnectionOnCheckout">true</prop>
+                
+                <!-- desabilita o bean validation no save/update -->
+                <prop key="javax.persistence.validation.mode">none</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <bean id="persistenceAnnotationBeanPostProcessor" 
+          class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+    
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <!-- configuracao do JavaMail -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/>
+        <property name="port" value="${mail.port}"/>
+        <property name="username" value="${mail.user}"/>
+        <property name="password" value="${mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.debug">${mail.debug}</prop> 
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <!-- thyleaf templates -->
+    <bean id="emailTemplateResolver" class="org.thymeleaf.templateresolver.ClassLoaderTemplateResolver">
+        <property name="prefix" value="mail/" />
+        <property name="templateMode" value="HTML5" />
+        <property name="characterEncoding" value="UTF-8" />
+        <property name="order" value="1" />
+    </bean>
+    <bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+        <property name="templateResolvers">
+            <set>
+                <ref bean="emailTemplateResolver" />
+            </set>
+        </property>
+    </bean>
+
+    <!-- bean validation -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+    
+    <!-- password encoder -->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+    
+    <!-- security provider da aplicacao -->
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider user-service-ref="accountService" >
+            <security:password-encoder ref="passwordEncoder" />
+        </security:authentication-provider>
+    </security:authentication-manager>
+    
+    <!-- resource bundle -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:/i18n/messages" />
+    </bean>
+</beans>

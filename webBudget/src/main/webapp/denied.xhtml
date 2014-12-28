@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:of="http://omnifaces.org/functions"
+                template="/template/default.xhtml">
+
+    <ui:define name="content">
+        <div style="text-align: center; margin-top: 50px">
+            <p:graphicImage library="images" name="ui-lock.png" />
+            <br/>
+            <br/>
+            <br/>
+            <h:outputText style="font-size: 18px;" 
+                          value="#{i18n['denied.message']}" />
+        </div>
+    </ui:define>
+</ui:composition>

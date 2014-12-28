@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:ui="http://java.sun.com/jsf/facelets"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:f="http://java.sun.com/jsf/core"
+          id="displayPrivateMessagePopup"
+          widgetVar="popupDisplayPrivateMessage" 
+          header="#{dashboardBean.selectedPrivateMessage.privateMessage.title}"
+          resizable="false" showEffect="fade" modal="true" closable="false">
+
+    <script type="text/javascript">
+        PrimeFaces.widget.Dialog.prototype.applyFocus = function() {
+            jQuery('#closeButton').focus();
+        };
+    </script>
+    
+    <div style="margin: 5px 0 10px 0">
+        <p:inputTextarea maxlength="255"
+                         readonly="true"
+                         autoResize="false"
+                         style="width: 350px; height: 100px"
+                         value="#{dashboardBean.selectedPrivateMessage.privateMessage.text}" />
+    </div>
+    <div style="margin: 5px 0 5px 0">
+        <h:outputText style="font-weight: bold"
+                      value="#{i18n['private-message.dialog.from']}: "/>
+        <h:outputText value="#{dashboardBean.selectedPrivateMessage.privateMessage.owner.name}"/>
+    </div>
+    <div style="margin: 5px 0 5px 0">
+        <h:outputText style="font-weight: bold"
+                      value="#{i18n['private-message.dialog.when']}: "/>
+        <h:outputText value="#{dashboardBean.selectedPrivateMessage.inclusion}">
+            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+        </h:outputText>
+    </div>
+
+    <div style="margin-top: 10px; text-align: right">
+        <p:commandButton immediate="true"
+                         styleClass="red-button" 
+                         value="#{i18n['actions.delete']}"
+                         actionListener="#{dashboardBean.deleteAndClosePrivateMessage()}"/>
+        <p:spacer width="10"/>
+        <p:commandButton id="closeButton" 
+                         immediate="true"
+                         styleClass="red-button" 
+                         value="#{i18n['actions.close']}"
+                         actionListener="#{dashboardBean.closePrivateMessage()}"/>
+    </div>
+</p:dialog>

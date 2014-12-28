@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:ui="http://java.sun.com/jsf/facelets"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:pe="http://primefaces.org/ui/extensions"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          widgetVar="popupAdjustBalance" id="adjustBalancePopup"
+          header="#{i18n['wallet.dialog.adjustment']}"
+          resizable="false" showEffect="fade" modal="true">
+
+    <h:form id="adjustmentForm" prependId="false">
+        <div class="form-cell">
+            <h:outputText value="#{i18n['wallet.dialog.actual-balance']}: " />
+            <h:outputText value="R$ #{walletBean.wallet.balance}" 
+                          style="#{walletBean.wallet.balance.signum() lt 0 ? 'color: red;' : 'color: green;'}"/>
+        </div>
+        <div class="form-cell">
+            <p:outputLabel for="inBalance" 
+                           value="#{i18n['wallet.dialog.adjustment-value']}: "/>
+            <br/>
+            <pe:inputNumber id="inBalance" 
+                            decimalPlaces="2" 
+                            decimalSeparator="," 
+                            thousandSeparator="." 
+                            style="width: 128px; text-align: right"
+                            value="#{walletBean.wallet.adjustmentValue}"
+                            title="#{component.valid ? '' : walletBean.getErrorMessage(component.clientId)}">
+                <pe:keyFilter regEx="/[0-9_,]/i"/>
+                <f:converter converterId="javax.faces.BigDecimal" />
+            </pe:inputNumber>
+        </div>
+        <div style="margin-top: 10px; text-align: center">
+            <p:commandButton update="adjustmentForm"
+                             styleClass="green-button" 
+                             value="#{i18n['actions.adjust']}"
+                             actionListener="#{walletBean.doAdjustment()}"/>
+            <p:spacer width="10"/>
+            <p:commandButton immediate="true"
+                             styleClass="red-button" 
+                             value="#{i18n['actions.cancel']}"
+                             actionListener="#{walletBean.cancelAdjustment()}"/>
+        </div>
+    </h:form>
+</p:dialog>

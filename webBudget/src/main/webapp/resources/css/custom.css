@@ -1,0 +1,37 @@
+/* 
+    Created on : 25/02/2014, 19:43:50
+    Author     : Arthur Greg?rio
+*/
+
+@charset "utf-8";
+
+.ui-messages-error-icon {
+    background: url("/webBudget/javax.faces.resource/ui-error-alert.png.xhtml?ln=images") no-repeat !important;
+    background-position: 0px -52px;
+}
+.ui-menuitem-link {
+    margin-top: 3px;
+}
+.ui-button {
+    height: 30px;
+    width: 100px;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    border-color: #ccc !important;
+}
+.ui-widget-header {
+    border: 1px solid #DFDFD8 !important;
+}
+.jqplot-table-legend {
+    border: none !important;
+}
+.jqplot-table-legend-label {
+    padding-right: 5px !important;
+}
+.selectmanycheckbox.ui-widget label, .ui-selectoneradio.ui-widget label {
+    padding-left: 5px;
+    padding-bottom: 3px;
+}
+.ui-icon-home {
+    background: url("/webBudget/javax.faces.resource/ui-home-icon.png.xhtml?ln=images") no-repeat !important;
+}
