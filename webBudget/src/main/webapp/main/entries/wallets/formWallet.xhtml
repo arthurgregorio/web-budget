@@ -12,6 +12,19 @@
         <f:event type="preRenderView" 
                  listener="#{walletBean.initializeForm(param.walletId)}" />
     </ui:define>
+    
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['breadcrumb.entries']}" />
+        <p:menuitem url="listWallets.xhtml"
+                    value="#{breadcrumb['breadcrumb.entries.wallet']}" />
+        <p:menuitem url="formWallet.xhtml"
+                    rendered="#{walletBean.viewState eq 'ADD'}"
+                    value="#{breadcrumb['breadcrumb.inclusion']}" />
+        <p:menuitem url="#"
+                    value="#{breadcrumb['breadcrumb.edition']}" 
+                    rendered="#{walletBean.viewState eq 'EDIT'}"/>
+    </ui:define>
 
     <ui:define name="content">
         <h:form id="walletForm" prependId="false">

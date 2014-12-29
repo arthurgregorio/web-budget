@@ -15,15 +15,15 @@
 
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
-                    value="#{i18n['breadcrumb.entries']}" />
+                    value="#{breadcrumb['breadcrumb.entries']}" />
         <p:menuitem url="listCards.xhtml"
-                    value="#{i18n['breadcrumb.entries.cards']}" />
+                    value="#{breadcrumb['breadcrumb.entries.card']}" />
         <p:menuitem url="formCard.xhtml"
                     rendered="#{cardBean.viewState eq 'ADD'}"
-                    value="#{i18n['breadcrumb.entries.inclusion']}" />
+                    value="#{breadcrumb['breadcrumb.inclusion']}" />
         <p:menuitem url="#"
                     rendered="#{cardBean.viewState eq 'EDIT'}"
-                    value="#{i18n['breadcrumb.entries.edition']}" />
+                    value="#{breadcrumb['breadcrumb.edition']}" />
     </ui:define>
     
     <ui:define name="content">

@@ -20,5 +20,9 @@
             <base-name>i18n.messages</base-name>  
             <var>i18n</var>
         </resource-bundle>  
+        <resource-bundle>  
+            <base-name>i18n.breadcrumb</base-name>  
+            <var>breadcrumb</var>
+        </resource-bundle>  
     </application>
 </faces-config>

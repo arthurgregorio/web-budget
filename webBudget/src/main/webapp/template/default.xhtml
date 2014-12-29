@@ -119,8 +119,10 @@
                 </h:form>
                 <div class="breadcrumb">
                     <div class="breadcrumb-box">
-                        <p:breadCrumb style="background: none; border: none !important">
-                            <p:menuitem url="/main/home.xhtml" />
+                        <p:breadCrumb homeDisplay="text"
+                                      style="background: none; border: none !important">
+                            <p:menuitem value="#{breadcrumb['breadcrumb.home']}"
+                                        url="/main/home.xhtml" />
                             <ui:insert name="breadcrumb" />
                         </p:breadCrumb>
                     </div>

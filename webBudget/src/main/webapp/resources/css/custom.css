@@ -32,6 +32,6 @@
     padding-left: 5px;
     padding-bottom: 3px;
 }
-.ui-icon-home {
-    background: url("/webBudget/javax.faces.resource/ui-home-icon.png.xhtml?ln=images") no-repeat !important;
+.ui-breadcrumb a {
+    text-decoration: none;
 }
