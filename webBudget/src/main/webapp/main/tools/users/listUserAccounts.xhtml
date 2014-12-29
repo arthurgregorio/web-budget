@@ -14,6 +14,13 @@
                  listener="#{userAccountBean.initializeListing()}" />
     </ui:define>
 
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['tools']}" />
+        <p:menuitem url="listUserAccounts.xhtml"
+                    value="#{breadcrumb['tools.user']}" />
+    </ui:define>
+    
     <ui:define name="content">
 
         <p:messages id="messages" closable="true" globalOnly="true"/>

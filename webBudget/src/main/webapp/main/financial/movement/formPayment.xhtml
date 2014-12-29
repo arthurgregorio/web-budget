@@ -12,6 +12,15 @@
         <f:event type="preRenderView" 
                  listener="#{movementBean.initializePayment(param.movementId)}" />
     </ui:define>
+    
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['financial']}" />
+        <p:menuitem url="listCards.xhtml"
+                    value="#{breadcrumb['financial.movement']}" />
+        <p:menuitem url="#"
+                    value="#{breadcrumb['financial.movement.payment']}"/>
+    </ui:define>
 
     <ui:define name="content">
 

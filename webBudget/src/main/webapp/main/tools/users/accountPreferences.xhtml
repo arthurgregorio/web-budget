@@ -13,6 +13,11 @@
                  listener="#{userAccountBean.initializePreferences()}" />
     </ui:define>
 
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['preferences']}" />
+    </ui:define>
+    
     <ui:define name="content">
         <h:form id="userAccountForm" prependId="false">
             

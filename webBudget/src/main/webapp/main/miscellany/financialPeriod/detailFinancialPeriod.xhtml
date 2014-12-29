@@ -11,6 +11,15 @@
         <f:event type="preRenderView" 
                  listener="#{financialPeriodDetailsBean.initializeDetails(param.financialPeriodId)}" />
     </ui:define>
+    
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['miscellany']}" />
+        <p:menuitem url="listFinancialPeriods.xhtml"
+                    value="#{breadcrumb['miscellany.financial-period']}" />
+        <p:menuitem url="#"
+                    value="#{breadcrumb['miscellany.financial-period.detail']}" />
+    </ui:define>
 
     <ui:define name="content">
         <div style="width: 100%">

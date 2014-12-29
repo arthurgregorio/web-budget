@@ -15,14 +15,14 @@
     
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
-                    value="#{breadcrumb['breadcrumb.entries']}" />
+                    value="#{breadcrumb['entries']}" />
         <p:menuitem url="listCostCenters.xhtml"
-                    value="#{breadcrumb['breadcrumb.entries.cost-center']}" />
+                    value="#{breadcrumb['entries.cost-center']}" />
         <p:menuitem url="formCostCenter.xhtml"
-                    value="#{breadcrumb['breadcrumb.inclusion']}" 
+                    value="#{breadcrumb['inclusion']}" 
                     rendered="#{costCenterBean.viewState eq 'ADD'}"/>
         <p:menuitem url="#"
-                    value="#{breadcrumb['breadcrumb.edition']}" 
+                    value="#{breadcrumb['edition']}" 
                     rendered="#{costCenterBean.viewState eq 'EDIT'}"/>
     </ui:define>
 

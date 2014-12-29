@@ -13,6 +13,13 @@
         <f:event type="preRenderView" 
                  listener="#{closingBean.initializeClosing(param.financialPeriodId)}" />
     </ui:define>
+    
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['miscellany']}" />
+        <p:menuitem url="closeFinancialPeriod.xhtml"
+                    value="#{breadcrumb['miscellany.financial-period.close']}" />
+    </ui:define>
 
     <ui:define name="content">
 

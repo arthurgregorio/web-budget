@@ -14,6 +14,13 @@
         <f:event type="preRenderView" listener="#{cardInvoiceBean.initialize()}" />
     </ui:define>
 
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['financial']}" />
+        <p:menuitem url="generateCardInvoice.xhtml"
+                    value="#{breadcrumb['financial.card-invoice']}" />
+    </ui:define>
+    
     <ui:define name="content">
 
         <h:form id="controlsForm" prependId="false">

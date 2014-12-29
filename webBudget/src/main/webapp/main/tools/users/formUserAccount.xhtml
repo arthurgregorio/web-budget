@@ -12,6 +12,19 @@
         <f:event type="preRenderView" 
                  listener="#{userAccountBean.initializeForm(param.userId)}" />
     </ui:define>
+    
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['tools']}" />
+        <p:menuitem url="listUserAccounts.xhtml"
+                    value="#{breadcrumb['tools.user']}" />
+        <p:menuitem url="formUserAccount.xhtml"
+                    value="#{breadcrumb['inclusion']}" 
+                    rendered="#{userAccountBean.viewState eq 'ADD'}"/>
+        <p:menuitem url="#"
+                    value="#{breadcrumb['edition']}" 
+                    rendered="#{userAccountBean.viewState eq 'EDIT'}"/>
+    </ui:define>
 
     <ui:define name="content">
 

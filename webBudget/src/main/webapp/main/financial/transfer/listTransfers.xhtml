@@ -12,7 +12,14 @@
         <f:event type="preRenderView" 
                  listener="#{transferenceBean.initializeListing()}" />
     </ui:define>
-
+    
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['financial']}" />
+        <p:menuitem url="listTransfers.xhtml"
+                    value="#{breadcrumb['financial.transfer']}" />
+    </ui:define>
+    
     <ui:define name="content">
 
         <p:messages id="messages" closable="true" globalOnly="true"/>

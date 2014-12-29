@@ -12,6 +12,16 @@
         <f:event type="preRenderView" 
                  listener="#{transferenceBean.initializeForm()}" />
     </ui:define>
+    
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['financial']}" />
+        <p:menuitem url="listTransfers.xhtml"
+                    value="#{breadcrumb['financial.transfer']}" />
+        <p:menuitem url="formTransfer.xhtml"
+                    value="#{breadcrumb['inclusion']}" 
+                    rendered="#{transferenceBean.viewState eq 'ADD'}"/>
+    </ui:define>
 
     <ui:define name="content">
 

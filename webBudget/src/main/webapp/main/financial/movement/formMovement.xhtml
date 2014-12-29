@@ -12,6 +12,19 @@
         <f:event type="preRenderView" 
                  listener="#{movementBean.initializeForm(param.movementId)}" />
     </ui:define>
+    
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['financial']}" />
+        <p:menuitem url="listMovements.xhtml"
+                    value="#{breadcrumb['financial.movement']}" />
+        <p:menuitem url="formMovement.xhtml"
+                    value="#{breadcrumb['inclusion']}" 
+                    rendered="#{movementBean.viewState eq 'ADD'}"/>
+        <p:menuitem url="#"
+                    value="#{breadcrumb['edition']}" 
+                    rendered="#{movementBean.viewState eq 'EDIT'}"/>
+    </ui:define>
 
     <ui:define name="content">
 
