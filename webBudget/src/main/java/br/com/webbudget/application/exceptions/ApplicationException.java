@@ -19,6 +19,11 @@ public final class ApplicationException extends AuthenticationException {
         super(message);
     }
     
+    /**
+     * 
+     * @param message
+     * @param throwable 
+     */
     public ApplicationException(String message, Throwable throwable) {
         super(message, throwable);
     }

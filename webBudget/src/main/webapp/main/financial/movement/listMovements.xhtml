@@ -7,7 +7,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:of="http://omnifaces.org/functions"
                 xmlns:sec="http://www.springframework.org/security/tags"
-                template="/template/default.xhtml">
+                template="/template/mainTemplate.xhtml">
 
     <ui:define name="head">
         <f:event type="preRenderView" 
@@ -16,14 +16,14 @@
 
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
-                    value="#{breadcrumb['breadcrumb.financial']}" />
+                    value="#{breadcrumb['financial']}" />
         <p:menuitem url="listCards.xhtml"
-                    value="#{breadcrumb['breadcrumb.financial.movement']}" />
+                    value="#{breadcrumb['financial.movement']}" />
         <p:menuitem url="formCard.xhtml"
-                    value="#{breadcrumb['breadcrumb.inclusion']}" 
+                    value="#{breadcrumb['inclusion']}" 
                     rendered="#{movementBean.viewState eq 'ADD'}"/>
         <p:menuitem url="#"
-                    value="#{breadcrumb['breadcrumb.edition']}" 
+                    value="#{breadcrumb['edition']}" 
                     rendered="#{movementBean.viewState eq 'EDIT'}"/>
     </ui:define>
     

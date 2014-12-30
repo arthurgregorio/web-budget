@@ -122,7 +122,7 @@ public class Postman {
        
         final MimeMessageHelper helper = new MimeMessageHelper(message, true);
         
-        helper.setFrom(ResourceBundle.getBundle("webbudget").getString("mail.user"));
+        helper.setFrom(ResourceBundle.getBundle("config/webbudget").getString("mail.user"));
         
         return helper;
     }

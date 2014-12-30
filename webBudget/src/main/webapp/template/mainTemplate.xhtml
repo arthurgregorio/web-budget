@@ -10,34 +10,19 @@
     <f:view contentType="text/html">
         <h:head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <meta name="author" content="Arthur Gregório"/>
 
             <link rel="shortcut icon" type="image/x-icon" href="#{resource['images:favicon.ico']}"/>
 
-            <script type="text/javascript" src="#{resource['js:locale.js']}"></script>
+            <script type="text/javascript" src="#{resource['js:locale.js']}" />
             
             <h:outputStylesheet library="css" name="main.css" />
             <h:outputStylesheet library="css" name="custom.css" />
 
             <title>#{i18n['application.title']}</title>
             <ui:insert name="head" />
-            
-            <script type="text/javascript">
-                function idleHandler() {
-                    window.location.href = "#{request.contextPath}/main/logout";
-                }
-		    
-                var doc = document.documentElement;
-                doc.setAttribute('data-useragent', navigator.userAgent);
-            </script>
         </h:head>
 
         <h:body class="webbudget-body">
-            
-            <p:idleMonitor timeout="1800000">
-                <p:ajax event="idle" oncomplete="idleHandler()"/>
-            </p:idleMonitor>
-            
             <div class="wrapper">
                 <h:form id="menuForm" prependId="false">
                     <div class="header">
@@ -121,7 +106,7 @@
                     <div class="breadcrumb-box">
                         <p:breadCrumb homeDisplay="text"
                                       style="background: none; border: none !important">
-                            <p:menuitem value="#{breadcrumb['breadcrumb.home']}"
+                            <p:menuitem value="#{breadcrumb['home']}"
                                         url="/main/home.xhtml" />
                             <ui:insert name="breadcrumb" />
                         </p:breadCrumb>

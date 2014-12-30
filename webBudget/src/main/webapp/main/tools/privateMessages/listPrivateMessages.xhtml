@@ -5,13 +5,26 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                template="/template/default.xhtml">
+                template="/template/mainTemplate.xhtml">
     
     <ui:define name="head">
         <f:event type="preRenderView" 
                  listener="#{privateMessageBean.initializeListing()}" />
     </ui:define>
 
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['tools']}" />
+        <p:menuitem url="listPrivateMessages.xhtml"
+                    value="#{breadcrumb['tools.private-message']}" />
+        <p:menuitem url="formPrivateMessage.xhtml"
+                    value="#{breadcrumb['inclusion']}" 
+                    rendered="#{privateMessageBean.viewState eq 'ADD'}"/>
+        <p:menuitem url="#"
+                    value="#{breadcrumb['edition']}" 
+                    rendered="#{privateMessageBean.viewState eq 'EDIT'}"/>
+    </ui:define>
+    
     <ui:define name="content">
 
         <p:messages id="messages" closable="true" globalOnly="true"/>

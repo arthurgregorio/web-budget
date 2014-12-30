@@ -1,4 +1,4 @@
-package br.com.webbudget.application.controller.miscellany;
+package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.application.exceptions.ApplicationException;
