@@ -1,5 +1,6 @@
 package br.com.webbudget.application.controller.miscellany;
 
+import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
@@ -16,6 +17,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CartesianChartModel;
 
 /**
@@ -39,11 +42,9 @@ public class FinancialPeriodDetailsBean implements Serializable {
     @Getter
     private CartesianChartModel topOutClasses;
     
-    @Getter
-    private BigDecimal graphInMax;
-    @Getter
-    private BigDecimal graphOutMax;
-    
+    @Setter
+    @ManagedProperty("#{messagesFactory}")
+    private transient MessagesFactory messages;
     @Setter
     @ManagedProperty("#{closingService}")
     private transient ClosingService closingService;
@@ -72,6 +73,9 @@ public class FinancialPeriodDetailsBean implements Serializable {
             this.topOutClasses = this.graphModelService.buildTopClassesModel(
                     this.closing.getTopFiveClassesOut());
             
+            this.formatGraphIn();
+            this.formatGraphOut();
+            
             // ordena corretamente as classes de entrada
             Collections.sort(this.closing.getTopFiveClassesIn(), new Comparator<MovementClass>() {
                 @Override
@@ -87,13 +91,6 @@ public class FinancialPeriodDetailsBean implements Serializable {
                     return classTwo.getBudget().compareTo(classOne.getBudget());
                 }
             });
-            
-            this.graphInMax = BigDecimal.ZERO;
-            this.graphOutMax = BigDecimal.ZERO;
-            
-            // calculamos os pontos maximos em Y para o grafico de movimentos
-            this.calculateGraphInMax();
-            this.calculateGraphOutMax();
         }
     }
     
@@ -116,17 +113,14 @@ public class FinancialPeriodDetailsBean implements Serializable {
     
     /**
      * 
-     * @return 
      */
-    public BigDecimal getMaxGraphIn() {
-        final BigDecimal max = this.closing.getTopFiveClassesIn().get(0).getBudget();
-        return max.add(new BigDecimal("100"));
-    }
-    
-    /**
-     * Calcula o maximo Y do grafico de entradas
-     */
-    public void calculateGraphInMax() {
+    public void formatGraphIn() {
+        
+        final Axis yAxis = this.topInClasses.getAxis(AxisType.Y);
+        
+        yAxis.setMin(0);
+        
+        BigDecimal graphInMax = BigDecimal.ZERO;
         
         for (MovementClass movementClass : this.closing.getTopFiveClassesIn()) {
         
@@ -139,18 +133,31 @@ public class FinancialPeriodDetailsBean implements Serializable {
                 }
             }
             
-            if (max.compareTo(this.graphInMax) > 0) {
-                this.graphInMax = max;
+            if (max.compareTo(graphInMax) > 0) {
+                graphInMax = max;
             }
         }
         
-        this.graphInMax = this.graphInMax.add(new BigDecimal("100"));
+        graphInMax = graphInMax.add(new BigDecimal("100"));
+
+        yAxis.setMax(graphInMax);
+        
+        this.topInClasses.setAnimate(true);
+        this.topInClasses.setLegendPosition("ne");
+        this.topInClasses.setTitle(this.messages.getMessage("financial-period.chart.in-classes"));
+        this.topInClasses.setDatatipFormat("<span style=\"display:none;\">%s</span><span>R$ %s</span>");
     }
     
     /**
-     * Calcula o maximo Y do grafico de saidas
+     * 
      */
-    public void calculateGraphOutMax() {
+    private void formatGraphOut() {
+        
+        final Axis yAxis = this.topInClasses.getAxis(AxisType.Y);
+        
+        yAxis.setMin(0);
+        
+        BigDecimal graphOutMax = BigDecimal.ZERO;
         
         for (MovementClass movementClass : this.closing.getTopFiveClassesOut()) {
             
@@ -163,20 +170,19 @@ public class FinancialPeriodDetailsBean implements Serializable {
                 }
             }
             
-            if (max.compareTo(this.graphOutMax) > 0) {
-                this.graphOutMax = max;
+            if (max.compareTo(graphOutMax) > 0) {
+                graphOutMax = max;
             }
         }
         
-        this.graphOutMax = this.graphOutMax.add(new BigDecimal("100"));
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    public String getDatatipFormat() {
-        return "<span style=\"display:none;\">%s</span><span>R$ %s</span>";
+        graphOutMax = graphOutMax.add(new BigDecimal("100"));
+
+        yAxis.setMax(graphOutMax);
+        
+        this.topInClasses.setAnimate(true);
+        this.topInClasses.setLegendPosition("ne");
+        this.topInClasses.setTitle(this.messages.getMessage("financial-period.chart.out-classes"));
+        this.topInClasses.setDatatipFormat("<span style=\"display:none;\">%s</span><span>R$ %s</span>");
     }
     
     /**

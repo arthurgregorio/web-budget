@@ -23,26 +23,14 @@
                             headerText="#{i18n['home.graphs']}"
                             itemStyle="height:290px;width:580px;">
                     <p:tab> 
-                        <h:panelGroup layout="block">
-                            <p:pieChart diameter="240"
-                                        shadow="false"
-                                        legendCols="3"
-                                        legendRows="10"
-                                        legendPosition="e"
-                                        showDataLabels="true" 
-                                        style="height: 300px;"
-                                        value="#{dashboardBean.consumeModel}"/>
-                        </h:panelGroup>
+                        <p:chart type="pie" 
+                                 style="height: 300px;"
+                                 model="#{dashboardBean.consumeModel}"/>
                     </p:tab>
                     <p:tab>
-                        <p:pieChart diameter="240"
-                                    shadow="false"
-                                    legendCols="3"
-                                    legendRows="10"
-                                    legendPosition="e"
-                                    showDataLabels="true"
-                                    style="height: 300px"
-                                    value="#{dashboardBean.revenueModel}"/>
+                        <p:chart type="pie" 
+                                 style="height: 300px;"
+                                 model="#{dashboardBean.revenueModel}"/>
                     </p:tab>
                 </p:carousel>
             </div>
@@ -133,7 +121,7 @@
             </div>
         </div>
     </ui:define>
-    
+
     <ui:define name="popups">
         <ui:include src="popupDisplayPrivateMessage.xhtml" />
     </ui:define>

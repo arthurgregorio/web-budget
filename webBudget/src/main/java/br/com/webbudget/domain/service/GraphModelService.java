@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.BarChartSeries;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.LineChartSeries;
@@ -69,6 +70,12 @@ public class GraphModelService implements Serializable {
             }
         }
         
+        model.setShadow(false);
+        model.setLegendCols(3);
+        model.setLegendRows(10);
+        model.setLegendPosition("e");
+        model.setShowDataLabels(true);
+        
         return model;
     }
     
@@ -106,6 +113,12 @@ public class GraphModelService implements Serializable {
             }
         }
         
+        model.setShadow(false);
+        model.setLegendCols(3);
+        model.setLegendRows(10);
+        model.setLegendPosition("e");
+        model.setShowDataLabels(true);
+        
         return model;
     }
     
@@ -116,7 +129,7 @@ public class GraphModelService implements Serializable {
      */
     public CartesianChartModel buildTopClassesModel(List<MovementClass> classes) {
         
-        final CartesianChartModel model = new CartesianChartModel();
+        final CartesianChartModel model = new BarChartModel();
         
         final BarChartSeries classesBar = this.buildClassesBar(classes);
         final LineChartSeries budgetLine = this.buildBudgetLine(classes);

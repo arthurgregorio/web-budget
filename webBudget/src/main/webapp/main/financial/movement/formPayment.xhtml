@@ -32,7 +32,7 @@
             <h:panelGroup layout="block"
                           styleClass="form-cell">
                 <p:outputLabel for="inPaymentDate" 
-                               value="#{i18n['maintenance.form.payment-date']}: "/>
+                               value="#{i18n['payment.form.payment-date']}: "/>
                 <br/>
                 <p:calendar id="inPaymentDate" 
                             size="10"
@@ -45,7 +45,7 @@
                           styleClass="form-cell" 
                           rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
                 <p:outputLabel for="inPaymentMethod" 
-                               value="#{i18n['maintenance.form.payment-method']}: "/>
+                               value="#{i18n['payment.form.method']}: "/>
                 <br/>
                 <p:selectOneMenu id="inPaymentMethod" 
                                  style="width: 250px"
@@ -55,7 +55,7 @@
                             listener="#{movementBean.loadPaymentMethodFont()}" />
                     <f:selectItem itemValue="#{null}"
                                   noSelectionOption="true"
-                                  itemLabel="#{i18n['maintenance.form.select-one']}" />
+                                  itemLabel="#{i18n['payment.form.select-one']}" />
                     <f:selectItems var="paymentType"
                                    itemValue="#{paymentType}"
                                    itemLabel="#{i18n[paymentType]}"
@@ -65,7 +65,7 @@
             <h:panelGroup layout="block"
                           styleClass="form-cell">
                 <p:outputLabel for="inWallet" 
-                               value="#{i18n['maintenance.form.wallet']}: "/>
+                               value="#{i18n['payment.form.wallet']}: "/>
                 <br/>
                 <p:selectOneMenu id="inWallet" 
                                  style="width: 250px"
@@ -74,7 +74,7 @@
                                  disabled="#{movementBean.payment.paymentMethodType ne 'IN_CASH'}">
                     <f:selectItem itemValue="#{null}"
                                   noSelectionOption="true"
-                                  itemLabel="#{i18n['maintenance.form.select-one']}" />
+                                  itemLabel="#{i18n['payment.form.select-one']}" />
                     <f:selectItems var="wallet"
                                    itemValue="#{wallet}"
                                    itemLabel="#{wallet.friendlyName}"
@@ -85,7 +85,7 @@
                           styleClass="form-cell" 
                           rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
                 <p:outputLabel for="inCreditCard" 
-                               value="#{i18n['maintenance.form.credit-card']}: "/>
+                               value="#{i18n['payment.form.credit-card']}: "/>
                 <br/>
                 <p:selectOneMenu id="inCreditCard" 
                                  style="width: 250px"
@@ -94,7 +94,7 @@
                                  disabled="#{movementBean.payment.paymentMethodType ne 'CREDIT_CARD'}">
                     <f:selectItem itemValue="#{null}"
                                   noSelectionOption="true"
-                                  itemLabel="#{i18n['maintenance.form.select-one']}" />
+                                  itemLabel="#{i18n['payment.form.select-one']}" />
                     <f:selectItems var="creditCard"
                                    itemValue="#{creditCard}"
                                    itemLabel="#{creditCard.readableName}"
@@ -105,7 +105,7 @@
                           styleClass="form-cell" 
                           rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
                 <p:outputLabel for="inDebitCard" 
-                               value="#{i18n['maintenance.form.debit-card']}: "/>
+                               value="#{i18n['payment.form.debit-card']}: "/>
                 <br/>
                 <p:selectOneMenu id="inDebitCard" 
                                  style="width: 250px"
@@ -114,7 +114,7 @@
                                  disabled="#{movementBean.payment.paymentMethodType ne 'DEBIT_CARD'}">
                     <f:selectItem itemValue="#{null}"
                                   noSelectionOption="true"
-                                  itemLabel="#{i18n['maintenance.form.select-one']}" />
+                                  itemLabel="#{i18n['payment.form.select-one']}" />
                     <f:selectItems var="debitCard"
                                    itemValue="#{debitCard}"
                                    itemLabel="#{debitCard.readableName}"

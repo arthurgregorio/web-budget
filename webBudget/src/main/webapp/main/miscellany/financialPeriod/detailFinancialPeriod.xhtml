@@ -11,7 +11,7 @@
         <f:event type="preRenderView" 
                  listener="#{financialPeriodDetailsBean.initializeDetails(param.financialPeriodId)}" />
     </ui:define>
-    
+
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['miscellany']}" />
@@ -62,14 +62,9 @@
                 </h:panelGroup>
                 <p:spacer height="10" 
                           rendered="#{financialPeriodDetailsBean.showInsChart() eq true}" />
-                <p:barChart min="0" 
-                            animate="true"
-                            legendPosition="ne"  
-                            max="#{financialPeriodDetailsBean.graphInMax}" 
-                            value="#{financialPeriodDetailsBean.topInClasses}" 
-                            title="#{i18n['financial-period.chart.in-classes']}"
-                            datatipFormat="#{financialPeriodDetailsBean.datatipFormat}"
-                            rendered="#{financialPeriodDetailsBean.showInsChart() eq true}"/>
+                <p:chart type="bar"
+                         model="#{financialPeriodDetailsBean.topInClasses}" 
+                         rendered="#{financialPeriodDetailsBean.showInsChart() eq true}"/>
 
                 <h:panelGroup layout="block" 
                               styleClass="no-graph-outs"
@@ -79,14 +74,9 @@
                 </h:panelGroup>
                 <p:spacer height="25" 
                           rendered="#{financialPeriodDetailsBean.showOutsChart() eq true}" />
-                <p:barChart min="0" 
-                            animate="true"
-                            legendPosition="ne"  
-                            max="#{financialPeriodDetailsBean.graphOutMax}" 
-                            value="#{financialPeriodDetailsBean.topOutClasses}" 
-                            title="#{i18n['financial-period.chart.out-classes']}"
-                            datatipFormat="#{financialPeriodDetailsBean.datatipFormat}"
-                            rendered="#{financialPeriodDetailsBean.showOutsChart() eq true}"/> 
+                <p:chart type="bar"
+                         model="#{financialPeriodDetailsBean.topOutClasses}" 
+                         rendered="#{financialPeriodDetailsBean.showOutsChart() eq true}"/> 
             </div>
             <div style="text-align: right; width: 100%; padding-top: 20px">
                 <p:commandButton immediate="true"

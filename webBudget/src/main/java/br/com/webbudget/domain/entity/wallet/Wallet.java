@@ -102,7 +102,7 @@ public class Wallet extends PersistentEntity {
      * 
      * @return 
      */
-    public String getfriendlyName() {
+    public String getFriendlyName() {
         if (this.walletType == WalletType.BANK_ACCOUNT) {
             return this.name + " - " + this.bank;
         } 
