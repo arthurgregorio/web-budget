@@ -144,23 +144,8 @@ public class DashboardBean implements Serializable {
      * 
      * @return 
      */
-    public String getSaudation() {
-        
-        final int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-
-        final String saudation;
-        
-        if (hour < 13) {
-            saudation = "saudation.morning";
-        } else if (hour > 12 && hour < 19) {
-            saudation = "saudation.evening";
-        } else {
-            saudation = "saudation.night";
-        }
-
-        final User authenticated = AccountService.getCurrentAuthenticatedUser();
-
-        return this.messages.getMessage(saudation, authenticated.getName());
+    public String getCurrentUserName() {
+        return AccountService.getCurrentAuthenticatedUser().getName();
     }
     
     /**
