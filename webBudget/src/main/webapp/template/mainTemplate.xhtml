@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -6,137 +7,126 @@
       xmlns:sec="http://www.springframework.org/security/tags">
 
     <h:head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['images:favicon.ico']}"/>
 
         <script type="text/javascript" src="#{resource['js:locale.js']}" />
 
-        <h:outputStylesheet library="css" name="style.css" />
         <h:outputStylesheet library="css" name="custom.css" />
+        <h:outputStylesheet library="css" name="style.css" />
 
         <title>#{i18n['application.title']}</title>
         <ui:insert name="head" />
     </h:head>
 
-    <h:body>
-        <!-- wrapper -->
-        <div class="wrapper ui-grid ui-grid-responsive">
-            <!-- header-->
-            <header class="header ui-grid-row">
-                <div class="ui-grid-col-6">
+    <h:body class="webbudget-body">
+        <div class="wrapper">
+            <div class="header">
+                <div class="logo">
                     <h:link outcome="/main/home.xhtml">
                         <p:graphicImage library="images" name="ui-webbudget.png" />
                     </h:link>
                 </div>
-                <div class="ui-grid-col-6">
-                    <h:form>
-                        <p:menuButton iconPos="right" 
-                                      value="#{dashboardBean.currentUserName}">
-                            <p:menuitem value="#{i18n['controls.logout']}" 
-                                        action="#{dashboardBean.doLogout()}"/>
-                            <p:menuitem value="#{i18n['controls.my-account']}" 
-                                        url="/main/tools/users/accountPreferences.xhtml?faces-redirect=true" />
-                        </p:menuButton>
-                    </h:form>
-                </div>
-            </header>
-            <!-- content -->
-            <main class="content ui-grid-row">
-                <div class="ui-grid-col-12">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
-                            <p:menubar id="menuBar">
-                                <p:submenu label="#{i18n['menu.entries']}" >
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.entries.cards']}"    
-                                                    url="/main/entries/cards/listCards.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.entries.wallets']}"
-                                                    url="/main/entries/wallets/listWallets.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.entries.cost-center']}"    
-                                                    url="/main/entries/costCenter/listCostCenters.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_CLASS_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.entries.movement-classes']}"
-                                                    url="/main/entries/movementClass/listMovementClasses.xhtml"/>
-                                    </sec:authorize>
-                                </p:submenu>
-                                <p:submenu label="#{i18n['menu.financial']}" >
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.financial.movements']}"    
-                                                    url="/main/financial/movement/listMovements.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.financial.card-invoice']}"    
-                                                    url="/main/financial/cardInvoice/generateCardInvoice.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.BALANCE_TRANSFER_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.financial.transfers']}"    
-                                                    url="/main/financial/transfer/listTransfers.xhtml"/>
-                                    </sec:authorize>
-                                </p:submenu>
-                                <p:submenu label="#{i18n['menu.miscellany']}" >
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.miscellany.closing']}"    
-                                                    url="/main/miscellany/closing/closeFinancialPeriod.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.miscellany.financial-periods']}"    
-                                                    url="/main/miscellany/financialPeriod/listFinancialPeriods.xhtml"/>
-                                    </sec:authorize>
-                                </p:submenu>
-                                <p:submenu label="#{i18n['menu.tools']}" >
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.tools.users']}"    
-                                                    url="/main/tools/users/listUserAccounts.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.PRIVATE_MESSAGES_VIEW}">
-                                        <p:menuitem value="#{i18n['menu.tools.private-messages']}"    
-                                                    url="/main/tools/privateMessages/listPrivateMessages.xhtml"/>
-                                    </sec:authorize>
-                                </p:submenu>
-                            </p:menubar>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
-                            <p:breadCrumb homeDisplay="text"
-                                          styleClass="breadcrumb">
-                                <p:menuitem value="#{breadcrumb['home']}"
-                                            url="/main/home.xhtml" />
-                                <ui:insert name="breadcrumb" />
-                            </p:breadCrumb>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
-                            <ui:insert name="content" />
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+                <div class="controls">
+                    <span style="position: relative; top: 25px; right: 10px">
 
-        <!-- footer -->
-        <footer class="footer">
+                    </span>
+                    <br/>
+                    <p:commandLink style="position: relative; top: 30px; right: 13px"
+                                   value="#{i18n['controls.logout']}" 
+                                   action="#{dashboardBean.doLogout()}"/>
+                    <p:spacer width="10"/> 
+                    <p:commandLink style="position: relative; top: 30px; right: 13px"
+                                   value="#{i18n['controls.my-account']}" 
+                                   action="/main/tools/users/accountPreferences.xhtml?faces-redirect=true"/>
+                </div>
+            </div>
+            <div class="menu">
+                <p:menubar>
+                    <p:submenu label="#{i18n['menu.entries']}" >
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_VIEW}">
+                            <p:menuitem value="#{i18n['menu.entries.cards']}"    
+                                        url="/main/entries/cards/listCards.xhtml"/>
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_VIEW}">
+                            <p:menuitem value="#{i18n['menu.entries.wallets']}"
+                                        url="/main/entries/wallets/listWallets.xhtml"/>
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_VIEW}">
+                            <p:menuitem value="#{i18n['menu.entries.cost-center']}"    
+                                        url="/main/entries/costCenter/listCostCenters.xhtml"/>
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_CLASS_VIEW}">
+                            <p:menuitem value="#{i18n['menu.entries.movement-classes']}"
+                                        url="/main/entries/movementClass/listMovementClasses.xhtml"/>
+                        </sec:authorize>
+                    </p:submenu>
+                    <p:submenu label="#{i18n['menu.financial']}" >
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_VIEW}">
+                            <p:menuitem value="#{i18n['menu.financial.movements']}"    
+                                        url="/main/financial/movement/listMovements.xhtml"/>
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_VIEW}">
+                            <p:menuitem value="#{i18n['menu.financial.card-invoice']}"    
+                                        url="/main/financial/cardInvoice/generateCardInvoice.xhtml"/>
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.BALANCE_TRANSFER_VIEW}">
+                            <p:menuitem value="#{i18n['menu.financial.transfers']}"    
+                                        url="/main/financial/transfer/listTransfers.xhtml"/>
+                        </sec:authorize>
+                    </p:submenu>
+                    <p:submenu label="#{i18n['menu.miscellany']}" >
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_VIEW}">
+                            <p:menuitem value="#{i18n['menu.miscellany.closing']}"    
+                                        url="/main/miscellany/closing/closeFinancialPeriod.xhtml"/>
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_VIEW}">
+                            <p:menuitem value="#{i18n['menu.miscellany.financial-periods']}"    
+                                        url="/main/miscellany/financialPeriod/listFinancialPeriods.xhtml"/>
+                        </sec:authorize>
+                    </p:submenu>
+                    <p:submenu label="#{i18n['menu.tools']}" >
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_VIEW}">
+                            <p:menuitem value="#{i18n['menu.tools.users']}"    
+                                        url="/main/tools/users/listUserAccounts.xhtml"/>
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.PRIVATE_MESSAGES_VIEW}">
+                            <p:menuitem value="#{i18n['menu.tools.private-messages']}"    
+                                        url="/main/tools/privateMessages/listPrivateMessages.xhtml"/>
+                        </sec:authorize>
+                    </p:submenu>
+                </p:menubar>
+            </div>
+            <div class="breadcrumb">
+                <div class="breadcrumb-box">
+                    <p:breadCrumb homeDisplay="text"
+                                  style="background: none; border: none !important">
+                        <p:menuitem value="#{breadcrumb['home']}"
+                                    url="/main/home.xhtml" />
+                        <ui:insert name="breadcrumb" />
+                    </p:breadCrumb>
+                </div>
+            </div>
+            <div class="content-wrapper">
+                <div class="content">
+                    <ui:insert name="content" />
+                </div>
+            </div>
+        </div>
+        <!-- rodape -->
+        <div class="footer">
             <div class="footer-text">
                 <span style="font-weight: bold; color: #0081c2">web</span><span style="font-weight: bold">Budget</span>
                 <h:outputText escape="false" 
                               value=" v#{dashboardBean.version}"/>
-                | <span style="font-weight: bold">AG.Software</span> 2014 
+                | <span style="font-weight: bold">AG.Software</span> 2015 
             </div>
-        </footer>
+        </div>
 
-        <!-- popups entram aqui -->
         <ui:insert name="popups" />
-
-        <div style="clear: both"/>
     </h:body>
+
+    <div style="clear: both"/>
 </html>
 
