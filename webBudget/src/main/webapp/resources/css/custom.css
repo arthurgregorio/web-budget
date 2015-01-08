@@ -5,33 +5,23 @@
 
 @charset "utf-8";
 
-.ui-messages-error-icon {
-    background: url("#{resource['images:ui-error-alert.png']}") no-repeat !important;
-    background-position: 0px -52px;
+/* acerta o breadcrumb na template */
+.ui-breadcrumb {
+    padding: 10px !important;
 }
-.ui-menuitem-link {
-    margin-top: 3px;
+.ui-breadcrumb a {
+    text-decoration: none;
 }
-.ui-button {
-    height: 30px;
-    width: 100px;
-}
+
+/* remove linhas indesejadas nos widgets */
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
     border-color: #ccc !important;
 }
-.ui-widget-header {
-    border: 1px solid #DFDFD8 !important;
-}
+
+/* legenda do grafico na dashboard sem bordas */
 .jqplot-table-legend {
     border: none !important;
 }
 .jqplot-table-legend-label {
     padding-right: 5px !important;
-}
-.selectmanycheckbox.ui-widget label, .ui-selectoneradio.ui-widget label {
-    padding-left: 5px;
-    padding-bottom: 3px;
-}
-.ui-icon-home {
-    background: url("#{resource['images:ui-home-icon.png']}") no-repeat !important;
 }

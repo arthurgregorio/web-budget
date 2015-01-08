@@ -57,10 +57,10 @@ public class AuthenticationBean implements Serializable {
 
         try {
             this.accountService.login(this.user);
-            return "/main/home.xhtml?faces-redirect=true";
+            return "/main/dashboard.xhtml?faces-redirect=true";
         } catch (ApplicationException ex) {
             Messages.addError(null, this.messages.getMessage(ex.getMessage()));
-            return null;
+            return "";
         }
     }
     
