@@ -18,7 +18,11 @@
         <!-- bundle -->
         <resource-bundle>  
             <base-name>i18n.messages</base-name>  
-            <var>i18n</var>
+            <var>messages</var>
+        </resource-bundle>  
+        <resource-bundle>  
+            <base-name>i18n.menu</base-name>  
+            <var>menu</var>
         </resource-bundle>  
         <resource-bundle>  
             <base-name>i18n.breadcrumb</base-name>  

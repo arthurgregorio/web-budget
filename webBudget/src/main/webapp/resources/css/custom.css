@@ -6,7 +6,7 @@
 @charset "utf-8";
 
 .ui-messages-error-icon {
-    background: url("/webBudget/javax.faces.resource/ui-error-alert.png.xhtml?ln=images") no-repeat !important;
+    background: url("#{resource['images:ui-error-alert.png']}") no-repeat !important;
     background-position: 0px -52px;
 }
 .ui-menuitem-link {
@@ -33,5 +33,5 @@
     padding-bottom: 3px;
 }
 .ui-icon-home {
-    background: url("/webBudget/javax.faces.resource/ui-home-icon.png.xhtml?ln=images") no-repeat !important;
+    background: url("#{resource['images:ui-home-icon.png']}") no-repeat !important;
 }
