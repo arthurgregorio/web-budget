@@ -19,9 +19,7 @@ body {
 .wrapper {
     width: 70%;
     margin: 0 auto;
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
+    min-height: 90%;
 }
 
 /* sessoes do layout ------------------------- */
@@ -36,8 +34,8 @@ body {
 }
 .footer {
     width: 70%;
-    margin: -100px auto 0;
-    height: 50px;
+    margin: 0 auto;
+    height: 10%;
     position: relative;
     text-align: center;
 }
@@ -45,7 +43,7 @@ body {
 /* componentes do layout base ---------------- */
 .footer-text {
     position: relative;
-    top: 15px;
+    top: 45px;
 }
 
 /* classes gerais do layout ------------------ */
@@ -70,7 +68,7 @@ body {
     -webkit-border-radius: 10px;
 }
 .login div {
-    text-align: right;
+    text-align: center;
 }
 .input {
     color: rgb(61, 61, 61);
