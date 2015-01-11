@@ -5,7 +5,7 @@
 
 @charset "utf-8";
 
-@import "reset.css.xhtml?ln=css";
+@import url('reset.css.xhtml?ln=css');
 
 /* corpo da pagina --------------------------- */
 html {
@@ -25,6 +25,18 @@ body {
 /* sessoes do layout ------------------------- */
 .header {
     height: 100px;
+}
+.logo a {
+    position: relative;
+    top: 12px;
+}
+.session-controls { 
+    text-align: right;
+}
+.session-controls button {
+    position: relative;
+    top: 35px;
+    right: 10px;
 }
 .breadcrumb {
     padding: 0 10px;
@@ -48,8 +60,8 @@ body {
 
 /* classes gerais do layout ------------------ */
 .wb-button {
-    height: 30px;
-    width: 100px;
+    height: 30px !important;
+    width: 100px; 
 }
 
 /* tela de login ----------------------------- */

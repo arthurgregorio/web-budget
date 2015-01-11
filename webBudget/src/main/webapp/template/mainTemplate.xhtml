@@ -25,17 +25,21 @@
         <div class="wrapper">
             <div class="ui-grid ui-grid-responsive">
                 <div class="header ui-grid-row">
-                    <div class="ui-grid-col-6">
+                    <div class="ui-grid-col-6 logo">
                         <h:link outcome="/main/dashboard.xhtml">
                             <p:graphicImage library="images" name="ui-webbudget.png" />
                         </h:link>
                     </div>
-                    <div class="ui-grid-col-6">
-                        <p:commandLink value="#{menu['dashboard.logout']}" 
-                                       action="#{dashboardBean.doLogout()}"/>
-                        <p:spacer width="10"/> 
-                        <p:commandLink value="#{menu['dashboard.account']}" 
-                                       action="/main/tools/users/accountPreferences.xhtml?faces-redirect=true"/>
+                    <div class="ui-grid-col-6 session-controls">
+                        <h:form>
+                            <p:menuButton iconPos="right"
+                                          value="#{dashboardBean.currentUserName}">
+                                <p:menuitem value="#{menu['dashboard.logout']}" 
+                                            action="#{dashboardBean.doLogout()}"/>
+                                <p:menuitem value="#{menu['dashboard.account']}" 
+                                            action="/main/tools/users/accountPreferences.xhtml?faces-redirect=true"/>
+                            </p:menuButton>
+                        </h:form>
                     </div>
                 </div>
                 <div class="ui-grid-row">
