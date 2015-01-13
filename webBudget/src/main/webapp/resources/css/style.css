@@ -71,7 +71,9 @@ body {
     position: relative;
     margin: -50px auto 0;
     width: 100%;
-    height: 50px;
+    height: 49px;
+    background: #f3f5f6;
+    border-top: 1px solid #dee4e8;
 }
 .footer-content {
     position: relative;
@@ -89,21 +91,27 @@ body {
     width: 80%;
 }
 .footer-text {
+    position: relative;
     float: left;
     width: 50%;
     background: greenyellow;
 }
 .footer-logo {
+    position: relative;
     float: left;
     width: 50%;
     background: red;
 }
 
 /* classes gerais do layout ------------------ */
+td {
+    vertical-align: middle !important;
+}
 .wb-button {
     height: 30px !important;
     width: 100px; 
 }
+
 
 /* areas da template ------------------------- */
 .main-menu {
@@ -214,12 +222,12 @@ body {
     box-shadow: 1px 1px 2px rgba(200, 200, 200, 0.2) inset;
 }
 #inUser {
-    background: url("#{resource['images:ui-icon-user.png']}") no-repeat scroll 7px 9px;
+    background: url("/webBudget/javax.faces.resource/ui-icon-user.png.xhtml?ln=images") no-repeat scroll 7px 9px;
     padding-left: 35px;
     margin-bottom: 10px;
 }
 #inPassword {
-    background: url("#{resource['images:ui-icon-key.png']}") no-repeat scroll 7px 9px;
+    background: url("/webBudget/javax.faces.resource/ui-icon-key.png.xhtml?ln=images") no-repeat scroll 7px 9px;
     padding-left: 35px;
     margin-bottom: 20px;
 }

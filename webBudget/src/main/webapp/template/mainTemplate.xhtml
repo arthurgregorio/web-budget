@@ -118,18 +118,24 @@
             </div>
             <div class="content">
                 <div class="content-content">
-                    <ui:insert name="content" />
+                    <div class="ui-grid ui-grid-responsive">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-12">
+                                <ui:insert name="content" />
+                            </div> 
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="footer">
             <div class="footer-content">
                 <div class="footer-logo">
-                    logo
+                    
                 </div>
                 <div class="footer-text">
                     <h:outputText escape="false" 
-                                  value=" v#{dashboardBean.version}"/>
+                                  value="#{messages['application.version']}: #{dashboardBean.version}"/>
                 </div>
             </div>
         </div>
