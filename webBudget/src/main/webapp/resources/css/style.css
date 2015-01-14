@@ -94,7 +94,6 @@ body {
     position: relative;
     float: left;
     width: 50%;
-    background: greenyellow;
 }
 .footer-logo {
     position: relative;
@@ -111,7 +110,18 @@ td {
     height: 30px !important;
     width: 100px; 
 }
-
+.div-tb-10 {
+    padding: 10px 0;
+}
+.div-lr-10 {
+    padding: 10px 0;
+}
+.div-align-right {
+    text-align: right;
+}
+.div-align-left {
+    text-align: left;
+}
 
 /* areas da template ------------------------- */
 .main-menu {

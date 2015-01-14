@@ -19,67 +19,72 @@
         <p:menuitem url="listCostCenters.xhtml"
                     value="#{breadcrumb['entries.cost-center']}" />
     </ui:define>
-    
+
     <ui:define name="content">
 
-        <p:messages id="messages" closable="true" globalOnly="true"/>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:messages id="messages" closable="true" globalOnly="true"/>
+            </div>
+        </div>
 
         <h:form id="controlsForm" prependId="false">
-            <div class="controls-box">
-                <div class="filter-box">
-                    <div class="filter-cell">
+            <div class="ui-grid-row div-tb-10">
+                <div class="ui-grid-col-10">
 
-                    </div>
                 </div>
-                <div class="button-box">
+                <div class="ui-grid-col-2 div-align-right">
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_INSERT}">
                         <p:commandButton immediate="true"
-                                         styleClass="green-button" 
-                                         value="#{i18n['list.add']}"
+                                         icon="ui-icon-plus"
+                                         styleClass="wb-button"  
+                                         value="#{messages['list.add']}"
                                          action="#{costCenterBean.changeToAdd()}"/>
                     </sec:authorize>
                 </div>
             </div>
         </h:form>
-
-        <div style="float: left; width: 100%">
-            <p:dataTable id="costCentersList" 
-                         rows="15"
-                         paginator="true"
-                         var="costCenter"
-                         paginatorPosition="bottom"
-                         paginatorAlwaysVisible="false"
-                         value="#{costCenterBean.costCenters}"
-                         emptyMessage="#{i18n['cost-center.list.empty']}">
-                <p:column width="10%" 
-                          style="text-align: center"
-                          headerText="#{i18n['cost-center.list.blocked']}">
-                    <p:selectBooleanCheckbox disabled="true" value="#{costCenter.blocked}" />
-                </p:column>
-                <p:column headerText="#{i18n['cost-center.list.name']}">
-                    #{costCenter.name}
-                </p:column>
-                <p:column width="20%" 
-                          style="text-align: center"
-                          headerText="#{i18n['cost-center.list.budget']}">
-                    <h:outputText value="R$ #{costCenter.budget}"/>
-                </p:column>
-                <p:column width="15%" 
-                          style="text-align: center"
-                          headerText="#{i18n['list.action']}">
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_UPDATE}">
-                        <p:commandButton icon="icon-edit"
-                                         title="#{i18n['list.label.edit']}"
-                                         action="#{costCenterBean.changeToEdit(costCenter.id)}" />
-                    </sec:authorize>
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_DELETE}">
-                        <p:spacer width="10"/>
-                        <p:commandButton icon="icon-delete"
-                                         title="#{i18n['list.label.delete']}"
-                                         actionListener="#{costCenterBean.changeToDelete(costCenter.id)}" />
-                    </sec:authorize>
-                </p:column>
-            </p:dataTable>
+        
+        <div class="ui-grid-row div-tb-10">
+            <div class="ui-grid-col-12">
+                <p:dataTable id="costCentersList" 
+                             rows="15"
+                             paginator="true"
+                             var="costCenter"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{costCenterBean.costCenters}"
+                             emptyMessage="#{messages['cost-center.list.empty']}">
+                    <p:column width="10%" 
+                              style="text-align: center"
+                              headerText="#{messages['cost-center.list.blocked']}">
+                        <p:selectBooleanCheckbox disabled="true" value="#{costCenter.blocked}" />
+                    </p:column>
+                    <p:column headerText="#{messages['cost-center.list.name']}">
+                        #{costCenter.name}
+                    </p:column>
+                    <p:column width="20%" 
+                              style="text-align: center"
+                              headerText="#{messages['cost-center.list.budget']}">
+                        <h:outputText value="R$ #{costCenter.budget}"/>
+                    </p:column>
+                    <p:column width="15%" 
+                              style="text-align: center"
+                              headerText="#{messages['list.action']}">
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_UPDATE}">
+                            <p:commandButton icon=" ui-icon-pencil"
+                                             title="#{messages['list.label.edit']}"
+                                             action="#{costCenterBean.changeToEdit(costCenter.id)}" />
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_DELETE}">
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             title="#{messages['list.label.delete']}"
+                                             actionListener="#{costCenterBean.changeToDelete(costCenter.id)}" />
+                        </sec:authorize>
+                    </p:column>
+                </p:dataTable>
+            </div>
         </div>
     </ui:define>
 
