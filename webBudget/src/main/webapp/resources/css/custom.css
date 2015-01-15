@@ -45,3 +45,8 @@ li[role="menuitem"] .ui-button-icon-left {
     background-position: initial !important;
     background-image: url("#{resource['images:ui-icon-arrow-right.png']}") !important;
 }
+
+/* customizacao da posicao do texto no checkbox */
+.ui-chkbox .ui-chkbox-label {
+    margin: 1px 0 0 3px !important;
+}

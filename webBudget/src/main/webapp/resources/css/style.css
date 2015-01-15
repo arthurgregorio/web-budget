@@ -16,11 +16,6 @@ body {
     width: 100%;
     height: 100%;
 }
-.wrapper {
-    width: 70%;
-    margin: 0 auto;
-    min-height: 90%;
-}
 
 /* sessoes do layout ------------------------- */
 .container {
@@ -53,12 +48,12 @@ body {
     margin: 0 auto;
     width: 80%;
     height: auto;
-    padding-bottom: 25px;
 }
 .footer {
     width: 100%;
-    height: 50px;
+    height: 5%;
     background: #f3f5f6;
+    margin-top: -1px;
     border-top: 1px solid #dee4e8;
 }
 .footer-content {
@@ -115,6 +110,33 @@ td {
 }
 .div-align-left {
     text-align: left;
+}
+.form-group {
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 0 0 15px;
+}
+.form-group input[role="textbox"] {
+    display: block;
+    width: 81%;
+    padding: 8px 10px;
+    font-size: 10.5pt;
+}
+.form-group div.ui-selectonemenu {
+    display: block;
+}
+.form-group div.ui-selectonemenu {
+    width: 50% !important;
+}
+.form-group div.ui-selectonemenu > label {
+    padding: 10px 7px 6px;
+    height: 20px !important;
+    width: 92% !important;
+}
+.form-group label.ui-outputlabel {
+    display: inline-block;
+    margin: 0px 0px 5px;
+    font-weight: 700;
 }
 
 /* areas da template ------------------------- */
