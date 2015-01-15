@@ -6,7 +6,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="/template/mainTemplate.xhtml">
-    
+
     <ui:define name="head">
         <f:event type="preRenderView" 
                  listener="#{privateMessageBean.initializeListing()}" />
@@ -24,60 +24,65 @@
                     value="#{breadcrumb['edition']}" 
                     rendered="#{privateMessageBean.viewState eq 'EDIT'}"/>
     </ui:define>
-    
+
     <ui:define name="content">
 
-        <p:messages id="messages" closable="true" globalOnly="true"/>
-        
-        <h:form id="controlsForm" prependId="false">
-            <div class="controls-box">
-                <div class="filter-box">
-                    <div class="filter-cell">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:messages id="messages" closable="true" globalOnly="true"/>
+            </div>
+        </div>
 
-                    </div>
+        <h:form id="controlsForm" prependId="false">
+            <div class="ui-grid-row div-tb-10">
+                <div class="ui-grid-col-10">
+
                 </div>
-                <div class="button-box">
+                <div class="ui-grid-col-2 div-align-right">
                     <p:commandButton immediate="true"
-                                     styleClass="green-button" 
-                                     value="#{i18n['list.add']}"
+                                     styleClass="wb-button" 
+                                     value="#{messages['list.add']}"
                                      action="#{privateMessageBean.changeToAdd()}"/>
                 </div>
             </div>
         </h:form>
 
-        <div style="float: left; width: 100%">
-            <p:dataTable id="privateMessagesList" 
-                         rows="15"
-                         paginator="true"
-                         var="privateMessage"
-                         paginatorPosition="bottom"
-                         paginatorAlwaysVisible="false"
-                         value="#{privateMessageBean.privateMessages}"
-                         emptyMessage="#{i18n['private-message.list.empty']}">
+        <div class="ui-grid-row div-tb-10">
+            <div class="ui-grid-col-12">
 
-                <p:column headerText="#{i18n['private-message.list.title']}">
-                    #{privateMessage.title}
-                </p:column>
-                <p:column width="20%"
-                          style="text-align: center"
-                          headerText="#{i18n['private-message.list.posted-at']}">
-                    <h:outputText value="#{privateMessage.inclusion}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                    </h:outputText>
-                </p:column>
+                <p:dataTable id="privateMessagesList" 
+                             rows="15"
+                             paginator="true"
+                             var="privateMessage"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{privateMessageBean.privateMessages}"
+                             emptyMessage="#{messages['private-message.list.empty']}">
 
-                <p:column width="15%" 
-                          style="text-align: center"
-                          headerText="#{i18n['list.action']}">
-                    <p:commandButton icon="icon-detail"
-                                     title="#{i18n['list.label.detail']}"
-                                     action="#{privateMessageBean.changeToDetails(privateMessage.id)}" />
-                    <p:spacer width="10"/>
-                    <p:commandButton icon="icon-delete"
-                                     title="#{i18n['list.label.delete']}"
-                                     actionListener="#{privateMessageBean.changeToDelete(privateMessage.id)}" />
-                </p:column>
-            </p:dataTable>
+                    <p:column headerText="#{messages['private-message.list.title']}">
+                        #{privateMessage.title}
+                    </p:column>
+                    <p:column width="20%"
+                              style="text-align: center"
+                              headerText="#{messages['private-message.list.posted-at']}">
+                        <h:outputText value="#{privateMessage.inclusion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column width="15%" 
+                              style="text-align: center"
+                              headerText="#{messages['list.action']}">
+                        <p:commandButton icon="icon-detail"
+                                         title="#{messages['list.label.detail']}"
+                                         action="#{privateMessageBean.changeToDetails(privateMessage.id)}" />
+                        <p:spacer width="10"/>
+                        <p:commandButton icon="icon-delete"
+                                         title="#{messages['list.label.delete']}"
+                                         actionListener="#{privateMessageBean.changeToDelete(privateMessage.id)}" />
+                    </p:column>
+                </p:dataTable>
+            </div>
         </div>
     </ui:define>
 

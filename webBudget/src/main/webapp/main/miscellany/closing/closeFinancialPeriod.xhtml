@@ -13,7 +13,7 @@
         <f:event type="preRenderView" 
                  listener="#{closingBean.initializeClosing(param.financialPeriodId)}" />
     </ui:define>
-    
+
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['miscellany']}" />
@@ -23,48 +23,50 @@
 
     <ui:define name="content">
 
-        <p:messages id="messages" closable="true" globalOnly="true" />
-        
-        <h:form id="controlsForm" prependId="false">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:messages id="messages" closable="true" globalOnly="true"/>
+            </div>
+        </div>
 
-            <div class="controls-box">
-                <div class="filter-box">
-                    <div class="filter-cell">
-                        <p:outputLabel for="inFinancialPeriod" 
-                                       styleClass="filter-label"
-                                       value="#{i18n['closing.filter.financial-period']}: "/>
-                        <p:selectOneMenu id="inFinancialPeriod" 
-                                         style="width: 250px"
-                                         value="#{closingBean.financialPeriod}"
-                                         converter="omnifaces.SelectItemsConverter">
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{i18n['closing.select-one']}" />
-                            <f:selectItems var="financialPeriod" 
-                                           itemValue="#{financialPeriod}"
-                                           value="#{closingBean.financialPeriods}" 
-                                           itemLabel="#{financialPeriod.identification}"/> 
-                        </p:selectOneMenu>
-                    </div>
+        <h:form id="controlsForm" prependId="false">
+            <div class="ui-grid-row div-tb-10">
+                <div class="ui-grid-col-10">
+                    <p:outputLabel for="inFinancialPeriod" 
+                                   styleClass="filter-label"
+                                   value="#{messages['closing.filter.financial-period']}: "/>
+                    <p:selectOneMenu id="inFinancialPeriod" 
+                                     style="width: 250px"
+                                     value="#{closingBean.financialPeriod}"
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemValue="#{null}"
+                                      noSelectionOption="true"
+                                      itemLabel="#{messages['closing.select-one']}" />
+                        <f:selectItems var="financialPeriod" 
+                                       itemValue="#{financialPeriod}"
+                                       value="#{closingBean.financialPeriods}" 
+                                       itemLabel="#{financialPeriod.identification}"/> 
+                    </p:selectOneMenu>
                 </div>
-                <div class="button-box">
+                <div class="ui-grid-col-2 div-align-right">
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_PROCESS}">
-                        <p:commandButton styleClass="yellow-button"
-                                         value="#{i18n['closing.process']}"
+                        <p:commandButton styleClass="wb-button" 
+                                         value="#{messages['closing.process']}"
                                          actionListener="#{closingBean.process()}"
                                          rendered="#{closingBean.canProcessPeriod()}"/>
                     </sec:authorize>
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_CLOSE}">
-                        <p:commandButton styleClass="red-button"
-                                         value="#{i18n['closing.close']}"
+                        <p:commandButton styleClass="wb-button"
+                                         value="#{messages['closing.close']}"
                                          rendered="#{closingBean.canClosePeriod()}" 
                                          actionListener="#{closingBean.changeToClose()}" />
                     </sec:authorize>
                 </div>
             </div>
-            
-            <div style="float: left; width: 100%">
-                
+        </h:form>
+
+        <div class="ui-grid-row div-tb-10">
+            <div class="ui-grid-col-12">
                 <p:dataTable id="movementsList" 
                              rows="20"
                              var="movement"
@@ -73,41 +75,41 @@
                              paginatorAlwaysVisible="false"
                              value="#{closingBean.closing.openMovements}"
                              emptyMessage="#{closingBean.closing eq null 
-                                             ? i18n['closing.list.process-first'] 
-                                             : i18n['closing.list.empty']}">
+                                             ? messages['closing.list.process-first'] 
+                                             : messages['closing.list.empty']}">
                     <p:column width="10%" 
                               style="text-align: center"
-                              headerText="#{i18n['closing.list.code']}">
+                              headerText="#{messages['closing.list.code']}">
                         #{movement.code}
                     </p:column>
-                    <p:column headerText="#{i18n['closing.list.description']}">
+                    <p:column headerText="#{messages['closing.list.description']}">
                         #{movement.description}
                     </p:column>
                     <p:column width="15%"
                               style="text-align: center" 
-                              headerText="#{i18n['closing.list.value']}">
+                              headerText="#{messages['closing.list.value']}">
                         <h:outputText value="R$ #{movement.value}" />
                     </p:column>
                     <p:column width="15%"
                               style="text-align: center" 
-                              headerText="#{i18n['closing.list.due-date']}">
+                              headerText="#{messages['closing.list.due-date']}">
                         <h:outputText value="#{movement.dueDate}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText> 
                     </p:column>
                     <p:column width="10%" 
                               style="text-align: center"
-                              headerText="#{i18n['closing.list.delete']}">
+                              headerText="#{messages['closing.list.delete']}">
                         <p:selectBooleanCheckbox value="#{movement.delete}" />
                     </p:column>
                     <p:column width="10%" 
                               style="text-align: center"
-                              headerText="#{i18n['closing.list.transfer']}">
+                              headerText="#{messages['closing.list.transfer']}">
                         <p:selectBooleanCheckbox value="#{movement.transfer}" />
                     </p:column>
                 </p:dataTable>
             </div>
-        </h:form>
+        </div>
     </ui:define>
 
     <ui:define name="popups">

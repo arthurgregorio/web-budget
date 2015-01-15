@@ -20,110 +20,111 @@
         <p:menuitem url="generateCardInvoice.xhtml"
                     value="#{breadcrumb['financial.card-invoice']}" />
     </ui:define>
-    
+
     <ui:define name="content">
 
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:messages id="messages" closable="true" globalOnly="true"/>
+            </div>
+        </div>
+
         <h:form id="controlsForm" prependId="false">
-            
-            <p:messages id="messages" closable="true" globalOnly="true" />
-            
-            <div class="controls-box">
-                <div class="filter-box">
-                    <div class="filter-cell">
-                        <p:outputLabel for="inCards"
-                                       styleClass="filter-label"
-                                       value="#{i18n['card-invoice.filter.card']}: "/>
-                        <p:selectOneMenu id="inCards" 
-                                         style="width: 250px"
-                                         converter="omnifaces.SelectItemsConverter"
-                                         value="#{cardInvoiceBean.cardInvoice.card}">
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{i18n['card-invoice.select-one']}" />
-                            <f:selectItems var="card"
-                                           itemValue="#{card}"
-                                           itemLabel="#{card.readableName}"
-                                           value="#{cardInvoiceBean.cards}"/>
-                        </p:selectOneMenu>
-                    </div>
-                    <div class="filter-cell filter-cell-margin" >
-                        <p:outputLabel for="inFinancialPeriods"
-                                       styleClass="filter-label"
-                                       value="#{i18n['card-invoice.filter.financial-period']}: "/>
-                        <p:selectOneMenu id="inFinancialPeriods" 
-                                         style="width: 250px"
-                                         converter="omnifaces.SelectItemsConverter"
-                                         value="#{cardInvoiceBean.cardInvoice.financialPeriod}">
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{i18n['card-invoice.select-one']}" />
-                            <f:selectItems var="financialPeriod" 
-                                           itemValue="#{financialPeriod}"
-                                           value="#{cardInvoiceBean.financialPeriods}" 
-                                           itemLabel="#{financialPeriod.identification}"/> 
-                        </p:selectOneMenu>
-                    </div>
+            <div class="ui-grid-row div-tb-10">
+                <div class="ui-grid-col-5">
+                    <p:outputLabel for="inCards"
+                                   styleClass="filter-label"
+                                   value="#{messages['card-invoice.filter.card']}: "/>
+                    <p:selectOneMenu id="inCards" 
+                                     style="width: 250px"
+                                     converter="omnifaces.SelectItemsConverter"
+                                     value="#{cardInvoiceBean.cardInvoice.card}">
+                        <f:selectItem itemValue="#{null}"
+                                      noSelectionOption="true"
+                                      itemLabel="#{messages['card-invoice.select-one']}" />
+                        <f:selectItems var="card"
+                                       itemValue="#{card}"
+                                       itemLabel="#{card.readableName}"
+                                       value="#{cardInvoiceBean.cards}"/>
+                    </p:selectOneMenu>
                 </div>
-                <div class="button-box">
+                <div class="ui-grid-col-5">
+                    <p:outputLabel for="inFinancialPeriods"
+                                   styleClass="filter-label"
+                                   value="#{messages['card-invoice.filter.financial-period']}: "/>
+                    <p:selectOneMenu id="inFinancialPeriods" 
+                                     style="width: 250px"
+                                     converter="omnifaces.SelectItemsConverter"
+                                     value="#{cardInvoiceBean.cardInvoice.financialPeriod}">
+                        <f:selectItem itemValue="#{null}"
+                                      noSelectionOption="true"
+                                      itemLabel="#{messages['card-invoice.select-one']}" />
+                        <f:selectItems var="financialPeriod" 
+                                       itemValue="#{financialPeriod}"
+                                       value="#{cardInvoiceBean.financialPeriods}" 
+                                       itemLabel="#{financialPeriod.identification}"/> 
+                    </p:selectOneMenu>
+                </div>
+                <div class="ui-grid-col-2 div-align-right">
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PAY}">
                         <p:commandButton immediate="true" 
-                                         style="width: 120px;"
-                                         styleClass="green-button"
-                                         value="#{i18n['card-invoice.pay']}" 
+                                         styleClass="wb-button" 
+                                         value="#{messages['card-invoice.pay']}" 
                                          rendered="#{cardInvoiceBean.canPay() eq true}"
                                          actionListener="#{cardInvoiceBean.changeToPay()}"/>
                     </sec:authorize>
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PROCESS}">
                         <p:spacer width="10"/>
-                        <p:commandButton style="width: 120px;"
-                                         styleClass="green-button"
-                                         value="#{i18n['card-invoice.generate-invoice']}"
+                        <p:commandButton styleClass="wb-button" 
+                                         value="#{messages['card-invoice.generate-invoice']}"
                                          actionListener="#{cardInvoiceBean.generateInvoice()}" />
                     </sec:authorize>
                 </div>
             </div>
         </h:form>
 
-        <div style="float: left; width: 100%">
-            <p:dataTable id="movementsList" 
-                         rows="30"
-                         var="movement"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         paginatorAlwaysVisible="false"
-                         value="#{cardInvoiceBean.cardInvoice.movements}"
-                         emptyMessage="#{cardInvoiceBean.cardInvoice.movements eq null 
-                                         ? i18n['card-invoice.list.empty-search'] 
-                                         : i18n['card-invoice.list.empty']}">
+        <div class="ui-grid-row div-tb-10">
+            <div class="ui-grid-col-12">
+                <p:dataTable id="movementsList" 
+                             rows="30"
+                             var="movement"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{cardInvoiceBean.cardInvoice.movements}"
+                             emptyMessage="#{cardInvoiceBean.cardInvoice.movements eq null 
+                                             ? messages['card-invoice.list.empty-search'] 
+                                             : messages['card-invoice.list.empty']}">
 
-                <p:column width="10%" 
-                          style="text-align: center"
-                          headerText="#{i18n['card-invoice.list.code']}">
-                    #{movement.code}
-                </p:column>
-                <p:column headerText="#{i18n['card-invoice.list.description']}">
-                    #{of:abbreviate(movement.description,50)}
-                </p:column>
-                <p:column width="15%"
-                          style="text-align: center" 
-                          headerText="#{i18n['card-invoice.list.value']}">
-                    <h:outputText value="R$ #{movement.value}" />
-                </p:column>
-                <p:column width="15%"
-                          style="text-align: center" 
-                          headerText="#{i18n['card-invoice.list.pay-date']}">
-                    <h:outputText value="#{movement.inclusion}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText> 
-                </p:column>
-                <p:column width="20%"
-                          style="text-align: center" 
-                          headerText="#{i18n['card-invoice.list.cost-center']}">
-                    <h:outputText value="#{movement.movementClass.costCenter.name}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText> 
-                </p:column>
-            </p:dataTable>
+                    <p:column width="10%" 
+                              style="text-align: center"
+                              headerText="#{messages['card-invoice.list.code']}">
+                        #{movement.code}
+                    </p:column>
+                    <p:column headerText="#{messages['card-invoice.list.description']}">
+                        #{of:abbreviate(movement.description,50)}
+                    </p:column>
+                    <p:column width="15%"
+                              style="text-align: center" 
+                              headerText="#{messages['card-invoice.list.value']}">
+                        <h:outputText value="R$ #{movement.value}" />
+                    </p:column>
+                    <p:column width="15%"
+                              style="text-align: center" 
+                              headerText="#{messages['card-invoice.list.pay-date']}">
+                        <h:outputText value="#{movement.inclusion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText> 
+                    </p:column>
+                    <p:column width="20%"
+                              style="text-align: center" 
+                              headerText="#{messages['card-invoice.list.cost-center']}">
+                        <h:outputText value="#{movement.movementClass.costCenter.name}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText> 
+                    </p:column>
+                </p:dataTable>
+            </div>
         </div>
     </ui:define>
 

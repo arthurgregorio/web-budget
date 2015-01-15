@@ -12,13 +12,16 @@
 
     <ui:define name="content">
 
-        <p:messages id="messages" closable="true" globalOnly="true" />
-
-        <div class="home-wrapper">
-            <div class="graphs-box">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:messages id="messages" closable="true" globalOnly="true" />
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-6">
                 <p:carousel numVisible="1" 
                             effect="easeInStrong" 
-                            headerText="#{i18n['home.graphs']}"
+                            headerText="#{messages['home.graphs']}"
                             itemStyle="height:290px;width:580px;">
                     <p:tab> 
                         <p:chart type="pie" 
@@ -32,47 +35,14 @@
                     </p:tab>
                 </p:carousel>
             </div>
-            <div class="messages-box">
-                <p:fieldset legend="#{i18n['home.private-messages']}" style="height: 100%">
-                    <div style="margin: 10px 0 10px 0">
-                        <h:form id="messagesForm" prependId="false">
-                            <p:dataTable id="messagesList" 
-                                         rows="8"
-                                         paginator="true" 
-                                         var="userMessage"
-                                         selectionMode="single"
-                                         paginatorPosition="bottom" 
-                                         rowKey="#{userMessage.id}"
-                                         paginatorAlwaysVisible="false"
-                                         value="#{dashboardBean.userPrivateMessages}"
-                                         selection="#{dashboardBean.selectedPrivateMessage}"
-                                         emptyMessage="#{i18n['home.private-message.list.no-messages']}"
-                                         rowStyleClass="#{userMessage.wasRead eq false ? 'unread-message' : ''}">
-
-                                <p:ajax event="rowSelect" 
-                                        listener="#{dashboardBean.displayMessage()}" />
-
-                                <p:column headerText="#{i18n['home.private-message.list.title']}">
-                                    #{userMessage.privateMessage.title}
-                                </p:column>
-                                <p:column width="40%" 
-                                          style="text-align: center" 
-                                          headerText="#{i18n['home.private-message.list.received']}">
-                                    <h:outputText value="#{userMessage.privateMessage.inclusion}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                    </h:outputText>
-                                </p:column>
-                            </p:dataTable>
-                        </h:form>
-                    </div>
-                </p:fieldset>
-            </div>
-            <div class="movements-box">
-                <p:fieldset legend="#{i18n['home.movements']}">
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:fieldset legend="#{messages['home.movements']}">
                     <h:panelGroup layout="block" 
                                   styleClass="hint-box"
                                   rendered="#{dashboardBean.movements eq null or empty dashboardBean.movements}">
-                        <h:outputText value="#{i18n['home.movements.list.no-movements']}" />
+                        <h:outputText value="#{messages['home.movements.list.no-movements']}" />
                     </h:panelGroup>
                     <div style="margin: 10px 0 10px 0">
                         <p:dataTable id="movementsList" 
@@ -87,29 +57,29 @@
 
                             <p:column width="10%" 
                                       style="text-align: center" 
-                                      headerText="#{i18n['home.movements.list.code']}">
+                                      headerText="#{messages['home.movements.list.code']}">
                                 #{movement.code}
                             </p:column>
-                            <p:column headerText="#{i18n['home.movements.list.description']}">
+                            <p:column headerText="#{messages['home.movements.list.description']}">
                                 #{of:abbreviate(movement.description,50)}
                             </p:column>
                             <p:column width="15%"
                                       style="text-align: center" 
-                                      headerText="#{i18n['home.movements.list.value']}">
+                                      headerText="#{messages['home.movements.list.value']}">
                                 <h:outputText value="R$ #{movement.value}" />
                             </p:column>
                             <p:column width="15%"
                                       style="text-align: center" 
-                                      headerText="#{i18n['home.movements.list.due-date']}">
+                                      headerText="#{messages['home.movements.list.due-date']}">
                                 <h:outputText value="#{movement.dueDate}">
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
                             <p:column width="10%" 
                                       style="text-align: center"
-                                      headerText="#{i18n['list.action']}">
-                                <p:commandButton icon="icon-pay"
-                                                 title="#{i18n['list.label.pay']}"
+                                      headerText="#{messages['list.action']}">
+                                <p:commandButton icon="ui-icon-check"
+                                                 title="#{messages['list.label.pay']}"
                                                  rendered="#{movement.payable eq true}"
                                                  action="#{dashboardBean.changeToPay(movement.id)}" />
                             </p:column>

@@ -36,7 +36,6 @@
                 <div class="ui-grid-col-2 div-align-right">
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_INSERT}">
                         <p:commandButton immediate="true"
-                                         icon="ui-icon-plus"
                                          styleClass="wb-button" 
                                          value="#{messages['list.add']}"
                                          action="#{walletBean.changeToAdd()}"/>

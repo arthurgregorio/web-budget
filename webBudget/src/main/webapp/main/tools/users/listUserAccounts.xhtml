@@ -20,70 +20,74 @@
         <p:menuitem url="listUserAccounts.xhtml"
                     value="#{breadcrumb['tools.user']}" />
     </ui:define>
-    
+
     <ui:define name="content">
 
-        <p:messages id="messages" closable="true" globalOnly="true"/>
-        
-        <h:form id="controlsForm" prependId="false">
-            <div class="controls-box">
-                <div class="filter-box">
-                    <div class="filter-cell">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:messages id="messages" closable="true" globalOnly="true"/>
+            </div>
+        </div>
 
-                    </div>
+        <h:form id="controlsForm" prependId="false">
+            <div class="ui-grid-row div-tb-10">
+                <div class="ui-grid-col-10">
+
                 </div>
-                <div class="button-box">
+                <div class="ui-grid-col-2 div-align-right">
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_INSERT}">
                         <p:commandButton immediate="true"
-                                         styleClass="green-button" 
-                                         value="#{i18n['list.add']}"
+                                         styleClass="wb-button" 
+                                         value="#{messages['list.add']}"
                                          action="#{userAccountBean.changeToAdd()}"/>
                     </sec:authorize>
                 </div>
             </div>
         </h:form>
 
-        <div style="float: left; width: 100%">
-            <p:dataTable id="usersList" 
-                         rows="15"
-                         var="user"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         paginatorAlwaysVisible="false"
-                         value="#{userAccountBean.users}"
-                         emptyMessage="#{i18n['user-account.list.empty']}">
+        <div class="ui-grid-row div-tb-10">
+            <div class="ui-grid-col-12">
+                <p:dataTable id="usersList" 
+                             rows="15"
+                             var="user"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{userAccountBean.users}"
+                             emptyMessage="#{messages['user-account.list.empty']}">
 
-                <p:column width="10%" 
-                          style="text-align: center"
-                          headerText="#{i18n['user-account.list.blocked']}">
-                    <p:selectBooleanCheckbox disabled="true" 
-                                             value="#{user.blocked}"/>
-                </p:column>
-                <p:column headerText="#{i18n['user-account.list.name']}">
-                    #{user.name}
-                </p:column>
-                <p:column width="25%" 
-                          style="text-align: center"
-                          headerText="#{i18n['user-account.list.username']}">
-                    #{user.username}
-                </p:column>
+                    <p:column width="10%" 
+                              style="text-align: center"
+                              headerText="#{messages['user-account.list.blocked']}">
+                        <p:selectBooleanCheckbox disabled="true" 
+                                                 value="#{user.blocked}"/>
+                    </p:column>
+                    <p:column headerText="#{messages['user-account.list.name']}">
+                        #{user.name}
+                    </p:column>
+                    <p:column width="25%" 
+                              style="text-align: center"
+                              headerText="#{messages['user-account.list.username']}">
+                        #{user.username}
+                    </p:column>
 
-                <p:column width="15%" 
-                          style="text-align: center"
-                          headerText="#{i18n['list.action']}">
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_UPDATE}">
-                        <p:commandButton icon="icon-edit"
-                                         title="#{i18n['list.label.edit']}"
-                                         action="#{userAccountBean.changeToEdit(user.id)}" />
-                    </sec:authorize>
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_DELETE}">
-                        <p:spacer width="10"/>
-                        <p:commandButton icon="icon-delete"
-                                         title="#{i18n['list.label.delete']}"
-                                         actionListener="#{userAccountBean.changeToDelete(user.id)}" />
-                    </sec:authorize>
-                </p:column>
-            </p:dataTable>
+                    <p:column width="15%" 
+                              style="text-align: center"
+                              headerText="#{messages['list.action']}">
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_UPDATE}">
+                            <p:commandButton icon="ui-icon-pencil"
+                                             title="#{messages['list.label.edit']}"
+                                             action="#{userAccountBean.changeToEdit(user.id)}" />
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_DELETE}">
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             title="#{messages['list.label.delete']}"
+                                             actionListener="#{userAccountBean.changeToDelete(user.id)}" />
+                        </sec:authorize>
+                    </p:column>
+                </p:dataTable>
+            </div>
         </div>
     </ui:define>
 

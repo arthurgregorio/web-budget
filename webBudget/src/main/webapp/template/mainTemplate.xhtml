@@ -131,15 +131,20 @@
         <div class="footer">
             <div class="footer-content">
                 <div class="footer-logo">
-                    
+                    <p:link href="http://arthurgregorio.eti.br/blog/">
+                        <p:graphicImage library="images" name="ui-ag-logo.png" />
+                    </p:link>
                 </div>
                 <div class="footer-text">
-                    <h:outputText escape="false" 
-                                  value="#{messages['application.version']}: #{dashboardBean.version}"/>
+                    <h:outputText styleClass="version-text"
+                                  value="#{messages['application.version']}:"/>
+                    <p:spacer width="5"/>
+                    <h:outputText styleClass="version-number"
+                                  value="#{dashboardBean.version}"/>
                 </div>
             </div>
         </div>
-        
+
         <ui:insert name="popups" />
 
         <div style="clear: both"/>
