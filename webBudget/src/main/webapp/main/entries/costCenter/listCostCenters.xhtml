@@ -36,7 +36,6 @@
                 <div class="ui-grid-col-2 div-align-right">
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_INSERT}">
                         <p:commandButton immediate="true"
-                                         styleClass="wb-button"  
                                          value="#{messages['list.add']}"
                                          action="#{costCenterBean.changeToAdd()}"/>
                     </sec:authorize>

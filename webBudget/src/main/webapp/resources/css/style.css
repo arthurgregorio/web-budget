@@ -95,10 +95,6 @@ body {
 td {
     vertical-align: middle !important;
 }
-.wb-button {
-    height: 30px !important;
-    width: 100px; 
-}
 .div-tb-10 {
     padding: 10px 0;
 }
@@ -202,6 +198,7 @@ td {
     top: 13px;
 }
 .session-button button {
+    width: auto !important;
     background: #03A9F4 !important;
     border: none !important;
     box-shadow: none !important;

@@ -78,7 +78,7 @@
                               style="text-align: center"
                               headerText="#{messages['list.action']}">
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_UPDATE}">
-                            <p:commandButton icon=" ui-icon-pencil"
+                            <p:commandButton icon="ui-icon-pencil"
                                              title="#{messages['list.label.edit']}"
                                              action="#{cardBean.changeToEdit(card.id)}" />
                         </sec:authorize>
