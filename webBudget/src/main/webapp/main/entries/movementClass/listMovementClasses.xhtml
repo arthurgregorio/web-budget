@@ -1,5 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
@@ -29,21 +27,21 @@
         </div>
 
         <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row div-tb-10">
+            <div class="ui-grid-row div-pd-tb-10">
                 <div class="ui-grid-col-10">
 
                 </div>
                 <div class="ui-grid-col-2 div-align-right">
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_INSERT}">
                         <p:commandButton immediate="true"
-                                         value="#{messages['list.add']}"
+                                         value="#{menu['add']}"
                                          action="#{movementClassBean.changeToAdd()}"/>
                     </sec:authorize>
                 </div>
             </div>
         </h:form>
 
-        <div class="ui-grid-row div-tb-10">
+        <div class="ui-grid-row div-pd-tb-10">
             <div class="ui-grid-col-12">
 
             </div>
@@ -76,13 +74,13 @@
                 </p:column>
                 <p:column width="15%" 
                           style="text-align: center"
-                          headerText="#{messages['list.action']}">
+                          headerText="#{menu['actions']}">
                     <p:commandButton icon="ui-icon-pencil"
-                                     title="#{messages['list.label.edit']}"
+                                     title="#{menu['edit']}"
                                      action="#{movementClassBean.changeToEdit(movementClass.id)}" />
                     <p:spacer width="10"/>
                     <p:commandButton icon="ui-icon-trash"
-                                     title="#{messages['list.label.delete']}"
+                                     title="#{menu['delete']}"
                                      actionListener="#{movementClassBean.changeToDelete(movementClass.id)}" />
                 </p:column>
             </p:dataTable>
@@ -90,6 +88,6 @@
     </ui:define>
 
     <ui:define name="popups">
-        <ui:include src="popupDeleteMovementClass.xhtml"/>
+        <ui:include src="dialogDeleteMovementClass.xhtml"/>
     </ui:define>
 </ui:composition>

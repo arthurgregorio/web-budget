@@ -29,8 +29,8 @@ public abstract class AbstractBean implements Serializable {
 
     protected Logger logger;
     
-    protected FacesContext facesContext;
-    protected RequestContext requestContext;
+    protected transient FacesContext facesContext;
+    protected transient RequestContext requestContext;
     
     @Getter
     protected ViewState viewState;

@@ -13,17 +13,33 @@
     text-decoration: none;
 }
 
+/* corrige a borda do paginador das datatables */
+div.ui-paginator {
+    border: 1px solid #dddddd !important; 
+}
+
+/* reposicionamento dos labels dos radiobuttons */
+table.ui-selectoneradio label {
+    margin-left: 7px;
+    margin-top: 2px;
+}
+
 /* corrige a opacidade dos checkboxes das grids */
 .ui-chkbox .ui-state-disabled {
     opacity: initial !important;
 }
 
 /* remove linhas indesejadas nos widgets */
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+.ui-state-default, .ui-widget-content div.ui-state-default, .ui-widget-header div.ui-state-default {
     border-color: #ccc !important;
 }
 
-/* background quando com erro no labe; */
+/* tira a sembra para que os botoes fiquem certos quando em widgets */
+.ui-widget-content button.ui-state-default {
+    box-shadow: none !important;
+}
+
+/* background quando com erro no label */
 label.ui-state-error {
     background: none;
 }
@@ -79,6 +95,9 @@ li[role="menuitem"] .ui-button-icon-left {
     display: none;
 }
 .ui-messages span.ui-messages-warn-icon { 
+    display: none;
+}
+.ui-messages span.ui-messages-error-icon { 
     display: none;
 }
 
@@ -329,8 +348,8 @@ fieldset[disabled] .ui-button-info.active {
 .ui-button-warning:active,
 .ui-button-warning.active,
 .open > .dropdown-toggle.ui-button-warning {
-    color: #ffffff;
-    background-color: #ec971f;
+    color: #ffffff !important;
+    background-color: #ec971f !important;
     border-color: #d58512 !important;
 }
 .ui-button-warning:active,
@@ -364,8 +383,8 @@ fieldset[disabled] .ui-button-warning.active {
     background-color: #ffffff;
 }
 .ui-button-danger {
-    color: #ffffff;
-    background-color: #d9534f;
+    color: #ffffff !important;
+    background-color: #d9534f !important;
     border-color: #d43f3a !important;
 }
 .ui-button-danger:hover,
@@ -374,8 +393,8 @@ fieldset[disabled] .ui-button-warning.active {
 .ui-button-danger:active,
 .ui-button-danger.active,
 .open > .dropdown-toggle.ui-button-danger {
-    color: #ffffff;
-    background-color: #c9302c;
+    color: #ffffff !important;
+    background-color: #c9302c !important;
     border-color: #ac2925 !important;
 }
 .ui-button-danger:active,

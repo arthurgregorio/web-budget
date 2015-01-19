@@ -1,5 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
@@ -20,15 +18,15 @@
                     value="#{breadcrumb['entries.movement-class']}" />
         <p:menuitem url="formMovementClass.xhtml"
                     value="#{breadcrumb['inclusion']}" 
-                    rendered="#{movementClassBean.viewState eq 'ADD'}"/>
+                    rendered="#{movementClassBean.viewState eq 'ADDING'}"/>
         <p:menuitem url="#"
                     value="#{breadcrumb['edition']}" 
-                    rendered="#{movementClassBean.viewState eq 'EDIT'}"/>
+                    rendered="#{movementClassBean.viewState eq 'EDITING'}"/>
     </ui:define>
 
     <ui:define name="content">
         <h:form id="movementClassForm" prependId="false">
-            <div class="ui-grid-row">
+            <div class="ui-grid-row messages-row">
                 <div class="ui-grid-col-12">
                     <p:messages id="messages" closable="true" globalOnly="true" />
                     <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
@@ -44,7 +42,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inName" 
                                            value="#{messages['movement-class.form.name']}: "/>
                             <p:inputText id="inName" 
@@ -53,7 +51,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inCostCenter" 
                                            value="#{messages['movement-class.form.cost-center']}: "/>
                             <p:selectOneMenu id="inCostCenter" 
@@ -70,7 +68,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-s">
                             <p:outputLabel for="inBudget" 
                                            value="#{messages['movement-class.form.budget']}: "/>
                             <pe:inputNumber id="inBudget" 
@@ -111,21 +109,21 @@
                 </div>
                 <div class="ui-grid-col-6 div-align-right">
                     <p:commandButton immediate="true"
-                                     value="#{messages['form.back']}"
+                                     value="#{menu['back']}"
                                      action="#{movementClassBean.doCancel()}"/>
                     <p:spacer width="10"/>
-                    <p:commandButton update="movementClassForm"
+                    <p:commandButton value="#{menu['save']}"
+                                     update="movementClassForm"
                                      process="movementClassForm"
-                                     value="#{messages['form.save']}"
                                      styleClass="ui-button-success"
                                      action="#{movementClassBean.doSave()}"
-                                     rendered="#{movementClassBean.viewState eq 'ADD'}"/>
-                    <p:commandButton update="movementClassForm"
+                                     rendered="#{movementClassBean.viewState eq 'ADDING'}"/>
+                    <p:commandButton value="#{menu['update']}"
+                                     update="movementClassForm"
                                      process="movementClassForm"
                                      styleClass="ui-button-success"
-                                     value="#{messages['form.update']}"
                                      action="#{movementClassBean.doUpdate()}"
-                                     rendered="#{movementClassBean.viewState eq 'EDIT'}"/>
+                                     rendered="#{movementClassBean.viewState eq 'EDITING'}"/>
                 </div>
             </div>
         </h:form>
