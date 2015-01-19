@@ -1,6 +1,5 @@
 package br.com.webbudget.application.controller.tools;
 
-import br.com.webbudget.application.ViewState;
 import br.com.webbudget.infraestructure.Postman;
 import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.application.exceptions.ApplicationException;
@@ -39,8 +38,6 @@ public class PrivateMessageBean implements Serializable {
     @Getter
     @Setter
     private boolean selectAll;
-    @Getter
-    private ViewState viewState;
     
     @Getter
     private PrivateMessage privateMessage;
@@ -70,7 +67,7 @@ public class PrivateMessageBean implements Serializable {
      */
     public void initializeListing(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
+//            this.viewState = ViewState.LISTING;
             this.privateMessages = this.privateMessageService.listPrivateMessagesSent();
         }
     }
@@ -86,13 +83,13 @@ public class PrivateMessageBean implements Serializable {
             this.users = this.accountService.listUsersByStatus(false, true);
             
             if (privateMessageId == 0) {
-                this.viewState = ViewState.ADD;
+//                this.viewState = ViewState.ADD;
                 
                 // iniciamos e dizemos que o cara logado e o dono da mensagem
                 this.privateMessage = new PrivateMessage();
                 this.privateMessage.setOwner(AccountService.getCurrentAuthenticatedUser());
             } else {
-                this.viewState = ViewState.DETAILS;
+//                this.viewState = ViewState.DETAILS;
                 
                 this.privateMessage = this.privateMessageService.findPrivateMessageById(privateMessageId);
                 

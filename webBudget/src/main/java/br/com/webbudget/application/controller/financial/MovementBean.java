@@ -1,6 +1,5 @@
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.ViewState;
 import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
@@ -43,9 +42,6 @@ import org.slf4j.LoggerFactory;
 @ManagedBean
 public class MovementBean implements Serializable {
 
-    @Getter
-    private ViewState viewState;
-    
     @Getter
     @Setter
     private String filter;
@@ -104,7 +100,7 @@ public class MovementBean implements Serializable {
      */
     public void initializeListing(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
+//            this.viewState = ViewState.LISTING;
             this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
             
             // preenche os campos de filtro
@@ -126,14 +122,14 @@ public class MovementBean implements Serializable {
             this.openFinancialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
 
             if (movementId == 0) {
-                this.viewState = ViewState.ADD;
+//                this.viewState = ViewState.ADD;
 
                 this.movement = new Movement();
 
                 // setamos o periodo financeiro atual no movimento a ser incluido
                 this.movement.setFinancialPeriod(this.financialPeriod);
             } else {
-                this.viewState = ViewState.EDIT;
+//                this.viewState = ViewState.EDIT;
 
                 this.movement = this.movementService.findMovementById(movementId);
 

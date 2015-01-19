@@ -34,7 +34,7 @@ body {
 }
 .breadcrumb {
     background: #f3f5f6;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border-bottom: 1px solid #dee4e8;
 }
 .breadcrumb-content {
@@ -92,14 +92,24 @@ body {
 }
 
 /* classes gerais do layout ------------------ */
+hr {
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
 td {
     vertical-align: middle !important;
 }
-.div-tb-10 {
+
+.div-pd-tb-10 {
     padding: 10px 0;
 }
-.div-lr-10 {
+.div-pd-lr-10 {
     padding: 10px 0;
+}
+.div-mg-b-15 {
+    margin-bottom: 15px;
 }
 .div-align-right {
     text-align: right;
@@ -107,32 +117,72 @@ td {
 .div-align-left {
     text-align: left;
 }
+.div-align-center {
+    text-align: center;
+}
+
+.messages-row {
+    margin-bottom: 15px;
+}
+
 .form-group {
     display: inline-block;
     box-sizing: border-box;
     margin: 0 0 15px;
 }
-.form-group input[role="textbox"] {
+.form-group input[role="textbox"], textarea[role="textbox"] {
     display: block;
-    width: 81%;
     padding: 8px 10px;
     font-size: 10.5pt;
 }
 .form-group div.ui-selectonemenu {
     display: block;
 }
-.form-group div.ui-selectonemenu {
-    width: 50% !important;
-}
 .form-group div.ui-selectonemenu > label {
     padding: 10px 7px 6px;
     height: 20px !important;
-    width: 92% !important;
 }
 .form-group label.ui-outputlabel {
     display: inline-block;
     margin: 0px 0px 5px;
     font-weight: 700;
+}
+
+.form-group-xl input[role="textbox"] {
+    width: 92%;
+}
+div.form-group-l input[role="textbox"], textarea[role="textbox"] {
+    width: 75%;
+}
+.form-group-m input[role="textbox"] {
+    width: 50%;
+}
+.form-group-s input[role="textbox"] {
+    width: 25%;
+}
+.form-group-ss input[role="textbox"] {
+    width: 15%;
+}
+
+.form-group-l div.ui-selectonemenu {
+    width: 95% !important;
+}
+.form-group-m div.ui-selectonemenu {
+    width: 50% !important;
+}
+.form-group-s div.ui-selectonemenu {
+    width: 25% !important;
+}
+
+.form-header {
+    margin-bottom: 15px;
+    padding: 10px 0;
+    font-size: 16pt;
+    border-bottom: 1px solid #dee4e8;
+}
+.form-header-text {
+    position: relative;
+    top: 10px;
 }
 
 /* areas da template ------------------------- */
@@ -143,7 +193,7 @@ td {
     height: 60px !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    padding: 0 15px !important;
+    padding: 0 0 0 15px !important;
 }
 .main-menu > ul {
     height: 100% !important;

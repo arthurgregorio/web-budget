@@ -1,6 +1,5 @@
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.ViewState;
 import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
@@ -32,9 +31,6 @@ import org.slf4j.LoggerFactory;
 public class TransferenceBean implements Serializable {
 
     @Getter
-    private ViewState viewState;
-    
-    @Getter
     @Setter
     private Wallet selectedWallet;
     
@@ -60,7 +56,7 @@ public class TransferenceBean implements Serializable {
      */
     public void initializeListing() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
+//            this.viewState = ViewState.LISTING;
             
             this.wallets = this.walletService.listWallets(false);
         }
@@ -71,7 +67,7 @@ public class TransferenceBean implements Serializable {
      */
     public void initializeForm() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.ADD;
+//            this.viewState = ViewState.ADD;
             
             this.walletBalance = new WalletBalance();
             

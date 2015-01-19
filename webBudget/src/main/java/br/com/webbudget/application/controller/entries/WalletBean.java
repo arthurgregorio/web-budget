@@ -1,23 +1,17 @@
 package br.com.webbudget.application.controller.entries;
 
-import br.com.webbudget.application.ViewState;
-import br.com.webbudget.application.components.MessagesFactory;
+import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletType;
 import br.com.webbudget.domain.service.WalletService;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.omnifaces.util.Messages;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,11 +24,8 @@ import org.slf4j.LoggerFactory;
  */
 @ViewScoped
 @ManagedBean
-public class WalletBean implements Serializable {
+public class WalletBean extends AbstractBean {
 
-    @Getter
-    private ViewState viewState;
-    
     @Getter
     private Wallet wallet;
     @Getter
@@ -42,12 +33,16 @@ public class WalletBean implements Serializable {
     
     @Setter
     @ManagedProperty("#{walletService}")
-    private transient WalletService walletService;
-    @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
-    
-    private final Logger LOG = LoggerFactory.getLogger(WalletBean.class);
+    private WalletService walletService;
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(WalletBean.class);
+    }
     
     /**
      * 
@@ -66,10 +61,10 @@ public class WalletBean implements Serializable {
     public void initializeForm(long walletId) {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             if (walletId == 0) {
-                this.viewState = ViewState.ADD;
+                this.viewState = ViewState.ADDING;
                 this.wallet = new Wallet();
             } else {
-                this.viewState = ViewState.EDIT;
+                this.viewState = ViewState.EDITING;
                 this.wallet = this.walletService.findWalletById(walletId);
             }
         }
@@ -106,7 +101,16 @@ public class WalletBean implements Serializable {
      */
     public void changeToDelete(long walletId) {
         this.wallet = this.walletService.findWalletById(walletId);
-        RequestContext.getCurrentInstance().execute("PF('popupDeleteWallet').show()");
+        this.openDialog("deleteWalletDialog","dialogDeleteWallet");
+    }
+    
+    /**
+     * Cancela e volta para a listagem
+     * 
+     * @return 
+     */
+    public String doCancel() {
+        return "listWallets.xhtml?faces-redirect=true";
     }
     
     /**
@@ -123,14 +127,11 @@ public class WalletBean implements Serializable {
             this.walletService.saveWallet(this.wallet);
             this.wallet = new Wallet();
             
-            Messages.addInfo(null, this.messages.getMessage("wallet.action.saved"));
+            this.info("wallet.action.saved", true);
         }  catch (Exception ex) {
-            LOG.error("WalletBean#doSave found erros", ex);
-            Messages.addError(null, this.messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("walletForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-        }
+            this.logger.error("WalletBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        } 
     }
     
     /**
@@ -144,16 +145,13 @@ public class WalletBean implements Serializable {
             
             this.wallets = this.walletService.listWallets(null);
             
-            Messages.addInfo(null, this.messages.getMessage("wallet.action.adjusted"));
+            this.info("wallet.action.adjusted", true);
         }  catch (Exception ex) {
-            LOG.error("WalletBean#doAdjustment found erros", ex);
-            Messages.addError(null, this.messages.getMessage(ex.getMessage()));
+            this.logger.error("WalletBean#doAdjustment found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } finally {
-            RequestContext.getCurrentInstance().execute("PF('popupAdjustBalance').hide()");
-            RequestContext.getCurrentInstance().update("walletsList");
-            RequestContext.getCurrentInstance().update("adjustmentForm");
-            RequestContext.getCurrentInstance().update("messages");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.update("walletsList");
+            this.closeDialog("dialogAdjustBalance");
         }
     }
     
@@ -165,14 +163,11 @@ public class WalletBean implements Serializable {
         try {
             this.wallet = this.walletService.updateWallet(this.wallet);
             
-            Messages.addInfo(null, this.messages.getMessage("wallet.action.updated"));
+            this.info("wallet.action.updated", true);
         } catch (Exception ex) {
-            LOG.error("WalletBean#doUpdate found erros", ex);
-            Messages.addError(null, this.messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("walletForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-        }
+            this.logger.error("WalletBean#doUpdate found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        } 
     }
     
     /**
@@ -184,25 +179,14 @@ public class WalletBean implements Serializable {
             this.walletService.deleteWallet(this.wallet);
             this.wallets = this.walletService.listWallets(false);
             
-            Messages.addWarn(null, messages.getMessage("wallet.action.deleted"));
+            this.info("wallet.action.deleted", true);
         } catch (Exception ex) {
-            LOG.error("WalletBean#doDelete found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
+            this.logger.error("WalletBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } finally {
-            RequestContext.getCurrentInstance().execute("PF('popupDeleteWallet').hide()");
-            RequestContext.getCurrentInstance().update("messages");
-            RequestContext.getCurrentInstance().execute("setTimeout('$(\\'#messages\\').slideUp(300)', 5000)");
-            RequestContext.getCurrentInstance().update("walletsList");
+            this.update("walletsList");
+            this.closeDialog("dialogDeleteWallet");
         }
-    }
-    
-    /**
-     * Cancela e volta para a listagem
-     * 
-     * @return 
-     */
-    public String doCancel() {
-        return "listWallets.xhtml?faces-redirect=true";
     }
     
     /**
@@ -211,9 +195,7 @@ public class WalletBean implements Serializable {
      */
     public void displayAdjustment(long walletId) {
         this.wallet = this.walletService.findWalletById(walletId);
-        
-        RequestContext.getCurrentInstance().update("adjustBalancePopup");
-        RequestContext.getCurrentInstance().execute("PF('popupAdjustBalance').show()");
+        this.openDialog("adjustBalanceDialog", "dialogAdjustBalance");
     }
     
     /**
@@ -221,35 +203,19 @@ public class WalletBean implements Serializable {
      */
     public void cancelAdjustment() {
         this.wallet = null;
-        RequestContext.getCurrentInstance().execute("PF('popupAdjustBalance').hide()");
+        this.closeDialog("dialogAdjustBalance");
     }
     
     /**
      * 
      */
     public void loadBankData() {
-        RequestContext.getCurrentInstance().update("inBank");
-        RequestContext.getCurrentInstance().update("inDigit");
-        RequestContext.getCurrentInstance().update("inAgency");
-        RequestContext.getCurrentInstance().update("inAccount");
+        this.update("inBank");
+        this.update("inDigit");
+        this.update("inAgency");
+        this.update("inAccount");
     }
-    
-    /**
-     * 
-     * @param id
-     * @return 
-     */
-    public String getErrorMessage(String id) {
-    
-        final FacesContext facesContext = FacesContext.getCurrentInstance();
-        final Iterator<FacesMessage> iterator = facesContext.getMessages(id);
         
-        if (iterator.hasNext()) {
-            return this.messages.getMessage(iterator.next().getDetail());
-        }
-        return "";
-    }
-    
     /**
      * 
      * @return 

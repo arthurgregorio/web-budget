@@ -13,9 +13,29 @@
     text-decoration: none;
 }
 
+/* corrige a opacidade dos checkboxes das grids */
+.ui-chkbox .ui-state-disabled {
+    opacity: initial !important;
+}
+
 /* remove linhas indesejadas nos widgets */
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
     border-color: #ccc !important;
+}
+
+/* background quando com erro no labe; */
+label.ui-state-error {
+    background: none;
+}
+
+/* remove uma linha preta escrota da header das tabelas */
+th[role="columnheader"].ui-state-default {
+    border-color: #ccc !important;
+}
+
+/* remove background escroto branco de botoes em widgets */ 
+button[role="button"].ui-state-default {
+    background-image: none !important;
 }
 
 /* legenda do grafico na dashboard sem bordas */
@@ -51,6 +71,17 @@ li[role="menuitem"] .ui-button-icon-left {
     margin: 1px 0 0 3px !important;
 }
 
+/* remove icone de mensagens */
+.ui-messages ul {
+    margin: 0 !important;
+}
+.ui-messages span.ui-messages-info-icon {
+    display: none;
+}
+.ui-messages span.ui-messages-warn-icon { 
+    display: none;
+}
+
 /* customizacao dos botoes da aplicacao */
 .ui-button {
     width: 110px;
@@ -72,6 +103,7 @@ li[role="menuitem"] .ui-button-icon-left {
     -ms-user-select: none;
     text-shadow: none !important;
     margin: 0 !important;
+    box-shadow: none;
 }
 .ui-button:focus,
 .ui-button:active:focus,
@@ -287,8 +319,8 @@ fieldset[disabled] .ui-button-info.active {
     background-color: #ffffff;
 }
 .ui-button-warning {
-    color: #ffffff;
-    background-color: #f0ad4e;
+    color: #ffffff !important;
+    background-color: #f0ad4e !important;
     border-color: #eea236 !important;
 }
 .ui-button-warning:hover,

@@ -12,6 +12,7 @@
         <title>#{messages['application.title']}</title>
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['images:favicon.ico']}"/>
         
+        <h:outputStylesheet library="css" name="custom.css" />
         <h:outputStylesheet library="css" name="style.css" />
     </h:head>
     
@@ -27,23 +28,22 @@
                 <p:messages id="messages" closable="true" globalOnly="true" />
                 
                 <p:watermark for="inUser"
-                             value="#{messages['authentication.input.user']}" />
+                             value="#{messages['authentication.user']}" />
                 <p:inputText id="inUser"
                              styleClass="input" 
                              value="#{authenticationBean.user.username}" />
                 
                 <p:watermark for="inPassword" 
-                             value="#{messages['authentication.input.password']}" />
+                             value="#{messages['authentication.password']}" />
                 <p:password id="inPassword" 
                             styleClass="input" 
                             value="#{authenticationBean.user.password}" />
                 
                 <div>
-                    <p:commandButton styleClass="wb-button"
-                                     update="authenticationForm"
+                    <p:commandButton update="authenticationForm"
                                      process="authenticationForm"
                                      action="#{authenticationBean.doLogin()}"
-                                     value="#{messages['authentication.button.authenticate']}" />
+                                     value="#{messages['authentication.authenticate']}" />
                 </div>
             </h:form>
         </div>  

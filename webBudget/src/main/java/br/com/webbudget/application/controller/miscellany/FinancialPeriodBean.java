@@ -1,6 +1,5 @@
 package br.com.webbudget.application.controller.miscellany;
 
-import br.com.webbudget.application.ViewState;
 import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
@@ -32,8 +31,6 @@ import org.slf4j.LoggerFactory;
 public class FinancialPeriodBean implements Serializable {
 
     @Getter
-    private ViewState viewState;
-    @Getter
     private boolean hasOpenPeriod;
     
     @Getter
@@ -58,7 +55,7 @@ public class FinancialPeriodBean implements Serializable {
      */
     public void initializeListing(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
+//            this.viewState = ViewState.LISTING;
             this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
         }
     }
@@ -75,7 +72,7 @@ public class FinancialPeriodBean implements Serializable {
             // validamos se tem periodo em aberto
             this.validateOpenPeriods();
 
-            this.viewState = ViewState.ADD;
+//            this.viewState = ViewState.ADD;
             this.financialPeriod = new FinancialPeriod();
         }
     }

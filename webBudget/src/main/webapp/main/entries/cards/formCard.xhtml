@@ -1,5 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
@@ -20,17 +18,17 @@
                     value="#{breadcrumb['entries.card']}" />
         <p:menuitem url="formCard.xhtml"
                     value="#{breadcrumb['inclusion']}" 
-                    rendered="#{cardBean.viewState eq 'ADD'}"/>
+                    rendered="#{cardBean.viewState eq 'ADDING'}"/>
         <p:menuitem url="#"
                     value="#{breadcrumb['edition']}" 
-                    rendered="#{cardBean.viewState eq 'EDIT'}"/>
+                    rendered="#{cardBean.viewState eq 'EDITING'}"/>
     </ui:define>
 
     <ui:define name="content">
 
         <h:form id="cardForm" prependId="false">
             <div class="ui-grid-row">
-                <div class="ui-grid-col-12">
+                <div class="ui-grid-col-12 messages-row">
                     <p:messages id="messages" closable="true" globalOnly="true" />
                     <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
                 </div> 
@@ -45,7 +43,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inName" 
                                            value="#{messages['card.form.name']}: "/>
                             <p:inputText id="inName" 
@@ -55,7 +53,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inNumber" 
                                            value="#{messages['card.form.number']}: "/>
                             <p:inputText id="inNumber" 
@@ -65,7 +63,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inOwner" 
                                            value="#{messages['card.form.owner']}: "/>
                             <p:inputText id="inOwner" 
@@ -75,7 +73,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inFlag" 
                                            value="#{messages['card.form.flag']}: "/>
                             <p:inputText id="inFlag" 
@@ -85,7 +83,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inCardType" 
                                            value="#{messages['card.form.card-type']}: "/>
                             <p:selectOneMenu id="inCardType" 
@@ -104,7 +102,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inCreditLimit" 
                                            value="#{messages['card.form.credit-limit']}: "/>
                             <pe:inputNumber id="inCreditLimit" 
@@ -120,19 +118,20 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inExpirationDay" 
                                            value="#{messages['card.form.expiration-day']}: "/>
                             <p:inputText id="inExpirationDay" 
+                                         maxlength="2"
                                          value="#{cardBean.card.expirationDay}" 
                                          disabled="#{cardBean.card.cardType ne 'CREDIT'}"
                                          title="#{component.valid ? '' : cardBean.getErrorMessage(component.clientId)}" >
-                                <pe:keyFilter regEx="/[a-z0-9_]/i"/>
+                                <pe:keyFilter regEx="/[0-9]/i"/>
                             </p:inputText>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inWallet" 
                                            value="#{messages['card.form.wallet']}: "/>
                             <p:selectOneMenu id="inWallet" 
@@ -160,21 +159,21 @@
                 </div>
                 <div class="ui-grid-col-6 div-align-right">
                     <p:commandButton immediate="true"
-                                     action="#{cardBean.doCancel()}"
-                                     value="#{messages['form.back']}"/>
+                                     value="#{menu['back']}"
+                                     action="#{cardBean.doCancel()}"/>
                     <p:spacer width="10"/>
                     <p:commandButton update="cardForm"
                                      process="cardForm"
+                                     value="#{menu['save']}"
                                      action="#{cardBean.doSave()}"
                                      styleClass="ui-button-success"
-                                     value="#{messages['form.save']}"
-                                     rendered="#{cardBean.viewState eq 'ADD'}"/>
+                                     rendered="#{cardBean.viewState eq 'ADDING'}"/>
                     <p:commandButton update="cardForm"
                                      process="cardForm"
-                                     styleClass="ui-button-success"
+                                     value="#{menu['update']}"
                                      action="#{cardBean.doUpdate()}"
-                                     value="#{messages['form.update']}"
-                                     rendered="#{cardBean.viewState eq 'EDIT'}"/>
+                                     styleClass="ui-button-success"
+                                     rendered="#{cardBean.viewState eq 'EDITING'}"/>
                 </div>
             </div>
         </h:form>

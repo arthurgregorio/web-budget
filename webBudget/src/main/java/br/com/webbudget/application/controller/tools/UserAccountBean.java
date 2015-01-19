@@ -1,6 +1,5 @@
 package br.com.webbudget.application.controller.tools;
 
-import br.com.webbudget.application.ViewState;
 import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.application.components.permission.Authority;
 import br.com.webbudget.application.exceptions.ApplicationException;
@@ -40,9 +39,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 public class UserAccountBean implements Serializable {
 
     @Getter
-    private ViewState viewState;
-    
-    @Getter
     private User user;
     
     @Getter
@@ -78,7 +74,7 @@ public class UserAccountBean implements Serializable {
      */
     public void initializeListing() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
+//            this.viewState = ViewState.LISTING;
             this.users = this.accountService.listAccounts();
         }
     }
@@ -93,10 +89,10 @@ public class UserAccountBean implements Serializable {
             this.buildPermissionTree();
             
             if (userId == 0) {
-                this.viewState = ViewState.ADD;
+//                this.viewState = ViewState.ADD;
                 this.user = new User();
             } else {
-                this.viewState = ViewState.EDIT;
+//                this.viewState = ViewState.EDIT;
                 this.user = this.accountService.findAccountById(userId);
                 
                 // seleciona as permissoes do usuario para edicao
