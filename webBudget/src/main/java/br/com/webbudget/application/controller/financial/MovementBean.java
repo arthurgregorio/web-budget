@@ -1,6 +1,6 @@
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.components.MessagesFactory;
+import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.movement.CostCenter;
@@ -16,18 +16,13 @@ import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
-import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.omnifaces.util.Messages;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 @ViewScoped
 @ManagedBean
-public class MovementBean implements Serializable {
+public class MovementBean extends AbstractBean {
 
     @Getter
     @Setter
@@ -81,9 +76,6 @@ public class MovementBean implements Serializable {
     @ManagedProperty("#{cardService}")
     private transient CardService cardService;
     @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
-    @Setter
     @ManagedProperty("#{walletService}")
     private transient WalletService walletService;
     @Setter
@@ -92,15 +84,22 @@ public class MovementBean implements Serializable {
     @Setter
     @ManagedProperty("#{financialPeriodService}")
     private transient FinancialPeriodService financialPeriodService;
-    
-    private final Logger LOG = LoggerFactory.getLogger(MovementBean.class);
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(MovementBean.class);
+    }
     
     /**
      * 
      */
     public void initializeListing(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
-//            this.viewState = ViewState.LISTING;
+            this.viewState = ViewState.LISTING;
             this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
             
             // preenche os campos de filtro
@@ -122,14 +121,14 @@ public class MovementBean implements Serializable {
             this.openFinancialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
 
             if (movementId == 0) {
-//                this.viewState = ViewState.ADD;
+                this.viewState = ViewState.ADDING;
 
                 this.movement = new Movement();
 
                 // setamos o periodo financeiro atual no movimento a ser incluido
                 this.movement.setFinancialPeriod(this.financialPeriod);
             } else {
-//                this.viewState = ViewState.EDIT;
+                this.viewState = ViewState.EDITING;
 
                 this.movement = this.movementService.findMovementById(movementId);
 
@@ -168,7 +167,7 @@ public class MovementBean implements Serializable {
      */
     public void filterList() {
         this.movements = this.movementService.listByFilter(this.filter, this.filterPaid);
-        RequestContext.getCurrentInstance().update("movementsList");
+        this.update("movementsList");
     }
     
     /**
@@ -219,7 +218,16 @@ public class MovementBean implements Serializable {
      */
     public void changeToDelete(long movementId) {
         this.movement = this.movementService.findMovementById(movementId);
-        RequestContext.getCurrentInstance().execute("PF('popupDeleteMovement').show()");
+        this.openDialog("deleteMovementDialog","dialogDeleteMovement");
+    }
+
+    /**
+     * Cancela e volta para a listagem
+     * 
+     * @return 
+     */
+    public String doCancel() {
+        return "listMovements.xhtml?faces-redirect=true";
     }
     
     /**
@@ -234,14 +242,11 @@ public class MovementBean implements Serializable {
             this.movement = new Movement();
             this.movement.setFinancialPeriod(this.financialPeriod);
             
-            Messages.addInfo(null, messages.getMessage("movement.action.saved"));
+            this.info("movement.action.saved", true);
         } catch (ApplicationException ex) {
-            LOG.error("MovementBean#doSave found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("messages");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-        }
+            this.logger.error("MovementBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        } 
     }
     
     /**
@@ -255,8 +260,8 @@ public class MovementBean implements Serializable {
             // invoca os metodos para mostrar a popup de pagamento
             this.displayPaymentPopup();
         } catch (ApplicationException ex) {
-            LOG.error("MovementBean#doSaveAndPay found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
+            this.logger.error("MovementBean#doSaveAndPay found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } 
     }
     
@@ -270,18 +275,18 @@ public class MovementBean implements Serializable {
         
         try {
             if (this.payment.getCard() == null && this.payment.getWallet() == null) {
-                Messages.addError(null, messages.getMessage("movement.validate.payment-font"));
+                this.error("movement.validate.payment-font", true);
             } else {
                 this.movementService.payAndSaveMovement(this.movement);
                 this.movement = new Movement();
 
-                RequestContext.getCurrentInstance().execute("PF('popupConfirmPayment').show()");
+                this.openDialog("dialogConfirmPayment");
             }
         } catch (ApplicationException ex) {
-            LOG.error("MovementBean#doPayment found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
+            this.logger.error("MovementBean#doPayment found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } finally {
-            RequestContext.getCurrentInstance().update("paymentForm");
+            this.update("paymentForm");
         }
     }
     
@@ -295,23 +300,20 @@ public class MovementBean implements Serializable {
         
         try {
             if (this.payment.getCard() == null && this.payment.getWallet() == null) {
-                Messages.addError(null, messages.getMessage("movement.validate.payment-font"));
+                this.error("movement.validate.payment-font", true);
             } else {
                 this.movementService.payAndSaveMovement(this.movement);
                 
                 this.movement = new Movement();
                 this.movement.setFinancialPeriod(this.financialPeriod);
 
-                RequestContext.getCurrentInstance().execute("PF('popupPayment').hide()");
-                Messages.addInfo(null, messages.getMessage("movement.action.saved-and-paid"));
+                this.closeDialog("popupPayment");
+                this.info("movement.action.saved-and-paid", true);
             }
         } catch (ApplicationException ex) {
-            LOG.error("MovementBean#doPayment found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("movementForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-        }
+            this.logger.error("MovementBean#doPayment found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        } 
     }
     
     /**
@@ -325,14 +327,11 @@ public class MovementBean implements Serializable {
             // seta o centro de custo para nao ficar em branco a view
             this.movement.setCostCenter(this.movement.getMovementClass().getCostCenter());
             
-            Messages.addInfo(null, messages.getMessage("movement.action.updated"));
+            this.info("movement.action.updated", true);
         } catch (ApplicationException ex) {
-            LOG.error("MovementBean#doUpdate found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("movementForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-        }
+            this.logger.error("MovementBean#doUpdate found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        } 
     }
     
     /**
@@ -352,25 +351,14 @@ public class MovementBean implements Serializable {
             
             this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
             
-            Messages.addWarn(null, messages.getMessage("movement.action.deleted"));
+            this.info("movement.action.deleted", true);
         } catch (ApplicationException ex) {
-            LOG.error("MovementBean#doDelete found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
+            this.logger.error("MovementBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } finally {
-            RequestContext.getCurrentInstance().execute("PF('popupDeleteMovement').hide()");
-            RequestContext.getCurrentInstance().update("messages");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-            RequestContext.getCurrentInstance().update("movementsList");
+            this.update("movementsList");
+            this.closeDialog("dialoDeleteMovement");
         }
-    }
-    
-    /**
-     * Cancela e volta para a listagem
-     * 
-     * @return 
-     */
-    public String doCancel() {
-        return "listMovements.xhtml?faces-redirect=true";
     }
     
     /**
@@ -379,16 +367,16 @@ public class MovementBean implements Serializable {
     public void loadMovementClasses() {
         this.movementClasses = this.movementService
                 .listMovementClassesByCostCenterAndType(this.movement.getCostCenter(), null);
-        RequestContext.getCurrentInstance().update("inMovementClass");
+        this.update("inMovementClass");
     }
     
     /**
      * Atualiza a view para mostrar o combo de acordo com o tipo de pagamento
      */
     public void loadPaymentMethodFont() {
-        RequestContext.getCurrentInstance().update("inWallet");
-        RequestContext.getCurrentInstance().update("inDebitCard");
-        RequestContext.getCurrentInstance().update("inCreditCard");
+        this.update("inWallet");
+        this.update("inDebitCard");
+        this.update("inCreditCard");
     }
     
     /**
@@ -408,8 +396,7 @@ public class MovementBean implements Serializable {
         this.debitCards = this.cardService.listDebitCards(false);
         this.creditCards = this.cardService.listCreditCards(false);
         
-        RequestContext.getCurrentInstance().update("paymentPopup");
-        RequestContext.getCurrentInstance().execute("PF('popupPayment').show()");
+        this.openDialog("paymentDialog","dialogPayment");
     }
     
     /**
@@ -422,20 +409,17 @@ public class MovementBean implements Serializable {
         this.movement.setFinancialPeriod(this.financialPeriod);
 
         // atualizamos tudo na tela
-        RequestContext.getCurrentInstance().execute("PF('popupPayment').hide()");
-        RequestContext.getCurrentInstance().update("movementForm");
+        this.update("movementForm");
+        this.closeDialog("dialoPayment");
         
-        Messages.addWarn(null, messages.getMessage("movement.action.saved-not-paid"));
-        RequestContext.getCurrentInstance().update("messages");
-        RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+        this.warn("movement.action.saved-not-paid", true);
     }
 
     /**
      * 
      */
     public void displayDetailsPopup() {
-        RequestContext.getCurrentInstance().update("detailMovementPopup");
-        RequestContext.getCurrentInstance().execute("PF('popupDetailMovement').show()");
+        this.openDialog("detailMovementDialog","dialogDetailMovement");
     }
     
     /**
@@ -443,8 +427,8 @@ public class MovementBean implements Serializable {
      */
     public void closeDetailsPopup() {
         this.selectedMovement = null;
-        RequestContext.getCurrentInstance().update("movementsList");
-        RequestContext.getCurrentInstance().execute("PF('popupDetailMovement').hide()");
+        this.update("movementsList");
+        this.closeDialog("dialogDetailMovement");
     }
     
     /**
@@ -462,21 +446,5 @@ public class MovementBean implements Serializable {
      */
     public PaymentMethodType[] getAvailablePaymentMethods() {
         return PaymentMethodType.values();
-    }
-    
-    /**
-     * 
-     * @param id
-     * @return 
-     */
-    public String getErrorMessage(String id) {
-    
-        final FacesContext facesContext = FacesContext.getCurrentInstance();
-        final Iterator<FacesMessage> iterator = facesContext.getMessages(id);
-        
-        if (iterator.hasNext()) {
-            return this.messages.getMessage(iterator.next().getDetail());
-        }
-        return "";
     }
 }

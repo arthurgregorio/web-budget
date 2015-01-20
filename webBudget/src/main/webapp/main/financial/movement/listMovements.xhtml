@@ -1,5 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
@@ -19,12 +17,6 @@
                     value="#{breadcrumb['financial']}" />
         <p:menuitem url="listCards.xhtml"
                     value="#{breadcrumb['financial.movement']}" />
-        <p:menuitem url="formCard.xhtml"
-                    value="#{breadcrumb['inclusion']}" 
-                    rendered="#{movementBean.viewState eq 'ADD'}"/>
-        <p:menuitem url="#"
-                    value="#{breadcrumb['edition']}" 
-                    rendered="#{movementBean.viewState eq 'EDIT'}"/>
     </ui:define>
 
     <ui:define name="content">
@@ -36,12 +28,11 @@
         </div>
 
         <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row div-tb-5">
+            <div class="ui-grid-row div-pd-tb-10">
                 <div class="ui-grid-col-10">
                     <p:watermark for="inFilter"
                                  value="#{messages['movement.filter.types']}"/>
                     <p:inputText id="inFilter" 
-                                 styleClass="input-filter"
                                  value="#{movementBean.filter}" />
                 </div>
                 <div class="ui-grid-col-2">
@@ -50,21 +41,20 @@
                                              itemLabel="#{messages['movement.filter.set-paid']}"/>
                 </div>
                 <div class="ui-grid-col-5 div-align-right">
-                    <p:commandButton styleClass="wb-button" 
-                                     value="#{messages['list.filter']}"
+                    <p:commandButton value="#{menu['filter']}"
                                      action="#{movementBean.filterList()}"/>
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_INSERT}">
                         <p:spacer width="10" />
                         <p:commandButton immediate="true"
-                                         styleClass="wb-button" 
-                                         value="#{messages['list.add']}"
+                                         value="#{menu['add']}"
+                                         styleClass="ui-button-info" 
                                          action="#{movementBean.changeToAdd()}"/>
                     </sec:authorize>
                 </div>
             </div>
         </h:form>
 
-        <div class="ui-grid-row div-tb-10">
+        <div class="ui-grid-row div-pd-tb-10">
             <div class="ui-grid-col-12">
                 <h:form prependId="false">
                     <p:dataTable id="movementsList" 
@@ -136,10 +126,10 @@
                         </p:column>
                         <p:column width="16%" 
                                   style="text-align: center"
-                                  headerText="#{messages['list.action']}">
+                                  headerText="#{menu['actions']}">
                             <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_PAY}">
                                 <p:commandButton icon="ui-icon-check"
-                                                 title="#{messages['list.label.pay']}"
+                                                 title="#{menu['pay']}"
                                                  rendered="#{movement.payable eq true}"
                                                  action="#{movementBean.changeToPay(movement.id)}" />
                             </sec:authorize>
@@ -147,7 +137,7 @@
                                       rendered="#{movement.payable eq true}"/>
                             <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_UPDATE}">
                                 <p:commandButton icon="ui-icon-pencil"
-                                                 title="#{messages['list.label.edit']}"
+                                                 title="#{menu['edit']}"
                                                  rendered="#{movement.editable eq true}"
                                                  action="#{movementBean.changeToEdit(movement.id)}" />
                             </sec:authorize>
@@ -155,7 +145,7 @@
                                       rendered="#{movement.editable eq true}"/>
                             <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_DELETE}">
                                 <p:commandButton icon="ui-icon-trash"
-                                                 title="#{messages['list.label.delete']}"
+                                                 title="#{menu['delete']}"
                                                  rendered="#{movement.deletable eq true}"
                                                  actionListener="#{movementBean.changeToDelete(movement.id)}" />
                             </sec:authorize>
@@ -169,8 +159,8 @@
     </ui:define>
 
     <ui:define name="popups">
-        <ui:include src="popupConfirmPayment.xhtml" />
-        <ui:include src="popupDeleteMovement.xhtml" />
-        <ui:include src="popupDetailMovement.xhtml" />
+        <ui:include src="dialogConfirmPayment.xhtml" />
+        <ui:include src="dialogDeleteMovement.xhtml" />
+        <ui:include src="dialogDetailMovement.xhtml" />
     </ui:define>
 </ui:composition>

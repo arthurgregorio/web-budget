@@ -35,6 +35,7 @@
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_INSERT}">
                         <p:commandButton immediate="true"
                                          value="#{menu['add']}"
+                                         styleClass="ui-button-info" 
                                          action="#{costCenterBean.changeToAdd()}"/>
                     </sec:authorize>
                 </div>

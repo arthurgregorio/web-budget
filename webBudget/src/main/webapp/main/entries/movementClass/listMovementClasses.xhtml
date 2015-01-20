@@ -35,6 +35,7 @@
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_INSERT}">
                         <p:commandButton immediate="true"
                                          value="#{menu['add']}"
+                                         styleClass="ui-button-info" 
                                          action="#{movementClassBean.changeToAdd()}"/>
                     </sec:authorize>
                 </div>

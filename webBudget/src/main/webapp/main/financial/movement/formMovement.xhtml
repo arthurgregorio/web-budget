@@ -1,5 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
@@ -12,7 +10,7 @@
         <f:event type="preRenderView" 
                  listener="#{movementBean.initializeForm(param.movementId)}" />
     </ui:define>
-    
+
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['financial']}" />
@@ -20,187 +18,217 @@
                     value="#{breadcrumb['financial.movement']}" />
         <p:menuitem url="formMovement.xhtml"
                     value="#{breadcrumb['inclusion']}" 
-                    rendered="#{movementBean.viewState eq 'ADD'}"/>
+                    rendered="#{movementBean.viewState eq 'ADDING'}"/>
         <p:menuitem url="#"
                     value="#{breadcrumb['edition']}" 
-                    rendered="#{movementBean.viewState eq 'EDIT'}"/>
+                    rendered="#{movementBean.viewState eq 'EDITING'}"/>
     </ui:define>
 
     <ui:define name="content">
 
         <h:form id="movementForm" prependId="false">
-
-            <p:messages id="messages" closable="true" globalOnly="true" />
-            <pe:tooltip global="true" myPosition="left center"  atPosition="right center" for="@(.ui-state-error)"/> 
-
-            <div class="form-box-wrapper">
-                <div class="left-form-box">
-                    <div class="form-cell">
-                        <p:outputLabel for="inCode" 
-                                       value="#{i18n['movement.form.code']}: "/>
-                        <br/>
-                        <p:inputText id="inCode" 
-                                     readonly="true"
-                                     value="#{movementBean.movement.code}" 
-                                     title="#{component.valid ? '' : movementBean.getErrorMessage(component.clientId)}"/>
-                    </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inValue" 
-                                       value="#{i18n['movement.form.value']}: "/>
-                        <br/>
-                        <pe:inputNumber id="inValue" 
-                                        decimalPlaces="2" 
-                                        decimalSeparator="," 
-                                        thousandSeparator="." 
-                                        style="text-align: right"
-                                        value="#{movementBean.movement.value}">
-                            <pe:keyFilter regEx="/[0-9_,]/i"/>
-                            <f:converter converterId="javax.faces.BigDecimal" />
-                        </pe:inputNumber>
-                    </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inDueDate" 
-                                       value="#{i18n['movement.form.due-date']}: "/>
-                        <br/>
-                        <p:calendar id="inDueDate" 
-                                    mask="true"
-                                    showOn="button"
-                                    pattern="dd/MM/yyyy"
-                                    value="#{movementBean.movement.dueDate}" 
-                                    title="#{component.valid ? '' : movementBean.getErrorMessage(component.clientId)}"/>
-                    </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inCostCenter" 
-                                       value="#{i18n['movement.form.cost-center']}: "/>
-                        <br/>
-                        <p:selectOneMenu id="inCostCenter" 
-                                         style="width: 325px"
-                                         converter="omnifaces.SelectItemsConverter"
-                                         value="#{movementBean.movement.costCenter}" >
-                            <p:ajax event="change" 
-                                    listener="#{movementBean.loadMovementClasses()}" />
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{i18n['movement.form.select-one']}" />
-                            <f:selectItems var="costCenter" 
-                                           itemValue="#{costCenter}"
-                                           itemLabel="#{costCenter.name}"
-                                           value="#{movementBean.costCenters}" /> 
-                        </p:selectOneMenu>
-                    </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inMovementClass" 
-                                       value="#{i18n['movement.form.movement-class']}: "/>
-                        <br/>
-                        <p:selectOneMenu id="inMovementClass" 
-                                         style="width: 325px"
-                                         converter="omnifaces.SelectItemsConverter"
-                                         value="#{movementBean.movement.movementClass}" >
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{i18n['movement.form.select-one']}" />
-                            <f:selectItems var="movementClass" 
-                                           itemValue="#{movementClass}"
-                                           itemLabel="#{movementClass.name}"
-                                           value="#{movementBean.movementClasses}" /> 
-                        </p:selectOneMenu>
-                    </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inDescription" 
-                                       value="#{i18n['movement.form.description']}: "/>
-                        <br/>
-                        <p:inputTextarea id="inDescription" 
-                                         maxlength="255"
-                                         autoResize="false"
-                                         style="width: 317px; height: 100px"
-                                         value="#{movementBean.movement.description}" 
+            <div class="ui-grid-row messages-row">
+                <div class="ui-grid-col-12">
+                    <p:messages id="messages" closable="true" globalOnly="true" />
+                    <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+                </div> 
+            </div> 
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6"> 
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inCode" 
+                                           value="#{messages['movement.form.code']}: "/>
+                            <p:inputText id="inCode" 
+                                         readonly="true"
+                                         value="#{movementBean.movement.code}" 
                                          title="#{component.valid ? '' : movementBean.getErrorMessage(component.clientId)}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inValue" 
+                                           value="#{messages['movement.form.value']}: "/>
+                            <pe:inputNumber id="inValue" 
+                                            decimalPlaces="2" 
+                                            decimalSeparator="," 
+                                            thousandSeparator="." 
+                                            value="#{movementBean.movement.value}">
+                                <pe:keyFilter regEx="/[0-9_,]/i"/>
+                                <f:converter converterId="javax.faces.BigDecimal" />
+                            </pe:inputNumber>  
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inDueDate" 
+                                           value="#{messages['movement.form.due-date']}: "/>
+                            <p:calendar id="inDueDate" 
+                                        mask="true"
+                                        showOn="button"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{movementBean.movement.dueDate}" 
+                                        title="#{component.valid ? '' : movementBean.getErrorMessage(component.clientId)}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inCostCenter" 
+                                           value="#{messages['movement.form.cost-center']}: "/>
+                            <p:selectOneMenu id="inCostCenter" 
+                                             converter="omnifaces.SelectItemsConverter"
+                                             value="#{movementBean.movement.costCenter}" >
+                                <p:ajax event="change" 
+                                        listener="#{movementBean.loadMovementClasses()}" />
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{messages['movement.form.select-one']}" />
+                                <f:selectItems var="costCenter" 
+                                               itemValue="#{costCenter}"
+                                               itemLabel="#{costCenter.name}"
+                                               value="#{movementBean.costCenters}" /> 
+                            </p:selectOneMenu>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inMovementClass" 
+                                           value="#{messages['movement.form.movement-class']}: "/>
+                            <p:selectOneMenu id="inMovementClass" 
+                                             converter="omnifaces.SelectItemsConverter"
+                                             value="#{movementBean.movement.movementClass}" >
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{messages['movement.form.select-one']}" />
+                                <f:selectItems var="movementClass" 
+                                               itemValue="#{movementClass}"
+                                               itemLabel="#{movementClass.name}"
+                                               value="#{movementBean.movementClasses}" /> 
+                            </p:selectOneMenu>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inDescription" 
+                                           value="#{messages['movement.form.description']}: "/>
+                            <p:inputTextarea id="inDescription" 
+                                             maxlength="255"
+                                             autoResize="false"
+                                             value="#{movementBean.movement.description}" 
+                                             title="#{component.valid ? '' : movementBean.getErrorMessage(component.clientId)}"/>
+                        </div>                        
                     </div>
                 </div>
-                <div class="rigth-form-box">
-                    <div class="form-cell">
-                        <p:fieldset legend="#{i18n['movement.form.financial-period-active']}">
-                            <h:panelGroup layout="block" 
-                                          style="margin-top: 10px; margin-bottom: 10px"
-                                          rendered="#{movementBean.haveOpenPeriod() eq true}">
-                                <div style="width: 100%;">
-                                    <p:outputLabel for="inCurrentFinancialPeriod" 
-                                                   value="#{i18n['movement.form.financial-period-current']}: "/>
-                                    <br/>
-                                    <p:inputText id="inCurrentFinancialPeriod" 
-                                                 readonly="true"
-                                                 style="width: 291px"
-                                                 value="#{movementBean.financialPeriod.expired eq true 
-                                                          ? '' 
-                                                          : movementBean.financialPeriod.identification}"/>
-                                </div>
-                                <br/>
-                                <div style="width: 100%;">
-                                    <p:outputLabel for="inLaunchFinancialPeriod" 
-                                                   value="#{i18n['movement.form.financial-period-launch']}: "/>
-                                    <br/>
-                                    <p:selectOneMenu id="inLaunchFinancialPeriod" 
-                                                     style="width: 300px"
-                                                     value="#{movementBean.movement.financialPeriod}"
-                                                     converter="omnifaces.SelectItemsConverter">
-                                        <f:selectItems var="financialPeriod" 
-                                                       itemValue="#{financialPeriod}"
-                                                       itemLabel="#{financialPeriod.expired eq true 
-                                                                    ? financialPeriod.identification.concat(' - ').concat(i18n['movement.form.expired']) 
-                                                                    : financialPeriod.identification}"
-                                                       value="#{movementBean.openFinancialPeriods}" /> 
-                                    </p:selectOneMenu>
-                                </div>
-                            </h:panelGroup>
-                            <h:panelGroup layout="block" 
-                                          style="margin-top: 10px; margin-bottom: 10px"
-                                          rendered="#{movementBean.haveOpenPeriod() eq false}">
-                                <h:outputText style="color: red;"
-                                              value="#{i18n['movement.form.financial-period-not-open']}" />
-                                <br/>
-                                <br/>
-                                <p:commandLink immediate="true"
-                                               action="#{movementBean.changeToOpenFinancialPeriod()}"
-                                               value="#{i18n['movement.form.financial-period-open']}" />
-                            </h:panelGroup>
-                        </p:fieldset>
+                <div class="ui-grid-col-6"> 
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+
+                        </div>
                     </div>
                 </div>
-                <div class="form-controls-box">
-                    <p:commandButton style="width: 130px"
-                                     update="movementForm"
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">
+
+                </div>
+                <div class="ui-grid-col-6 div-align-right">
+                    <p:commandButton update="movementForm"
                                      process="movementForm"
-                                     styleClass="yellow-button"
-                                     value="#{i18n['form.save-and-pay']}"
+                                     value="#{menu['pay']}"
+                                     styleClass="ui-button-warning"
                                      actionListener="#{movementBean.doSaveAndPay()}"
-                                     rendered="#{movementBean.viewState eq 'ADD' and movementBean.haveOpenPeriod() eq true}"/>
-                    <p:spacer width="10" rendered="#{movementBean.viewState eq 'ADD' and movementBean.haveOpenPeriod() eq true}"/>
-                    <p:commandButton style="width: 130px"
-                                     update="movementForm"
+                                     rendered="#{movementBean.viewState eq 'ADDING' 
+                                                 and movementBean.haveOpenPeriod() eq true}"/>
+                    <p:spacer width="10" rendered="#{movementBean.viewState eq 'ADDING' 
+                                                     and movementBean.haveOpenPeriod() eq true}"/>
+                    <p:commandButton update="movementForm"
                                      process="movementForm"
-                                     styleClass="green-button"
-                                     value="#{i18n['form.save']}"
+                                     value="#{menu['save']}"
+                                     styleClass="ui-button-success"
                                      actionListener="#{movementBean.doSave()}"
-                                     rendered="#{movementBean.viewState eq 'ADD' and movementBean.haveOpenPeriod() eq true}"/>
-                    <p:commandButton style="width: 130px"
-                                     update="movementForm"
+                                     rendered="#{movementBean.viewState eq 'ADDING' 
+                                                 and movementBean.haveOpenPeriod() eq true}"/>
+                    <p:commandButton update="movementForm"
                                      process="movementForm"
-                                     styleClass="green-button"
-                                     value="#{i18n['form.update']}"
+                                     value="#{menu['update']}"
+                                     styleClass="ui-button-success"
                                      actionListener="#{movementBean.doUpdate()}"
-                                     rendered="#{movementBean.viewState eq 'EDIT'}"/>
+                                     rendered="#{movementBean.viewState eq 'EDITING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
-                                     style="width: 130px"
-                                     styleClass="red-button"
-                                     value="#{i18n['form.back']}"
+                                     value="#{menu['back']}"
                                      action="#{movementBean.doCancel()}"/>
                 </div>
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+            <div class="rigth-form-box">
+                <div class="form-cell">
+                    <p:fieldset legend="#{messages['movement.form.financial-period-active']}">
+                        <h:panelGroup layout="block" 
+                                      style="margin-top: 10px; margin-bottom: 10px"
+                                      rendered="#{movementBean.haveOpenPeriod() eq true}">
+                            <div style="width: 100%;">
+                                <p:outputLabel for="inCurrentFinancialPeriod" 
+                                               value="#{messages['movement.form.financial-period-current']}: "/>
+                                <br/>
+                                <p:inputText id="inCurrentFinancialPeriod" 
+                                             readonly="true"
+                                             style="width: 291px"
+                                             value="#{movementBean.financialPeriod.expired eq true 
+                                                      ? '' 
+                                                      : movementBean.financialPeriod.identification}"/>
+                            </div>
+                            <br/>
+                            <div style="width: 100%;">
+                                <p:outputLabel for="inLaunchFinancialPeriod" 
+                                               value="#{messages['movement.form.financial-period-launch']}: "/>
+                                <br/>
+                                <p:selectOneMenu id="inLaunchFinancialPeriod" 
+                                                 style="width: 300px"
+                                                 value="#{movementBean.movement.financialPeriod}"
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItems var="financialPeriod" 
+                                                   itemValue="#{financialPeriod}"
+                                                   itemLabel="#{financialPeriod.expired eq true 
+                                                                ? financialPeriod.identification.concat(' - ').concat(messages['movement.form.expired']) 
+                                                                : financialPeriod.identification}"
+                                                   value="#{movementBean.openFinancialPeriods}" /> 
+                                </p:selectOneMenu>
+                            </div>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" 
+                                      style="margin-top: 10px; margin-bottom: 10px"
+                                      rendered="#{movementBean.haveOpenPeriod() eq false}">
+                            <h:outputText style="color: red;"
+                                          value="#{messages['movement.form.financial-period-not-open']}" />
+                            <br/>
+                            <br/>
+                            <p:commandLink immediate="true"
+                                           action="#{movementBean.changeToOpenFinancialPeriod()}"
+                                           value="#{messages['movement.form.financial-period-open']}" />
+                        </h:panelGroup>
+                    </p:fieldset>
+                </div>
+            </div>
+            </div>
         </h:form>
     </ui:define>
-    
+
     <ui:define name="popups">
-        <ui:include src="popupPayment.xhtml" />
+        <ui:include src="dialogPayment.xhtml" />
     </ui:define>
 </ui:composition>
