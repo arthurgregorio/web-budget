@@ -1,13 +1,16 @@
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
-          xmlns:ui="http://java.sun.com/jsf/facelets"
           xmlns:p="http://primefaces.org/ui"
           xmlns:h="http://java.sun.com/jsf/html"
           xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:ui="http://java.sun.com/jsf/facelets"
           xmlns:pe="http://primefaces.org/ui/extensions"
-          id="detailMovementPopup" widgetVar="popupDetailMovement" 
+          id="detailMovementDialog" 
+          modal="true" 
+          closable="false"
+          resizable="false" 
+          widgetVar="dialogDetailMovement" 
           header="#{i18n['movement.dialog.details'].concat(': ')
-                    .concat(movementBean.selectedMovement.code)}"
-          resizable="false" showEffect="fade" modal="true" closable="false">
+                    .concat(movementBean.selectedMovement.code)}">
 
     <script type="text/javascript">
         PrimeFaces.widget.Dialog.prototype.applyFocus = function() {

@@ -304,3 +304,15 @@ div.form-group-l input[role="textbox"], textarea[role="textbox"] {
     padding-left: 35px;
     margin-bottom: 20px;
 }
+
+/* form de movimentos */ 
+#inCurrentFinancialPeriod {
+    width: 95%;
+}
+#inLaunchFinancialPeriod {
+    width: 99% !important;
+}
+.financial-period-group {
+    margin: 0;
+    padding: 10px 0;    
+}

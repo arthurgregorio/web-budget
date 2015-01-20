@@ -34,9 +34,9 @@
                 </div> 
             </div> 
             <div class="ui-grid-row">
-                <div class="ui-grid-col-6"> 
+                <div class="ui-grid-col-8"> 
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
+                        <div class="ui-grid-col-12 form-group form-group-s">
                             <p:outputLabel for="inCode" 
                                            value="#{messages['movement.form.code']}: "/>
                             <p:inputText id="inCode" 
@@ -46,7 +46,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
+                        <div class="ui-grid-col-12 form-group form-group-s">
                             <p:outputLabel for="inValue" 
                                            value="#{messages['movement.form.value']}: "/>
                             <pe:inputNumber id="inValue" 
@@ -60,7 +60,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
+                        <div class="ui-grid-col-12 form-group form-group-s">
                             <p:outputLabel for="inDueDate" 
                                            value="#{messages['movement.form.due-date']}: "/>
                             <p:calendar id="inDueDate" 
@@ -108,7 +108,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
+                        <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inDescription" 
                                            value="#{messages['movement.form.description']}: "/>
                             <p:inputTextarea id="inDescription" 
@@ -119,10 +119,57 @@
                         </div>                        
                     </div>
                 </div>
-                <div class="ui-grid-col-6"> 
+                <div class="ui-grid-col-4"> 
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-m">
-
+                            <p:fieldset legend="#{messages['movement.form.financial-period-active']}">
+                                <h:panelGroup layout="block" 
+                                              styleClass="ui-grid-row"
+                                              rendered="#{movementBean.haveOpenPeriod() eq true}">
+                                    <div class="ui-grid-col-12">
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-12 form-group financial-period-group">
+                                                <p:outputLabel for="inCurrentFinancialPeriod" 
+                                                               value="#{messages['movement.form.financial-period-current']}: "/>
+                                                <br/>
+                                                <p:inputText id="inCurrentFinancialPeriod" 
+                                                             readonly="true"
+                                                             value="#{movementBean.financialPeriod.expired eq true 
+                                                                      ? '' 
+                                                                      : movementBean.financialPeriod.identification}"/>
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-12 form-group financial-period-group">
+                                                <p:outputLabel for="inLaunchFinancialPeriod" 
+                                                               value="#{messages['movement.form.financial-period-launch']}: "/>
+                                                <p:selectOneMenu id="inLaunchFinancialPeriod" 
+                                                                 style="width: 300px"
+                                                                 value="#{movementBean.movement.financialPeriod}"
+                                                                 converter="omnifaces.SelectItemsConverter">
+                                                    <f:selectItems var="financialPeriod" 
+                                                                   itemValue="#{financialPeriod}"
+                                                                   itemLabel="#{financialPeriod.expired eq true 
+                                                                                ? financialPeriod.identification.concat(' - ')
+                                                                                .concat(messages['movement.form.expired']) 
+                                                                                : financialPeriod.identification}"
+                                                                   value="#{movementBean.openFinancialPeriods}" /> 
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" 
+                                              rendered="#{movementBean.haveOpenPeriod() eq false}">
+                                    <h:outputText style="color: red;"
+                                                  value="#{messages['movement.form.financial-period-not-open']}" />
+                                    <br/>
+                                    <br/>
+                                    <p:commandLink immediate="true"
+                                                   action="#{movementBean.changeToOpenFinancialPeriod()}"
+                                                   value="#{messages['movement.form.financial-period-open']}" />
+                                </h:panelGroup>
+                            </p:fieldset>
                         </div>
                     </div>
                 </div>
@@ -132,6 +179,10 @@
 
                 </div>
                 <div class="ui-grid-col-6 div-align-right">
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{movementBean.doCancel()}"/>
+                    <p:spacer width="10"/>
                     <p:commandButton update="movementForm"
                                      process="movementForm"
                                      value="#{menu['pay']}"
@@ -154,76 +205,7 @@
                                      styleClass="ui-button-success"
                                      actionListener="#{movementBean.doUpdate()}"
                                      rendered="#{movementBean.viewState eq 'EDITING'}"/>
-                    <p:spacer width="10"/>
-                    <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
-                                     action="#{movementBean.doCancel()}"/>
                 </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
-            <div class="rigth-form-box">
-                <div class="form-cell">
-                    <p:fieldset legend="#{messages['movement.form.financial-period-active']}">
-                        <h:panelGroup layout="block" 
-                                      style="margin-top: 10px; margin-bottom: 10px"
-                                      rendered="#{movementBean.haveOpenPeriod() eq true}">
-                            <div style="width: 100%;">
-                                <p:outputLabel for="inCurrentFinancialPeriod" 
-                                               value="#{messages['movement.form.financial-period-current']}: "/>
-                                <br/>
-                                <p:inputText id="inCurrentFinancialPeriod" 
-                                             readonly="true"
-                                             style="width: 291px"
-                                             value="#{movementBean.financialPeriod.expired eq true 
-                                                      ? '' 
-                                                      : movementBean.financialPeriod.identification}"/>
-                            </div>
-                            <br/>
-                            <div style="width: 100%;">
-                                <p:outputLabel for="inLaunchFinancialPeriod" 
-                                               value="#{messages['movement.form.financial-period-launch']}: "/>
-                                <br/>
-                                <p:selectOneMenu id="inLaunchFinancialPeriod" 
-                                                 style="width: 300px"
-                                                 value="#{movementBean.movement.financialPeriod}"
-                                                 converter="omnifaces.SelectItemsConverter">
-                                    <f:selectItems var="financialPeriod" 
-                                                   itemValue="#{financialPeriod}"
-                                                   itemLabel="#{financialPeriod.expired eq true 
-                                                                ? financialPeriod.identification.concat(' - ').concat(messages['movement.form.expired']) 
-                                                                : financialPeriod.identification}"
-                                                   value="#{movementBean.openFinancialPeriods}" /> 
-                                </p:selectOneMenu>
-                            </div>
-                        </h:panelGroup>
-                        <h:panelGroup layout="block" 
-                                      style="margin-top: 10px; margin-bottom: 10px"
-                                      rendered="#{movementBean.haveOpenPeriod() eq false}">
-                            <h:outputText style="color: red;"
-                                          value="#{messages['movement.form.financial-period-not-open']}" />
-                            <br/>
-                            <br/>
-                            <p:commandLink immediate="true"
-                                           action="#{movementBean.changeToOpenFinancialPeriod()}"
-                                           value="#{messages['movement.form.financial-period-open']}" />
-                        </h:panelGroup>
-                    </p:fieldset>
-                </div>
-            </div>
             </div>
         </h:form>
     </ui:define>
