@@ -357,7 +357,7 @@ public class MovementBean extends AbstractBean {
             this.fixedError(ex.getMessage(), true);
         } finally {
             this.update("movementsList");
-            this.closeDialog("dialoDeleteMovement");
+            this.closeDialog("dialogDeleteMovement");
         }
     }
     

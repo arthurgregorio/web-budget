@@ -129,14 +129,12 @@
                                     <div class="ui-grid-col-12">
                                         <div class="ui-grid-row">
                                             <div class="ui-grid-col-12 form-group financial-period-group">
-                                                <p:outputLabel for="inCurrentFinancialPeriod" 
-                                                               value="#{messages['movement.form.financial-period-current']}: "/>
-                                                <br/>
-                                                <p:inputText id="inCurrentFinancialPeriod" 
-                                                             readonly="true"
-                                                             value="#{movementBean.financialPeriod.expired eq true 
-                                                                      ? '' 
-                                                                      : movementBean.financialPeriod.identification}"/>
+                                                <p:outputLabel value="#{messages['movement.form.financial-period-current']}: "/>
+                                                <div class="financial-period-text">
+                                                    <h:outputText value="#{movementBean.financialPeriod.expired eq true 
+                                                                           ? messages['movement.form.financial-period.not-active'] 
+                                                                           : movementBean.financialPeriod.identification}" />
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="ui-grid-row">

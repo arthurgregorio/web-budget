@@ -125,6 +125,13 @@ td {
     margin-bottom: 15px;
 }
 
+.filter-group input {
+    display: block;
+    padding: 8px 10px;
+    height: 17px;
+    font-size: 10.5pt;
+}
+
 .form-group {
     display: inline-block;
     box-sizing: border-box;
@@ -318,4 +325,11 @@ td {
 }
 #inDueDate button {
     height: 34px;
+}
+.check-paid {
+    position: relative;
+    top: 9px;
+}
+.financial-period-text {
+    padding-top: 10px;
 }
