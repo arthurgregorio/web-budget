@@ -108,7 +108,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
+                        <div class="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inDescription" 
                                            value="#{messages['movement.form.description']}: "/>
                             <p:inputTextarea id="inDescription" 
@@ -121,7 +121,7 @@
                 </div>
                 <div class="ui-grid-col-4"> 
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
+                        <div class="ui-grid-col-12 form-group form-group-l">
                             <p:fieldset legend="#{messages['movement.form.financial-period-active']}">
                                 <h:panelGroup layout="block" 
                                               styleClass="ui-grid-row"
@@ -144,7 +144,6 @@
                                                 <p:outputLabel for="inLaunchFinancialPeriod" 
                                                                value="#{messages['movement.form.financial-period-launch']}: "/>
                                                 <p:selectOneMenu id="inLaunchFinancialPeriod" 
-                                                                 style="width: 300px"
                                                                  value="#{movementBean.movement.financialPeriod}"
                                                                  converter="omnifaces.SelectItemsConverter">
                                                     <f:selectItems var="financialPeriod" 

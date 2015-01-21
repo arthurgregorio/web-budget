@@ -130,10 +130,13 @@ td {
     box-sizing: border-box;
     margin: 0 0 15px;
 }
-.form-group input[role="textbox"], textarea[role="textbox"] {
+.form-group input, .form-group textarea {
     display: block;
     padding: 8px 10px;
     font-size: 10.5pt;
+}
+.form-group textarea[role="textbox"] {
+    height: 100px;    
 }
 .form-group div.ui-selectonemenu {
     display: block;
@@ -148,19 +151,19 @@ td {
     font-weight: 700;
 }
 
-.form-group-xl input[role="textbox"] {
+.form-group-xl input, .form-group-xl textarea {
     width: 92%;
 }
-div.form-group-l input[role="textbox"], textarea[role="textbox"] {
+.form-group-l input, .form-group-l textarea {
     width: 75%;
 }
-.form-group-m input[role="textbox"] {
+.form-group-m input, .form-group-m textarea {
     width: 50%;
 }
-.form-group-s input[role="textbox"] {
+.form-group-s input, .form-group-s textarea {
     width: 25%;
 }
-.form-group-ss input[role="textbox"] {
+.form-group-ss input, .form-group-ss textarea {
     width: 15%;
 }
 
@@ -168,7 +171,7 @@ div.form-group-l input[role="textbox"], textarea[role="textbox"] {
     width: 95% !important;
 }
 .form-group-m div.ui-selectonemenu {
-    width: 50% !important;
+    width: 52% !important;
 }
 .form-group-s div.ui-selectonemenu {
     width: 25% !important;
@@ -306,13 +309,13 @@ div.form-group-l input[role="textbox"], textarea[role="textbox"] {
 }
 
 /* form de movimentos */ 
-#inCurrentFinancialPeriod {
-    width: 95%;
-}
-#inLaunchFinancialPeriod {
-    width: 99% !important;
-}
 .financial-period-group {
     margin: 0;
     padding: 10px 0;    
+}
+#inDueDate {
+    display: flex;
+}
+#inDueDate button {
+    height: 34px;
 }

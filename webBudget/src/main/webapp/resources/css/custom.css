@@ -13,11 +13,6 @@
     text-decoration: none;
 }
 
-/* corrige a borda do paginador das datatables */
-div.ui-paginator {
-    border: 1px solid #dddddd !important; 
-}
-
 /* reposicionamento dos labels dos radiobuttons */
 table.ui-selectoneradio label {
     margin-left: 7px;
@@ -103,8 +98,8 @@ li[role="menuitem"] .ui-button-icon-left {
 
 /* customizacao dos botoes da aplicacao */
 .ui-button {
-    width: 110px;
-    height: 32px;
+    width: 115px;
+    height: 35px;
     font-size: 12pt;
     display: inline-block;
     font-weight: normal;
