@@ -5,6 +5,16 @@
 
 @charset "utf-8";
 
+/* arruma automaticamente o tamanho do label nos combos */
+.ui-selectonemenu-label {
+    width: auto !important;
+}
+
+/* tira um padding escroto dos botoes */
+span.ui-button-text {
+    /* padding: 0 1em !important; */
+}
+
 /* acerta o breadcrumb na template */
 .ui-breadcrumb {
     padding: 10px !important;
@@ -74,7 +84,7 @@ li[role="menuitem"] .ui-button-icon-left {
     left: 0 !important;
     background: no-repeat !important;
     background-image: url("/webBudget/javax.faces.resource/ui-icon-user-profile.png.xhtml?ln=images") !important;
-    top: 11px !important;
+    top: 13px !important;
 }
 .ui-icon-triangle-1-e {
     top: 2px;

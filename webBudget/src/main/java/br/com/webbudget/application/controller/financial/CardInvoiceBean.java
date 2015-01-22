@@ -1,6 +1,7 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.components.MessagesFactory;
+import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 @ViewScoped
 @ManagedBean
-public class CardInvoiceBean implements Serializable {
+public class CardInvoiceBean extends AbstractBean {
 
     @Getter
     private CardInvoice cardInvoice;
@@ -55,9 +56,6 @@ public class CardInvoiceBean implements Serializable {
     @ManagedProperty("#{cardService}")
     private transient CardService cardService;
     @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
-    @Setter
     @ManagedProperty("#{walletService}")
     private transient WalletService walletService;
     @Setter
@@ -66,8 +64,15 @@ public class CardInvoiceBean implements Serializable {
     @Setter
     @ManagedProperty("#{financialPeriodService}")
     private transient FinancialPeriodService financialPeriodService;
-    
-    private final Logger LOG = LoggerFactory.getLogger(CardInvoiceBean.class);
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(CardInvoiceBean.class);
+    }
     
     /**
      * Inicializa o formulario listando os cartoes de credito e o periodo
@@ -75,7 +80,8 @@ public class CardInvoiceBean implements Serializable {
     public void initialize() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             
-            this.cardInvoice = new CardInvoice(this.messages.getMessage("beans.card-invoice.invoice"));
+            // FIXME arrumar isso! passar o code da fatura
+            this.cardInvoice = new CardInvoice("");
             
             this.cards = this.cardService.listCreditCards(false);
             this.costCenters = this.movementService.listCostCenters(false);
@@ -89,9 +95,7 @@ public class CardInvoiceBean implements Serializable {
     public void generateInvoice() {
         
         if (this.cardInvoice.getCard() == null || this.cardInvoice.getFinancialPeriod() == null) {
-            Messages.addError(null, messages.getMessage("card-invoice.validate.null-period-card"));
-            RequestContext.getCurrentInstance().update("controlsForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.error("card-invoice.validate.null-period-card", true);
             return;
         }
 
@@ -99,18 +103,17 @@ public class CardInvoiceBean implements Serializable {
             this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
             
             if (this.cardInvoice.getMovements().isEmpty()) {
-                Messages.addWarn(null, messages.getMessage("card-invoice.action.no-movements-to-pay"));
-                this.cardInvoice = new CardInvoice(this.messages.getMessage("beans.card-invoice.invoice"));
+                this.info("card-invoice.action.no-movements-to-pay", true);
+                this.cardInvoice = new CardInvoice("");
             } else {
-                Messages.addInfo(null, messages.getMessage("card-invoice.action.generated"));
+                this.info("card-invoice.action.generated", true);
             }
         } catch (ApplicationException ex) {
-            LOG.error("CardInvoiceBean#generateInvoice found errors", ex);
-            Messages.addError(null, this.messages.getMessage(ex.getMessage()));
+            this.logger.error("CardInvoiceBean#generateInvoice found errors", ex);
+            this.fixedError(ex.getMessage(), true);
         } finally {
-            RequestContext.getCurrentInstance().update("controlsForm");
-            RequestContext.getCurrentInstance().update("movementsList");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.update("controlsForm");
+            this.update("movementsList");
         }
     }
     
@@ -120,9 +123,7 @@ public class CardInvoiceBean implements Serializable {
     public void payInvoice() {
         
         if (this.cardInvoice.getWallet() == null) {
-            Messages.addError(null, messages.getMessage("card-invoice.validate.null-wallet"));
-            RequestContext.getCurrentInstance().update("formPayInvoice");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#formPayMessages\').slideUp(300)\", 5000)");
+            this.error("card-invoice.validate.null-wallet", true);
             return;
         }
 
@@ -130,17 +131,16 @@ public class CardInvoiceBean implements Serializable {
             this.cardService.payInvoice(this.cardInvoice);
             
             // limpa o form
-            this.cardInvoice = new CardInvoice(this.messages.getMessage("beans.card-invoice.invoice"));
+            this.cardInvoice = new CardInvoice("");
                     
-            Messages.addInfo(null, messages.getMessage("card-invoice.action.paid"));
+            this.info("card-invoice.action.paid", true);
         } catch (ApplicationException ex) {
-            LOG.error("CardInvoiceBean#payInvoice found errors", ex);
-            Messages.addError(null, this.messages.getMessage(ex.getMessage()));
+            this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
+            this.fixedError(ex.getMessage(), true);
         } finally {
-            RequestContext.getCurrentInstance().execute("PF('popupPayInvoice').hide()");
-            RequestContext.getCurrentInstance().update("controlsForm");
-            RequestContext.getCurrentInstance().update("movementsList");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.update("controlsForm");
+            this.update("movementsList");
+            this.closeDialog("dialogPayInvoice");
         }
     }
     
@@ -150,7 +150,7 @@ public class CardInvoiceBean implements Serializable {
     public void loadMovementClasses() {
         this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
                 this.cardInvoice.getCostCenter(), MovementClassType.OUT);
-        RequestContext.getCurrentInstance().update("inMovementClass");
+        this.update("inMovementClass");
     }
     
     /**
@@ -162,8 +162,7 @@ public class CardInvoiceBean implements Serializable {
         this.wallets = this.walletService.listWallets(false);
         
         // atualiza e chama a popup de pagamento
-        RequestContext.getCurrentInstance().update("payInvoicePopup");
-        RequestContext.getCurrentInstance().execute("PF('popupPayInvoice').show()");
+        this.openDialog("payInvoiceDialog","dialogPayInvoice");
     }
     
     /**

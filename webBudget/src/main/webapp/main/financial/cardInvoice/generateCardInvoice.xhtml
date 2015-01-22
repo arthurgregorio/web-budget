@@ -1,12 +1,10 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:pe="http://primefaces.org/ui/extensions"
                 xmlns:of="http://omnifaces.org/functions"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 xmlns:sec="http://www.springframework.org/security/tags"
                 template="/template/mainTemplate.xhtml">
 
@@ -30,30 +28,12 @@
         </div>
 
         <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row div-tb-10">
-                <div class="ui-grid-col-5">
-                    <p:outputLabel for="inCards"
-                                   styleClass="filter-label"
-                                   value="#{messages['card-invoice.filter.card']}: "/>
-                    <p:selectOneMenu id="inCards" 
-                                     style="width: 250px"
-                                     converter="omnifaces.SelectItemsConverter"
-                                     value="#{cardInvoiceBean.cardInvoice.card}">
-                        <f:selectItem itemValue="#{null}"
-                                      noSelectionOption="true"
-                                      itemLabel="#{messages['card-invoice.select-one']}" />
-                        <f:selectItems var="card"
-                                       itemValue="#{card}"
-                                       itemLabel="#{card.readableName}"
-                                       value="#{cardInvoiceBean.cards}"/>
-                    </p:selectOneMenu>
-                </div>
-                <div class="ui-grid-col-5">
+            <div class="ui-grid-row div-pd-tb-10">
+                <div class="ui-grid-col-4 form-group-l">
                     <p:outputLabel for="inFinancialPeriods"
                                    styleClass="filter-label"
                                    value="#{messages['card-invoice.filter.financial-period']}: "/>
                     <p:selectOneMenu id="inFinancialPeriods" 
-                                     style="width: 250px"
                                      converter="omnifaces.SelectItemsConverter"
                                      value="#{cardInvoiceBean.cardInvoice.financialPeriod}">
                         <f:selectItem itemValue="#{null}"
@@ -65,25 +45,42 @@
                                        itemLabel="#{financialPeriod.identification}"/> 
                     </p:selectOneMenu>
                 </div>
-                <div class="ui-grid-col-2 div-align-right">
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PAY}">
-                        <p:commandButton immediate="true" 
-                                         styleClass="wb-button" 
-                                         value="#{messages['card-invoice.pay']}" 
-                                         rendered="#{cardInvoiceBean.canPay() eq true}"
-                                         actionListener="#{cardInvoiceBean.changeToPay()}"/>
-                    </sec:authorize>
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PROCESS}">
-                        <p:spacer width="10"/>
-                        <p:commandButton styleClass="wb-button" 
-                                         value="#{messages['card-invoice.generate-invoice']}"
-                                         actionListener="#{cardInvoiceBean.generateInvoice()}" />
-                    </sec:authorize>
+                <div class="ui-grid-col-4 form-group-l">
+                    <p:outputLabel for="inCards"
+                                   styleClass="filter-label"
+                                   value="#{messages['card-invoice.filter.card']}: "/>
+                    <p:selectOneMenu id="inCards" 
+                                     converter="omnifaces.SelectItemsConverter"
+                                     value="#{cardInvoiceBean.cardInvoice.card}">
+                        <f:selectItem itemValue="#{null}"
+                                      noSelectionOption="true"
+                                      itemLabel="#{messages['card-invoice.select-one']}" />
+                        <f:selectItems var="card"
+                                       itemValue="#{card}"
+                                       itemLabel="#{card.readableName}"
+                                       value="#{cardInvoiceBean.cards}"/>
+                    </p:selectOneMenu>
+                </div>
+                <div class="ui-grid-col-4 div-align-right">
+                    <div class="invoice-controls-box">
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PAY}">
+                            <p:commandButton immediate="true" 
+                                             value="#{messages['card-invoice.pay']}" 
+                                             rendered="#{cardInvoiceBean.canPay() eq true}"
+                                             actionListener="#{cardInvoiceBean.changeToPay()}"/>
+                            <p:spacer width="10"/>
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PROCESS}">
+                            <p:commandButton styleClass="ui-button-info"
+                                             value="#{messages['card-invoice.generate-invoice']}"
+                                             actionListener="#{cardInvoiceBean.generateInvoice()}" />
+                        </sec:authorize>
+                    </div>
                 </div>
             </div>
         </h:form>
 
-        <div class="ui-grid-row div-tb-10">
+        <div class="ui-grid-row div-pd-tb-10">
             <div class="ui-grid-col-12">
                 <p:dataTable id="movementsList" 
                              rows="30"
@@ -106,11 +103,6 @@
                     </p:column>
                     <p:column width="15%"
                               style="text-align: center" 
-                              headerText="#{messages['card-invoice.list.value']}">
-                        <h:outputText value="R$ #{movement.value}" />
-                    </p:column>
-                    <p:column width="15%"
-                              style="text-align: center" 
                               headerText="#{messages['card-invoice.list.pay-date']}">
                         <h:outputText value="#{movement.inclusion}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
@@ -123,12 +115,17 @@
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText> 
                     </p:column>
+                    <p:column width="15%"
+                              style="text-align: center" 
+                              headerText="#{messages['card-invoice.list.value']}">
+                        <h:outputText value="R$ #{movement.value}" />
+                    </p:column>
                 </p:dataTable>
             </div>
         </div>
     </ui:define>
 
     <ui:define name="popups">
-        <ui:include src="popupPayInvoice.xhtml"/>
+        <ui:include src="dialogPayInvoice.xhtml"/>
     </ui:define>
 </ui:composition>

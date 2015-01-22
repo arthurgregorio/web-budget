@@ -308,7 +308,7 @@ public class MovementBean extends AbstractBean {
                 this.movement = new Movement();
                 this.movement.setFinancialPeriod(this.financialPeriod);
 
-                this.closeDialog("popupPayment");
+                this.closeDialog("dialogPayment");
                 this.info("movement.action.saved-and-paid", true);
             }
         } catch (ApplicationException ex) {
