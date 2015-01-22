@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-12 form-group form-group-s">
+            <p:outputLabel for="inPaymentDate" 
+                           value="#{messages['movement.dialog.payment.payment-date']}: "/>
+            <p:calendar id="inPaymentDate" 
+                        size="10"
+                        showOn="button"
+                        mask="true"
+                        pattern="dd/MM/yyyy"
+                        value="#{movementBean.payment.paymentDate}" 
+                        title="#{component.valid ? '' : movementBean.getErrorMessage(component.clientId)}"/>
+        </div>
+    </div>
+    <h:panelGroup layout="block"
+                  styleClass="ui-grid-row" 
+                  rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
+        <div class="ui-grid-col-12 form-group form-group-l">
+            <p:outputLabel for="inPaymentMethod" 
+                           value="#{messages['movement.dialog.payment.payment-method']}: "/>
+            <p:selectOneMenu id="inPaymentMethod" 
+                             converter="omnifaces.GenericEnumConverter"
+                             value="#{movementBean.payment.paymentMethodType}">
+                <p:ajax event="change"  
+                        listener="#{movementBean.loadPaymentMethodFont()}" />
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{messages['movement.dialog.payment.select-one']}" />
+                <f:selectItems var="paymentType"
+                               itemValue="#{paymentType}"
+                               itemLabel="#{messages[paymentType]}"
+                               value="#{movementBean.availablePaymentMethods}"/>
+            </p:selectOneMenu>
+        </div>
+    </h:panelGroup>
+    <h:panelGroup layout="block"
+                  styleClass="ui-grid-row">
+        <div class="ui-grid-col-12 form-group form-group-l">
+            <p:outputLabel for="inWallet" 
+                           value="#{messages['movement.dialog.payment.wallet']}: "/>
+            <p:selectOneMenu id="inWallet" 
+                             value="#{movementBean.payment.wallet}" 
+                             converter="omnifaces.SelectItemsConverter"
+                             disabled="#{movementBean.payment.paymentMethodType ne 'IN_CASH'}">
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{messages['movement.dialog.payment.select-one']}" />
+                <f:selectItems var="wallet"
+                               itemValue="#{wallet}"
+                               value="#{movementBean.wallets}"
+                               itemLabel="#{wallet.friendlyName}"/>
+            </p:selectOneMenu>
+        </div>
+    </h:panelGroup>
+    <h:panelGroup layout="block"
+                  styleClass="ui-grid-row" 
+                  rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
+        <div class="ui-grid-col-12 form-group form-group-l">
+            <p:outputLabel for="inCreditCard" 
+                           value="#{messages['movement.dialog.payment.credit-card']}: "/>
+            <p:selectOneMenu id="inCreditCard" 
+                             value="#{movementBean.payment.card}" 
+                             converter="omnifaces.SelectItemsConverter"
+                             disabled="#{movementBean.payment.paymentMethodType ne 'CREDIT_CARD'}">
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{messages['movement.dialog.payment.select-one']}" />
+                <f:selectItems var="creditCard"
+                               itemValue="#{creditCard}"
+                               itemLabel="#{creditCard.readableName}"
+                               value="#{movementBean.creditCards}"/>
+            </p:selectOneMenu>
+        </div>
+    </h:panelGroup>
+    <h:panelGroup layout="block"
+                  styleClass="ui-grid-row" 
+                  rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
+        <div class="ui-grid-col-12 form-group form-group-l">
+            <p:outputLabel for="inDebitCard" 
+                           value="#{messages['movement.dialog.payment.debit-card']}: "/>
+            <p:selectOneMenu id="inDebitCard" 
+                             value="#{movementBean.payment.card}" 
+                             converter="omnifaces.SelectItemsConverter"
+                             disabled="#{movementBean.payment.paymentMethodType ne 'DEBIT_CARD'}">
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{messages['movement.dialog.payment.select-one']}" />
+                <f:selectItems var="debitCard"
+                               itemValue="#{debitCard}"
+                               itemLabel="#{debitCard.readableName}"
+                               value="#{movementBean.debitCards}"/>
+            </p:selectOneMenu>
+        </div>
+    </h:panelGroup>
+</ui:composition>

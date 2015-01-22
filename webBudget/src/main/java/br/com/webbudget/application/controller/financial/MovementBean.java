@@ -278,9 +278,10 @@ public class MovementBean extends AbstractBean {
                 this.error("movement.validate.payment-font", true);
             } else {
                 this.movementService.payAndSaveMovement(this.movement);
+                
+                this.openDialog("confirmPaymentDialog","dialogConfirmPayment");
+                
                 this.movement = new Movement();
-
-                this.openDialog("dialogConfirmPayment");
             }
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doPayment found erros", ex);
@@ -410,7 +411,7 @@ public class MovementBean extends AbstractBean {
 
         // atualizamos tudo na tela
         this.update("movementForm");
-        this.closeDialog("dialoPayment");
+        this.closeDialog("dialogPayment");
         
         this.warn("movement.action.saved-not-paid", true);
     }

@@ -326,6 +326,12 @@ td {
 #inDueDate button {
     height: 34px;
 }
+#inPaymentDate {
+    display: flex;
+}
+#inPaymentDate button {
+    height: 34px;
+}
 .check-paid {
     position: relative;
     top: 9px;

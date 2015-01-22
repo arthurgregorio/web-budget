@@ -1,17 +1,31 @@
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
-          xmlns:ui="http://java.sun.com/jsf/facelets"
+          xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
           xmlns:h="http://java.sun.com/jsf/html"
-          widgetVar="popupConfirmPayment" 
-          header="#{i18n['movement.dialog.confirm-payment']}"
-          resizable="false" showEffect="fade" modal="true" closable="false">
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:ui="http://java.sun.com/jsf/facelets"
+          id="confirmPaymentDialog" 
+          modal="true" 
+          closable="false"
+          resizable="false" 
+          widgetVar="dialogConfirmPayment" 
+          header="#{messages['movement.dialog.confirm-payment']}">
 
-    <div style="text-align: center">
-        <h:outputText value="#{i18n['movement.dialog.payment-confirmed']}" />
-    </div>
-    <div style="margin-top: 10px; text-align: center">
-        <p:commandButton styleClass="green-button" 
-                         value="#{i18n['actions.back']}"
-                         action="#{movementBean.doCancel()}"/>
+    <div class="ui-grid ui-grid-responsive">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12 div-align-center div-mg-b-15">
+                <o:outputFormat var="_confirmation"
+                                value="#{messages['movement.dialog.payment-confirmed']}">
+                    <f:param value="#{movementBean.movement.code}" />
+                </o:outputFormat>
+                <h:outputText value="#{_confirmation}" />
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12 div-align-center">
+                <p:commandButton value="#{menu['back']}"
+                                 action="#{movementBean.doCancel()}"/>
+            </div>
+        </div>
     </div>
 </p:dialog>
