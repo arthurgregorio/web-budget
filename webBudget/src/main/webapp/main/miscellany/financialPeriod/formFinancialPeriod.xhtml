@@ -12,7 +12,7 @@
         <f:event type="preRenderView" 
                  listener="#{financialPeriodBean.initializeForm()}" />
     </ui:define>
-    
+
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['miscellany']}" />
@@ -20,76 +20,84 @@
                     value="#{breadcrumb['miscellany.financial-period']}" />
         <p:menuitem url="formFinancialPeriod.xhtml"
                     value="#{breadcrumb['inclusion']}" 
-                    rendered="#{financialPeriodBean.viewState eq 'ADD'}"/>
+                    rendered="#{financialPeriodBean.viewState eq 'ADDING'}"/>
     </ui:define>
 
     <ui:define name="content">
 
         <h:form id="financialPeriodForm" prependId="false">
 
-            <p:messages id="messages" closable="true" globalOnly="true"/>
-            <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+            <h:panelGroup styleClass="ui-grid-row messages-row"
+                          rendered="#{financialPeriodBean.hasOpenPeriod eq true}">
+                <div class="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget">
+                    <span class="ui-messages-warn-summary">
+                        #{messages['financial-period.validate.already-open']}
+                    </span>
+                </div>
+            </h:panelGroup>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+                    <p:messages id="messages" closable="true" globalOnly="true" />
+                    <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+                </div> 
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6"> 
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inIdentification" 
+                                           value="#{messages['financial-period.form.identification']}: "/>
+                            <p:inputText id="inIdentification" 
+                                         value="#{financialPeriodBean.financialPeriod.identification}" 
+                                         title="#{component.valid ? '' : financialPeriodBean.getErrorMessage(component.clientId)}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inStart" 
+                                           value="#{messages['financial-period.form.start']}: "/>
+                            <p:calendar id="inStart" 
+                                        size="10"
+                                        mask="true"
+                                        showOn="button"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{financialPeriodBean.financialPeriod.start}" 
+                                        title="#{component.valid ? '' : financialPeriodBean.getErrorMessage(component.clientId)}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inEnd" 
+                                           value="#{messages['financial-period.form.end']}: "/>
+                            <p:calendar id="inEnd" 
+                                        size="10"
+                                        mask="true"
+                                        showOn="button"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{financialPeriodBean.financialPeriod.end}" 
+                                        title="#{component.valid ? '' : financialPeriodBean.getErrorMessage(component.clientId)}"/>
+                        </div>                        
+                    </div>
+                </div>
+                <div class="ui-grid-col-6"> 
 
-            <div class="form-box-wrapper">
-                <div class="left-form-box">
-                    <div class="form-cell">
-                        <p:outputLabel for="inIdentification" 
-                                       value="#{i18n['financial-period.form.identification']}: "/>
-                        <br/>
-                        <p:inputText id="inIdentification" 
-                                     style="width: 320px"
-                                     value="#{financialPeriodBean.financialPeriod.identification}" 
-                                     title="#{component.valid ? '' : financialPeriodBean.getErrorMessage(component.clientId)}"/>
-                    </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inStart" 
-                                       value="#{i18n['financial-period.form.start']}: "/>
-                        <br/>
-                        <p:calendar id="inStart" 
-                                    size="10"
-                                    mask="true"
-                                    showOn="button"
-                                    pattern="dd/MM/yyyy"
-                                    value="#{financialPeriodBean.financialPeriod.start}" 
-                                    title="#{component.valid ? '' : financialPeriodBean.getErrorMessage(component.clientId)}"/>
-                    </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inEnd" 
-                                       value="#{i18n['financial-period.form.end']}: "/>
-                        <br/>
-                        <p:calendar id="inEnd" 
-                                    size="10"
-                                    mask="true"
-                                    showOn="button"
-                                    pattern="dd/MM/yyyy"
-                                    value="#{financialPeriodBean.financialPeriod.end}" 
-                                    title="#{component.valid ? '' : financialPeriodBean.getErrorMessage(component.clientId)}"/>
-                    </div>
                 </div>
-                <div class="rigth-form-box">
-                    <h:panelGroup rendered="#{financialPeriodBean.hasOpenPeriod eq true}">
-                        <div class="ui-messages-warn ui-corner-all ui-messages ui-widget" aria-live="polite">
-                            <div style="float: left; width: 10%;">
-                                <span class="ui-messages-warn-icon" style="top: 8px"/>
-                            </div>
-                            <span class="ui-messages-warn-summary" style="margin-left: 0 !important;">
-                                #{i18n['financial-period.validate.already-open']}
-                            </span>
-                        </div>
-                    </h:panelGroup>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">
+
                 </div>
-                <div class="form-controls-box">
-                    <p:commandButton styleClass="green-button"
-                                     value="#{i18n['form.save']}"
+                <div class="ui-grid-col-6 div-align-right">
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{financialPeriodBean.doCancel()}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['save']}"
                                      update="financialPeriodForm"
                                      process="financialPeriodForm"
+                                     styleClass="ui-button-success"
                                      actionListener="#{financialPeriodBean.doSave()}"
-                                     rendered="#{financialPeriodBean.viewState eq 'ADD'}"/>
-                    <p:spacer width="10"/>
-                    <p:commandButton immediate="true"
-                                     styleClass="red-button"
-                                     value="#{i18n['form.back']}"
-                                     action="#{financialPeriodBean.doCancel()}"/>
+                                     rendered="#{financialPeriodBean.viewState eq 'ADDING'}"/>
                 </div>
             </div>
         </h:form>

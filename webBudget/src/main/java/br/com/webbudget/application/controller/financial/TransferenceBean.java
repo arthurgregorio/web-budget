@@ -1,21 +1,16 @@
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.components.MessagesFactory;
+import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.service.WalletService;
-import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.omnifaces.util.Messages;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +23,7 @@ import org.slf4j.LoggerFactory;
  */
 @ViewScoped
 @ManagedBean
-public class TransferenceBean implements Serializable {
+public class TransferenceBean extends AbstractBean {
 
     @Getter
     @Setter
@@ -43,21 +38,24 @@ public class TransferenceBean implements Serializable {
     private List<WalletBalance> transferences;
     
     @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
-    @Setter
     @ManagedProperty("#{walletService}")
-    private transient WalletService walletService;
-    
-    private final Logger LOG = LoggerFactory.getLogger(TransferenceBean.class);
+    private WalletService walletService;
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(TransferenceBean.class);
+    }
     
     /**
      * 
      */
     public void initializeListing() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-//            this.viewState = ViewState.LISTING;
-            
+            this.viewState = ViewState.LISTING;
             this.wallets = this.walletService.listWallets(false);
         }
     }    
@@ -67,49 +65,14 @@ public class TransferenceBean implements Serializable {
      */
     public void initializeForm() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-//            this.viewState = ViewState.ADD;
+            
+            this.viewState = ViewState.ADDING;
             
             this.walletBalance = new WalletBalance();
             
             this.wallets = this.walletService.listWallets(false);
         }
     }    
-    
-    /**
-     * 
-     */
-    public void doTransference() {
-        
-        try {
-            this.walletService.transfer(this.walletBalance);
-            
-            this.walletBalance = new WalletBalance();
-            this.wallets = this.walletService.listWallets(false);
-            
-            Messages.addInfo(null, messages.getMessage("transfer.action.transfered"));
-        }  catch (Exception ex) {
-            LOG.error("TransferenceBean#doTransference found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("transferForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-        }
-    }
-    
-    /**
-     * 
-     */
-    public void loadTransfers() {
-        this.transferences = this.walletService.listTransfersByWallet(this.selectedWallet);
-        
-        if (this.transferences.isEmpty()) {
-            Messages.addError(null, this.messages.getMessage("transfer.no-trasfers"));
-            RequestContext.getCurrentInstance().update("messages");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-        } else {
-            RequestContext.getCurrentInstance().update("transferencesList");
-        }
-    }
     
     /**
      * 
@@ -129,17 +92,33 @@ public class TransferenceBean implements Serializable {
     
     /**
      * 
-     * @param id
-     * @return 
      */
-    public String getErrorMessage(String id) {
-    
-        final FacesContext facesContext = FacesContext.getCurrentInstance();
-        final Iterator<FacesMessage> iterator = facesContext.getMessages(id);
+    public void doTransference() {
         
-        if (iterator.hasNext()) {
-            return this.messages.getMessage(iterator.next().getDetail());
+        try {
+            this.walletService.transfer(this.walletBalance);
+            
+            this.walletBalance = new WalletBalance();
+            this.wallets = this.walletService.listWallets(false);
+            
+            this.info("transfer.action.transfered", true);
+        }  catch (Exception ex) {
+            this.logger.error("TransferenceBean#doTransference found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         }
-        return "";
+    }
+    
+    /**
+     * 
+     */
+    public void loadTransfers() {
+        
+        this.transferences = this.walletService.listTransfersByWallet(this.selectedWallet);
+        
+        if (this.transferences.isEmpty()) {
+            this.error("transfer.no-trasfers", true);
+        } else {
+            this.update("transferencesList");
+        }
     }
 }

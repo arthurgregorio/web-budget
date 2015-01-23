@@ -1,16 +1,16 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:pe="http://primefaces.org/ui/extensions"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
     <ui:define name="head">
         <f:event type="preRenderView" 
                  listener="#{transferenceBean.initializeForm()}" />
     </ui:define>
-    
+
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['financial']}" />
@@ -24,106 +24,120 @@
     <ui:define name="content">
 
         <h:form id="transferForm" prependId="false">
-
-            <p:messages id="messages" closable="true" globalOnly="true" />
-            <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/> 
-
-            <div class="form-box-wrapper">
-                <div class="left-form-box" style="width: 70% !important">
-                    <div class="form-cell">
-                        <p:outputLabel for="inValue" 
-                                       value="#{i18n['transfer.form.value']}: "/>
-                        <br/>
-                        <pe:inputNumber id="inValue" 
-                                        decimalPlaces="2" 
-                                        decimalSeparator="," 
-                                        thousandSeparator="." 
-                                        style="text-align: right"
-                                        value="#{transferenceBean.walletBalance.transferValue}"
-                                        title="#{component.valid ? '' : transferenceBean.getErrorMessage(component.clientId)}">
-                            <pe:keyFilter regEx="/[0-9_,]/i"/>
-                            <f:converter converterId="javax.faces.BigDecimal" />
-                        </pe:inputNumber>
+            <div class="ui-grid-row messages-row">
+                <div class="ui-grid-col-12">
+                    <p:messages id="messages" closable="true" globalOnly="true" />
+                    <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+                </div> 
+            </div> 
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6"> 
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inValue" 
+                                           value="#{messages['transfer.form.value']}: "/>
+                            <pe:inputNumber id="inValue" 
+                                            decimalPlaces="2" 
+                                            decimalSeparator="," 
+                                            thousandSeparator="." 
+                                            value="#{transferenceBean.walletBalance.transferValue}"
+                                            title="#{component.valid ? '' : transferenceBean.getErrorMessage(component.clientId)}">
+                                <pe:keyFilter regEx="/[0-9_,]/i"/>
+                                <f:converter converterId="javax.faces.BigDecimal" />
+                            </pe:inputNumber>
+                        </div>                        
                     </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inWalletSource" 
-                                       value="#{i18n['transfer.form.wallet-source']}: "/>
-                        <br/>
-                        <p:selectOneMenu id="inWalletSource" 
-                                         style="width: 250px"
-                                         converter="omnifaces.SelectItemsConverter"
-                                         value="#{transferenceBean.walletBalance.sourceWallet}">
-                            <p:ajax event="change" update="sourceBalancePanel" />
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{i18n['transfer.form.select-one']}" />
-                            <f:selectItems var="wallet"
-                                           itemValue="#{wallet}"
-                                           itemLabel="#{wallet.friendlyName}"
-                                           value="#{transferenceBean.wallets}"/>
-                        </p:selectOneMenu>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inWalletSource" 
+                                           value="#{messages['transfer.form.wallet-source']}: "/>
+                            <p:selectOneMenu id="inWalletSource" 
+                                             converter="omnifaces.SelectItemsConverter"
+                                             value="#{transferenceBean.walletBalance.sourceWallet}">
+                                
+                                <p:ajax event="change" 
+                                        update="sourceBalancePanel" />
+                                
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{messages['transfer.form.select-one']}" />
+                                <f:selectItems var="wallet"
+                                               itemValue="#{wallet}"
+                                               itemLabel="#{wallet.friendlyName}"
+                                               value="#{transferenceBean.wallets}"/>
+                            </p:selectOneMenu>
+                        </div>                        
                     </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inWalletDestiny" 
-                                       value="#{i18n['transfer.form.wallet-destiny']}: "/>
-                        <br/>
-                        <p:selectOneMenu id="inWalletDestiny" 
-                                         style="width: 250px"
-                                         converter="omnifaces.SelectItemsConverter"
-                                         value="#{transferenceBean.walletBalance.wallet}">
-                            <p:ajax event="change" update="destinyBalancePanel" />
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{i18n['transfer.form.select-one']}" />
-                            <f:selectItems var="wallet"
-                                           itemValue="#{wallet}"
-                                           itemLabel="#{wallet.friendlyName}"
-                                           value="#{transferenceBean.wallets}"/>
-                        </p:selectOneMenu>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inWalletDestiny" 
+                                           value="#{messages['transfer.form.wallet-destiny']}: "/>
+                            <p:selectOneMenu id="inWalletDestiny" 
+                                             converter="omnifaces.SelectItemsConverter"
+                                             value="#{transferenceBean.walletBalance.wallet}">
+                                
+                                <p:ajax event="change" 
+                                        update="destinyBalancePanel" />
+                                
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{messages['transfer.form.select-one']}" />
+                                <f:selectItems var="wallet"
+                                               itemValue="#{wallet}"
+                                               itemLabel="#{wallet.friendlyName}"
+                                               value="#{transferenceBean.wallets}"/>
+                            </p:selectOneMenu>
+                        </div>                        
                     </div>
                 </div>
-                <div class="rigth-form-box" style="width: 30% !important">
-                    <div class="form-cell">
-                        <p:fieldset legend="#{i18n['transfer.form.source-balance']}">
-                            <h:panelGroup id="sourceBalancePanel"
-                                          layout="block"
-                                          style="margin: 5px 0 5px 0">
-                                <h:outputText value="R$ #{transferenceBean.walletBalance.sourceWallet.balance}"
-                                              rendered="#{transferenceBean.walletBalance.sourceWallet ne null}"
-                                              style="#{transferenceBean.walletBalance.sourceWallet.balance.signum() 
-                                                       lt 0 ? 'color: red;' : 'color: green;'}"/>
-                                <h:outputText value="#{i18n['transfer.form.select-source']}"
-                                              rendered="#{transferenceBean.walletBalance.sourceWallet eq null}"/>
-                            </h:panelGroup> 
-                        </p:fieldset>
-                        <p:spacer height="10" />
-                        <p:fieldset legend="#{i18n['transfer.form.destiny-balance']}">
-                            <h:panelGroup id="destinyBalancePanel"
-                                          layout="block"
-                                          style="margin: 5px 0 5px 0">
-                                <h:outputText rendered="#{transferenceBean.walletBalance.wallet ne null}"
-                                              value="R$ #{transferenceBean.walletBalance.wallet.balance}"
-                                              style="#{transferenceBean.walletBalance.wallet.balance.signum() 
-                                                       lt 0 ? 'color: red;' : 'color: green;'}"/>
-                                <h:outputText value="#{i18n['transfer.form.select-destiny']}"
-                                              rendered="#{transferenceBean.walletBalance.wallet eq null}"/>
-                            </h:panelGroup> 
-                        </p:fieldset>
+                <div class="ui-grid-col-6"> 
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <p:fieldset legend="#{messages['transfer.form.source-balance']}">
+                                <h:panelGroup id="sourceBalancePanel"
+                                              layout="block">
+                                    <h:outputText value="R$ #{transferenceBean.walletBalance.sourceWallet.balance}"
+                                                  rendered="#{transferenceBean.walletBalance.sourceWallet ne null}"
+                                                  style="#{transferenceBean.walletBalance.sourceWallet.balance.signum() 
+                                                           lt 0 ? 'color: red;' : 'color: green;'}"/>
+                                    <h:outputText value="#{messages['transfer.form.select-source']}"
+                                                  rendered="#{transferenceBean.walletBalance.sourceWallet eq null}"/>
+                                </h:panelGroup> 
+                            </p:fieldset>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row div-pd-tb-10">
+                        <div class="ui-grid-col-12">
+                            <p:fieldset legend="#{messages['transfer.form.destiny-balance']}">
+                                <h:panelGroup id="destinyBalancePanel"
+                                              layout="block">
+                                    <h:outputText rendered="#{transferenceBean.walletBalance.wallet ne null}"
+                                                  value="R$ #{transferenceBean.walletBalance.wallet.balance}"
+                                                  style="#{transferenceBean.walletBalance.wallet.balance.signum() 
+                                                           lt 0 ? 'color: red;' : 'color: green;'}"/>
+                                    <h:outputText value="#{messages['transfer.form.select-destiny']}"
+                                                  rendered="#{transferenceBean.walletBalance.wallet eq null}"/>
+                                </h:panelGroup> 
+                            </p:fieldset>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-controls-box">
-                <p:commandButton update="transferForm"
-                                 process="transferForm"
-                                 styleClass="green-button"
-                                 value="#{i18n['form.transfer']}"
-                                 actionListener="#{transferenceBean.doTransference()}"/>
-                <p:spacer width="10"/>
-                <p:commandButton immediate="true"
-                                 styleClass="red-button"
-                                 value="#{i18n['form.back']}"
-                                 style="width: 100px !important"
-                                 action="#{transferenceBean.doCancel()}"/>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">
+
+                </div>
+                <div class="ui-grid-col-6 div-align-right">
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{transferenceBean.doCancel()}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton update="transferForm"
+                                     process="transferForm"
+                                     value="#{menu['transfer']}"
+                                     styleClass="ui-button-success"
+                                     actionListener="#{transferenceBean.doTransference()}"/>
+                </div>
             </div>
         </h:form>
     </ui:define>

@@ -74,16 +74,16 @@ public class MovementBean extends AbstractBean {
     
     @Setter
     @ManagedProperty("#{cardService}")
-    private transient CardService cardService;
+    private CardService cardService;
     @Setter
     @ManagedProperty("#{walletService}")
-    private transient WalletService walletService;
+    private WalletService walletService;
     @Setter
     @ManagedProperty("#{movementService}")
-    private transient MovementService movementService;
+    private MovementService movementService;
     @Setter
     @ManagedProperty("#{financialPeriodService}")
-    private transient FinancialPeriodService financialPeriodService;
+    private FinancialPeriodService financialPeriodService;
 
     /**
      * 

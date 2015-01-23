@@ -1,21 +1,16 @@
 package br.com.webbudget.application.controller.miscellany;
 
-import br.com.webbudget.application.components.MessagesFactory;
+import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.service.FinancialPeriodService;
-import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.omnifaces.util.Messages;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +23,7 @@ import org.slf4j.LoggerFactory;
  */
 @ViewScoped
 @ManagedBean
-public class FinancialPeriodBean implements Serializable {
+public class FinancialPeriodBean extends AbstractBean {
 
     @Getter
     private boolean hasOpenPeriod;
@@ -40,22 +35,26 @@ public class FinancialPeriodBean implements Serializable {
     
     @Getter
     private List<FinancialPeriod> financialPeriods;
-    
-    @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
+
     @Setter
     @ManagedProperty("#{financialPeriodService}")
     private transient FinancialPeriodService financialPeriodService;
-    
-    private final Logger LOG = LoggerFactory.getLogger(FinancialPeriodBean.class);
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(FinancialPeriodBean.class);
+    }
     
     /**
      * 
      */
     public void initializeListing(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
-//            this.viewState = ViewState.LISTING;
+            this.viewState = ViewState.LISTING;
             this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
         }
     }
@@ -72,7 +71,7 @@ public class FinancialPeriodBean implements Serializable {
             // validamos se tem periodo em aberto
             this.validateOpenPeriods();
 
-//            this.viewState = ViewState.ADD;
+            this.viewState = ViewState.ADDING;
             this.financialPeriod = new FinancialPeriod();
         }
     }
@@ -116,14 +115,11 @@ public class FinancialPeriodBean implements Serializable {
             // validamos se tem periodo em aberto
             this.validateOpenPeriods();
             
-            Messages.addInfo(null, this.messages.getMessage("financial-period.action.saved"));
+            this.info("financial-period.action.saved", true);
         } catch (Exception ex) {
-            LOG.error("FinancialPeriodBean#doSave found errors", ex);
-            Messages.addError(null, this.messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("financialPeriodForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-        }
+            this.logger.error("FinancialPeriodBean#doSave found errors", ex);
+            this.fixedError(ex.getMessage(), true);
+        } 
     }
     
     /**
@@ -142,7 +138,8 @@ public class FinancialPeriodBean implements Serializable {
     public void validateOpenPeriods() {
 
         // validamos se ha algum periodo em aberto
-        final List<FinancialPeriod> periods = this.financialPeriodService.listOpenFinancialPeriods();
+        final List<FinancialPeriod> periods = 
+                this.financialPeriodService.listOpenFinancialPeriods();
 
         for (FinancialPeriod open : periods) {
             if (open != null && (!open.isClosed() || !open.isExpired())) {
@@ -151,21 +148,5 @@ public class FinancialPeriodBean implements Serializable {
                 break;
             }
         }
-    }
-    
-    /**
-     * 
-     * @param id
-     * @return 
-     */
-    public String getErrorMessage(String id) {
-    
-        final FacesContext facesContext = FacesContext.getCurrentInstance();
-        final Iterator<FacesMessage> iterator = facesContext.getMessages(id);
-        
-        if (iterator.hasNext()) {
-            return this.messages.getMessage(iterator.next().getDetail());
-        }
-        return "";
     }
 }

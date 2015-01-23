@@ -363,3 +363,17 @@ td {
     position: relative;
     top: 4px;
 }
+
+/* form periodos financeiros ----------------- */
+#inStart {
+    display: flex;
+}
+#inStart button {
+    height: 34px;
+}
+#inEnd {
+    display: flex;
+}
+#inEnd button {
+    height: 34px;
+}

@@ -1,6 +1,5 @@
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
@@ -14,7 +13,6 @@ import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
-import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -22,8 +20,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.omnifaces.util.Messages;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,16 +50,16 @@ public class CardInvoiceBean extends AbstractBean {
     
     @Setter
     @ManagedProperty("#{cardService}")
-    private transient CardService cardService;
+    private CardService cardService;
     @Setter
     @ManagedProperty("#{walletService}")
-    private transient WalletService walletService;
+    private WalletService walletService;
     @Setter
     @ManagedProperty("#{movementService}")
-    private transient MovementService movementService;
+    private MovementService movementService;
     @Setter
     @ManagedProperty("#{financialPeriodService}")
-    private transient FinancialPeriodService financialPeriodService;
+    private FinancialPeriodService financialPeriodService;
 
     /**
      * 
