@@ -33,7 +33,7 @@
                     </div>
                     <div class="menu">
                         <h:form id="menuForm" prependId="false">
-                            <p:menubar styleClass="main-menu">
+                            <p:menubar styleClass="main-menu" autoDisplay="false">
                                 <p:submenu label="#{menu['entries']}" 
                                            styleClass="main-menu-item">
                                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_VIEW}">
@@ -110,8 +110,8 @@
             <div class="breadcrumb">
                 <div class="breadcrumb-content">
                     <p:breadCrumb homeDisplay="text">
-                        <p:menuitem value="#{breadcrumb['home']}"
-                                    url="/main/home.xhtml" />
+                        <p:menuitem url="/main/dashboard.xhtml" 
+                                    value="#{breadcrumb['home']}"/>
                         <ui:insert name="breadcrumb" />
                     </p:breadCrumb>
                 </div>
@@ -131,16 +131,16 @@
         <div class="footer">
             <div class="footer-content">
                 <div class="footer-logo">
-<!--                    <p:link href="http://arthurgregorio.eti.br/blog/">
+                    <p:link href="http://arthurgregorio.eti.br/blog/">
                         <p:graphicImage library="images" name="ui-ag-logo.png" />
-                    </p:link>-->
+                    </p:link>
                 </div>
                 <div class="footer-text">
-<!--                    <h:outputText styleClass="version-text"
+                    <h:outputText styleClass="version-text"
                                   value="#{messages['application.version']}:"/>
                     <p:spacer width="5"/>
                     <h:outputText styleClass="version-number"
-                                  value="#{dashboardBean.version}"/>-->
+                                  value="#{dashboardBean.version}"/>
                 </div>
             </div>
         </div>

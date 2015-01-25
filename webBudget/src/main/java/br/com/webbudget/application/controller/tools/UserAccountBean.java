@@ -1,26 +1,21 @@
 package br.com.webbudget.application.controller.tools;
 
-import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.application.components.permission.Authority;
+import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.Permission;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.service.AccountService;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.omnifaces.util.Messages;
-import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
@@ -36,7 +31,7 @@ import org.springframework.dao.DataIntegrityViolationException;
  */
 @ViewScoped
 @ManagedBean
-public class UserAccountBean implements Serializable {
+public class UserAccountBean extends AbstractBean {
 
     @Getter
     private User user;
@@ -51,13 +46,17 @@ public class UserAccountBean implements Serializable {
     private TreeNode[] selectedAuthorities;
     
     @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
-    @Setter
     @ManagedProperty("#{accountService}")
     private transient AccountService accountService;
-    
-    private final Logger LOG = LoggerFactory.getLogger(UserAccountBean.class);
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(UserAccountBean.class);
+    }
 
     /**
      * Inicializa o usuario para edicao da conta pelas preferencias
@@ -74,7 +73,7 @@ public class UserAccountBean implements Serializable {
      */
     public void initializeListing() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-//            this.viewState = ViewState.LISTING;
+            this.viewState = ViewState.LISTING;
             this.users = this.accountService.listAccounts();
         }
     }
@@ -89,10 +88,10 @@ public class UserAccountBean implements Serializable {
             this.buildPermissionTree();
             
             if (userId == 0) {
-//                this.viewState = ViewState.ADD;
+                this.viewState = ViewState.ADDING;
                 this.user = new User();
             } else {
-//                this.viewState = ViewState.EDIT;
+                this.viewState = ViewState.EDITING;
                 this.user = this.accountService.findAccountById(userId);
                 
                 // seleciona as permissoes do usuario para edicao
@@ -124,7 +123,7 @@ public class UserAccountBean implements Serializable {
      */
     public void changeToDelete(long userId) {
         this.user = this.accountService.findAccountById(userId);
-        RequestContext.getCurrentInstance().execute("PF('popupDeleteUserAccount').show()");
+        this.openDialog("deleteUserAccountDialog","dialogDeleteUserAccount");
     }
     
     /**
@@ -154,14 +153,12 @@ public class UserAccountBean implements Serializable {
             
             this.unselectNodes();
             
-            Messages.addInfo(null, messages.getMessage("user-account.action.saved"));
+            this.info("user-account.action.saved", true);
         } catch (ApplicationException ex) {
-            LOG.error("UserAccountBean#doSave found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
+            this.logger.error("UserAccountBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } finally {
-            RequestContext.getCurrentInstance().update("permissionTree");
-            RequestContext.getCurrentInstance().update("userAccountForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.update("permissionTree");
         }
     }
     
@@ -189,13 +186,11 @@ public class UserAccountBean implements Serializable {
             
             this.selectNodes();
             
-            Messages.addInfo(null, messages.getMessage("user-account.action.updated"));
+            this.info("user-account.action.updated", true);
         } catch (ApplicationException ex) {
-            LOG.error("UserAccountBean#doUpdate on {} has found erros", this.user.getUsername(), ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("userAccountForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.logger.error("UserAccountBean#doUpdate on {} has found erros", 
+                    this.user.getUsername(), ex);
+            this.fixedError(ex.getMessage(), true);
         }
     }
     
@@ -207,13 +202,11 @@ public class UserAccountBean implements Serializable {
         try {
             this.accountService.updateAccount(this.user);
             
-            Messages.addInfo(null, messages.getMessage("user-account.action.updated"));
+            this.info("user-account.action.updated", true);
         } catch (ApplicationException ex) {
-            LOG.error("UserAccountBean#doUpdate on {} has found erros", this.user.getUsername(), ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("userAccountForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.logger.error("UserAccountBean#doUpdate on {} has found erros", 
+                    this.user.getUsername(), ex);
+            this.fixedError(ex.getMessage(), true);
         }
     }
     
@@ -226,18 +219,16 @@ public class UserAccountBean implements Serializable {
             this.accountService.deleteAccount(this.user);
             this.users = this.accountService.listAccounts();
             
-            Messages.addWarn(null, messages.getMessage("user-account.action.deleted"));
+            this.info("user-account.action.deleted", true);
         } catch (DataIntegrityViolationException ex) {
-            LOG.error("UserAccountBean#doDelete found erros", ex);
-            Messages.addError(null, messages.getMessage("user-account.action.delete-used"));
+            this.logger.error("UserAccountBean#doDelete found erros", ex);
+            this.fixedError("user-account.action.delete-used", true);
         } catch (Exception ex) {
-            LOG.error("UserAccountBean#doDelete found erros", ex);
-            Messages.addError(null, messages.getMessage(ex.getMessage()));
+            this.logger.error("UserAccountBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } finally {
-            RequestContext.getCurrentInstance().execute("PF('popupDeleteUserAccount').hide()");
-            RequestContext.getCurrentInstance().update("messages");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-            RequestContext.getCurrentInstance().update("usersList");
+            this.update("usersList");
+            this.closeDialog("dialogDeleteUserAccount");
         }
     }
     
@@ -247,7 +238,7 @@ public class UserAccountBean implements Serializable {
     private void buildPermissionTree() {
         
         // instancia o node principal, root
-        this.authorityNodes = new DefaultTreeNode(this.messages.getMessage(
+        this.authorityNodes = new DefaultTreeNode(this.translate(
                     "user-account.form.tree.permissions"), null);
         
         // pega todas as authorities da lista de authorities do sistema
@@ -350,7 +341,7 @@ public class UserAccountBean implements Serializable {
      * @return 
      */
     public String doCancel() {
-        return "/main/tools/users/listUserAccounts.xhtml?faces-redirect=true";
+        return "listUserAccounts.xhtml?faces-redirect=true";
     }
     
     /**
@@ -359,21 +350,5 @@ public class UserAccountBean implements Serializable {
      */
     public String backToHome() {
         return "/main/home.xhtml?faces-redirect=true";
-    }
-    
-    /**
-     * 
-     * @param id
-     * @return 
-     */
-    public String getErrorMessage(String id) {
-    
-        final FacesContext facesContext = FacesContext.getCurrentInstance();
-        final Iterator<FacesMessage> iterator = facesContext.getMessages(id);
-        
-        if (iterator.hasNext()) {
-            return this.messages.getMessage(iterator.next().getDetail());
-        }
-        return "";
     }
 }

@@ -10,6 +10,12 @@
     width: auto !important;
 }
 
+/* arruma o toggler da tree */
+span.ui-tree-toggler {
+    position: relative;
+    top: 3px;
+}
+
 /* tira um padding escroto dos botoes */
 span.ui-button-text {
     /* padding: 0 1em !important; */
@@ -436,4 +442,35 @@ fieldset[disabled] .ui-button-danger.active {
 .ui-button-danger .badge {
     color: #d9534f;
     background-color: #ffffff;
+}
+
+.ui-messages {
+    width: auto;
+    margin: 0 auto !important;
+}
+
+/* customizacao das mensagens em tela */
+.ui-messages-error {
+    margin: 5px 0 20px 0 !important;
+    border: 1px solid #eee !important;
+    border-left-width: 5px !important;
+    border-radius: 3px !important;
+    border-left-color: #d9534f !important;
+    background-color: rgba(217, 83, 79, 0.1) !important;
+}
+.ui-messages-warn {
+    margin: 5px 0 20px 0 !important;
+    border: 1px solid #eee !important;
+    border-left-width: 5px !important;
+    border-radius: 3px !important;
+    border-left-color: #f0ad4e !important;
+    background-color: rgba(240, 173, 78, 0.1) !important;
+}
+.ui-messages-info {
+    margin: 5px 0 10px 0 !important;
+    border: 1px solid #eee !important;
+    border-left-width: 5px !important;
+    border-radius: 3px !important;
+    border-left-color: #5bc0de !important;
+    background-color: rgba(91, 192, 222, 0.1) !important;
 }

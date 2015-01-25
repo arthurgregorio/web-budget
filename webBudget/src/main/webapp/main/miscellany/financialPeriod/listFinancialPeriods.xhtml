@@ -64,21 +64,21 @@
                     <p:column headerText="#{messages['financial-period.list.identification']}">
                         #{financialPeriod.identification}
                     </p:column>
-                    <p:column width="15%" 
+                    <p:column width="12%" 
                               style="text-align: center"
                               headerText="#{messages['financial-period.list.start']}">
                         <h:outputText value="#{financialPeriod.start}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column width="15%" 
+                    <p:column width="12%" 
                               style="text-align: center"
                               headerText="#{messages['financial-period.list.end']}">
                         <h:outputText value="#{financialPeriod.end}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column width="15%" 
+                    <p:column width="12%" 
                               style="text-align: center"
                               headerText="#{messages['financial-period.list.closing-date']}">
                         <h:outputText rendered="#{financialPeriod.closed eq true}"
@@ -93,7 +93,7 @@
                                       value="#{messages['financial-period.list.expired']}" />    
                     </p:column>
 
-                    <p:column width="10%" 
+                    <p:column width="15%" 
                               style="text-align: center"
                               headerText="#{menu['actions']}">
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_DETAILS}">

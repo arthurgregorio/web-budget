@@ -7,8 +7,6 @@
     <h:head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
-        <script type="text/javascript" src="#{resource['js:locale.js']}"></script>
-
         <title>#{messages['application.title']}</title>
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['images:favicon.ico']}"/>
         
@@ -18,28 +16,24 @@
     
     <h:body>
         <div class="login">
-            
             <div style="text-align: center; padding-bottom: 30px">
                 <p:graphicImage library="images" name="ui-webbudget.png"/>
             </div>
-            
             <h:form id="authenticationForm" prependId="false">
                  
                 <p:messages id="messages" closable="true" globalOnly="true" />
                 
-                <p:watermark for="inUser"
-                             value="#{messages['authentication.user']}" />
-                <p:inputText id="inUser"
-                             styleClass="input" 
-                             value="#{authenticationBean.user.username}" />
+                <p:inputText autocomplete="false"
+                             styleClass="username-input" 
+                             value="#{authenticationBean.user.username}" 
+                             placeholder="#{messages['authentication.user']}" />
                 
-                <p:watermark for="inPassword" 
-                             value="#{messages['authentication.password']}" />
-                <p:password id="inPassword" 
-                            styleClass="input" 
-                            value="#{authenticationBean.user.password}" />
+                <p:password autocomplete="false"
+                            styleClass="password-input" 
+                            value="#{authenticationBean.user.password}" 
+                            placeholder="#{messages['authentication.password']}"/>
                 
-                <div>
+                <div class="div-align-center">
                     <p:commandButton update="authenticationForm"
                                      process="authenticationForm"
                                      action="#{authenticationBean.doLogin()}"

@@ -1,6 +1,7 @@
 package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.components.MessagesFactory;
+import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
@@ -30,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 @ViewScoped
 @ManagedBean
-public class ClosingBean implements Serializable {
+public class ClosingBean extends AbstractBean {
 
     @Getter
     @Setter
@@ -43,16 +44,20 @@ public class ClosingBean implements Serializable {
     private List<FinancialPeriod> financialPeriods;
     
     @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
-    @Setter
     @ManagedProperty("#{closingService}")
     private transient ClosingService closingService;
     @Setter
     @ManagedProperty("#{financialPeriodService}")
     private transient FinancialPeriodService financialPeriodService;
-    
-    private final Logger LOG = LoggerFactory.getLogger(ClosingBean.class);
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(ClosingBean.class);
+    }
     
     /**
      * Inicializa o form do fechamento com os periodos disponiveis para encerramento
@@ -79,24 +84,17 @@ public class ClosingBean implements Serializable {
     public void process() {
 
         if (this.financialPeriod == null) {
-            Messages.addError(null, messages.getMessage("closing.validate.null-period"));
-            RequestContext.getCurrentInstance().update("controlsForm");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.error("closing.validate.null-period", true);
             return;
         }
 
         try {
             this.closing = this.closingService.process(this.financialPeriod, this.closing);
-            Messages.addInfo(null, messages.getMessage("closing.action.processed"));
+            this.info("closing.action.processed", true);
         } catch (ApplicationException ex) {
-            LOG.error("ClosingBean#process found errors", ex);
-            Messages.addError(null, this.messages.getMessage(ex.getMessage()));
-        } finally {
-            RequestContext.getCurrentInstance().update("controlsForm");
-            RequestContext.getCurrentInstance().update("movementsList");
-            RequestContext.getCurrentInstance().update("messages");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
-        }
+            this.logger.error("ClosingBean#process found errors", ex);
+            this.fixedError(ex.getMessage(), true);
+        } 
     }
     
     /**
@@ -105,10 +103,7 @@ public class ClosingBean implements Serializable {
     public void close() {
         
         if (this.financialPeriod == null) {
-            Messages.addError(null, messages.getMessage("closing.validate.null-period"));
-            RequestContext.getCurrentInstance().update("controlsForm");
-            RequestContext.getCurrentInstance().update("messages");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.error("closing.validate.null-period", true);
             return;
         }
         
@@ -121,16 +116,12 @@ public class ClosingBean implements Serializable {
             this.closing = null;
             this.financialPeriod = null;
             
-            Messages.addInfo(null, this.messages.getMessage("closing.action.closed"));
+            this.info("closing.action.closed", true);
         } catch (ApplicationException ex) {
-            LOG.error("ClosingBean#close found errors", ex);
-            Messages.addError(null, this.messages.getMessage(ex.getMessage()));
+            this.logger.error("ClosingBean#close found errors", ex);
+            this.fixedError(ex.getMessage(), true);
         } finally {
-            RequestContext.getCurrentInstance().update("controlsForm");
-            RequestContext.getCurrentInstance().update("movementsList");
-            RequestContext.getCurrentInstance().execute("PF('popupConfirmClosing').hide()");
-            RequestContext.getCurrentInstance().update("messages");
-            RequestContext.getCurrentInstance().execute("setTimeout(\"$(\'#messages\').slideUp(300)\", 5000)");
+            this.closeDialog("popupConfirmClosing");
         }
     }
     
@@ -139,7 +130,7 @@ public class ClosingBean implements Serializable {
      * o periodo
      */
     public void changeToClose() {
-        RequestContext.getCurrentInstance().execute("PF('popupConfirmClosing').show()");
+        this.openDialog("popupConfirmClosing");
     }
     
     /**

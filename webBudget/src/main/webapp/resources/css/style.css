@@ -6,13 +6,14 @@
 @charset "utf-8";
 
 @import url('reset.css.xhtml?ln=css');
+@import url(http://fonts.googleapis.com/css?family=Ubuntu);
 
 /* corpo da pagina --------------------------- */
 html {
     height: 100%;
 }
 body {
-    font: 12px/18px Arial, sans-serif;
+    font: 12px/18px 'Ubuntu', sans-serif;
     width: 100%;
     height: 100%;
 }
@@ -52,13 +53,14 @@ body {
 .footer {
     width: 100%;
     height: 5%;
-    background: #f3f5f6;
     margin-top: -1px;
+    background-color: #f3f5f6;
     border-top: 1px solid #dee4e8;
 }
 .footer-content {
     margin: 0 auto;
     width: 80%;
+    height: 100%;
 }
 
 /* sessoes do layout base -------------------- */
@@ -74,8 +76,8 @@ body {
     position: relative;
     float: left;
     width: 50%;
-    top: 17px;
     text-align: right;
+    top: 32%;
 }
 .version-number {
     font-size: 11pt;
@@ -88,7 +90,7 @@ body {
     position: relative;
     float: left;
     width: 50%;
-    top: 6px;
+    top: 7%;
 }
 
 /* classes gerais do layout ------------------ */
@@ -111,6 +113,9 @@ td {
 .div-mg-b-15 {
     margin-bottom: 15px;
 }
+.div-mg-t-15 {
+    margin-bottom: 15px;
+}
 .div-align-right {
     text-align: right;
 }
@@ -125,11 +130,20 @@ td {
     margin-bottom: 15px;
 }
 
+.form-filter-box {
+    position: relative;
+    top: 4px;
+}
 .filter-group input {
     display: block;
     padding: 8px 10px;
     height: 17px;
     font-size: 10.5pt;
+}
+
+.form-controls-box {
+    text-align: right;
+    padding-top: 20px;
 }
 
 .form-group {
@@ -296,10 +310,7 @@ td {
     border-radius: 10px;
     -webkit-border-radius: 10px;
 }
-.login div {
-    text-align: center;
-}
-.input {
+.login input {
     color: rgb(61, 61, 61);
     font-size: 24px;
     width: 230px;
@@ -307,15 +318,15 @@ td {
     background: none repeat scroll 0% 0% rgb(251, 251, 251);
     box-shadow: 1px 1px 2px rgba(200, 200, 200, 0.2) inset;
 }
-#inUser {
-    background: url("/webBudget/javax.faces.resource/ui-icon-user.png.xhtml?ln=images") no-repeat scroll 7px 9px;
-    padding-left: 35px;
-    margin-bottom: 10px;
+.username-input {
+    background: url("/webBudget/javax.faces.resource/ui-icon-user.png.xhtml?ln=images") no-repeat scroll 7px 9px !important;
+    padding-left: 35px !important;
+    margin-bottom: 10px !important;
 }
-#inPassword {
-    background: url("/webBudget/javax.faces.resource/ui-icon-key.png.xhtml?ln=images") no-repeat scroll 7px 9px;
-    padding-left: 35px;
-    margin-bottom: 20px;
+.password-input {
+    background: url("/webBudget/javax.faces.resource/ui-icon-key.png.xhtml?ln=images") no-repeat scroll 7px 9px !important;
+    padding-left: 35px !important;
+    margin-bottom: 20px !important;
 }
 
 /* form de movimentos ------------------------ */
@@ -352,16 +363,11 @@ td {
     width: 90%;
 }
 
-/* fatura do cartao -------------------------- */
-.invoice-controls-box {
-    position: relative;
-    top: 10px;
-}
-
-/* transferencias de valores ----------------- */
-.transfer-search-box {
-    position: relative;
-    top: 4px;
+/* form contas de usuario -------------------- */
+.permission-tree {
+    overflow: auto;
+    height: 338px !important;
+    width: auto !important;
 }
 
 /* form periodos financeiros ----------------- */

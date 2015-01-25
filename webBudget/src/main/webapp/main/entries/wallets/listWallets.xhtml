@@ -64,7 +64,7 @@
                 <p:column headerText="#{messages['wallet.list.name']}">
                     <h:outputText value="#{wallet.friendlyName}"/>
                 </p:column>
-                <p:column width="15%" 
+                <p:column width="12%" 
                           style="text-align: center"
                           headerText="#{messages['wallet.list.balance']}">
                     <h:outputText value="R$ #{wallet.balance}"
@@ -76,7 +76,7 @@
                           headerText="#{messages['wallet.list.type']}">
                     #{messages[wallet.walletType]}
                 </p:column>
-                <p:column width="15%" 
+                <p:column width="18%" 
                           style="text-align: center"
                           headerText="#{menu['actions']}">
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_ADJUST_BALANCE}">

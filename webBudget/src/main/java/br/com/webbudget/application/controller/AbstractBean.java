@@ -55,6 +55,16 @@ public abstract class AbstractBean implements Serializable {
     }
     
     /**
+     * Traduz uma chave para a sua versao internacionalizada
+     * 
+     * @param key a chave a ser internacionalizada
+     * @return a internacionalizacao da chae em questao 
+     */
+    protected String translate(String key) {
+        return this.messagesFactory.getMessage(key);
+    }
+    
+    /**
      * Metodo tosco para carregar o contexto antes de usar, como o lixo do 
      * spring nao tem um meio de produzir as dependencias em escopo de request
      * fiz esse gambito para resolver provisoriamente ate a migracao para o JEE

@@ -203,6 +203,13 @@
             <artifactId>hibernate-validator-annotation-processor</artifactId>
             <version>${hibernate.validator.version}</version>
         </dependency>
+
+        <!-- beans utils para reflection -->        
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.2</version>
+        </dependency>
         
         <!-- datasource -->
         <dependency>

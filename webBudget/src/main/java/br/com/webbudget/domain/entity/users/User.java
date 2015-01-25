@@ -1,5 +1,6 @@
 package br.com.webbudget.domain.entity.users;
 
+import br.com.webbudget.application.components.validators.MatchFields;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import java.util.Collection;
 import java.util.Set;
@@ -9,15 +10,13 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,33 +31,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "users")
 @ToString(callSuper = true, of = {"email", "username"})
 @EqualsAndHashCode(callSuper = true, of = {"email", "username"})
+@MatchFields(
+        first = "unsecurePassword", 
+        second = "unsecurePasswordConfirmation", 
+        message = "{user-account.password-not-match}")
 public class User extends PersistentEntity implements UserDetails {
 
     @Getter 
     @Setter
-    @NotNull(message = "user-account.validate.name")
-    @NotBlank(message = "user-account.validate.name")
+    @NotEmpty(message = "{user-account.name}")
     @Column(name = "name", length = 90, nullable = false)
     private String name;
     @Getter 
     @Setter
-    @Email(message = "user-account.validate.email")
-    @NotNull(message = "user-account.validate.email")
-    @NotBlank(message = "user-account.validate.email")
-    @Column(name = "email", length = 90)
+    @Email(message = "{user-account.email}")
+    @NotEmpty(message = "{user-account.email}")
+    @Column(name = "email", length = 90, nullable = false)
     private String email;
     @Setter
-    @NotNull(message = "user-account.validate.username")
-    @NotBlank(message = "user-account.validate.username")
-    @Length(min = 5, message = "user-account.validate.username")
-    @Pattern(regexp = "[\\Wa-zA-Z]*", message = "user-account.validate.username")
+    @NotEmpty(message = "{user-account.username}")
     @Column(name = "username", length = 45, nullable = false)
     private String username;
     @Getter
     @Setter
-    @NotNull(message = "user-account.validate.password")
-    @NotBlank(message = "user-account.validate.password")
-    @Length(min = 5, message = "user-account.validate.password")
     @Column(name = "password", length = 64, nullable = false)
     private String password;
     @Getter 
@@ -82,7 +77,13 @@ public class User extends PersistentEntity implements UserDetails {
     @Getter 
     @Setter
     @Transient
-    private String newPassword;
+    @NotEmpty(message = "{user-account.password}")
+    @Length(min = 5, max = 64, message = "{user-account.password-gt-5}")
+    private String unsecurePassword;
+    @Getter 
+    @Setter
+    @Transient
+    private String unsecurePasswordConfirmation;
 
     /**
      * Junta todas as permissoes do usuario vindas pela ralacao user-permission

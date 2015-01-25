@@ -98,7 +98,7 @@ public class AccountService implements UserDetailsService {
             throw new ApplicationException("user-account.validate.no-permissions");
         }
 
-        final String encodedPassword = this.passwordEncoder.encode(user.getNewPassword());
+        final String encodedPassword = this.passwordEncoder.encode(user.getUnsecurePassword());
 
         user.setPassword(encodedPassword);
 
@@ -128,10 +128,10 @@ public class AccountService implements UserDetailsService {
         }
         
         // atualiza o password se precisar
-        if (user.getNewPassword() != null && !user.getNewPassword().isEmpty()) {
+        if (user.getUnsecurePassword() != null && !user.getUnsecurePassword().isEmpty()) {
             
             final String encodedPassword = 
-                    this.passwordEncoder.encode(user.getNewPassword());
+                    this.passwordEncoder.encode(user.getUnsecurePassword());
             
             user.setPassword(encodedPassword);
         }

@@ -72,7 +72,7 @@
                         <p:ajax event="rowSelect" 
                                 listener="#{movementBean.displayDetailsPopup()}" />
 
-                        <p:column width="7%" 
+                        <p:column width="6%" 
                                   style="text-align: center"
                                   headerText="#{messages['movement.list.direction']}">
                             <p:graphicImage width="18"
@@ -96,7 +96,7 @@
                         <p:column headerText="#{messages['movement.list.description']}">
                             #{of:abbreviate(movement.description,50)}
                         </p:column>
-                        <p:column width="15%"
+                        <p:column width="10%"
                                   style="text-align: center" 
                                   headerText="#{messages['movement.list.movement-state-type']}">
                             <h:outputText style="color: green; font-weight: bold;"
@@ -112,19 +112,19 @@
                                           value="#{messages[movement.movementStateType]}"
                                           rendered="#{movement.movementStateType eq 'CANCELED'}" />
                         </p:column>
-                        <p:column width="15%"
+                        <p:column width="12%"
                                   style="text-align: center" 
                                   headerText="#{messages['movement.list.value']}">
                             <h:outputText value="R$ #{movement.value}" />
                         </p:column>
-                        <p:column width="10%"
+                        <p:column width="12%"
                                   style="text-align: center" 
                                   headerText="#{messages['movement.list.due-date']}">
                             <h:outputText value="#{movement.dueDate}">
                                 <f:convertDateTime pattern="dd/MM/yyyy" />
                             </h:outputText> 
                         </p:column>
-                        <p:column width="16%" 
+                        <p:column width="18%" 
                                   style="text-align: center"
                                   headerText="#{menu['actions']}">
                             <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_PAY}">

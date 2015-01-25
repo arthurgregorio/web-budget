@@ -54,7 +54,7 @@ public class Bootstrap {
             user.setName("Administrador");
             user.setEmail("contato@arthurgregorio.eti.br");
             user.setUsername("admin");
-            user.setNewPassword("admin");
+            user.setUnsecurePassword("admin");
 
             // cria as permissoes
             final Set<Permission> permissions = new HashSet<>();
