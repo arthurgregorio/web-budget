@@ -1,9 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
     <ui:define name="head">
@@ -15,78 +14,77 @@
         <p:menuitem url="#"
                     value="#{breadcrumb['preferences']}" />
     </ui:define>
-    
+
     <ui:define name="content">
+
         <h:form id="userAccountForm" prependId="false">
-            
-            <p:messages id="messages" closable="true" globalOnly="true"/>
-            <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
-            
-            <div class="form-cell">
-                <p:outputLabel for="inName" 
-                               value="#{i18n['user-account.form.name']}: "/>
-                <br/>
-                <p:inputText id="inName" 
-                             size="50"
-                             value="#{userAccountBean.user.name}" 
-                             title="#{component.valid ? '' : userAccountBean.getErrorMessage(component.clientId)}"/>
+            <div class="ui-grid-row messages-row">
+                <div class="ui-grid-col-12">
+                    <p:messages id="messages" closable="true" />
+                </div> 
+            </div> 
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6"> 
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inName" 
+                                           value="#{messages['user-account.form.name']}: "/>
+                            <p:inputText id="inName" 
+                                         size="50"
+                                         value="#{userAccountBean.user.name}" />
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inEmail" 
+                                           value="#{messages['user-account.form.email']}: "/>
+                            <p:inputText id="inEmail" 
+                                         size="50"
+                                         value="#{userAccountBean.user.email}"/>  
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row div-pd-tb-10">
+                        <div class="ui-grid-col-12 form-header">
+                            <h:outputText value="#{messages['user-account.form.change-password']}:"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inNewPassword" 
+                                           value="#{messages['user-account.form.new-password']}: "/>
+                            <p:password id="inNewPassword" 
+                                        match="inConfirmPassword"
+                                        value="#{userAccountBean.user.unsecurePassword}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inConfirmPassword" 
+                                           value="#{messages['user-account.form.confirm-password']}: "/>
+                            <p:password id="inConfirmPassword"
+                                        value="#{userAccountBean.user.unsecurePasswordConfirmation}"/>
+                        </div>                        
+                    </div>
+                </div>
+                <div class="ui-grid-col-6"> 
+
+                </div>
             </div>
-            <div class="form-cell">
-                <p:outputLabel for="inEmail" 
-                               value="#{i18n['user-account.form.email']}: "/>
-                <br/>
-                <p:inputText id="inEmail" 
-                             size="50"
-                             value="#{userAccountBean.user.email}" 
-                             title="#{component.valid ? '' : userAccountBean.getErrorMessage(component.clientId)}"/>
-            </div>
-            <div class="form-cell" style="margin-top: 50px; margin-bottom: 10px">
-                <span class="change-password">
-                    #{i18n['user-account.form.change-password']}:
-                </span>
-            </div>
-            <div class="form-cell">
-                <p:outputLabel for="inNewPassword" 
-                               value="#{i18n['user-account.form.new-password']}: "/>
-                <br/>
-                <p:password id="inNewPassword" 
-                            size="25"
-                            match="inConfirmPassword"
-                            value="#{userAccountBean.user.newPassword}"
-                            title="#{component.valid ? '' : userAccountBean.getErrorMessage(component.clientId)}">
-                    <f:validator binding="#{passwordValidator}"/>
-                    <f:validateRegex pattern="[\x21-\x7E]{4,16}"/>
-                </p:password>
-            </div>
-            <div class="form-cell">
-                <p:outputLabel for="inConfirmPassword" 
-                               value="#{i18n['user-account.form.confirm-password']}: "/>
-                <br/>
-                <p:password id="inConfirmPassword"
-                            size="25"
-                            value="#{userAccountBean.user.newPassword}"
-                            title="#{component.valid ? '' : userAccountBean.getErrorMessage(component.clientId)}">
-                    <f:validator binding="#{passwordValidator}"/>
-                    <f:validateRegex pattern="[\x21-\x7E]{4,16}"/>
-                </p:password>
-            </div>
-            <div class="rowField" style="margin-top: 15px">
-                <span class="password-hint">
-                    #{i18n['user-account.form.password.hint']}
-                </span> 
-            </div>
-            <div class="form-controls-box">
-                <p:commandButton styleClass="green-button"
-                                 update="userAccountForm"
-                                 process="userAccountForm"
-                                 value="#{i18n['form.save']}"
-                                 action="#{userAccountBean.doPasswordUpdate()}"
-                                 onsuccess="setTimeout('$(\'#messages\').slideUp(300)', 3000)"/>
-                <p:spacer width="10"/>
-                <p:commandButton immediate="true"
-                                 styleClass="red-button"
-                                 value="#{i18n['form.back']}"
-                                 action="#{userAccountBean.backToHome()}"/>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">
+
+                </div>
+                <div class="ui-grid-col-6 form-controls-box">
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{userAccountBean.toDashboard()}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['save']}"
+                                     update="userAccountForm"
+                                     process="userAccountForm"
+                                     styleClass="ui-button-success"
+                                     action="#{userAccountBean.doPasswordUpdate()}"/>
+                </div>
             </div>
         </h:form>
     </ui:define>

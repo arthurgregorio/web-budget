@@ -15,6 +15,12 @@
             <supported-locale>en_US</supported-locale>
         </locale-config>  
         
+        <!-- mensagens de validacao -->
+        <resource-bundle>  
+            <base-name>ValidationMessages</base-name>  
+            <var>validation</var>
+        </resource-bundle>  
+        
         <!-- bundle -->
         <resource-bundle>  
             <base-name>i18n.messages</base-name>  

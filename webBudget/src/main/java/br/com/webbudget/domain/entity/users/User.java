@@ -1,9 +1,9 @@
 package br.com.webbudget.domain.entity.users;
 
-import br.com.webbudget.application.components.validators.MatchFields;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import java.util.Collection;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,10 +31,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "users")
 @ToString(callSuper = true, of = {"email", "username"})
 @EqualsAndHashCode(callSuper = true, of = {"email", "username"})
-@MatchFields(
-        first = "unsecurePassword", 
-        second = "unsecurePasswordConfirmation", 
-        message = "{user-account.password-not-match}")
 public class User extends PersistentEntity implements UserDetails {
 
     @Getter 
@@ -67,7 +63,7 @@ public class User extends PersistentEntity implements UserDetails {
      */
     @Getter
     @Setter
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Permission> permissions;
     
     @Getter 

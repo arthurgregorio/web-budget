@@ -1,10 +1,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                template="/template/mainTemplate.xhtml">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/template/mainTemplate.xhtml"
+                xmlns:o="http://omnifaces.org/ui">
 
     <ui:define name="head">
         <f:event type="preRenderView" 
@@ -74,7 +74,9 @@
                             <p:outputLabel for="inPassword" 
                                            value="#{messages['user-account.form.password']}: "/>
                             <p:password id="inPassword" 
-                                        value="#{userAccountBean.user.unsecurePassword}"/>
+                                        match="inConfirmPassword"
+                                        value="#{userAccountBean.user.unsecurePassword}"
+                                        validatorMessage="#{validation['user-account.password-not-match']}"/>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
@@ -126,7 +128,7 @@
                                      process="userAccountForm"
                                      styleClass="ui-button-success"
                                      action="#{userAccountBean.doSave()}"
-                                     rendered="#{userAccountBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{userAccountBean.viewState eq 'ADDING'}" />
                     <p:commandButton update="userAccountForm"
                                      process="userAccountForm"
                                      value="#{menu['update']}"

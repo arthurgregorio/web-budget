@@ -348,7 +348,7 @@ public class UserAccountBean extends AbstractBean {
      * 
      * @return 
      */
-    public String backToHome() {
-        return "/main/home.xhtml?faces-redirect=true";
+    public String toDashboard() {
+        return "/main/dashboard.xhtml?faces-redirect=true";
     }
 }
