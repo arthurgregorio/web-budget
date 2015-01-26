@@ -14,8 +14,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -33,14 +31,11 @@ public class MovementClass extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotEmpty(message = "movement-class.validate.name")
-    @NotBlank(message = "movement-class.validate.name")
-    @Length(max = 45, message = "movement-class.validate.name")
+    @NotEmpty(message = "{movement-class.name}")
     @Column(name = "name", nullable = false, length = 45)
     private String name;
     @Getter
     @Setter
-    @NotNull(message = "movement-class.validate.budget")
     @Column(name = "budget")
     private BigDecimal budget;
     @Getter
@@ -50,14 +45,14 @@ public class MovementClass extends PersistentEntity {
     @Getter
     @Setter
     @Enumerated
-    @NotNull(message = "movement-class.validate.movement-class-type")
+    @NotNull(message = "{movement-class.movement-class-type}")
     @Column(name = "movement_class_type", nullable = false)
     private MovementClassType movementClassType;
     
     @Getter
     @Setter
-    @NotNull(message = "movement-class.validate.cost-center")
     @ManyToOne
+    @NotNull(message = "{movement-class.cost-center}")
     @JoinColumn(name = "id_cost_center", nullable = false)
     private CostCenter costCenter;
     

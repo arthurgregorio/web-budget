@@ -29,8 +29,7 @@
         <h:form id="movementForm" prependId="false">
             <div class="ui-grid-row messages-row">
                 <div class="ui-grid-col-12">
-                    <p:messages id="messages" closable="true" globalOnly="true" />
-                    <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+                    <p:messages id="messages" closable="true" />
                 </div> 
             </div> 
             <div class="ui-grid-row">
@@ -41,8 +40,7 @@
                                            value="#{messages['movement.form.code']}: "/>
                             <p:inputText id="inCode" 
                                          readonly="true"
-                                         value="#{movementBean.movement.code}" 
-                                         title="#{component.valid ? '' : movementBean.getErrorMessage(component.clientId)}"/>
+                                         value="#{movementBean.movement.code}" />
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
@@ -157,14 +155,23 @@
                                     </div>
                                 </h:panelGroup>
                                 <h:panelGroup layout="block" 
+                                              styleClass="ui-grid-row"
                                               rendered="#{movementBean.haveOpenPeriod() eq false}">
-                                    <h:outputText style="color: red;"
-                                                  value="#{messages['movement.form.financial-period-not-open']}" />
-                                    <br/>
-                                    <br/>
-                                    <p:commandLink immediate="true"
-                                                   action="#{movementBean.changeToOpenFinancialPeriod()}"
-                                                   value="#{messages['movement.form.financial-period-open']}" />
+                                    <div class="ui-grid-col-12">
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-12 financial-period-group">
+                                                <h:outputText style="color: red;"
+                                                              value="#{messages['movement.form.financial-period-not-open']}" />
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-12 financial-period-group">
+                                                <p:commandLink immediate="true"
+                                                               action="#{movementBean.changeToOpenFinancialPeriod()}"
+                                                               value="#{messages['movement.form.financial-period-open']}" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </h:panelGroup>
                             </p:fieldset>
                         </div>
@@ -175,7 +182,7 @@
                 <div class="ui-grid-col-6">
 
                 </div>
-                <div class="ui-grid-col-6 div-align-right">
+                <div class="ui-grid-col-6 form-controls-box">
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
                                      action="#{movementBean.doCancel()}"/>

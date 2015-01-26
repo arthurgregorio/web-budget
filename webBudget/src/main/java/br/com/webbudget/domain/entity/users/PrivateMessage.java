@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -34,14 +35,12 @@ public class PrivateMessage extends PersistentEntity {
     private String code;
     @Getter
     @Setter
-    @NotNull(message = "private-message.validate.text")
-    @NotBlank(message = "private-message.validate.text")
+    @NotEmpty(message = "{private-message.title}")
     @Column(name = "title", nullable = false, length = 45)
     private String title;
     @Getter
     @Setter
-    @NotNull(message = "private-message.validate.text")
-    @NotBlank(message = "private-message.validate.text")
+    @NotEmpty(message = "{private-message.text}")
     @Column(name = "text", nullable = false, length = 255)
     private String text;
     @Getter

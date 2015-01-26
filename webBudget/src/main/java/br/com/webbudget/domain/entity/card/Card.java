@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -31,20 +32,17 @@ public class Card extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotNull(message = "card.validate.name")
-    @NotBlank(message = "card.validate.name")
+    @NotEmpty(message = "{card.name}")
     @Column(name = "name", nullable = false, length = 45)
     private String name;
     @Getter
     @Setter
-    @NotNull(message = "card.validate.number")
-    @NotBlank(message = "card.validate.number")
+    @NotEmpty(message = "{card.number}")
     @Column(name = "number", nullable = false, length = 45)
     private String number;
     @Getter
     @Setter
-    @NotNull(message = "card.validate.flag")
-    @NotBlank(message = "card.validate.flag")
+    @NotEmpty(message = "{card.flag}")
     @Column(name = "flag", nullable = false, length = 45)
     private String flag;
     @Getter
@@ -57,8 +55,7 @@ public class Card extends PersistentEntity {
     private Integer expirationDay;
     @Getter
     @Setter
-    @NotNull(message = "card.validate.owner")
-    @NotBlank(message = "card.validate.owner")
+    @NotEmpty(message = "{card.owner}")
     @Column(name = "owner", nullable = false, length = 45)
     private String owner;
     @Getter

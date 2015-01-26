@@ -363,6 +363,11 @@ td {
     width: 90%;
 }
 
+/* form de cadastro de periodos -------------- */
+.warn-financial-period {
+    margin: 5px 0 !important;
+}
+
 /* form contas de usuario -------------------- */
 .permission-tree {
     overflow: auto;

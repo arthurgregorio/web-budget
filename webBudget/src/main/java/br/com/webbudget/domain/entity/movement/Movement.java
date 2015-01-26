@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -30,7 +30,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since 1.0, 04/03/2014
  */
 @Entity
-@Table(name = "movement")
+@Table(name = "movements")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")
 public class Movement extends PersistentEntity {
@@ -40,24 +40,22 @@ public class Movement extends PersistentEntity {
     private String code;
     @Getter
     @Setter
-    @NotNull(message = "movement.validate.value")
+    @NotNull(message = "{movement.value}")
     @Column(name = "value", nullable = false, length = 8)
     private BigDecimal value;
     @Getter
     @Setter
-    @NotNull(message = "movement.validate.description")
-    @NotBlank(message = "movement.validate.description")
+    @NotEmpty(message = "{movement.description}")
     @Column(name = "description", nullable = false, length = 255)
     private String description;
     @Getter
     @Setter
-    @NotNull(message = "movement.validate.due-date")
+    @NotNull(message = "{movement.due-date}")
     @Temporal(TemporalType.DATE)
     @Column(name = "due_date", nullable = false)
     private Date dueDate;
     @Getter
     @Setter
-    @NotNull(message = "movement.validate.movement-state-type")
     @Enumerated
     @Column(name = "movement_state_type", nullable = false)
     private MovementStateType movementStateType;
@@ -87,14 +85,14 @@ public class Movement extends PersistentEntity {
     private Contact contact;
     @Getter
     @Setter
-    @NotNull(message = "movement.validate.movement-class")
     @ManyToOne
+    @NotNull(message = "{movement.movement-class}")
     @JoinColumn(name = "id_movement_class", nullable = false)
     private MovementClass movementClass;
     @Getter
     @Setter
-    @NotNull(message = "movement.validate.financial-period")
     @ManyToOne
+    @NotNull(message = "{movement.financial-period}")
     @JoinColumn(name = "id_financial_period", nullable = false)
     private FinancialPeriod financialPeriod;
 

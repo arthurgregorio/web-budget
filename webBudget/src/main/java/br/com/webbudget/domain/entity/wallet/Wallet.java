@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -31,8 +32,7 @@ public class Wallet extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotNull(message = "wallet.validate.name")
-    @NotBlank(message = "wallet.validate.name")
+    @NotEmpty(message = "{wallet.name}")
     @Column(name = "name", nullable = false, length = 45)
     private String name;
     @Getter
@@ -57,7 +57,7 @@ public class Wallet extends PersistentEntity {
     private String description;
     @Getter
     @Setter
-    @NotNull(message = "wallet.validate.balance")
+    @NotNull(message = "{wallet.balance}")
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
     @Getter
@@ -67,7 +67,7 @@ public class Wallet extends PersistentEntity {
     
     @Getter
     @Setter
-    @NotNull(message = "wallet.validate.wallet-type")
+    @NotNull(message = "{wallet.wallet-type}")
     @Column(name = "wallet_type", nullable = false)
     private WalletType walletType;
     
@@ -78,7 +78,7 @@ public class Wallet extends PersistentEntity {
     @Getter
     @Setter
     @Transient
-    @NotNull(message = "wallet.validate.adjustment-value")
+    @NotNull(message = "{wallet.adjustment-value}")
     private BigDecimal adjustmentValue;
 
     /**

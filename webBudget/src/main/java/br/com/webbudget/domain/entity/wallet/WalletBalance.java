@@ -41,7 +41,7 @@ public class WalletBalance extends PersistentEntity {
     private BigDecimal adjustmentValue;
     @Getter
     @Setter
-    @NotNull(message = "transfer.validate.transfer-value")
+    @NotNull(message = "{transfer.transfer-value}")
     @Column(name = "transfer_value")
     private BigDecimal transferValue;
     @Getter
@@ -65,13 +65,13 @@ public class WalletBalance extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "transfer.validate.null-target")
+    @NotNull(message = "{transfer.null-target}")
     @JoinColumn(name = "id_wallet")
     private Wallet wallet;
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "transfer.validate.null-source")
+    @NotNull(message = "{transfer.null-source}")
     @JoinColumn(name = "id_source_wallet")
     private Wallet sourceWallet;    
     

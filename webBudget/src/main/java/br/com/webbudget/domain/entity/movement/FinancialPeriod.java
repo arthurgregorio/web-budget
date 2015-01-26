@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -35,20 +35,19 @@ public class FinancialPeriod extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotNull(message = "financial-period.validate.identification")
-    @NotBlank(message = "financial-period.validate.identification")
+    @NotEmpty(message = "{financial-period.identification}")
     @Column(name = "identification", nullable = false)
     private String identification;
     @Getter
     @Setter
-    @NotNull(message = "financial-period.validate.start")
+    @NotNull(message = "{financial-period.start}")
     @Temporal(TemporalType.DATE)
     @Column(name = "start", nullable = false)
     private Date start;
     @Getter
     @Setter
-    @Future(message = "financial-period.validate.end")
-    @NotNull(message = "financial-period.validate.end")
+    @Future(message = "{financial-period.end-must-future}")
+    @NotNull(message = "{financial-period.end}")
     @Temporal(TemporalType.DATE)
     @Column(name = "end", nullable = false)
     private Date end;

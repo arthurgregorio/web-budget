@@ -28,10 +28,9 @@
 
         <h:form id="walletForm" prependId="false">
 
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12 messages-row">
-                    <p:messages id="messages" closable="true" globalOnly="true" />
-                    <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+            <div class="ui-grid-row messages-row">
+                <div class="ui-grid-col-12">
+                    <p:messages id="messages" closable="true" />
                 </div> 
             </div> 
             <div class="ui-grid-row">
@@ -49,8 +48,7 @@
                                            value="#{messages['wallet.form.name']}: "/>
                             <p:inputText id="inName" 
                                          maxlength="45"
-                                         value="#{walletBean.wallet.name}" 
-                                         title="#{component.valid ? '' : walletBean.getErrorMessage(component.clientId)}"/>
+                                         value="#{walletBean.wallet.name}" />
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
@@ -79,8 +77,7 @@
                             <p:inputText id="inBank" 
                                          maxlength="45"
                                          value="#{walletBean.wallet.bank}" 
-                                         disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}"
-                                         title="#{component.valid ? '' : walletBean.getErrorMessage(component.clientId)}"/>
+                                         disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}"/>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
@@ -90,8 +87,7 @@
                             <p:inputText id="inAgency"
                                          maxlength="20"
                                          value="#{walletBean.wallet.agency}"
-                                         disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}"
-                                         title="#{component.valid ? '' : walletBean.getErrorMessage(component.clientId)}">
+                                         disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
                                 <pe:keyFilter regEx="/[\d\-]/"/>  
                             </p:inputText>
                         </div>                        
@@ -107,8 +103,7 @@
                                             decimalSeparator="," 
                                             thousandSeparator="." 
                                             value="#{walletBean.wallet.balance}"
-                                            disabled="#{walletBean.wallet.saved}"
-                                            title="#{component.valid ? '' : walletBean.getErrorMessage(component.clientId)}">
+                                            disabled="#{walletBean.wallet.saved}">
                                 <pe:keyFilter regEx="/[0-9_,]/i"/>
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </pe:inputNumber>
@@ -124,18 +119,16 @@
                                              value="#{walletBean.wallet.description}" />
                         </div>                        
                     </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
-
-                        </div>                        
-                    </div>
                 </div> 
+                <div class="ui-grid-col-6">
+
+                </div>                        
             </div>
             <div class="ui-grid-row">
                 <div class="ui-grid-col-6">
 
                 </div>
-                <div class="ui-grid-col-6 div-align-right">
+                <div class="ui-grid-col-6 form-controls-box">
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
                                      action="#{walletBean.doCancel()}"/>

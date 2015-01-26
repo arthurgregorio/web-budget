@@ -451,7 +451,7 @@ fieldset[disabled] .ui-button-danger.active {
 
 /* customizacao das mensagens em tela */
 .ui-messages-error {
-    margin: 5px 0 20px 0 !important;
+    margin: 5px 0 10px 0 !important;
     border: 1px solid #eee !important;
     border-left-width: 5px !important;
     border-radius: 3px !important;
@@ -459,7 +459,7 @@ fieldset[disabled] .ui-button-danger.active {
     background-color: rgba(217, 83, 79, 0.1) !important;
 }
 .ui-messages-warn {
-    margin: 5px 0 20px 0 !important;
+    margin: 5px 0 10px 0 !important;
     border: 1px solid #eee !important;
     border-left-width: 5px !important;
     border-radius: 3px !important;

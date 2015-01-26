@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -30,13 +30,12 @@ public class CostCenter extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotNull(message = "cost-center.validate.name")
-    @NotBlank(message = "cost-center.validate.name")
+    @NotEmpty(message = "{cost-center.name}")
     @Column(name = "name", nullable = false, length = 90)
     private String name;
     @Getter
     @Setter
-    @NotNull(message = "cost-center.validate.budget")
+    @NotNull(message = "{cost-center.budget}")
     @Column(name = "budget", nullable = false)
     private BigDecimal budget;
     @Getter

@@ -28,8 +28,7 @@
         <h:form id="movementClassForm" prependId="false">
             <div class="ui-grid-row messages-row">
                 <div class="ui-grid-col-12">
-                    <p:messages id="messages" closable="true" globalOnly="true" />
-                    <pe:tooltip global="true" myPosition="left center" atPosition="right center" for="@(.ui-state-error)"/>  
+                    <p:messages id="messages" closable="true" />
                 </div> 
             </div> 
             <div class="ui-grid-row">
@@ -46,8 +45,7 @@
                             <p:outputLabel for="inName" 
                                            value="#{messages['movement-class.form.name']}: "/>
                             <p:inputText id="inName" 
-                                         value="#{movementClassBean.movementClass.name}" 
-                                         title="#{component.valid ? '' : movementClassBean.getErrorMessage(component.clientId)}"/>
+                                         value="#{movementClassBean.movementClass.name}" />
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
@@ -75,8 +73,7 @@
                                             decimalPlaces="2" 
                                             decimalSeparator="," 
                                             thousandSeparator="." 
-                                            value="#{movementClassBean.movementClass.budget}"
-                                            title="#{component.valid ? '' : movementClassBean.getErrorMessage(component.clientId)}">
+                                            value="#{movementClassBean.movementClass.budget}">
                                 <pe:keyFilter regEx="/[0-9_,]/i"/>
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </pe:inputNumber>
@@ -107,7 +104,7 @@
                 <div class="ui-grid-col-6">
 
                 </div>
-                <div class="ui-grid-col-6 div-align-right">
+                <div class="ui-grid-col-6 form-controls-box">
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
                                      action="#{movementClassBean.doCancel()}"/>
