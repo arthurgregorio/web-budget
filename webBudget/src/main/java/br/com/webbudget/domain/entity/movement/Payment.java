@@ -37,14 +37,14 @@ public class Payment extends PersistentEntity {
     private String code;
     @Getter
     @Setter
-    @NotNull(message = "payment.validate.payment-date")
+    @NotNull(message = "{payment.payment-date}")
     @Temporal(TemporalType.DATE)
     @Column(name = "payment_date", nullable = false)
     private Date paymentDate;
     @Getter
     @Setter
-    @NotNull(message = "payment.validate.payment-method")
     @Enumerated
+    @NotNull(message = "{payment.payment-method}")
     @Column(name = "payment_method_type", nullable = false)
     private PaymentMethodType paymentMethodType;
 
