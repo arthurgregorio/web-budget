@@ -75,22 +75,10 @@ body {
 .footer-text {
     position: relative;
     float: left;
-    width: 50%;
-    text-align: right;
+    width: 100%;
     top: 32%;
-}
-.version-number {
-    font-size: 11pt;
-    font-weight: 700;
-}
-.version-text {
-    font-size: 11pt;
-}
-.footer-logo {
-    position: relative;
-    float: left;
-    width: 50%;
-    top: 7%;
+    color: #646769;
+    text-align: center;
 }
 
 /* classes gerais do layout ------------------ */
