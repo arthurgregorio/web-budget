@@ -89,6 +89,17 @@ public class WalletBean extends AbstractBean {
     
     /**
      * 
+     * @param walletId 
+     */
+    public void initializeAdjustment(long walletId) {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            
+            this.wallet = this.walletService.findWalletById(walletId);            
+        }
+    }
+    
+    /**
+     * 
      * @return o form de inclusao
      */
     public String changeToAdd() {
@@ -110,6 +121,15 @@ public class WalletBean extends AbstractBean {
      */
     public String changeToEdit(long walletId) {
         return "formWallet.xhtml?faces-redirect=true&walletId=" + walletId;
+    }
+    
+    /**
+     * 
+     * @param walletId
+     * @return 
+     */
+    public String changeToAdjustment(long walletId) {
+        return "formAdjustment.xhtml?faces-redirect=true&walletId=" + walletId;
     }
     
     /**
@@ -204,23 +224,6 @@ public class WalletBean extends AbstractBean {
             this.update("walletsList");
             this.closeDialog("dialogDeleteWallet");
         }
-    }
-    
-    /**
-     * 
-     * @param walletId 
-     */
-    public void displayAdjustment(long walletId) {
-        this.wallet = this.walletService.findWalletById(walletId);
-        this.openDialog("adjustBalanceDialog", "dialogAdjustBalance");
-    }
-    
-    /**
-     * 
-     */
-    public void cancelAdjustment() {
-        this.wallet = null;
-        this.closeDialog("dialogAdjustBalance");
     }
     
     /**

@@ -66,6 +66,7 @@ body {
     margin: 0 auto;
     width: 80%;
     height: auto;
+    padding-bottom: 50px;
 }
 .footer {
     width: 100%;
@@ -356,7 +357,11 @@ td {
     top: 9px;
 }
 .financial-period-text {
-    padding-top: 10px;
+    font-size: 11pt;
+}
+.current-period-label {
+    font-weight: 700;
+    font-size: 11pt;
 }
 .details-description textarea {
     width: 95%;

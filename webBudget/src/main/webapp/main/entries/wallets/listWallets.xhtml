@@ -99,7 +99,7 @@
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_ADJUST_BALANCE}">
                         <p:commandButton icon="ui-icon-wrench"
                                          title="#{menu['balance-adjust']}"
-                                         actionListener="#{walletBean.displayAdjustment(wallet.id)}" />
+                                         action="#{walletBean.changeToAdjustment(wallet.id)}" />
                         <p:spacer width="10"/>
                     </sec:authorize>
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_UPDATE}">
@@ -120,6 +120,5 @@
 
     <ui:define name="popups">
         <ui:include src="dialogDeleteWallet.xhtml"/>
-        <ui:include src="dialogAdjustBalance.xhtml"/>
     </ui:define>
 </ui:composition>

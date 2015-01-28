@@ -1,0 +1,109 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/template/mainTemplate.xhtml">
+
+    <ui:define name="head">
+        <f:event type="preRenderView" 
+                 listener="#{walletBean.initializeAdjustment(param.walletId)}" />
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['entries']}" />
+        <p:menuitem url="listWallets.xhtml"
+                    value="#{breadcrumb['entries.wallet']}" />
+        <p:menuitem url="#"
+                    value="#{breadcrumb['entries.wallet.adjustment']}"/>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="adjustmentForm" prependId="false">
+
+            <div class="ui-grid-row messages-row">
+                <div class="ui-grid-col-12">
+                    <p:messages id="messages" closable="true" />
+                </div> 
+            </div> 
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inWallet" 
+                                           value="#{messages['adjustment.form.wallet']}: " />
+                            <p:inputText id="inWallet" 
+                                         readonly="true"
+                                         value="#{walletBean.wallet.friendlyName}" />
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inActualBalance" 
+                                           value="#{messages['adjustment.form.actual-balance']}: " />
+                            <p:inputText id="inActualBalance" 
+                                         readonly="true"
+                                         value="R$ #{walletBean.wallet.balance}" 
+                                         style="#{walletBean.wallet.balance.signum() lt 0 ? 'color: red;' : 
+                                                  walletBean.wallet.balance.signum() gt 0 ? 'color: green': ''}"/>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row div-pd-tb-10">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inBalance" 
+                                           value="#{messages['adjustment.form.adjustment-value']}: "/>
+                            <br/>
+                            <pe:inputNumber id="inBalance" 
+                                            decimalPlaces="2" 
+                                            decimalSeparator="," 
+                                            thousandSeparator="." 
+                                            value="#{walletBean.wallet.adjustmentValue}">
+                                <pe:keyFilter regEx="/[0-9_,]/i"/>
+                                <f:converter converterId="javax.faces.BigDecimal" />
+                            </pe:inputNumber>
+                        </div>
+                    </div>
+                </div> 
+                <div class="ui-grid-col-6">
+
+                </div>                        
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">
+
+                </div>
+                <div class="ui-grid-col-6 form-controls-box">
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{walletBean.doCancel()}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton update="adjustmentForm"
+                                     process="adjustmentForm"
+                                     value="#{menu['update']}"
+                                     styleClass="ui-button-success"
+                                     action="#{walletBean.doAdjustment()}"/>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
