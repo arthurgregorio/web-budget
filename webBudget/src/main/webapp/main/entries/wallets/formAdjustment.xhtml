@@ -68,7 +68,7 @@
                                                   walletBean.wallet.balance.signum() gt 0 ? 'color: green': ''}"/>
                         </div>
                     </div>
-                    <div class="ui-grid-row div-pd-tb-10">
+                    <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inBalance" 
                                            value="#{messages['adjustment.form.adjustment-value']}: "/>
@@ -105,5 +105,9 @@
                 </div>
             </div>
         </h:form>
+    </ui:define>
+    
+    <ui:define name="popups">
+        <ui:include src="dialogAdjustment.xhtml"/>
     </ui:define>
 </ui:composition>

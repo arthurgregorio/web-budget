@@ -93,7 +93,6 @@ public class WalletBean extends AbstractBean {
      */
     public void initializeAdjustment(long walletId) {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            
             this.wallet = this.walletService.findWalletById(walletId);            
         }
     }
@@ -178,17 +177,15 @@ public class WalletBean extends AbstractBean {
         
         try {
             this.walletService.adjustBalance(this.wallet);
-            this.wallet = new Wallet();
             
             this.wallets = this.walletService.listWallets(null);
             
-            this.info("wallet.action.adjusted", true);
+            this.openDialog("adjustmentDialog","dialogAdjustment");
         }  catch (Exception ex) {
             this.logger.error("WalletBean#doAdjustment found erros", ex);
             this.fixedError(ex.getMessage(), true);
         } finally {
             this.update("walletsList");
-            this.closeDialog("dialogAdjustBalance");
         }
     }
     
