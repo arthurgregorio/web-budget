@@ -89,11 +89,11 @@
                             <p:outputLabel for="inBudget" 
                                            value="#{messages['cost-center.form.budget']}: "/>
                             <pe:inputNumber id="inBudget" 
+                                            symbol="R$ "
                                             decimalPlaces="2" 
                                             decimalSeparator="," 
                                             thousandSeparator="." 
                                             value="#{costCenterBean.costCenter.budget}">
-                                <pe:keyFilter regEx="/[0-9_,]/i"/>
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </pe:inputNumber>
                         </div>                        

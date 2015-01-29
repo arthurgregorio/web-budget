@@ -163,19 +163,21 @@ public class MovementBean extends AbstractBean {
      */
     public void initializePayment(long movementId) {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            
             this.movement = this.movementService.findMovementById(movementId);
 
             this.payment = new Payment();
 
             // tipos entrada, pagamento somente em carteira
-            if (this.movement.getMovementClass().getMovementClassType() == MovementClassType.IN) {
+            if (this.movement.getMovementDirection() == MovementClassType.IN) {
                 this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
+            } else {
+                this.debitCards = this.cardService.listDebitCards(false);
+                this.creditCards = this.cardService.listCreditCards(false);
             }
 
             // lista as fontes para preencher os combos
             this.wallets = this.walletService.listWallets(false);
-            this.debitCards = this.cardService.listDebitCards(false);
-            this.creditCards = this.cardService.listCreditCards(false);
         }
     }
     
@@ -299,6 +301,7 @@ public class MovementBean extends AbstractBean {
                 this.openDialog("confirmPaymentDialog","dialogConfirmPayment");
                 
                 this.movement = new Movement();
+                this.movement.setFinancialPeriod(this.financialPeriod);
             }
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doPayment found erros", ex);

@@ -118,12 +118,12 @@
                             <p:outputLabel for="inCreditLimit" 
                                            value="#{messages['card.form.credit-limit']}: "/>
                             <pe:inputNumber id="inCreditLimit" 
+                                            symbol="R$ "
                                             decimalPlaces="2" 
                                             decimalSeparator="," 
                                             thousandSeparator="." 
                                             value="#{cardBean.card.creditLimit}"
                                             disabled="#{cardBean.card.cardType ne 'CREDIT'}">
-                                <pe:keyFilter regEx="/[0-9_,]/i"/>
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </pe:inputNumber>
                         </div>                        
