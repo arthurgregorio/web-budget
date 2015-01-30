@@ -84,9 +84,10 @@
                 <p:column width="12%" 
                           style="text-align: center"
                           headerText="#{messages['wallet.list.balance']}">
-                    <h:outputText value="R$ #{wallet.balance}"
-                                  style="#{wallet.balance.signum() lt 0 ? 'color: red;' : 
-                                          wallet.balance.signum() gt 0 ? 'color: green': ''}"/>
+                    <p:commandLink value="R$ #{wallet.balance}" 
+                                   actionListener="#{walletBean.showBalance(wallet.id)}"
+                                   style="#{wallet.balance.signum() lt 0 ? 'color: red;' : 
+                                            wallet.balance.signum() gt 0 ? 'color: green': ''}"/>
                 </p:column>
                 <p:column width="15%" 
                           style="text-align: center"
@@ -120,5 +121,6 @@
 
     <ui:define name="popups">
         <ui:include src="dialogDeleteWallet.xhtml"/>
+        <ui:include src="dialogBalanceHistory.xhtml"/>
     </ui:define>
 </ui:composition>

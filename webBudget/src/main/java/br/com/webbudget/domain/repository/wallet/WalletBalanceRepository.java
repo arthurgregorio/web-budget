@@ -23,6 +23,7 @@ import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -79,18 +80,24 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
     /**
      * 
      * @param wallet
-     * @param walletBalanceType
+     * @param walletBalanceTypes
      * @return 
      */
     @Override
-    public List<WalletBalance> listByWallet(Wallet wallet, WalletBalanceType walletBalanceType) {
+    public List<WalletBalance> listByWallet(Wallet wallet, WalletBalanceType... walletBalanceTypes) {
        
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
         
         criteria.createAlias("wallet", "wl");
         criteria.add(Restrictions.eq("wl.id", wallet.getId()));
 
-        criteria.add(Restrictions.eq("walletBalanceType", walletBalanceType));
+        if (walletBalanceTypes != null) {
+            for (WalletBalanceType type : walletBalanceTypes) {
+                criteria.add(Restrictions.eq("walletBalanceType", type));
+            }
+        }
+        
+        criteria.addOrder(Order.desc("inclusion"));
         
         return criteria.list();
     }

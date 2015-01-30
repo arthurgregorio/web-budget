@@ -19,6 +19,7 @@ package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.wallet.Wallet;
+import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletType;
 import br.com.webbudget.domain.service.WalletService;
 import java.math.BigDecimal;
@@ -45,8 +46,11 @@ public class WalletBean extends AbstractBean {
 
     @Getter
     private Wallet wallet;
+    
     @Getter
     private List<Wallet> wallets;
+    @Getter
+    private List<WalletBalance> walletBalances;
     
     @Setter
     @ManagedProperty("#{walletService}")
@@ -95,6 +99,14 @@ public class WalletBean extends AbstractBean {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             this.wallet = this.walletService.findWalletById(walletId);            
         }
+    }
+    
+    public void showBalance(long walletId) {
+        
+        this.wallet = this.walletService.findWalletById(walletId);
+        this.walletBalances = this.walletService.listBalancesByWallet(wallet);
+        
+        this.openDialog("balanceHistoryDialog", "dialogBalanceHistory");
     }
     
     /**
