@@ -147,21 +147,24 @@ public class WalletService {
      */
     public void adjustBalance(Wallet wallet) {
 
+        // atualizamos o novo saldo
+        final BigDecimal oldBalance = wallet.getBalance();
+        final BigDecimal newBalance = oldBalance.add(wallet.getAdjustmentValue());
+        
+        wallet.setBalance(newBalance);
+        
+        this.walletRepository.save(wallet);        
+        
         final WalletBalance walletBalance = new WalletBalance();
         
         // gravamos o ultimo saldo como historico
         walletBalance.setWallet(wallet);
         walletBalance.setAdjustmentValue(wallet.getAdjustmentValue());
-        walletBalance.setOldBalance(wallet.getBalance());
-        walletBalance.setBalance(wallet.getAdjustmentValue());
+        walletBalance.setOldBalance(oldBalance);
+        walletBalance.setBalance(newBalance);
         walletBalance.setWalletBalanceType(WalletBalanceType.ADJUSTMENT);
 
         this.walletBalanceRepository.save(walletBalance);
-        
-        // atualizamos o novo saldo
-        wallet.setBalance(walletBalance.getAdjustmentValue());
-        
-        this.walletRepository.save(wallet);
     }
     
     /**

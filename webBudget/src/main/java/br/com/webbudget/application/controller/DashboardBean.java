@@ -142,7 +142,7 @@ public class DashboardBean implements Serializable {
      * @return 
      */
     public String changeToPay(long movementId) {
-        return "movements/maintenance/formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
+        return "financial/movement/formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
     }
     
     /**

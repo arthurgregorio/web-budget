@@ -54,23 +54,31 @@
                     <p:column style="text-align: center"
                               headerText="#{messages['balance-history.list.value']}">
                         <h:outputText value="#{balance.transferValue}"
-                                      rendered="#{balance.walletBalanceType eq 'TRANSFERENCE'}">
+                                      rendered="#{balance.walletBalanceType eq 'TRANSFERENCE'}"
+                                      style="#{balance.transferValue.signum() lt 0 ? 'color: red;' : 
+                                                  balance.transferValue.signum() gt 0 ? 'color: green': ''}">
                             <f:convertNumber type="currency" />
                         </h:outputText>
                         <h:outputText value="#{balance.adjustmentValue}"
-                                      rendered="#{balance.walletBalanceType eq 'ADJUSTMENT'}">
+                                      rendered="#{balance.walletBalanceType eq 'ADJUSTMENT'}"
+                                      style="#{balance.adjustmentValue.signum() lt 0 ? 'color: red;' : 
+                                                  balance.adjustmentValue.signum() gt 0 ? 'color: green': ''}">
                             <f:convertNumber type="currency" />
                         </h:outputText>
                     </p:column>
                     <p:column style="text-align: center"
                               headerText="#{messages['balance-history.list.old-balance']}">
-                        <h:outputText value="#{balance.oldBalance}">
+                        <h:outputText value="#{balance.oldBalance}"
+                                      style="#{balance.oldBalance.signum() lt 0 ? 'color: red;' : 
+                                                  balance.oldBalance.signum() gt 0 ? 'color: green': ''}">
                             <f:convertNumber type="currency" />
                         </h:outputText>
                     </p:column>
                     <p:column style="text-align: center"
                               headerText="#{messages['balance-history.list.balance']}">
-                        <h:outputText value="#{balance.balance}">
+                        <h:outputText value="#{balance.balance}"
+                                      style="#{balance.balance.signum() lt 0 ? 'color: red;' : 
+                                                  balance.balance.signum() gt 0 ? 'color: green': ''}">
                             <f:convertNumber type="currency" />
                         </h:outputText>
                     </p:column>

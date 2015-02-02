@@ -78,8 +78,10 @@
                                             decimalPlaces="2" 
                                             decimalSeparator="," 
                                             thousandSeparator="." 
+                                            minValue="-99999999.99"
                                             value="#{walletBean.wallet.adjustmentValue}">
                                 <f:converter converterId="javax.faces.BigDecimal" />
+                                <pe:keyFilter mask="num"/>
                             </pe:inputNumber>
                         </div>
                     </div>
