@@ -99,6 +99,13 @@ public class Wallet extends PersistentEntity {
 
     /**
      * 
+     */
+    public Wallet() {
+        this.balance = BigDecimal.ZERO;
+    }
+    
+    /**
+     * 
      * @return 
      */
     public String getAccountFormatted() {

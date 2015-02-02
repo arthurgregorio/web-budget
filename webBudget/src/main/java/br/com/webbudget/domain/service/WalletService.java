@@ -24,6 +24,7 @@ import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.entity.wallet.WalletType;
 import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
 import br.com.webbudget.domain.repository.wallet.IWalletRepository;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,6 +84,19 @@ public class WalletService {
      * @param wallet 
      */
     public void deleteWallet(Wallet wallet) {
+        
+        // checa se a carteira nao tem saldo menor ou maior que zero
+        // se houve, dispara o erro, comente carteiras zeradas sao deletaveis
+        if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
+            throw new ApplicationException("wallet.validate.has-balance");
+        }
+        
+        final List<WalletBalance> balaces = this.listBalancesByWallet(wallet);
+
+        for (WalletBalance balance : balaces) {
+            this.walletBalanceRepository.delete(balance);
+        }
+        
         this.walletRepository.delete(wallet);
     }
 
