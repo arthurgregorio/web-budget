@@ -155,7 +155,7 @@ public abstract class AbstractBean implements Serializable {
         this.requestContext.update(componentId);
         
         if (useTimer) {
-            this.requestContext.execute("setTimeout(\"$(\'#" + componentId + "\').slideUp(300)\", 8000)");
+            this.requestContext.execute("putTimeout()");
         }
     }
     

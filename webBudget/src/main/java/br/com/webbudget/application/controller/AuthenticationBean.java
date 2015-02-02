@@ -32,6 +32,8 @@ import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.omnifaces.util.Messages;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * MBean que contem os metodos de autenticacao do usuario, nele e feita a invo-<br/>
@@ -44,17 +46,23 @@ import org.omnifaces.util.Messages;
  */
 @ViewScoped
 @ManagedBean
-public class AuthenticationBean implements Serializable {
+public class AuthenticationBean extends AbstractBean {
     
     @Getter
     private User user;
     
     @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
-    @Setter
     @ManagedProperty("#{accountService}")
     private transient AccountService accountService;
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(AuthenticationBean.class);
+    }
     
     /**
      * 
@@ -76,24 +84,8 @@ public class AuthenticationBean implements Serializable {
             this.accountService.login(this.user);
             return "/main/dashboard.xhtml?faces-redirect=true";
         } catch (ApplicationException ex) {
-            Messages.addError(null, this.messages.getMessage(ex.getMessage()));
+            this.error(ex.getMessage(), true);
             return "";
         }
-    }
-    
-    /**
-     * 
-     * @param id
-     * @return 
-     */
-    public String getErrorMessage(String id) {
-    
-        final FacesContext facesContext = FacesContext.getCurrentInstance();
-        final Iterator<FacesMessage> iterator = facesContext.getMessages(id);
-        
-        if (iterator.hasNext()) {
-            return this.messages.getMessage(iterator.next().getDetail());
-        }
-        return "";
     }
 }

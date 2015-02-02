@@ -110,6 +110,9 @@ td {
     vertical-align: middle !important;
 }
 
+.div-h-300 {
+    height: 300px;
+}
 .div-pd-tb-10 {
     padding: 10px 0;
 }
@@ -400,4 +403,11 @@ td {
 }
 #inEnd button {
     height: 34px;
+}
+
+/* dashboard --------------------------------- */
+.empty-graph-text {
+    position: relative;
+    top: 45%;
+    text-align: center;
 }

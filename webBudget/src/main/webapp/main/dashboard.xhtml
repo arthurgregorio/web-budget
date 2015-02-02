@@ -38,16 +38,30 @@
             <div class="ui-grid-col-6">
                 <p:carousel numVisible="1" 
                             effect="easeInStrong" 
-                            headerText="#{messages['dashboard.graphs']}"
-                            itemStyle="height:290px;width:580px;">
-                    <p:tab> 
+                            itemStyle="height:290px;width:580px;"
+                            headerText="#{messages['dashboard.graphs']}">
+                     <p:tab rendered="#{empty dashboardBean.consumeModel.data}"> 
+                        <div class="div-h-300">
+                            <div class="empty-graph-text">
+                                #{messages['dashboard.graphs.no-data-consume']}
+                            </div>
+                        </div>
+                    </p:tab>
+                    <p:tab rendered="#{empty dashboardBean.revenueModel.data}"> 
+                        <div class="div-h-300">
+                            <div class="empty-graph-text">
+                                #{messages['dashboard.graphs.no-data-revenue']}
+                            </div>
+                        </div>
+                    </p:tab>
+                    <p:tab rendered="#{not empty dashboardBean.consumeModel.data}"> 
                         <p:chart type="pie" 
-                                 style="height: 300px;"
+                                 styleClass="div-h-300"
                                  model="#{dashboardBean.consumeModel}"/>
                     </p:tab>
-                    <p:tab>
+                    <p:tab rendered="#{not empty dashboardBean.revenueModel.data}"> 
                         <p:chart type="pie" 
-                                 style="height: 300px;"
+                                 styleClass="div-h-300"
                                  model="#{dashboardBean.revenueModel}"/>
                     </p:tab>
                 </p:carousel>
