@@ -379,6 +379,9 @@ td {
 .apportionment-label {
     font-size: 14pt !important;
 }
+.apportionment-control-box {
+    padding-top: 18px;
+}
 
 /* form de cadastro de periodos -------------- */
 .warn-financial-period {

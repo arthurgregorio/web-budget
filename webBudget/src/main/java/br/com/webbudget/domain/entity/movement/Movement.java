@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.users.Contact;
@@ -94,7 +93,7 @@ public class Movement extends PersistentEntity {
     @Setter
     @Column(name = "card_invoice")
     private String cardInvoice;
-    
+
     @Getter
     @Setter
     @OneToOne
@@ -111,7 +110,7 @@ public class Movement extends PersistentEntity {
     @NotNull(message = "{movement.financial-period}")
     @JoinColumn(name = "id_financial_period", nullable = false)
     private FinancialPeriod financialPeriod;
-    
+
     /**
      * Fetch eager pois sempre que precisarmos pesquisar um movimento, vamos
      * precisar saber como ele foi distribuido, ou seja, precisaremos do rateio
@@ -129,39 +128,39 @@ public class Movement extends PersistentEntity {
     @Setter
     @Transient
     private boolean transfer;
-    
+
     /**
-     * 
+     *
      */
     public Movement() {
-        
+
         this.code = this.createMovementCode();
-        
+
         this.apportionments = new ArrayList<>();
-        
+
         this.cardInvoicePaid = false;
         this.movementType = MovementType.MOVEMENT;
         this.movementStateType = MovementStateType.OPEN;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     private String createMovementCode() {
-        
+
         long decimalNumber = System.nanoTime();
-        
+
         String generated = "";
         final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        
+
         synchronized (this.getClass()) {
-            
+
             int mod;
             int authCodeLength = 0;
 
             while (decimalNumber != 0 && authCodeLength < 5) {
-                
+
                 mod = (int) (decimalNumber % 36);
                 generated = digits.substring(mod, mod + 1) + generated;
                 decimalNumber = decimalNumber / 36;
@@ -170,57 +169,73 @@ public class Movement extends PersistentEntity {
         }
         return generated;
     }
+
+    /**
+     *
+     * @param apportionment
+     */
+    public void addApportionment(Apportionment apportionment) {
+        this.apportionments.add(apportionment);
+    }
     
     /**
      * 
-     * @return 
+     * @param apportionment 
+     */
+    public void removeApportionment(Apportionment apportionment) {
+        this.apportionments.remove(apportionment);
+    }
+
+    /**
+     *
+     * @return
      */
     public boolean isEditable() {
-        return (this.movementStateType == MovementStateType.OPEN 
-                && !this.financialPeriod.isClosed()); 
+        return (this.movementStateType == MovementStateType.OPEN
+                && !this.financialPeriod.isClosed());
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isPayable() {
-        return (this.movementStateType == MovementStateType.OPEN 
-                && !this.financialPeriod.isClosed()); 
+        return (this.movementStateType == MovementStateType.OPEN
+                && !this.financialPeriod.isClosed());
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isDeletable() {
-        return ((this.movementStateType == MovementStateType.OPEN 
+        return ((this.movementStateType == MovementStateType.OPEN
                 || this.movementStateType == MovementStateType.PAID)
-                && !this.financialPeriod.isClosed()); 
+                && !this.financialPeriod.isClosed());
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isOverdue() {
-        
+
         final Calendar calendar = Calendar.getInstance();
-        
+
         calendar.setTime(new Date());
-        
+
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        
+
         return this.dueDate.compareTo(calendar.getTime()) < 0;
     }
-    
+
     /**
-     * De acordo com a primeira classe do rateio, diz se o movimento e de 
+     * De acordo com a primeira classe do rateio, diz se o movimento e de
      * entrada ou saida
-     * 
+     *
      * @return a direcao do movimento de acordo com as classes usadas
      */
     public MovementClassType getMovementDirection() {

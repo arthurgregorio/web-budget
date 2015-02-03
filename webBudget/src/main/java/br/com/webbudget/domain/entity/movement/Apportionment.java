@@ -73,10 +73,7 @@ public class Apportionment extends PersistentEntity {
      * 
      */
     public Apportionment(){
-        
         this.code = this.createApportionmentCode();
-        
-        this.value = BigDecimal.ZERO;
     }
     
     /**

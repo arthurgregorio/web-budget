@@ -374,6 +374,19 @@ public class MovementBean extends AbstractBean {
     }
     
     /**
+     * 
+     */
+    public void addApportionment() {
+        
+        this.movement.addApportionment(this.apportionment);
+        
+        this.apportionment = new Apportionment();
+        
+        this.update("apportionmentForm");
+        this.update("apportionmentList");
+    }
+    
+    /**
      * Atualiza o combo de classes quando o usuário selecionar o centro de custo
      */
     public void loadMovementClasses() {

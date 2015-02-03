@@ -16,11 +16,11 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:pe="http://primefaces.org/ui/extensions"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
     <ui:define name="head">
@@ -137,70 +137,74 @@
                     </div>
                 </div>
                 <div class="ui-grid-col-6 apportionment-box">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
-                            <p:outputLabel styleClass="apportionment-label"
-                                           value="#{messages['movement.form.apportionment']}:"/>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
-                            <p:outputLabel for="inCostCenter" 
-                                           value="#{messages['movement.form.cost-center']}: "/>
-                            <p:selectOneMenu id="inCostCenter" 
-                                             styleClass="cost-center-combo"
-                                             converter="omnifaces.SelectItemsConverter"
-                                             value="#{movementBean.apportionment.costCenter}" >
 
-                                <p:ajax event="change" 
-                                        listener="#{movementBean.loadMovementClasses()}" />
+                    <h:form id="apportionmentForm" prependId="false">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-12 form-group">
+                                <p:outputLabel styleClass="apportionment-label"
+                                               value="#{messages['movement.form.apportionment']}:"/>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-12 form-group">
+                                <p:outputLabel for="inCostCenter" 
+                                               value="#{messages['movement.form.cost-center']}: "/>
+                                <p:selectOneMenu id="inCostCenter" 
+                                                 styleClass="cost-center-combo"
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 value="#{movementBean.apportionment.costCenter}" >
 
-                                <f:selectItem itemValue="#{null}"
-                                              noSelectionOption="true"
-                                              itemLabel="#{messages['movement.form.select-one']}" />
-                                <f:selectItems var="costCenter" 
-                                               itemValue="#{costCenter}"
-                                               itemLabel="#{costCenter.name}"
-                                               value="#{movementBean.costCenters}" /> 
-                            </p:selectOneMenu>
-                        </div>                        
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inMovementClass" 
-                                           value="#{messages['movement.form.movement-class']}: "/>
-                            <p:selectOneMenu id="inMovementClass" 
-                                             styleClass="movement-class-combo"
-                                             converter="omnifaces.SelectItemsConverter"
-                                             value="#{movementBean.apportionment.movementClass}" >
-                                <f:selectItem itemValue="#{null}"
-                                              noSelectionOption="true"
-                                              itemLabel="#{messages['movement.form.select-one']}" />
-                                <f:selectItems var="movementClass" 
-                                               itemValue="#{movementClass}"
-                                               itemLabel="#{movementClass.name}"
-                                               value="#{movementBean.movementClasses}" /> 
-                            </p:selectOneMenu>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-4 form-group form-group-l">
-                            <p:outputLabel for="inApportionment" 
-                                           value="#{messages['movement.form.value']}: "/>
-                            <pe:inputNumber id="inApportionment" 
-                                            symbol="R$ "
-                                            decimalPlaces="2" 
-                                            decimalSeparator="," 
-                                            thousandSeparator="." 
-                                            value="#{movementBean.apportionment.value}">
-                                <f:converter converterId="javax.faces.BigDecimal" />
-                            </pe:inputNumber>  
+                                    <p:ajax event="change" 
+                                            listener="#{movementBean.loadMovementClasses()}" />
+
+                                    <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
+                                                  itemLabel="#{messages['movement.form.select-one']}" />
+                                    <f:selectItems var="costCenter" 
+                                                   itemValue="#{costCenter}"
+                                                   itemLabel="#{costCenter.name}"
+                                                   value="#{movementBean.costCenters}" /> 
+                                </p:selectOneMenu>
+                            </div>                        
+                            <div class="ui-grid-col-12 form-group form-group-l">
+                                <p:outputLabel for="inMovementClass" 
+                                               value="#{messages['movement.form.movement-class']}: "/>
+                                <p:selectOneMenu id="inMovementClass" 
+                                                 styleClass="movement-class-combo"
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 value="#{movementBean.apportionment.movementClass}" >
+                                    <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
+                                                  itemLabel="#{messages['movement.form.select-one']}" />
+                                    <f:selectItems var="movementClass" 
+                                                   itemValue="#{movementClass}"
+                                                   itemLabel="#{movementClass.name}"
+                                                   value="#{movementBean.movementClasses}" /> 
+                                </p:selectOneMenu>
+                            </div>                        
                         </div>
-                        <div class="ui-grid-col-4 form-group form-group-l">
-                            
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-6 form-group form-group-l">
+                                <p:outputLabel for="inApportionment" 
+                                               value="#{messages['movement.form.value']}: "/>
+                                <pe:inputNumber id="inApportionment" 
+                                                symbol="R$ "
+                                                decimalPlaces="2" 
+                                                decimalSeparator="," 
+                                                thousandSeparator="." 
+                                                value="#{movementBean.apportionment.value}">
+                                    <f:converter converterId="javax.faces.BigDecimal" />
+                                </pe:inputNumber>  
+                            </div>
+                            <div class="ui-grid-col-6 div-align-right apportionment-control-box">
+                                <p:commandButton value="#{menu['add']}"
+                                                 update="apportionmentForm"
+                                                 process="apportionmentForm"
+                                                 styleClass="ui-button-info"
+                                                 actionListener="#{movementBean.addApportionment()}"/>
+                            </div>
                         </div>
-                        <div class="ui-grid-col-4 form-group form-group-l">
-                            
-                        </div>
-                    </div>
+                    </h:form>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12">
                             <p:dataTable id="apportionmentList" 
@@ -214,16 +218,16 @@
 
                                 <p:column style="text-align: center"
                                           headerText="#{messages['apportionment.cost-center']}">
-                                    #{apportionment.costCenter}
+                                    #{apportionment.costCenter.name}
                                 </p:column>
                                 <p:column style="text-align: center"
                                           headerText="#{messages['apportionment.movement-class']}">
-                                    #{apportionment.movementClass}
+                                    #{apportionment.movementClass.name}
                                 </p:column>
                                 <p:column width="20%" 
                                           style="text-align: center"
                                           headerText="#{messages['apportionment.apportionment']}">
-                                    <h:outputText value="#{apportionment.value}">
+                                    <h:outputText value="R$ #{apportionment.value}">
                                         <f:convertNumber type="currency" />
                                     </h:outputText>
                                 </p:column>
