@@ -49,6 +49,8 @@ public class MessagesFactory implements Serializable {
      */
     public String getMessage(String key) {
         
+        this.messages.clearCache();
+        
         final Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
         
         try {
@@ -68,6 +70,8 @@ public class MessagesFactory implements Serializable {
      * @return o valor da chave
      */
     public String getMessage(String key, String... parameters) {
+        
+        this.messages.clearCache();
 
         final Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
         

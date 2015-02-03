@@ -166,7 +166,7 @@ td {
 .form-group input, .form-group textarea {
     display: block;
     padding: 8px 10px;
-    font-size: 10.5pt;
+    font-size: 10.5pt !important;
 }
 .form-group textarea[role="textbox"] {
     height: 100px;    
@@ -185,7 +185,7 @@ td {
 }
 
 .form-group-xl input, .form-group-xl textarea {
-    width: 92%;
+    width: 95%;
 }
 .form-group-l input, .form-group-l textarea {
     width: 75%;
@@ -201,7 +201,7 @@ td {
 }
 
 .form-group-l div.ui-selectonemenu {
-    width: 95% !important;
+    width: 99% !important;
 }
 .form-group-m div.ui-selectonemenu {
     width: 52% !important;
@@ -211,14 +211,10 @@ td {
 }
 
 .form-header {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     padding: 10px 0;
     font-size: 16pt;
     border-bottom: 1px solid #dee4e8;
-}
-.form-header-text {
-    position: relative;
-    top: 10px;
 }
 
 /* areas da template ------------------------- */
@@ -324,7 +320,7 @@ td {
 }
 .login input {
     color: rgb(61, 61, 61);
-    font-size: 24px;
+    font-size: 24px !important;
     width: 230px;
     border: 1px solid rgb(229, 229, 229);
     background: none repeat scroll 0% 0% rgb(251, 251, 251);
@@ -362,21 +358,26 @@ td {
     position: relative;
     top: 9px;
 }
-.financial-period-text {
-    font-size: 11pt;
+.period-combo {
+    width: 40% !important;
 }
-.current-period-label {
-    font-weight: 700;
-    font-size: 11pt;
+.active-period-text {
+    padding-top: 11px;
 }
-.details-description textarea {
-    width: 95%;
+.no-period-text {
+    padding-top: 6px;
 }
-.details-col-1 input {
-    width: 80%;
+.apportionment-box {
+    margin-left: 10px;
 }
-.details-col-2 input {
-    width: 90%;
+.movement-class-combo {
+    width: 99% !important;
+}
+.cost-center-combo {
+    width: 95% !important;
+}
+.apportionment-label {
+    font-size: 14pt !important;
 }
 
 /* form de cadastro de periodos -------------- */

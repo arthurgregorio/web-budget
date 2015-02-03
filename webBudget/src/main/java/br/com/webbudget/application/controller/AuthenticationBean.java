@@ -17,21 +17,15 @@
 
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.service.AccountService;
-import java.io.Serializable;
-import java.util.Iterator;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.omnifaces.util.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +79,7 @@ public class AuthenticationBean extends AbstractBean {
             return "/main/dashboard.xhtml?faces-redirect=true";
         } catch (ApplicationException ex) {
             this.error(ex.getMessage(), true);
-            return "";
+            return null;
         }
     }
 }

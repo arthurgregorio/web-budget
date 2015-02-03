@@ -20,6 +20,7 @@ package br.com.webbudget.application.controller.financial;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
+import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
@@ -66,11 +67,10 @@ public class MovementBean extends AbstractBean {
     @Getter
     private Movement movement;
     @Getter
-    private FinancialPeriod financialPeriod;
-    
-    @Getter
     @Setter
-    private Movement selectedMovement;
+    private Apportionment apportionment;
+    @Getter
+    private FinancialPeriod financialPeriod;
     
     @Getter
     private List<Wallet> wallets;
@@ -141,18 +141,13 @@ public class MovementBean extends AbstractBean {
                 this.viewState = ViewState.ADDING;
 
                 this.movement = new Movement();
+                this.apportionment = new Apportionment();
 
                 // setamos o periodo financeiro atual no movimento a ser incluido
                 this.movement.setFinancialPeriod(this.financialPeriod);
             } else {
                 this.viewState = ViewState.EDITING;
-
                 this.movement = this.movementService.findMovementById(movementId);
-
-                // seta o centro de custo para setar a classe
-                this.movement.setCostCenter(this.movement.getMovementClass().getCostCenter());
-                this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
-                        this.movement.getMovementClass().getCostCenter(), null);
             }
         }
     }
@@ -344,10 +339,6 @@ public class MovementBean extends AbstractBean {
         
         try {
             this.movement = this.movementService.updateMovement(this.movement);
-            
-            // seta o centro de custo para nao ficar em branco a view
-            this.movement.setCostCenter(this.movement.getMovementClass().getCostCenter());
-            
             this.info("movement.action.updated", true);
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doUpdate found erros", ex);
@@ -386,8 +377,8 @@ public class MovementBean extends AbstractBean {
      * Atualiza o combo de classes quando o usuário selecionar o centro de custo
      */
     public void loadMovementClasses() {
-        this.movementClasses = this.movementService
-                .listMovementClassesByCostCenterAndType(this.movement.getCostCenter(), null);
+        this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
+                this.apportionment.getCostCenter(), null);
         this.update("inMovementClass");
     }
     
@@ -408,7 +399,7 @@ public class MovementBean extends AbstractBean {
         this.payment = new Payment();
         
         // tipos entrada, pagamento somente em carteira
-        if (this.movement.getMovementClass().getMovementClassType() == MovementClassType.IN) {
+        if (this.movement.getMovementDirection() == MovementClassType.IN) {
             this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
         }
 
@@ -447,7 +438,9 @@ public class MovementBean extends AbstractBean {
      * 
      */
     public void closeDetailsPopup() {
-        this.selectedMovement = null;
+        
+        this.movement = new Movement();
+        
         this.update("movementsList");
         this.closeDialog("dialogDetailMovement");
     }

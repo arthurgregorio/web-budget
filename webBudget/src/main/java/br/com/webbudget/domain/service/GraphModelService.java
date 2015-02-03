@@ -65,15 +65,16 @@ public class GraphModelService implements Serializable {
         
         BigDecimal total = BigDecimal.ZERO;
         
-        for (Movement movement : movements) {
-            total = total.add(movement.getValue());
-            
-            for (CostCenter costCenter : costCenters) {
-                if (movement.getMovementClass().getCostCenter().equals(costCenter)) {
-                    costCenter.setTotalMovements(costCenter.getTotalMovements().add(movement.getValue()));
-                }
-            }
-        }
+        // FIXME arrumar quando o rateio estiver OK!
+//        for (Movement movement : movements) {
+//            total = total.add(movement.getValue());
+//            
+//            for (CostCenter costCenter : costCenters) {
+//                if (movement.getMovementClass().getCostCenter().equals(costCenter)) {
+//                    costCenter.setTotalMovements(costCenter.getTotalMovements().add(movement.getValue()));
+//                }
+//            }
+//        }
         
         final PieChartModel model = new PieChartModel();
         
@@ -108,15 +109,16 @@ public class GraphModelService implements Serializable {
         
         BigDecimal total = BigDecimal.ZERO;
         
-        for (Movement movement : movements) {
-            total = total.add(movement.getValue());
-            
-            for (CostCenter costCenter : costCenters) {
-                if (movement.getMovementClass().getCostCenter().equals(costCenter)) {
-                    costCenter.setTotalMovements(costCenter.getTotalMovements().add(movement.getValue()));
-                }
-            }
-        }
+        // FIXME arrumar quando o rateio estiver OK!
+//        for (Movement movement : movements) {
+//            total = total.add(movement.getValue());
+//            
+//            for (CostCenter costCenter : costCenters) {
+//                if (movement.getMovementClass().getCostCenter().equals(costCenter)) {
+//                    costCenter.setTotalMovements(costCenter.getTotalMovements().add(movement.getValue()));
+//                }
+//            }
+//        }
         
         final PieChartModel model = new PieChartModel();
         

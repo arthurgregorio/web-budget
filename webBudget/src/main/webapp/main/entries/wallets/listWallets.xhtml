@@ -61,61 +61,60 @@
 
         <div class="ui-grid-row div-pd-tb-10">
             <div class="ui-grid-col-12">
+                <p:dataTable id="walletsList" 
+                             rows="15"
+                             var="wallet"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{walletBean.wallets}"
+                             emptyMessage="#{messages['wallet.list.empty']}">
 
+                    <p:column width="10%" 
+                              style="text-align: center"
+                              headerText="#{messages['wallet.list.blocked']}">
+                        <p:selectBooleanCheckbox disabled="true" 
+                                                 value="#{wallet.blocked}" />
+                    </p:column>
+                    <p:column headerText="#{messages['wallet.list.name']}">
+                        <h:outputText value="#{wallet.friendlyName}"/>
+                    </p:column>
+                    <p:column width="12%" 
+                              style="text-align: center"
+                              headerText="#{messages['wallet.list.balance']}">
+                        <p:commandLink value="R$ #{wallet.balance}" 
+                                       actionListener="#{walletBean.showBalance(wallet.id)}"
+                                       style="#{wallet.balance.signum() lt 0 ? 'color: red;' : 
+                                                wallet.balance.signum() gt 0 ? 'color: green': ''}"/>
+                    </p:column>
+                    <p:column width="15%" 
+                              style="text-align: center"
+                              headerText="#{messages['wallet.list.type']}">
+                        #{messages[wallet.walletType]}
+                    </p:column>
+                    <p:column width="18%" 
+                              style="text-align: center"
+                              headerText="#{menu['actions']}">
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_ADJUST_BALANCE}">
+                            <p:commandButton icon="ui-icon-wrench"
+                                             title="#{menu['balance-adjust']}"
+                                             action="#{walletBean.changeToAdjustment(wallet.id)}" />
+                            <p:spacer width="10"/>
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_UPDATE}">
+                            <p:commandButton icon="ui-icon-pencil"
+                                             title="#{menu['edit']}"
+                                             action="#{walletBean.changeToEdit(wallet.id)}" />
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_DELETE}">
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             title="#{menu['delete']}"
+                                             actionListener="#{walletBean.changeToDelete(wallet.id)}" />
+                        </sec:authorize>
+                    </p:column>
+                </p:dataTable>
             </div>
-            <p:dataTable id="walletsList" 
-                         rows="15"
-                         var="wallet"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         paginatorAlwaysVisible="false"
-                         value="#{walletBean.wallets}"
-                         emptyMessage="#{messages['wallet.list.empty']}">
-
-                <p:column width="10%" 
-                          style="text-align: center"
-                          headerText="#{messages['wallet.list.blocked']}">
-                    <p:selectBooleanCheckbox disabled="true" 
-                                             value="#{wallet.blocked}" />
-                </p:column>
-                <p:column headerText="#{messages['wallet.list.name']}">
-                    <h:outputText value="#{wallet.friendlyName}"/>
-                </p:column>
-                <p:column width="12%" 
-                          style="text-align: center"
-                          headerText="#{messages['wallet.list.balance']}">
-                    <p:commandLink value="R$ #{wallet.balance}" 
-                                   actionListener="#{walletBean.showBalance(wallet.id)}"
-                                   style="#{wallet.balance.signum() lt 0 ? 'color: red;' : 
-                                            wallet.balance.signum() gt 0 ? 'color: green': ''}"/>
-                </p:column>
-                <p:column width="15%" 
-                          style="text-align: center"
-                          headerText="#{messages['wallet.list.type']}">
-                    #{messages[wallet.walletType]}
-                </p:column>
-                <p:column width="18%" 
-                          style="text-align: center"
-                          headerText="#{menu['actions']}">
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_ADJUST_BALANCE}">
-                        <p:commandButton icon="ui-icon-wrench"
-                                         title="#{menu['balance-adjust']}"
-                                         action="#{walletBean.changeToAdjustment(wallet.id)}" />
-                        <p:spacer width="10"/>
-                    </sec:authorize>
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_UPDATE}">
-                        <p:commandButton icon="ui-icon-pencil"
-                                         title="#{menu['edit']}"
-                                         action="#{walletBean.changeToEdit(wallet.id)}" />
-                    </sec:authorize>
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_DELETE}">
-                        <p:spacer width="10"/>
-                        <p:commandButton icon="ui-icon-trash"
-                                         title="#{menu['delete']}"
-                                         actionListener="#{walletBean.changeToDelete(wallet.id)}" />
-                    </sec:authorize>
-                </p:column>
-            </p:dataTable>
         </div>
     </ui:define>
 

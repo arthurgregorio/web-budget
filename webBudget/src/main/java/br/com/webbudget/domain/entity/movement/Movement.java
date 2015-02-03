@@ -20,13 +20,18 @@ package br.com.webbudget.domain.entity.movement;
 import br.com.webbudget.domain.entity.users.Contact;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import static javax.persistence.FetchType.EAGER;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -103,15 +108,18 @@ public class Movement extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{movement.movement-class}")
-    @JoinColumn(name = "id_movement_class", nullable = false)
-    private MovementClass movementClass;
-    @Getter
-    @Setter
-    @ManyToOne
     @NotNull(message = "{movement.financial-period}")
     @JoinColumn(name = "id_financial_period", nullable = false)
     private FinancialPeriod financialPeriod;
+    
+    /**
+     * Fetch eager pois sempre que precisarmos pesquisar um movimento, vamos
+     * precisar saber como ele foi distribuido, ou seja, precisaremos do rateio
+     */
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "movement", fetch = EAGER, cascade = REMOVE)
+    private List<Apportionment> apportionments;
 
     @Getter
     @Setter
@@ -123,19 +131,15 @@ public class Movement extends PersistentEntity {
     private boolean transfer;
     
     /**
-     * Usado apenas para conseguir mostrar a classe na tela
-     */
-    @Getter
-    @Setter
-    @Transient
-    private CostCenter costCenter;
-    
-    /**
      * 
      */
     public Movement() {
-        this.cardInvoicePaid = false;
+        
         this.code = this.createMovementCode();
+        
+        this.apportionments = new ArrayList<>();
+        
+        this.cardInvoicePaid = false;
         this.movementType = MovementType.MOVEMENT;
         this.movementStateType = MovementStateType.OPEN;
     }
@@ -214,10 +218,15 @@ public class Movement extends PersistentEntity {
     }
     
     /**
+     * De acordo com a primeira classe do rateio, diz se o movimento e de 
+     * entrada ou saida
      * 
-     * @return 
+     * @return a direcao do movimento de acordo com as classes usadas
      */
     public MovementClassType getMovementDirection() {
-        return this.movementClass.getMovementClassType();
+        for (Apportionment apportionment : this.apportionments) {
+            return apportionment.getMovementClass().getMovementClassType();
+        }
+        return null;
     }
 }

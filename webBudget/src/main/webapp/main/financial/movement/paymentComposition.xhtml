@@ -36,7 +36,7 @@
     </div>
     <h:panelGroup layout="block"
                   styleClass="ui-grid-row" 
-                  rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
+                  rendered="#{movementBean.movement.movementDirection eq 'OUT'}">
         <div class="ui-grid-col-12 form-group form-group-l">
             <p:outputLabel for="inPaymentMethod" 
                            value="#{messages['movement.dialog.payment.payment-method']}: "/>
@@ -76,7 +76,7 @@
     </h:panelGroup>
     <h:panelGroup layout="block"
                   styleClass="ui-grid-row" 
-                  rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
+                  rendered="#{movementBean.movement.movementDirection eq 'OUT'}">
         <div class="ui-grid-col-12 form-group form-group-l">
             <p:outputLabel for="inCreditCard" 
                            value="#{messages['movement.dialog.payment.credit-card']}: "/>
@@ -96,7 +96,7 @@
     </h:panelGroup>
     <h:panelGroup layout="block"
                   styleClass="ui-grid-row" 
-                  rendered="#{movementBean.movement.movementClass.movementClassType eq 'OUT'}">
+                  rendered="#{movementBean.movement.movementDirection eq 'OUT'}">
         <div class="ui-grid-col-12 form-group form-group-l">
             <p:outputLabel for="inDebitCard" 
                            value="#{messages['movement.dialog.payment.debit-card']}: "/>

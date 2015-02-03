@@ -156,7 +156,8 @@ public class CardService {
             movement.setDueDate(cardInvoice.getFinancialPeriod().getEnd());
         }
         
-        movement.setMovementClass(cardInvoice.getMovementClass());
+        
+//      movement.setMovementClass(cardInvoice.getMovementClass()); // FIXME arrumar quando o rateio estiver OK!
         movement.setFinancialPeriod(cardInvoice.getFinancialPeriod());
         movement.setMovementStateType(MovementStateType.PAID);
         movement.setValue(cardInvoice.getValue());

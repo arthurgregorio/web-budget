@@ -20,14 +20,16 @@
  * @returns {undefined}
  */
 function putTimeout() {
+
+    var lastTimeout = $('#messages').closest('form').attr('timeout');
     
-    var timeoutId = null;
-    
-    if (timeoutId) {
-        clearTimeout(timeoutId);
+    if (lastTimeout) {
+        clearTimeout(lastTimeout);
     }
     
-    timeoutId = setTimeout(function () {
-        jQuery('#messages').slideUp(300);
+    var timeoutId = setTimeout(function () {
+        $('#messages').slideUp(300);
     }, 8000);
+    
+    $('#messages').closest('form').attr('timeout', timeoutId);
 }

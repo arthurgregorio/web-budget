@@ -75,14 +75,15 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
         
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
         
-        criteria.createAlias("movementClass", "mc");
-        criteria.add(Restrictions.eq("mc.movementClassType", MovementClassType.IN));
-        
-        criteria.createAlias("financialPeriod", "fp");
-        criteria.add(Restrictions.eq("fp.closed", false));
-        criteria.add(Restrictions.isNull("fp.closing"));
-        
-        criteria.addOrder(Order.desc("inclusion"));
+        // FIXME arrumar quando o rateio estiver OK!
+//        criteria.createAlias("movementClass", "mc");
+//        criteria.add(Restrictions.eq("mc.movementClassType", MovementClassType.IN));
+//        
+//        criteria.createAlias("financialPeriod", "fp");
+//        criteria.add(Restrictions.eq("fp.closed", false));
+//        criteria.add(Restrictions.isNull("fp.closing"));
+//        
+//        criteria.addOrder(Order.desc("inclusion"));
         
         return criteria.list();
     }
@@ -96,16 +97,17 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
         
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
-        criteria.add(Restrictions.eq("movementType", MovementType.MOVEMENT));
-        
-        criteria.createAlias("movementClass", "mc");
-        criteria.add(Restrictions.eq("mc.movementClassType", MovementClassType.OUT));
-        
-        criteria.createAlias("financialPeriod", "fp");
-        criteria.add(Restrictions.eq("fp.closed", false));
-        criteria.add(Restrictions.isNull("fp.closing"));
-        
-        criteria.addOrder(Order.desc("inclusion"));
+        // FIXME arrumar quando o rateio estiver OK!
+//        criteria.add(Restrictions.eq("movementType", MovementType.MOVEMENT));
+//        
+//        criteria.createAlias("movementClass", "mc");
+//        criteria.add(Restrictions.eq("mc.movementClassType", MovementClassType.OUT));
+//        
+//        criteria.createAlias("financialPeriod", "fp");
+//        criteria.add(Restrictions.eq("fp.closed", false));
+//        criteria.add(Restrictions.isNull("fp.closing"));
+//        
+//        criteria.addOrder(Order.desc("inclusion"));
         
         return criteria.list();
     }
