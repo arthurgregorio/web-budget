@@ -19,6 +19,7 @@ package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.CardInvoice;
+import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
@@ -27,10 +28,12 @@ import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
+import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IPaymentRepository;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,8 @@ public class MovementService {
     private ICostCenterRepository costCenterRepository;
     @Autowired
     private ICardInvoiceRepository cardInvoiceRepository;
+    @Autowired
+    private IApportionmentRepository apportionmentRepository;
     @Autowired
     private IMovementClassRepository movementClassRepository;
     
@@ -106,7 +111,30 @@ public class MovementService {
      * @return 
      */
     public Movement saveMovement(Movement movement) {
-        return this.movementRepository.save(movement);
+
+        // validamos se os rateios estao corretos
+        if (!movement.getApportionments().isEmpty()) {
+            if (!movement.isApportionmentsValid()) {
+                throw new ApplicationException("movement.validate.apportionment-value", 
+                        movement.getApportionmentsDifference());
+            }            
+        } else {
+            throw new ApplicationException("movement.validate.empty-apportionment");
+        }
+        
+        // pega os rateios antes de salva o movimento para nao perder a lista
+        final List<Apportionment> apportionments = movement.getApportionments();
+        
+        // salva o movimento
+        movement = this.movementRepository.save(movement);
+        
+        // salva os rateios
+        for (Apportionment apportionment : apportionments) {
+            apportionment.setMovement(movement);
+            this.apportionmentRepository.save(apportionment);
+        }
+        
+        return movement;
     }
     
     /**

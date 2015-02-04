@@ -185,7 +185,38 @@ public class Movement extends PersistentEntity {
     public void removeApportionment(Apportionment apportionment) {
         this.apportionments.remove(apportionment);
     }
+    
+    /**
+     * @return o valor da somatoria dos rateios
+     */
+    public BigDecimal getApportionmentsTotal() {
+        
+        BigDecimal total = BigDecimal.ZERO;
+        
+        for (Apportionment apportionment : this.apportionments) {
+            total = total.add(apportionment.getValue());
+        }
 
+        return total;
+    }
+    
+    /**
+     * @return false se o valor dos rateios for menor ou maior que o do movimento
+     */
+    public boolean isApportionmentsValid() {
+        
+        final BigDecimal total = this.getApportionmentsTotal();
+        
+        return total.compareTo(this.value) == 0;
+    }
+
+    /**
+     * @return a diferenca entre o valor dos produtos e o valor do movimento
+     */
+    public BigDecimal getApportionmentsDifference() {
+        return this.value.subtract(this.getApportionmentsTotal());
+    }
+    
     /**
      *
      * @return

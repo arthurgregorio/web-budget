@@ -28,6 +28,8 @@ import org.springframework.security.core.AuthenticationException;
  */
 public final class ApplicationException extends AuthenticationException {
 
+    private Object[] parameters;
+    
     /**
      * 
      * @param message 
@@ -39,9 +41,21 @@ public final class ApplicationException extends AuthenticationException {
     /**
      * 
      * @param message
-     * @param throwable 
+     * @param parameters 
      */
-    public ApplicationException(String message, Throwable throwable) {
+    public ApplicationException(String message, Object... parameters) {
+        super(message);
+        this.parameters = parameters;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @param throwable
+     * @param parameters 
+     */
+    public ApplicationException(String message, Throwable throwable, Object... parameters) {
         super(message, throwable);
+        this.parameters = parameters;
     }
 }
