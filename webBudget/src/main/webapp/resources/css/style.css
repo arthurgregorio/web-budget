@@ -370,12 +370,6 @@ td {
 .apportionment-box {
     margin-left: 10px;
 }
-.movement-class-combo {
-    width: 99% !important;
-}
-.cost-center-combo {
-    width: 95% !important;
-}
 .apportionment-label {
     font-size: 14pt !important;
 }
@@ -411,7 +405,7 @@ td {
 
 /* dashboard --------------------------------- */
 .empty-graph-text {
-    position: relative;
     top: 45%;
+    position: relative;
     text-align: center;
 }

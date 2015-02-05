@@ -137,75 +137,22 @@
                     </div>
                 </div>
                 <div class="ui-grid-col-6 apportionment-box">
-
-                    <h:form id="apportionmentForm" prependId="false">
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-12 form-group">
-                                <p:outputLabel styleClass="apportionment-label"
-                                               value="#{messages['movement.form.apportionment']}:"/>
-                            </div>
-                        </div>
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-12 form-group">
-                                <p:outputLabel for="inCostCenter" 
-                                               value="#{messages['movement.form.cost-center']}: "/>
-                                <p:selectOneMenu id="inCostCenter" 
-                                                 styleClass="cost-center-combo"
-                                                 converter="omnifaces.SelectItemsConverter"
-                                                 value="#{movementBean.apportionment.costCenter}" >
-
-                                    <p:ajax event="change" 
-                                            listener="#{movementBean.loadMovementClasses()}" />
-
-                                    <f:selectItem itemValue="#{null}"
-                                                  noSelectionOption="true"
-                                                  itemLabel="#{messages['movement.form.select-one']}" />
-                                    <f:selectItems var="costCenter" 
-                                                   itemValue="#{costCenter}"
-                                                   itemLabel="#{costCenter.name}"
-                                                   value="#{movementBean.costCenters}" /> 
-                                </p:selectOneMenu>
-                            </div>                        
-                            <div class="ui-grid-col-12 form-group form-group-l">
-                                <p:outputLabel for="inMovementClass" 
-                                               value="#{messages['movement.form.movement-class']}: "/>
-                                <p:selectOneMenu id="inMovementClass" 
-                                                 styleClass="movement-class-combo"
-                                                 converter="omnifaces.SelectItemsConverter"
-                                                 value="#{movementBean.apportionment.movementClass}" >
-                                    <f:selectItem itemValue="#{null}"
-                                                  noSelectionOption="true"
-                                                  itemLabel="#{messages['movement.form.select-one']}" />
-                                    <f:selectItems var="movementClass" 
-                                                   itemValue="#{movementClass}"
-                                                   itemLabel="#{movementClass.name}"
-                                                   value="#{movementBean.movementClasses}" /> 
-                                </p:selectOneMenu>
-                            </div>                        
-                        </div>
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-6 form-group form-group-l">
-                                <p:outputLabel for="inApportionment" 
-                                               value="#{messages['movement.form.value']}: "/>
-                                <pe:inputNumber id="inApportionment" 
-                                                symbol="R$ "
-                                                decimalPlaces="2" 
-                                                decimalSeparator="," 
-                                                thousandSeparator="." 
-                                                value="#{movementBean.apportionment.value}">
-                                    <f:converter converterId="javax.faces.BigDecimal" />
-                                </pe:inputNumber>  
-                            </div>
-                            <div class="ui-grid-col-6 div-align-right apportionment-control-box">
-                                <p:commandButton value="#{menu['add']}"
-                                                 update="apportionmentForm"
-                                                 process="apportionmentForm"
-                                                 styleClass="ui-button-info"
-                                                 actionListener="#{movementBean.addApportionment()}"/>
-                            </div>
-                        </div>
-                    </h:form>
                     <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <p:outputLabel styleClass="apportionment-label"
+                                           value="#{messages['movement.form.apportionment']}:"/>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 div-align-right">
+                            <p:commandButton update="messages"
+                                             value="#{menu['add']}"
+                                             process="@this,inValue"
+                                             styleClass="ui-button-info"
+                                             actionListener="#{movementBean.showApportionmentDialog()}"/>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row div-mg-t-15">
                         <div class="ui-grid-col-12">
                             <p:dataTable id="apportionmentList" 
                                          rows="15"
@@ -230,6 +177,11 @@
                                     <h:outputText value="R$ #{apportionment.value}">
                                         <f:convertNumber type="currency" />
                                     </h:outputText>
+                                </p:column>
+                                <p:column width="10%" 
+                                          style="text-align: center"
+                                          headerText="#{menu['actions']}">
+                                    
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -274,5 +226,6 @@
 
     <ui:define name="popups">
         <ui:include src="dialogPayment.xhtml" />
+        <ui:include src="dialogApportionment.xhtml" />
     </ui:define>
 </ui:composition>

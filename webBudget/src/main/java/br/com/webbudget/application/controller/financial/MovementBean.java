@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
@@ -34,6 +33,7 @@ import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -61,7 +61,7 @@ public class MovementBean extends AbstractBean {
     @Getter
     @Setter
     private boolean filterPaid;
-    
+
     @Getter
     private Payment payment;
     @Getter
@@ -71,7 +71,7 @@ public class MovementBean extends AbstractBean {
     private Apportionment apportionment;
     @Getter
     private FinancialPeriod financialPeriod;
-    
+
     @Getter
     private List<Wallet> wallets;
     @Getter
@@ -88,7 +88,7 @@ public class MovementBean extends AbstractBean {
     private List<FinancialPeriod> financialPeriods;
     @Getter
     private List<FinancialPeriod> openFinancialPeriods;
-    
+
     @Setter
     @ManagedProperty("#{cardService}")
     private CardService cardService;
@@ -103,22 +103,22 @@ public class MovementBean extends AbstractBean {
     private FinancialPeriodService financialPeriodService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
         return LoggerFactory.getLogger(MovementBean.class);
     }
-    
+
     /**
-     * 
+     *
      */
-    public void initializeListing(){
+    public void initializeListing() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             this.viewState = ViewState.LISTING;
             this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
-            
+
             // preenche os campos de filtro
             this.costCenters = this.movementService.listCostCenters(false);
             this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
@@ -126,8 +126,8 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     * 
-     * @param movementId 
+     *
+     * @param movementId
      */
     public void initializeForm(long movementId) {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -141,7 +141,6 @@ public class MovementBean extends AbstractBean {
                 this.viewState = ViewState.ADDING;
 
                 this.movement = new Movement();
-                this.apportionment = new Apportionment();
 
                 // setamos o periodo financeiro atual no movimento a ser incluido
                 this.movement.setFinancialPeriod(this.financialPeriod);
@@ -151,14 +150,14 @@ public class MovementBean extends AbstractBean {
             }
         }
     }
-    
+
     /**
-     * 
-     * @param movementId 
+     *
+     * @param movementId
      */
     public void initializePayment(long movementId) {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            
+
             this.movement = this.movementService.findMovementById(movementId);
 
             this.payment = new Payment();
@@ -175,7 +174,7 @@ public class MovementBean extends AbstractBean {
             this.wallets = this.walletService.listWallets(false);
         }
     }
-    
+
     /**
      * Pesquisa com filtro
      */
@@ -183,118 +182,118 @@ public class MovementBean extends AbstractBean {
         this.movements = this.movementService.listByFilter(this.filter, this.filterPaid);
         this.update("movementsList");
     }
-    
+
     /**
-     * 
+     *
      * @return o form de inclusao
      */
     public String changeToAdd() {
         return "formMovement.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String changeToListing() {
         return "listMovements.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      * @param movementId
-     * @return 
+     * @return
      */
     public String changeToEdit(long movementId) {
         return "formMovement.xhtml?faces-redirect=true&movementId=" + movementId;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String changeToOpenFinancialPeriod() {
         return "../../miscellany/financialPeriod/formFinancialPeriod.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      * @param movementId
-     * @return 
+     * @return
      */
     public String changeToPay(long movementId) {
         return "formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
     }
-    
+
     /**
-     * 
-     * @param movementId 
+     *
+     * @param movementId
      */
     public void changeToDelete(long movementId) {
         this.movement = this.movementService.findMovementById(movementId);
-        this.openDialog("deleteMovementDialog","dialogDeleteMovement");
+        this.openDialog("deleteMovementDialog", "dialogDeleteMovement");
     }
 
     /**
      * Cancela e volta para a listagem
-     * 
-     * @return 
+     *
+     * @return
      */
     public String doCancel() {
         return "listMovements.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      */
     public void doSave() {
-        
+
         try {
             this.movementService.saveMovement(this.movement);
-            
+
             // reiniciamos o form
             this.movement = new Movement();
             this.movement.setFinancialPeriod(this.financialPeriod);
-            
+
             this.info("movement.action.saved", true);
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doSave found erros", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doSaveAndPay() {
-        
+
         try {
             this.movement = this.movementService.saveMovement(this.movement);
-            
+
             // invoca os metodos para mostrar a popup de pagamento
             this.displayPaymentPopup();
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doSaveAndPay found erros", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doPayment() {
-        
+
         // setamos o pagamento
         this.movement.setPayment(this.payment);
-        
+
         try {
             if (this.payment.getCard() == null && this.payment.getWallet() == null) {
                 this.error("movement.validate.payment-font", true);
             } else {
                 this.movementService.payAndSaveMovement(this.movement);
-                
-                this.openDialog("confirmPaymentDialog","dialogConfirmPayment");
-                
+
+                this.openDialog("confirmPaymentDialog", "dialogConfirmPayment");
+
                 this.movement = new Movement();
                 this.movement.setFinancialPeriod(this.financialPeriod);
             }
@@ -305,21 +304,21 @@ public class MovementBean extends AbstractBean {
             this.update("paymentForm");
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doPaymentAfterSave() {
-        
+
         // setamos o pagamento
         this.movement.setPayment(this.payment);
-        
+
         try {
             if (this.payment.getCard() == null && this.payment.getWallet() == null) {
                 this.error("movement.validate.payment-font", true);
             } else {
                 this.movementService.payAndSaveMovement(this.movement);
-                
+
                 this.movement = new Movement();
                 this.movement.setFinancialPeriod(this.financialPeriod);
 
@@ -329,40 +328,40 @@ public class MovementBean extends AbstractBean {
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doPayment found erros", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doUpdate() {
-        
+
         try {
             this.movement = this.movementService.updateMovement(this.movement);
             this.info("movement.action.updated", true);
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doUpdate found erros", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doDelete() {
-        
+
         try {
             final MovementType movementType = this.movement.getMovementType();
-            
+
             // fazemos a selecao do tipo de delecao a ser executado
             if (movementType == MovementType.MOVEMENT) {
                 this.movementService.deleteMovement(this.movement);
             } else if (movementType == MovementType.CARD_INVOICE) {
                 this.movementService.deleteCardInvoiceMovement(this.movement);
             }
-            
+
             this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
-            
+
             this.info("movement.action.deleted", true);
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doDelete found erros", ex);
@@ -372,20 +371,24 @@ public class MovementBean extends AbstractBean {
             this.closeDialog("dialogDeleteMovement");
         }
     }
-    
+
     /**
      * 
      */
     public void addApportionment() {
-        
         this.movement.addApportionment(this.apportionment);
-        
-        this.apportionment = new Apportionment();
-        
-        this.update("apportionmentForm");
         this.update("apportionmentList");
+        this.closeDialog("dialogApportionment");
     }
     
+    /**
+     *
+     */
+    public void showApportionmentDialog() {
+        this.apportionment = new Apportionment();
+        this.openDialog("apportionmentDialog", "dialogApportionment");
+    }
+
     /**
      * Atualiza o combo de classes quando o usuário selecionar o centro de custo
      */
@@ -394,7 +397,7 @@ public class MovementBean extends AbstractBean {
                 this.apportionment.getCostCenter(), null);
         this.update("inMovementClass");
     }
-    
+
     /**
      * Atualiza a view para mostrar o combo de acordo com o tipo de pagamento
      */
@@ -403,14 +406,14 @@ public class MovementBean extends AbstractBean {
         this.update("inDebitCard");
         this.update("inCreditCard");
     }
-    
+
     /**
-     * 
+     *
      */
     public void displayPaymentPopup() {
 
         this.payment = new Payment();
-        
+
         // tipos entrada, pagamento somente em carteira
         if (this.movement.getMovementDirection() == MovementClassType.IN) {
             this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
@@ -420,10 +423,10 @@ public class MovementBean extends AbstractBean {
         this.wallets = this.walletService.listWallets(false);
         this.debitCards = this.cardService.listDebitCards(false);
         this.creditCards = this.cardService.listCreditCards(false);
-        
-        this.openDialog("paymentDialog","dialogPayment");
+
+        this.openDialog("paymentDialog", "dialogPayment");
     }
-    
+
     /**
      * Invocado quando cancelamos o pagamento apos salvar
      */
@@ -436,39 +439,39 @@ public class MovementBean extends AbstractBean {
         // atualizamos tudo na tela
         this.update("movementForm");
         this.closeDialog("dialogPayment");
-        
+
         this.warn("movement.action.saved-not-paid", true);
     }
 
     /**
-     * 
+     *
      */
     public void displayDetailsPopup() {
-        this.openDialog("detailMovementDialog","dialogDetailMovement");
+        this.openDialog("detailMovementDialog", "dialogDetailMovement");
     }
-    
+
     /**
-     * 
+     *
      */
     public void closeDetailsPopup() {
-        
+
         this.movement = new Movement();
-        
+
         this.update("movementsList");
         this.closeDialog("dialogDetailMovement");
     }
-    
+
     /**
      * Se existe ou nao um periodo aberto para lancamentos
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean haveOpenPeriod() {
         return this.financialPeriod != null;
-    } 
-    
+    }
+
     /**
-     * 
+     *
      * @return a lista dos valores do enum
      */
     public PaymentMethodType[] getAvailablePaymentMethods() {
