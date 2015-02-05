@@ -19,10 +19,10 @@ package br.com.webbudget.domain.entity.movement;
 import br.com.webbudget.domain.entity.users.Contact;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +41,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -116,9 +118,9 @@ public class Movement extends PersistentEntity {
      * precisar saber como ele foi distribuido, ou seja, precisaremos do rateio
      */
     @Getter
-    @Setter
+    @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "movement", fetch = EAGER, cascade = REMOVE)
-    private List<Apportionment> apportionments;
+    private final Set<Apportionment> apportionments;
 
     @Getter
     @Setter
@@ -136,7 +138,7 @@ public class Movement extends PersistentEntity {
 
         this.code = this.createMovementCode();
 
-        this.apportionments = new ArrayList<>();
+        this.apportionments = new HashSet<>();
 
         this.cardInvoicePaid = false;
         this.movementType = MovementType.MOVEMENT;
@@ -176,6 +178,23 @@ public class Movement extends PersistentEntity {
      */
     public void addApportionment(Apportionment apportionment) {
         this.apportionments.add(apportionment);
+    }
+    
+    /**
+     * 
+     * @param id 
+     */
+    public void removeApportionment(String id) {
+        
+        Apportionment toRemove = null;
+        
+        for (Apportionment apportionment : this.apportionments) {
+            if (id.equals(apportionment.getCode())) {
+                toRemove = apportionment;
+            }
+        }
+        
+        this.apportionments.remove(toRemove);
     }
     
     /**

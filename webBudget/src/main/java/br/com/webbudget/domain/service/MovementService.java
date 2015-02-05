@@ -33,9 +33,9 @@ import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IPaymentRepository;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -123,7 +123,7 @@ public class MovementService {
         }
         
         // pega os rateios antes de salva o movimento para nao perder a lista
-        final List<Apportionment> apportionments = movement.getApportionments();
+        final Set<Apportionment> apportionments = movement.getApportionments();
         
         // salva o movimento
         movement = this.movementRepository.save(movement);

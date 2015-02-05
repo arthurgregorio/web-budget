@@ -195,7 +195,7 @@ public abstract class AbstractBean implements Serializable {
      * @param parameters parametros para montar a mensagem
      */
     protected void fixedError(String message, boolean updateMessages, Object... parameters) {
-        Messages.addError(null, this.messagesFactory.getMessage(message));
+        Messages.addError(null, this.messagesFactory.getMessage(message), parameters);
         if (updateMessages) {
             this.updateMessages(false);
         }
@@ -254,6 +254,7 @@ public abstract class AbstractBean implements Serializable {
         ADDING,
         LISTING, 
         EDITING,
-        DELETING;
+        DELETING,
+        DETAILING;
     }
 }

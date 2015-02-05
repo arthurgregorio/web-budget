@@ -33,7 +33,6 @@ import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -41,6 +40,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
+import org.omnifaces.util.Faces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,9 +63,10 @@ public class MovementBean extends AbstractBean {
     private boolean filterPaid;
 
     @Getter
-    private Payment payment;
-    @Getter
+    @Setter
     private Movement movement;
+    @Getter
+    private Payment payment;
     @Getter
     @Setter
     private Apportionment apportionment;
@@ -126,10 +127,11 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     *
+     * 
      * @param movementId
+     * @param detailing 
      */
-    public void initializeForm(long movementId) {
+    public void initializeForm(long movementId, boolean detailing) {
         if (!FacesContext.getCurrentInstance().isPostback()) {
 
             // buscamos o periodo financeiro atual
@@ -137,15 +139,18 @@ public class MovementBean extends AbstractBean {
             this.financialPeriod = this.financialPeriodService.findActiveFinancialPeriod();
             this.openFinancialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
 
-            if (movementId == 0) {
+            if (movementId == 0 && !detailing) {
                 this.viewState = ViewState.ADDING;
 
                 this.movement = new Movement();
 
                 // setamos o periodo financeiro atual no movimento a ser incluido
                 this.movement.setFinancialPeriod(this.financialPeriod);
-            } else {
+            } else if (movementId != 0 && !detailing) {
                 this.viewState = ViewState.EDITING;
+                this.movement = this.movementService.findMovementById(movementId);
+            } else {
+                this.viewState = ViewState.DETAILING;
                 this.movement = this.movementService.findMovementById(movementId);
             }
         }
@@ -224,6 +229,23 @@ public class MovementBean extends AbstractBean {
     public String changeToPay(long movementId) {
         return "formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
     }
+    
+    /**
+     * 
+     */
+    public void changeToDetails() {
+        try {
+            String url = FacesContext.getCurrentInstance()
+                    .getExternalContext().getRequestContextPath();
+		
+            url += "/main/financial/movement/formMovement.xhtml?movementId=" 
+                    + this.movement.getId() + "&detailing=true";
+            
+            Faces.redirect(url);
+        } catch (Exception ex) {
+            this.logger.error("Cannot redirect user", ex);
+        }
+    }
 
     /**
      *
@@ -258,7 +280,7 @@ public class MovementBean extends AbstractBean {
             this.info("movement.action.saved", true);
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         }
     }
 
@@ -382,6 +404,15 @@ public class MovementBean extends AbstractBean {
     }
     
     /**
+     * 
+     * @param id 
+     */
+    public void deleteApportionment(String id) {
+        this.movement.removeApportionment(id);
+        this.update("apportionmentList");
+    }
+    
+    /**
      *
      */
     public void showApportionmentDialog() {
@@ -441,13 +472,6 @@ public class MovementBean extends AbstractBean {
         this.closeDialog("dialogPayment");
 
         this.warn("movement.action.saved-not-paid", true);
-    }
-
-    /**
-     *
-     */
-    public void displayDetailsPopup() {
-        this.openDialog("detailMovementDialog", "dialogDetailMovement");
     }
 
     /**

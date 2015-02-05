@@ -17,6 +17,7 @@
 
 package br.com.webbudget.application.exceptions;
 
+import lombok.Getter;
 import org.springframework.security.core.AuthenticationException;
 
 /**
@@ -28,6 +29,7 @@ import org.springframework.security.core.AuthenticationException;
  */
 public final class ApplicationException extends AuthenticationException {
 
+    @Getter
     private Object[] parameters;
     
     /**

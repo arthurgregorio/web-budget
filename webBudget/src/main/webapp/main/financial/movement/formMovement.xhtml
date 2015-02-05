@@ -25,7 +25,7 @@
 
     <ui:define name="head">
         <f:event type="preRenderView" 
-                 listener="#{movementBean.initializeForm(param.movementId)}" />
+                 listener="#{movementBean.initializeForm(param.movementId, param.detailing)}" />
     </ui:define>
 
     <ui:define name="breadcrumb">
@@ -149,6 +149,7 @@
                                              value="#{menu['add']}"
                                              process="@this,inValue"
                                              styleClass="ui-button-info"
+                                             disabled="#{movementBean.viewState eq 'DETAILING'}"
                                              actionListener="#{movementBean.showApportionmentDialog()}"/>
                         </div>
                     </div>
@@ -181,7 +182,11 @@
                                 <p:column width="10%" 
                                           style="text-align: center"
                                           headerText="#{menu['actions']}">
-                                    
+                                    <p:commandButton immediate="true"
+                                                     icon="ui-icon-trash"
+                                                     title="#{menu['delete']}"
+                                                     disabled="#{movementBean.viewState eq 'DETAILING'}"
+                                                     actionListener="#{movementBean.deleteApportionment(apportionment.code)}" />
                                 </p:column>
                             </p:dataTable>
                         </div>
