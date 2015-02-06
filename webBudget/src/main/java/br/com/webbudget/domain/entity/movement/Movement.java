@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.entity.movement;
 
+import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.Contact;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import java.math.BigDecimal;
@@ -98,7 +99,7 @@ public class Movement extends PersistentEntity {
 
     @Getter
     @Setter
-    @OneToOne
+    @OneToOne(cascade = REMOVE)
     @JoinColumn(name = "id_payment")
     private Payment payment;
     @Getter
@@ -177,6 +178,20 @@ public class Movement extends PersistentEntity {
      * @param apportionment
      */
     public void addApportionment(Apportionment apportionment) {
+        
+        // checa se nao esta sendo inserido outro exatamente igual
+        if (this.apportionments.contains(apportionment)) {
+            throw new ApplicationException("movement.validate.apportionment-duplicated");
+        } 
+        
+        // checa se nao esta inserindo outro para o mesmo CC e MC
+        for (Apportionment a : this.apportionments) {
+            if (a.getCostCenter().equals(apportionment.getCostCenter()) && 
+                    a.getMovementClass().equals(apportionment.getMovementClass())) {
+                throw new ApplicationException("movement.validate.apportionment-duplicated");
+            }
+        }
+        
         this.apportionments.add(apportionment);
     }
     
