@@ -127,9 +127,9 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     * 
+     *
      * @param movementId
-     * @param detailing 
+     * @param detailing
      */
     public void initializeForm(long movementId, boolean detailing) {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -229,18 +229,18 @@ public class MovementBean extends AbstractBean {
     public String changeToPay(long movementId) {
         return "formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
     }
-    
+
     /**
-     * 
+     *
      */
     public void changeToDetails() {
         try {
             String url = FacesContext.getCurrentInstance()
                     .getExternalContext().getRequestContextPath();
-		
-            url += "/main/financial/movement/formMovement.xhtml?movementId=" 
+
+            url += "/main/financial/movement/formMovement.xhtml?movementId="
                     + this.movement.getId() + "&detailing=true";
-            
+
             Faces.redirect(url);
         } catch (Exception ex) {
             this.logger.error("Cannot redirect user", ex);
@@ -395,23 +395,27 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     * 
+     *
      */
     public void addApportionment() {
-        this.movement.addApportionment(this.apportionment);
-        this.update("apportionmentList");
-        this.closeDialog("dialogApportionment");
+        try {
+            this.movement.addApportionment(this.apportionment);
+            this.update("apportionmentList");
+            this.closeDialog("dialogApportionment");
+        } catch (ApplicationException ex) {
+            this.fixedError(ex.getMessage(), false);
+        }
     }
-    
+
     /**
-     * 
-     * @param id 
+     *
+     * @param id
      */
     public void deleteApportionment(String id) {
         this.movement.removeApportionment(id);
         this.update("apportionmentList");
     }
-    
+
     /**
      *
      */
@@ -477,12 +481,13 @@ public class MovementBean extends AbstractBean {
     /**
      *
      */
-    public void closeDetailsPopup() {
-
-        this.movement = new Movement();
-
-        this.update("movementsList");
-        this.closeDialog("dialogDetailMovement");
+    public void showPaymentDetails() {
+        
+        if (this.movement.getPayment() == null) {
+            this.warn("movement.not-paid", true);
+        } else {
+            this.openDialog("detailPaymentDialog","dialogDetailPayment");
+        }
     }
 
     /**
