@@ -1,5 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-
 <!--
   Copyright (C) 2015 Arthur Gregorio, AG.Software
  
@@ -17,7 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://java.sun.com/jsf/html">
@@ -36,23 +34,21 @@
     
     <h:body>
         <div class="login">
-            <div style="text-align: center; padding-bottom: 30px">
-                <p:graphicImage library="images" name="ui-webbudget.png"/>
-            </div>
             <h:form id="authenticationForm" prependId="false">
-                 
-                <p:messages id="messages" closable="true" globalOnly="true" />
-                
+                <div class="div-align-center">
+                    <p:graphicImage library="images" name="ui-wb-logo-2.png"/>
+                </div>            
+                <div class="messages-row">
+                    <p:messages id="messages" closable="true" globalOnly="true" />
+                </div>
                 <p:inputText autocomplete="false"
                              styleClass="username-input" 
                              value="#{authenticationBean.user.username}" 
                              placeholder="#{messages['authentication.user']}" />
-                
                 <p:password autocomplete="false"
                             styleClass="password-input" 
                             value="#{authenticationBean.user.password}" 
                             placeholder="#{messages['authentication.password']}"/>
-                
                 <div class="div-align-center">
                     <p:commandButton update="authenticationForm"
                                      process="authenticationForm"

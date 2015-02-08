@@ -28,91 +28,84 @@
     </ui:define>
 
     <ui:define name="content">
-
         <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
-                <p:messages id="messages" closable="true" globalOnly="true" />
-            </div>
-        </div>
-        <div class="ui-grid-row div-pd-tb-10">
-            <div class="ui-grid-col-6">
-                <p:carousel numVisible="1" 
-                            effect="easeInStrong" 
-                            itemStyle="height:290px;width:580px;"
-                            headerText="#{messages['dashboard.graphs']}">
-                     <p:tab rendered="#{empty dashboardBean.consumeModel.data}"> 
-                        <div class="div-h-300">
-                            <div class="empty-graph-text">
-                                #{messages['dashboard.graphs.no-data-consume']}
-                            </div>
+            <div class="ui-grid-col-6 flat-box">
+                <p:tabView styleClass="dashboard-graphs">
+                    <p:tab title="#{messages['dashboard.graphs.consume']}"
+                           rendered="#{empty dashboardBean.consumeModel.data}"> 
+                        <div class="empty-graph-text">
+                            #{messages['dashboard.graphs.no-data-consume']}
                         </div>
                     </p:tab>
-                    <p:tab rendered="#{empty dashboardBean.revenueModel.data}"> 
-                        <div class="div-h-300">
-                            <div class="empty-graph-text">
-                                #{messages['dashboard.graphs.no-data-revenue']}
-                            </div>
+                    <p:tab title="#{messages['dashboard.graphs.revenue']}"
+                           rendered="#{empty dashboardBean.revenueModel.data}"> 
+                        <div class="empty-graph-text">
+                            #{messages['dashboard.graphs.no-data-revenue']}
                         </div>
                     </p:tab>
-                    <p:tab rendered="#{not empty dashboardBean.consumeModel.data}"> 
+                    <p:tab title="#{messages['dashboard.graphs.consume']}"
+                           rendered="#{not empty dashboardBean.consumeModel.data}"> 
                         <p:chart type="pie" 
-                                 styleClass="div-h-300"
                                  model="#{dashboardBean.consumeModel}"/>
                     </p:tab>
-                    <p:tab rendered="#{not empty dashboardBean.revenueModel.data}"> 
+                    <p:tab title="#{messages['dashboard.graphs.revenue']}"
+                           rendered="#{not empty dashboardBean.revenueModel.data}"> 
                         <p:chart type="pie" 
-                                 styleClass="div-h-300"
                                  model="#{dashboardBean.revenueModel}"/>
                     </p:tab>
-                </p:carousel>
+                </p:tabView>
             </div>
         </div>
-        <div class="ui-grid-row div-pd-tb-10">
-            <div class="ui-grid-col-12 form-header">
-                #{messages['dashboard.movements.to-pay']}
-            </div>
-        </div>
-        <div class="ui-grid-row">
+        <div class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
-                <p:dataTable id="movementsList" 
-                             rows="6"
-                             var="movement"
-                             paginator="true" 
-                             paginatorPosition="bottom"
-                             value="#{dashboardBean.movements}"
-                             paginatorAlwaysVisible="false"
-                             emptyMessage="#{messages['dashboard.movements.list.no-movements']}"
-                             rowStyleClass="#{movement.overdue eq true ? 'overdue-movement' : ''}">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12 form-header">
+                        #{messages['dashboard.movements.to-pay']}
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        <p:dataTable id="movementsList" 
+                                     rows="6"
+                                     var="movement"
+                                     paginator="true" 
+                                     paginatorPosition="bottom"
+                                     value="#{dashboardBean.movements}"
+                                     paginatorAlwaysVisible="false"
+                                     emptyMessage="#{messages['dashboard.movements.list.no-movements']}"
+                                     rowStyleClass="#{movement.overdue eq true ? 'overdue-movement' : ''}">
 
-                    <p:column width="10%" 
-                              style="text-align: center" 
-                              headerText="#{messages['dashboard.movements.list.code']}">
-                        #{movement.code}
-                    </p:column>
-                    <p:column headerText="#{messages['dashboard.movements.list.description']}">
-                        #{of:abbreviate(movement.description,50)}
-                    </p:column>
-                    <p:column width="15%"
-                              style="text-align: center" 
-                              headerText="#{messages['dashboard.movements.list.value']}">
-                        <h:outputText value="R$ #{movement.value}" />
-                    </p:column>
-                    <p:column width="15%"
-                              style="text-align: center" 
-                              headerText="#{messages['dashboard.movements.list.due-date']}">
-                        <h:outputText value="#{movement.dueDate}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText> 
-                    </p:column>
-                    <p:column width="10%" 
-                              style="text-align: center"
-                              headerText="#{menu['actions']}">
-                        <p:commandButton icon="ui-icon-check"
-                                         title="#{menu['pay']}"
-                                         rendered="#{movement.payable eq true}"
-                                         action="#{dashboardBean.changeToPay(movement.id)}" />
-                    </p:column>
-                </p:dataTable>
+                            <p:column width="10%" 
+                                      style="text-align: center" 
+                                      headerText="#{messages['dashboard.movements.list.code']}">
+                                #{movement.code}
+                            </p:column>
+                            <p:column headerText="#{messages['dashboard.movements.list.description']}">
+                                #{of:abbreviate(movement.description,50)}
+                            </p:column>
+                            <p:column width="15%"
+                                      style="text-align: center" 
+                                      headerText="#{messages['dashboard.movements.list.value']}">
+                                <h:outputText value="R$ #{movement.value}" />
+                            </p:column>
+                            <p:column width="15%"
+                                      style="text-align: center" 
+                                      headerText="#{messages['dashboard.movements.list.due-date']}">
+                                <h:outputText value="#{movement.dueDate}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column width="10%" 
+                                      style="text-align: center"
+                                      headerText="#{menu['actions']}">
+                                <p:commandButton icon="ui-icon-check"
+                                                 title="#{menu['pay']}"
+                                                 rendered="#{movement.payable eq true}"
+                                                 action="#{dashboardBean.changeToPay(movement.id)}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
             </div>
         </div>
     </ui:define>

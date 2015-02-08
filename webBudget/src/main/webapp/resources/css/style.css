@@ -30,9 +30,10 @@ html {
     height: 100%;
 }
 body {
-    font: 12px/18px 'Ubuntu', sans-serif;
+    font: 10.5pt/18pt 'Ubuntu', sans-serif;
     width: 100%;
     height: 100%;
+    background-color: #f7f7f7;
 }
 
 /* sessoes do layout ------------------------- */
@@ -42,7 +43,6 @@ body {
 }
 .header {
     height: 60px;
-    background: #03A9F4;
 }
 .header-content {
     position: relative;
@@ -51,7 +51,7 @@ body {
     background: inherit;
 }
 .breadcrumb {
-    background: #f3f5f6;
+    background: #FFFFFF;
     margin-bottom: 10px;
     border-bottom: 1px solid #dee4e8;
 }
@@ -72,7 +72,7 @@ body {
     width: 100%;
     height: 5%;
     margin-top: -1px;
-    background-color: #f3f5f6;
+    background-color: #FFFFFF;
     border-top: 1px solid #dee4e8;
 }
 .footer-content {
@@ -110,9 +110,18 @@ td {
     vertical-align: middle !important;
 }
 
-.div-h-300 {
-    height: 300px;
+.flat-box {
+    box-shadow: 0px 4px 10px -1px rgba(200, 200, 200, 0.7);
+    box-sizing: border-box !important;
+    color: rgb(81, 81, 81);
+    background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box;
+    border: 1px solid rgb(229, 229, 229);
+    margin: 0px 0px 15px;
+    outline: rgb(81, 81, 81) none 0px;
+    overflow: hidden;
+    padding: 15px;
 }
+
 .div-pd-tb-10 {
     padding: 10px 0;
 }
@@ -212,15 +221,22 @@ td {
 
 .form-header {
     margin-bottom: 20px;
-    padding: 10px 0;
-    font-size: 16pt;
+    padding: 5px 0;
+    font-size: 15pt;
     border-bottom: 1px solid #dee4e8;
 }
 
 /* areas da template ------------------------- */
+.header-background {
+    background: #2c3742 !important;
+    background: -moz-linear-gradient(top, #2c3742 0%, #28303a 100%) !important;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2c3742), color-stop(100%,#28303a)) !important;
+    background: -webkit-linear-gradient(top, #2c3742 0%,#28303a 100%) !important;
+    background: -o-linear-gradient(top, #2c3742 0%,#28303a 100%) !important;
+    background: -ms-linear-gradient(top, #2c3742 0%,#28303a 100%) !important;
+    background: linear-gradient(to bottom, #2c3742 0%,#28303a 100%) !important;
+}
 .main-menu {
-    background: none !important;
-    background-color: #03A9F4 !important;
     border: none !important;
     height: 60px !important;
     border-radius: 0 !important;
@@ -257,7 +273,7 @@ td {
     margin: 0 !important;
 }
 .main-menu li[role="menuitem"] > .ui-state-hover {
-    background-color: #3DB9F7 !important;
+    background-color: #23b7e5 !important;
 }
 .main-menu ul[role="menu"].ui-menu-child {
     background: #FFFFFF !important;
@@ -281,21 +297,26 @@ td {
 }
 .session-button button {
     width: auto !important;
-    background: #03A9F4 !important;
+    background: #23b7e5 !important;
     border: none !important;
     box-shadow: none !important;
     color: white !important;
     font-size: 12pt !important;
-}
-#btSession_button span.ui-button-text { 
-    padding: .3em 1em .3em 2.1em !important;
-}
-#btSession_menu {
-    top: 60px !important;
-    border: none !important;
     border-radius: 0 !important;
 }
+.session-button > button > span.ui-icon {
+    display: none;
+}
+.session-button > button > span.ui-button-text {
+    padding: 4px 10px !important;
+}
+#btSession_menu {
+    border: none !important;
+    border-radius: 0 !important;
+    background-clip: initial !important;
+}
 #btSession_menu a {
+    font-size: 11pt !important;
     color: #707070 !important;
 }
 #btSession_menu li > a.ui-state-hover {
@@ -305,9 +326,9 @@ td {
 
 /* tela de login ----------------------------- */
 .login {
+    margin: auto;
     width: 320px;
     padding: 60px 0px 0px;
-    margin: auto;
 }
 .login form {
     padding: 26px 24px 24px;
@@ -315,8 +336,6 @@ td {
     background: none repeat scroll 0% 0% rgb(255, 255, 255);
     border: 1px solid rgb(229, 229, 229);
     box-shadow: 0px 4px 10px -1px rgba(200, 200, 200, 0.7);
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
 }
 .login input {
     color: rgb(61, 61, 61);
@@ -327,14 +346,23 @@ td {
     box-shadow: 1px 1px 2px rgba(200, 200, 200, 0.2) inset;
 }
 .username-input {
-    background: url("/webBudget/javax.faces.resource/ui-icon-user.png.xhtml?ln=images") no-repeat scroll 7px 9px !important;
     padding-left: 35px !important;
     margin-bottom: 10px !important;
+    background: url("/webBudget/javax.faces.resource/ui-icon-user.png.xhtml?ln=images") no-repeat scroll 7px 9px !important;
 }
 .password-input {
-    background: url("/webBudget/javax.faces.resource/ui-icon-key.png.xhtml?ln=images") no-repeat scroll 7px 9px !important;
     padding-left: 35px !important;
     margin-bottom: 20px !important;
+    background: url("/webBudget/javax.faces.resource/ui-icon-key.png.xhtml?ln=images") no-repeat scroll 7px 9px !important;
+}
+
+/* dashboard --------------------------------- */
+.dashboard-graphs div.ui-tabs-panels {
+    height: 300px;
+}
+.dashboard-graphs div[role='tabpanel'] {
+    height: 100%;
+    padding: 0;
 }
 
 /* form de movimentos ------------------------ */

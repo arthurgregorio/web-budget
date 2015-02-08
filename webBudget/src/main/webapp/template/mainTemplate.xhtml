@@ -1,5 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-
 <!--
   Copyright (C) 2015 Arthur Gregorio, AG.Software
  
@@ -17,7 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -26,7 +24,9 @@
       xmlns:sec="http://www.springframework.org/security/tags">
 
     <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
         <title>#{messages['application.title']}</title>
 
@@ -45,16 +45,17 @@
 
     <h:body>
         <div class="container">
-            <div class="header">
+            <div class="header header-background">
                 <div class="header-content">
                     <div class="logo">
                         <h:link outcome="/main/dashboard.xhtml">
-                            <p:graphicImage library="images" name="ui-wb-logo.png" />
+                            <p:graphicImage library="images" name="ui-wb-logo-1.png" />
                         </h:link>
                     </div>
                     <div class="menu">
                         <h:form id="menuForm" prependId="false">
-                            <p:menubar styleClass="main-menu" autoDisplay="false">
+                            <p:menubar autoDisplay="false"
+                                       styleClass="main-menu header-background" >
                                 <p:submenu label="#{menu['entries']}" 
                                            styleClass="main-menu-item">
                                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_VIEW}">
