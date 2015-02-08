@@ -50,7 +50,7 @@
                 </div> 
             </div> 
             <h:panelGroup layout="block" 
-                          styleClass="ui-grid-row form-header"
+                          styleClass="ui-grid-row financial-period-info flat-box"
                           rendered="#{movementBean.haveOpenPeriod() eq true}">
                 <div class="ui-grid-col-5 active-period-text">
                     <h:outputText value="#{messages['movement.form.current-period']}: "/>
@@ -78,7 +78,7 @@
                 </div>
             </h:panelGroup>
             <h:panelGroup layout="block" 
-                          styleClass="ui-grid-row form-header"
+                          styleClass="ui-grid-row financial-period-info form-header"
                           rendered="#{movementBean.haveOpenPeriod() eq false}">
                 <div class="ui-grid-col-8 no-period-text">
                     <h:outputText value="#{messages['movement.form.financial-period-not-open']}" />
@@ -89,7 +89,7 @@
                                    value="#{messages['movement.form.financial-period-open']}" />
                 </div>
             </h:panelGroup>
-            <div class="ui-grid-row">
+            <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-6">
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-m">
@@ -138,13 +138,11 @@
                 </div>
                 <div class="ui-grid-col-6 apportionment-box">
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
+                        <div class="ui-grid-col-6 apportionment-text-box">
                             <p:outputLabel styleClass="apportionment-label"
                                            value="#{messages['movement.form.apportionment']}:"/>
                         </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 div-align-right">
+                        <div class="ui-grid-col-6 div-align-right">
                             <p:commandButton update="messages"
                                              value="#{menu['add']}"
                                              process="@this,inValue"
@@ -193,7 +191,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui-grid-row">
+            <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-6">
                     
                 </div>

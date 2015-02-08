@@ -164,7 +164,6 @@ td {
 
 .form-controls-box {
     text-align: right;
-    padding-top: 20px;
 }
 
 .form-group {
@@ -366,9 +365,11 @@ td {
 }
 
 /* form de movimentos ------------------------ */
-.financial-period-group {
-    margin: 0;
-    padding: 10px 0;    
+.financial-period-info {
+    font-size: 15pt;    
+}
+.apportionment-text-box {
+    padding-top: 7px;
 }
 #inDueDate {
     display: flex;
@@ -384,13 +385,13 @@ td {
 }
 .check-paid {
     position: relative;
-    top: 9px;
+    top: 5px;
 }
 .period-combo {
     width: 40% !important;
 }
 .active-period-text {
-    padding-top: 11px;
+    padding-top: 7px;
 }
 .no-period-text {
     padding-top: 6px;

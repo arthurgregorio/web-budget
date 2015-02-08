@@ -22,6 +22,14 @@
 
 @charset "utf-8";
 
+/* remove todos os efeitos arredondadinhos dos elementos */
+.ui-corner-all {
+    border-radius: 0 !important;
+}
+.ui-selectonemenu-trigger {
+    border-radius: 0 !important;
+}
+
 /* seta a fonte correta em todos os widgets */
 .ui-widget {
     font: 1.1em 'Ubuntu', sans-serif !important;
@@ -40,13 +48,18 @@ span.ui-tree-toggler {
 
 /* acerta o breadcrumb na template */
 .ui-breadcrumb {
-    padding: 10px !important;
+    /* padding: 5px 10px 10px !important; */
     border: none !important;
     background: none !important;
 }
 .ui-breadcrumb a {
     font-size: 11pt;
     text-decoration: none;
+}
+.ui-icon-triangle-1-e {
+    top: 2px;
+    background-position: initial !important;
+    background-image: url("/webBudget/javax.faces.resource/ui-icon-arrow-right.png.xhtml?ln=images") !important;
 }
 
 /* corrige a borda do paginador das datatables */
@@ -96,18 +109,6 @@ button[role="button"].ui-state-default {
 }
 .jqplot-table-legend-label {
     padding-right: 5px !important;
-}
-
-/* customizacao dos itens da template */
-.ui-breadcrumb {
-    border: none !important;
-    background: none !important;
-    padding: 7px 0 !important;
-}
-.ui-icon-triangle-1-e {
-    top: 2px;
-    background-position: initial !important;
-    background-image: url("/webBudget/javax.faces.resource/ui-icon-arrow-right.png.xhtml?ln=images") !important;
 }
 
 /* customizacao da posicao do texto no checkbox */
