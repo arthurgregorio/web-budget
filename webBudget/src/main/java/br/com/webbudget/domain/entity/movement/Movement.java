@@ -20,10 +20,10 @@ import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.Contact;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -119,9 +119,10 @@ public class Movement extends PersistentEntity {
      * precisar saber como ele foi distribuido, ou seja, precisaremos do rateio
      */
     @Getter
+    @Setter
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "movement", fetch = EAGER, cascade = REMOVE)
-    private final Set<Apportionment> apportionments;
+    private List<Apportionment> apportionments;
 
     @Getter
     @Setter
@@ -132,6 +133,10 @@ public class Movement extends PersistentEntity {
     @Transient
     private boolean transfer;
 
+    @Getter
+    @Transient
+    private final List<Apportionment> deletedApportionments;
+    
     /**
      *
      */
@@ -139,7 +144,8 @@ public class Movement extends PersistentEntity {
 
         this.code = this.createMovementCode();
 
-        this.apportionments = new HashSet<>();
+        this.apportionments = new ArrayList<>();
+        this.deletedApportionments = new ArrayList<>();
 
         this.cardInvoicePaid = false;
         this.movementType = MovementType.MOVEMENT;
@@ -210,6 +216,7 @@ public class Movement extends PersistentEntity {
         }
         
         this.apportionments.remove(toRemove);
+        this.addDeletedApportionment(toRemove);
     }
     
     /**
@@ -218,6 +225,20 @@ public class Movement extends PersistentEntity {
      */
     public void removeApportionment(Apportionment apportionment) {
         this.apportionments.remove(apportionment);
+        this.addDeletedApportionment(apportionment);
+    }
+    
+    /**
+     * Usado em caso de um rateio jah persistente ser apagado, ele precisara
+     * ser removido do banco tambem 
+     * 
+     * @param apportionment o rateio removido da lista que sera colocado na 
+     *        lista de deletados somente se ele ja houve sido persistido
+     */
+    private void addDeletedApportionment(Apportionment apportionment) {
+        if (apportionment.isSaved()) {
+            this.deletedApportionments.add(apportionment);
+        }
     }
     
     /**
@@ -248,7 +269,7 @@ public class Movement extends PersistentEntity {
      * @return a diferenca entre o valor dos produtos e o valor do movimento
      */
     public BigDecimal getApportionmentsDifference() {
-        return this.value.subtract(this.getApportionmentsTotal());
+        return this.getApportionmentsTotal().subtract(this.value);
     }
     
     /**

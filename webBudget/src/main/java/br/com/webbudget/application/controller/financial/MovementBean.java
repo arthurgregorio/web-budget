@@ -359,12 +359,12 @@ public class MovementBean extends AbstractBean {
     public void doUpdate() {
 
         try {
-            this.movement = this.movementService.updateMovement(this.movement);
+            this.movement = this.movementService.saveMovement(this.movement);
             this.info("movement.action.updated", true);
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        }
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
+        } 
     }
 
     /**

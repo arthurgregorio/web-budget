@@ -18,7 +18,9 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.Apportionment;
+import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.repository.IGenericRepository;
+import java.util.List;
 
 /**
  *
@@ -29,4 +31,10 @@ import br.com.webbudget.domain.repository.IGenericRepository;
  */
 public interface IApportionmentRepository extends IGenericRepository<Apportionment, Long> {
 
+    /**
+     * 
+     * @param movement
+     * @return 
+     */
+    public List<Apportionment> listByMovement(Movement movement);
 }

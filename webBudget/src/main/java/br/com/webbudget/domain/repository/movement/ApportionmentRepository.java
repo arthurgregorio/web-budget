@@ -18,7 +18,11 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.Apportionment;
+import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.repository.GenericRepository;
+import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -31,4 +35,19 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ApportionmentRepository extends GenericRepository<Apportionment, Long> implements IApportionmentRepository {
 
+    /**
+     * 
+     * @param movement
+     * @return 
+     */
+    @Override
+    public List<Apportionment> listByMovement(Movement movement) {
+        
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+        
+        criteria.createAlias("movement", "mv");
+        criteria.add(Restrictions.eq("mv.id", movement.getId()));
+        
+        return criteria.list();
+    }
 }
