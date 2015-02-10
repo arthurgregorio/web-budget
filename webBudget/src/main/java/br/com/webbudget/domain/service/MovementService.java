@@ -26,6 +26,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.Payment;
+import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
@@ -162,12 +163,17 @@ public class MovementService {
 
         // salva o pagamento
         final Payment payment = this.paymentRepository.save(movement.getPayment());
-
+        
         // seta no pagamento e atualiza o movimento
         movement.setPayment(payment);
         movement.setMovementStateType(MovementStateType.PAID);
 
         this.movementRepository.save(movement);
+        
+        // atualizamos os saldos das carteiras quando pagamento em dinheiro
+        if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH) {
+            // TODO movimentar carteiras
+        } 
     }
 
     /**

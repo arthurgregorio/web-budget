@@ -231,7 +231,7 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     *
+     * Da um redirect para os detalhes do movimento
      */
     public void changeToDetails() {
         try {
@@ -296,7 +296,7 @@ public class MovementBean extends AbstractBean {
             this.displayPaymentPopup();
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doSaveAndPay found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         }
     }
 
