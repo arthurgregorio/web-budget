@@ -105,11 +105,11 @@
                                            styleClass="main-menu-item">
                                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_VIEW}">
                                         <p:menuitem value="#{menu['tools.users']}"    
-                                                    url="/main/tools/users/listUserAccounts.xhtml"/>
+                                                    url="/main/tools/user/listUserAccounts.xhtml"/>
                                     </sec:authorize>
                                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.PRIVATE_MESSAGES_VIEW}">
                                         <p:menuitem value="#{menu['tools.private-messages']}"    
-                                                    url="/main/tools/privateMessages/listPrivateMessages.xhtml"/>
+                                                    url="/main/tools/privateMessage/listPrivateMessages.xhtml"/>
                                     </sec:authorize>
                                 </p:submenu>
 
@@ -121,7 +121,7 @@
                                         <p:menuitem value="#{menu['dashboard.logout']}" 
                                                     action="#{dashboardBean.doLogout()}"/>
                                         <p:menuitem value="#{menu['dashboard.account']}" 
-                                                    action="/main/tools/users/accountPreferences.xhtml?faces-redirect=true"/>
+                                                    action="/main/tools/user/accountPreferences.xhtml?faces-redirect=true"/>
                                     </p:menuButton>
                                 </f:facet>
                             </p:menubar>

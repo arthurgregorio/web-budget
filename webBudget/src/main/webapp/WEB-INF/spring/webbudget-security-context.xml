@@ -39,20 +39,20 @@
         
         <!-- url's dos forms -->
         <security:intercept-url pattern="/main/entries/cards/**" access="hasRole('card.authority.view')" />
-        <security:intercept-url pattern="/main/entries/wallets/**" access="hasRole('wallet.authority.view')" />
         <security:intercept-url pattern="/main/entries/contacts/**" access="hasRole('contact.authority.view')" />
         <security:intercept-url pattern="/main/entries/costCenter/**" access="hasRole('cost-center.authority.view')" />
         <security:intercept-url pattern="/main/entries/movementClass/**" access="hasRole('movement-class.authority.view')" />
+        <security:intercept-url pattern="/main/entries/wallets/**" access="hasRole('wallet.authority.view')" />
+        
+        <security:intercept-url pattern="/main/financial/cardInvoice/**" access="hasRole('card-invoice.authority.view')" />
+        <security:intercept-url pattern="/main/financial/movement/**" access="hasRole('movement.authority.view')" />
+        <security:intercept-url pattern="/main/financial/transfer/**" access="hasRole('balance-transfer.authority.view')" />
         
         <security:intercept-url pattern="/main/miscellany/closing/**" access="hasRole('closing.authority.view')" />
         <security:intercept-url pattern="/main/miscellany/financialPeriod/**" access="hasRole('financial-period.authority.view')" />
         
-        <security:intercept-url pattern="/main/movements/cardInvoice/**" access="hasRole('card-invoice.authority.view')" />
-        <security:intercept-url pattern="/main/movements/maintenance/**" access="hasRole('movement.authority.view')" />
-        <security:intercept-url pattern="/main/movements/transfer/**" access="hasRole('balance-transfer.authority.view')" />
-        
-        <security:intercept-url pattern="/main/tools/privateMessages/**" access="hasRole('private-message.authority.view')" />
-        <security:intercept-url pattern="/main/tools/users/**" access="hasRole('account.authority.view')" />
+        <security:intercept-url pattern="/main/tools/privateMessage/**" access="hasRole('private-message.authority.view')" />
+        <security:intercept-url pattern="/main/tools/user/**" access="hasRole('account.authority.view')" />
         
         <!-- mapeamento da url para redirect de logout -->
         <security:logout logout-url="/main/logout" logout-success-url="/home.xhtml?expired=true" />
