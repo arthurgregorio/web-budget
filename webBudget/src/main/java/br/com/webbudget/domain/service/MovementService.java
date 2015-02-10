@@ -158,7 +158,7 @@ public class MovementService {
      *
      * @param movement
      */
-    public void payAndSaveMovement(Movement movement) {
+    public void payAndUpdateMovement(Movement movement) {
 
         // salva o pagamento
         final Payment payment = this.paymentRepository.save(movement.getPayment());

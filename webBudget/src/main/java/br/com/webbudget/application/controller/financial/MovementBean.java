@@ -312,7 +312,7 @@ public class MovementBean extends AbstractBean {
             if (this.payment.getCard() == null && this.payment.getWallet() == null) {
                 this.error("movement.validate.payment-font", true);
             } else {
-                this.movementService.payAndSaveMovement(this.movement);
+                this.movementService.payAndUpdateMovement(this.movement);
 
                 this.openDialog("confirmPaymentDialog", "dialogConfirmPayment");
 
@@ -339,7 +339,7 @@ public class MovementBean extends AbstractBean {
             if (this.payment.getCard() == null && this.payment.getWallet() == null) {
                 this.error("movement.validate.payment-font", true);
             } else {
-                this.movementService.payAndSaveMovement(this.movement);
+                this.movementService.payAndUpdateMovement(this.movement);
 
                 this.movement = new Movement();
                 this.movement.setFinancialPeriod(this.financialPeriod);

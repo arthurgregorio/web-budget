@@ -197,6 +197,20 @@ public class Movement extends PersistentEntity {
                 throw new ApplicationException("movement.validate.apportionment-duplicated");
             }
         }
+
+        // verificamos se os movimentos partem na mesma direcao, para que nao
+        // haja rateios com debitos e creditos juntos
+        if (!this.apportionments.isEmpty()) {
+            
+            final MovementClassType direction = this.getMovementDirection();
+            final MovementClassType apportionmentDirection = 
+                    apportionment.getMovementClass().getMovementClassType();
+            
+            if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT) || 
+                    (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN))  {
+                throw new ApplicationException("movement.validate.apportionment-debit-credit");
+            }
+        }
         
         this.apportionments.add(apportionment);
     }
