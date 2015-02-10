@@ -46,29 +46,29 @@ public class WalletBalance extends PersistentEntity {
 
     @Getter
     @Setter
-    @Column(name = "balance", nullable = false)
-    private BigDecimal balance;
+    @Column(name = "actual_balance", nullable = false)
+    private BigDecimal actualBalance;
     @Getter
     @Setter
-    @Column(name = "old_balance")
+    @Column(name = "old_balance", nullable = false)
     private BigDecimal oldBalance;
     @Getter
     @Setter
-    @Column(name = "adjustment_value")
-    private BigDecimal adjustmentValue;
+    @NotNull(message = "{wallet-balance.movimented-value}")
+    @Column(name = "movimented_value", nullable = false)
+    private BigDecimal movimentedValue;
     @Getter
     @Setter
-    @NotNull(message = "{transfer.transfer-value}")
-    @Column(name = "transfer_value")
-    private BigDecimal transferValue;
+    @Column(name = "total_ins")
+    private BigDecimal totalIns;
     @Getter
     @Setter
-    @Column(name = "ins")
-    private BigDecimal ins;
+    @Column(name = "total_outs")
+    private BigDecimal totalOuts;
     @Getter
     @Setter
-    @Column(name = "outs")
-    private BigDecimal outs;
+    @Column(name = "movement_code")
+    private String movementCode;
     @Getter
     @Setter
     @Column(name = "wallet_balance_type", nullable = false)
@@ -82,13 +82,13 @@ public class WalletBalance extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{transfer.null-target}")
+    @NotNull(message = "{wallet-balance.null-target}")
     @JoinColumn(name = "id_wallet")
     private Wallet wallet;
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{transfer.null-source}")
+    @NotNull(message = "{wallet-balance.null-source}")
     @JoinColumn(name = "id_source_wallet")
     private Wallet sourceWallet;    
     
@@ -96,10 +96,10 @@ public class WalletBalance extends PersistentEntity {
      * 
      */
     public WalletBalance() {
-        this.ins = BigDecimal.ZERO;
-        this.outs = BigDecimal.ZERO;
-        this.balance = BigDecimal.ZERO;
+        this.totalIns = BigDecimal.ZERO;
+        this.totalOuts = BigDecimal.ZERO;
         this.oldBalance = BigDecimal.ZERO;
-        this.adjustmentValue = BigDecimal.ZERO;
+        this.actualBalance = BigDecimal.ZERO;
+        this.movimentedValue = BigDecimal.ZERO;
     }
 }

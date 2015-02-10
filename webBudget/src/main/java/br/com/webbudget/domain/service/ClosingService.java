@@ -153,11 +153,11 @@ public class ClosingService {
 
             // calculamos com base no ultimo saldo ou no salredo inicial da conta
             if (lastBalance != null) {
-                final BigDecimal balance = lastBalance.getBalance().add(totalIns);
-                newBalance.setBalance(balance.subtract(totalOuts));
+                final BigDecimal balance = lastBalance.getActualBalance().add(totalIns);
+                newBalance.setActualBalance(balance.subtract(totalOuts));
             } else {
                 final BigDecimal balance = wallet.getBalance().add(totalIns);
-                newBalance.setBalance(balance.subtract(totalOuts));
+                newBalance.setActualBalance(balance.subtract(totalOuts));
             }
 
             // dizemos qual wallet e fechamento o balanco pertence
@@ -166,11 +166,11 @@ public class ClosingService {
             newBalance.setWalletBalanceType(WalletBalanceType.CLOSING_BALANCE);
             
             // setamos os valores totais
-            newBalance.setIns(totalIns);
-            newBalance.setOuts(totalOuts);
+            newBalance.setTotalIns(totalIns);
+            newBalance.setTotalOuts(totalOuts);
 
             // atualizamos o saldo na carteira
-            wallet.setBalance(newBalance.getBalance());
+            wallet.setBalance(newBalance.getActualBalance());
             this.walletRepository.save(wallet);
             
             // salvamos

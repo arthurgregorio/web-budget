@@ -26,6 +26,8 @@ package br.com.webbudget.domain.entity.wallet;
  */
 public enum WalletBalanceType {
 
+    PAYMENT("beans.wallet-balance.payment"),
+    REVENUE("beans.wallet-balance.revenue"),
     ADJUSTMENT("beans.wallet-balance.adjustment"), 
     TRANSFERENCE("beans.wallet-balance.transference"),
     CLOSING_BALANCE("beans.wallet-balance.closing-balance"),

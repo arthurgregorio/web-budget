@@ -27,12 +27,18 @@ import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.movement.PaymentMethodType;
+import br.com.webbudget.domain.entity.wallet.Wallet;
+import br.com.webbudget.domain.entity.wallet.WalletBalance;
+import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IPaymentRepository;
+import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
+import br.com.webbudget.domain.repository.wallet.IWalletRepository;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +58,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MovementService {
 
     @Autowired
+    private IWalletRepository walletRepository;
+    @Autowired
     private IPaymentRepository paymentRepository;
     @Autowired
     private IMovementRepository movementRepository;
@@ -63,6 +71,8 @@ public class MovementService {
     private IApportionmentRepository apportionmentRepository;
     @Autowired
     private IMovementClassRepository movementClassRepository;
+    @Autowired
+    private IWalletBalanceRepository walletBalanceRepository;
 
     /**
      *
@@ -128,13 +138,13 @@ public class MovementService {
             if (movement.getFinancialPeriod().isClosed()) {
                 throw new ApplicationException("maintenance.validate.closed-financial-period");
             }
-            
+
             // remove algum rateio editado
             for (Apportionment apportionment : movement.getDeletedApportionments()) {
                 this.apportionmentRepository.delete(apportionment);
             }
         }
-        
+
         // pega os rateios antes de salvar o movimento para nao perder a lista
         final List<Apportionment> apportionments = movement.getApportionments();
 
@@ -146,7 +156,7 @@ public class MovementService {
             apportionment.setMovement(movement);
             this.apportionmentRepository.save(apportionment);
         }
-        
+
         // busca novamente as classes
         movement.getApportionments().clear();
         movement.setApportionments(new ArrayList<>(
@@ -163,17 +173,49 @@ public class MovementService {
 
         // salva o pagamento
         final Payment payment = this.paymentRepository.save(movement.getPayment());
-        
+
         // seta no pagamento e atualiza o movimento
         movement.setPayment(payment);
         movement.setMovementStateType(MovementStateType.PAID);
 
         this.movementRepository.save(movement);
-        
+
         // atualizamos os saldos das carteiras quando pagamento em dinheiro
         if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH) {
-            // TODO movimentar carteiras
-        } 
+
+            final Wallet wallet = payment.getWallet();
+            
+            // atualizamos o novo saldo
+            final BigDecimal oldBalance = wallet.getBalance();
+            
+            // cria o historico do saldo
+            final WalletBalance walletBalance = new WalletBalance();
+            
+            walletBalance.setMovementCode(movement.getCode());
+            walletBalance.setOldBalance(oldBalance);
+            walletBalance.setMovimentedValue(movement.getValue());
+            
+            BigDecimal newBalance;
+            
+            if (movement.getDirection() == MovementClassType.OUT) { 
+                newBalance = oldBalance.subtract(movement.getValue());
+                walletBalance.setWalletBalanceType(WalletBalanceType.PAYMENT);
+            } else {
+                newBalance = oldBalance.add(movement.getValue());
+                walletBalance.setWalletBalanceType(WalletBalanceType.REVENUE);
+            }
+
+            walletBalance.setWallet(wallet);
+            walletBalance.setActualBalance(newBalance);
+
+            // salva o historico do saldo
+            this.walletBalanceRepository.save(walletBalance);
+            
+            wallet.setBalance(newBalance);
+
+            // atualiza a carteira com o novo saldo
+            this.walletRepository.save(wallet);
+        }
     }
 
     /**

@@ -168,7 +168,7 @@ public class MovementBean extends AbstractBean {
             this.payment = new Payment();
 
             // tipos entrada, pagamento somente em carteira
-            if (this.movement.getMovementDirection() == MovementClassType.IN) {
+            if (this.movement.getDirection() == MovementClassType.IN) {
                 this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
             } else {
                 this.debitCards = this.cardService.listDebitCards(false);
@@ -450,7 +450,7 @@ public class MovementBean extends AbstractBean {
         this.payment = new Payment();
 
         // tipos entrada, pagamento somente em carteira
-        if (this.movement.getMovementDirection() == MovementClassType.IN) {
+        if (this.movement.getDirection() == MovementClassType.IN) {
             this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
         }
 

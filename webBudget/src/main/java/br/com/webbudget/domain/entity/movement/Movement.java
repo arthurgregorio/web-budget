@@ -202,7 +202,7 @@ public class Movement extends PersistentEntity {
         // haja rateios com debitos e creditos juntos
         if (!this.apportionments.isEmpty()) {
             
-            final MovementClassType direction = this.getMovementDirection();
+            final MovementClassType direction = this.getDirection();
             final MovementClassType apportionmentDirection = 
                     apportionment.getMovementClass().getMovementClassType();
             
@@ -338,7 +338,7 @@ public class Movement extends PersistentEntity {
      *
      * @return a direcao do movimento de acordo com as classes usadas
      */
-    public MovementClassType getMovementDirection() {
+    public MovementClassType getDirection() {
         for (Apportionment apportionment : this.apportionments) {
             return apportionment.getMovementClass().getMovementClassType();
         }

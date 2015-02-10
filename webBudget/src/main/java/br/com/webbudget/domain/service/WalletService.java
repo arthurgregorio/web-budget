@@ -113,19 +113,19 @@ public class WalletService {
         // atualizamos a origem
         final Wallet source = walletBalance.getSourceWallet();
         
-        source.setBalance(source.getBalance().subtract(walletBalance.getTransferValue()));
+        source.setBalance(source.getBalance().subtract(walletBalance.getMovimentedValue()));
         
         this.walletRepository.save(source);
         
         // atualizamos o destino
         final Wallet destiny = walletBalance.getWallet();
         
-        destiny.setBalance(destiny.getBalance().add(walletBalance.getTransferValue()));
+        destiny.setBalance(destiny.getBalance().add(walletBalance.getMovimentedValue()));
         
         this.walletRepository.save(destiny);
         
         // completamos a transferencia para o destino
-        walletBalance.setBalance(destiny.getBalance());
+        walletBalance.setActualBalance(destiny.getBalance());
         walletBalance.setWalletBalanceType(WalletBalanceType.TRANSFERENCE);
 
         this.walletBalanceRepository.save(walletBalance);
@@ -134,8 +134,8 @@ public class WalletService {
         final WalletBalance sourceBalance = new WalletBalance();
         
         sourceBalance.setWallet(source);
-        sourceBalance.setBalance(source.getBalance());
-        sourceBalance.setAdjustmentValue(walletBalance.getTransferValue());
+        sourceBalance.setActualBalance(source.getBalance());
+        sourceBalance.setMovimentedValue(walletBalance.getMovimentedValue());
         sourceBalance.setWalletBalanceType(WalletBalanceType.TRANSFER_ADJUSTMENT);
         
         this.walletBalanceRepository.save(sourceBalance);
@@ -159,9 +159,9 @@ public class WalletService {
         
         // gravamos o ultimo saldo como historico
         walletBalance.setWallet(wallet);
-        walletBalance.setAdjustmentValue(wallet.getAdjustmentValue());
+        walletBalance.setMovimentedValue(wallet.getAdjustmentValue());
         walletBalance.setOldBalance(oldBalance);
-        walletBalance.setBalance(newBalance);
+        walletBalance.setActualBalance(newBalance);
         walletBalance.setWalletBalanceType(WalletBalanceType.ADJUSTMENT);
 
         this.walletBalanceRepository.save(walletBalance);
