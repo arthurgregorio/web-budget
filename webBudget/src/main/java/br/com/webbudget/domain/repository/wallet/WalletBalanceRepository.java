@@ -101,4 +101,37 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
         
         return criteria.list();
     }
+
+    /**
+     * 
+     * @param source
+     * @param target
+     * @param walletBalanceTypes
+     * @return 
+     */
+    @Override
+    public List<WalletBalance> listByWallet(Wallet source, Wallet target, WalletBalanceType... walletBalanceTypes) {
+        
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+        
+        if (target != null) {
+            criteria.createAlias("wallet", "tgt");
+            criteria.add(Restrictions.eq("tgt.id", target.getId()));
+        } 
+        
+        if (source != null) {
+            criteria.createAlias("sourceWallet", "src");
+            criteria.add(Restrictions.eq("src.id", source.getId()));
+        }
+
+        if (walletBalanceTypes != null) {
+            for (WalletBalanceType type : walletBalanceTypes) {
+                criteria.add(Restrictions.eq("walletBalanceType", type));
+            }
+        }
+        
+        criteria.addOrder(Order.desc("inclusion"));
+        
+        return criteria.list();
+    }
 }

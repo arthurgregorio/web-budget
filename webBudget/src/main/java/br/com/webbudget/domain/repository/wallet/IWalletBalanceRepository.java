@@ -53,4 +53,13 @@ public interface IWalletBalanceRepository extends IGenericRepository<WalletBalan
      * @return 
      */
     public List<WalletBalance> listByWallet(Wallet wallet, WalletBalanceType... walletBalanceTypes);
+    
+    /**
+     * 
+     * @param source
+     * @param target
+     * @param walletBalanceTypes
+     * @return 
+     */
+    public List<WalletBalance> listByWallet(Wallet source, Wallet target, WalletBalanceType... walletBalanceTypes);
 }

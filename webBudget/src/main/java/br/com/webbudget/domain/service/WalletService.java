@@ -224,6 +224,17 @@ public class WalletService {
     
     /**
      * 
+     * @param source
+     * @param target
+     * @return 
+     */
+    @Transactional(readOnly = true)
+    public List<WalletBalance> listTransfersByWallet(Wallet source, Wallet target) {
+        return this.walletBalanceRepository.listByWallet(source, target, WalletBalanceType.TRANSFERENCE);
+    }
+    
+    /**
+     * 
      * @param wallet
      * @return 
      */

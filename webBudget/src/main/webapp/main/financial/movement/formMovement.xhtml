@@ -65,8 +65,8 @@
                     <p:spacer width="10"/>
                     <p:selectOneMenu id="inLaunchPeriod" 
                                      styleClass="period-combo"
-                                     value="#{movementBean.movement.financialPeriod}"
-                                     converter="omnifaces.SelectItemsConverter">
+                                     converter="omnifaces.SelectItemsConverter"
+                                     value="#{movementBean.movement.financialPeriod}">
                         <f:selectItems var="financialPeriod" 
                                        itemValue="#{financialPeriod}"
                                        itemLabel="#{financialPeriod.expired eq true 

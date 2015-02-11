@@ -45,13 +45,30 @@
 
         <h:form id="controlsForm" prependId="false">
             <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-8 form-group-m">
+                <div class="ui-grid-col-4 form-group-m">
                     <div class="form-filter-box">
-                        <p:outputLabel for="inWallet" 
-                                       styleClass="filter-label"
+                        <p:outputLabel for="inSourceWallet" 
+                                       value="#{messages['transfer.filter.source-wallet']}: "/>
+                        <p:selectOneMenu id="inSourceWallet" 
+                                         value="#{transferenceBean.sourceWallet}" 
+                                         converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemValue="#{null}"
+                                          noSelectionOption="true"
+                                          itemLabel="#{messages['transfer.filter.select-one']}" />
+                            <f:selectItems var="wallet"
+                                           itemValue="#{wallet}"
+                                           itemLabel="#{wallet.friendlyName}"
+                                           value="#{transferenceBean.wallets}"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                <div class="ui-grid-col-4 form-group-m font">
+                    <div class="form-filter-box">
+                        <p:spacer width="10"/>
+                        <p:outputLabel for="inTargetWallet" 
                                        value="#{messages['transfer.filter.target-wallet']}: "/>
-                        <p:selectOneMenu id="inWallet" 
-                                         value="#{transferenceBean.selectedWallet}" 
+                        <p:selectOneMenu id="inTargetWallet" 
+                                         value="#{transferenceBean.targetWallet}" 
                                          converter="omnifaces.SelectItemsConverter">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
@@ -64,6 +81,8 @@
                     </div>
                 </div>
                 <div class="ui-grid-col-4 div-align-right">
+                    <p:commandButton value="#{menu['filter']}"
+                                     action="#{transferenceBean.filterTransfers()}"/>
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.BALANCE_TRANSFER_MAKE}">
                         <p:spacer width="10"/>
                         <p:commandButton immediate="true"
@@ -96,7 +115,7 @@
                     <p:column width="20%"
                               style="text-align: center"
                               headerText="#{messages['transfer.list.transfer-value']}">
-                        R$ #{transference.transferValue}
+                        R$ #{transference.movimentedValue}
                     </p:column>
                     <p:column headerText="#{messages['transfer.list.source-wallet']}">
                         #{transference.sourceWallet.friendlyName}

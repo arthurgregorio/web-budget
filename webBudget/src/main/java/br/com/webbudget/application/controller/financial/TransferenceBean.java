@@ -44,7 +44,10 @@ public class TransferenceBean extends AbstractBean {
 
     @Getter
     @Setter
-    private Wallet selectedWallet;
+    private Wallet sourceWallet;
+    @Getter
+    @Setter
+    private Wallet targetWallet;
     
     @Getter
     private WalletBalance walletBalance;
@@ -82,11 +85,8 @@ public class TransferenceBean extends AbstractBean {
      */
     public void initializeForm() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            
             this.viewState = ViewState.ADDING;
-            
             this.walletBalance = new WalletBalance();
-            
             this.wallets = this.walletService.listWallets(false);
         }
     }    
@@ -128,9 +128,14 @@ public class TransferenceBean extends AbstractBean {
     /**
      * 
      */
-    public void loadTransfers() {
+    public void filterTransfers() {
         
-        this.transferences = this.walletService.listTransfersByWallet(this.selectedWallet);
+        if (this.sourceWallet == null && this.targetWallet == null) {
+            this.transferences = this.walletService.listTransferences();
+        } else {
+            this.transferences = this.walletService
+                    .listTransfersByWallet(this.sourceWallet, this.targetWallet);
+        }
         
         if (this.transferences.isEmpty()) {
             this.error("transfer.no-trasfers", true);
