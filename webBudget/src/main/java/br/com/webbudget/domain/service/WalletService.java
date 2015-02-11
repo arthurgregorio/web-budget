@@ -112,20 +112,23 @@ public class WalletService {
         
         // atualizamos a origem
         final Wallet source = walletBalance.getSourceWallet();
+        final BigDecimal sourceOldBalance = source.getBalance();
         
-        source.setBalance(source.getBalance().subtract(walletBalance.getMovimentedValue()));
+        source.setBalance(sourceOldBalance.subtract(walletBalance.getMovimentedValue()));
         
         this.walletRepository.save(source);
         
         // atualizamos o destino
-        final Wallet destiny = walletBalance.getWallet();
+        final Wallet target = walletBalance.getWallet();
+        final BigDecimal targetOldBalance = target.getBalance();
         
-        destiny.setBalance(destiny.getBalance().add(walletBalance.getMovimentedValue()));
+        target.setBalance(targetOldBalance.add(walletBalance.getMovimentedValue()));
         
-        this.walletRepository.save(destiny);
+        this.walletRepository.save(target);
         
         // completamos a transferencia para o destino
-        walletBalance.setActualBalance(destiny.getBalance());
+        walletBalance.setOldBalance(targetOldBalance);
+        walletBalance.setActualBalance(target.getBalance());
         walletBalance.setWalletBalanceType(WalletBalanceType.TRANSFERENCE);
 
         this.walletBalanceRepository.save(walletBalance);
@@ -134,6 +137,7 @@ public class WalletService {
         final WalletBalance sourceBalance = new WalletBalance();
         
         sourceBalance.setWallet(source);
+        sourceBalance.setOldBalance(sourceOldBalance);
         sourceBalance.setActualBalance(source.getBalance());
         sourceBalance.setMovimentedValue(walletBalance.getMovimentedValue());
         sourceBalance.setWalletBalanceType(WalletBalanceType.TRANSFER_ADJUSTMENT);
