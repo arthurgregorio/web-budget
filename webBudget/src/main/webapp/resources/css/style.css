@@ -363,6 +363,11 @@ td {
     height: 100%;
     padding: 0;
 }
+.empty-graph-text {
+    top: 45%;
+    position: relative;
+    text-align: center;
+}
 
 /* form de movimentos ------------------------ */
 .financial-period-info {
@@ -432,9 +437,8 @@ td {
     height: 34px;
 }
 
-/* dashboard --------------------------------- */
-.empty-graph-text {
-    top: 45%;
-    position: relative;
-    text-align: center;
+/* historico de saldos ----------------------- */
+.wallet-identification {
+    font-weight: 700;
+    margin-left: 5px;
 }

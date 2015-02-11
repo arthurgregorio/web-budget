@@ -53,10 +53,11 @@
                             <p:outputLabel for="inValue" 
                                            value="#{messages['transfer.form.value']}: "/>
                             <pe:inputNumber id="inValue" 
+                                            symbol="R$ "
                                             decimalPlaces="2" 
                                             decimalSeparator="," 
                                             thousandSeparator="." 
-                                            value="#{transferenceBean.walletBalance.transferValue}">
+                                            value="#{transferenceBean.walletBalance.movimentedValue}">
                                 <pe:keyFilter regEx="/[0-9_,]/i"/>
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </pe:inputNumber>

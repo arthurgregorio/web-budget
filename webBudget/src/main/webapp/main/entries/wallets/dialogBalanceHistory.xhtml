@@ -22,7 +22,7 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:ui="http://java.sun.com/jsf/facelets"
           id="balanceHistoryDialog" 
-          width="720"
+          width="750"
           modal="true"
           resizable="false" 
           widgetVar="dialogBalanceHistory" 
@@ -31,8 +31,9 @@
     <div class="ui-grid ui-grid-responsive">
         <div class="ui-grid-row">
             <div class="ui-grid-row div-mg-b-15">
-                <o:outputFormat value="#{messages['balance-history.dialog.wallet-identification']}">
-                    <f:param value="#{walletBean.wallet.friendlyName}"/>
+                <o:outputFormat escape="false" 
+                                value="#{messages['balance-history.dialog.wallet-identification']}">
+                    <f:param value=" #{walletBean.wallet.friendlyName}" />
                 </o:outputFormat>
             </div>
         </div>
@@ -51,22 +52,17 @@
                               headerText="#{messages['balance-history.list.type']}">
                         #{messages[balance.walletBalanceType]}
                     </p:column>
-                    <p:column style="text-align: center"
-                              headerText="#{messages['balance-history.list.value']}">
-                        <h:outputText value="#{balance.transferValue}"
-                                      rendered="#{balance.walletBalanceType eq 'TRANSFERENCE'}"
-                                      style="#{balance.transferValue.signum() lt 0 ? 'color: red;' : 
-                                                  balance.transferValue.signum() gt 0 ? 'color: green': ''}">
-                            <f:convertNumber type="currency" />
-                        </h:outputText>
-                        <h:outputText value="#{balance.adjustmentValue}"
-                                      rendered="#{balance.walletBalanceType eq 'ADJUSTMENT'}"
-                                      style="#{balance.adjustmentValue.signum() lt 0 ? 'color: red;' : 
-                                                  balance.adjustmentValue.signum() gt 0 ? 'color: green': ''}">
+                    <p:column width="17%"
+                              style="text-align: center"
+                              headerText="#{messages['balance-history.list.movimented-value']}">
+                        <h:outputText value="#{balance.movimentedValue}"
+                                      style="#{balance.movimentedValue.signum() lt 0 ? 'color: red;' : 
+                                                  balance.movimentedValue.signum() gt 0 ? 'color: green': ''}">
                             <f:convertNumber type="currency" />
                         </h:outputText>
                     </p:column>
-                    <p:column style="text-align: center"
+                    <p:column width="17%"
+                              style="text-align: center"
                               headerText="#{messages['balance-history.list.old-balance']}">
                         <h:outputText value="#{balance.oldBalance}"
                                       style="#{balance.oldBalance.signum() lt 0 ? 'color: red;' : 
@@ -74,15 +70,17 @@
                             <f:convertNumber type="currency" />
                         </h:outputText>
                     </p:column>
-                    <p:column style="text-align: center"
-                              headerText="#{messages['balance-history.list.balance']}">
-                        <h:outputText value="#{balance.balance}"
-                                      style="#{balance.balance.signum() lt 0 ? 'color: red;' : 
-                                                  balance.balance.signum() gt 0 ? 'color: green': ''}">
+                    <p:column width="17%"
+                              style="text-align: center"
+                              headerText="#{messages['balance-history.list.actual-balance']}">
+                        <h:outputText value="#{balance.actualBalance}"
+                                      style="#{balance.actualBalance.signum() lt 0 ? 'color: red;' : 
+                                                  balance.actualBalance.signum() gt 0 ? 'color: green': ''}">
                             <f:convertNumber type="currency" />
                         </h:outputText>
                     </p:column>
-                    <p:column style="text-align: center"
+                    <p:column width="22%"
+                              style="text-align: center"
                               headerText="#{messages['balance-history.list.inclusion']}">
                         <h:outputText value="#{balance.inclusion}">
                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />

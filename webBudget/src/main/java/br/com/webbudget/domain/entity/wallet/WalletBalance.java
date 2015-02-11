@@ -90,16 +90,5 @@ public class WalletBalance extends PersistentEntity {
     @ManyToOne
     @NotNull(message = "{wallet-balance.null-source}")
     @JoinColumn(name = "id_source_wallet")
-    private Wallet sourceWallet;    
-    
-    /**
-     * 
-     */
-    public WalletBalance() {
-        this.totalIns = BigDecimal.ZERO;
-        this.totalOuts = BigDecimal.ZERO;
-        this.oldBalance = BigDecimal.ZERO;
-        this.actualBalance = BigDecimal.ZERO;
-        this.movimentedValue = BigDecimal.ZERO;
-    }
+    private Wallet sourceWallet; 
 }
