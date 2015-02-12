@@ -83,8 +83,8 @@ public class WalletBalance extends PersistentEntity {
     @Setter
     @ManyToOne
     @NotNull(message = "{wallet-balance.null-target}")
-    @JoinColumn(name = "id_wallet")
-    private Wallet wallet;
+    @JoinColumn(name = "id_target_wallet")
+    private Wallet targetWallet;
     @Getter
     @Setter
     @ManyToOne

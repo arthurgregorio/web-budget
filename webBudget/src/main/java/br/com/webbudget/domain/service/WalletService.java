@@ -106,7 +106,7 @@ public class WalletService {
      */
     public void transfer(WalletBalance walletBalance) {
        
-        if (walletBalance.getSourceWallet().equals(walletBalance.getWallet())) {
+        if (walletBalance.getSourceWallet().equals(walletBalance.getTargetWallet())) {
             throw new ApplicationException("transfer.validate.same-wallet");
         }
         
@@ -119,7 +119,7 @@ public class WalletService {
         this.walletRepository.save(source);
         
         // atualizamos o destino
-        final Wallet target = walletBalance.getWallet();
+        final Wallet target = walletBalance.getTargetWallet();
         final BigDecimal targetOldBalance = target.getBalance();
         
         target.setBalance(targetOldBalance.add(walletBalance.getMovimentedValue()));
@@ -136,7 +136,7 @@ public class WalletService {
         // criamos novo saldo para a origem
         final WalletBalance sourceBalance = new WalletBalance();
         
-        sourceBalance.setWallet(source);
+        sourceBalance.setTargetWallet(source);
         sourceBalance.setOldBalance(sourceOldBalance);
         sourceBalance.setActualBalance(source.getBalance());
         sourceBalance.setMovimentedValue(walletBalance.getMovimentedValue());
@@ -162,7 +162,7 @@ public class WalletService {
         final WalletBalance walletBalance = new WalletBalance();
         
         // gravamos o ultimo saldo como historico
-        walletBalance.setWallet(wallet);
+        walletBalance.setTargetWallet(wallet);
         walletBalance.setMovimentedValue(wallet.getAdjustmentValue());
         walletBalance.setOldBalance(oldBalance);
         walletBalance.setActualBalance(newBalance);

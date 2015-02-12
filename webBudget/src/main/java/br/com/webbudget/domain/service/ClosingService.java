@@ -161,7 +161,7 @@ public class ClosingService {
             }
 
             // dizemos qual wallet e fechamento o balanco pertence
-            newBalance.setWallet(wallet);
+            newBalance.setTargetWallet(wallet);
             newBalance.setClosing(closing);
             newBalance.setWalletBalanceType(WalletBalanceType.CLOSING_BALANCE);
             

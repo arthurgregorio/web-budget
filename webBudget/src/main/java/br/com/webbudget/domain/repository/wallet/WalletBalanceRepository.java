@@ -88,7 +88,7 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
        
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
         
-        criteria.createAlias("wallet", "wl");
+        criteria.createAlias("targetWallet", "wl");
         criteria.add(Restrictions.eq("wl.id", wallet.getId()));
 
         if (walletBalanceTypes != null) {
@@ -115,7 +115,7 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
         
         if (target != null) {
-            criteria.createAlias("wallet", "tgt");
+            criteria.createAlias("targetWallet", "tgt");
             criteria.add(Restrictions.eq("tgt.id", target.getId()));
         } 
         

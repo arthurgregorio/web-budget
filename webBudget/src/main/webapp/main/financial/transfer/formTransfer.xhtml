@@ -90,7 +90,7 @@
                                            value="#{messages['transfer.form.wallet-destiny']}: "/>
                             <p:selectOneMenu id="inWalletDestiny" 
                                              converter="omnifaces.SelectItemsConverter"
-                                             value="#{transferenceBean.walletBalance.wallet}">
+                                             value="#{transferenceBean.walletBalance.targetWallet}">
                                 
                                 <p:ajax event="change" 
                                         update="destinyBalancePanel" />
@@ -127,12 +127,12 @@
                             <p:fieldset legend="#{messages['transfer.form.destiny-balance']}">
                                 <h:panelGroup id="destinyBalancePanel"
                                               layout="block">
-                                    <h:outputText rendered="#{transferenceBean.walletBalance.wallet ne null}"
-                                                  value="R$ #{transferenceBean.walletBalance.wallet.balance}"
-                                                  style="#{transferenceBean.walletBalance.wallet.balance.signum() 
+                                    <h:outputText rendered="#{transferenceBean.walletBalance.targetWallet ne null}"
+                                                  value="R$ #{transferenceBean.walletBalance.targetWallet.balance}"
+                                                  style="#{transferenceBean.walletBalance.targetWallet.balance.signum() 
                                                            lt 0 ? 'color: red;' : 'color: green;'}"/>
                                     <h:outputText value="#{messages['transfer.form.select-destiny']}"
-                                                  rendered="#{transferenceBean.walletBalance.wallet eq null}"/>
+                                                  rendered="#{transferenceBean.walletBalance.targetWallet eq null}"/>
                                 </h:panelGroup> 
                             </p:fieldset>
                         </div>

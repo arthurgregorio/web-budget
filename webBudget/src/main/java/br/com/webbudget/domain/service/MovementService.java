@@ -205,7 +205,7 @@ public class MovementService {
                 walletBalance.setWalletBalanceType(WalletBalanceType.REVENUE);
             }
 
-            walletBalance.setWallet(wallet);
+            walletBalance.setTargetWallet(wallet);
             walletBalance.setActualBalance(newBalance);
 
             // salva o historico do saldo
