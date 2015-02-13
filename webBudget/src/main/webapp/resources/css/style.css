@@ -446,3 +446,13 @@ td {
     font-weight: 700;
     margin-left: 5px;
 }
+
+/* fatura do cartao de credito --------------- */
+.card-details-header {
+    margin-bottom: 20px;
+    padding: 5px 0;
+    font-size: 13pt;
+}
+.filter-card-invoice div.ui-selectonemenu {
+    width: 70% !important;
+}

@@ -46,10 +46,9 @@
 
         <h:form id="controlsForm" prependId="false">
             <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-4 form-group-m">
+                <div class="ui-grid-col-4 filter-card-invoice">
                     <div class="form-filter-box">
                         <p:outputLabel for="inFinancialPeriods"
-                                       styleClass="filter-label"
                                        value="#{messages['card-invoice.filter.financial-period']}: "/>
                         <p:selectOneMenu id="inFinancialPeriods" 
                                          converter="omnifaces.SelectItemsConverter"
@@ -64,10 +63,9 @@
                         </p:selectOneMenu>
                     </div>
                 </div>
-                <div class="ui-grid-col-4 form-group-m">
+                <div class="ui-grid-col-4 filter-card-invoice">
                     <div class="form-filter-box">
                         <p:outputLabel for="inCards"
-                                       styleClass="filter-label"
                                        value="#{messages['card-invoice.filter.card']}: "/>
                         <p:selectOneMenu id="inCards" 
                                          converter="omnifaces.SelectItemsConverter"
@@ -91,7 +89,9 @@
                         <p:spacer width="10"/>
                     </sec:authorize>
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PROCESS}">
-                        <p:commandButton styleClass="ui-button-info"
+                        <p:commandButton update="controlsForm"
+                                         process="controlsForm"
+                                         styleClass="ui-button-info"
                                          value="#{messages['card-invoice.generate-invoice']}"
                                          actionListener="#{cardInvoiceBean.generateInvoice()}" />
                     </sec:authorize>
@@ -101,45 +101,61 @@
 
         <div class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
-                <p:dataTable id="movementsList" 
-                             rows="30"
-                             var="movement"
-                             paginator="true"
-                             paginatorPosition="bottom"
-                             paginatorAlwaysVisible="false"
-                             value="#{cardInvoiceBean.cardInvoice.movements}"
-                             emptyMessage="#{cardInvoiceBean.cardInvoice.movements eq null 
-                                             ? messages['card-invoice.list.empty-search'] 
-                                             : messages['card-invoice.list.empty']}">
+                <h:panelGroup id="detailsPanel" 
+                              layout="block"
+                              styleClass="ui-grid-row card-details-header">
+                    <div class="ui-grid-col-6">
+                        <h:outputText value="#{messages['card-invoice.card.owner']}: "/>
+                        <p:spacer width="10"/>
+                        <h:outputText value="#{cardInvoiceBean.cardInvoice.card.owner}"/>
+                    </div>
+                    <div class="ui-grid-col-3">
+                        <h:outputText value="#{messages['card-invoice.card.limit']}: "/>
+                        <p:spacer width="10"/>
+                        <h:outputText value="#{cardInvoiceBean.cardInvoice.card.creditLimit}"/>
+                    </div>
+                    <div class="ui-grid-col-3">
+                        <h:outputText value="#{messages['card-invoice.card.total']}:"/>
+                        <p:spacer width="10"/>
+                        <h:outputText value="#{cardInvoiceBean.cardInvoice.total}"/>
+                    </div>
+                </h:panelGroup>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        <p:dataTable id="movementsList" 
+                                     rows="30"
+                                     var="movement"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     paginatorAlwaysVisible="false"
+                                     value="#{cardInvoiceBean.cardInvoice.movements}"
+                                     emptyMessage="#{cardInvoiceBean.cardInvoice.movements eq null 
+                                                     ? messages['card-invoice.list.empty-search'] 
+                                                     : messages['card-invoice.list.empty']}">
 
-                    <p:column width="10%" 
-                              style="text-align: center"
-                              headerText="#{messages['card-invoice.list.code']}">
-                        #{movement.code}
-                    </p:column>
-                    <p:column headerText="#{messages['card-invoice.list.description']}">
-                        #{of:abbreviate(movement.description,50)}
-                    </p:column>
-                    <p:column width="15%"
-                              style="text-align: center" 
-                              headerText="#{messages['card-invoice.list.pay-date']}">
-                        <h:outputText value="#{movement.inclusion}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText> 
-                    </p:column>
-                    <p:column width="20%"
-                              style="text-align: center" 
-                              headerText="#{messages['card-invoice.list.cost-center']}">
-                        <h:outputText value="#{movement.movementClass.costCenter.name}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText> 
-                    </p:column>
-                    <p:column width="15%"
-                              style="text-align: center" 
-                              headerText="#{messages['card-invoice.list.value']}">
-                        <h:outputText value="R$ #{movement.value}" />
-                    </p:column>
-                </p:dataTable>
+                            <p:column width="10%" 
+                                      style="text-align: center"
+                                      headerText="#{messages['card-invoice.list.code']}">
+                                #{movement.code}
+                            </p:column>
+                            <p:column headerText="#{messages['card-invoice.list.description']}">
+                                #{of:abbreviate(movement.description,50)}
+                            </p:column>
+                            <p:column width="15%"
+                                      style="text-align: center" 
+                                      headerText="#{messages['card-invoice.list.pay-date']}">
+                                <h:outputText value="#{movement.inclusion}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
+                            </p:column>
+                            <p:column width="15%"
+                                      style="text-align: center" 
+                                      headerText="#{messages['card-invoice.list.value']}">
+                                <h:outputText value="R$ #{movement.value}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
             </div>
         </div>
     </ui:define>

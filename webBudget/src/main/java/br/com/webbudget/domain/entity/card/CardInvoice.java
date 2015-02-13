@@ -24,6 +24,7 @@ import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -96,7 +97,7 @@ public class CardInvoice extends PersistentEntity {
      * 
      */
     public CardInvoice() {
-    
+        this.movements = new ArrayList<>();
     }
     
     /**
@@ -112,6 +113,8 @@ public class CardInvoice extends PersistentEntity {
         builder.append(this.createInvoiceCode());
         
         this.identification = builder.toString();
+        
+        this.movements = new ArrayList<>();
     }
     
     /**
@@ -139,5 +142,21 @@ public class CardInvoice extends PersistentEntity {
             }
         }
         return generated;
+    }
+    
+    /**
+     * Gera o total da fatura
+     * 
+     * @return o valor total da fatura com base nos movimentos pagos nela
+     */
+    public BigDecimal getTotal() {
+        
+        BigDecimal total = BigDecimal.ZERO;
+        
+        for (Movement m : this.movements) {
+            total = total.add(m.getValue());
+        }
+        
+        return total;
     }
 }

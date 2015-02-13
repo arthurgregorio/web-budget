@@ -125,7 +125,7 @@ public class CardInvoiceBean extends AbstractBean {
             this.logger.error("CardInvoiceBean#generateInvoice found errors", ex);
             this.fixedError(ex.getMessage(), true);
         } finally {
-            this.update("controlsForm");
+            this.update("detailsPanel");
             this.update("movementsList");
         }
     }
