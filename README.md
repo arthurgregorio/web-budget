@@ -13,8 +13,9 @@ O sistema foi desenvolvido utilizando uma plataforma baseada na tecnologia Java 
 
 Alguns frameworks que compoem a aplicação:
 
-- JSF 2.2 + Primefaces 5
-- Spring 4
-- Tomcat 8
+- Java 7
+- JSF 2.1 + Primefaces 5.1
+- Spring 3
+- Tomcat 7
 - Hibernate 4
 - Thymeleaf 2
