@@ -15,41 +15,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.com.webbudget.domain.entity.wallet;
+package br.com.webbudget.domain.repository.system;
+
+import br.com.webbudget.domain.entity.system.Configuration;
+import br.com.webbudget.domain.repository.IGenericRepository;
 
 /**
  *
  * @author Arthur Gregorio
  *
  * @version 1.0
- * @since 1.0, 03/04/2014
+ * @since 1.0, 04/03/2013
  */
-public enum WalletBalanceType {
-
-    PAYMENT("beans.wallet-balance.payment"),
-    REVENUE("beans.wallet-balance.revenue"),
-    ADJUSTMENT("beans.wallet-balance.adjustment"), 
-    TRANSFERENCE("beans.wallet-balance.transference"),
-    PAYMENT_RETURN("beans.wallet-balance.payment-return"),
-    CLOSING_BALANCE("beans.wallet-balance.closing-balance"),
-    TRANSFER_ADJUSTMENT("beans.wallet-balance.transfer-adjustment"); 
-    
-    private final String i18nKey;
-
-    /**
-     * 
-     * @param i18nKey 
-     */
-    private WalletBalanceType(String i18nKey) {
-        this.i18nKey = i18nKey;
-    }
+public interface IConfigurationRepository extends IGenericRepository<Configuration, Long> {
 
     /**
      * 
      * @return 
      */
-    @Override
-    public String toString() {
-        return this.i18nKey;
-    }
+    public Configuration findDefault();
 }

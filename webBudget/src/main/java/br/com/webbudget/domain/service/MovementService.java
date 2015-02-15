@@ -184,20 +184,20 @@ public class MovementService {
         if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH) {
 
             final Wallet wallet = payment.getWallet();
-            
+
             // atualizamos o novo saldo
             final BigDecimal oldBalance = wallet.getBalance();
-            
+
             // cria o historico do saldo
             final WalletBalance walletBalance = new WalletBalance();
-            
+
             walletBalance.setMovementCode(movement.getCode());
             walletBalance.setOldBalance(oldBalance);
             walletBalance.setMovimentedValue(movement.getValue());
-            
+
             BigDecimal newBalance;
-            
-            if (movement.getDirection() == MovementClassType.OUT) { 
+
+            if (movement.getDirection() == MovementClassType.OUT) {
                 newBalance = oldBalance.subtract(movement.getValue());
                 walletBalance.setWalletBalanceType(WalletBalanceType.PAYMENT);
             } else {
@@ -210,7 +210,7 @@ public class MovementService {
 
             // salva o historico do saldo
             this.walletBalanceRepository.save(walletBalance);
-            
+
             wallet.setBalance(newBalance);
 
             // atualiza a carteira com o novo saldo
@@ -227,6 +227,23 @@ public class MovementService {
         if (movement.getFinancialPeriod().isClosed()) {
             throw new ApplicationException("maintenance.validate.closed-financial-period");
         }
+        
+        // se tem vinculo com fatura, nao pode ser excluido
+        if (movement.isCardInvoicePaid()) {
+            throw new ApplicationException("maintenance.validate.has-card-invoice");
+        }
+        
+        // devolve o saldo na carteira se for o caso
+        if (movement.getMovementStateType() == MovementStateType.PAID && 
+                movement.getPayment().getPaymentMethodType() == PaymentMethodType.IN_CASH) {
+            
+            final Wallet paymentWallet = movement.getPayment().getWallet();
+
+            final BigDecimal oldBalance = paymentWallet.getBalance();
+            final BigDecimal newBalance = oldBalance.add(movement.getValue());
+
+            this.returnBalance(paymentWallet, oldBalance, newBalance, movement.getValue());
+        }
 
         this.movementRepository.delete(movement);
     }
@@ -236,11 +253,12 @@ public class MovementService {
      * fatura de cartao, deletando a fatura e limpando as flags dos movimentos
      * vinculados a ela
      *
-     * @param cardInvoiceMovement o movimento referenciando a invoice
+     * @param movement o movimento referenciando a invoice
      */
-    public void deleteCardInvoiceMovement(Movement cardInvoiceMovement) {
+    public void deleteCardInvoiceMovement(Movement movement) {
 
-        final CardInvoice cardInvoice = this.cardInvoiceRepository.findByMovement(cardInvoiceMovement);
+        final CardInvoice cardInvoice
+                = this.cardInvoiceRepository.findByMovement(movement);
 
         // se a invoice for de um periodo fechado, bloqueia o processo
         if (cardInvoice.getFinancialPeriod().isClosed()) {
@@ -248,22 +266,34 @@ public class MovementService {
         }
 
         // listamos os movimentos da invoice
-        final List<Movement> invoiceMovements = this.movementRepository.listByCardInvoice(cardInvoice);
+        final List<Movement> invoiceMovements
+                = this.movementRepository.listByCardInvoice(cardInvoice);
 
         // limpamos as flags para cada moveimento
-        for (Movement movement : invoiceMovements) {
+        for (Movement invoiceMovement : invoiceMovements) {
 
-            movement.setCardInvoice(null);
-            movement.setCardInvoicePaid(false);
+            invoiceMovement.setCardInvoice(null);
+            invoiceMovement.setCardInvoicePaid(false);
 
-            this.movementRepository.save(movement);
+            this.movementRepository.save(invoiceMovement);
         }
+
+        // se houve pagamento, devolve o valor para a origem
+        if (movement.getMovementStateType() == MovementStateType.PAID) {
+
+            final Wallet paymentWallet = movement.getPayment().getWallet();
+
+            final BigDecimal oldBalance = paymentWallet.getBalance();
+            final BigDecimal newBalance = oldBalance.add(movement.getValue());
+
+            this.returnBalance(paymentWallet, oldBalance, newBalance, movement.getValue());
+        }
+
+        // deletamos a movimentacao da invoice
+        this.movementRepository.delete(movement);
 
         // deletamos a invoice
         this.cardInvoiceRepository.delete(cardInvoice);
-
-        // deletamos a movimentacao da invoice
-        this.movementRepository.delete(cardInvoiceMovement);
     }
 
     /**
@@ -297,6 +327,36 @@ public class MovementService {
         }
 
         return this.costCenterRepository.save(costCenter);
+    }
+
+    /**
+     *
+     * @param wallet
+     * @param oldBalance
+     * @param newBalance
+     * @param movimentedValue
+     *
+     * @return
+     */
+    private WalletBalance returnBalance(Wallet wallet, BigDecimal oldBalance,
+            BigDecimal newBalance, BigDecimal movimentedValue) {
+        
+        // seta o saldo na carteira
+        wallet.setBalance(newBalance);
+
+        // salva carteira
+        this.walletRepository.save(wallet);
+
+        // coloca um novo saldo no historico
+        final WalletBalance balance = new WalletBalance();
+
+        balance.setTargetWallet(wallet);
+        balance.setOldBalance(oldBalance);
+        balance.setActualBalance(newBalance);
+        balance.setMovimentedValue(movimentedValue);
+        balance.setWalletBalanceType(WalletBalanceType.PAYMENT_RETURN);
+
+        return this.walletBalanceRepository.save(balance);
     }
 
     /**

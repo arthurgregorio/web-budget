@@ -21,18 +21,18 @@ import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.card.CardType;
+import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
-import br.com.webbudget.domain.entity.movement.Payment;
-import br.com.webbudget.domain.entity.movement.PaymentMethodType;
+import br.com.webbudget.domain.entity.system.Configuration;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.card.ICardRepository;
+import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.movement.IPaymentRepository;
-import java.math.BigDecimal;
+import br.com.webbudget.domain.repository.system.IConfigurationRepository;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +57,10 @@ public class CardService {
     private IMovementRepository movementRepository;
     @Autowired
     private ICardInvoiceRepository cardInvoiceRepository;
+    @Autowired
+    private IApportionmentRepository apportionmentRepository;
+    @Autowired
+    private IConfigurationRepository configurationRepository;
     
     /**
      * 
@@ -108,34 +112,39 @@ public class CardService {
     }
     
     /**
+     * Metodo que cria a movimentacao para a fatura referente ao cartao 
      * 
-     * @param cardInvoice 
+     * @param cardInvoice a fatura do cartao que sera transformada e movimento
+     * @param identificationPrefix prefixo a ser colocado antes do numerod da invoice
      */
-    public void payInvoice(CardInvoice cardInvoice) {
+    public void createMovement(CardInvoice cardInvoice, String identificationPrefix) {
 
-        BigDecimal total = BigDecimal.ZERO;
+        final List<Movement> movements = cardInvoice.getMovements();
         
-        for (Movement movement : cardInvoice.getMovements()) {
-            
-            // marca que ja foi incluido em fatura e diz qual 
+        cardInvoice.setValue(cardInvoice.getTotal());
+        cardInvoice.setIdentificationPefix(identificationPrefix);
+        
+        cardInvoice = this.cardInvoiceRepository.save(cardInvoice);
+        
+        // atualizamos os movimentos vinculados
+        for (Movement movement : movements) {
+
+            // altera o movimento para atender ao pagamento
             movement.setCardInvoicePaid(true);
-            movement.setCardInvoice(cardInvoice.getIdentification());
+            movement.setCardInvoice(cardInvoice);
             
-            // soma o valor para compor o valor da fatura
-            total = total.add(movement.getValue());
-            
-            // atualizamos o movimento
+            // salva ele
             this.movementRepository.save(movement);
         }
 
-        cardInvoice.setValue(total);
+        final Configuration config = this.configurationRepository.findDefault();
         
-        // cria o movimento para debitar da conta onde a fatura sera paga
+        // cria o movimento para aparecer no financeiro
         Movement movement = new Movement();
         
         // identificacao da fatura
-        movement.setDescription(cardInvoice.getIdentification() + " - "  
-                + cardInvoice.getCard().getReadableName());
+        movement.setDescription(cardInvoice.getIdentification() 
+                + " ref: " + cardInvoice.getCard().getReadableName());
         
         // pegamos o dia de vencimento do cartao e setamos a conta para a data
         int dueDate = cardInvoice.getCard().getExpirationDay();
@@ -156,31 +165,24 @@ public class CardService {
             movement.setDueDate(cardInvoice.getFinancialPeriod().getEnd());
         }
         
-        
-//      movement.setMovementClass(cardInvoice.getMovementClass()); // FIXME arrumar quando o rateio estiver OK!
         movement.setFinancialPeriod(cardInvoice.getFinancialPeriod());
-        movement.setMovementStateType(MovementStateType.PAID);
+        movement.setMovementStateType(MovementStateType.OPEN);
         movement.setValue(cardInvoice.getValue());
         movement.setMovementType(MovementType.CARD_INVOICE);
         
-        // cria o pagamento
-        Payment payment = new Payment();
-        
-        payment.setPaymentDate(new Date());
-        payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
-        payment.setWallet(cardInvoice.getWallet());
-        
-        // salvamos a fatura
-        cardInvoice  = this.cardInvoiceRepository.save(cardInvoice);
-        
-        // salvamos pagamento
-        payment = this.paymentRepository.save(payment);
-
-        // salva o movimento pago
-        movement.setPayment(payment);
         movement = this.movementRepository.save(movement);
         
-        // atualizamos a fatura com o movimento correspondente pago
+        // salvamos o rateio dela em 100% para o CC e MC configurado
+        final Apportionment apportionment = new Apportionment();
+        
+        apportionment.setCostCenter(config.getInvoiceDefaultCostCenter());
+        apportionment.setMovementClass(config.getInvoiceDefaultMovementClass());
+        apportionment.setValue(cardInvoice.getValue());
+        apportionment.setMovement(movement);
+        
+        this.apportionmentRepository.save(apportionment);
+        
+        // atualizamos a fatura com o movimento correspondente a ela
         cardInvoice.setMovement(movement);
         this.cardInvoiceRepository.save(cardInvoice);
     }

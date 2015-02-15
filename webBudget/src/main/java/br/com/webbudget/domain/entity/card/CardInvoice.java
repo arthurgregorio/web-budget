@@ -17,11 +17,8 @@
 package br.com.webbudget.domain.entity.card;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
-import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.movement.MovementClass;
-import br.com.webbudget.domain.entity.wallet.Wallet;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,19 +74,6 @@ public class CardInvoice extends PersistentEntity {
     @Getter
     @Setter
     @Transient
-    private Wallet wallet;
-    @Getter
-    @Setter
-    @Transient
-    private CostCenter costCenter;
-    @Getter
-    @Setter
-    @Transient
-    private MovementClass movementClass;
-
-    @Getter
-    @Setter
-    @Transient
     private List<Movement> movements;
 
     /**
@@ -97,23 +81,7 @@ public class CardInvoice extends PersistentEntity {
      */
     public CardInvoice() {
         this.movements = new ArrayList<>();
-    }
-
-    /**
-     *
-     * @param name
-     */
-    public CardInvoice(String name) {
-
-        final StringBuilder builder = new StringBuilder();
-
-        builder.append(name);
-        builder.append("-");
-        builder.append(this.createInvoiceCode());
-
-        this.identification = builder.toString();
-
-        this.movements = new ArrayList<>();
+        this.identification = this.createInvoiceCode();
     }
 
     /**
@@ -143,6 +111,21 @@ public class CardInvoice extends PersistentEntity {
         return generated;
     }
 
+    /**
+     * 
+     * @param prefix 
+     */
+    public void setIdentificationPefix(String prefix) {
+
+        final StringBuilder builder = new StringBuilder();
+
+        builder.append(prefix);
+        builder.append("-");
+        builder.append(this.identification);
+
+        this.identification = builder.toString();
+    }
+    
     /**
      * Gera o total da fatura
      *

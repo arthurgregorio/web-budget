@@ -69,9 +69,6 @@ public class CardInvoiceBean extends AbstractBean {
     @ManagedProperty("#{cardService}")
     private CardService cardService;
     @Setter
-    @ManagedProperty("#{walletService}")
-    private WalletService walletService;
-    @Setter
     @ManagedProperty("#{movementService}")
     private MovementService movementService;
     @Setter
@@ -93,13 +90,21 @@ public class CardInvoiceBean extends AbstractBean {
     public void initialize() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             
-            // FIXME arrumar isso! passar o code da fatura
-            this.cardInvoice = new CardInvoice("");
+            this.cardInvoice = new CardInvoice();
             
             this.cards = this.cardService.listCreditCards(false);
             this.costCenters = this.movementService.listCostCenters(false);
             this.financialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
         }
+    }
+    
+    /**
+     * Cancela e volta para a listagem
+     *
+     * @return
+     */
+    public String doCancel() {
+        return "generateCardInvoice.xhtml?faces-redirect=true";
     }
     
     /**
@@ -117,7 +122,7 @@ public class CardInvoiceBean extends AbstractBean {
             
             if (this.cardInvoice.getMovements().isEmpty()) {
                 this.info("card-invoice.action.no-movements-to-pay", true);
-                this.cardInvoice = new CardInvoice("");
+                this.cardInvoice = new CardInvoice();
             } else {
                 this.info("card-invoice.action.generated", true);
             }
@@ -130,50 +135,19 @@ public class CardInvoiceBean extends AbstractBean {
     }
     
     /**
-     * 
+     * Invoca a criacao do movimento para a fatura
      */
-    public void payInvoice() {
+    public void createInvoiceMovement() {
         
-        if (this.cardInvoice.getWallet() == null) {
-            this.error("card-invoice.validate.null-wallet", true);
-            return;
-        }
-
         try {
-            this.cardService.payInvoice(this.cardInvoice);
+            this.cardService.createMovement(this.cardInvoice, 
+                    this.translate("card-invoice.identification"));
             
-            // limpa o form
-            this.cardInvoice = new CardInvoice("");
-                    
-            this.info("card-invoice.action.paid", true);
+            this.openDialog("moveInvoiceDialog","dialogMoveInvoice");
         } catch (ApplicationException ex) {
             this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
             this.fixedError(ex.getMessage(), true);
-        } finally {
-            this.update("detailsPanel");
-            this.closeDialog("dialogPayInvoice");
         }
-    }
-    
-    /**
-     * Atualiza o combo de classes quando o usuário selecionar o centro de custo
-     */
-    public void loadMovementClasses() {
-        this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
-                this.cardInvoice.getCostCenter(), MovementClassType.OUT);
-        this.update("inMovementClass");
-    }
-    
-    /**
-     * Muda para a popup de pagamento da fatura
-     */
-    public void changeToPay() {
-        
-        // listas as carteiras para pagamento
-        this.wallets = this.walletService.listWallets(false);
-        
-        // atualiza e chama a popup de pagamento
-        this.openDialog("payInvoiceDialog","dialogPayInvoice");
     }
     
     /**

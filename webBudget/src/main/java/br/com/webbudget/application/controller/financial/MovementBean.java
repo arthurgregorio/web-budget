@@ -171,8 +171,13 @@ public class MovementBean extends AbstractBean {
             if (this.movement.getDirection() == MovementClassType.IN) {
                 this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
             } else {
-                this.debitCards = this.cardService.listDebitCards(false);
-                this.creditCards = this.cardService.listCreditCards(false);
+                // se for fatura de cartao, so permite pagar em carteira
+                if (this.movement.getMovementType() == MovementType.CARD_INVOICE) {
+                    this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
+                } else {
+                    this.debitCards = this.cardService.listDebitCards(false);
+                    this.creditCards = this.cardService.listCreditCards(false);
+                }
             }
 
             // lista as fontes para preencher os combos
@@ -499,6 +504,15 @@ public class MovementBean extends AbstractBean {
         return this.financialPeriod != null;
     }
 
+    /**
+     * 
+     * @return 
+     */
+    public boolean isPayableWithCard() {
+        return this.movement.getMovementType() != MovementType.CARD_INVOICE 
+                && this.movement.getDirection() != MovementClassType.IN;
+    }
+    
     /**
      *
      * @return a lista dos valores do enum

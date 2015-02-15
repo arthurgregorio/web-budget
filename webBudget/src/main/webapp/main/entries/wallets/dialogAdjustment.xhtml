@@ -29,7 +29,8 @@
     <div class="ui-grid ui-grid-responsive">
         <div class="ui-grid-row div-mg-b-15">
             <div class="ui-grid-col-12">
-                <o:outputFormat value="#{messages['wallet.dialog.adjustment-confirm']}">
+                <o:outputFormat escape="false"
+                                value="#{messages['wallet.dialog.adjustment-confirm']}">
                     <f:param value="#{walletBean.wallet.friendlyName}"/>
                 </o:outputFormat>
             </div>

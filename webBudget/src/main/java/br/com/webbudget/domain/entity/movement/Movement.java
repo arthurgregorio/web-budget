@@ -19,6 +19,7 @@ package br.com.webbudget.domain.entity.movement;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.Contact;
 import br.com.webbudget.domain.entity.PersistentEntity;
+import br.com.webbudget.domain.entity.card.CardInvoice;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,11 +92,7 @@ public class Movement extends PersistentEntity {
     @Getter
     @Setter
     @Column(name = "card_invoice_paid")
-    private Boolean cardInvoicePaid;
-    @Getter
-    @Setter
-    @Column(name = "card_invoice")
-    private String cardInvoice;
+    private boolean cardInvoicePaid;
 
     @Getter
     @Setter
@@ -107,6 +104,11 @@ public class Movement extends PersistentEntity {
     @ManyToOne
     @JoinColumn(name = "id_contact")
     private Contact contact;
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "id_card_invoice")
+    private CardInvoice cardInvoice;
     @Getter
     @Setter
     @ManyToOne

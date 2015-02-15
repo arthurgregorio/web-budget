@@ -1,0 +1,48 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:o="http://omnifaces.org/ui"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:ui="http://java.sun.com/jsf/facelets"
+          id="moveInvoiceDialog" 
+          modal="true" 
+          closable="false"
+          resizable="false" 
+          widgetVar="dialogMoveInvoice" 
+          header="#{messages['card-invoice.dialog.move-invoice']}">
+
+    <div class="ui-grid ui-grid-responsive">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12 div-align-center">
+                <o:outputFormat escape="false" 
+                                value="#{messages['card-invoice.dialog.moviment-generated']}">
+                    <f:param value="#{cardInvoiceBean.cardInvoice.identification}"/>
+                </o:outputFormat>
+            </div>
+        </div>
+        <div class="ui-grid-row div-mg-t-15 div-align-center">
+            <div class="ui-grid-col-12">
+                <p:commandButton immediate="true"
+                                 value="#{menu['back']}" 
+                                 action="#{cardInvoiceBean.doCancel()}"/>
+            </div>
+        </div>
+    </div>
+</p:dialog>

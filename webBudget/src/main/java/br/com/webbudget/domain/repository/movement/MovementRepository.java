@@ -122,7 +122,8 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
         
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
         
-        criteria.add(Restrictions.eq("cardInvoice", cardInvoice.getIdentification()));
+        criteria.createAlias("cardInvoice", "ci");
+        criteria.add(Restrictions.eq("ci.id", cardInvoice.getId()));
        
         return criteria.list();
     }

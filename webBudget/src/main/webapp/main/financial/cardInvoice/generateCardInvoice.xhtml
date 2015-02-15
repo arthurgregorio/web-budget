@@ -84,9 +84,9 @@
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PAY}">
                         <p:commandButton immediate="true" 
                                          styleClass="ui-button-success"
-                                         value="#{messages['card-invoice.pay']}" 
+                                         value="#{messages['card-invoice.move']}" 
                                          rendered="#{cardInvoiceBean.canPay() eq true}"
-                                         actionListener="#{cardInvoiceBean.changeToPay()}"/>
+                                         actionListener="#{cardInvoiceBean.createInvoiceMovement()}"/>
                         <p:spacer width="10"/>
                     </sec:authorize>
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PROCESS}">
@@ -184,6 +184,6 @@
     </ui:define>
 
     <ui:define name="popups">
-        <ui:include src="dialogPayInvoice.xhtml"/>
+        <ui:include src="dialogMoveInvoice.xhtml"/>
     </ui:define>
 </ui:composition>
