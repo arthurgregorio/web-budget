@@ -173,8 +173,8 @@
                                 <p:column width="20%" 
                                           style="text-align: center"
                                           headerText="#{messages['apportionment.apportionment']}">
-                                    <h:outputText value="R$ #{apportionment.value}">
-                                        <f:convertNumber type="currency" />
+                                    <h:outputText value="#{apportionment.value}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                     </h:outputText>
                                 </p:column>
                                 <p:column width="10%" 

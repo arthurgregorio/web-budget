@@ -80,7 +80,9 @@
                     <p:column width="20%" 
                               style="text-align: center"
                               headerText="#{messages['cost-center.list.budget']}">
-                        <h:outputText value="R$ #{costCenter.budget}"/>
+                        <h:outputText value="#{costCenter.budget}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
                     </p:column>
                     <p:column width="15%" 
                               style="text-align: center"

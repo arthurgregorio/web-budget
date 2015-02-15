@@ -58,7 +58,7 @@
                         <h:outputText value="#{balance.movimentedValue}"
                                       style="#{balance.movimentedValue.signum() lt 0 ? 'color: red;' : 
                                                   balance.movimentedValue.signum() gt 0 ? 'color: green': ''}">
-                            <f:convertNumber type="currency" />
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </p:column>
                     <p:column width="17%"
@@ -67,7 +67,7 @@
                         <h:outputText value="#{balance.oldBalance}"
                                       style="#{balance.oldBalance.signum() lt 0 ? 'color: red;' : 
                                                   balance.oldBalance.signum() gt 0 ? 'color: green': ''}">
-                            <f:convertNumber type="currency" />
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </p:column>
                     <p:column width="17%"
@@ -76,7 +76,7 @@
                         <h:outputText value="#{balance.actualBalance}"
                                       style="#{balance.actualBalance.signum() lt 0 ? 'color: red;' : 
                                                   balance.actualBalance.signum() gt 0 ? 'color: green': ''}">
-                            <f:convertNumber type="currency" />
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </p:column>
                     <p:column width="22%"

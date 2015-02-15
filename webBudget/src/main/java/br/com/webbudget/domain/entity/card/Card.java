@@ -108,4 +108,29 @@ public class Card extends PersistentEntity {
         
         return builder.toString();
     }
+    
+    /**
+     * Retorna o numero do cartao escondendo alguns caracteres
+     * 
+     * @return o numero do catao
+     */
+    public String getSecuredNumber() {
+            
+        final StringBuilder secured = new StringBuilder();
+
+        if (this.number != null && this.number.length() >= 8) {
+            
+            secured.append(this.number.substring(0, 2));
+            
+            for (int i = 0; i < (this.number.length() - 2); i++) { 
+                secured.append("*");
+            }
+            secured.append(this.number.substring(
+                    this.number.length() - 4, this.number.length()));
+        } else {
+            return this.number;
+        }
+        
+        return secured.toString();
+    }
 }

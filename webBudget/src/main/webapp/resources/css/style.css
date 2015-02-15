@@ -327,6 +327,11 @@ td {
     background-color: #e7ebee !important;
 }
 
+.dialog-highlighted-text {
+    font-weight: 700;
+    margin: 0 5px;
+}
+
 /* tela de login ----------------------------- */
 .login {
     margin: auto;
@@ -441,16 +446,19 @@ td {
     height: 34px;
 }
 
-/* historico de saldos ----------------------- */
-.wallet-identification {
-    font-weight: 700;
-    margin-left: 5px;
-}
-
 /* fatura do cartao de credito --------------- */
+.card-info label {
+    font-weight: 700;
+}
+.card-info span {
+    
+}
 .card-details-header {
-    margin-bottom: 20px;
-    padding: 5px 0;
+    margin-bottom: 15px;
+    font-size: 13pt;
+}
+.card-details-footer {
+    margin-top: 20px;
     font-size: 13pt;
 }
 .filter-card-invoice div.ui-selectonemenu {

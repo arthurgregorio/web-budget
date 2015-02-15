@@ -83,6 +83,7 @@
                 <div class="ui-grid-col-4 div-align-right">
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_PAY}">
                         <p:commandButton immediate="true" 
+                                         styleClass="ui-button-success"
                                          value="#{messages['card-invoice.pay']}" 
                                          rendered="#{cardInvoiceBean.canPay() eq true}"
                                          actionListener="#{cardInvoiceBean.changeToPay()}"/>
@@ -99,27 +100,35 @@
             </div>
         </h:form>
 
-        <div class="ui-grid-row flat-box">
+        <h:panelGroup id="detailsPanel" 
+                      layout="block"
+                      styleClass="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
-                <h:panelGroup id="detailsPanel" 
-                              layout="block"
-                              styleClass="ui-grid-row card-details-header">
-                    <div class="ui-grid-col-6">
-                        <h:outputText value="#{messages['card-invoice.card.owner']}: "/>
+                <div class="ui-grid-row card-details-header">
+                    <div class="ui-grid-col-5">
+                        <p:outputLabel styleClass="card-info"
+                                       value="#{messages['card-invoice.card.owner']}: "/>
                         <p:spacer width="10"/>
-                        <h:outputText value="#{cardInvoiceBean.cardInvoice.card.owner}"/>
+                        <h:outputText styleClass="card-info"
+                                      value="#{cardInvoiceBean.cardInvoice.card.owner}"/>
                     </div>
                     <div class="ui-grid-col-3">
-                        <h:outputText value="#{messages['card-invoice.card.limit']}: "/>
+                        <p:outputLabel styleClass="card-info"
+                                       value="#{messages['card-invoice.card.limit']}: "/>
                         <p:spacer width="10"/>
-                        <h:outputText value="#{cardInvoiceBean.cardInvoice.card.creditLimit}"/>
+                        <h:outputText styleClass="card-info"
+                                      value="#{cardInvoiceBean.cardInvoice.card.creditLimit}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
                     </div>
-                    <div class="ui-grid-col-3">
-                        <h:outputText value="#{messages['card-invoice.card.total']}:"/>
+                    <div class="ui-grid-col-4">
+                        <p:outputLabel styleClass="card-info"
+                                       value="#{messages['card-invoice.card.number']}: "/>
                         <p:spacer width="10"/>
-                        <h:outputText value="#{cardInvoiceBean.cardInvoice.total}"/>
+                        <h:outputText styleClass="card-info"
+                                      value="#{cardInvoiceBean.cardInvoice.card.securedNumber}"/>
                     </div>
-                </h:panelGroup>
+                </div>
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-12">
                         <p:dataTable id="movementsList" 
@@ -151,13 +160,27 @@
                             <p:column width="15%"
                                       style="text-align: center" 
                                       headerText="#{messages['card-invoice.list.value']}">
-                                <h:outputText value="R$ #{movement.value}" />
+                                <h:outputText value="#{movement.value}">
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                </h:outputText>
                             </p:column>
                         </p:dataTable>
                     </div>
                 </div>
+                <div class="ui-grid-row card-details-footer">
+                    <div class="ui-grid-col-10 div-align-right">
+                        <p:outputLabel styleClass="card-info"
+                                       value="#{messages['card-invoice.card.total']}:"/>
+                    </div>
+                    <div class="ui-grid-col-2 div-align-center">
+                        <h:outputText styleClass="card-info"
+                                      value="#{cardInvoiceBean.cardInvoice.total}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                </div>
             </div>
-        </div>
+        </h:panelGroup>
     </ui:define>
 
     <ui:define name="popups">

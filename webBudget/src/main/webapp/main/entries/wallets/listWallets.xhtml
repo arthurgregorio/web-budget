@@ -82,10 +82,13 @@
                     <p:column width="12%" 
                               style="text-align: center"
                               headerText="#{messages['wallet.list.balance']}">
-                        <p:commandLink value="R$ #{wallet.balance}" 
-                                       actionListener="#{walletBean.showBalance(wallet.id)}"
+                        <p:commandLink actionListener="#{walletBean.showBalance(wallet.id)}"
                                        style="#{wallet.balance.signum() lt 0 ? 'color: red;' : 
-                                                wallet.balance.signum() gt 0 ? 'color: green': ''}"/>
+                                                wallet.balance.signum() gt 0 ? 'color: green': ''}">
+                            <h:outputText value="R$ #{wallet.balance}" >
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </p:commandLink>
                     </p:column>
                     <p:column width="15%" 
                               style="text-align: center"

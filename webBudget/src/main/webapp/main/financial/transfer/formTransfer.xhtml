@@ -115,7 +115,9 @@
                                     <h:outputText value="R$ #{transferenceBean.walletBalance.sourceWallet.balance}"
                                                   rendered="#{transferenceBean.walletBalance.sourceWallet ne null}"
                                                   style="#{transferenceBean.walletBalance.sourceWallet.balance.signum() 
-                                                           lt 0 ? 'color: red;' : 'color: green;'}"/>
+                                                           lt 0 ? 'color: red;' : 'color: green;'}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
                                     <h:outputText value="#{messages['transfer.form.select-source']}"
                                                   rendered="#{transferenceBean.walletBalance.sourceWallet eq null}"/>
                                 </h:panelGroup> 
@@ -128,9 +130,11 @@
                                 <h:panelGroup id="destinyBalancePanel"
                                               layout="block">
                                     <h:outputText rendered="#{transferenceBean.walletBalance.targetWallet ne null}"
-                                                  value="R$ #{transferenceBean.walletBalance.targetWallet.balance}"
+                                                  value="#{transferenceBean.walletBalance.targetWallet.balance}"
                                                   style="#{transferenceBean.walletBalance.targetWallet.balance.signum() 
-                                                           lt 0 ? 'color: red;' : 'color: green;'}"/>
+                                                           lt 0 ? 'color: red;' : 'color: green;'}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
                                     <h:outputText value="#{messages['transfer.form.select-destiny']}"
                                                   rendered="#{transferenceBean.walletBalance.targetWallet eq null}"/>
                                 </h:panelGroup> 

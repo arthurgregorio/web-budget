@@ -115,13 +115,15 @@
                     <p:column width="20%"
                               style="text-align: center"
                               headerText="#{messages['transfer.list.transfer-value']}">
-                        R$ #{transference.movimentedValue}
+                        <h:outputText value="#{transference.movimentedValue}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="#{messages['transfer.list.source-wallet']}">
                         #{transference.sourceWallet.friendlyName}
                     </p:column>
                     <p:column headerText="#{messages['transfer.list.destiny-wallet']}">
-                        #{transference.wallet.friendlyName}
+                        #{transference.targetWallet.friendlyName}
                     </p:column>
                 </p:dataTable>
             </div>

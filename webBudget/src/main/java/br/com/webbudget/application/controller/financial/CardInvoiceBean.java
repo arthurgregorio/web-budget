@@ -126,7 +126,6 @@ public class CardInvoiceBean extends AbstractBean {
             this.fixedError(ex.getMessage(), true);
         } finally {
             this.update("detailsPanel");
-            this.update("movementsList");
         }
     }
     
@@ -151,8 +150,7 @@ public class CardInvoiceBean extends AbstractBean {
             this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
             this.fixedError(ex.getMessage(), true);
         } finally {
-            this.update("controlsForm");
-            this.update("movementsList");
+            this.update("detailsPanel");
             this.closeDialog("dialogPayInvoice");
         }
     }

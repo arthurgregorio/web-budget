@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.card;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -94,47 +93,47 @@ public class CardInvoice extends PersistentEntity {
     private List<Movement> movements;
 
     /**
-     * 
+     *
      */
     public CardInvoice() {
         this.movements = new ArrayList<>();
     }
-    
+
     /**
-     * 
-     * @param name 
+     *
+     * @param name
      */
-    public CardInvoice(String name){
-       
+    public CardInvoice(String name) {
+
         final StringBuilder builder = new StringBuilder();
-        
+
         builder.append(name);
         builder.append("-");
         builder.append(this.createInvoiceCode());
-        
+
         this.identification = builder.toString();
-        
+
         this.movements = new ArrayList<>();
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     private String createInvoiceCode() {
-        
+
         long decimalNumber = System.nanoTime();
-        
+
         String generated = "";
         final String digits = "0123456789";
-        
+
         synchronized (this.getClass()) {
-            
+
             int mod;
             int authCodeLength = 0;
 
             while (decimalNumber != 0 && authCodeLength < 5) {
-                
+
                 mod = (int) (decimalNumber % 10);
                 generated = digits.substring(mod, mod + 1) + generated;
                 decimalNumber = decimalNumber / 10;
@@ -143,20 +142,25 @@ public class CardInvoice extends PersistentEntity {
         }
         return generated;
     }
-    
+
     /**
      * Gera o total da fatura
-     * 
+     *
      * @return o valor total da fatura com base nos movimentos pagos nela
      */
     public BigDecimal getTotal() {
-        
-        BigDecimal total = BigDecimal.ZERO;
-        
-        for (Movement m : this.movements) {
-            total = total.add(m.getValue());
+
+        BigDecimal total = null;
+
+        if (!this.movements.isEmpty()) {
+            
+            total = BigDecimal.ZERO;
+            
+            for (Movement m : this.movements) {
+                total = total.add(m.getValue());
+            }
         }
-        
+
         return total;
     }
 }

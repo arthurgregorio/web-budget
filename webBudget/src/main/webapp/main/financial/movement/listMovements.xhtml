@@ -132,7 +132,9 @@
                         <p:column width="12%"
                                   style="text-align: center" 
                                   headerText="#{messages['movement.list.value']}">
-                            <h:outputText value="R$ #{movement.value}" />
+                            <h:outputText value="#{movement.value}" >
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
                         </p:column>
                         <p:column width="12%"
                                   style="text-align: center" 
