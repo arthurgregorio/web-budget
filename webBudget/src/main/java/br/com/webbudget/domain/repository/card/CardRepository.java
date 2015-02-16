@@ -52,7 +52,7 @@ public class CardRepository extends GenericRepository<Card, Long> implements ICa
         
         criteria.add(Restrictions.eq("cardType", CardType.DEBIT));
         
-        criteria.addOrder(Order.asc("number"));
+        criteria.addOrder(Order.desc("inclusion"));
         
         return criteria.list();
     }
@@ -73,7 +73,7 @@ public class CardRepository extends GenericRepository<Card, Long> implements ICa
         
         criteria.add(Restrictions.eq("cardType", CardType.CREDIT));
         
-        criteria.addOrder(Order.asc("number"));
+        criteria.addOrder(Order.desc("inclusion"));
         
         return criteria.list();
     }
@@ -92,7 +92,7 @@ public class CardRepository extends GenericRepository<Card, Long> implements ICa
             criteria.add(Restrictions.eq("blocked", isBlocked));
         }
         
-        criteria.addOrder(Order.asc("number"));
+        criteria.addOrder(Order.desc("inclusion"));
         
         return criteria.list();
     }

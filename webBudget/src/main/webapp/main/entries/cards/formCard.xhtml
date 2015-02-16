@@ -73,7 +73,8 @@
                                            value="#{messages['card.form.number']}: "/>
                             <p:inputText id="inNumber" 
                                          maxlength="45"
-                                         value="#{cardBean.card.number}" />
+                                         value="#{cardBean.card.number}" 
+                                         disabled="#{cardBean.viewState eq 'EDITING'}"/>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
@@ -100,7 +101,8 @@
                                            value="#{messages['card.form.card-type']}: "/>
                             <p:selectOneMenu id="inCardType" 
                                              value="#{cardBean.card.cardType}"
-                                             converter="omnifaces.GenericEnumConverter">
+                                             converter="omnifaces.GenericEnumConverter"
+                                             disabled="#{cardBean.viewState eq 'EDITING'}">
                                 <p:ajax event="change" 
                                         update="inCreditLimit,inExpirationDay,inWallet" />
                                 <f:selectItem itemValue="#{null}"

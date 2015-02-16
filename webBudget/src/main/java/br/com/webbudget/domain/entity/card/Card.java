@@ -41,8 +41,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table(name = "cards")
-@ToString(callSuper = true, of = {"number", "cardType", "flag"})
-@EqualsAndHashCode(callSuper = true, of = {"number", "cardType", "flag"})
+@ToString(callSuper = true, of = {"number", "cardType"})
+@EqualsAndHashCode(callSuper = true, of = {"number", "cardType"})
 public class Card extends PersistentEntity {
 
     @Getter
