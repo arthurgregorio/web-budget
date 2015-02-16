@@ -64,7 +64,8 @@
                                            value="#{messages['cost-center.form.name']}: "/>
                             <p:inputText id="inName" 
                                          maxlength="45"
-                                         value="#{costCenterBean.costCenter.name}" />
+                                         value="#{costCenterBean.costCenter.name}" 
+                                         disabled="#{costCenterBean.viewState eq 'EDITING'}"/>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">

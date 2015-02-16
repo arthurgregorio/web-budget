@@ -62,7 +62,8 @@
                             <p:outputLabel for="inName" 
                                            value="#{messages['movement-class.form.name']}: "/>
                             <p:inputText id="inName" 
-                                         value="#{movementClassBean.movementClass.name}" />
+                                         value="#{movementClassBean.movementClass.name}"
+                                         disabled="#{movementClassBean.viewState eq 'EDITING'}"/>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">

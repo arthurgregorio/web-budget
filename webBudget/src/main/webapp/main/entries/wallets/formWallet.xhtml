@@ -65,7 +65,8 @@
                                            value="#{messages['wallet.form.name']}: "/>
                             <p:inputText id="inName" 
                                          maxlength="45"
-                                         value="#{walletBean.wallet.name}" />
+                                         value="#{walletBean.wallet.name}" 
+                                         disabled="#{walletBean.viewState eq 'EDITING'}"/>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
@@ -74,7 +75,8 @@
                                            value="#{messages['wallet.form.wallet-type']}: "/>
                             <p:selectOneMenu id="inWalletType" 
                                              value="#{walletBean.wallet.walletType}"
-                                             converter="omnifaces.GenericEnumConverter">
+                                             converter="omnifaces.GenericEnumConverter"
+                                             disabled="#{walletBean.viewState eq 'EDITING'}">
                                 <p:ajax event="change" 
                                         listener="#{walletBean.loadBankData}" />
                                 <f:selectItem itemValue="#{null}"
