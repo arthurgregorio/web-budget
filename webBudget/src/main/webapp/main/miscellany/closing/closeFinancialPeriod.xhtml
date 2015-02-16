@@ -71,7 +71,7 @@
                                          rendered="#{closingBean.canProcessPeriod()}"/>
                     </sec:authorize>
                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_CLOSE}">
-                        <p:commandButton styleClass="ui-button-danger"
+                        <p:commandButton styleClass="ui-button-success"
                                          value="#{messages['closing.close']}"
                                          rendered="#{closingBean.canClosePeriod()}" 
                                          actionListener="#{closingBean.changeToClose()}" />

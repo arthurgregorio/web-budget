@@ -334,9 +334,13 @@ td {
 
 /* tela de login ----------------------------- */
 .login {
-    margin: auto;
+    position: absolute;    
     width: 320px;
-    padding: 60px 0px 0px;
+    left:50%;   
+    top:50%;    
+    margin: auto;
+    margin-left: -160px;    
+    margin-top: -200px;
 }
 .login form {
     padding: 26px 24px 24px;
