@@ -181,9 +181,16 @@ public class MovementService {
         this.movementRepository.save(movement);
 
         // atualizamos os saldos das carteiras quando pagamento em dinheiro
-        if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH) {
-
-            final Wallet wallet = payment.getWallet();
+        if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH || 
+                payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
+            
+            Wallet wallet;
+            
+            if (payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
+                wallet = payment.getCard().getWallet();
+            } else {
+                wallet = payment.getWallet();
+            }
 
             // atualizamos o novo saldo
             final BigDecimal oldBalance = wallet.getBalance();
@@ -237,7 +244,15 @@ public class MovementService {
         if (movement.getMovementStateType() == MovementStateType.PAID && 
                 movement.getPayment().getPaymentMethodType() == PaymentMethodType.IN_CASH) {
             
-            final Wallet paymentWallet = movement.getPayment().getWallet();
+            Wallet paymentWallet;
+            
+            final Payment payment = movement.getPayment();
+            
+            if (payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
+                paymentWallet = payment.getCard().getWallet();
+            } else {
+                paymentWallet = payment.getWallet();
+            }
 
             final BigDecimal oldBalance = paymentWallet.getBalance();
             final BigDecimal newBalance = oldBalance.add(movement.getValue());
