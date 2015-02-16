@@ -143,8 +143,9 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
             criteria.add(Restrictions.isNotNull("payment"));
         } 
         
-        criteria.createAlias("movementClass", "mc");
-        criteria.createAlias("mc.costCenter", "cc");
+        criteria.createAlias("apportionments", "ap");
+        criteria.createAlias("ap.movementClass", "mc");
+        criteria.createAlias("ap.costCenter", "cc");
         criteria.createAlias("financialPeriod", "fp");
         
         // se conseguir castar para bigdecimal trata como um filtro
@@ -154,17 +155,19 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
                 Restrictions.eq("value", value),
                 Restrictions.ilike("description", filter + "%"),
                 Restrictions.ilike("mc.name", filter + "%"),
-                Restrictions.ilike("cc.name", filter),
+                Restrictions.ilike("cc.name", filter + "%"),
                 Restrictions.ilike("fp.identification", filter + "%")));
         } catch (NumberFormatException ex) { 
             criteria.add(Restrictions.or(Restrictions.eq("code", filter),
                 Restrictions.ilike("description", filter + "%"),
                 Restrictions.ilike("mc.name", filter + "%"),
-                Restrictions.ilike("cc.name", filter),
+                Restrictions.ilike("cc.name", filter + "%"),
                 Restrictions.ilike("fp.identification", filter + "%")));
         }
         
         criteria.addOrder(Order.desc("inclusion"));
+        
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         
         return criteria.list();        
     }
