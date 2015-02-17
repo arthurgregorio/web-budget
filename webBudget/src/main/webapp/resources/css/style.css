@@ -340,7 +340,7 @@ td {
     top:50%;    
     margin: auto;
     margin-left: -160px;    
-    margin-top: -200px;
+    margin-top: -250px;
 }
 .login form {
     padding: 26px 24px 24px;
@@ -454,9 +454,6 @@ td {
 .card-info label {
     font-weight: 700;
 }
-.card-info span {
-    
-}
 .card-details-header {
     margin-bottom: 15px;
     font-size: 13pt;
@@ -467,4 +464,9 @@ td {
 }
 .filter-card-invoice div.ui-selectonemenu {
     width: 70% !important;
+}
+
+/* fechamento -------------------------------- */
+.closing-messages {
+    margin: 5px 0 !important;
 }

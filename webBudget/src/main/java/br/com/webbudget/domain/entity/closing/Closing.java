@@ -53,18 +53,26 @@ public class Closing extends PersistentEntity {
     private String code;
     @Getter
     @Setter
-    @Column(name = "in_value", nullable = false)
-    private BigDecimal inValue;
+    @Column(name = "revenues", nullable = false)
+    private BigDecimal revenues;
     @Getter
     @Setter
-    @Column(name = "out_value", nullable = false)
-    private BigDecimal outValue;
+    @Column(name = "expenses", nullable = false)
+    private BigDecimal expenses;
+    @Getter
+    @Setter
+    @Column(name = "balance", nullable = false)
+    private BigDecimal balance;
     @Getter
     @Setter
     @Temporal(TemporalType.DATE)
     @Column(name = "closing_date", nullable = false)
     private Date closingDate;
     
+    @Getter
+    @Setter
+    @Transient
+    public boolean movementsWithoutInvoice;
     @Getter
     @Setter
     @Transient

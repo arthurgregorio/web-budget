@@ -22,7 +22,8 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions"
                 xmlns:sec="http://www.springframework.org/security/tags"
-                template="/template/mainTemplate.xhtml">
+                template="/template/mainTemplate.xhtml"
+                xmlns:o="http://omnifaces.org/ui">
 
     <ui:define name="head">
         <f:event type="preRenderView" 
@@ -38,96 +39,149 @@
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
-                <p:messages id="messages" closable="true" globalOnly="true"/>
-            </div>
-        </div>
-
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-8 form-group-m">
-                    <div class="form-filter-box">
-                        <p:outputLabel for="inFinancialPeriod" 
-                                       value="#{messages['closing.filter.financial-period']}: "/>
-                        <p:selectOneMenu id="inFinancialPeriod" 
-                                         value="#{closingBean.financialPeriod}"
-                                         converter="omnifaces.SelectItemsConverter">
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{messages['closing.select-one']}" />
-                            <f:selectItems var="financialPeriod" 
-                                           itemValue="#{financialPeriod}"
-                                           value="#{closingBean.financialPeriods}" 
-                                           itemLabel="#{financialPeriod.identification}"/> 
-                        </p:selectOneMenu> 
+        <h:panelGroup id="closingPanel">
+            
+            <h:form id="controlsForm" prependId="false">
+                <div class="ui-grid-row flat-box">
+                    <div class="ui-grid-col-8 form-group-m">
+                        <div class="form-filter-box">
+                            <p:outputLabel for="inFinancialPeriod" 
+                                           value="#{messages['closing.filter.financial-period']}: "/>
+                            <p:selectOneMenu id="inFinancialPeriod" 
+                                             value="#{closingBean.financialPeriod}"
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{messages['closing.select-one']}" />
+                                <f:selectItems var="financialPeriod" 
+                                               itemValue="#{financialPeriod}"
+                                               value="#{closingBean.financialPeriods}" 
+                                               itemLabel="#{financialPeriod.identification}"/> 
+                            </p:selectOneMenu> 
+                        </div>
+                    </div>
+                    <div class="ui-grid-col-4 div-align-right">
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_CLOSE}">
+                            <p:commandButton styleClass="ui-button-success"
+                                             value="#{messages['closing.close']}"
+                                             rendered="#{closingBean.canClosePeriod()}" 
+                                             actionListener="#{closingBean.changeToClose()}" />
+                        </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_PROCESS}">
+                            <p:spacer width="10"/>
+                            <p:commandButton styleClass="ui-button-info"
+                                             value="#{messages['closing.process']}"
+                                             actionListener="#{closingBean.process()}"/>
+                        </sec:authorize>
                     </div>
                 </div>
-                <div class="ui-grid-col-4 div-align-right">
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_PROCESS}">
-                        <p:commandButton styleClass="ui-button-info"
-                                         value="#{messages['closing.process']}"
-                                         actionListener="#{closingBean.process()}"
-                                         rendered="#{closingBean.canProcessPeriod()}"/>
-                    </sec:authorize>
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_CLOSE}">
-                        <p:commandButton styleClass="ui-button-success"
-                                         value="#{messages['closing.close']}"
-                                         rendered="#{closingBean.canClosePeriod()}" 
-                                         actionListener="#{closingBean.changeToClose()}" />
-                    </sec:authorize>
+            </h:form>
+
+            <h:panelGroup styleClass="ui-grid-row flat-box"
+                          layout="block"
+                          rendered="#{closingBean.canClosePeriod()}">
+                <div class="ui-grid-col-12 ui-messages-info ui-corner-all ui-messages ui-widget closing-messages">
+                    <span class="ui-messages-info-summary">
+                        #{messages['closing.can-close']}
+                    </span>
+                </div>
+            </h:panelGroup>
+
+            <h:panelGroup styleClass="ui-grid-row flat-box"
+                          layout="block"
+                          rendered="#{closingBean.hasIrregularities()}">
+                <div class="ui-grid-col-12">
+                    <div class="ui-grid-row">
+                        <h:panelGroup layout="block"
+                                      styleClass="ui-grid-col-12 ui-messages-error ui-corner-all ui-messages ui-widget closing-messages">
+                            <span class="ui-messages-error-summary">
+                                #{messages['closing.cant-close']}
+                            </span>
+                        </h:panelGroup>
+                    </div>
+                    <div class="ui-grid-row">
+                        <h:panelGroup layout="block"
+                                      rendered="#{closingBean.closing.movementsWithoutInvoice}"
+                                      styleClass="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget closing-messages">
+                            <span class="ui-messages-warn-summary">
+                                #{messages['closing.movements-no-invoice']}
+                            </span>
+                        </h:panelGroup>
+                    </div>
+                    <div class="ui-grid-row">
+                        <h:panelGroup layout="block"
+                                      rendered="#{not empty closingBean.closing.openMovements}"
+                                      styleClass="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget closing-messages">
+                            <span class="ui-messages-warn-summary">
+                                #{messages['closing.has-open-movements']}
+                            </span>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </h:panelGroup>
+
+            <div class="ui-grid-row flat-box">
+                <div class="ui-grid-col-12">
+                    <div class="ui-grid-row form-header">
+                        #{messages['closing.open-movements']}
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <p:dataTable id="movementsList" 
+                                         rows="20"
+                                         var="movement"
+                                         paginator="true"
+                                         paginatorPosition="bottom"
+                                         paginatorAlwaysVisible="false"
+                                         value="#{closingBean.closing.openMovements}"
+                                         emptyMessage="#{closingBean.closing eq null 
+                                                         ? messages['closing.list.process-first'] 
+                                                         : messages['closing.list.empty']}">
+                                <p:column width="10%" 
+                                          style="text-align: center"
+                                          headerText="#{messages['closing.list.code']}">
+                                    #{movement.code}
+                                </p:column>
+                                <p:column headerText="#{messages['closing.list.description']}">
+                                    #{movement.description}
+                                </p:column>
+                                <p:column width="15%"
+                                          style="text-align: center" 
+                                          headerText="#{messages['closing.list.value']}">
+                                    <h:outputText value="#{movement.value}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column width="15%"
+                                          style="text-align: center" 
+                                          headerText="#{messages['closing.list.due-date']}">
+                                    <h:outputText value="#{movement.dueDate}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText> 
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </h:form>
-
-        <div class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
-                <p:dataTable id="movementsList" 
-                             rows="20"
-                             var="movement"
-                             paginator="true"
-                             paginatorPosition="bottom"
-                             paginatorAlwaysVisible="false"
-                             value="#{closingBean.closing.openMovements}"
-                             emptyMessage="#{closingBean.closing eq null 
-                                             ? messages['closing.list.process-first'] 
-                                             : messages['closing.list.empty']}">
-                    <p:column width="10%" 
-                              style="text-align: center"
-                              headerText="#{messages['closing.list.code']}">
-                        #{movement.code}
-                    </p:column>
-                    <p:column headerText="#{messages['closing.list.description']}">
-                        #{movement.description}
-                    </p:column>
-                    <p:column width="15%"
-                              style="text-align: center" 
-                              headerText="#{messages['closing.list.value']}">
-                        <h:outputText value="R$ #{movement.value}" />
-                    </p:column>
-                    <p:column width="15%"
-                              style="text-align: center" 
-                              headerText="#{messages['closing.list.due-date']}">
-                        <h:outputText value="#{movement.dueDate}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText> 
-                    </p:column>
-                    <p:column width="10%" 
-                              style="text-align: center"
-                              headerText="#{messages['closing.list.delete']}">
-                        <p:selectBooleanCheckbox value="#{movement.delete}" />
-                    </p:column>
-                    <p:column width="10%" 
-                              style="text-align: center"
-                              headerText="#{messages['closing.list.transfer']}">
-                        <p:selectBooleanCheckbox value="#{movement.transfer}" />
-                    </p:column>
-                </p:dataTable>
+        </h:panelGroup>
+        
+        <pe:blockUI target="closingPanel" 
+                    widgetVar="closingPanelBlock">
+            <div class="div-align-center">
+                <p:graphicImage width="32" 
+                                height="32"
+                                library="images" 
+                                name="ui-loading.gif" />
             </div>
-        </div>
+            <div style="margin-top: 5px">
+                #{messages['closing.closing-period']}
+            </div>        
+        </pe:blockUI>  
     </ui:define>
 
     <ui:define name="popups">
-        <ui:include src="popupConfirmClosing.xhtml"/>
+        <ui:include src="dialogConfirmClosing.xhtml"/>
+        <ui:include src="dialogClosingConfirmation.xhtml"/>
     </ui:define>
 </ui:composition>

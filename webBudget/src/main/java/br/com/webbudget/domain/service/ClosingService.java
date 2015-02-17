@@ -54,6 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0, 09/04/2014
  */
 @Service
+@Transactional
 public class ClosingService {
 
     @Autowired
@@ -109,8 +110,8 @@ public class ClosingService {
         // processamos os valores de entradas e saidas
         Closing closing = this.calculateInAndOutsTotals(financialPeriod);
         
-        closing.setInValue(closing.getTotalInsOpen().add(closing.getTotalInsPaid()));
-        closing.setOutValue(closing.getTotalOutsOpen().add(closing.getTotalOutsPaid()));
+        closing.setRevenues(closing.getTotalInsOpen().add(closing.getTotalInsPaid()));
+        closing.setExpenses(closing.getTotalOutsOpen().add(closing.getTotalOutsPaid()));
         
         closing.setClosingDate(new Date());
         
@@ -196,55 +197,33 @@ public class ClosingService {
     /**
      * 
      * @param financialPeriod
-     * @param closing
      * @return 
      */
-    @Transactional
-    public Closing process(FinancialPeriod financialPeriod, Closing closing) {
+    @Transactional(readOnly = true)
+    public Closing process(FinancialPeriod financialPeriod) {
         
-        if (closing == null) {
-            closing = new Closing();
-        } else {
-            // buscamos o novo periodo para contas que serao transferidas
-            final List<FinancialPeriod> openPeriods = this.financialPeriodRepository.listOpen();
-            
-            if (openPeriods != null && !openPeriods.isEmpty()) {
-
-                final FinancialPeriod newPeriod = openPeriods.get(0);
-                
-                // transferimos ou deletamos os movimentos abertos
-                for (Movement movement : closing.getOpenMovements()) {
-                    if (movement.isTransfer()) {
-                        if (newPeriod.equals(movement.getFinancialPeriod())) {
-                            throw new ApplicationException("closing.validate.cant-move-to-same-period");
-                        } else {
-                            movement.setFinancialPeriod(newPeriod);
-                            this.movementRepository.save(movement);
-                        }
-                    } else if (movement.isDelete()) {
-                        this.movementRepository.delete(movement);
-                    }
-                }
-            } else {
-                throw new ApplicationException("closing.validate.no-period-to-transfer");
-            }
-        }
+        final Closing closing = new Closing();
        
         // verificamos por cartoes de credito com debitos sem fatura
         final List<Card> cards = this.cardRepository.listByStatus(false);
         
         for (Card card : cards) {
             if (card.getCardType() != CardType.DEBIT) {
-                final List<Movement> movements = this.movementRepository.listByPeriodAndCard(financialPeriod, card);
+               
+                final List<Movement> movements = this.movementRepository
+                        .listByPeriodAndCard(financialPeriod, card);
 
                 if (!movements.isEmpty()) {
-                    throw new ApplicationException("closing.validate.movements-no-invoice");
+                    closing.setMovementsWithoutInvoice(true);
+                    break;
                 }
             }
         }
         
         // atualizamos a lista de movimentos em aberto
-        final List<Movement> openMovements = this.movementRepository.listOpenMovementsByPeriod(financialPeriod);
+        final List<Movement> openMovements = this.movementRepository
+                .listOpenMovementsByPeriod(financialPeriod);
+        
         closing.setOpenMovements(openMovements);
         
         return closing;
@@ -257,6 +236,30 @@ public class ClosingService {
      * @return 
      */
     private Closing calculateInAndOutsTotals(FinancialPeriod financialPeriod) {
+
+//            // buscamos o novo periodo para contas que serao transferidas
+//            final List<FinancialPeriod> openPeriods = this.financialPeriodRepository.listOpen();
+//            
+//            if (openPeriods != null && !openPeriods.isEmpty()) {
+//
+//                final FinancialPeriod newPeriod = openPeriods.get(0);
+//                
+//                // transferimos ou deletamos os movimentos abertos
+//                for (Movement movement : closing.getOpenMovements()) {
+//                    if (movement.isTransfer()) {
+//                        if (newPeriod.equals(movement.getFinancialPeriod())) {
+//                            throw new ApplicationException("closing.validate.cant-move-to-same-period");
+//                        } else {
+//                            movement.setFinancialPeriod(newPeriod);
+//                            this.movementRepository.save(movement);
+//                        }
+//                    } else if (movement.isDelete()) {
+//                        this.movementRepository.delete(movement);
+//                    }
+//                }
+//            } else {
+//                throw new ApplicationException("closing.validate.no-period-to-transfer");
+//            }
         
         final Closing closing = new Closing();
         
@@ -307,8 +310,8 @@ public class ClosingService {
         closing.setTotalOutsPaid(totalOutsPaid);
         
         // setamos o total geral
-        closing.setInValue(totalIns);
-        closing.setOutValue(totalOuts);
+        closing.setRevenues(totalIns);
+        closing.setExpenses(totalOuts);
         
         return closing;
     }

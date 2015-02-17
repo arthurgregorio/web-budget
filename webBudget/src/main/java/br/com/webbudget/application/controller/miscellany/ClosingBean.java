@@ -21,6 +21,8 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.service.ClosingService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import java.util.List;
@@ -89,6 +91,14 @@ public class ClosingBean extends AbstractBean {
             }      
         }
     }
+
+    /**
+     * 
+     * @return 
+     */
+    public String doCancel() {
+        return "closeFinancialPeriod.xhtml?faces-redirect=true";
+    }
     
     /**
      * Processa o periodo financeiro selecionado e habilita ou nao a funcao de
@@ -102,39 +112,31 @@ public class ClosingBean extends AbstractBean {
         }
 
         try {
-            this.closing = this.closingService.process(this.financialPeriod, this.closing);
-            this.info("closing.action.processed", true);
+            this.closing = this.closingService.process(this.financialPeriod);
         } catch (ApplicationException ex) {
             this.logger.error("ClosingBean#process found errors", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        } finally {
+            this.update("closingPanel");
+        }
     }
     
     /**
      * Dependendo da selecao do usuario este metodo calcula e encerra o periodo
      */
     public void close() {
-        
-        if (this.financialPeriod == null) {
-            this.error("closing.validate.null-period", true);
-            return;
-        }
-        
+
         try {
-            this.closingService.close(this.financialPeriod);
+            this.closeDialog("dialogConfirmClosing");
+            this.execute("PF('closingPanelBlock').block()");
             
-            // listamos novamente os periodos para fechamento e limpamos os objetos
-            this.financialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
-            
-            this.closing = null;
-            this.financialPeriod = null;
-            
-            this.info("closing.action.closed", true);
+            //this.closingService.close(this.financialPeriod);
         } catch (ApplicationException ex) {
             this.logger.error("ClosingBean#close found errors", ex);
             this.fixedError(ex.getMessage(), true);
         } finally {
-            this.closeDialog("popupConfirmClosing");
+            this.execute("PF('closingPanelBlock').unblock()");
+            this.openDialog("closingConfirmationDialog", "dialogClosingConfirmation");
         }
     }
     
@@ -143,21 +145,27 @@ public class ClosingBean extends AbstractBean {
      * o periodo
      */
     public void changeToClose() {
-        this.openDialog("popupConfirmClosing");
+        this.openDialog("confirmClosingDialog","dialogConfirmClosing");
+    }
+
+    /**
+     * @return caso haja irregularidades que afetem o fechamento, avisa o usuario
+     */
+    public boolean hasIrregularities() {
+        if (this.closing != null) {
+            return !this.closing.getOpenMovements().isEmpty() 
+                    || this.closing.isMovementsWithoutInvoice();
+        }
+        return false;
     }
     
     /**
      * @return se true, renderiza o botao para fechamento
      */
     public boolean canClosePeriod() {
-        return this.closing != null && this.closing.getOpenMovements().isEmpty();
-    }
-    
-    /**
-     * @return se true, renderiza o botao de processamento do periodo
-     */
-    public boolean canProcessPeriod() {
-        return this.closing == null || (this.closing.getOpenMovements() != null 
-                && !this.closing.getOpenMovements().isEmpty());
+        if (closing != null) {
+            return this.closing.getOpenMovements().isEmpty();
+        } 
+        return false;
     }
 }

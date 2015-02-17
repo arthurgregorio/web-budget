@@ -110,4 +110,21 @@ public class FinancialPeriod extends PersistentEntity {
     public String getEndFormatted() {
         return new SimpleDateFormat("dd/MM/yyyy").format(this.end);
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    public String getFriendlyName() {
+       
+        final StringBuilder builder = new StringBuilder();
+        
+        builder.append(this.identification);
+        builder.append(" | ");
+        builder.append(this.getStartFormatted());
+        builder.append(" - ");
+        builder.append(this.getEndFormatted());
+        
+        return builder.toString();
+    }
 }
