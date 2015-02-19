@@ -14,14 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.domain.entity.movement.CostCenter;
+import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
+import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.entity.movement.MovementStateType;
+import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
+import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -37,7 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- *  
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0
@@ -52,63 +56,65 @@ public class GraphModelService implements Serializable {
     private IMovementRepository movementRepository;
     @Autowired
     private ICostCenterRepository costCenterRepository;
-    
+    @Autowired
+    private IFinancialPeriodRepository financialPeriodRepository;
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Transactional(readOnly = true)
-    public PieChartModel buildConsumeModel() {
-        
-        final List<CostCenter> costCenters = this.costCenterRepository.listByStatus(false);
-//        final List<Movement> movements = this.movementRepository.listOutsByActiveFinancialPeriod();
-        
+    public PieChartModel buildExpensesModel() {
+
+        final List<CostCenter> costCenters = 
+                this.totalizeCostCentersByDirection(MovementClassType.OUT);
+
+        // total geral, todos o movimentos em todos os centros de custo
+        // usado depois para calcular a porcentagem que representa o valor total
+        // daquele centro de custo no total geral
         BigDecimal total = BigDecimal.ZERO;
         
-        // FIXME arrumar quando o rateio estiver OK!
-//        for (Movement movement : movements) {
-//            total = total.add(movement.getValue());
-//            
-//            for (CostCenter costCenter : costCenters) {
-//                if (movement.getMovementClass().getCostCenter().equals(costCenter)) {
-//                    costCenter.setTotalMovements(costCenter.getTotalMovements().add(movement.getValue()));
-//                }
-//            }
-//        }
+        for (CostCenter costCenter : costCenters) {
+            total = total.add(costCenter.getTotalMovements());
+        }
         
         final PieChartModel model = new PieChartModel();
-        
+
+        // calcula as porcentagens para cada CC
         for (CostCenter costCenter : costCenters) {
             if (costCenter.getTotalMovements() != BigDecimal.ZERO) {
+
                 final BigDecimal divider = costCenter.getTotalMovements()
                         .multiply(new BigDecimal("100"));
+
                 costCenter.setPercentage(divider.divide(total, RoundingMode.CEILING));
-                
+
                 model.set(costCenter.getName(), costCenter.getPercentage());
             }
         }
-        
+
+        // monta o grafico
         model.setShadow(false);
         model.setLegendCols(3);
         model.setLegendRows(10);
         model.setLegendPosition("e");
         model.setShowDataLabels(true);
-        
+
         return model;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Transactional(readOnly = true)
     public PieChartModel buildRevenueModel() {
-        
+
         final List<CostCenter> costCenters = this.costCenterRepository.listByStatus(false);
 //        final List<Movement> movements = this.movementRepository.listInsByActiveFinancialPeriod();
-        
+
         BigDecimal total = BigDecimal.ZERO;
-        
+
         // FIXME arrumar quando o rateio estiver OK!
 //        for (Movement movement : movements) {
 //            total = total.add(movement.getValue());
@@ -119,81 +125,121 @@ public class GraphModelService implements Serializable {
 //                }
 //            }
 //        }
-        
         final PieChartModel model = new PieChartModel();
-        
+
         for (CostCenter costCenter : costCenters) {
             if (costCenter.getTotalMovements() != BigDecimal.ZERO) {
                 final BigDecimal divider = costCenter.getTotalMovements()
                         .multiply(new BigDecimal("100"));
                 costCenter.setPercentage(divider.divide(total, RoundingMode.CEILING));
-                
+
                 model.set(costCenter.getName(), costCenter.getPercentage());
             }
         }
-        
+
         model.setShadow(false);
         model.setLegendCols(3);
         model.setLegendRows(10);
         model.setLegendPosition("e");
         model.setShowDataLabels(true);
-        
+
         return model;
     }
-    
+
     /**
-     * 
+     *
      * @param classes
-     * @return 
+     * @return
      */
     public CartesianChartModel buildTopClassesModel(List<MovementClass> classes) {
-        
+
         final CartesianChartModel model = new BarChartModel();
-        
+
         final BarChartSeries classesBar = this.buildClassesBar(classes);
         final LineChartSeries budgetLine = this.buildBudgetLine(classes);
-        
+
         model.addSeries(classesBar);
         model.addSeries(budgetLine);
-        
+
         model.setMouseoverHighlight(false);
-        
+
         return model;
     }
-    
+
     /**
-     * 
+     *
      * @param classes
-     * @return 
+     * @return
      */
     private BarChartSeries buildClassesBar(List<MovementClass> classes) {
-        
+
         final BarChartSeries series = new BarChartSeries();
-        
+
         series.setLabel(this.messages.getMessage("financial-period.chart.classes"));
-        
+
         for (MovementClass movementClass : classes) {
             series.set(movementClass.getName(), movementClass.getTotalMovements());
         }
-        
+
         return series;
     }
-    
+
     /**
-     * 
+     *
      * @param classes
-     * @return 
+     * @return
      */
     private LineChartSeries buildBudgetLine(List<MovementClass> classes) {
-        
+
         final LineChartSeries series = new LineChartSeries();
-        
+
         series.setLabel(this.messages.getMessage("financial-period.chart.budget"));
-        
+
         for (MovementClass movementClass : classes) {
             series.set(movementClass.getName(), movementClass.getBudget());
         }
-        
+
         return series;
+    }
+
+    /**
+     * Neste metodo para cada centro de custo, calculamos o valor de movimentos 
+     * pagos nos periodos abertos para mostrar na home
+     *
+     * @return a lista de centros de custo com seus valores de movimentos 
+     */
+    private List<CostCenter> totalizeCostCentersByDirection(MovementClassType direction) {
+
+        final List<CostCenter> costCenters = 
+                this.costCenterRepository.listByStatus(false);
+        
+        final List<FinancialPeriod> periods = 
+                this.financialPeriodRepository.listOpen();
+
+        // para cada centro de custo
+        for (CostCenter costCenter : costCenters) {
+
+            BigDecimal total =  BigDecimal.ZERO;
+            
+            // pegamos os periodos abertos
+            for (FinancialPeriod period : periods) {
+
+                final List<Movement> movements = this.movementRepository
+                        .listByPeriodAndCostCenterAndDirection(period, costCenter, direction);
+
+                // pegamos os movimentos
+                for (Movement movement : movements) {
+
+                    // se estiver pago e nao for fatura, soma no total
+                    if (movement.getMovementStateType() == MovementStateType.PAID 
+                            && movement.getMovementType() == MovementType.MOVEMENT) {
+                        total = total.add(movement.getValue());
+                    }
+                }
+            }
+            costCenter.setTotalMovements(total);
+        }
+
+        return costCenters;
     }
 }

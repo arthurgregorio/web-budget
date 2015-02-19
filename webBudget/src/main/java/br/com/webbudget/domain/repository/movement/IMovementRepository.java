@@ -25,6 +25,7 @@ import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
+import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.Date;
 import java.util.List;
@@ -73,16 +74,8 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      * @param type
      * @return 
      */
-    public List<Movement> listByPeriodAndCardType(FinancialPeriod financialPeriod, CardType type);
+    public List<Movement> listByPeriodAndCardType(FinancialPeriod period, CardType type);
 
-    /**
-     * 
-     * @param period
-     * @param costCenter
-     * @return 
-     */
-    public List<Movement> listByPeriodAndCostCenter(FinancialPeriod period, CostCenter costCenter);
-    
     /**
      * 
      * @param period
@@ -97,7 +90,7 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      * @param state
      * @return 
      */
-    public List<Movement> listByPeriodAndState(FinancialPeriod financialPeriod, MovementStateType state);
+    public List<Movement> listByPeriodAndState(FinancialPeriod period, MovementStateType state);
     
     /**
      * 
@@ -105,5 +98,30 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      * @param card
      * @return 
      */
-    public List<Movement> listPaidWithoutInvoiceByPeriodAndCard(FinancialPeriod financialPeriod, Card card);
+    public List<Movement> listPaidWithoutInvoiceByPeriodAndCard(FinancialPeriod period, Card card);
+    
+    /**
+     * 
+     * @param financialPeriod
+     * @param state
+     * @return 
+     */
+    public List<Movement> listByPeriodAndStateAndType(FinancialPeriod period, MovementStateType state, MovementType type);
+    
+    /**
+     * 
+     * @param period
+     * @param costCenter
+     * @param direction
+     * @return 
+     */
+    public List<Movement> listByPeriodAndCostCenterAndDirection(FinancialPeriod period, CostCenter costCenter, MovementClassType direction);
+    
+    /**
+     * 
+     * @param financialPeriod
+     * @param state
+     * @return 
+     */
+    public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period, MovementStateType state, MovementType type, MovementClassType direction);
 }

@@ -24,6 +24,7 @@ import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
+import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -146,40 +147,13 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
 
     /**
      *
-     * @param period
-     * @param costCenter
+     * @param financialPeriod
+     * @param type
      * @return
      */
     @Override
-    public List<Movement> listByPeriodAndCostCenter(FinancialPeriod period, CostCenter costCenter) {
-
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-
-        if (period != null) {
-            criteria.createAlias("financialPeriod", "fp");
-            criteria.add(Restrictions.eq("fp.id", period.getId()));
-        }
-
-        if (costCenter != null) {
-            criteria.createAlias("apportionments", "ap");
-            criteria.createAlias("ap.movementClass", "mc");
-            criteria.createAlias("mc.costCenter", "cc");
-            
-            criteria.add(Restrictions.eq("cc.id", costCenter.getId()));
-        }
-
-        return criteria.list();
-    }
-
-    /**
-     * 
-     * @param financialPeriod
-     * @param type
-     * @return 
-     */
-    @Override
     public List<Movement> listByPeriodAndCardType(FinancialPeriod financialPeriod, CardType type) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
         criteria.createAlias("financialPeriod", "fp");
@@ -190,49 +164,49 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
 
         return criteria.list();
     }
-    
+
     /**
-     * 
+     *
      * @param period
      * @param direction
-     * @return 
+     * @return
      */
     @Override
     public List<Movement> listByPeriodAndDirection(FinancialPeriod period, MovementClassType direction) {
-       
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         criteria.createAlias("financialPeriod", "fp");
         criteria.add(Restrictions.eq("fp.id", period.getId()));
-        
+
         criteria.createAlias("apportionments", "ap");
         criteria.createAlias("ap.movementClass", "mc");
         criteria.add(Restrictions.eq("mc.movementClassType", direction));
-        
+
         return criteria.list();
     }
 
     /**
-     * 
+     *
      * @param financialPeriod
      * @param state
-     * @return 
+     * @return
      */
     @Override
     public List<Movement> listByPeriodAndState(FinancialPeriod financialPeriod, MovementStateType state) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         criteria.createAlias("financialPeriod", "fp");
         criteria.add(Restrictions.eq("fp.id", financialPeriod.getId()));
-        
+
         if (state != null) {
             criteria.add(Restrictions.eq("movementStateType", state));
         }
-        
+
         return criteria.list();
     }
-    
+
     /**
      *
      * @param financialPeriod
@@ -253,6 +227,75 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
 
         criteria.createAlias("payment", "py").createAlias("py.card", "cc");
         criteria.add(Restrictions.eq("cc.id", card.getId()));
+
+        return criteria.list();
+    }
+
+    /**
+     *
+     * @param period
+     * @param state
+     * @param type
+     * @return
+     */
+    @Override
+    public List<Movement> listByPeriodAndStateAndType(FinancialPeriod period, MovementStateType state, MovementType type) {
+        return this.listByPeriodAndStateAndTypeAndDirection(period, state, type, null);
+    }
+
+    /**
+     *
+     * @param period
+     * @param costCenter
+     * @return
+     */
+    @Override
+    public List<Movement> listByPeriodAndCostCenterAndDirection(FinancialPeriod period, CostCenter costCenter, MovementClassType direction) {
+
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+
+        criteria.createAlias("financialPeriod", "fp");
+        criteria.add(Restrictions.eq("fp.id", period.getId()));
+
+        criteria.createAlias("apportionments", "ap");
+        criteria.createAlias("ap.movementClass", "mc");
+        criteria.createAlias("mc.costCenter", "cc");
+
+        criteria.add(Restrictions.eq("mc.movementClassType", direction));
+        criteria.add(Restrictions.eq("cc.id", costCenter.getId()));
+
+        return criteria.list();
+    }
+
+    /**
+     *
+     * @param period
+     * @param state
+     * @param type
+     * @param direction
+     * @return
+     */
+    @Override
+    public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period, MovementStateType state, MovementType type, MovementClassType direction) {
+
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+
+        if (type != null) {
+            criteria.add(Restrictions.eq("movementType", type));
+        }
+
+        if (state != null) {
+            criteria.add(Restrictions.eq("movementStateType", state));
+        }
+
+        criteria.createAlias("financialPeriod", "fp");
+        criteria.add(Restrictions.eq("fp.id", period.getId()));
+
+        if (direction != null) {
+            criteria.createAlias("apportionments", "ap");
+            criteria.createAlias("ap.movementClass", "mc");
+            criteria.add(Restrictions.eq("mc.movementClassType", direction));
+        }
 
         return criteria.list();
     }

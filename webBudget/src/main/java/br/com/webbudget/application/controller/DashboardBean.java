@@ -61,7 +61,7 @@ public class DashboardBean implements Serializable {
     private UserPrivateMessage selectedPrivateMessage;
     
     @Getter
-    private PieChartModel consumeModel;
+    private PieChartModel expensesModel;
     @Getter
     private PieChartModel revenueModel;
     
@@ -89,8 +89,8 @@ public class DashboardBean implements Serializable {
         if (!FacesContext.getCurrentInstance().isPostback()) {
         
             // carregamos os graficos
-            this.consumeModel = this.graphModelService.buildConsumeModel();
             this.revenueModel = this.graphModelService.buildRevenueModel();
+            this.expensesModel = this.graphModelService.buildExpensesModel();
 
             // carrega as mensagens do usuario
             this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
