@@ -237,30 +237,6 @@ public class ClosingService {
      */
     private Closing calculateInAndOutsTotals(FinancialPeriod financialPeriod) {
 
-//            // buscamos o novo periodo para contas que serao transferidas
-//            final List<FinancialPeriod> openPeriods = this.financialPeriodRepository.listOpen();
-//            
-//            if (openPeriods != null && !openPeriods.isEmpty()) {
-//
-//                final FinancialPeriod newPeriod = openPeriods.get(0);
-//                
-//                // transferimos ou deletamos os movimentos abertos
-//                for (Movement movement : closing.getOpenMovements()) {
-//                    if (movement.isTransfer()) {
-//                        if (newPeriod.equals(movement.getFinancialPeriod())) {
-//                            throw new ApplicationException("closing.validate.cant-move-to-same-period");
-//                        } else {
-//                            movement.setFinancialPeriod(newPeriod);
-//                            this.movementRepository.save(movement);
-//                        }
-//                    } else if (movement.isDelete()) {
-//                        this.movementRepository.delete(movement);
-//                    }
-//                }
-//            } else {
-//                throw new ApplicationException("closing.validate.no-period-to-transfer");
-//            }
-        
         final Closing closing = new Closing();
         
         final List<Movement> ins = this.movementRepository.listInsByFinancialPeriod(financialPeriod);

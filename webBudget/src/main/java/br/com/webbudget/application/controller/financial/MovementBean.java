@@ -355,6 +355,8 @@ public class MovementBean extends AbstractBean {
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doPayment found erros", ex);
             this.fixedError(ex.getMessage(), true);
+        } finally {
+            this.update("movementForm");
         }
     }
 

@@ -38,8 +38,57 @@
     </ui:define>
 
     <ui:define name="content">
+        
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:messages id="messages" closable="true" globalOnly="true"/>
+            </div>
+        </div>
 
         <h:panelGroup id="closingPanel">
+            
+            <h:panelGroup styleClass="ui-grid-row flat-box"
+                          layout="block"
+                          rendered="#{closingBean.canClosePeriod()}">
+                <div class="ui-grid-col-12 ui-messages-info ui-corner-all ui-messages ui-widget closing-messages">
+                    <span class="ui-messages-info-summary">
+                        #{messages['closing.can-close']}
+                    </span>
+                </div>
+            </h:panelGroup>
+            
+            <h:panelGroup styleClass="ui-grid-row flat-box"
+                          layout="block"
+                          rendered="#{closingBean.hasIrregularities()}">
+                <div class="ui-grid-col-12">
+                    <div class="ui-grid-row">
+                        <h:panelGroup layout="block"
+                                      styleClass="ui-grid-col-12 ui-messages-error ui-corner-all ui-messages ui-widget closing-messages">
+                            <span class="ui-messages-error-summary">
+                                #{messages['closing.cant-close']}
+                            </span>
+                        </h:panelGroup>
+                    </div>
+                    <div class="ui-grid-row">
+                        <h:panelGroup layout="block"
+                                      rendered="#{closingBean.closing.movementsWithoutInvoice}"
+                                      styleClass="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget closing-messages">
+                            <span class="ui-messages-warn-summary">
+                                #{messages['closing.movements-no-invoice']}
+                            </span>
+                        </h:panelGroup>
+                    </div>
+                    <div class="ui-grid-row">
+                        <h:panelGroup layout="block"
+                                      rendered="#{not empty closingBean.closing.openMovements}"
+                                      styleClass="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget closing-messages">
+                            <span class="ui-messages-warn-summary">
+                                #{messages['closing.has-open-movements']}
+                            </span>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </h:panelGroup>
             
             <h:form id="controlsForm" prependId="false">
                 <div class="ui-grid-row flat-box">
@@ -76,49 +125,6 @@
                     </div>
                 </div>
             </h:form>
-
-            <h:panelGroup styleClass="ui-grid-row flat-box"
-                          layout="block"
-                          rendered="#{closingBean.canClosePeriod()}">
-                <div class="ui-grid-col-12 ui-messages-info ui-corner-all ui-messages ui-widget closing-messages">
-                    <span class="ui-messages-info-summary">
-                        #{messages['closing.can-close']}
-                    </span>
-                </div>
-            </h:panelGroup>
-
-            <h:panelGroup styleClass="ui-grid-row flat-box"
-                          layout="block"
-                          rendered="#{closingBean.hasIrregularities()}">
-                <div class="ui-grid-col-12">
-                    <div class="ui-grid-row">
-                        <h:panelGroup layout="block"
-                                      styleClass="ui-grid-col-12 ui-messages-error ui-corner-all ui-messages ui-widget closing-messages">
-                            <span class="ui-messages-error-summary">
-                                #{messages['closing.cant-close']}
-                            </span>
-                        </h:panelGroup>
-                    </div>
-                    <div class="ui-grid-row">
-                        <h:panelGroup layout="block"
-                                      rendered="#{closingBean.closing.movementsWithoutInvoice}"
-                                      styleClass="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget closing-messages">
-                            <span class="ui-messages-warn-summary">
-                                #{messages['closing.movements-no-invoice']}
-                            </span>
-                        </h:panelGroup>
-                    </div>
-                    <div class="ui-grid-row">
-                        <h:panelGroup layout="block"
-                                      rendered="#{not empty closingBean.closing.openMovements}"
-                                      styleClass="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget closing-messages">
-                            <span class="ui-messages-warn-summary">
-                                #{messages['closing.has-open-movements']}
-                            </span>
-                        </h:panelGroup>
-                    </div>
-                </div>
-            </h:panelGroup>
 
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-12">
@@ -165,19 +171,6 @@
                 </div>
             </div>
         </h:panelGroup>
-        
-        <pe:blockUI target="closingPanel" 
-                    widgetVar="closingPanelBlock">
-            <div class="div-align-center">
-                <p:graphicImage width="32" 
-                                height="32"
-                                library="images" 
-                                name="ui-loading.gif" />
-            </div>
-            <div style="margin-top: 5px">
-                #{messages['closing.closing-period']}
-            </div>        
-        </pe:blockUI>  
     </ui:define>
 
     <ui:define name="popups">

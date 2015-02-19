@@ -128,15 +128,15 @@ public class ClosingBean extends AbstractBean {
 
         try {
             this.closeDialog("dialogConfirmClosing");
-            this.execute("PF('closingPanelBlock').block()");
             
-            //this.closingService.close(this.financialPeriod);
-        } catch (ApplicationException ex) {
+            this.closingService.close(this.financialPeriod);
+            
+            this.openDialog("closingConfirmationDialog", "dialogClosingConfirmation");
+        } catch (Exception ex) {
             this.logger.error("ClosingBean#close found errors", ex);
             this.fixedError(ex.getMessage(), true);
         } finally {
-            this.execute("PF('closingPanelBlock').unblock()");
-            this.openDialog("closingConfirmationDialog", "dialogClosingConfirmation");
+            this.update("closingPanel");
         }
     }
     
@@ -164,7 +164,7 @@ public class ClosingBean extends AbstractBean {
      */
     public boolean canClosePeriod() {
         if (closing != null) {
-            return this.closing.getOpenMovements().isEmpty();
+            return this.closing.getOpenMovements().isEmpty() && !this.closing.movementsWithoutInvoice;
         } 
         return false;
     }
