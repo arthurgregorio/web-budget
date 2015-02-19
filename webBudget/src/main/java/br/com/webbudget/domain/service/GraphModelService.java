@@ -61,7 +61,7 @@ public class GraphModelService implements Serializable {
     public PieChartModel buildConsumeModel() {
         
         final List<CostCenter> costCenters = this.costCenterRepository.listByStatus(false);
-        final List<Movement> movements = this.movementRepository.listOutsByActiveFinancialPeriod();
+//        final List<Movement> movements = this.movementRepository.listOutsByActiveFinancialPeriod();
         
         BigDecimal total = BigDecimal.ZERO;
         
@@ -105,7 +105,7 @@ public class GraphModelService implements Serializable {
     public PieChartModel buildRevenueModel() {
         
         final List<CostCenter> costCenters = this.costCenterRepository.listByStatus(false);
-        final List<Movement> movements = this.movementRepository.listInsByActiveFinancialPeriod();
+//        final List<Movement> movements = this.movementRepository.listInsByActiveFinancialPeriod();
         
         BigDecimal total = BigDecimal.ZERO;
         

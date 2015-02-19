@@ -59,14 +59,6 @@ public class WalletBalance extends PersistentEntity {
     private BigDecimal movimentedValue;
     @Getter
     @Setter
-    @Column(name = "total_ins")
-    private BigDecimal totalIns;
-    @Getter
-    @Setter
-    @Column(name = "total_outs")
-    private BigDecimal totalOuts;
-    @Getter
-    @Setter
     @Column(name = "movement_code")
     private String movementCode;
     @Getter
@@ -74,11 +66,6 @@ public class WalletBalance extends PersistentEntity {
     @Column(name = "wallet_balance_type", nullable = false)
     private WalletBalanceType walletBalanceType;
     
-    @Getter
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_closing")
-    private Closing closing;
     @Getter
     @Setter
     @ManyToOne

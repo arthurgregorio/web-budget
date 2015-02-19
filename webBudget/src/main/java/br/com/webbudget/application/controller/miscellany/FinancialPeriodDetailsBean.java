@@ -82,7 +82,7 @@ public class FinancialPeriodDetailsBean implements Serializable {
             this.financialPeriod = this.financialPeriodService.findFinancialPeriodById(financialPeriodId);
             
             // chama a simulacao
-            this.closing = this.closingService.simulate(this.financialPeriod);
+//            this.closing = this.closingService.simulate(this.financialPeriod);
             
             // cria os modelos dos graficos
             this.topInClasses = this.graphModelService.buildTopClassesModel(

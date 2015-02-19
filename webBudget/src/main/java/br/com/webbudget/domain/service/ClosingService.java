@@ -17,18 +17,13 @@
 
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
-import br.com.webbudget.domain.entity.wallet.Wallet;
-import br.com.webbudget.domain.entity.wallet.WalletBalance;
-import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IClosingRepository;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
@@ -37,9 +32,6 @@ import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
 import br.com.webbudget.domain.repository.wallet.IWalletRepository;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * Classe que realiza todo o processo de fechamento do periodo
  *
  * @author Arthur Gregorio
  *
@@ -71,133 +64,12 @@ public class ClosingService {
     private IMovementClassRepository movementClassRepository;
     @Autowired
     private IFinancialPeriodRepository financialPeriodRepository;
-
-    /**
-     * 
-     * @param financialPeriod
-     * @return 
-     */
-    @Transactional(readOnly = true)
-    public Closing simulate(FinancialPeriod financialPeriod) {
-        
-        // comecamos o processo de calculo instanciando o fechamento com os 
-        // valores individuais por tipos
-        final Closing closing = this.calculateInAndOutsTotals(financialPeriod);
-        
-        // top 5 classes com mais entradas
-        final List<MovementClass> classesIn = this.countTopConsumeClassesByType(
-                MovementClassType.IN, financialPeriod);
-        
-        closing.setTopFiveClassesIn(new ArrayList<>(classesIn));
-        
-        // top 5 classes com mais saidas
-        final List<MovementClass> classesOut = this.countTopConsumeClassesByType(
-                MovementClassType.OUT, financialPeriod);
-        
-        closing.setTopFiveClassesOut(new ArrayList<>(classesOut));
-        
-        // fim dos calculos, retorna pra view
-        return closing;
-    }
     
     /**
+     * Processa o fechamento do mes, verificando por incosistencias de movimentos
      * 
-     * @param financialPeriod 
-     */
-    @Transactional
-    public void close(FinancialPeriod financialPeriod) {
-        
-        // processamos os valores de entradas e saidas
-        Closing closing = this.calculateInAndOutsTotals(financialPeriod);
-        
-        closing.setRevenues(closing.getTotalInsOpen().add(closing.getTotalInsPaid()));
-        closing.setExpenses(closing.getTotalOutsOpen().add(closing.getTotalOutsPaid()));
-        
-        closing.setClosingDate(new Date());
-        
-        // salvamos o fechamento
-        closing = this.closingRepository.save(closing);
-        
-        // construimos o saldo final das carteiras 
-        final List<Wallet> wallets = this.walletRepository.listByStatus(false);
-        
-        for (Wallet wallet : wallets) {
-            
-            BigDecimal totalIns = this.movementRepository
-                    .findTotalByWallet(wallet, MovementClassType.IN, financialPeriod);
-            BigDecimal totalOuts = this.movementRepository
-                    .findTotalByWallet(wallet, MovementClassType.OUT, financialPeriod);
-            
-            // listamos todos os pagamentos no cartao de debito para a carteira
-            BigDecimal totalOutsDebit = this.movementRepository
-                    .findTotalOutsByWalletOnDebitCards(wallet, financialPeriod);
-            
-            // se zerar os valores, calculamos igual mas com tudo zerado
-            if (totalIns == null) {
-                totalIns = BigDecimal.ZERO;
-            }
-
-            if (totalOuts == null) {
-                totalOuts = BigDecimal.ZERO;
-            }
-            
-            if (totalOutsDebit == null) {
-                totalOutsDebit = BigDecimal.ZERO;
-            }
-            
-            // somamos os pagos no debito e os pagos direto
-            totalOuts = totalOuts.add(totalOutsDebit);
-            
-            // geramos os saldos
-            final WalletBalance newBalance = new WalletBalance();
-            final WalletBalance lastBalance = this.walletBalanceRepository.findLastWalletBalance(wallet);
-
-            // calculamos com base no ultimo saldo ou no salredo inicial da conta
-            if (lastBalance != null) {
-                final BigDecimal balance = lastBalance.getActualBalance().add(totalIns);
-                newBalance.setActualBalance(balance.subtract(totalOuts));
-            } else {
-                final BigDecimal balance = wallet.getBalance().add(totalIns);
-                newBalance.setActualBalance(balance.subtract(totalOuts));
-            }
-
-            // dizemos qual wallet e fechamento o balanco pertence
-            newBalance.setTargetWallet(wallet);
-            newBalance.setClosing(closing);
-            newBalance.setWalletBalanceType(WalletBalanceType.CLOSING_BALANCE);
-            
-            // setamos os valores totais
-            newBalance.setTotalIns(totalIns);
-            newBalance.setTotalOuts(totalOuts);
-
-            // atualizamos o saldo na carteira
-            wallet.setBalance(newBalance.getActualBalance());
-            this.walletRepository.save(wallet);
-            
-            // salvamos
-            this.walletBalanceRepository.save(newBalance);
-        }
-        
-        // listamos todos os movimentos para marcar como calculado
-        final List<Movement> movements = this.movementRepository
-                .listByFinancialPeriod(financialPeriod);
-        
-        for (Movement movement : movements) {
-            movement.setMovementStateType(MovementStateType.CALCULATED);
-            this.movementRepository.save(movement);
-        }
-        
-        // fechamos o periodo e salvamos
-        financialPeriod.setClosed(true);
-        financialPeriod.setClosing(closing);
-        
-        this.financialPeriodRepository.save(financialPeriod);
-    } 
-    
-    /**
-     * 
-     * @param financialPeriod
-     * @return 
+     * @param financialPeriod o periodo a ser processado
+     * @return o resumo do fechamento
      */
     @Transactional(readOnly = true)
     public Closing process(FinancialPeriod financialPeriod) {
@@ -211,7 +83,7 @@ public class ClosingService {
             if (card.getCardType() != CardType.DEBIT) {
                
                 final List<Movement> movements = this.movementRepository
-                        .listByPeriodAndCard(financialPeriod, card);
+                        .listPaidWithoutInvoiceByPeriodAndCard(financialPeriod, card);
 
                 if (!movements.isEmpty()) {
                     closing.setMovementsWithoutInvoice(true);
@@ -222,7 +94,7 @@ public class ClosingService {
         
         // atualizamos a lista de movimentos em aberto
         final List<Movement> openMovements = this.movementRepository
-                .listOpenMovementsByPeriod(financialPeriod);
+                .listByPeriodAndState(financialPeriod, MovementStateType.OPEN);
         
         closing.setOpenMovements(openMovements);
         
@@ -230,108 +102,92 @@ public class ClosingService {
     } 
     
     /**
+     * Encerra um periodo, gerando toda a movimentacao necessaria e calculando
+     * os valores de receitas e despesas
      * 
-     * @param financialPeriod
-     * @param closing
-     * @return 
+     * @param financialPeriod 
      */
-    private Closing calculateInAndOutsTotals(FinancialPeriod financialPeriod) {
-
-        final Closing closing = new Closing();
+    @Transactional
+    public void close(FinancialPeriod financialPeriod) {
         
-        final List<Movement> ins = this.movementRepository.listInsByFinancialPeriod(financialPeriod);
+        // calculamos os saldos
+        final BigDecimal revenuesTotal = this.calculateTotalByDirection(
+                financialPeriod, MovementClassType.IN);
+        final BigDecimal expensesTotal = this.calculateTotalByDirection(
+                financialPeriod, MovementClassType.OUT);
         
-        BigDecimal totalIns = BigDecimal.ZERO;
-        BigDecimal totalInsPaid = BigDecimal.ZERO;
-        BigDecimal totalInsOpen = BigDecimal.ZERO;
+        // calculamos o saldo final
+        final BigDecimal balance = revenuesTotal.subtract(expensesTotal);
         
-        // iteramos nos movimentos de entrada
-        for (Movement movement : ins) {
-            
-            // pegamos somente movimentos abertos ou pagos
-            if (movement.getMovementStateType() == MovementStateType.OPEN) {
-                totalInsOpen = totalInsOpen.add(movement.getValue());
-            } else if (movement.getMovementStateType() == MovementStateType.PAID) {
-                totalInsPaid = totalInsPaid.add(movement.getValue());
-            }
-            
-            // soma total de movimentos
-            totalIns = totalIns.add(totalInsOpen.add(totalInsPaid));
+        // pegamos os totais de consumo por tipo de cartao
+        final BigDecimal debitCardExpenses = this.calculateCardExpenses(
+                financialPeriod, CardType.DEBIT);
+        final BigDecimal creditCardExpenses = this.calculateCardExpenses(
+                financialPeriod, CardType.CREDIT);
+        
+        // criamos e salvamos o fechamento
+        Closing closing = new Closing();
+        
+        closing.setClosingDate(new Date());
+        
+        closing.setBalance(balance);
+        closing.setRevenues(revenuesTotal);
+        closing.setExpenses(expensesTotal);
+        closing.setDebitCardExpenses(debitCardExpenses);
+        closing.setCreditCardExpenses(creditCardExpenses);
+        
+        closing = this.closingRepository.save(closing);
+        
+        // atualizamos o período para encerrado
+        financialPeriod.setClosed(true);
+        financialPeriod.setClosing(closing);
+        
+        this.financialPeriodRepository.save(financialPeriod);
+    } 
+    
+    /**
+     * Calcula o total dos movimentos de mesmo tipo
+     * 
+     * @param period o periodo de busca
+     * @param direction a direcao do movimento (receita ou despesa)
+     * 
+     * @return o total para aquele tipo
+     */
+    private BigDecimal calculateTotalByDirection(FinancialPeriod period, 
+            MovementClassType direction) {
+        
+        final List<Movement> movements = this.movementRepository
+                .listByPeriodAndDirection(period, direction);
+        
+        BigDecimal total = BigDecimal.ZERO;
+        
+        for (Movement movement : movements) {
+            total = total.add(movement.getValue());
         }
-
-        final List<Movement> outs = this.movementRepository.listOutsByFinancialPeriod(financialPeriod);
         
-        BigDecimal totalOuts = BigDecimal.ZERO;
-        BigDecimal totalOutsPaid = BigDecimal.ZERO;
-        BigDecimal totalOutsOpen = BigDecimal.ZERO;
-        
-        // iteramos nos movimentos de saida
-        for (Movement movement : outs) {
-            
-            // pegamos somente movimentos abertos ou pagos
-            if (movement.getMovementStateType() == MovementStateType.OPEN) {
-                totalOutsOpen = totalOutsOpen.add(movement.getValue());
-            } else if (movement.getMovementStateType() == MovementStateType.PAID) {
-                totalOutsPaid = totalOutsPaid.add(movement.getValue());
-            }
-            
-            // soma total de movimentos
-            totalOuts = totalOuts.add(totalOutsOpen.add(totalOutsPaid));
-        }
-        
-        // setamos os totais individuais
-        closing.setTotalInsOpen(totalInsOpen);
-        closing.setTotalInsPaid(totalInsPaid);
-        closing.setTotalOutsOpen(totalOutsOpen);
-        closing.setTotalOutsPaid(totalOutsPaid);
-        
-        // setamos o total geral
-        closing.setRevenues(totalIns);
-        closing.setExpenses(totalOuts);
-        
-        return closing;
+        return total;
     }
     
     /**
+     * Lista os movimentos do perido totalizando os cosnsumos em cartao de 
+     * debito e credito
      * 
-     * @param type
-     * @param financialPeriod
-     * @return 
+     * @param period o periodo a pesquisar
+     * @param type o tipo do cartao
+     * 
+     * @return o total de consumo para aquele tipo
      */
-    private List<MovementClass> countTopConsumeClassesByType(MovementClassType type, FinancialPeriod financialPeriod) {
+    private BigDecimal calculateCardExpenses(FinancialPeriod period, CardType type) {
+       
+        final List<Movement> movements = this.movementRepository
+                .listByPeriodAndCardType(period, type);
         
-        final List<MovementClass> topClasses = new ArrayList<>();
-        final List<MovementClass> classes = this.movementClassRepository.listByTypeAndStatus(type, false);
-
-        for (MovementClass movementClass : classes) {
-                         
-           final BigDecimal total = this.movementRepository
-                    .countMovementTotalByClassAndPeriod(financialPeriod, movementClass);
-            
-            movementClass.setTotalMovements(total);
+        BigDecimal total = BigDecimal.ZERO;
+        
+        for (Movement movement : movements) {
+            total = total.add(movement.getValue());
         }
         
-        // ordenamos a lista pelos maiores
-        Collections.sort(classes, new Comparator<MovementClass>() {
-            @Override
-            public int compare(MovementClass classOne, MovementClass classTwo) {
-                
-                if (classOne.getTotalMovements() == null) {
-                    return 1;
-                } else if (classTwo.getTotalMovements() == null) {
-                    return -1;
-                } else {
-                    return classTwo.getTotalMovements().compareTo(classOne.getTotalMovements());
-                }
-            }
-        });
-        
-        if (classes.size() < 5) {
-            topClasses.addAll(new ArrayList<>(classes.subList(0, classes.size())));
-        } else {
-            topClasses.addAll(new ArrayList<>(classes.subList(0, 5)));
-        }
-        
-        return topClasses;
+        return total;
     }
 }

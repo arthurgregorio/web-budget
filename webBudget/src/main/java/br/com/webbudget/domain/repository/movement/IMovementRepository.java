@@ -19,14 +19,13 @@ package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
+import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
-import br.com.webbudget.domain.entity.wallet.Wallet;
+import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.repository.IGenericRepository;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -45,18 +44,6 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      */
     public List<Movement> listByActiveFinancialPeriod();
     
-    /**
-     * 
-     * @return 
-     */
-    public List<Movement> listInsByActiveFinancialPeriod();
-    
-    /**
-     * 
-     * @return 
-     */
-    public List<Movement> listOutsByActiveFinancialPeriod();
-
     /**
      * 
      * @param filter
@@ -83,38 +70,10 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
     /**
      * 
      * @param financialPeriod
+     * @param type
      * @return 
      */
-    public List<Movement> listByFinancialPeriod(FinancialPeriod financialPeriod);
-    
-    /**
-     * 
-     * @param financialPeriod
-     * @return 
-     */
-    public List<Movement> listInsByFinancialPeriod(FinancialPeriod financialPeriod);
-    
-    /**
-     * 
-     * @param financialPeriod
-     * @return 
-     */
-    public List<Movement> listOutsByFinancialPeriod(FinancialPeriod financialPeriod);
-    
-    /**
-     * 
-     * @param financialPeriod
-     * @return 
-     */
-    public List<Movement> listOpenMovementsByPeriod(FinancialPeriod financialPeriod);
-    
-    /**
-     * 
-     * @param financialPeriod
-     * @param card
-     * @return 
-     */
-    public List<Movement> listByPeriodAndCard(FinancialPeriod financialPeriod, Card card);
+    public List<Movement> listByPeriodAndCardType(FinancialPeriod financialPeriod, CardType type);
 
     /**
      * 
@@ -123,29 +82,28 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      * @return 
      */
     public List<Movement> listByPeriodAndCostCenter(FinancialPeriod period, CostCenter costCenter);
-
+    
     /**
      * 
-     * @param wallet
-     * @param financialPeriod
+     * @param period
+     * @param direction
      * @return 
      */
-    public BigDecimal findTotalOutsByWalletOnDebitCards(Wallet wallet, FinancialPeriod financialPeriod);
+    public List<Movement> listByPeriodAndDirection(FinancialPeriod period, MovementClassType direction);
     
     /**
      * 
      * @param financialPeriod
-     * @param movementClass
+     * @param state
      * @return 
      */
-    public BigDecimal countMovementTotalByClassAndPeriod(FinancialPeriod financialPeriod, MovementClass movementClass);
+    public List<Movement> listByPeriodAndState(FinancialPeriod financialPeriod, MovementStateType state);
     
     /**
      * 
-     * @param wallet
-     * @param movementClassType
      * @param financialPeriod
+     * @param card
      * @return 
      */
-    public BigDecimal findTotalByWallet(Wallet wallet, MovementClassType movementClassType, FinancialPeriod financialPeriod);
+    public List<Movement> listPaidWithoutInvoiceByPeriodAndCard(FinancialPeriod financialPeriod, Card card);
 }

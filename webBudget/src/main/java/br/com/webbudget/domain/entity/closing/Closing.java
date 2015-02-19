@@ -61,6 +61,14 @@ public class Closing extends PersistentEntity {
     private BigDecimal expenses;
     @Getter
     @Setter
+    @Column(name = "credit_card_expenses", nullable = false)
+    private BigDecimal creditCardExpenses;
+    @Getter
+    @Setter
+    @Column(name = "debit_card_expenses", nullable = false)
+    private BigDecimal debitCardExpenses;
+    @Getter
+    @Setter
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
     @Getter

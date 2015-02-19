@@ -246,7 +246,7 @@ public class CardService {
     @Transactional(readOnly = true)
     public CardInvoice fillCardInvoice(CardInvoice cardInvoice) {
         
-        final List<Movement> movements = this.movementRepository.listByPeriodAndCard(
+        final List<Movement> movements = this.movementRepository.listPaidWithoutInvoiceByPeriodAndCard(
                 cardInvoice.getFinancialPeriod(), cardInvoice.getCard());
         
         cardInvoice.setMovements(movements);
