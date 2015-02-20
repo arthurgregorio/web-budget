@@ -30,6 +30,12 @@
     border-radius: 0 !important;
 }
 
+/* marcacao de qual tab esta selecionada */
+ul.ui-tabs-nav > li.ui-tabs-selected {
+    margin-top: -2px;
+    border-top: 3px solid #23b7e5 !important;
+}
+
 /* seta a fonte correta em todos os widgets */
 .ui-widget {
     font: 1.1em 'Ubuntu', sans-serif !important;
@@ -103,7 +109,11 @@ button[role="button"].ui-state-default {
     background-image: none !important;
 }
 
-/* legenda do grafico na dashboard sem bordas */
+/* customizacao dos graficos da dashboard */
+.jqplot-target {
+    top: 8px;
+    font: inherit !important;
+}
 .jqplot-table-legend {
     border: none !important;
 }

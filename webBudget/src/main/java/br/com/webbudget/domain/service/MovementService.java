@@ -20,7 +20,6 @@ import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.CostCenter;
-import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
@@ -450,17 +449,6 @@ public class MovementService {
     @Transactional(readOnly = true)
     public List<Movement> listMovementsByActiveFinancialPeriod() {
         return this.movementRepository.listByActiveFinancialPeriod();
-    }
-
-    /**
-     *
-     * @param period
-     * @param costCenter
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public List<Movement> listMovementsByPeriodAndCostCenter(FinancialPeriod period, CostCenter costCenter) {
-        return this.movementRepository.listByPeriodAndCostCenter(period, costCenter);
     }
 
     /**

@@ -66,9 +66,6 @@ public class DashboardBean implements Serializable {
     private PieChartModel revenueModel;
     
     @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
-    @Setter
     @ManagedProperty("#{accountService}")
     private transient AccountService accountService;
     @Setter

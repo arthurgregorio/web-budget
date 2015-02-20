@@ -110,33 +110,34 @@ public class GraphModelService implements Serializable {
     @Transactional(readOnly = true)
     public PieChartModel buildRevenueModel() {
 
-        final List<CostCenter> costCenters = this.costCenterRepository.listByStatus(false);
-//        final List<Movement> movements = this.movementRepository.listInsByActiveFinancialPeriod();
+        final List<CostCenter> costCenters = 
+                this.totalizeCostCentersByDirection(MovementClassType.IN);
 
+        // total geral, todos o movimentos em todos os centros de custo
+        // usado depois para calcular a porcentagem que representa o valor total
+        // daquele centro de custo no total geral
         BigDecimal total = BigDecimal.ZERO;
-
-        // FIXME arrumar quando o rateio estiver OK!
-//        for (Movement movement : movements) {
-//            total = total.add(movement.getValue());
-//            
-//            for (CostCenter costCenter : costCenters) {
-//                if (movement.getMovementClass().getCostCenter().equals(costCenter)) {
-//                    costCenter.setTotalMovements(costCenter.getTotalMovements().add(movement.getValue()));
-//                }
-//            }
-//        }
+        
+        for (CostCenter costCenter : costCenters) {
+            total = total.add(costCenter.getTotalMovements());
+        }
+        
         final PieChartModel model = new PieChartModel();
 
+        // calcula as porcentagens para cada CC
         for (CostCenter costCenter : costCenters) {
             if (costCenter.getTotalMovements() != BigDecimal.ZERO) {
+
                 final BigDecimal divider = costCenter.getTotalMovements()
                         .multiply(new BigDecimal("100"));
+
                 costCenter.setPercentage(divider.divide(total, RoundingMode.CEILING));
 
                 model.set(costCenter.getName(), costCenter.getPercentage());
             }
         }
 
+        // monta o grafico
         model.setShadow(false);
         model.setLegendCols(3);
         model.setLegendRows(10);

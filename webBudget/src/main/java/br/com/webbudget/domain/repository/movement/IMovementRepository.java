@@ -70,7 +70,7 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
     
     /**
      * 
-     * @param financialPeriod
+     * @param period
      * @param type
      * @return 
      */
@@ -86,7 +86,7 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
     
     /**
      * 
-     * @param financialPeriod
+     * @param period
      * @param state
      * @return 
      */
@@ -94,7 +94,7 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
     
     /**
      * 
-     * @param financialPeriod
+     * @param period
      * @param card
      * @return 
      */
@@ -102,8 +102,9 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
     
     /**
      * 
-     * @param financialPeriod
+     * @param period
      * @param state
+     * @param type
      * @return 
      */
     public List<Movement> listByPeriodAndStateAndType(FinancialPeriod period, MovementStateType state, MovementType type);
@@ -119,8 +120,10 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
     
     /**
      * 
-     * @param financialPeriod
+     * @param period
      * @param state
+     * @param type
+     * @param direction
      * @return 
      */
     public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period, MovementStateType state, MovementType type, MovementClassType direction);
