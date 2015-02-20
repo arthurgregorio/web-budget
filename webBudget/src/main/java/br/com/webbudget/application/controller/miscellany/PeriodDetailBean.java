@@ -17,14 +17,12 @@
 
 package br.com.webbudget.application.controller.miscellany;
 
-import br.com.webbudget.application.components.MessagesFactory;
+import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.MovementClass;
-import br.com.webbudget.domain.service.ClosingService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,6 +35,8 @@ import lombok.Setter;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CartesianChartModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -47,7 +47,7 @@ import org.primefaces.model.chart.CartesianChartModel;
  */
 @ViewScoped
 @ManagedBean
-public class FinancialPeriodDetailsBean implements Serializable {
+public class PeriodDetailBean extends AbstractBean {
     
     @Getter
     private Closing closing;
@@ -60,17 +60,20 @@ public class FinancialPeriodDetailsBean implements Serializable {
     private CartesianChartModel topOutClasses;
     
     @Setter
-    @ManagedProperty("#{messagesFactory}")
-    private transient MessagesFactory messages;
-    @Setter
-    @ManagedProperty("#{closingService}")
-    private transient ClosingService closingService;
-    @Setter
     @ManagedProperty("#{graphModelService}")
     private transient GraphModelService graphModelService;
     @Setter
     @ManagedProperty("#{financialPeriodService}")
     private transient FinancialPeriodService financialPeriodService;
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(PeriodDetailBean.class);
+    }
     
     /**
      * 
@@ -78,6 +81,7 @@ public class FinancialPeriodDetailsBean implements Serializable {
      */
     public void initializeDetails(long financialPeriodId){
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            
             // busca o periodo 
             this.financialPeriod = this.financialPeriodService.findFinancialPeriodById(financialPeriodId);
             
@@ -85,29 +89,29 @@ public class FinancialPeriodDetailsBean implements Serializable {
 //            this.closing = this.closingService.simulate(this.financialPeriod);
             
             // cria os modelos dos graficos
-            this.topInClasses = this.graphModelService.buildTopClassesModel(
-                    this.closing.getTopFiveClassesIn());
-            this.topOutClasses = this.graphModelService.buildTopClassesModel(
-                    this.closing.getTopFiveClassesOut());
-            
-            this.formatGraphIn();
-            this.formatGraphOut();
-            
-            // ordena corretamente as classes de entrada
-            Collections.sort(this.closing.getTopFiveClassesIn(), new Comparator<MovementClass>() {
-                @Override
-                public int compare(MovementClass classOne, MovementClass classTwo) {
-                    return classTwo.getBudget().compareTo(classOne.getBudget());
-                }
-            });
-            
-            // ordena corretamente as classes de saida
-            Collections.sort(this.closing.getTopFiveClassesOut(), new Comparator<MovementClass>() {
-                @Override
-                public int compare(MovementClass classOne, MovementClass classTwo) {
-                    return classTwo.getBudget().compareTo(classOne.getBudget());
-                }
-            });
+//            this.topInClasses = this.graphModelService.buildTopClassesModel(
+//                    this.closing.getTopFiveClassesIn());
+//            this.topOutClasses = this.graphModelService.buildTopClassesModel(
+//                    this.closing.getTopFiveClassesOut());
+//            
+//            this.formatGraphIn();
+//            this.formatGraphOut();
+//            
+//            // ordena corretamente as classes de entrada
+//            Collections.sort(this.closing.getTopFiveClassesIn(), new Comparator<MovementClass>() {
+//                @Override
+//                public int compare(MovementClass classOne, MovementClass classTwo) {
+//                    return classTwo.getBudget().compareTo(classOne.getBudget());
+//                }
+//            });
+//            
+//            // ordena corretamente as classes de saida
+//            Collections.sort(this.closing.getTopFiveClassesOut(), new Comparator<MovementClass>() {
+//                @Override
+//                public int compare(MovementClass classOne, MovementClass classTwo) {
+//                    return classTwo.getBudget().compareTo(classOne.getBudget());
+//                }
+//            });
         }
     }
     
@@ -161,7 +165,7 @@ public class FinancialPeriodDetailsBean implements Serializable {
         
         this.topInClasses.setAnimate(true);
         this.topInClasses.setLegendPosition("ne");
-        this.topInClasses.setTitle(this.messages.getMessage("financial-period.chart.in-classes"));
+        this.topInClasses.setTitle(this.translate("financial-period.chart.in-classes"));
         this.topInClasses.setDatatipFormat("<span style=\"display:none;\">%s</span><span>R$ %s</span>");
     }
     
@@ -198,7 +202,7 @@ public class FinancialPeriodDetailsBean implements Serializable {
         
         this.topInClasses.setAnimate(true);
         this.topInClasses.setLegendPosition("ne");
-        this.topInClasses.setTitle(this.messages.getMessage("financial-period.chart.out-classes"));
+        this.topInClasses.setTitle(this.translate("financial-period.chart.out-classes"));
         this.topInClasses.setDatatipFormat("<span style=\"display:none;\">%s</span><span>R$ %s</span>");
     }
     

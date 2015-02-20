@@ -24,7 +24,7 @@
 
     <ui:define name="head">
         <f:event type="preRenderView" 
-                 listener="#{financialPeriodDetailsBean.initializeDetails(param.financialPeriodId)}" />
+                 listener="#{periodDetailBean.initializeDetails(param.financialPeriodId)}" />
     </ui:define>
 
     <ui:define name="breadcrumb">
@@ -37,72 +37,24 @@
     </ui:define>
 
     <ui:define name="content">
-        <div style="width: 100%">
-            <div style="display: inline-block; width: 100%">
-                <div style="float: left; width: 25%">
-                    <p:fieldset style="margin: 5px 5px 5px 0px" 
-                                legend="#{i18n['financial-period.details.ins-open']}">
-                        <h:outputText styleClass="ins-open"
-                                      value="R$ #{financialPeriodDetailsBean.closing.totalInsOpen}" />
-                    </p:fieldset>
-                </div>
-                <div style="float: left; width: 25%">
-                    <p:fieldset style="margin: 5px; text-align: center" 
-                                legend="#{i18n['financial-period.details.ins-paid']}">
-                        <h:outputText styleClass="ins-paid"
-                                      value="R$ #{financialPeriodDetailsBean.closing.totalInsPaid}" />
-                    </p:fieldset>
-                </div>
-                <div style="float: left; width: 25%">
-                    <p:fieldset style="margin: 5px; text-align: center" 
-                                legend="#{i18n['financial-period.details.outs-open']}">
-                        <h:outputText styleClass="outs-open"
-                                      value="R$ #{financialPeriodDetailsBean.closing.totalOutsOpen}" />
-                    </p:fieldset>
-                </div>
-                <div style="float: left; width: 25%">
-                    <p:fieldset style="margin: 5px 0px 5px 5px; text-align: right" 
-                                legend="#{i18n['financial-period.details.outs-paid']}">
-                        <h:outputText styleClass="outs-paid"
-                                      value="R$ #{financialPeriodDetailsBean.closing.totalOutsPaid}" />
-                    </p:fieldset>
-                </div>
-            </div>
-            <div style="margin-top: 15px;">
-                <h:panelGroup layout="block" 
-                              styleClass="no-graph-ins"
-                              rendered="#{financialPeriodDetailsBean.showInsChart() eq false}">
-                    <h:outputText style="position: relative; top: 100px"
-                                  value="#{i18n['financial-period.chart.no-in-classes']}" />
-                </h:panelGroup>
-                <p:spacer height="10" 
-                          rendered="#{financialPeriodDetailsBean.showInsChart() eq true}" />
-                <p:chart type="bar"
-                         model="#{financialPeriodDetailsBean.topInClasses}" 
-                         rendered="#{financialPeriodDetailsBean.showInsChart() eq true}"/>
 
-                <h:panelGroup layout="block" 
-                              styleClass="no-graph-outs"
-                              rendered="#{financialPeriodDetailsBean.showOutsChart() eq false}">
-                    <h:outputText style="position: relative; top: 100px"
-                                  value="#{i18n['financial-period.chart.no-out-classes']}" />
-                </h:panelGroup>
-                <p:spacer height="25" 
-                          rendered="#{financialPeriodDetailsBean.showOutsChart() eq true}" />
-                <p:chart type="bar"
-                         model="#{financialPeriodDetailsBean.topOutClasses}" 
-                         rendered="#{financialPeriodDetailsBean.showOutsChart() eq true}"/> 
+        <div class="ui-grid-row flat-box">
+            <div class="ui-grid-col-12 form-header">
+                <p:outputLabel value="#{messages['period-details.identification']}: 
+                               #{periodDetailBean.financialPeriod.identification}"/>
             </div>
-            <div style="text-align: right; width: 100%; padding-top: 20px">
+        </div>
+        <div class="ui-grid-row flat-box">
+            <div class="ui-grid-col-12 div-align-right">
                 <p:commandButton immediate="true"
                                  styleClass="green-button"
                                  value="#{i18n['form.refresh']}"
-                                 action="#{financialPeriodDetailsBean.doRefresh()}"/>
+                                 action="#{periodDetailBean.doRefresh()}"/>
                 <p:spacer width="10"/>
                 <p:commandButton immediate="true"
                                  styleClass="red-button"
                                  value="#{i18n['form.back']}"
-                                 action="#{financialPeriodDetailsBean.doCancel()}"/>
+                                 action="#{periodDetailBean.doCancel()}"/>
             </div>
         </div>
     </ui:define>
