@@ -17,7 +17,6 @@
 
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.users.UserPrivateMessage;
@@ -86,8 +85,8 @@ public class DashboardBean implements Serializable {
         if (!FacesContext.getCurrentInstance().isPostback()) {
         
             // carregamos os graficos
-            this.revenueModel = this.graphModelService.buildRevenueModel();
-            this.expensesModel = this.graphModelService.buildExpensesModel();
+            this.revenueModel = this.graphModelService.buildRevenueModelByCostCenter();
+            this.expensesModel = this.graphModelService.buildExpensesModelByCostCenter();
 
             // carrega as mensagens do usuario
             this.userPrivateMessages = this.privateMessageService.listMessagesByUser(

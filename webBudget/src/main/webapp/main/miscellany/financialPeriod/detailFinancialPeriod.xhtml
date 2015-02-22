@@ -37,24 +37,190 @@
     </ui:define>
 
     <ui:define name="content">
-
         <div class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12 form-header">
+            <div class="ui-grid-col-8 period-header">
                 <p:outputLabel value="#{messages['period-details.identification']}: 
-                               #{periodDetailBean.financialPeriod.identification}"/>
+                               #{periodDetailBean.periodDetailsDTO.financialPeriod.identification}"/>
+            </div>
+            <div class="ui-grid-col-4 div-align-right">
+                <p:commandButton value="#{menu['back']}"
+                                 action="#{periodDetailBean.doCancel()}"/>
+                <p:spacer width="10"/>
+                <p:commandButton value="#{menu['refresh']}"
+                                 styleClass="ui-button-info"
+                                 action="#{periodDetailBean.doRefresh()}"/>
             </div>
         </div>
         <div class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12 div-align-right">
-                <p:commandButton immediate="true"
-                                 styleClass="green-button"
-                                 value="#{i18n['form.refresh']}"
-                                 action="#{periodDetailBean.doRefresh()}"/>
-                <p:spacer width="10"/>
-                <p:commandButton immediate="true"
-                                 styleClass="red-button"
-                                 value="#{i18n['form.back']}"
-                                 action="#{periodDetailBean.doCancel()}"/>
+            <div class="ui-grid-col-12">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12 detail-header">
+                        #{messages['period-details.movements-detail']}
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4">
+                        #{messages['period-details.revenues']}
+                        <h:outputText styleClass="detail-text"
+                                      value="#{periodDetailBean.periodDetailsDTO.revenues}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                    <div class="ui-grid-col-4">
+                        #{messages['period-details.expenses']}
+                        <h:outputText styleClass="detail-text"
+                                      value="#{periodDetailBean.periodDetailsDTO.expenses}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                    <div class="ui-grid-col-4">
+                        #{messages['period-details.balance']}
+                        <h:outputText styleClass="detail-text"
+                                      value="#{periodDetailBean.periodDetailsDTO.balance}"
+                                      style="#{periodDetailBean.periodDetailsDTO.balance.signum() lt 0 ? 'color: red;' : 
+                                               periodDetailBean.periodDetailsDTO.balance.signum() gt 0 ? 'color: green': ''}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid-row flat-box">
+            <div class="ui-grid-col-12">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12 detail-header">
+                        #{messages['period-details.cards-details']}
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4">
+                        #{messages['period-details.debit-expenses']}
+                        <h:outputText styleClass="detail-text"
+                                      value="#{periodDetailBean.periodDetailsDTO.debitCardExpenses}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                    <div class="ui-grid-col-4">
+                        #{messages['period-details.credit-expenses']}
+                        <h:outputText styleClass="detail-text"
+                                      value="#{periodDetailBean.periodDetailsDTO.creditCardExpenses}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                    <div class="ui-grid-col-4">
+                        #{messages['period-details.total-cards']}
+                        <h:outputText styleClass="detail-text"
+                                      value="#{periodDetailBean.periodDetailsDTO.cardsTotal}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid-row flat-box">
+            <div class="ui-grid-col-12">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12 detail-header">
+                        #{messages['period-details.revenue-classes']}
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        <p:tabView>
+                            <p:tab title="#{messages['period-details.summary']}"> 
+                                <p:dataTable rows="15"
+                                             paginator="true"
+                                             var="movementClass"
+                                             paginatorPosition="bottom"
+                                             paginatorAlwaysVisible="false"
+                                             value="#{periodDetailBean.periodDetailsDTO.revenueClasses}">
+
+                                    <p:column headerText="#{messages['period-details.movement-class.name']}">
+                                        #{movementClass.name}
+                                    </p:column>
+                                    <p:column width="20%"
+                                              style="text-align: center"
+                                              headerText="#{messages['period-details.movement-class.cost-center']}">
+                                        #{movementClass.costCenter.name}
+                                    </p:column>
+                                    <p:column width="15%" 
+                                              style="text-align: center"
+                                              headerText="#{messages['period-details.movement-class.budget']}">
+                                        <h:outputText value="#{movementClass.budget}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column width="15%" 
+                                              style="text-align: center"
+                                              headerText="#{messages['period-details.movement-class.total-movements']}">
+                                        <h:outputText value="#{movementClass.totalMovements}"
+                                                      style="#{movementClass.totalMovements.compareTo(movementClass.budget) 
+                                                               lt 0 ? 'color: red;' : 'color: green;'}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="#{messages['period-details.graphics']}"> 
+                                <p:chart type="bar"
+                                         model="#{periodDetailBean.revenuesModel}"/>
+                            </p:tab>
+                        </p:tabView>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid-row flat-box">
+            <div class="ui-grid-col-12">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12 detail-header">
+                        #{messages['period-details.expense-classes']}
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        <p:tabView>
+                            <p:tab title="#{messages['period-details.summary']}"> 
+                                <p:dataTable rows="15"
+                                             paginator="true"
+                                             var="movementClass"
+                                             paginatorPosition="bottom"
+                                             paginatorAlwaysVisible="false"
+                                             value="#{periodDetailBean.periodDetailsDTO.expenseClasses}">
+
+                                    <p:column headerText="#{messages['period-details.movement-class.name']}">
+                                        #{movementClass.name}
+                                    </p:column>
+                                    <p:column width="20%"
+                                              style="text-align: center"
+                                              headerText="#{messages['period-details.movement-class.cost-center']}">
+                                        #{movementClass.costCenter.name}
+                                    </p:column>
+                                    <p:column width="15%" 
+                                              style="text-align: center"
+                                              headerText="#{messages['period-details.movement-class.budget']}">
+                                        <h:outputText value="#{movementClass.budget}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column width="15%" 
+                                              style="text-align: center"
+                                              headerText="#{messages['period-details.movement-class.total-movements']}">
+                                        <h:outputText value="#{movementClass.totalMovements}"
+                                                      style="#{movementClass.totalMovements.compareTo(movementClass.budget) 
+                                                               gt 0 ? 'color: red;' : 'color: green;'}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="#{messages['period-details.graphics']}"> 
+                                <p:chart type="bar"
+                                         model="#{periodDetailBean.expensesModel}"/>
+                            </p:tab>
+                        </p:tabView>
+                    </div>
+                </div>
             </div>
         </div>
     </ui:define>

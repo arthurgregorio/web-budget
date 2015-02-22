@@ -17,9 +17,15 @@
 
 package br.com.webbudget.domain.service;
 
+import br.com.webbudget.application.controller.miscellany.PeriodDetailsDTO;
 import br.com.webbudget.application.exceptions.ApplicationException;
+import br.com.webbudget.domain.components.MovementsCalculator;
+import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.entity.movement.MovementClass;
+import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +41,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class FinancialPeriodService {
 
+    @Autowired
+    private MovementsCalculator movementsCalculator;
+    
     @Autowired
     private IFinancialPeriodRepository financialPeriodRepository;
     
@@ -86,6 +95,54 @@ public class FinancialPeriodService {
         }
         
         return activePeriod;
+    }
+    
+    /**
+     * 
+     * @param periodId
+     * @return 
+     */
+    @Transactional(readOnly = true)
+    public PeriodDetailsDTO previewPeriod(long periodId) {
+       
+        final PeriodDetailsDTO periodDetailsDTO = new PeriodDetailsDTO();
+        
+        // buscamos o periodo
+        final FinancialPeriod financialPeriod = 
+                this.financialPeriodRepository.findById(periodId, false);
+        
+        // calculamos os saldos
+        final BigDecimal revenuesTotal = this.movementsCalculator.
+                calculateTotalByDirection(financialPeriod, MovementClassType.IN);
+        final BigDecimal expensesTotal = this.movementsCalculator.
+                calculateTotalByDirection(financialPeriod, MovementClassType.OUT);
+        
+        // pegamos os totais de consumo por tipo de cartao
+        final BigDecimal debitCardExpenses = this.movementsCalculator.
+                calculateCardExpenses(financialPeriod, CardType.DEBIT);
+        final BigDecimal creditCardExpenses = this.movementsCalculator.
+                calculateCardExpenses(financialPeriod, CardType.CREDIT);
+        
+        final List<MovementClass> revenueClasses = this.movementsCalculator
+                .calculateTotalByMovementClass(financialPeriod, MovementClassType.IN);
+        final List<MovementClass> expensesClasses = this.movementsCalculator
+                .calculateTotalByMovementClass(financialPeriod, MovementClassType.OUT);
+        
+        // preenchemos os detalhes
+        periodDetailsDTO.setFinancialPeriod(financialPeriod);
+
+        periodDetailsDTO.setExpenses(expensesTotal);
+        periodDetailsDTO.setRevenues(revenuesTotal);
+        
+        periodDetailsDTO.setDebitCardExpenses(debitCardExpenses);
+        periodDetailsDTO.setCreditCardExpenses(creditCardExpenses);
+        
+        periodDetailsDTO.setRevenueClasses(revenueClasses);
+        periodDetailsDTO.setExpenseClasses(expensesClasses);
+        
+        periodDetailsDTO.sortMovementClasses();
+        
+        return periodDetailsDTO;
     }
     
     /**

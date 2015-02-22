@@ -23,10 +23,12 @@ import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.repository.IGenericRepository;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -99,6 +101,14 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      * @return 
      */
     public List<Movement> listPaidWithoutInvoiceByPeriodAndCard(FinancialPeriod period, Card card);
+
+    /**
+     * 
+     * @param period
+     * @param movementClass
+     * @return 
+     */
+    public BigDecimal countTotalByPeriodAndMovementClass(FinancialPeriod period, MovementClass movementClass);
     
     /**
      * 

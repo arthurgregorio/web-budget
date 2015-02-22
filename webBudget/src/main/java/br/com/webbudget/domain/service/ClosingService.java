@@ -17,6 +17,7 @@
 
 package br.com.webbudget.domain.service;
 
+import br.com.webbudget.domain.components.MovementsCalculator;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.closing.Closing;
@@ -27,10 +28,7 @@ import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IClosingRepository;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
-import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
-import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
-import br.com.webbudget.domain.repository.wallet.IWalletRepository;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -51,17 +49,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClosingService {
 
     @Autowired
-    private ICardRepository cardRepository;
+    private MovementsCalculator movementsCalculator;
+    
     @Autowired
-    private IWalletRepository walletRepository;
+    private ICardRepository cardRepository;
     @Autowired
     private IClosingRepository closingRepository;
     @Autowired
     private IMovementRepository movementRepository;
-    @Autowired
-    private IWalletBalanceRepository walletBalanceRepository;
-    @Autowired
-    private IMovementClassRepository movementClassRepository;
     @Autowired
     private IFinancialPeriodRepository financialPeriodRepository;
     
@@ -111,19 +106,19 @@ public class ClosingService {
     public void close(FinancialPeriod financialPeriod) {
         
         // calculamos os saldos
-        final BigDecimal revenuesTotal = this.calculateTotalByDirection(
-                financialPeriod, MovementClassType.IN);
-        final BigDecimal expensesTotal = this.calculateTotalByDirection(
-                financialPeriod, MovementClassType.OUT);
+        final BigDecimal revenuesTotal = this.movementsCalculator.
+                calculateTotalByDirection(financialPeriod, MovementClassType.IN);
+        final BigDecimal expensesTotal = this.movementsCalculator.
+                calculateTotalByDirection(financialPeriod, MovementClassType.OUT);
         
         // calculamos o saldo final
         final BigDecimal balance = revenuesTotal.subtract(expensesTotal);
         
         // pegamos os totais de consumo por tipo de cartao
-        final BigDecimal debitCardExpenses = this.calculateCardExpenses(
-                financialPeriod, CardType.DEBIT);
-        final BigDecimal creditCardExpenses = this.calculateCardExpenses(
-                financialPeriod, CardType.CREDIT);
+        final BigDecimal debitCardExpenses = this.movementsCalculator.
+                calculateCardExpenses(financialPeriod, CardType.DEBIT);
+        final BigDecimal creditCardExpenses = this.movementsCalculator.
+                calculateCardExpenses(financialPeriod, CardType.CREDIT);
         
         // criamos e salvamos o fechamento
         Closing closing = new Closing();
@@ -144,50 +139,4 @@ public class ClosingService {
         
         this.financialPeriodRepository.save(financialPeriod);
     } 
-    
-    /**
-     * Calcula o total dos movimentos de mesmo tipo
-     * 
-     * @param period o periodo de busca
-     * @param direction a direcao do movimento (receita ou despesa)
-     * 
-     * @return o total para aquele tipo
-     */
-    private BigDecimal calculateTotalByDirection(FinancialPeriod period, 
-            MovementClassType direction) {
-        
-        final List<Movement> movements = this.movementRepository
-                .listByPeriodAndDirection(period, direction);
-        
-        BigDecimal total = BigDecimal.ZERO;
-        
-        for (Movement movement : movements) {
-            total = total.add(movement.getValue());
-        }
-        
-        return total;
-    }
-    
-    /**
-     * Lista os movimentos do perido totalizando os cosnsumos em cartao de 
-     * debito e credito
-     * 
-     * @param period o periodo a pesquisar
-     * @param type o tipo do cartao
-     * 
-     * @return o total de consumo para aquele tipo
-     */
-    private BigDecimal calculateCardExpenses(FinancialPeriod period, CardType type) {
-       
-        final List<Movement> movements = this.movementRepository
-                .listByPeriodAndCardType(period, type);
-        
-        BigDecimal total = BigDecimal.ZERO;
-        
-        for (Movement movement : movements) {
-            total = total.add(movement.getValue());
-        }
-        
-        return total;
-    }
 }

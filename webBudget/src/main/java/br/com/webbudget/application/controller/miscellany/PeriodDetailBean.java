@@ -19,13 +19,10 @@ package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.service.GraphModelService;
-import br.com.webbudget.domain.entity.closing.Closing;
-import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -50,14 +47,12 @@ import org.slf4j.LoggerFactory;
 public class PeriodDetailBean extends AbstractBean {
     
     @Getter
-    private Closing closing;
+    private PeriodDetailsDTO periodDetailsDTO;
+    
     @Getter
-    private FinancialPeriod financialPeriod;
-
+    private CartesianChartModel expensesModel;
     @Getter
-    private CartesianChartModel topInClasses;
-    @Getter
-    private CartesianChartModel topOutClasses;
+    private CartesianChartModel revenuesModel;
     
     @Setter
     @ManagedProperty("#{graphModelService}")
@@ -82,36 +77,15 @@ public class PeriodDetailBean extends AbstractBean {
     public void initializeDetails(long financialPeriodId){
         if (!FacesContext.getCurrentInstance().isPostback()) {
             
-            // busca o periodo 
-            this.financialPeriod = this.financialPeriodService.findFinancialPeriodById(financialPeriodId);
+            // busca o preview do periodo
+            this.periodDetailsDTO = this.financialPeriodService
+                    .previewPeriod(financialPeriodId);
             
-            // chama a simulacao
-//            this.closing = this.closingService.simulate(this.financialPeriod);
-            
-            // cria os modelos dos graficos
-//            this.topInClasses = this.graphModelService.buildTopClassesModel(
-//                    this.closing.getTopFiveClassesIn());
-//            this.topOutClasses = this.graphModelService.buildTopClassesModel(
-//                    this.closing.getTopFiveClassesOut());
-//            
-//            this.formatGraphIn();
-//            this.formatGraphOut();
-//            
-//            // ordena corretamente as classes de entrada
-//            Collections.sort(this.closing.getTopFiveClassesIn(), new Comparator<MovementClass>() {
-//                @Override
-//                public int compare(MovementClass classOne, MovementClass classTwo) {
-//                    return classTwo.getBudget().compareTo(classOne.getBudget());
-//                }
-//            });
-//            
-//            // ordena corretamente as classes de saida
-//            Collections.sort(this.closing.getTopFiveClassesOut(), new Comparator<MovementClass>() {
-//                @Override
-//                public int compare(MovementClass classOne, MovementClass classTwo) {
-//                    return classTwo.getBudget().compareTo(classOne.getBudget());
-//                }
-//            });
+            // monta o grafico
+            this.revenuesModel = this.graphModelService.buildClassesChartModel(
+                    this.periodDetailsDTO.getRevenueClasses());
+            this.expensesModel = this.graphModelService.buildClassesChartModel(
+                    this.periodDetailsDTO.getExpenseClasses());
         }
     }
     
@@ -129,96 +103,7 @@ public class PeriodDetailBean extends AbstractBean {
      * @return 
      */
     public String doRefresh() {
-        return "detailFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId=" + this.financialPeriod.getId();
-    }
-    
-    /**
-     * 
-     */
-    public void formatGraphIn() {
-        
-        final Axis yAxis = this.topInClasses.getAxis(AxisType.Y);
-        
-        yAxis.setMin(0);
-        
-        BigDecimal graphInMax = BigDecimal.ZERO;
-        
-        for (MovementClass movementClass : this.closing.getTopFiveClassesIn()) {
-        
-            BigDecimal max = movementClass.getBudget();
-            final BigDecimal maxMovement = movementClass.getTotalMovements();
-            
-            if (maxMovement != null) {
-                if (max.compareTo(maxMovement) < 0) {
-                    max = maxMovement;
-                }
-            }
-            
-            if (max.compareTo(graphInMax) > 0) {
-                graphInMax = max;
-            }
-        }
-        
-        graphInMax = graphInMax.add(new BigDecimal("100"));
-
-        yAxis.setMax(graphInMax);
-        
-        this.topInClasses.setAnimate(true);
-        this.topInClasses.setLegendPosition("ne");
-        this.topInClasses.setTitle(this.translate("financial-period.chart.in-classes"));
-        this.topInClasses.setDatatipFormat("<span style=\"display:none;\">%s</span><span>R$ %s</span>");
-    }
-    
-    /**
-     * 
-     */
-    private void formatGraphOut() {
-        
-        final Axis yAxis = this.topInClasses.getAxis(AxisType.Y);
-        
-        yAxis.setMin(0);
-        
-        BigDecimal graphOutMax = BigDecimal.ZERO;
-        
-        for (MovementClass movementClass : this.closing.getTopFiveClassesOut()) {
-            
-            BigDecimal max = movementClass.getBudget();
-            final BigDecimal maxMovement = movementClass.getTotalMovements();
-            
-            if (maxMovement != null) {
-                if (max.compareTo(maxMovement) < 0) {
-                    max = maxMovement;
-                }
-            }
-            
-            if (max.compareTo(graphOutMax) > 0) {
-                graphOutMax = max;
-            }
-        }
-        
-        graphOutMax = graphOutMax.add(new BigDecimal("100"));
-
-        yAxis.setMax(graphOutMax);
-        
-        this.topInClasses.setAnimate(true);
-        this.topInClasses.setLegendPosition("ne");
-        this.topInClasses.setTitle(this.translate("financial-period.chart.out-classes"));
-        this.topInClasses.setDatatipFormat("<span style=\"display:none;\">%s</span><span>R$ %s</span>");
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    public boolean showInsChart() {
-        return this.closing != null && this.closing.getTopFiveClassesIn().size() > 0;
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    public boolean showOutsChart() {
-        return this.closing != null && this.closing.getTopFiveClassesOut().size() > 0;
+        return "detailFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId=" 
+                + this.periodDetailsDTO.getFinancialPeriod().getId();
     }
 }

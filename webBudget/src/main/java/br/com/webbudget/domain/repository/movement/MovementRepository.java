@@ -22,6 +22,7 @@ import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
@@ -31,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -231,6 +233,29 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
         return criteria.list();
     }
 
+    /**
+     * 
+     * @param period
+     * @param movementClass
+     * @return 
+     */
+    @Override
+    public BigDecimal countTotalByPeriodAndMovementClass(FinancialPeriod period, MovementClass movementClass) {
+        
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+
+        criteria.createAlias("financialPeriod", "fp");
+        criteria.add(Restrictions.eq("fp.id", period.getId()));
+
+        criteria.createAlias("apportionments", "ap");
+        criteria.createAlias("ap.movementClass", "mc");
+        criteria.add(Restrictions.eq("mc.id", movementClass.getId()));
+        
+        criteria.setProjection(Projections.sum("value"));
+
+        return (BigDecimal) criteria.uniqueResult();
+    }
+    
     /**
      *
      * @param period

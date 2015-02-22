@@ -81,36 +81,12 @@ public class Closing extends PersistentEntity {
     @Setter
     @Transient
     public boolean movementsWithoutInvoice;
-    @Getter
-    @Setter
-    @Transient
-    private BigDecimal totalInsPaid;
-    @Getter
-    @Setter
-    @Transient
-    private BigDecimal totalInsOpen;
-    @Getter
-    @Setter
-    @Transient
-    private BigDecimal totalOutsPaid;
-    @Getter
-    @Setter
-    @Transient
-    private BigDecimal totalOutsOpen;
-
+    
     @Getter
     @Setter
     @Transient
     private List<Movement> openMovements;
-    @Getter
-    @Setter
-    @Transient
-    private List<MovementClass> topFiveClassesIn;
-    @Getter
-    @Setter
-    @Transient
-    private List<MovementClass> topFiveClassesOut;
-    
+        
     /**
      * 
      */

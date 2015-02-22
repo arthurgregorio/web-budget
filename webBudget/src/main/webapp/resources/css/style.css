@@ -470,3 +470,20 @@ td {
 .closing-messages {
     margin: 5px 0 !important;
 }
+
+/* detalhes do periodo ----------------------- */
+.period-header {
+    padding: 5px 0;
+    font-size: 15pt;
+}
+.detail-header {
+    margin-bottom: 20px;
+    padding: 5px 0;
+    font-size: 13pt;
+    border-bottom: 1px solid #dee4e8;
+}
+.detail-text {
+    display: block;
+    font-size: 14pt;
+    margin-top: 10px;
+}
