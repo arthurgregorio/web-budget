@@ -33,9 +33,10 @@ import java.math.RoundingMode;
 import java.util.List;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.BarChartSeries;
 import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,22 +157,19 @@ public class GraphModelService implements Serializable {
      */
     public CartesianChartModel buildClassesChartModel(List<MovementClass> classes) {
 
-        final CartesianChartModel model = new BarChartModel();
+        final CartesianChartModel model = new HorizontalBarChartModel();
 
-        final BarChartSeries classesBar = this.buildClassesBar(classes);
-        final LineChartSeries budgetLine = this.buildBudgetLine(classes);
+        final ChartSeries classesBar = this.buildClassesBar(classes);
+        final ChartSeries budgetLine = this.buildBudgetLine(classes);
 
         model.addSeries(classesBar);
         model.addSeries(budgetLine);
-
         
         model.setAnimate(true);
-        model.setShowDatatip(true);
         model.setLegendPosition("ne");
         model.setMouseoverHighlight(false);
+        model.setDatatipFormat("<span>R$ %s</span><span style='display:none;'>%s</span>");
         
-        model.setDatatipFormat("<span style='display:none;'>%s</span><span>R$ %s</span>");
-
         this.formatGraph(classes, model);
         
         return model;
@@ -184,11 +182,11 @@ public class GraphModelService implements Serializable {
      */
     private void formatGraph(List<MovementClass> classes, CartesianChartModel model) {
         
-        final Axis yAxis = model.getAxis(AxisType.Y);
+        final Axis xAxis = model.getAxis(AxisType.X);
         
-        yAxis.setMin(0);
+        xAxis.setMin(0);
         
-        BigDecimal yAxisMax = BigDecimal.ZERO;
+        BigDecimal xAxisMax = BigDecimal.ZERO;
         
         for (MovementClass movementClass : classes) {
         
@@ -201,14 +199,14 @@ public class GraphModelService implements Serializable {
                 }
             }
             
-            if (max.compareTo(yAxisMax) > 0) {
-                yAxisMax = max;
+            if (max.compareTo(xAxisMax) > 0) {
+                xAxisMax = max;
             }
         }
         
-        yAxisMax = yAxisMax.add(new BigDecimal("200"));
+        xAxisMax = xAxisMax.add(new BigDecimal("100"));
 
-        yAxis.setMax(yAxisMax);
+        xAxis.setMax(xAxisMax);
     }
 
     /**
@@ -216,9 +214,9 @@ public class GraphModelService implements Serializable {
      * @param classes
      * @return
      */
-    private BarChartSeries buildClassesBar(List<MovementClass> classes) {
+    private ChartSeries buildClassesBar(List<MovementClass> classes) {
 
-        final BarChartSeries series = new BarChartSeries();
+        final ChartSeries series = new BarChartSeries();
 
         series.setLabel(this.messages.getMessage("period-details.chart.classes"));
 
@@ -234,9 +232,9 @@ public class GraphModelService implements Serializable {
      * @param classes
      * @return
      */
-    private LineChartSeries buildBudgetLine(List<MovementClass> classes) {
+    private ChartSeries buildBudgetLine(List<MovementClass> classes) {
 
-        final LineChartSeries series = new LineChartSeries();
+        final ChartSeries series = new LineChartSeries();
 
         series.setLabel(this.messages.getMessage("period-details.chart.budget-line"));
 

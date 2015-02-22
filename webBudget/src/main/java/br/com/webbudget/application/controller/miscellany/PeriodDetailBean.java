@@ -19,18 +19,13 @@ package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.service.GraphModelService;
-import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.service.FinancialPeriodService;
-import java.math.BigDecimal;
-import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

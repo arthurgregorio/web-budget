@@ -133,7 +133,8 @@
                                              var="movementClass"
                                              paginatorPosition="bottom"
                                              paginatorAlwaysVisible="false"
-                                             value="#{periodDetailBean.periodDetailsDTO.revenueClasses}">
+                                             value="#{periodDetailBean.periodDetailsDTO.revenueClasses}"
+                                             emptyMessage="#{messages['period-details.movement-class.no-movements']}">
 
                                     <p:column headerText="#{messages['period-details.movement-class.name']}">
                                         #{movementClass.name}
@@ -161,8 +162,10 @@
                                     </p:column>
                                 </p:dataTable>
                             </p:tab>
-                            <p:tab title="#{messages['period-details.graphics']}"> 
+                            <p:tab title="#{messages['period-details.graphics']}" 
+                                   disabled="#{empty periodDetailBean.periodDetailsDTO.revenueClasses}"> 
                                 <p:chart type="bar"
+                                         style="height: 500px;"
                                          model="#{periodDetailBean.revenuesModel}"/>
                             </p:tab>
                         </p:tabView>
@@ -186,7 +189,8 @@
                                              var="movementClass"
                                              paginatorPosition="bottom"
                                              paginatorAlwaysVisible="false"
-                                             value="#{periodDetailBean.periodDetailsDTO.expenseClasses}">
+                                             value="#{periodDetailBean.periodDetailsDTO.expenseClasses}"
+                                             emptyMessage="#{messages['period-details.movement-class.no-movements']}">
 
                                     <p:column headerText="#{messages['period-details.movement-class.name']}">
                                         #{movementClass.name}
@@ -214,8 +218,10 @@
                                     </p:column>
                                 </p:dataTable>
                             </p:tab>
-                            <p:tab title="#{messages['period-details.graphics']}"> 
+                            <p:tab title="#{messages['period-details.graphics']}"
+                                   disabled="#{empty periodDetailBean.periodDetailsDTO.expenseClasses}"> 
                                 <p:chart type="bar"
+                                         style="height: 500px;"
                                          model="#{periodDetailBean.expensesModel}"/>
                             </p:tab>
                         </p:tabView>

@@ -25,6 +25,7 @@ import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -58,15 +59,20 @@ public class MovementsCalculator {
         final List<MovementClass> classes = 
                 this.movementClassRepository.listByTypeAndStatus(direction, false);
         
+        final List<MovementClass> onlyValidClasses = new ArrayList<>();
+        
         for (MovementClass movementClass : classes) {
             
             final BigDecimal total = this.movementRepository
                     .countTotalByPeriodAndMovementClass(period, movementClass);
             
-            movementClass.setTotalMovements(total == null ? BigDecimal.ZERO : total);
+            if (total != null) {
+                movementClass.setTotalMovements(total);
+                onlyValidClasses.add(movementClass);
+            }
         }
         
-        return classes;
+        return onlyValidClasses;
     }
     
     /**
