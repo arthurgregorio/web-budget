@@ -166,7 +166,7 @@ public class GraphModelService implements Serializable {
         model.addSeries(budgetLine);
         
         model.setAnimate(true);
-        model.setLegendPosition("ne");
+        model.setExtender("extendLegend");
         model.setMouseoverHighlight(false);
         model.setDatatipFormat("<span>R$ %s</span><span style='display:none;'>%s</span>");
         

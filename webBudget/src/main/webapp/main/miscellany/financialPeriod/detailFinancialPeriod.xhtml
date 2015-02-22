@@ -25,6 +25,16 @@
     <ui:define name="head">
         <f:event type="preRenderView" 
                  listener="#{periodDetailBean.initializeDetails(param.financialPeriodId)}" />
+
+        <script type="text/javascript">
+            function extendLegend() {
+                this.cfg.legend = {
+                    show: true,
+                    location: 'e',
+                    placement: 'outsideGrid'
+                };
+            }
+        </script>
     </ui:define>
 
     <ui:define name="breadcrumb">
@@ -221,7 +231,7 @@
                             <p:tab title="#{messages['period-details.graphics']}"
                                    disabled="#{empty periodDetailBean.periodDetailsDTO.expenseClasses}"> 
                                 <p:chart type="bar"
-                                         style="height: 500px;"
+                                         style="height: 500px;" 
                                          model="#{periodDetailBean.expensesModel}"/>
                             </p:tab>
                         </p:tabView>
