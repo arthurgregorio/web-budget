@@ -29,7 +29,7 @@
 
     <ui:define name="content">
         <div class="ui-grid-row">
-            <div class="ui-grid-col-6 flat-box">
+            <div class="ui-grid-col-7 flat-box graph-box">
                 <p:tabView styleClass="dashboard-graphs">
                     <p:tab title="#{messages['dashboard.graphs.expenses']}"
                            rendered="#{empty dashboardBean.expensesModel.data}"> 
@@ -55,6 +55,46 @@
                     </p:tab>
                 </p:tabView>
             </div>
+            <div class="ui-grid-col-5 flat-box">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12 form-header">
+                        #{messages['dashboard.private-messages']}
+                    </div>
+                </div> 
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        <h:form prependId="false">
+                            <p:dataTable id="messagesList" 
+                                         rows="10"
+                                         paginator="true" 
+                                         var="userMessage"
+                                         selectionMode="single"
+                                         rowKey="#{userMessage.id}"
+                                         paginatorPosition="bottom" 
+                                         paginatorAlwaysVisible="false"
+                                         value="#{dashboardBean.userPrivateMessages}"
+                                         selection="#{dashboardBean.selectedPrivateMessage}"
+                                         emptyMessage="#{messages['dashboard.messages.no-messages']}"
+                                         rowStyleClass="#{userMessage.wasRead eq false ? 'unread-message' : ''}">
+
+                                <p:ajax event="rowSelect" 
+                                        listener="#{dashboardBean.displayMessage()}" />
+
+                                <p:column headerText="#{messages['dashboard.messages.title']}">
+                                    #{userMessage.privateMessage.title}
+                                </p:column>
+                                <p:column width="40%" 
+                                          style="text-align: center" 
+                                          headerText="#{messages['dashboard.messages.received']}">
+                                    <h:outputText value="#{userMessage.privateMessage.inclusion}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+                </div> 
+            </div>
         </div>
         <div class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
@@ -62,8 +102,8 @@
                     <div class="ui-grid-col-12 form-header">
                         #{messages['dashboard.movements.to-pay']}
                     </div>
-                </div>
-                <div class="ui-grid-row">
+                </div> 
+               <div class="ui-grid-row">
                     <div class="ui-grid-col-12">
                         <p:dataTable id="movementsList" 
                                      rows="6"
@@ -108,5 +148,9 @@
                 </div>
             </div>
         </div>
+    </ui:define>
+    
+    <ui:define name="popups">
+        <ui:include src="dialogDisplayPrivateMessage.xhtml"/>
     </ui:define>
 </ui:composition>

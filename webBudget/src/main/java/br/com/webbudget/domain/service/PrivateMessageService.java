@@ -66,7 +66,7 @@ public class PrivateMessageService {
             
             final UserPrivateMessage associative = new UserPrivateMessage();
             
-            associative.setUser(user);
+            associative.setRecipient(user);
             associative.setPrivateMessage(privateMessage);
             
             // salva a mensagem

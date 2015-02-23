@@ -37,12 +37,4 @@ public interface IPrivateMessageRepository extends IGenericRepository<PrivateMes
      * @return 
      */
     public List<PrivateMessage> listSent(User user);
-    
-    /**
-     * 
-     * @param user
-     * @param showUnread
-     * @return 
-     */
-    public List<PrivateMessage> listByUser(User user, boolean showUnread);
 }

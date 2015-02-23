@@ -46,7 +46,7 @@ public class PrivateMessageRepository extends GenericRepository<PrivateMessage, 
         
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
-        criteria.createAlias("owner", "ow");
+        criteria.createAlias("sender", "ow");
         
         criteria.add(Restrictions.eq("ow.id", user.getId()));
         
@@ -55,32 +55,6 @@ public class PrivateMessageRepository extends GenericRepository<PrivateMessage, 
 
         criteria.addOrder(Order.desc("inclusion"));
         
-        return criteria.list();
-    }
-    
-    /**
-     * 
-     * @param user
-     * @param showUnread
-     * @return 
-     */
-    @Override
-    public List<PrivateMessage> listByUser(User user, boolean showUnread) {
-        
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-
-        criteria.createAlias("addressees", "adr");
-        criteria.add(Restrictions.eq("adr.id", user.getId()));
-        
-        if (!showUnread) {
-            criteria.add(Restrictions.eq("wasRead", false));
-        }
-        
-        // nao mostra mensagens deletadas nunca
-        criteria.add(Restrictions.eq("deleted", false));
-        
-        criteria.addOrder(Order.desc("inclusion"));
-
         return criteria.list();
     }
 }

@@ -53,8 +53,8 @@ public class UserPrivateMessage extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User user;
+    @JoinColumn(name = "id_recipient")
+    private User recipient;
     @Getter
     @Setter
     @ManyToOne

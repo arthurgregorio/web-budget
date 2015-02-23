@@ -48,7 +48,7 @@ public class UserPrivateMessageRepository extends GenericRepository<UserPrivateM
         
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
-        criteria.createAlias("user", "u");
+        criteria.createAlias("recipient", "u");
         criteria.add(Restrictions.eq("u.id", user.getId()));
         
         if (showUnread != null) {

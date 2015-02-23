@@ -38,7 +38,7 @@ ul.ui-tabs-nav > li.ui-tabs-selected {
 
 /* seta a fonte correta em todos os widgets */
 .ui-widget {
-    font: 1.1em 'Ubuntu', sans-serif !important;
+    /* font: 1.1em 'Ubuntu', sans-serif !important; */
 }
 
 /* arruma automaticamente o tamanho do label nos combos */

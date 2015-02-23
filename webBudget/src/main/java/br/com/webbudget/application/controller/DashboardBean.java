@@ -24,7 +24,6 @@ import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.PrivateMessageService;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -34,8 +33,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.PieChartModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -46,18 +46,18 @@ import org.primefaces.model.chart.PieChartModel;
  */
 @ViewScoped
 @ManagedBean
-public class DashboardBean implements Serializable {
+public class DashboardBean extends AbstractBean {
 
+    @Getter
+    @Setter
+    private UserPrivateMessage selectedPrivateMessage;
+    
     @Getter
     private List<Movement> movements;
     @Getter
     private List<FinancialPeriod> financialPeriods;
     @Getter
     private List<UserPrivateMessage> userPrivateMessages;
-    
-    @Getter
-    @Setter
-    private UserPrivateMessage selectedPrivateMessage;
     
     @Getter
     private PieChartModel expensesModel;
@@ -76,6 +76,15 @@ public class DashboardBean implements Serializable {
     @Setter
     @ManagedProperty("#{privateMessageService}")
     private transient PrivateMessageService privateMessageService;
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected Logger initializeLogger() {
+        return LoggerFactory.getLogger(DashboardBean.class);
+    }
     
     /**
      * 
@@ -102,34 +111,33 @@ public class DashboardBean implements Serializable {
      */
     public void displayMessage() {
         this.privateMessageService.markAsRead(this.selectedPrivateMessage);
-        RequestContext.getCurrentInstance().update("displayPrivateMessagePopup");
-        RequestContext.getCurrentInstance().execute("PF('popupDisplayPrivateMessage').show()");
+        this.openDialog("displayPrivateMessageDialog","dialogDisplayPrivateMessage");
     }
     
     /**
      * Atualiza as mensagens e fecha a popup de mensagem
      */
-    public void closePrivateMessage() {
+    public void closeMessge() {
         this.selectedPrivateMessage = null;
         this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
                     AccountService.getCurrentAuthenticatedUser(), null);
         
-        RequestContext.getCurrentInstance().update("messagesList");
-        RequestContext.getCurrentInstance().execute("PF('popupDisplayPrivateMessage').hide()");
+        this.update("messagesList");
+        this.closeDialog("dialogDisplayPrivateMessage");
     }
     
     /**
      * Deleta a mensagem e atualiza a view
      */
-    public void deleteAndClosePrivateMessage() {
+    public void deleteAndCloseMessage() {
         
         this.privateMessageService.markAsDeleted(this.selectedPrivateMessage);
         
         this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
                     AccountService.getCurrentAuthenticatedUser(), null);
         
-        RequestContext.getCurrentInstance().update("messagesList");
-        RequestContext.getCurrentInstance().execute("PF('popupDisplayPrivateMessage').hide()");
+        this.update("messagesList");
+        this.closeDialog("dialogDisplayPrivateMessage");
     }
     
     /**

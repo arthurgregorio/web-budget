@@ -103,7 +103,7 @@ public class PrivateMessageBean extends AbstractBean {
                 
                 // iniciamos e dizemos que o cara logado e o dono da mensagem
                 this.privateMessage = new PrivateMessage();
-                this.privateMessage.setOwner(AccountService.getCurrentAuthenticatedUser());
+                this.privateMessage.setSender(AccountService.getCurrentAuthenticatedUser());
             } else {
                 
                 this.privateMessage = this.privateMessageService.findPrivateMessageById(privateMessageId);
@@ -115,7 +115,7 @@ public class PrivateMessageBean extends AbstractBean {
                 // marcamos para mostrar na tabela
                 for (User user : this.users) {
                     for (UserPrivateMessage userPrivateMessage : receipts) {
-                        if (userPrivateMessage.getUser().equals(user)) {
+                        if (userPrivateMessage.getRecipient().equals(user)) {
                             user.setSelected(true);
                         }
                     }
@@ -186,7 +186,7 @@ public class PrivateMessageBean extends AbstractBean {
             
             // limpamos o form
             this.privateMessage = new PrivateMessage();
-            this.privateMessage.setOwner(AccountService.getCurrentAuthenticatedUser());
+            this.privateMessage.setSender(AccountService.getCurrentAuthenticatedUser());
 
             this.users = this.accountService.listUsersByStatus(false, true);
             

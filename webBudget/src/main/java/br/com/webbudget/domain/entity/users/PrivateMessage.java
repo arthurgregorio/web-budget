@@ -66,8 +66,8 @@ public class PrivateMessage extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "id_owner", nullable = false)
-    private User owner;
+    @JoinColumn(name = "id_sender", nullable = false)
+    private User sender;
     
     @Getter
     @Setter
@@ -113,7 +113,7 @@ public class PrivateMessage extends PersistentEntity {
      * @return 
      */
     public boolean isCurrentAuthenticatedOwner() {
-        return this.owner != null && 
-                this.owner.equals(AccountService.getCurrentAuthenticatedUser());
+        return this.sender != null && 
+                this.sender.equals(AccountService.getCurrentAuthenticatedUser());
     }
 }

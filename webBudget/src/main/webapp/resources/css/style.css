@@ -138,6 +138,9 @@ td {
 .div-mg-t-15 {
     margin-top: 15px;
 }
+.div-mg-t-10 {
+    margin-top: 10px;
+}
 .div-mg-t-25 {
     margin-top: 25px;
 }
@@ -380,6 +383,12 @@ td {
     top: 45%;
     position: relative;
     text-align: center;
+}
+.graph-box {
+    margin-right: 15px;
+}
+.message-label {
+    font-size: 11pt !important;
 }
 
 /* form de movimentos ------------------------ */
