@@ -154,6 +154,7 @@ public class PrivateMessageService {
     
     /**
      * 
+     * @param privateMessage
      * @return 
      */
     @Transactional(readOnly = true)

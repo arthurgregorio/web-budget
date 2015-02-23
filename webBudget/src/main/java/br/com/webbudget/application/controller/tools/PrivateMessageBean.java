@@ -178,10 +178,11 @@ public class PrivateMessageBean extends AbstractBean {
         try {
             this.privateMessageService.savePrivateMessage(this.privateMessage);
             
-            // notificamos os usuarios por email
-            for (User user : receipts) {
-                this.postman.newMessageWarning(user);
-            }
+//            FIXME arumar isso, voltar a enviar email
+            // notificamos os usuarios por email 
+//            for (User user : receipts) {
+//                this.postman.newMessageWarning(user);
+//            }
             
             // limpamos o form
             this.privateMessage = new PrivateMessage();

@@ -55,8 +55,6 @@ public class PrivateMessageRepository extends GenericRepository<PrivateMessage, 
 
         criteria.addOrder(Order.desc("inclusion"));
         
-        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-        
         return criteria.list();
     }
     
@@ -82,8 +80,6 @@ public class PrivateMessageRepository extends GenericRepository<PrivateMessage, 
         criteria.add(Restrictions.eq("deleted", false));
         
         criteria.addOrder(Order.desc("inclusion"));
-        
-        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
         return criteria.list();
     }

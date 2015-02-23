@@ -16,21 +16,18 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:of="http://omnifaces.org/functions"
-                template="/template/default.xhtml">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/template/mainTemplate.xhtml">
 
     <ui:define name="content">
-        <div style="text-align: center; margin-top: 50px">
-            <p:graphicImage library="images" name="ui-lock.png" />
-            <br/>
-            <br/>
-            <br/>
-            <h:outputText style="font-size: 18px;" 
-                          value="#{i18n['denied.message']}" />
+        <div class="ui-grid-row denied-box">
+            <div class="ui-grid-col-12 div-align-center denied-text">
+                <p:graphicImage library="images" name="ui-icon-denied.png" />
+                <p:spacer width="50"/>
+                <h:outputText value="#{messages['application.access-denied']}" />
+            </div>
         </div>
     </ui:define>
 </ui:composition>

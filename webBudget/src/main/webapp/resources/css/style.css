@@ -487,3 +487,12 @@ td {
     font-size: 14pt;
     margin-top: 10px;
 }
+
+/* detalhes do periodo ----------------------- */
+.denied-box {
+    position: relative;
+    top: 50px;
+}
+.denied-text {
+    font-size: 15pt;
+}

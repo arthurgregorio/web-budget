@@ -80,11 +80,11 @@
                     <p:column width="15%" 
                               style="text-align: center"
                               headerText="#{menu['actions']}">
-                        <p:commandButton icon="ui-icon-"
+                        <p:commandButton icon="ui-icon-search"
                                          title="#{menu['detail']}"
                                          action="#{privateMessageBean.changeToDetails(privateMessage.id)}" />
                         <p:spacer width="10"/>
-                        <p:commandButton icon="ui-icon-pencil"
+                        <p:commandButton icon="ui-icon-trash"
                                          title="#{menu['delete']}"
                                          actionListener="#{privateMessageBean.changeToDelete(privateMessage.id)}" />
                     </p:column>

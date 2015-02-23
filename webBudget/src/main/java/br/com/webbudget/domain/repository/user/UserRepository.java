@@ -63,8 +63,6 @@ public class UserRepository extends GenericRepository<User, Long> implements IUs
             criteria.add(Restrictions.eq("blocked", blocked));
         }
         
-        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-        
         return criteria.list();
     }
 
@@ -84,8 +82,6 @@ public class UserRepository extends GenericRepository<User, Long> implements IUs
         }
         
         criteria.add(Restrictions.ne("id", authenticated.getId()));
-        
-        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         
         return criteria.list();
     }
