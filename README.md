@@ -45,6 +45,7 @@ Ou ainda você poderá abrir uma requisição de implementação/correção/melh
 
 #### Extras:
 
-- Changelog das versões: [*em desenvolvimento*]
-- Ambiente de demonstração: [*em desenvolvimento*]
-- Vídeo de apresentação da ferramenta: [*em desenvolvimento*]
+- Changelog das versões [*em desenvolvimento*]
+- Ambiente de demonstração [*em desenvolvimento*]
+- [Documentação de instalação e uso](https://github.com/arthurgregorio/web-budget/wiki) [*em desenvolvimento*]
+- Vídeo de apresentação da ferramenta [*em desenvolvimento*]
