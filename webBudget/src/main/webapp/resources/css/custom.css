@@ -65,7 +65,7 @@ span.ui-tree-toggler {
 .ui-icon-triangle-1-e {
     top: 2px;
     background-position: initial !important;
-    background-image: url("/webBudget/javax.faces.resource/ui-icon-arrow-right.png.xhtml?ln=images") !important;
+    background-image: url("#{resource['images:ui-icon-arrow-right.png']}") !important;
 }
 
 /* corrige a borda do paginador das datatables */

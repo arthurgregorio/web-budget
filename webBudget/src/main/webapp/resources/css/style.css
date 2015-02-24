@@ -20,6 +20,12 @@
     Author     : Arthur Gregorio
 */
 
+/*
+    Antes de cada deploy verificar se as URL's dos recursos estao corretas
+    
+    Ex.: url("#{resource['images:ui-icon-user.png']}")
+*/
+
 @charset "utf-8";
 
 @import url('reset.css.xhtml?ln=css');
@@ -363,12 +369,12 @@ td {
 .username-input {
     padding-left: 35px !important;
     margin-bottom: 10px !important;
-    background: url("/webBudget/javax.faces.resource/ui-icon-user.png.xhtml?ln=images") no-repeat scroll 7px 9px !important;
+    background: url("#{resource['images:ui-icon-user.png']}") no-repeat scroll 7px 9px !important;
 }
 .password-input {
     padding-left: 35px !important;
     margin-bottom: 20px !important;
-    background: url("/webBudget/javax.faces.resource/ui-icon-key.png.xhtml?ln=images") no-repeat scroll 7px 9px !important;
+    background: url("#{resource['images:ui-icon-key.png']}") no-repeat scroll 7px 9px !important;
 }
 
 /* dashboard --------------------------------- */

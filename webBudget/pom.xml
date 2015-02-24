@@ -118,6 +118,23 @@
                 <orm.show_sql>false</orm.show_sql>
             </properties>
         </profile>
+        <profile>
+            <id>openshift</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env</name>
+                    <value>openshift</value>
+                </property>
+            </activation>
+            <properties>
+                <application.version>${project.version}</application.version>
+                <db.connectionURL>jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/webbudget</db.connectionURL>
+                <db.username>${OPENSHIFT_MYSQL_DB_USERNAME}</db.username>
+                <db.password>${OPENSHIFT_MYSQL_DB_PASSWORD}</db.password>
+                <orm.show_sql>false</orm.show_sql>
+            </properties>
+        </profile>
     </profiles>
     
     <repositories>
