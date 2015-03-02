@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.card;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -77,52 +76,59 @@ public class Card extends PersistentEntity {
     @Setter
     @Column(name = "blocked")
     private boolean blocked;
-    
+
     @Getter
     @Setter
     @Enumerated
     @Column(name = "card_type", nullable = false)
     private CardType cardType;
-    
+
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_wallet")
     private Wallet wallet;
-    
+
     /**
-     * Um nome mais legivel para o cartao: 
-     * 
+     * Um nome mais legivel para o cartao:
+     *
      * @return nome + 4 ultimos digitos do cartao + bandeira
      */
     public String getReadableName() {
-        
+
         final StringBuilder builder = new StringBuilder();
-        
+
         builder.append(this.name);
         builder.append(" - ");
-        builder.append(this.number.substring(this.number.length() - 4, 
-                this.number.length()));
+        
+        // fix #31
+        if (this.number.length() > 3) {
+            builder.append(this.number.substring(this.number.length() - 4,
+                    this.number.length()));
+        } else {
+            builder.append(this.number);
+        }
+        
         builder.append(" - ");
         builder.append(this.flag);
-        
+
         return builder.toString();
     }
-    
+
     /**
      * Retorna o numero do cartao escondendo alguns caracteres
-     * 
+     *
      * @return o numero do catao
      */
     public String getSecuredNumber() {
-            
+
         final StringBuilder secured = new StringBuilder();
 
         if (this.number != null && this.number.length() >= 8) {
-            
+
             secured.append(this.number.substring(0, 2));
-            
-            for (int i = 0; i < (this.number.length() - 2); i++) { 
+
+            for (int i = 0; i < (this.number.length() - 2); i++) {
                 secured.append("*");
             }
             secured.append(this.number.substring(
@@ -130,7 +136,7 @@ public class Card extends PersistentEntity {
         } else {
             return this.number;
         }
-        
+
         return secured.toString();
     }
 }
