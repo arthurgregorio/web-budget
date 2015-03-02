@@ -60,10 +60,12 @@ public class AccountService implements UserDetailsService {
     private AuthenticationManager authenticationManager;
     
     /**
+     * Realiza o a autenticacao do usuario
      * 
-     * @param user
-     * @return
-     * @throws ApplicationException 
+     * @param user o usuario a ser autenticado
+     * @return true ou false indicando se ele pode ou nao realizar login
+     * 
+     * @throws ApplicationException se houver algum erro ou o usuario for invalido
      */
     @Transactional(readOnly = true)
     public boolean login(User user) throws ApplicationException {
@@ -72,7 +74,7 @@ public class AccountService implements UserDetailsService {
         user = this.userRepository.findByUsername(user.getUsername());
 
         if (user == null) {
-            throw new ApplicationException("authentication.error.invalid_user");
+            throw new ApplicationException("authentication.error.invalid-user");
         }
 
         try {
@@ -90,7 +92,7 @@ public class AccountService implements UserDetailsService {
     }
     
     /**
-     * 
+     * Logout do usuario
      */
     public void logout() {
         SecurityContextHolder.clearContext();
@@ -98,8 +100,9 @@ public class AccountService implements UserDetailsService {
     }
 
     /**
+     * Cria uma nova conta de usuario
      * 
-     * @param user 
+     * @param user o usuario a ser criado no sistema
      */
     public void createAccount(User user) {
         
@@ -134,8 +137,9 @@ public class AccountService implements UserDetailsService {
     }
     
     /**
+     * Atualiza uma conta de usuario
      * 
-     * @param user 
+     * @param user a conta a ser atualizada
      */
     public void updateAccount(User user) {
         
@@ -146,7 +150,7 @@ public class AccountService implements UserDetailsService {
         
         // atualiza o password se precisar
         if (user.getUnsecurePassword() != null && !user.getUnsecurePassword().isEmpty()) {
-            
+        
             final String encodedPassword = 
                     this.passwordEncoder.encode(user.getUnsecurePassword());
             
@@ -175,16 +179,18 @@ public class AccountService implements UserDetailsService {
     }
     
     /**
+     * Deleta a conta de usuario
      * 
-     * @param user 
+     * @param user a conta a ser deletada
      */
     public void deleteAccount(User user) {
         this.userRepository.delete(user);
     }
     
     /**
+     * Retorna o usuario autenticado no contexto atual
      * 
-     * @return 
+     * @return o usuario autenticado no contexto
      */
     public static User getCurrentAuthenticatedUser() {
        
@@ -244,9 +250,13 @@ public class AccountService implements UserDetailsService {
     }
     
     /**
+     * Metodo default da interface UserDetailsService do spring security
+     * 
+     * @see UserDetailsService#loadUserByUsername(java.lang.String) 
      * 
      * @param username
      * @return
+     * 
      * @throws UsernameNotFoundException 
      */
     @Override
