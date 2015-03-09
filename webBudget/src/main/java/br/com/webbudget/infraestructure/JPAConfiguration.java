@@ -90,15 +90,15 @@ public class JPAConfiguration {
 
     /**
      * 
-     * @param emf
+     * @param factory
      * @return 
      */
     @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+    public PlatformTransactionManager transactionManager(EntityManagerFactory factory) {
         
         final JpaTransactionManager transactionManager = new JpaTransactionManager();
         
-        transactionManager.setEntityManagerFactory(emf);
+        transactionManager.setEntityManagerFactory(factory);
 
         return transactionManager;
     }
