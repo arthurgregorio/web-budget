@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2015 Arthur
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,30 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package br.com.webbudget.application.components.permission;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package br.com.webbudget.infraestructure;
 
 /**
- * Annotation utlizada para realizar o agrupamento das authorities via reflection
  *
  * @author Arthur Gregorio
  *
  * @version 1.0
- * @since 1.0, 29/06/2014
+ * @since 1.0, 07/03/2015
  */
-@Documented
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface AuthorityGroup {
+public class SecurityConfiguration {
 
     /**
-     * @return o grupo da authority
+     * 
      */
-    String value() default "";
+    public SecurityConfiguration(){
+
+    }
 }

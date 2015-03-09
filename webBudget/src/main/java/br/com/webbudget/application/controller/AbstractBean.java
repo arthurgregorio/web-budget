@@ -17,7 +17,7 @@
 
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.components.MessagesFactory;
+import br.com.webbudget.infraestructure.MessagesFactory;
 import java.io.Serializable;
 import java.util.Iterator;
 import javax.annotation.PostConstruct;

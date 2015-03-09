@@ -17,7 +17,6 @@
 
 package br.com.webbudget.infraestructure;
 
-import br.com.webbudget.application.components.MessagesFactory;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;

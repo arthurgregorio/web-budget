@@ -17,7 +17,7 @@
 
 package br.com.webbudget.application.controller.tools;
 
-import br.com.webbudget.application.components.permission.Authority;
+import br.com.webbudget.application.permission.Authority;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.Permission;

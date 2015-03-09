@@ -17,7 +17,7 @@
 
 package br.com.webbudget.infraestructure;
 
-import br.com.webbudget.application.components.permission.Authority;
+import br.com.webbudget.application.permission.Authority;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.entity.users.Permission;
 import br.com.webbudget.domain.service.AccountService;

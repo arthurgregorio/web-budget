@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.com.webbudget.application.components;
+package br.com.webbudget.infraestructure;
 
 import java.io.Serializable;
 import java.util.Locale;

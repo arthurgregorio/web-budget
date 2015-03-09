@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.com.webbudget.application.components.permission;
+package br.com.webbudget.application.permission;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

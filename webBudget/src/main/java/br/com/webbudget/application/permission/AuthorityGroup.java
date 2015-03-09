@@ -15,35 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.com.webbudget.application.controller;
+package br.com.webbudget.application.permission;
 
-import br.com.webbudget.application.permission.Authority;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import lombok.Getter;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Bean utlizado pelo sistema para requisitar as authorities disponiveis no 
- * sistemas
- * 
+ * Annotation utlizada para realizar o agrupamento das authorities via reflection
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0
  * @since 1.0, 29/06/2014
  */
-@ManagedBean
-@RequestScoped
-public class PermissionsBean {
+@Documented
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AuthorityGroup {
 
-    @Getter
-    private Authority authority;
-    
     /**
-     * Inicializa a authority
+     * @return o grupo da authority
      */
-    @PostConstruct
-    protected void initialize() {
-        this.authority = new Authority();
-    }
+    String value() default "";
 }
