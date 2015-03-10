@@ -19,9 +19,8 @@ package br.com.webbudget.infraestructure;
 import br.com.webbudget.application.permission.Authority;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.entity.users.Permission;
-import br.com.webbudget.domain.repository.user.PermissionRepository;
-import br.com.webbudget.domain.repository.user.UserRepository;
-import br.com.webbudget.domain.service.AccountService;
+import br.com.webbudget.domain.repository.user.IPermissionRepository;
+import br.com.webbudget.domain.repository.user.IUserRepository;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -46,15 +46,16 @@ public class ApplicationInitializer implements ApplicationListener<ContextRefres
     private PasswordEncoder passwordEncoder;
             
     @Autowired
-    private UserRepository userRepository;
+    private IUserRepository userRepository;
     @Autowired
-    private PermissionRepository permissionRepository;
+    private IPermissionRepository permissionRepository;
 
     /**
      *
      * @param event
      */
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         // checa os dados do BD e marca que jah foi inicializado

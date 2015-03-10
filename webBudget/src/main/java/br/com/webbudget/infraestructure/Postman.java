@@ -51,12 +51,12 @@ import org.thymeleaf.context.Context;
 @Component
 public class Postman {
 
-    @Autowired
-    private MessagesFactory messages;
-    @Autowired
-    private JavaMailSender mailSender;
-    @Autowired
-    private TemplateEngine templateEngine;
+//    @Autowired
+//    private MessagesFactory messages;
+//    @Autowired
+//    private JavaMailSender mailSender;
+//    @Autowired
+//    private TemplateEngine templateEngine;
     
     private final Logger LOG = LoggerFactory.getLogger(Postman.class);
     
@@ -95,37 +95,37 @@ public class Postman {
     @Async
     public void newMessageWarning(User addressee) {
        
-        LOG.info("Sending new message warning to {}", addressee.getUsername());
-        
-        try {
-            final MimeMessage message = this.mailSender.createMimeMessage();
-            final MimeMessageHelper helper = this.createHelper(message);
-
-            helper.setTo(addressee.getEmail());
-            helper.setSubject(this.messages.getMessage(
-                    "mail.private-message.new-message-subject"));
-        
-            final Context context = new Context(FacesContext.getCurrentInstance()
-                    .getViewRoot().getLocale());
-            
-            context.setVariable("greeting", this.messages.getMessage(
-                    "mail.private-message.saudation", addressee.getName()));
-            context.setVariable("message", this.messages.getMessage("mail.private-message.body", 
-                    AccountService.getCurrentAuthenticatedUser().getName()));
-            context.setVariable("urlDescription", this.messages.getMessage("mail.private-message.link"));
-            context.setVariable("appUrl", this.getApplicationURL().toString());
-            context.setVariable("logo", this.getLogoPath().toString());
-            
-            final String body = this.templateEngine.process("NewMesageWarning.html", context);
-            
-            helper.setText(body, true);
-            
-            this.mailSender.send(message);
-                        
-            LOG.info("New message warning sent to {}", addressee.getUsername());
-        } catch (MessagingException | MailException ex) {
-            LOG.error("Error when try to send the message", ex);
-        }
+//        LOG.info("Sending new message warning to {}", addressee.getUsername());
+//        
+//        try {
+//            final MimeMessage message = this.mailSender.createMimeMessage();
+//            final MimeMessageHelper helper = this.createHelper(message);
+//
+//            helper.setTo(addressee.getEmail());
+//            helper.setSubject(this.messages.getMessage(
+//                    "mail.private-message.new-message-subject"));
+//        
+//            final Context context = new Context(FacesContext.getCurrentInstance()
+//                    .getViewRoot().getLocale());
+//            
+//            context.setVariable("greeting", this.messages.getMessage(
+//                    "mail.private-message.saudation", addressee.getName()));
+//            context.setVariable("message", this.messages.getMessage("mail.private-message.body", 
+//                    AccountService.getCurrentAuthenticatedUser().getName()));
+//            context.setVariable("urlDescription", this.messages.getMessage("mail.private-message.link"));
+//            context.setVariable("appUrl", this.getApplicationURL().toString());
+//            context.setVariable("logo", this.getLogoPath().toString());
+//            
+//            final String body = this.templateEngine.process("NewMesageWarning.html", context);
+//            
+//            helper.setText(body, true);
+//            
+//            this.mailSender.send(message);
+//                        
+//            LOG.info("New message warning sent to {}", addressee.getUsername());
+//        } catch (MessagingException | MailException ex) {
+//            LOG.error("Error when try to send the message", ex);
+//        }
     }
     
     /**

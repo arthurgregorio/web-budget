@@ -15,11 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.com.webbudget.infraestructure;
+package br.com.webbudget.infraestructure.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -50,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.userDetailsService);
+        auth.userDetailsService(this.userDetailsService).passwordEncoder(this.encoder());
     }
     
 
@@ -77,10 +78,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .failureUrl("/home.xhtml?error=true")
                 .permitAll()
             .and()
-            .sessionManagement()
-                .invalidSessionUrl("/invalidSession.xhtml")
-                .sessionFixation().none()
-            .and()
             .logout()
                 .invalidateHttpSession(true)
                 .logoutUrl("/main/logout")
@@ -102,6 +99,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/main/tools/user/**").hasRole("");
     }
 
+    /**
+     * 
+     * @return
+     * @throws Exception 
+     */
+    @Override
+    @Bean(name = "customAuthenticationManager")
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean(); 
+    }
+    
     /**
      * 
      * @return 

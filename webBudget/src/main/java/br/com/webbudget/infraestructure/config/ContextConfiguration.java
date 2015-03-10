@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.com.webbudget.infraestructure;
+package br.com.webbudget.infraestructure.config;
 
 import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
