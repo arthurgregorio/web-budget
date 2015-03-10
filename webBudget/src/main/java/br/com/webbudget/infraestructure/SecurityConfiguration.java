@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur
+  * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ package br.com.webbudget.infraestructure;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -36,6 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @version 1.0
  * @since 1.0, 07/03/2015
  */
+@Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -49,8 +50,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(this.authProvider());
+        auth.userDetailsService(this.userDetailsService);
     }
+    
 
     /**
      * 
@@ -83,7 +85,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .logoutUrl("/main/logout")
                 .logoutSuccessUrl("/home.xhtml?logout=true")
-                .deleteCookies("JSESSIONID")
                 .permitAll()
             .and()
                 .authorizeRequests()
@@ -106,22 +107,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * @return 
      */
     @Bean
-    public DaoAuthenticationProvider authProvider() {
-        
-        final DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        
-        provider.setUserDetailsService(this.userDetailsService);
-        provider.setPasswordEncoder(this.encoder());
-        
-        return provider;
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    @Bean
     public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder(11);
+        return new BCryptPasswordEncoder(13);
     }
 }

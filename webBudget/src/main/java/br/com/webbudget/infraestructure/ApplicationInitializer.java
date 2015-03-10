@@ -14,44 +14,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.infraestructure;
 
 import br.com.webbudget.application.permission.Authority;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.entity.users.Permission;
+import br.com.webbudget.domain.repository.user.PermissionRepository;
+import br.com.webbudget.domain.repository.user.UserRepository;
 import br.com.webbudget.domain.service.AccountService;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/02/2014
+ * @version 1.1.0
+ * @since 1.1.0, 18/02/2014
  */
 @Component
-public class Bootstrap {
+public class ApplicationInitializer implements ApplicationListener<ContextRefreshedEvent> {
+
+    private boolean bootstraped = false;
 
     @Autowired
-    private AccountService accountService;
+    private PasswordEncoder passwordEncoder;
+            
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     /**
-     * Incializa o bootstrap da aplicacao
+     *
+     * @param event
      */
-    @PostConstruct
-    void initialize() {
-        
-        // diz que a lingua padrao e pt_BR
-        Locale.setDefault(new Locale("pt", "BR"));
-        
-        // checa os dados do BD
-        this.checkForAdmin();
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+
+        // checa os dados do BD e marca que jah foi inicializado
+        if (!this.bootstraped) {
+            this.checkForAdmin();
+            this.bootstraped = true;
+        }
     }
 
     /**
@@ -60,7 +70,7 @@ public class Bootstrap {
     private void checkForAdmin() {
 
         // busca pelo admin
-        User user = this.accountService.findUserByUsername("admin");
+        User user = this.userRepository.findByUsername("admin");
 
         // checa se ele existe ou nao
         if (user == null) {
@@ -75,25 +85,32 @@ public class Bootstrap {
 
             // cria as permissoes
             final Set<Permission> permissions = new HashSet<>();
-            
+
             // instanciamos a classe que contem todas as authorities
             final Authority authorities = new Authority();
-            
-            // lista todas as disponiveis
-            for (String authority : authorities.getAllAvailableAuthorities()) {
-                final Permission permission = new Permission();
-                
-                permission.setAuthority(authority);
-                
-                // seta na lista de permissoes
-                permissions.add(permission);
-            }
-            
-            // seta a permissao no usuario
-            user.setPermissions(permissions);
 
-            // salva o admin com todas as permissoes
-            this.accountService.createAccount(user);
+            // lista todas as disponiveis
+            authorities.getAllAvailableAuthorities().stream().map((authority) -> {
+                final Permission permission = new Permission();
+                permission.setAuthority(authority);
+                return permission;
+            }).forEach((permission) -> {
+                permissions.add(permission);
+            });
+
+            final String encodedPassword = 
+                    this.passwordEncoder.encode(user.getUnsecurePassword());
+
+            user.setPassword(encodedPassword);
+
+            // salva o usuario
+            user = this.userRepository.save(user);
+
+            // salvamos novamente as permissions
+            for (Permission permission : permissions) {
+                permission.setUser(user);
+                this.permissionRepository.save(permission);
+            }
         }
     }
 }

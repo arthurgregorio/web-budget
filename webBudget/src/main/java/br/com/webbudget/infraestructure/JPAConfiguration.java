@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -75,15 +74,26 @@ public class JPAConfiguration {
      * 
      * @return 
      */
-    @Bean
+    @Bean(destroyMethod = "close")
     public DataSource dataSource() {
         
-        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        final org.apache.tomcat.jdbc.pool.DataSource dataSource = 
+                new org.apache.tomcat.jdbc.pool.DataSource();
         
+        // config default do DS
         dataSource.setDriverClassName(this.env.getProperty("jdbc.driverClassName"));
         dataSource.setUrl(this.env.getProperty("jdbc.url"));
         dataSource.setUsername(this.env.getProperty("jdbc.username"));
         dataSource.setPassword(this.env.getProperty("jdbc.password"));
+        
+        // config do pool
+        dataSource.setInitialSize(5);
+        dataSource.setMaxActive(25);
+        dataSource.setMaxIdle(10);
+        dataSource.setMinIdle(5);
+        
+        // desabilita o autocommit
+        dataSource.setDefaultAutoCommit(false);
         
         return dataSource;
     }
