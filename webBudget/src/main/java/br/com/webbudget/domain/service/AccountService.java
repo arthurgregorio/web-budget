@@ -51,11 +51,53 @@ public class AccountService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationManager authenticationManager;
     
     @Autowired
     private IUserRepository userRepository;
     @Autowired
     private IPermissionRepository permissionRepository;
+    
+    /**
+     * Realiza o a autenticacao do usuario
+     * 
+     * @param user o usuario a ser autenticado
+     * @return true ou false indicando se ele pode ou nao realizar login
+     * 
+     * @throws ApplicationException se houver algum erro ou o usuario for invalido
+     */
+    @Transactional(readOnly = true)
+    public boolean login(User user) throws ApplicationException {
+
+        final String password = user.getPassword();
+        user = this.userRepository.findByUsername(user.getUsername());
+
+        if (user == null) {
+            throw new ApplicationException("authentication.error.invalid-user");
+        }
+
+        try {
+            final Authentication authenticate = this.authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), password));
+
+            if (authenticate.isAuthenticated()) {
+                SecurityContextHolder.getContext().setAuthentication(authenticate);
+                return true;
+            }
+        } catch (AuthenticationException ex) {
+            throw new ApplicationException("authentication.error");
+        }
+        return false;
+    }
+    
+    /**
+     * Logout do usuario
+     */
+    public void logout() {
+        SecurityContextHolder.clearContext();
+        SecurityContextHolder.createEmptyContext();
+    }
     
     /**
      * Cria uma nova conta de usuario

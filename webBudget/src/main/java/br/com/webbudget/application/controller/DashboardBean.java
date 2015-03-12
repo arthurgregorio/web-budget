@@ -24,7 +24,6 @@ import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.PrivateMessageService;
-import br.com.webbudget.infraestructure.Authenticator;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -66,17 +65,17 @@ public class DashboardBean extends AbstractBean {
     private PieChartModel revenueModel;
     
     @Setter
-    @ManagedProperty("#{authenticator}")
-    private Authenticator authenticator;
+    @ManagedProperty("#{accountService}")
+    private transient AccountService accountService;
     @Setter
     @ManagedProperty("#{movementService}")
-    private MovementService movementService;
+    private transient MovementService movementService;
     @Setter
     @ManagedProperty("#{graphModelService}")
-    private GraphModelService graphModelService;
+    private transient GraphModelService graphModelService;
     @Setter
     @ManagedProperty("#{privateMessageService}")
-    private PrivateMessageService privateMessageService;
+    private transient PrivateMessageService privateMessageService;
 
     /**
      * 
@@ -156,7 +155,7 @@ public class DashboardBean extends AbstractBean {
      * @return 
      */
     public String doLogout() {
-        this.authenticator.logout();
+        this.accountService.logout();
         return "/home.xhtml?faces-redirect=true";
     }
 

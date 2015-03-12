@@ -17,7 +17,7 @@
 
 package br.com.webbudget.infraestructure.config;
 
-import br.com.webbudget.infraestructure.Authenticator;
+import br.com.webbudget.domain.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +42,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private Authenticator authenticator;
+    private AccountService accountService;
     
     /**
      * 
@@ -51,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(this.authenticator);
+        auth.userDetailsService(this.accountService).passwordEncoder(this.encoder());
     }
 
     /**
