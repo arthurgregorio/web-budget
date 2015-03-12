@@ -41,11 +41,13 @@
                 <div class="messages-row">
                     <p:messages id="messages" closable="true" globalOnly="true" />
                 </div>
-                <p:inputText autocomplete="false"
+                <p:inputText id="inUsername"
+                             autocomplete="false"
                              styleClass="username-input" 
                              value="#{authenticationBean.user.username}" 
                              placeholder="#{messages['authentication.user']}" />
-                <p:password autocomplete="false"
+                <p:password id="inPassword"
+                            autocomplete="false"
                             styleClass="password-input" 
                             value="#{authenticationBean.user.password}" 
                             placeholder="#{messages['authentication.password']}"/>

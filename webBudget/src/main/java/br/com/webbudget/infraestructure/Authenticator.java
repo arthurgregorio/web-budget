@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,18 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package br.com.webbudget.infraestructure;
 
 import br.com.webbudget.domain.entity.users.User;
-import br.com.webbudget.domain.service.AccountService;
+import br.com.webbudget.domain.repository.user.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -38,7 +42,10 @@ import org.springframework.stereotype.Component;
 public class Authenticator implements AuthenticationProvider {
 
     @Autowired
-    private AccountService accountService;
+    private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private IUserRepository userRepository;
 
     /**
      *
@@ -47,21 +54,30 @@ public class Authenticator implements AuthenticationProvider {
      * @throws AuthenticationException
      */
     @Override
+    @Transactional(readOnly = true)
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
         final UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
 
-        final User user = this.accountService.findUserByUsername(token.getName());
+        final User user = this.userRepository.findByUsername(token.getName());
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("authentication-user-not-found");
         } else if (!user.getPassword().equals(String.valueOf(token.getCredentials()))) {
-            throw new BadCredentialsException("Bad Credentials");
+            throw new BadCredentialsException("authentication.bad-credentials");
         }
 
         return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }
 
+    /**
+     * Logout do usuario
+     */
+    public void logout() {
+        SecurityContextHolder.clearContext();
+        SecurityContextHolder.createEmptyContext();
+    }
+    
     /**
      *
      * @param authentication
