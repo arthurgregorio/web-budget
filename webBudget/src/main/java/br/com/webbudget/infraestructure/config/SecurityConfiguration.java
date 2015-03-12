@@ -17,6 +17,7 @@
 
 package br.com.webbudget.infraestructure.config;
 
+import br.com.webbudget.infraestructure.Authenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -42,7 +42,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private Authenticator authenticator;
     
     /**
      * 
@@ -51,9 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.userDetailsService).passwordEncoder(this.encoder());
+        auth.authenticationProvider(this.authenticator);
     }
-    
 
     /**
      * 
@@ -67,36 +66,42 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/javax.faces.resource/**");
     }
 
+    /**
+     * 
+     * @param http
+     * @throws Exception 
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-            .csrf().disable()
-            .formLogin()
+            .csrf()
+                .disable()
+            .authorizeRequests()
+                .antMatchers("/main/entries/cards/**").hasRole("")
+                .antMatchers("/main/entries/contacts/**").hasRole("")
+                .antMatchers("/main/entries/costCenter/**").hasRole("")
+                .antMatchers("/main/entries/movementClass/**").hasRole("")
+                .antMatchers("/main/entries/wallets/**").hasRole("")
+                .antMatchers("/main/financial/cardInvoice/**").hasRole("")
+                .antMatchers("/main/financial/movement/**").hasRole("")
+                .antMatchers("/main/financial/transfer/**").hasRole("")
+                .antMatchers("/main/miscellany/closing/**").hasRole("")
+                .antMatchers("/main/miscellany/financialPeriod/**").hasRole("")
+                .antMatchers("/main/tools/privateMessage/**").hasRole("")
+                .antMatchers("/main/tools/user/**").hasRole("")
+            .anyRequest()
+                .authenticated()
+            .and()
+                .formLogin()
                 .loginPage("/home.xhtml")
-                .defaultSuccessUrl("/main/dashboard.xhtml")
-                .failureUrl("/home.xhtml?error=true")
                 .permitAll()
             .and()
             .logout()
                 .invalidateHttpSession(true)
                 .logoutUrl("/main/logout")
                 .logoutSuccessUrl("/home.xhtml?logout=true")
-                .permitAll()
-            .and()
-                .authorizeRequests()
-                    .antMatchers("/main/entries/cards/**").hasRole("")
-                    .antMatchers("/main/entries/contacts/**").hasRole("")
-                    .antMatchers("/main/entries/costCenter/**").hasRole("")
-                    .antMatchers("/main/entries/movementClass/**").hasRole("")
-                    .antMatchers("/main/entries/wallets/**").hasRole("")
-                    .antMatchers("/main/financial/cardInvoice/**").hasRole("")
-                    .antMatchers("/main/financial/movement/**").hasRole("")
-                    .antMatchers("/main/financial/transfer/**").hasRole("")
-                    .antMatchers("/main/miscellany/closing/**").hasRole("")
-                    .antMatchers("/main/miscellany/financialPeriod/**").hasRole("")
-                    .antMatchers("/main/tools/privateMessage/**").hasRole("")
-                    .antMatchers("/main/tools/user/**").hasRole("");
+                .permitAll();
     }
 
     /**
@@ -104,8 +109,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * @return
      * @throws Exception 
      */
+    @Bean
     @Override
-    @Bean(name = "customAuthenticationManager")
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean(); 
     }

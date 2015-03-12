@@ -22,17 +22,18 @@ import br.com.webbudget.domain.entity.users.Permission;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.repository.user.IPermissionRepository;
 import br.com.webbudget.domain.repository.user.IUserRepository;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class AccountService implements Serializable {
+public class AccountService implements UserDetailsService {
 
     @Autowired
     private IUserRepository userRepository;
@@ -56,7 +57,6 @@ public class AccountService implements Serializable {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    @Qualifier("customAuthenticationManager")
     private AuthenticationManager authenticationManager;
     
     /**
@@ -247,5 +247,27 @@ public class AccountService implements Serializable {
         } else {
             return this.userRepository.listByStatus(blocked);
         }
+    }
+    
+    /**
+     * Metodo default da interface UserDetailsService do spring security
+     * 
+     * @see UserDetailsService#loadUserByUsername(java.lang.String) 
+     * 
+     * @param username
+     * @return
+     * 
+     * @throws UsernameNotFoundException 
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        final User user = this.userRepository.findByUsername(username);
+        
+        if (user == null) {
+            throw new UsernameNotFoundException("authentication.error.invalid_user");
+        }
+        return user;
     }
 }
