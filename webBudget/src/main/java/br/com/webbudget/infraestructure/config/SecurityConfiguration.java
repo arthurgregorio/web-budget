@@ -17,7 +17,6 @@
 
 package br.com.webbudget.infraestructure.config;
 
-import br.com.webbudget.domain.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +26,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -42,7 +41,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AccountService accountService;
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserDetailsService userDetailsService;
     
     /**
      * 
@@ -51,7 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.accountService).passwordEncoder(this.encoder());
+        auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder);
     }
 
     /**
@@ -77,6 +78,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
             .csrf()
                 .disable()
+            .formLogin()
+                .loginPage("/home.xhtml")
+                .loginProcessingUrl("/login")
+                .permitAll()
+            .and()
             .authorizeRequests()
                 .antMatchers("/main/entries/cards/**").hasRole("")
                 .antMatchers("/main/entries/contacts/**").hasRole("")
@@ -92,12 +98,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/main/tools/user/**").hasRole("")
             .anyRequest()
                 .authenticated()
-            .and()
-                .formLogin()
-                .loginPage("/home.xhtml")
-                .usernameParameter("inUsername")
-                .passwordParameter("inPassword")
-                .permitAll()
             .and()
             .logout()
                 .invalidateHttpSession(true)
@@ -115,14 +115,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean(); 
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder(13);
     }
 }

@@ -28,6 +28,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  *
@@ -98,5 +100,14 @@ public class ContextConfiguration {
         transport.setJavaMailProperties(properties);
         
         return transport;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder(13);
     }
 }
