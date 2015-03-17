@@ -99,10 +99,7 @@ public class ApplicationInitializer implements ApplicationListener<ContextRefres
                 permissions.add(permission);
             });
 
-            final String encodedPassword = 
-                    this.passwordEncoder.encode(user.getUnsecurePassword());
-
-            user.setPassword(encodedPassword);
+            user.setPassword(this.passwordEncoder.encode(user.getUnsecurePassword()));
 
             // salva o usuario
             user = this.userRepository.save(user);

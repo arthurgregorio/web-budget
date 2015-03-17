@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
@@ -53,12 +52,12 @@ public class AccountService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
-    
+
     @Autowired
     private IUserRepository userRepository;
     @Autowired
     private IPermissionRepository permissionRepository;
-    
+
     /**
      * Realiza o a autenticacao do usuario
      * 
@@ -82,6 +81,8 @@ public class AccountService implements UserDetailsService {
                     new UsernamePasswordAuthenticationToken(user.getUsername(), password));
 
             if (authenticate.isAuthenticated()) {
+                SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+                SecurityContextHolder.createEmptyContext();
                 SecurityContextHolder.getContext().setAuthentication(authenticate);
                 return true;
             }
@@ -101,95 +102,89 @@ public class AccountService implements UserDetailsService {
     
     /**
      * Cria uma nova conta de usuario
-     * 
+     *
      * @param user o usuario a ser criado no sistema
      */
     public void createAccount(User user) {
-        
+
         // checa se o cara ja existe
         final User found = this.findUserByUsername(user.getUsername());
-        
+
         if (found != null) {
             throw new ApplicationException("user-account.validate.username-used");
         }
-        
+
         // checa se tem permissoes
         if (user.getPermissions().isEmpty()) {
             throw new ApplicationException("user-account.validate.no-permissions");
         }
 
-        final String encodedPassword = this.passwordEncoder.encode(user.getUnsecurePassword());
-
-        user.setPassword(encodedPassword);
+        user.setPassword(this.passwordEncoder.encode(user.getUnsecurePassword()));
 
         // pegamos as novas permissoes antes de salvar o user, 
         // se pegar depois vem null pq o JPA da limpa o que e transient
         final Set<Permission> permissions = user.getPermissions();
-        
+
         // salva o usuario
         user = this.userRepository.save(user);
-        
+
         // salvamos novamente as permissions
         for (Permission permission : permissions) {
             permission.setUser(user);
             this.permissionRepository.save(permission);
         }
     }
-    
+
     /**
      * Atualiza uma conta de usuario
-     * 
+     *
      * @param user a conta a ser atualizada
      */
     public void updateAccount(User user) {
-        
+
         // checa se tem permissoes
         if (user.getPermissions().isEmpty()) {
             throw new ApplicationException("user-account.validate.no-permissions");
         }
-        
+
         // atualiza o password se precisar
         if (user.getUnsecurePassword() != null && !user.getUnsecurePassword().isEmpty()) {
-        
-            final String encodedPassword = 
-                    this.passwordEncoder.encode(user.getUnsecurePassword());
-            
-            user.setPassword(encodedPassword);
+            user.setPassword(this.passwordEncoder.encode(user.getUnsecurePassword()));
         }
-        
+
         // pegamos as novas permissoes antes de salvar o user, 
         // se pegar depois vem null pq o JPA da limpa o que e transient
         final Set<Permission> newPermissions = user.getPermissions();
 
         // salva o usuario
         user = this.userRepository.save(user);
-        
+
         // excluimos todas as permissoes atuais
         final Set<Permission> oldPermissions = new HashSet<>(this.permissionRepository.listByUser(user));
-        
+
         for (Permission permission : oldPermissions) {
             this.permissionRepository.delete(permission);
         }
-        
+
         // salvamos novamente as permissions
         for (Permission permission : newPermissions) {
             permission.setUser(user);
             this.permissionRepository.save(permission);
         }
     }
-    
+
     /**
      * Deleta a conta de usuario
-     * 
+     *
      * @param user a conta a ser deletada
      */
     public void deleteAccount(User user) {
         this.userRepository.delete(user);
     }
-    
+
     /**
      * Retorna o usuario autenticado no contexto atual
-     * 
+     *
      * @return o usuario autenticado no contexto
      */
     public static User getCurrentAuthenticatedUser() {
@@ -205,66 +200,48 @@ public class AccountService implements UserDetailsService {
     /**
      * 
      * @param username
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public User findUserByUsername(String username) {
         return this.userRepository.findByUsername(username);
     }
-    
+
     /**
-     * 
+     *
      * @param userId
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public User findAccountById(long userId) {
         return this.userRepository.findById(userId, false);
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Transactional(readOnly = true)
     public List<User> listAccounts() {
         return this.userRepository.listAll();
     }
-    
-    /**
-     * Lista os usuarios pelo seu status
-     * 
-     * @param blocked se quer o nao os usuarios bloqueados
-     * @param removeCurrent remove o usuario logado da lista
-     * 
-     * @return lista de usuarios
-     */
-    public List<User> listUsersByStatus(boolean blocked, boolean removeCurrent) {
-        
-        if (removeCurrent) { 
-            return this.userRepository.listByStatusAndRemoveAuthenticated(
-                    blocked, AccountService.getCurrentAuthenticatedUser());
-        } else {
-            return this.userRepository.listByStatus(blocked);
-        }
-    }
-    
+
     /**
      * Metodo default da interface UserDetailsService do spring security
-     * 
-     * @see UserDetailsService#loadUserByUsername(java.lang.String) 
-     * 
+     *
+     * @see UserDetailsService#loadUserByUsername(java.lang.String)
+     *
      * @param username
      * @return
-     * 
-     * @throws UsernameNotFoundException 
+     *
+     * @throws UsernameNotFoundException
      */
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         final User user = this.userRepository.findByUsername(username);
-        
+
         if (user == null) {
             throw new UsernameNotFoundException("authentication.error.invalid_user");
         }

@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
@@ -30,8 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * MBean que contem os metodos de autenticacao do usuario, nele e feita a invo-<br/>
- * cacao do metodo de autenticacao e tambem a validacao dos dados informados
+ * Bean que controla a autenticacao no sistema, por ele invocamos o gerenciador
+ * de autenticacao para que o usuario possa realizar acesso ao sistema
  *
  * @author Arthur Gregorio
  *
@@ -41,35 +40,35 @@ import org.slf4j.LoggerFactory;
 @ViewScoped
 @ManagedBean
 public class AuthenticationBean extends AbstractBean {
-    
+
     @Getter
     private User user;
-    
+
     @Setter
     @ManagedProperty("#{accountService}")
     private transient AccountService accountService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
         return LoggerFactory.getLogger(AuthenticationBean.class);
     }
-    
+
     /**
-     * 
+     *
      */
     @PostConstruct
     public void initialize() {
         this.user = new User();
     }
-    
+
     /**
      * Realiza o login, se houver erro redireciona para a home novamente e <br/>
      * impede que prossiga
-     * 
+     *
      * @return a home autenticada ou a home de login caso acesso negado
      */
     public String doLogin() {

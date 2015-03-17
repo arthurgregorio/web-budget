@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
@@ -23,6 +22,7 @@ import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.entity.users.UserPrivateMessage;
 import br.com.webbudget.domain.repository.user.IPrivateMessageRepository;
 import br.com.webbudget.domain.repository.user.IUserPrivateMessageRepository;
+import br.com.webbudget.domain.repository.user.IUserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,124 +41,144 @@ import org.springframework.transaction.annotation.Transactional;
 public class PrivateMessageService {
 
     @Autowired
+    private IUserRepository userRepository;
+    @Autowired
     private IPrivateMessageRepository privateMessageRepository;
     @Autowired
     private IUserPrivateMessageRepository userPrivateMessageRepository;
-    
+
     /**
-     * 
-     * @param privateMessage 
+     *
+     * @param privateMessage
      */
     public void savePrivateMessage(PrivateMessage privateMessage) {
-        
+
         if (privateMessage.getRecipients() == null || privateMessage.getRecipients().isEmpty()) {
             throw new ApplicationException("private-message.validate.no-receipts");
         }
-        
+
         // pegamos os destinatarios
         final List<User> receipts = new ArrayList<>(privateMessage.getRecipients());
-        
+
         // salvamos a mensagem
         privateMessage = this.privateMessageRepository.save(privateMessage);
-        
+
         // enviamos para os usuarios pela associacao das tabelas
         for (User user : receipts) {
-            
+
             final UserPrivateMessage associative = new UserPrivateMessage();
-            
+
             associative.setRecipient(user);
             associative.setPrivateMessage(privateMessage);
-            
+
             // salva a mensagem
             this.userPrivateMessageRepository.save(associative);
         }
     }
-    
+
     /**
-     * 
-     * @param privateMessage 
+     *
+     * @param privateMessage
      */
     public void deletePrivateMessage(PrivateMessage privateMessage) {
         privateMessage.setDeleted(true);
         this.privateMessageRepository.save(privateMessage);
     }
-    
+
     /**
-     * 
-     * @param userPrivateMessage 
+     *
+     * @param userPrivateMessage
      */
     public void markAsRead(UserPrivateMessage userPrivateMessage) {
         userPrivateMessage.setWasRead(true);
         this.userPrivateMessageRepository.save(userPrivateMessage);
     }
-    
+
     /**
-     * 
-     * @param userPrivateMessage 
+     *
+     * @param userPrivateMessage
      */
     public void markAsDeleted(UserPrivateMessage userPrivateMessage) {
         userPrivateMessage.setDeleted(true);
         this.userPrivateMessageRepository.save(userPrivateMessage);
     }
-    
+
     /**
-     * 
+     *
      * @param privateMessageId
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public PrivateMessage findPrivateMessageById(long privateMessageId) {
         return this.privateMessageRepository.findById(privateMessageId, false);
     }
-    
+
     /**
-     * 
+     *
      * @param userPrivateMessageId
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public UserPrivateMessage findUserPrivateMessageById(long userPrivateMessageId) {
         return this.userPrivateMessageRepository.findById(userPrivateMessageId, false);
     }
-    
+
     /**
-     * 
+     *
      * @param user
      * @param showUnread
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<UserPrivateMessage> listMessagesByUser(User user, Boolean showUnread) {
         return this.userPrivateMessageRepository.listByUser(user, showUnread);
     }
-    
+
     /**
-     * 
+     *
      * @param showUnread
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<UserPrivateMessage> listMessagesByCurrentUser(Boolean showUnread) {
         final User user = AccountService.getCurrentAuthenticatedUser();
         return this.userPrivateMessageRepository.listByUser(user, showUnread);
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Transactional(readOnly = true)
     public List<PrivateMessage> listPrivateMessagesSent() {
         return this.privateMessageRepository.listSent(AccountService.getCurrentAuthenticatedUser());
     }
-    
+
     /**
-     * 
+     *
      * @param privateMessage
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<UserPrivateMessage> listPrivateMessageReceipts(PrivateMessage privateMessage) {
         return this.userPrivateMessageRepository.listReceipts(privateMessage);
+    }
+
+    /**
+     * Lista os usuarios pelo seu status
+     *
+     * @param blocked se quer o nao os usuarios bloqueados
+     * @param removeCurrent remove o usuario logado da lista
+     *
+     * @return lista de usuarios
+     */
+    public List<User> listUsersByStatus(boolean blocked, boolean removeCurrent) {
+
+        if (removeCurrent) {
+            return this.userRepository.listByStatusAndRemoveAuthenticated(
+                    blocked, AccountService.getCurrentAuthenticatedUser());
+        } else {
+            return this.userRepository.listByStatus(blocked);
+        }
     }
 }

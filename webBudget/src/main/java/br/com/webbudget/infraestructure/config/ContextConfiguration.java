@@ -41,7 +41,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @ComponentScan({
     "br.com.webbudget.domain",
-    "br.com.webbudget.infraestructure"
+    "br.com.webbudget.infraestructure",
+    "br.com.webbudget.application.controller"
 })
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @PropertySource("classpath:config/webbudget.properties")

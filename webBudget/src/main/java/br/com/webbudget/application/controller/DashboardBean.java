@@ -14,16 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.entity.users.UserPrivateMessage;
 import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.PrivateMessageService;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;

@@ -23,6 +23,7 @@ import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.Permission;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.service.AccountService;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

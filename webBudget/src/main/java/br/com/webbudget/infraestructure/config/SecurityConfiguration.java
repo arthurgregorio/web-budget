@@ -1,5 +1,5 @@
 /*
-  * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.infraestructure.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,27 +38,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserDetailsService userDetailsService;
-    
+
     /**
      * 
      * @param auth
      * @throws Exception 
      */
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    @Autowired
+    public void registerGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder);
     }
 
     /**
-     * 
+     *
      * @param web
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -68,9 +69,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 
+     *
      * @param http
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -80,8 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .disable()
             .formLogin()
                 .loginPage("/home.xhtml")
-                .usernameParameter("inUsername")
-                .passwordParameter("inPassword")
+                .loginProcessingUrl("/loginSpring")
                 .failureUrl("/home.xhtml?failure=true")
                 .defaultSuccessUrl("/main/dashboard.xhtml?faces-redirect=true")
                 .permitAll()
@@ -110,13 +110,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 
-     * @return
-     * @throws Exception 
+     *
+     * @return @throws Exception
      */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean(); 
+        return super.authenticationManagerBean();
     }
 }

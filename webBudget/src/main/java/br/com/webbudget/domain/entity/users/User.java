@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.users;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -52,12 +51,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EqualsAndHashCode(callSuper = true, of = {"email", "username"})
 public class User extends PersistentEntity implements UserDetails {
 
-    @Getter 
+    @Getter
     @Setter
     @NotEmpty(message = "{user-account.name}")
     @Column(name = "name", length = 90, nullable = false)
     private String name;
-    @Getter 
+    @Getter
     @Setter
     @Email(message = "{user-account.email}")
     @NotEmpty(message = "{user-account.email}")
@@ -71,11 +70,11 @@ public class User extends PersistentEntity implements UserDetails {
     @Setter
     @Column(name = "password", length = 64, nullable = false)
     private String password;
-    @Getter 
+    @Getter
     @Setter
     @Column(name = "blocked")
     private boolean blocked;
-    
+
     /**
      * as permissoes do usuario, eager pq se for lazy quando o spring solicitar
      * as authoritys vai bater no proxy do hibernate e estourar um lazyinitiexp
@@ -85,18 +84,18 @@ public class User extends PersistentEntity implements UserDetails {
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Permission> permissions;
-    
-    @Getter 
+
+    @Getter
     @Setter
     @Transient
     private boolean selected;
-    @Getter 
+    @Getter
     @Setter
     @Transient
     @NotEmpty(message = "{user-account.password}")
     @Length(min = 5, max = 64, message = "{user-account.password-gt-5}")
     private String unsecurePassword;
-    @Getter 
+    @Getter
     @Setter
     @Transient
     private String unsecurePasswordConfirmation;
@@ -105,7 +104,7 @@ public class User extends PersistentEntity implements UserDetails {
      * Junta todas as permissoes do usuario vindas pela ralacao user-permission
      * e devolve elas no metodo padrao do spring para saber quais as authorities
      * do usuario
-     * 
+     *
      * @return a lista de authorities do usuario
      */
     @Override
@@ -114,8 +113,8 @@ public class User extends PersistentEntity implements UserDetails {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String getUsername() {
@@ -123,8 +122,8 @@ public class User extends PersistentEntity implements UserDetails {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public boolean isAccountNonExpired() {
@@ -132,8 +131,8 @@ public class User extends PersistentEntity implements UserDetails {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public boolean isAccountNonLocked() {
@@ -141,8 +140,8 @@ public class User extends PersistentEntity implements UserDetails {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public boolean isCredentialsNonExpired() {
@@ -150,8 +149,8 @@ public class User extends PersistentEntity implements UserDetails {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public boolean isEnabled() {

@@ -18,7 +18,6 @@
 package br.com.webbudget.domain.entity.users;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
-import br.com.webbudget.domain.service.AccountService;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -106,14 +105,5 @@ public class PrivateMessage extends PersistentEntity {
             }
         }
         return generated;
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    public boolean isCurrentAuthenticatedOwner() {
-        return this.sender != null && 
-                this.sender.equals(AccountService.getCurrentAuthenticatedUser());
     }
 }
