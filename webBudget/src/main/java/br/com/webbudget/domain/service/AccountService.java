@@ -81,8 +81,6 @@ public class AccountService implements UserDetailsService {
                     new UsernamePasswordAuthenticationToken(user.getUsername(), password));
 
             if (authenticate.isAuthenticated()) {
-                SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
-                SecurityContextHolder.createEmptyContext();
                 SecurityContextHolder.getContext().setAuthentication(authenticate);
                 return true;
             }

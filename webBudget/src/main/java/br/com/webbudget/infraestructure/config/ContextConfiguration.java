@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.infraestructure.config;
 
 import java.util.Properties;
@@ -32,6 +31,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
+ * Configura todo o contexto base da aplicacao junto ao Spring
  *
  * @author Arthur Gregorio
  *
@@ -41,8 +41,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @ComponentScan({
     "br.com.webbudget.domain",
-    "br.com.webbudget.infraestructure",
-    "br.com.webbudget.application.controller"
+    "br.com.webbudget.infraestructure"
 })
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @PropertySource("classpath:config/webbudget.properties")
@@ -50,19 +49,18 @@ public class ContextConfiguration {
 
     @Autowired
     private Environment env;
-    
+
     /**
-     * 
-     * @return 
+     * @return nosso property placeholder para que possamos trabalhar com os 
+     * arquivos *.property
      */
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
-    
+
     /**
-     *
-     * @return
+     * @return nosso message bundle gerenciado pelo spring
      */
     @Bean
     public ReloadableResourceBundleMessageSource configureMessageSource() {
@@ -73,39 +71,45 @@ public class ContextConfiguration {
         source.setBasename("classpath:/i18n/messages");
         source.setUseCodeAsDefaultMessage(true);
         source.setDefaultEncoding("UTF-8");
-        source.setCacheSeconds(0);
+        source.setCacheSeconds(5);
 
         return source;
     }
-    
+
     /**
+     * Configura a sessao do javamail para que possamos enviar emails
      * 
-     * @return 
+     * @return a sessao do javamail a ser usada no {@link Postman}
      */
     @Bean
     public JavaMailSenderImpl javaMailSenderImpl() {
-        
+
         final JavaMailSenderImpl transport = new JavaMailSenderImpl();
-        
+
         transport.setHost(this.env.getProperty("mail.host"));
         transport.setPort(this.env.getProperty("mail.port", Integer.class));
         transport.setUsername(this.env.getProperty("mail.user"));
         transport.setPassword(this.env.getProperty("mail.password"));
-        
+
         final Properties properties = new Properties();
-        
+
         properties.put("mail.debug", this.env.getProperty("mail.debug"));
         properties.put("mail.smtp.auth", true);
         properties.put("mail.smtp.starttls.enable", true);
-        
+
         transport.setJavaMailProperties(properties);
-        
+
         return transport;
     }
-    
+
     /**
+     * Nosso password encoder
      * 
-     * @return 
+     * OBS: ele esta aqui pois precisamos dele pronto antes de termos a confi-
+     * guracao do contexto de seguranca devido ao fato de este precisar 
+     * ser injetado na classe que configura a seguranca {@link SecurityConfiguration}
+     * 
+     * @return o nosso password encoder com forca setada param 13
      */
     @Bean
     public PasswordEncoder encoder() {

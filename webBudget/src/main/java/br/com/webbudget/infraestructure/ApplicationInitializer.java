@@ -31,6 +31,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * Classe responsavel pela inicializacao da aplicacao.
+ * 
+ * E por ela que incializamos o banco e fazemos o insert do usuario admin e suas
+ * roles. Caso haja necessidade no futuro de adicionar novos dados no primeiro 
+ * start da aplicacao, este e o local onde deve ser feito
  *
  * @author Arthur Gregorio
  *
@@ -51,8 +56,10 @@ public class ApplicationInitializer implements ApplicationListener<ContextRefres
     private IPermissionRepository permissionRepository;
 
     /**
+     * Quando o contexto disparar o evento de incializacao, este evento sera 
+     * disparado
      *
-     * @param event
+     * @param event o evento a ser escutado
      */
     @Override
     @Transactional

@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.infraestructure;
 
 import java.io.Serializable;
@@ -31,8 +30,8 @@ import org.springframework.stereotype.Component;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 28/02/2014
+ * @version 1.0.0
+ * @since 1.0.0, 28/02/2014
  */
 @Component
 public class MessagesFactory implements Serializable {

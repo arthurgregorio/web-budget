@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.infraestructure.config;
 
+import br.com.webbudget.domain.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,11 +31,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
+ * Configura toda infra de seguranca do sistema atraves do spring security
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 07/03/2015
+ * @version 1.0.0
+ * @since 1.1.0, 07/03/2015
  */
 @Configuration
 @EnableWebSecurity
@@ -47,6 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     /**
+     * Registra o contexto global de seguranca
      * 
      * @param auth
      * @throws Exception 
@@ -57,8 +60,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * Configura as url's que nao devem ser interceptadas
      *
-     * @param web
+     * @param web 
      * @throws Exception
      */
     @Override
@@ -69,6 +73,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * Configura as url's que devem ser inteceptadas pelo filtro de seguranca e 
+     * tambem define a url de logout e login
      *
      * @param http
      * @throws Exception
@@ -110,8 +116,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     *
-     * @return @throws Exception
+     * Disponibiliza a AuthenticationManager para injecao em outras classes
+     * 
+     * @see AccountService#login(br.com.webbudget.domain.entity.users.User) 
+     * 
+     * @return
+     * @throws Exception 
      */
     @Bean
     @Override

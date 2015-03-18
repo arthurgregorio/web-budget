@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.infraestructure.config;
 
 import java.util.Properties;
@@ -35,7 +34,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- *
+ * Classe responsavel pela configuracao do contexto do JPA junto ao Spring
+ * 
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -50,8 +50,9 @@ public class JPAConfiguration {
     private Environment env;
 
     /**
+     * Configura a factory do EM
      * 
-     * @return 
+     * @return a factory dos EM's
      */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -74,8 +75,9 @@ public class JPAConfiguration {
     }
 
     /**
+     * Configura o datasource define os parametros de pool
      * 
-     * @return 
+     * @return o datasource
      */
     @Bean(destroyMethod = "close")
     public DataSource dataSource() {
@@ -102,9 +104,10 @@ public class JPAConfiguration {
     }
 
     /**
+     * Configura o agente que ira gerenciar nossas transacoes
      * 
-     * @param factory
-     * @return 
+     * @param factory a factory de EM's
+     * @return o gerenciador de transacoes
      */
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory factory) {
@@ -117,8 +120,7 @@ public class JPAConfiguration {
     }
 
     /**
-     * 
-     * @return 
+     * @return o ExceptionTranslator default a aplicacao
      */
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
@@ -126,8 +128,7 @@ public class JPAConfiguration {
     }
 
     /**
-     *
-     * @return
+     * @return as propriedades adicionais para o nosso provider do JPA (hibernate)
      */
     private Properties additionalProperties() {
 
