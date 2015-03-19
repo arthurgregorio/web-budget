@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import lombok.Setter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 21/02/2015
+ * @version 1.0.0
+ * @since 1.0.0, 21/02/2015
  */
 public class PeriodDetailsDTO implements Serializable {
 

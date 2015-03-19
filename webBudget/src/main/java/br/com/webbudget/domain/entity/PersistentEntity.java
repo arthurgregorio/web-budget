@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity;
 
 import java.io.Serializable;
@@ -33,13 +32,14 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * Classe base para indicar que se trata de uma entiade, nela temos os dados <br/>
+ * Classe base para indicar que se trata de uma entiade, nela temos os dados
+ * <br/>
  * basicos e comuns para que a classe possa ser persistente.
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 06/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 06/10/2013
  */
 @MappedSuperclass
 @ToString(of = "id")
@@ -47,24 +47,24 @@ import lombok.ToString;
 public abstract class PersistentEntity implements IPersistentEntity<Long>, Serializable {
 
     @Id
-    @Column(name="id", unique=true, updatable=false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Getter
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="inclusion", nullable=false)
+    @Column(name = "inclusion", nullable = false)
     private Date inclusion;
     @Getter
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="last_edition")
+    @Column(name = "last_edition")
     private Date lastEdition;
 
     /**
      * @return {@inheritDoc}
      */
     @Override
-    public boolean isSaved(){
+    public boolean isSaved() {
         return !(getId() == null || getId() == 0);
     }
 
@@ -75,7 +75,7 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     protected void prePersist() {
         this.inclusion = new Date();
     }
-    
+
     /**
      * Antes de atualizar, muda a hora de atualização e o usuário que atualizou
      */
@@ -83,7 +83,7 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     protected void preUpdate() {
         this.lastEdition = new Date();
     }
-    
+
     /**
      * @return {@inheritDoc}
      */

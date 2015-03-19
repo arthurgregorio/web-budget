@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
@@ -42,8 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 06/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 06/04/2014
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -61,196 +60,197 @@ public class CardService {
     private IApportionmentRepository apportionmentRepository;
     @Autowired
     private IConfigurationRepository configurationRepository;
-    
+
     /**
-     * 
-     * @param card 
+     *
+     * @param card
      */
     public void saveCard(Card card) {
-        
-        final Card found = this.findCardByNumberAndType(card.getNumber(), 
+
+        final Card found = this.findCardByNumberAndType(card.getNumber(),
                 card.getCardType());
 
         if (found != null) {
             throw new ApplicationException("card.validate.duplicated");
         }
-        
+
         if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
             throw new ApplicationException("card.validate.no-debit-wallet");
         }
 
         this.cardRepository.save(card);
     }
-    
+
     /**
-     * 
+     *
      * @param card
-     * @return 
+     * @return
      */
     public Card updateCard(Card card) {
-        
-        final Card found = this.findCardByNumberAndType(card.getNumber(), 
+
+        final Card found = this.findCardByNumberAndType(card.getNumber(),
                 card.getCardType());
 
         if (found != null && !found.equals(card)) {
             throw new ApplicationException("card.validate.duplicated");
         }
-        
+
         if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
             throw new ApplicationException("card.validate.no-debit-wallet");
         }
-        
+
         return this.cardRepository.save(card);
     }
-    
+
     /**
-     * 
-     * @param card 
+     *
+     * @param card
      */
     public void deleteCard(Card card) {
         this.cardRepository.delete(card);
     }
-    
+
     /**
-     * Metodo que cria a movimentacao para a fatura referente ao cartao 
-     * 
+     * Metodo que cria a movimentacao para a fatura referente ao cartao
+     *
      * @param cardInvoice a fatura do cartao que sera transformada e movimento
-     * @param identificationPrefix prefixo a ser colocado antes do numerod da invoice
+     * @param identificationPrefix prefixo a ser colocado antes do numerod da
+     * invoice
      */
     public void createMovement(CardInvoice cardInvoice, String identificationPrefix) {
 
         final List<Movement> movements = cardInvoice.getMovements();
-        
+
         cardInvoice.setValue(cardInvoice.getTotal());
         cardInvoice.setIdentificationPefix(identificationPrefix);
-        
+
         cardInvoice = this.cardInvoiceRepository.save(cardInvoice);
-        
+
         // atualizamos os movimentos vinculados
         for (Movement movement : movements) {
 
             // altera o movimento para atender ao pagamento
             movement.setCardInvoicePaid(true);
             movement.setCardInvoice(cardInvoice);
-            
+
             // salva ele
             this.movementRepository.save(movement);
         }
 
         final Configuration config = this.configurationRepository.findDefault();
-        
+
         // cria o movimento para aparecer no financeiro
         Movement movement = new Movement();
-        
+
         // identificacao da fatura
-        movement.setDescription(cardInvoice.getIdentification() 
+        movement.setDescription(cardInvoice.getIdentification()
                 + " ref: " + cardInvoice.getCard().getReadableName());
-        
+
         // pegamos o dia de vencimento do cartao e setamos a conta para a data
         int dueDate = cardInvoice.getCard().getExpirationDay();
 
         if (dueDate != 0) {
-            
+
             final Calendar periodCompentence = Calendar.getInstance();
-            
+
             periodCompentence.setTime(cardInvoice.getFinancialPeriod().getEnd());
 
             final Calendar calendar = Calendar.getInstance();
-            
-            calendar.set(calendar.get(Calendar.YEAR), 
+
+            calendar.set(calendar.get(Calendar.YEAR),
                     periodCompentence.get(Calendar.MONTH) + 1, dueDate);
-            
+
             movement.setDueDate(calendar.getTime());
         } else {
             movement.setDueDate(cardInvoice.getFinancialPeriod().getEnd());
         }
-        
+
         movement.setFinancialPeriod(cardInvoice.getFinancialPeriod());
         movement.setMovementStateType(MovementStateType.OPEN);
         movement.setValue(cardInvoice.getValue());
         movement.setMovementType(MovementType.CARD_INVOICE);
-        
+
         movement = this.movementRepository.save(movement);
-        
+
         // salvamos o rateio dela em 100% para o CC e MC configurado
         final Apportionment apportionment = new Apportionment();
-        
+
         apportionment.setCostCenter(config.getInvoiceDefaultCostCenter());
         apportionment.setMovementClass(config.getInvoiceDefaultMovementClass());
         apportionment.setValue(cardInvoice.getValue());
         apportionment.setMovement(movement);
-        
+
         this.apportionmentRepository.save(apportionment);
-        
+
         // atualizamos a fatura com o movimento correspondente a ela
         cardInvoice.setMovement(movement);
         this.cardInvoiceRepository.save(cardInvoice);
     }
-    
+
     /**
-     * 
+     *
      * @param cardId
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public Card findCardById(long cardId) {
         return this.cardRepository.findById(cardId, false);
     }
-    
+
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<Card> listCards(Boolean isBlocked) {
         return this.cardRepository.listByStatus(isBlocked);
     }
-    
+
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<Card> listCreditCards(Boolean isBlocked) {
         return this.cardRepository.listCredit(isBlocked);
     }
-    
+
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<Card> listDebitCards(Boolean isBlocked) {
         return this.cardRepository.listDebit(isBlocked);
     }
-    
+
     /**
-     * 
+     *
      * @param number
      * @param cardType
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public Card findCardByNumberAndType(String number, CardType cardType) {
         return this.cardRepository.findByNumberAndType(number, cardType);
     }
-    
+
     /**
-     * 
+     *
      * @param cardInvoice
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public CardInvoice fillCardInvoice(CardInvoice cardInvoice) {
-        
+
         final List<Movement> movements = this.movementRepository.listPaidWithoutInvoiceByPeriodAndCard(
                 cardInvoice.getFinancialPeriod(), cardInvoice.getCard());
-        
+
         cardInvoice.setMovements(movements);
-        
+
         return cardInvoice;
     }
 }

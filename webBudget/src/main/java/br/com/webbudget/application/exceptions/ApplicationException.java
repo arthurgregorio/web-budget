@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.exceptions;
 
 import lombok.Getter;
@@ -24,37 +23,37 @@ import org.springframework.security.core.AuthenticationException;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 06/11/2013
+ * @version 1.0.0
+ * @since 1.0.0, 06/11/2013
  */
 public final class ApplicationException extends AuthenticationException {
 
     @Getter
     private Object[] parameters;
-    
+
     /**
-     * 
-     * @param message 
+     *
+     * @param message
      */
     public ApplicationException(String message) {
         super(message);
     }
-    
+
     /**
-     * 
+     *
      * @param message
-     * @param parameters 
+     * @param parameters
      */
     public ApplicationException(String message, Object... parameters) {
         super(message);
         this.parameters = parameters;
     }
-    
+
     /**
-     * 
+     *
      * @param message
      * @param throwable
-     * @param parameters 
+     * @param parameters
      */
     public ApplicationException(String message, Throwable throwable, Object... parameters) {
         super(message, throwable);

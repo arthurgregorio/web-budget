@@ -49,8 +49,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2014
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -180,11 +180,11 @@ public class MovementService {
         this.movementRepository.save(movement);
 
         // atualizamos os saldos das carteiras quando pagamento em dinheiro
-        if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH || 
-                payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
-            
+        if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH
+                || payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
+
             Wallet wallet;
-            
+
             if (payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
                 wallet = payment.getCard().getWallet();
             } else {
@@ -233,20 +233,20 @@ public class MovementService {
         if (movement.getFinancialPeriod().isClosed()) {
             throw new ApplicationException("maintenance.validate.closed-financial-period");
         }
-        
+
         // se tem vinculo com fatura, nao pode ser excluido
         if (movement.isCardInvoicePaid()) {
             throw new ApplicationException("maintenance.validate.has-card-invoice");
         }
-        
+
         // devolve o saldo na carteira se for o caso
-        if (movement.getMovementStateType() == MovementStateType.PAID && 
-                movement.getPayment().getPaymentMethodType() == PaymentMethodType.IN_CASH) {
-            
+        if (movement.getMovementStateType() == MovementStateType.PAID
+                && movement.getPayment().getPaymentMethodType() == PaymentMethodType.IN_CASH) {
+
             Wallet paymentWallet;
-            
+
             final Payment payment = movement.getPayment();
-            
+
             if (payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
                 paymentWallet = payment.getCard().getWallet();
             } else {
@@ -354,7 +354,7 @@ public class MovementService {
      */
     private WalletBalance returnBalance(Wallet wallet, BigDecimal oldBalance,
             BigDecimal newBalance, BigDecimal movimentedValue) {
-        
+
         // seta o saldo na carteira
         wallet.setBalance(newBalance);
 

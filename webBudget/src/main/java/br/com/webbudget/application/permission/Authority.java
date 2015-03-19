@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.permission;
 
 import java.lang.reflect.Field;
@@ -28,8 +27,8 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 24/06/2014
+ * @version 1.0.0
+ * @since 1.0.0, 24/06/2014
  */
 public class Authority {
 
@@ -45,7 +44,7 @@ public class Authority {
     @Getter
     @AuthorityGroup("card.authority")
     public final String CARD_DELETE = "card.authority.delete";
-    
+
     @Getter
     @AuthorityGroup("contact.authority")
     public final String CONTACT_VIEW = "contact.authority.view";
@@ -58,7 +57,7 @@ public class Authority {
     @Getter
     @AuthorityGroup("contact.authority")
     public final String CONTACT_DELETE = "contact.authority.delete";
-    
+
     @Getter
     @AuthorityGroup("wallet.authority")
     public final String WALLET_VIEW = "wallet.authority.view";
@@ -74,7 +73,7 @@ public class Authority {
     @Getter
     @AuthorityGroup("wallet.authority")
     public final String WALLET_ADJUST_BALANCE = "wallet.authority.adjust-balance";
-    
+
     @Getter
     @AuthorityGroup("cost-center.authority")
     public final String COST_CENTER_VIEW = "cost-center.authority.view";
@@ -87,7 +86,7 @@ public class Authority {
     @Getter
     @AuthorityGroup("cost-center.authority")
     public final String COST_CENTER_DELETE = "cost-center.authority.delete";
-    
+
     @Getter
     @AuthorityGroup("movement-class.authority")
     public final String MOVEMENT_CLASS_VIEW = "movement-class.authority.view";
@@ -100,7 +99,7 @@ public class Authority {
     @Getter
     @AuthorityGroup("movement-class.authority")
     public final String MOVEMENT_CLASS_DELETE = "movement-class.authority.delete";
-    
+
     @Getter
     @AuthorityGroup("movement.authority")
     public final String MOVEMENT_VIEW = "movement.authority.view";
@@ -126,14 +125,14 @@ public class Authority {
     @Getter
     @AuthorityGroup("card-invoice.authority")
     public final String CARD_INVOICE_PROCESS = "card-invoice.authority.process";
-    
+
     @Getter
     @AuthorityGroup("balance-transfer.authority")
     public final String BALANCE_TRANSFER_VIEW = "balance-transfer.authority.view";
     @Getter
     @AuthorityGroup("balance-transfer.authority")
     public final String BALANCE_TRANSFER_MAKE = "balance-transfer.authority.make";
-    
+
     @Getter
     @AuthorityGroup("financial-period.authority")
     public final String FINANCIAL_PERIOD_VIEW = "financial-period.authority.view";
@@ -146,7 +145,7 @@ public class Authority {
     @Getter
     @AuthorityGroup("financial-period.authority")
     public final String FINANCIAL_PERIOD_DETAILS = "financial-period.authority.details";
-    
+
     @Getter
     @AuthorityGroup("closing.authority")
     public final String CLOSING_VIEW = "closing.authority.view";
@@ -156,7 +155,7 @@ public class Authority {
     @Getter
     @AuthorityGroup("closing.authority")
     public final String CLOSING_PROCESS = "closing.authority.process";
-    
+
     @Getter
     @AuthorityGroup("account.authority")
     public final String ACCOUNTS_VIEW = "account.authority.view";
@@ -169,72 +168,73 @@ public class Authority {
     @Getter
     @AuthorityGroup("account.authority")
     public final String ACCOUNTS_DELETE = "account.authority.delete";
-    
+
     @Getter
     @AuthorityGroup("private-message.authority")
     public final String PRIVATE_MESSAGES_VIEW = "private-message.authority.view";
     @Getter
     @AuthorityGroup("private-message.authority")
     public final String PRIVATE_MESSAGES_SEND = "private-message.authority.send";
-    
+
     /**
      * Lista todas as authorities disponiveis para uso, este metodo e utilzado
-     * para criar o admin no bootstrap da aplicacao 
-     * 
+     * para criar o admin no bootstrap da aplicacao
+     *
      * @return um set com todas as authorities disponiveis
      */
     public Set<String> getAllAvailableAuthorities() {
-       
+
         final Set<String> authorities = new HashSet<>();
 
         final Field[] fields = this.getClass().getDeclaredFields();
-        
+
         for (Field field : fields) {
-            
+
             field.setAccessible(true);
-            
+
             // verifica se a permissao tem grupo de permisao
             if (field.isAnnotationPresent(AuthorityGroup.class)) {
 
                 // adiciona as permissoes especificas
                 try {
                     authorities.add((String) field.get(Authority.this));
-                } catch (IllegalAccessException ex) { }
+                } catch (IllegalAccessException ex) {
+                }
             }
         }
         return authorities;
     }
-    
+
     /**
      * Lista todas as authorities agrupadas pelo grupo de cada uma
-     * 
+     *
      * @return hashmap com os valores: grupo e itens do grupo
      */
     public HashMap<String, Set<String>> getAllAvailableAuthoritiesGrouped() {
-       
+
         final HashMap<String, Set<String>> authorities = new HashMap<>();
         final Set<String> allAuthorities = this.getAllAvailableAuthorities();
-        
+
         final Field[] fields = this.getClass().getDeclaredFields();
-        
+
         for (Field field : fields) {
-            
+
             field.setAccessible(true);
-            
+
             if (field.isAnnotationPresent(AuthorityGroup.class)) {
-                
+
                 final String group = field.getAnnotation(AuthorityGroup.class).value();
-                
+
                 if (!authorities.containsKey(group)) {
-    
+
                     final Set<String> grouped = new HashSet<>();
-                    
+
                     for (String authority : allAuthorities) {
                         if (authority.contains(group)) {
                             grouped.add(authority);
                         }
                     }
-                    authorities.put(group, grouped);                
+                    authorities.put(group, grouped);
                 }
             }
         }

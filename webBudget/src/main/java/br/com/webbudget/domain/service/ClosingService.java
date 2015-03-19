@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.domain.components.MovementsCalculator;
@@ -41,8 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 09/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 09/04/2014
  */
 @Service
 @Transactional
@@ -50,7 +49,7 @@ public class ClosingService {
 
     @Autowired
     private MovementsCalculator movementsCalculator;
-    
+
     @Autowired
     private ICardRepository cardRepository;
     @Autowired
@@ -59,24 +58,25 @@ public class ClosingService {
     private IMovementRepository movementRepository;
     @Autowired
     private IFinancialPeriodRepository financialPeriodRepository;
-    
+
     /**
-     * Processa o fechamento do mes, verificando por incosistencias de movimentos
-     * 
+     * Processa o fechamento do mes, verificando por incosistencias de
+     * movimentos
+     *
      * @param financialPeriod o periodo a ser processado
      * @return o resumo do fechamento
      */
     @Transactional(readOnly = true)
     public Closing process(FinancialPeriod financialPeriod) {
-        
+
         final Closing closing = new Closing();
-       
+
         // verificamos por cartoes de credito com debitos sem fatura
         final List<Card> cards = this.cardRepository.listByStatus(false);
-        
+
         for (Card card : cards) {
             if (card.getCardType() != CardType.DEBIT) {
-               
+
                 final List<Movement> movements = this.movementRepository
                         .listPaidWithoutInvoiceByPeriodAndCard(financialPeriod, card);
 
@@ -86,57 +86,57 @@ public class ClosingService {
                 }
             }
         }
-        
+
         // atualizamos a lista de movimentos em aberto
         final List<Movement> openMovements = this.movementRepository
                 .listByPeriodAndState(financialPeriod, MovementStateType.OPEN);
-        
+
         closing.setOpenMovements(openMovements);
-        
+
         return closing;
-    } 
-    
+    }
+
     /**
      * Encerra um periodo, gerando toda a movimentacao necessaria e calculando
      * os valores de receitas e despesas
-     * 
-     * @param financialPeriod 
+     *
+     * @param financialPeriod
      */
     @Transactional
     public void close(FinancialPeriod financialPeriod) {
-        
+
         // calculamos os saldos
         final BigDecimal revenuesTotal = this.movementsCalculator.
                 calculateTotalByDirection(financialPeriod, MovementClassType.IN);
         final BigDecimal expensesTotal = this.movementsCalculator.
                 calculateTotalByDirection(financialPeriod, MovementClassType.OUT);
-        
+
         // calculamos o saldo final
         final BigDecimal balance = revenuesTotal.subtract(expensesTotal);
-        
+
         // pegamos os totais de consumo por tipo de cartao
         final BigDecimal debitCardExpenses = this.movementsCalculator.
                 calculateCardExpenses(financialPeriod, CardType.DEBIT);
         final BigDecimal creditCardExpenses = this.movementsCalculator.
                 calculateCardExpenses(financialPeriod, CardType.CREDIT);
-        
+
         // criamos e salvamos o fechamento
         Closing closing = new Closing();
-        
+
         closing.setClosingDate(new Date());
-        
+
         closing.setBalance(balance);
         closing.setRevenues(revenuesTotal);
         closing.setExpenses(expensesTotal);
         closing.setDebitCardExpenses(debitCardExpenses);
         closing.setCreditCardExpenses(creditCardExpenses);
-        
+
         closing = this.closingRepository.save(closing);
-        
+
         // atualizamos o período para encerrado
         financialPeriod.setClosed(true);
         financialPeriod.setClosing(closing);
-        
+
         this.financialPeriodRepository.save(financialPeriod);
-    } 
+    }
 }

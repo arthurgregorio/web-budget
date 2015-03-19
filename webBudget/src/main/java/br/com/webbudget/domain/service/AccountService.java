@@ -41,8 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 06/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 06/10/2013
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -60,11 +60,12 @@ public class AccountService implements UserDetailsService {
 
     /**
      * Realiza o a autenticacao do usuario
-     * 
+     *
      * @param user o usuario a ser autenticado
      * @return true ou false indicando se ele pode ou nao realizar login
-     * 
-     * @throws ApplicationException se houver algum erro ou o usuario for invalido
+     *
+     * @throws ApplicationException se houver algum erro ou o usuario for
+     * invalido
      */
     @Transactional(readOnly = true)
     public boolean login(User user) throws ApplicationException {
@@ -89,7 +90,7 @@ public class AccountService implements UserDetailsService {
         }
         return false;
     }
-    
+
     /**
      * Cria uma nova conta de usuario
      *
@@ -178,7 +179,7 @@ public class AccountService implements UserDetailsService {
      * @return o usuario autenticado no contexto
      */
     public static User getCurrentAuthenticatedUser() {
-       
+
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.getPrincipal() instanceof User) {
@@ -186,9 +187,9 @@ public class AccountService implements UserDetailsService {
         }
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @param username
      * @return
      */

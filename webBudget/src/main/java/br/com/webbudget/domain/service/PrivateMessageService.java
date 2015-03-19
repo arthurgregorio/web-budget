@@ -33,8 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 07/05/2014
+ * @version 1.0.0
+ * @since 1.0.0, 07/05/2014
  */
 @Service
 @Transactional

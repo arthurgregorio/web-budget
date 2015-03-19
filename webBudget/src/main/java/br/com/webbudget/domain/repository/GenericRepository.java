@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository;
 
 import br.com.webbudget.domain.entity.IPersistentEntity;
@@ -28,35 +27,33 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Session;
 
 /**
- * 
+ *
  * @param <T>
- * @param <ID> 
- * 
+ * @param <ID>
+ *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 03/03/2013
+ * @version 1.0.0
+ * @since 1.0.0, 03/03/2013
  */
-public abstract class GenericRepository<T extends IPersistentEntity, ID 
-        extends Serializable> implements IGenericRepository<T, ID>, Serializable {
- 
+public abstract class GenericRepository<T extends IPersistentEntity, ID extends Serializable> implements IGenericRepository<T, ID>, Serializable {
+
     @PersistenceContext
     private EntityManager entityManager;
-    
+
     private final Class<T> persistentClass;
 
     /**
-     * 
+     *
      */
     @SuppressWarnings({"unchecked", "unsafe"})
     public GenericRepository() {
-        this.persistentClass = (Class< T>)((ParameterizedType) 
-                this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-     }
- 
+        this.persistentClass = (Class< T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     protected EntityManager getEntityManager() {
         if (this.entityManager == null) {
@@ -64,34 +61,34 @@ public abstract class GenericRepository<T extends IPersistentEntity, ID
         }
         return this.entityManager;
     }
- 
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     protected Session getSession() {
         return (Session) this.getEntityManager().getDelegate();
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public Class<T> getPersistentClass() {
         return this.persistentClass;
     }
- 
+
     /**
-     * 
+     *
      * @param id
      * @param lock
-     * @return 
+     * @return
      */
     @Override
     public T findById(ID id, boolean lock) {
-        
+
         final T entity;
-        
+
         if (lock) {
             entity = (T) this.getEntityManager().find(
                     this.getPersistentClass(), id, LockModeType.OPTIMISTIC);
@@ -99,42 +96,42 @@ public abstract class GenericRepository<T extends IPersistentEntity, ID
             entity = (T) this.getEntityManager().find(
                     this.getPersistentClass(), id);
         }
- 
+
         return entity;
     }
- 
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public List<T> listAll() {
         final Query query = this.getEntityManager().createQuery(
                 "from " + getPersistentClass().getSimpleName());
-        
+
         return query.getResultList();
     }
-    
+
     /**
-     * 
+     *
      * @param entity
-     * @return 
+     * @return
      */
     @Override
     public T save(T entity) {
         return this.getEntityManager().merge(entity);
     }
- 
+
     /**
-     * 
-     * @param entity 
+     *
+     * @param entity
      */
     @Override
     public void delete(T entity) {
-        
+
         final T persistentEntity = this.getEntityManager().getReference(
                 this.getPersistentClass(), entity.getId());
-        
+
         this.getEntityManager().remove(persistentEntity);
     }
 }

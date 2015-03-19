@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository;
 
 import br.com.webbudget.domain.entity.IPersistentEntity;
@@ -22,41 +21,41 @@ import java.util.List;
 import java.io.Serializable;
 
 /**
- * 
+ *
  * @param <T>
- * @param <ID> 
- * 
+ * @param <ID>
+ *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 03/03/2013
+ * @version 1.0.0
+ * @since 1.0.0, 03/03/2013
  */
 public interface IGenericRepository<T extends IPersistentEntity, ID extends Serializable> {
- 
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     List<T> listAll();
-    
+
     /**
-     * 
+     *
      * @param id
      * @param lock
-     * @return 
+     * @return
      */
     T findById(ID id, boolean lock);
- 
+
     /**
-     * 
+     *
      * @param entity
-     * @return 
+     * @return
      */
     T save(T entity);
-    
+
     /**
-     * 
-     * @param entity 
+     *
+     * @param entity
      */
     void delete(T entity);
 }

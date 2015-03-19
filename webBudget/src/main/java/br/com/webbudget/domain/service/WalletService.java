@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
@@ -34,8 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 12/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 12/03/2014
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -45,14 +44,14 @@ public class WalletService {
     private IWalletRepository walletRepository;
     @Autowired
     private IWalletBalanceRepository walletBalanceRepository;
-    
+
     /**
-     * 
-     * @param wallet 
+     *
+     * @param wallet
      */
     public void saveWallet(Wallet wallet) {
-        
-        final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(), 
+
+        final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(),
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null) {
@@ -61,106 +60,106 @@ public class WalletService {
 
         this.walletRepository.save(wallet);
     }
-    
+
     /**
-     * 
+     *
      * @param wallet
-     * @return 
+     * @return
      */
     public Wallet updateWallet(Wallet wallet) {
-        
-        final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(), 
+
+        final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(),
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null && !found.equals(wallet)) {
             throw new ApplicationException("wallet.validate.duplicated");
         }
-        
+
         return this.walletRepository.save(wallet);
     }
-    
+
     /**
-     * 
-     * @param wallet 
+     *
+     * @param wallet
      */
     public void deleteWallet(Wallet wallet) {
-        
+
         // checa se a carteira nao tem saldo menor ou maior que zero
         // se houve, dispara o erro, comente carteiras zeradas sao deletaveis
         if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
             throw new ApplicationException("wallet.validate.has-balance");
         }
-        
+
         final List<WalletBalance> balaces = this.listBalancesByWallet(wallet);
 
         for (WalletBalance balance : balaces) {
             this.walletBalanceRepository.delete(balance);
         }
-        
+
         this.walletRepository.delete(wallet);
     }
 
     /**
-     * 
-     * @param walletBalance 
+     *
+     * @param walletBalance
      */
     public void transfer(WalletBalance walletBalance) {
-       
+
         if (walletBalance.getSourceWallet().equals(walletBalance.getTargetWallet())) {
             throw new ApplicationException("transfer.validate.same-wallet");
         }
-        
+
         // atualizamos a origem
         final Wallet source = walletBalance.getSourceWallet();
         final BigDecimal sourceOldBalance = source.getBalance();
-        
+
         source.setBalance(sourceOldBalance.subtract(walletBalance.getMovimentedValue()));
-        
+
         this.walletRepository.save(source);
-        
+
         // atualizamos o destino
         final Wallet target = walletBalance.getTargetWallet();
         final BigDecimal targetOldBalance = target.getBalance();
-        
+
         target.setBalance(targetOldBalance.add(walletBalance.getMovimentedValue()));
-        
+
         this.walletRepository.save(target);
-        
+
         // completamos a transferencia para o destino
         walletBalance.setOldBalance(targetOldBalance);
         walletBalance.setActualBalance(target.getBalance());
         walletBalance.setWalletBalanceType(WalletBalanceType.TRANSFERENCE);
 
         this.walletBalanceRepository.save(walletBalance);
-        
+
         // criamos novo saldo para a origem
         final WalletBalance sourceBalance = new WalletBalance();
-        
+
         sourceBalance.setTargetWallet(source);
         sourceBalance.setOldBalance(sourceOldBalance);
         sourceBalance.setActualBalance(source.getBalance());
         sourceBalance.setMovimentedValue(walletBalance.getMovimentedValue());
         sourceBalance.setWalletBalanceType(WalletBalanceType.TRANSFER_ADJUSTMENT);
-        
+
         this.walletBalanceRepository.save(sourceBalance);
     }
-    
+
     /**
-     * 
-     * @param wallet 
+     *
+     * @param wallet
      */
     public void adjustBalance(Wallet wallet) {
 
         // atualizamos o novo saldo
         final BigDecimal oldBalance = wallet.getBalance();
         final BigDecimal newBalance = oldBalance.add(wallet.getAdjustmentValue());
-        
+
         wallet.setBalance(newBalance);
-        
-        this.walletRepository.save(wallet);        
-        
+
+        this.walletRepository.save(wallet);
+
         final WalletBalance walletBalance = new WalletBalance();
-        
+
         // gravamos o ultimo saldo como historico
         walletBalance.setTargetWallet(wallet);
         walletBalance.setMovimentedValue(wallet.getAdjustmentValue());
@@ -170,73 +169,73 @@ public class WalletService {
 
         this.walletBalanceRepository.save(walletBalance);
     }
-    
+
     /**
-     * 
+     *
      * @param walletId
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public Wallet findWalletById(long walletId) {
         return this.walletRepository.findById(walletId, false);
     }
-    
+
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<Wallet> listWallets(Boolean isBlocked) {
         return this.walletRepository.listByStatus(isBlocked);
     }
-    
+
     /**
-     * 
+     *
      * @param name
      * @param bank
      * @param walletType
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public Wallet findWalletByNameAndBankAndType(String name, String bank, WalletType walletType) {
         return this.walletRepository.findByNameAndBankAndType(name, bank, walletType);
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Transactional(readOnly = true)
     public List<WalletBalance> listTransferences() {
         return this.walletBalanceRepository.listByType(WalletBalanceType.TRANSFERENCE);
     }
-    
+
     /**
-     * 
+     *
      * @param wallet
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<WalletBalance> listTransfersByWallet(Wallet wallet) {
         return this.walletBalanceRepository.listByWallet(wallet, WalletBalanceType.TRANSFERENCE);
     }
-    
+
     /**
-     * 
+     *
      * @param source
      * @param target
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<WalletBalance> listTransfersByWallet(Wallet source, Wallet target) {
         return this.walletBalanceRepository.listByWallet(source, target, WalletBalanceType.TRANSFERENCE);
     }
-    
+
     /**
-     * 
+     *
      * @param wallet
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public List<WalletBalance> listBalancesByWallet(Wallet wallet) {
