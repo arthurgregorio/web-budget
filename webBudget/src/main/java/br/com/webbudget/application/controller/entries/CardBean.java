@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
@@ -27,7 +26,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -37,8 +35,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 06/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 06/04/2014
  */
 @ViewScoped
 @ManagedBean
@@ -50,7 +48,7 @@ public class CardBean extends AbstractBean {
     private List<Card> cards;
     @Getter
     public List<Wallet> wallets;
-    
+
     @Setter
     @ManagedProperty("#{cardService}")
     private CardService cardService;
@@ -59,126 +57,122 @@ public class CardBean extends AbstractBean {
     private WalletService walletService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
         return LoggerFactory.getLogger(CardBean.class);
     }
-    
+
     /**
-     * 
+     *
      */
-    public void initializeListing(){
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
-            this.cards = this.cardService.listCards(null);
+    public void initializeListing() {
+        this.viewState = ViewState.LISTING;
+        this.cards = this.cardService.listCards(null);
+    }
+
+    /**
+     *
+     * @param cardId
+     */
+    public void initializeForm(long cardId) {
+
+        this.wallets = this.walletService.listWallets(false);
+
+        if (cardId == 0) {
+            this.viewState = ViewState.ADDING;
+            this.card = new Card();
+        } else {
+            this.viewState = ViewState.EDITING;
+            this.card = this.cardService.findCardById(cardId);
         }
     }
 
     /**
-     * 
-     * @param cardId 
-     */
-    public void initializeForm(long cardId) {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            
-            this.wallets = this.walletService.listWallets(false);
-            
-            if (cardId == 0) {
-                this.viewState = ViewState.ADDING;
-                this.card = new Card();
-            } else {
-                this.viewState = ViewState.EDITING;
-                this.card = this.cardService.findCardById(cardId);
-            }
-        }
-    }
-    
-    /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String changeToAdd() {
         return "formCard.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String changeToListing() {
         return "listCards.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      * @param cardId
-     * @return 
+     * @return
      */
     public String changeToEdit(long cardId) {
         return "formCard.xhtml?faces-redirect=true&cardId=" + cardId;
     }
-    
+
     /**
-     * 
-     * @param cardId 
+     *
+     * @param cardId
      */
     public void changeToDelete(long cardId) {
         this.card = this.cardService.findCardById(cardId);
         this.openDialog("deleteCardDialog", "dialogDeleteCard");
     }
-    
+
     /**
      * Cancela e volta para a listagem
-     * 
-     * @return 
+     *
+     * @return
      */
     public String doCancel() {
         return "listCards.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      */
     public void doSave() {
-        
+
         try {
             this.cardService.saveCard(this.card);
             this.card = new Card();
-            
+
             this.info("card.action.saved", true);
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             this.logger.error("CardBean#doSave found erros", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doUpdate() {
-        
+
         try {
             this.card = this.cardService.updateCard(this.card);
-            
+
             this.info("card.action.updated", true);
         } catch (Exception ex) {
             this.logger.error("CardBean#doUpdate found erros", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doDelete() {
-        
+
         try {
             this.cardService.deleteCard(this.card);
             this.cards = this.cardService.listCards(false);
-            
+
             this.info("card.action.deleted", true);
         } catch (Exception ex) {
             this.logger.error("CardBean#doDelete found erros", ex);
@@ -188,10 +182,10 @@ public class CardBean extends AbstractBean {
             this.closeDialog("dialogDeleteCard");
         }
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public CardType[] getAvailableCardTypes() {
         return CardType.values();

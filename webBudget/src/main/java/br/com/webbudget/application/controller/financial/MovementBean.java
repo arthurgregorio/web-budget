@@ -48,8 +48,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 18/03/2014
  */
 @ViewScoped
 @ManagedBean
@@ -116,14 +116,12 @@ public class MovementBean extends AbstractBean {
      *
      */
     public void initializeListing() {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
-            this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
+        this.viewState = ViewState.LISTING;
+        this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
 
-            // preenche os campos de filtro
-            this.costCenters = this.movementService.listCostCenters(false);
-            this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
-        }
+        // preenche os campos de filtro
+        this.costCenters = this.movementService.listCostCenters(false);
+        this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
     }
 
     /**
@@ -132,27 +130,25 @@ public class MovementBean extends AbstractBean {
      * @param detailing
      */
     public void initializeForm(long movementId, boolean detailing) {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
 
-            // buscamos o periodo financeiro atual
-            this.costCenters = this.movementService.listCostCenters(false);
-            this.financialPeriod = this.financialPeriodService.findActiveFinancialPeriod();
-            this.openFinancialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
+        // buscamos o periodo financeiro atual
+        this.costCenters = this.movementService.listCostCenters(false);
+        this.financialPeriod = this.financialPeriodService.findActiveFinancialPeriod();
+        this.openFinancialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
 
-            if (movementId == 0 && !detailing) {
-                this.viewState = ViewState.ADDING;
+        if (movementId == 0 && !detailing) {
+            this.viewState = ViewState.ADDING;
 
-                this.movement = new Movement();
+            this.movement = new Movement();
 
-                // setamos o periodo financeiro atual no movimento a ser incluido
-                this.movement.setFinancialPeriod(this.financialPeriod);
-            } else if (movementId != 0 && !detailing) {
-                this.viewState = ViewState.EDITING;
-                this.movement = this.movementService.findMovementById(movementId);
-            } else {
-                this.viewState = ViewState.DETAILING;
-                this.movement = this.movementService.findMovementById(movementId);
-            }
+            // setamos o periodo financeiro atual no movimento a ser incluido
+            this.movement.setFinancialPeriod(this.financialPeriod);
+        } else if (movementId != 0 && !detailing) {
+            this.viewState = ViewState.EDITING;
+            this.movement = this.movementService.findMovementById(movementId);
+        } else {
+            this.viewState = ViewState.DETAILING;
+            this.movement = this.movementService.findMovementById(movementId);
         }
     }
 
@@ -161,28 +157,26 @@ public class MovementBean extends AbstractBean {
      * @param movementId
      */
     public void initializePayment(long movementId) {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
 
-            this.movement = this.movementService.findMovementById(movementId);
+        this.movement = this.movementService.findMovementById(movementId);
 
-            this.payment = new Payment();
+        this.payment = new Payment();
 
-            // tipos entrada, pagamento somente em carteira
-            if (this.movement.getDirection() == MovementClassType.IN) {
+        // tipos entrada, pagamento somente em carteira
+        if (this.movement.getDirection() == MovementClassType.IN) {
+            this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
+        } else {
+            // se for fatura de cartao, so permite pagar em carteira
+            if (this.movement.getMovementType() == MovementType.CARD_INVOICE) {
                 this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
             } else {
-                // se for fatura de cartao, so permite pagar em carteira
-                if (this.movement.getMovementType() == MovementType.CARD_INVOICE) {
-                    this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
-                } else {
-                    this.debitCards = this.cardService.listDebitCards(false);
-                    this.creditCards = this.cardService.listCreditCards(false);
-                }
+                this.debitCards = this.cardService.listDebitCards(false);
+                this.creditCards = this.cardService.listCreditCards(false);
             }
-
-            // lista as fontes para preencher os combos
-            this.wallets = this.walletService.listWallets(false);
         }
+
+        // lista as fontes para preencher os combos
+        this.wallets = this.walletService.listWallets(false);
     }
 
     /**
@@ -371,7 +365,7 @@ public class MovementBean extends AbstractBean {
         } catch (ApplicationException ex) {
             this.logger.error("MovementBean#doUpdate found erros", ex);
             this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } 
+        }
     }
 
     /**
@@ -489,11 +483,11 @@ public class MovementBean extends AbstractBean {
      *
      */
     public void showPaymentDetails() {
-        
+
         if (this.movement.getPayment() == null) {
             this.warn("movement.not-paid", true);
         } else {
-            this.openDialog("detailPaymentDialog","dialogDetailPayment");
+            this.openDialog("detailPaymentDialog", "dialogDetailPayment");
         }
     }
 
@@ -507,14 +501,14 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isPayableWithCard() {
-        return this.movement.getMovementType() != MovementType.CARD_INVOICE 
+        return this.movement.getMovementType() != MovementType.CARD_INVOICE
                 && this.movement.getDirection() != MovementClassType.IN;
     }
-    
+
     /**
      *
      * @return a lista dos valores do enum

@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
@@ -23,7 +22,6 @@ import br.com.webbudget.domain.service.FinancialPeriodService;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.chart.CartesianChartModel;
@@ -34,21 +32,21 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 11/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 11/04/2014
  */
 @ViewScoped
 @ManagedBean
 public class PeriodDetailBean extends AbstractBean {
-    
+
     @Getter
     private PeriodDetailsDTO periodDetailsDTO;
-    
+
     @Getter
     private CartesianChartModel expensesModel;
     @Getter
     private CartesianChartModel revenuesModel;
-    
+
     @Setter
     @ManagedProperty("#{graphModelService}")
     private transient GraphModelService graphModelService;
@@ -57,33 +55,31 @@ public class PeriodDetailBean extends AbstractBean {
     private transient FinancialPeriodService financialPeriodService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
         return LoggerFactory.getLogger(PeriodDetailBean.class);
     }
-    
+
     /**
-     * 
-     * @param financialPeriodId 
+     *
+     * @param financialPeriodId
      */
-    public void initializeDetails(long financialPeriodId){
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            
-            // busca o preview do periodo
-            this.periodDetailsDTO = this.financialPeriodService
-                    .previewPeriod(financialPeriodId);
-            
-            // monta o grafico
-            this.revenuesModel = this.graphModelService.buildClassesChartModel(
-                    this.periodDetailsDTO.getRevenueClasses());
-            this.expensesModel = this.graphModelService.buildClassesChartModel(
-                    this.periodDetailsDTO.getExpenseClasses());
-        }
+    public void initializeDetails(long financialPeriodId) {
+
+        // busca o preview do periodo
+        this.periodDetailsDTO = this.financialPeriodService
+                .previewPeriod(financialPeriodId);
+
+        // monta o grafico
+        this.revenuesModel = this.graphModelService.buildClassesChartModel(
+                this.periodDetailsDTO.getRevenueClasses());
+        this.expensesModel = this.graphModelService.buildClassesChartModel(
+                this.periodDetailsDTO.getExpenseClasses());
     }
-    
+
     /**
      * Cancela e volta para a listagem
      *
@@ -92,13 +88,13 @@ public class PeriodDetailBean extends AbstractBean {
     public String doCancel() {
         return "listFinancialPeriods.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String doRefresh() {
-        return "detailFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId=" 
+        return "detailFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId="
                 + this.periodDetailsDTO.getFinancialPeriod().getId();
     }
 }

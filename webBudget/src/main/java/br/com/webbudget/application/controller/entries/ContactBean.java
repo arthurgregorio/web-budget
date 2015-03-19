@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
@@ -30,8 +29,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 06/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 06/04/2014
  */
 @ViewScoped
 @ManagedBean
@@ -43,8 +42,8 @@ public class ContactBean extends AbstractBean {
     private List<Contact> contacts;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {

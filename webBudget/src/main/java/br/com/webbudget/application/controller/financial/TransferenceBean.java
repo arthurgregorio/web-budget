@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
@@ -25,7 +24,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -35,8 +33,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 20/05/2014
+ * @version 1.0.0
+ * @since 1.0.0, 20/05/2014
  */
 @ViewScoped
 @ManagedBean
@@ -48,95 +46,91 @@ public class TransferenceBean extends AbstractBean {
     @Getter
     @Setter
     private Wallet targetWallet;
-    
+
     @Getter
     private WalletBalance walletBalance;
-    
+
     @Getter
     private List<Wallet> wallets;
     @Getter
     private List<WalletBalance> transferences;
-    
+
     @Setter
     @ManagedProperty("#{walletService}")
     private WalletService walletService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
         return LoggerFactory.getLogger(TransferenceBean.class);
     }
-    
+
     /**
-     * 
+     *
      */
     public void initializeListing() {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
-            this.wallets = this.walletService.listWallets(false);
-        }
-    }    
-    
+        this.viewState = ViewState.LISTING;
+        this.wallets = this.walletService.listWallets(false);
+    }
+
     /**
-     * 
+     *
      */
     public void initializeForm() {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.ADDING;
-            this.walletBalance = new WalletBalance();
-            this.wallets = this.walletService.listWallets(false);
-        }
-    }    
-    
+        this.viewState = ViewState.ADDING;
+        this.walletBalance = new WalletBalance();
+        this.wallets = this.walletService.listWallets(false);
+    }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String changeToAdd() {
         return "formTransfer.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String doCancel() {
         return "listTransfers.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      */
     public void doTransference() {
-        
+
         try {
             this.walletService.transfer(this.walletBalance);
-            
+
             this.walletBalance = new WalletBalance();
             this.wallets = this.walletService.listWallets(false);
-            
+
             this.info("transfer.action.transfered", true);
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             this.logger.error("TransferenceBean#doTransference found erros", ex);
             this.fixedError(ex.getMessage(), true);
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public void filterTransfers() {
-        
+
         if (this.sourceWallet == null && this.targetWallet == null) {
             this.transferences = this.walletService.listTransferences();
         } else {
             this.transferences = this.walletService
                     .listTransfersByWallet(this.sourceWallet, this.targetWallet);
         }
-        
+
         if (this.transferences.isEmpty()) {
             this.error("transfer.no-trasfers", true);
         } else {

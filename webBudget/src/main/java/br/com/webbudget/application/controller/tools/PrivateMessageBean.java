@@ -29,7 +29,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -39,8 +38,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 12/05/2014
+ * @version 1.0.0
+ * @since 1.0.0, 12/05/2014
  */
 @ViewScoped
 @ManagedBean
@@ -78,10 +77,8 @@ public class PrivateMessageBean extends AbstractBean {
      *
      */
     public void initializeListing() {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
-            this.privateMessages = this.privateMessageService.listPrivateMessagesSent();
-        }
+        this.viewState = ViewState.LISTING;
+        this.privateMessages = this.privateMessageService.listPrivateMessagesSent();
     }
 
     /**
@@ -89,31 +86,29 @@ public class PrivateMessageBean extends AbstractBean {
      * @param privateMessageId
      */
     public void initializeForm(long privateMessageId) {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
 
-            // preenchemos a lista de usuarios
-            this.users = this.privateMessageService.listUsersByStatus(false, true);
+        // preenchemos a lista de usuarios
+        this.users = this.privateMessageService.listUsersByStatus(false, true);
 
-            if (privateMessageId == 0) {
-                this.viewState = ViewState.ADDING;
+        if (privateMessageId == 0) {
+            this.viewState = ViewState.ADDING;
 
-                // iniciamos e dizemos que o cara logado e o dono da mensagem
-                this.privateMessage = new PrivateMessage();
-                this.privateMessage.setSender(AccountService.getCurrentAuthenticatedUser());
-            } else {
+            // iniciamos e dizemos que o cara logado e o dono da mensagem
+            this.privateMessage = new PrivateMessage();
+            this.privateMessage.setSender(AccountService.getCurrentAuthenticatedUser());
+        } else {
 
-                this.privateMessage = this.privateMessageService.findPrivateMessageById(privateMessageId);
+            this.privateMessage = this.privateMessageService.findPrivateMessageById(privateMessageId);
 
-                // pegamos os destinatarios
-                final List<UserPrivateMessage> receipts = this.privateMessageService
-                        .listPrivateMessageReceipts(this.privateMessage);
+            // pegamos os destinatarios
+            final List<UserPrivateMessage> receipts = this.privateMessageService
+                    .listPrivateMessageReceipts(this.privateMessage);
 
-                // marcamos para mostrar na tabela
-                for (User user : this.users) {
-                    for (UserPrivateMessage userPrivateMessage : receipts) {
-                        if (userPrivateMessage.getRecipient().equals(user)) {
-                            user.setSelected(true);
-                        }
+            // marcamos para mostrar na tabela
+            for (User user : this.users) {
+                for (UserPrivateMessage userPrivateMessage : receipts) {
+                    if (userPrivateMessage.getRecipient().equals(user)) {
+                        user.setSelected(true);
                     }
                 }
             }

@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
@@ -25,7 +24,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -35,8 +33,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 23/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 23/03/2014
  */
 @ViewScoped
 @ManagedBean
@@ -44,12 +42,12 @@ public class FinancialPeriodBean extends AbstractBean {
 
     @Getter
     private boolean hasOpenPeriod;
-    
+
     @Getter
     private Closing closing;
     @Getter
     private FinancialPeriod financialPeriod;
-    
+
     @Getter
     private List<FinancialPeriod> financialPeriods;
 
@@ -58,87 +56,83 @@ public class FinancialPeriodBean extends AbstractBean {
     private transient FinancialPeriodService financialPeriodService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
         return LoggerFactory.getLogger(FinancialPeriodBean.class);
     }
-    
-    /**
-     * 
-     */
-    public void initializeListing(){
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
-            this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
-        }
-    }
-    
-    /**
-     * 
-     */
-    public void initializeForm(){
-        if (!FacesContext.getCurrentInstance().isPostback()) {
 
-            // diz que pode abrir um periodo
-            this.hasOpenPeriod = false; 
-            
-            // validamos se tem periodo em aberto
-            this.validateOpenPeriods();
-
-            this.viewState = ViewState.ADDING;
-            this.financialPeriod = new FinancialPeriod();
-        }
-    }
-    
     /**
-     * 
-     * @return 
+     *
+     */
+    public void initializeListing() {
+        this.viewState = ViewState.LISTING;
+        this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
+    }
+
+    /**
+     *
+     */
+    public void initializeForm() {
+        
+        // diz que pode abrir um periodo
+        this.hasOpenPeriod = false;
+
+        // validamos se tem periodo em aberto
+        this.validateOpenPeriods();
+
+        this.viewState = ViewState.ADDING;
+        this.financialPeriod = new FinancialPeriod();
+    }
+
+    /**
+     *
+     * @return
      */
     public String changeToAdd() {
         return "formFinancialPeriod.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      * @param financialPeriodId
-     * @return 
+     * @return
      */
     public String changeToDetails(long financialPeriodId) {
         return "detailFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId=" + financialPeriodId;
     }
-   
+
     /**
-     * 
+     *
      * @param financialPeriodId
-     * @return 
+     * @return
      */
     public String changeToClosing(long financialPeriodId) {
         return "../closing/closeFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId=" + financialPeriodId;
     }
-    
+
     /**
-     * 
+     *
      */
     public void doSave() {
-        
+
         try {
             this.financialPeriodService.openPeriod(this.financialPeriod);
-            
+
             this.financialPeriod = new FinancialPeriod();
-            
+
             // validamos se tem periodo em aberto
             this.validateOpenPeriods();
-            
+
             this.info("financial-period.action.saved", true);
         } catch (Exception ex) {
             this.logger.error("FinancialPeriodBean#doSave found errors", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        }
     }
-    
+
     /**
      * Cancela e volta para a listagem
      *
@@ -147,16 +141,16 @@ public class FinancialPeriodBean extends AbstractBean {
     public String doCancel() {
         return "listFinancialPeriods.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * valida se tem algum periodo em aberto, se houver avisa ao usuario que 
-     * ja tem e se ele tem certeza que quer abrir um novo
+     * valida se tem algum periodo em aberto, se houver avisa ao usuario que ja
+     * tem e se ele tem certeza que quer abrir um novo
      */
     public void validateOpenPeriods() {
 
         // validamos se ha algum periodo em aberto
-        final List<FinancialPeriod> periods = 
-                this.financialPeriodService.listOpenFinancialPeriods();
+        final List<FinancialPeriod> periods
+                = this.financialPeriodService.listOpenFinancialPeriods();
 
         for (FinancialPeriod open : periods) {
             if (open != null && (!open.isClosed() || !open.isExpired())) {

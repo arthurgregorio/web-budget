@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
@@ -25,7 +24,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -36,8 +34,8 @@ import org.springframework.dao.DataIntegrityViolationException;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2014
  */
 @ViewScoped
 @ManagedBean
@@ -47,135 +45,131 @@ public class CostCenterBean extends AbstractBean {
     private CostCenter costCenter;
     @Getter
     private List<CostCenter> costCenters;
-    
+
     @Setter
     @ManagedProperty("#{movementService}")
     private MovementService movementService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
         return LoggerFactory.getLogger(CostCenterBean.class);
     }
-    
+
     /**
-     * 
+     *
      */
-    public void initializeListing(){
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            this.viewState = ViewState.LISTING;
-            this.costCenters = this.movementService.listCostCenters(null);
+    public void initializeListing() {
+        this.viewState = ViewState.LISTING;
+        this.costCenters = this.movementService.listCostCenters(null);
+    }
+
+    /**
+     *
+     * @param costCenterId
+     */
+    public void initializeForm(long costCenterId) {
+
+        this.costCenters = this.movementService.listCostCenters(false);
+
+        if (costCenterId == 0) {
+            this.viewState = ViewState.ADDING;
+            this.costCenter = new CostCenter();
+        } else {
+            this.viewState = ViewState.EDITING;
+            this.costCenter = this.movementService.findCostCenterById(costCenterId);
         }
     }
 
     /**
-     * 
-     * @param costCenterId 
-     */
-    public void initializeForm(long costCenterId) {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            
-            this.costCenters = this.movementService.listCostCenters(false);
-            
-            if (costCenterId == 0) {
-                this.viewState = ViewState.ADDING;
-                this.costCenter = new CostCenter();
-            } else {
-                this.viewState = ViewState.EDITING;
-                this.costCenter = this.movementService.findCostCenterById(costCenterId);
-            }
-        }
-    }
-    
-    /**
-     * 
+     *
      * @return
      */
     public String changeToAdd() {
         return "formCostCenter.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String changeToListing() {
         return "listCostCenters.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      * @param costCenterId
-     * @return 
+     * @return
      */
     public String changeToEdit(long costCenterId) {
         return "formCostCenter.xhtml?faces-redirect=true&costCenterId=" + costCenterId;
     }
-    
+
     /**
-     * 
-     * @param costCenterId 
+     *
+     * @param costCenterId
      */
     public void changeToDelete(long costCenterId) {
         this.costCenter = this.movementService.findCostCenterById(costCenterId);
-        this.openDialog("deleteCostCenterDialog" , "dialogDeleteCostCenter");
+        this.openDialog("deleteCostCenterDialog", "dialogDeleteCostCenter");
     }
 
     /**
      * Cancela e volta para a listagem
-     * 
-     * @return 
+     *
+     * @return
      */
     public String doCancel() {
         return "listCostCenters.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      */
     public void doSave() {
-        
+
         try {
             this.movementService.saveCostCenter(this.costCenter);
             this.costCenter = new CostCenter();
-            
+
             // busca novamente os centros de custo para atualizar a lista de parentes
             this.costCenters = this.movementService.listCostCenters(false);
-            
+
             this.info("cost-center.action.saved", true);
-        }  catch (ApplicationException ex) {
+        } catch (ApplicationException ex) {
             this.logger.error("CostCenterBean#doSave found erros", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doUpdate() {
-        
+
         try {
             this.costCenter = this.movementService.updateCostCenter(this.costCenter);
-            
+
             this.info("cost-center.action.updated", true);
         } catch (ApplicationException ex) {
             this.logger.error("CostCenterBean#doUpdate found erros", ex);
             this.fixedError(ex.getMessage(), true);
-        } 
+        }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doDelete() {
-        
+
         try {
             this.movementService.deleteCostCenter(this.costCenter);
             this.costCenters = this.movementService.listCostCenters(false);
-            
+
             this.info("cost-center.action.deleted", true);
         } catch (DataIntegrityViolationException ex) {
             this.logger.error("CostCenterBean#doDelete found erros", ex);

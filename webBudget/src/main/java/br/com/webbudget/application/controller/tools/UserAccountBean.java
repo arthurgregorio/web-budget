@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.permission.Authority;
@@ -23,7 +22,6 @@ import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.Permission;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.service.AccountService;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,8 +42,8 @@ import org.springframework.dao.DataIntegrityViolationException;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 02/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 02/03/2014
  */
 @ViewScoped
 @ManagedBean
@@ -53,23 +51,23 @@ public class UserAccountBean extends AbstractBean {
 
     @Getter
     private User user;
-    
+
     @Getter
     private List<User> users;
-    
+
     @Getter
     private TreeNode authorityNodes;
     @Getter
     @Setter
     private TreeNode[] selectedAuthorities;
-    
+
     @Setter
     @ManagedProperty("#{accountService}")
     private transient AccountService accountService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
@@ -85,9 +83,9 @@ public class UserAccountBean extends AbstractBean {
             this.user = this.accountService.findUserByUsername(inSession.getUsername());
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public void initializeListing() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -95,60 +93,60 @@ public class UserAccountBean extends AbstractBean {
             this.users = this.accountService.listAccounts();
         }
     }
-    
+
     /**
-     * 
-     * @param userId 
+     *
+     * @param userId
      */
     public void initializeForm(long userId) {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            
+
             this.buildPermissionTree();
-            
+
             if (userId == 0) {
                 this.viewState = ViewState.ADDING;
                 this.user = new User();
             } else {
                 this.viewState = ViewState.EDITING;
                 this.user = this.accountService.findAccountById(userId);
-                
+
                 // seleciona as permissoes do usuario para edicao
                 this.selectNodes();
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @return o form de inclusao
      */
     public String changeToAdd() {
         return "formUserAccount.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     *
      * @param userId
-     * @return 
+     * @return
      */
     public String changeToEdit(long userId) {
         return "formUserAccount.xhtml?faces-redirect=true&userId=" + userId;
     }
-    
+
     /**
-     * 
-     * @param userId 
+     *
+     * @param userId
      */
     public void changeToDelete(long userId) {
         this.user = this.accountService.findAccountById(userId);
-        this.openDialog("deleteUserAccountDialog","dialogDeleteUserAccount");
+        this.openDialog("deleteUserAccountDialog", "dialogDeleteUserAccount");
     }
-    
+
     /**
-     * 
+     *
      */
     public void doSave() {
-        
+
         // convertemos as authorities em permissoes
         final Set<Permission> permissions = new HashSet<>();
         final Set<String> authorities = this.nodesToAuthorities();
@@ -159,18 +157,18 @@ public class UserAccountBean extends AbstractBean {
             permission.setAuthority(authority);
             permissions.add(permission);
         }
-        
+
         // seta as permissoes do usuario
         this.user.setPermissions(permissions);
-        
+
         try {
-            this.accountService.createAccount(this.user); 
-            
+            this.accountService.createAccount(this.user);
+
             this.user = new User();
             this.selectedAuthorities = null;
-            
+
             this.unselectNodes();
-            
+
             this.info("user-account.action.saved", true);
         } catch (ApplicationException ex) {
             this.logger.error("UserAccountBean#doSave found erros", ex);
@@ -179,12 +177,12 @@ public class UserAccountBean extends AbstractBean {
             this.update("permissionTree");
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doUpdate() {
-        
+
         // convertemos as authorities em permissoes
         final Set<Permission> permissions = new HashSet<>();
         final Set<String> authorities = this.nodesToAuthorities();
@@ -195,48 +193,48 @@ public class UserAccountBean extends AbstractBean {
             permission.setAuthority(authority);
             permissions.add(permission);
         }
-        
+
         // seta as permissoes do usuario
         this.user.setPermissions(permissions);
-        
+
         try {
             this.accountService.updateAccount(this.user);
-            
+
             this.selectNodes();
-            
+
             this.info("user-account.action.updated", true);
         } catch (ApplicationException ex) {
-            this.logger.error("UserAccountBean#doUpdate on {} has found erros", 
+            this.logger.error("UserAccountBean#doUpdate on {} has found erros",
                     this.user.getUsername(), ex);
             this.fixedError(ex.getMessage(), true);
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doPasswordUpdate() {
-        
+
         try {
             this.accountService.updateAccount(this.user);
-            
+
             this.info("user-account.action.updated", true);
         } catch (ApplicationException ex) {
-            this.logger.error("UserAccountBean#doUpdate on {} has found erros", 
+            this.logger.error("UserAccountBean#doUpdate on {} has found erros",
                     this.user.getUsername(), ex);
             this.fixedError(ex.getMessage(), true);
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doDelete() {
-        
+
         try {
             this.accountService.deleteAccount(this.user);
             this.users = this.accountService.listAccounts();
-            
+
             this.info("user-account.action.deleted", true);
         } catch (DataIntegrityViolationException ex) {
             this.logger.error("UserAccountBean#doDelete found erros", ex);
@@ -249,70 +247,70 @@ public class UserAccountBean extends AbstractBean {
             this.closeDialog("dialogDeleteUserAccount");
         }
     }
-    
+
     /**
      * Metodo responsavel por construir toda a arvore de permissoes
      */
     private void buildPermissionTree() {
-        
+
         // instancia o node principal, root
         this.authorityNodes = new DefaultTreeNode(this.translate(
-                    "user-account.form.tree.permissions"), null);
-        
+                "user-account.form.tree.permissions"), null);
+
         // pega todas as authorities da lista de authorities do sistema
-        final HashMap<String, Set<String>> authorities = 
-                new Authority().getAllAvailableAuthoritiesGrouped();
-        
+        final HashMap<String, Set<String>> authorities
+                = new Authority().getAllAvailableAuthoritiesGrouped();
+
         for (String key : authorities.keySet()) {
-            
+
             // criamos o agrupador para a permissao com base na key
             final TreeNode rootNode = new DefaultTreeNode(key, this.authorityNodes);
-            
+
             // pegamos todas as permissoes vinculadas a key e setamos no root dela
             for (String authority : authorities.get(key)) {
                 rootNode.getChildren().add(new DefaultTreeNode(authority, rootNode));
             }
-            
+
             // setamos tudo no root de todos
             this.authorityNodes.getChildren().add(rootNode);
         }
     }
-    
+
     /**
      * Convertemos os nodes para as authorities do sistema
-     * 
-     * @return a lista de authorities 
+     *
+     * @return a lista de authorities
      */
     private Set<String> nodesToAuthorities() {
-        
+
         final Set<String> authorities = new HashSet<>();
-        
+
         // pegamos as agrupadoras
-        final Set<String> authoritiesGroups = 
-                new Authority().getAllAvailableAuthoritiesGrouped().keySet();
-        
+        final Set<String> authoritiesGroups
+                = new Authority().getAllAvailableAuthoritiesGrouped().keySet();
+
         // filtramos manualmente
         for (TreeNode node : this.selectedAuthorities) {
-            
+
             final String authority = (String) node.getData();
-            
+
             // se estiver no set de keys, eh uma agrupadora e nao adicionamos
             if (!authoritiesGroups.contains(authority)) {
                 authorities.add(authority);
             }
         }
-        
+
         return authorities;
     }
-    
+
     /**
-     * Metodo que tira a selecao dos nodes, utilizamos ele para nao ter que 
+     * Metodo que tira a selecao dos nodes, utilizamos ele para nao ter que
      * chamar novamente a construcao da tela o que tornaria a execucao lenta
      */
     private void unselectNodes() {
-       
+
         for (TreeNode node : this.authorityNodes.getChildren()) {
-            
+
             if (!node.getChildren().isEmpty()) {
                 for (TreeNode childNode : node.getChildren()) {
                     childNode.setSelected(false);
@@ -321,23 +319,23 @@ public class UserAccountBean extends AbstractBean {
             node.setSelected(false);
         }
     }
-    
+
     /**
      * Selecione os nodes de acordo com o usuario carregado
      */
     private void selectNodes() {
-       
+
         final Set<TreeNode> selected = new HashSet<>();
-        
+
         for (Permission permission : this.user.getPermissions()) {
-            
+
             for (TreeNode node : this.authorityNodes.getChildren()) {
 
                 if (permission.getAuthority().contains((String) node.getData())) {
                     node.setSelected(true);
                     selected.add(node);
                 }
-                
+
                 if (!node.getChildren().isEmpty()) {
                     for (TreeNode childNode : node.getChildren()) {
                         if (permission.getAuthority().contains((String) childNode.getData())) {
@@ -349,22 +347,22 @@ public class UserAccountBean extends AbstractBean {
                 }
             }
         }
-        
+
         this.selectedAuthorities = new TreeNode[selected.size()];
         this.selectedAuthorities = selected.toArray(this.selectedAuthorities);
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String doCancel() {
         return "listUserAccounts.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String toDashboard() {
         return "/main/dashboard.xhtml?faces-redirect=true";
