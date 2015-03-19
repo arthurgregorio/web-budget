@@ -101,7 +101,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                     .authenticated()
                 .antMatchers("/main/entries/cards/**").hasRole(authority.CARD_VIEW)
-                .antMatchers("/main/entries/contacts/**").hasRole("")
+                .antMatchers("/main/entries/contacts/**").hasRole(authority.CONTACT_VIEW)
                 .antMatchers("/main/entries/costCenter/**").hasRole(authority.COST_CENTER_VIEW)
                 .antMatchers("/main/entries/movementClass/**").hasRole(authority.MOVEMENT_CLASS_VIEW)
                 .antMatchers("/main/entries/wallets/**").hasRole(authority.WALLET_VIEW)

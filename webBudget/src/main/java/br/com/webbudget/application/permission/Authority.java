@@ -47,6 +47,19 @@ public class Authority {
     public final String CARD_DELETE = "card.authority.delete";
     
     @Getter
+    @AuthorityGroup("contact.authority")
+    public final String CONTACT_VIEW = "contact.authority.view";
+    @Getter
+    @AuthorityGroup("contact.authority")
+    public final String CONTACT_INSERT = "contact.authority.insert";
+    @Getter
+    @AuthorityGroup("contact.authority")
+    public final String CONTACT_UPDATE = "contact.authority.update";
+    @Getter
+    @AuthorityGroup("contact.authority")
+    public final String CONTACT_DELETE = "contact.authority.delete";
+    
+    @Getter
     @AuthorityGroup("wallet.authority")
     public final String WALLET_VIEW = "wallet.authority.view";
     @Getter
