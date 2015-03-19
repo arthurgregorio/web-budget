@@ -91,14 +91,6 @@ public class AccountService implements UserDetailsService {
     }
     
     /**
-     * Logout do usuario
-     */
-    public void logout() {
-        SecurityContextHolder.clearContext();
-        SecurityContextHolder.createEmptyContext();
-    }
-    
-    /**
      * Cria uma nova conta de usuario
      *
      * @param user o usuario a ser criado no sistema

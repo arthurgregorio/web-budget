@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.infraestructure.config;
 
+import br.com.webbudget.application.permission.Authority;
 import br.com.webbudget.domain.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -82,6 +83,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        // criamos o objeto que contem as roles
+        final Authority authority = new Authority();
+        
+        // configuramos a seguranca
         http
             .csrf()
                 .disable()
@@ -93,24 +98,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
             .and()
             .authorizeRequests()
-                .antMatchers("/main/entries/cards/**").hasRole("")
+                .anyRequest()
+                    .authenticated()
+                .antMatchers("/main/entries/cards/**").hasRole(authority.CARD_VIEW)
                 .antMatchers("/main/entries/contacts/**").hasRole("")
-                .antMatchers("/main/entries/costCenter/**").hasRole("")
-                .antMatchers("/main/entries/movementClass/**").hasRole("")
-                .antMatchers("/main/entries/wallets/**").hasRole("")
-                .antMatchers("/main/financial/cardInvoice/**").hasRole("")
-                .antMatchers("/main/financial/movement/**").hasRole("")
-                .antMatchers("/main/financial/transfer/**").hasRole("")
-                .antMatchers("/main/miscellany/closing/**").hasRole("")
-                .antMatchers("/main/miscellany/financialPeriod/**").hasRole("")
-                .antMatchers("/main/tools/privateMessage/**").hasRole("")
-                .antMatchers("/main/tools/user/**").hasRole("")
-            .anyRequest()
-                .authenticated()
+                .antMatchers("/main/entries/costCenter/**").hasRole(authority.COST_CENTER_VIEW)
+                .antMatchers("/main/entries/movementClass/**").hasRole(authority.MOVEMENT_CLASS_VIEW)
+                .antMatchers("/main/entries/wallets/**").hasRole(authority.WALLET_VIEW)
+                .antMatchers("/main/financial/cardInvoice/**").hasRole(authority.CARD_INVOICE_VIEW)
+                .antMatchers("/main/financial/movement/**").hasRole(authority.MOVEMENT_VIEW)
+                .antMatchers("/main/financial/transfer/**").hasRole(authority.BALANCE_TRANSFER_VIEW)
+                .antMatchers("/main/miscellany/closing/**").hasRole(authority.CLOSING_VIEW)
+                .antMatchers("/main/miscellany/financialPeriod/**").hasRole(authority.FINANCIAL_PERIOD_VIEW)
+                .antMatchers("/main/tools/privateMessage/**").hasRole(authority.PRIVATE_MESSAGES_VIEW)
+                .antMatchers("/main/tools/user/**").hasRole(authority.ACCOUNTS_VIEW)
             .and()
             .logout()
                 .invalidateHttpSession(true)
-                .logoutUrl("/main/logout")
+                .logoutUrl("/main/logout.xhtml")
                 .logoutSuccessUrl("/home.xhtml?logout=true")
                 .permitAll();
     }
