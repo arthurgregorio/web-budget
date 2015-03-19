@@ -19,7 +19,6 @@ package br.com.webbudget.application.controller;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.service.AccountService;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -34,8 +33,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 06/10/2013
+ * @version 1.0.1
+ * @since 1.0.0, 06/10/2013
  */
 @ViewScoped
 @ManagedBean
@@ -58,11 +57,20 @@ public class AuthenticationBean extends AbstractBean {
     }
 
     /**
-     *
+     * Inicializa a pagina, verificamos se ja nao existe alguem logado, se nao
+     * existir, inicializa o usuario e boa. Se nao, manda para a dashboard
+     * 
+     * @return pagina para redirecionar
      */
-    @PostConstruct
-    public void initialize() {
+    public String initialize() {
+        
+        if (AccountService.getCurrentAuthenticatedUser() != null) {
+            return "/main/dashboard.xhtml?faces-redirect=true";
+        }
+        
         this.user = new User();
+        
+        return null;
     }
 
     /**

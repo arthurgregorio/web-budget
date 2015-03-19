@@ -18,20 +18,17 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.entity.users.UserPrivateMessage;
 import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.PrivateMessageService;
-import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.chart.PieChartModel;
@@ -39,11 +36,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Mbean utilizado na dashboard do sistema, por ele carregamos os graficos da 
+ * dashboard e tambem alguns elementos da template, como o nome no botao de 
+ * informacoes da conta e logout
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 27/02/2014
+ * @version 1.1.0
+ * @since 1.0.0, 27/02/2014
  */
 @ViewScoped
 @ManagedBean
@@ -52,22 +52,19 @@ public class DashboardBean extends AbstractBean {
     @Getter
     @Setter
     private UserPrivateMessage selectedPrivateMessage;
-    
+
     @Getter
     private List<Movement> movements;
     @Getter
     private List<FinancialPeriod> financialPeriods;
     @Getter
     private List<UserPrivateMessage> userPrivateMessages;
-    
+
     @Getter
     private PieChartModel expensesModel;
     @Getter
     private PieChartModel revenueModel;
-    
-    @Setter
-    @ManagedProperty("#{accountService}")
-    private transient AccountService accountService;
+
     @Setter
     @ManagedProperty("#{movementService}")
     private transient MovementService movementService;
@@ -79,98 +76,95 @@ public class DashboardBean extends AbstractBean {
     private transient PrivateMessageService privateMessageService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
         return LoggerFactory.getLogger(DashboardBean.class);
     }
-    
+
     /**
-     * 
+     * Inicializa os graficos e tambem carrega as mensagens privadas no box
+     * de mensagens
      */
     public void initialize() {
-        
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-        
-            // carregamos os graficos
-            this.revenueModel = this.graphModelService.buildRevenueModelByCostCenter();
-            this.expensesModel = this.graphModelService.buildExpensesModelByCostCenter();
 
-            // carrega as mensagens do usuario
-            this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
-                    AccountService.getCurrentAuthenticatedUser(), null);
+        // carregamos os graficos
+        this.revenueModel = this.graphModelService.buildRevenueModelByCostCenter();
+        this.expensesModel = this.graphModelService.buildExpensesModelByCostCenter();
 
-            // carregamos os movimentos para pagamento
-            this.movements = this.movementService.listMovementsByDueDate(new Date(), true);
-        }
+        // carrega as mensagens do usuario
+        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
+                AccountService.getCurrentAuthenticatedUser(), null);
+
+        // carregamos os movimentos para pagamento
+        this.movements = this.movementService.listMovementsByDueDate(new Date(), true);
     }
-    
+
     /**
      * Pega mensagem selecionada e mostra a popup
      */
     public void displayMessage() {
         this.privateMessageService.markAsRead(this.selectedPrivateMessage);
-        this.openDialog("displayPrivateMessageDialog","dialogDisplayPrivateMessage");
+        this.openDialog("displayPrivateMessageDialog", "dialogDisplayPrivateMessage");
     }
-    
+
     /**
      * Atualiza as mensagens e fecha a popup de mensagem
      */
     public void closeMessge() {
         this.selectedPrivateMessage = null;
         this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
-                    AccountService.getCurrentAuthenticatedUser(), null);
-        
+                AccountService.getCurrentAuthenticatedUser(), null);
+
         this.update("messagesList");
         this.closeDialog("dialogDisplayPrivateMessage");
     }
-    
+
     /**
      * Deleta a mensagem e atualiza a view
      */
     public void deleteAndCloseMessage() {
-        
+
         this.privateMessageService.markAsDeleted(this.selectedPrivateMessage);
-        
+
         this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
-                    AccountService.getCurrentAuthenticatedUser(), null);
-        
+                AccountService.getCurrentAuthenticatedUser(), null);
+
         this.update("messagesList");
         this.closeDialog("dialogDisplayPrivateMessage");
     }
-    
+
     /**
+     * Quando este metodo e invocado o sistema realiza um redirecionamento para 
+     * a view de pagamento de movimentos para que o movimento selecionado seja
+     * pago pelo usuario
      * 
-     * @param movementId
-     * @return 
+     * @param movementId o id do movimento a ser pago
+     * @return a URL para redirecionar o usuario
      */
     public String changeToPay(long movementId) {
         return "financial/movement/formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
     }
-    
+
     /**
-     * Efetua logout do sistema
-     * 
-     * @return 
+     * @return a URL de logout do sistema
      */
     public String doLogout() {
-        this.accountService.logout();
-        return "/home.xhtml?faces-redirect=true";
+        return "logout.xhtml?faces-redirect=true";
     }
 
     /**
-     * 
-     * @return 
+     * @return o nome do usuario logado atualmente no sistema
      */
     public String getCurrentUserName() {
         return AccountService.getCurrentAuthenticatedUser().getName();
     }
-    
+
     /**
      * Pega do bundle da aplicacao o numero da versao setado no maven
-     * 
+     *
      * @return a versao da aplicacao
      */
     public String getVersion() {

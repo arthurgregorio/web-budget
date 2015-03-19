@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.permission;
 
 import java.lang.annotation.Documented;
@@ -24,12 +23,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation utlizada para realizar o agrupamento das authorities via reflection
+ * Annotation utlizada para realizar o agrupamento das authorities via
+ * reflection
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 29/06/2014
+ * @version 1.0.0
+ * @since 1.0.0, 29/06/2014
  */
 @Documented
 @Target(ElementType.FIELD)
@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
 public @interface AuthorityGroup {
 
     /**
-     * @return o grupo da authority
+     * @return o agrupador para a authority anotada
      */
     String value() default "";
 }

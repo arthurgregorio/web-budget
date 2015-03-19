@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.permission.Authority;
@@ -24,13 +23,13 @@ import javax.faces.bean.RequestScoped;
 import lombok.Getter;
 
 /**
- * Bean utlizado pelo sistema para requisitar as authorities disponiveis no 
+ * Bean utlizado pelo sistema para requisitar as authorities disponiveis no
  * sistemas
- * 
+ *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 29/06/2014
+ * @version 1.0.0
+ * @since 1.0.0, 29/06/2014
  */
 @ManagedBean
 @RequestScoped
@@ -38,7 +37,7 @@ public class PermissionsBean {
 
     @Getter
     private Authority authority;
-    
+
     /**
      * Inicializa a authority
      */

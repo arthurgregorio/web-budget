@@ -35,134 +35,134 @@ public class Authority {
 
     @Getter
     @AuthorityGroup("card.authority")
-    private final String CARD_VIEW = "card.authority.view";
+    public final String CARD_VIEW = "card.authority.view";
     @Getter
     @AuthorityGroup("card.authority")
-    private final String CARD_INSERT = "card.authority.insert";
+    public final String CARD_INSERT = "card.authority.insert";
     @Getter
     @AuthorityGroup("card.authority")
-    private final String CARD_UPDATE = "card.authority.update";
+    public final String CARD_UPDATE = "card.authority.update";
     @Getter
     @AuthorityGroup("card.authority")
-    private final String CARD_DELETE = "card.authority.delete";
+    public final String CARD_DELETE = "card.authority.delete";
     
     @Getter
     @AuthorityGroup("wallet.authority")
-    private final String WALLET_VIEW = "wallet.authority.view";
+    public final String WALLET_VIEW = "wallet.authority.view";
     @Getter
     @AuthorityGroup("wallet.authority")
-    private final String WALLET_INSERT = "wallet.authority.insert";
+    public final String WALLET_INSERT = "wallet.authority.insert";
     @Getter
     @AuthorityGroup("wallet.authority")
-    private final String WALLET_UPDATE = "wallet.authority.update";
+    public final String WALLET_UPDATE = "wallet.authority.update";
     @Getter
     @AuthorityGroup("wallet.authority")
-    private final String WALLET_DELETE = "wallet.authority.delete";
+    public final String WALLET_DELETE = "wallet.authority.delete";
     @Getter
     @AuthorityGroup("wallet.authority")
-    private final String WALLET_ADJUST_BALANCE = "wallet.authority.adjust-balance";
+    public final String WALLET_ADJUST_BALANCE = "wallet.authority.adjust-balance";
     
     @Getter
     @AuthorityGroup("cost-center.authority")
-    private final String COST_CENTER_VIEW = "cost-center.authority.view";
+    public final String COST_CENTER_VIEW = "cost-center.authority.view";
     @Getter
     @AuthorityGroup("cost-center.authority")
-    private final String COST_CENTER_INSERT = "cost-center.authority.insert";
+    public final String COST_CENTER_INSERT = "cost-center.authority.insert";
     @Getter
     @AuthorityGroup("cost-center.authority")
-    private final String COST_CENTER_UPDATE = "cost-center.authority.update";
+    public final String COST_CENTER_UPDATE = "cost-center.authority.update";
     @Getter
     @AuthorityGroup("cost-center.authority")
-    private final String COST_CENTER_DELETE = "cost-center.authority.delete";
+    public final String COST_CENTER_DELETE = "cost-center.authority.delete";
     
     @Getter
     @AuthorityGroup("movement-class.authority")
-    private final String MOVEMENT_CLASS_VIEW = "movement-class.authority.view";
+    public final String MOVEMENT_CLASS_VIEW = "movement-class.authority.view";
     @Getter
     @AuthorityGroup("movement-class.authority")
-    private final String MOVEMENT_CLASS_INSERT = "movement-class.authority.insert";
+    public final String MOVEMENT_CLASS_INSERT = "movement-class.authority.insert";
     @Getter
     @AuthorityGroup("movement-class.authority")
-    private final String MOVEMENT_CLASS_UPDATE = "movement-class.authority.update";
+    public final String MOVEMENT_CLASS_UPDATE = "movement-class.authority.update";
     @Getter
     @AuthorityGroup("movement-class.authority")
-    private final String MOVEMENT_CLASS_DELETE = "movement-class.authority.delete";
+    public final String MOVEMENT_CLASS_DELETE = "movement-class.authority.delete";
     
     @Getter
     @AuthorityGroup("movement.authority")
-    private final String MOVEMENT_VIEW = "movement.authority.view";
+    public final String MOVEMENT_VIEW = "movement.authority.view";
     @Getter
     @AuthorityGroup("movement.authority")
-    private final String MOVEMENT_INSERT = "movement.authority.insert";
+    public final String MOVEMENT_INSERT = "movement.authority.insert";
     @Getter
     @AuthorityGroup("movement.authority")
-    private final String MOVEMENT_UPDATE = "movement.authority.update";
+    public final String MOVEMENT_UPDATE = "movement.authority.update";
     @Getter
     @AuthorityGroup("movement.authority")
-    private final String MOVEMENT_PAY = "movement.authority.pay";
+    public final String MOVEMENT_PAY = "movement.authority.pay";
     @Getter
     @AuthorityGroup("movement.authority")
-    private final String MOVEMENT_DELETE = "movement.authority.delete";
+    public final String MOVEMENT_DELETE = "movement.authority.delete";
 
     @Getter
     @AuthorityGroup("card-invoice.authority")
-    private final String CARD_INVOICE_PAY = "card-invoice.authority.pay";
+    public final String CARD_INVOICE_PAY = "card-invoice.authority.pay";
     @Getter
     @AuthorityGroup("card-invoice.authority")
-    private final String CARD_INVOICE_VIEW = "card-invoice.authority.view";
+    public final String CARD_INVOICE_VIEW = "card-invoice.authority.view";
     @Getter
     @AuthorityGroup("card-invoice.authority")
-    private final String CARD_INVOICE_PROCESS = "card-invoice.authority.process";
+    public final String CARD_INVOICE_PROCESS = "card-invoice.authority.process";
     
     @Getter
     @AuthorityGroup("balance-transfer.authority")
-    private final String BALANCE_TRANSFER_VIEW = "balance-transfer.authority.view";
+    public final String BALANCE_TRANSFER_VIEW = "balance-transfer.authority.view";
     @Getter
     @AuthorityGroup("balance-transfer.authority")
-    private final String BALANCE_TRANSFER_MAKE = "balance-transfer.authority.make";
+    public final String BALANCE_TRANSFER_MAKE = "balance-transfer.authority.make";
     
     @Getter
     @AuthorityGroup("financial-period.authority")
-    private final String FINANCIAL_PERIOD_VIEW = "financial-period.authority.view";
+    public final String FINANCIAL_PERIOD_VIEW = "financial-period.authority.view";
     @Getter
     @AuthorityGroup("financial-period.authority")
-    private final String FINANCIAL_PERIOD_INSERT = "financial-period.authority.insert";
+    public final String FINANCIAL_PERIOD_INSERT = "financial-period.authority.insert";
     @Getter
     @AuthorityGroup("financial-period.authority")
-    private final String FINANCIAL_PERIOD_CLOSE = "financial-period.authority.close";
+    public final String FINANCIAL_PERIOD_CLOSE = "financial-period.authority.close";
     @Getter
     @AuthorityGroup("financial-period.authority")
-    private final String FINANCIAL_PERIOD_DETAILS = "financial-period.authority.details";
+    public final String FINANCIAL_PERIOD_DETAILS = "financial-period.authority.details";
     
     @Getter
     @AuthorityGroup("closing.authority")
-    private final String CLOSING_VIEW = "closing.authority.view";
+    public final String CLOSING_VIEW = "closing.authority.view";
     @Getter
     @AuthorityGroup("closing.authority")
-    private final String CLOSING_CLOSE = "closing.authority.close";
+    public final String CLOSING_CLOSE = "closing.authority.close";
     @Getter
     @AuthorityGroup("closing.authority")
-    private final String CLOSING_PROCESS = "closing.authority.process";
+    public final String CLOSING_PROCESS = "closing.authority.process";
     
     @Getter
     @AuthorityGroup("account.authority")
-    private final String ACCOUNTS_VIEW = "account.authority.view";
+    public final String ACCOUNTS_VIEW = "account.authority.view";
     @Getter
     @AuthorityGroup("account.authority")
-    private final String ACCOUNTS_INSERT = "account.authority.insert";
+    public final String ACCOUNTS_INSERT = "account.authority.insert";
     @Getter
     @AuthorityGroup("account.authority")
-    private final String ACCOUNTS_UPDATE = "account.authority.update";
+    public final String ACCOUNTS_UPDATE = "account.authority.update";
     @Getter
     @AuthorityGroup("account.authority")
-    private final String ACCOUNTS_DELETE = "account.authority.delete";
+    public final String ACCOUNTS_DELETE = "account.authority.delete";
     
     @Getter
     @AuthorityGroup("private-message.authority")
-    private final String PRIVATE_MESSAGES_VIEW = "private-message.authority.view";
+    public final String PRIVATE_MESSAGES_VIEW = "private-message.authority.view";
     @Getter
     @AuthorityGroup("private-message.authority")
-    private final String PRIVATE_MESSAGES_SEND = "private-message.authority.send";
+    public final String PRIVATE_MESSAGES_SEND = "private-message.authority.send";
     
     /**
      * Lista todas as authorities disponiveis para uso, este metodo e utilzado
