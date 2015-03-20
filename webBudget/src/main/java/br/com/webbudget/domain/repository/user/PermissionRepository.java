@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.user;
 
 import br.com.webbudget.domain.entity.users.Permission;
@@ -29,25 +28,25 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 18/10/2013
  */
 @Repository
-public class PermissionRepository extends GenericRepository<Permission, Long> implements IPermissionRepository  {
+public class PermissionRepository extends GenericRepository<Permission, Long> implements IPermissionRepository {
 
     /**
-     * 
+     *
      * @param user
-     * @return 
+     * @return
      */
     @Override
     public List<Permission> listByUser(User user) {
 
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-                
+
         criteria.createAlias("user", "us");
         criteria.add(Restrictions.eq("us.id", user.getId()));
-        
+
         return criteria.list();
     }
 }

@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.user;
 
 import br.com.webbudget.domain.entity.users.PrivateMessage;
@@ -30,31 +29,31 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 18/10/2013
  */
 @Repository
-public class PrivateMessageRepository extends GenericRepository<PrivateMessage, Long> implements IPrivateMessageRepository  {
+public class PrivateMessageRepository extends GenericRepository<PrivateMessage, Long> implements IPrivateMessageRepository {
 
     /**
-     * 
+     *
      * @param user
-     * @return 
+     * @return
      */
     @Override
     public List<PrivateMessage> listSent(User user) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
         criteria.createAlias("sender", "ow");
-        
+
         criteria.add(Restrictions.eq("ow.id", user.getId()));
-        
+
         // nao mostra mensagens deletadas nunca
         criteria.add(Restrictions.eq("deleted", false));
 
         criteria.addOrder(Order.desc("inclusion"));
-        
+
         return criteria.list();
     }
 }

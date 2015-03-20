@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.system;
 
 import br.com.webbudget.domain.entity.system.Configuration;
@@ -26,21 +25,21 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 18/10/2013
  */
 @Repository
-public class ConfigurationRepository extends GenericRepository<Configuration, Long> implements IConfigurationRepository  {
+public class ConfigurationRepository extends GenericRepository<Configuration, Long> implements IConfigurationRepository {
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public Configuration findDefault() {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         return (Configuration) criteria.uniqueResult();
     }
 }

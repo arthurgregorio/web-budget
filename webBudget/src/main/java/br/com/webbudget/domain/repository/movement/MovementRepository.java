@@ -40,8 +40,8 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 18/10/2013
  */
 @Repository
 public class MovementRepository extends GenericRepository<Movement, Long> implements IMovementRepository {
@@ -234,14 +234,14 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
     }
 
     /**
-     * 
+     *
      * @param period
      * @param movementClass
-     * @return 
+     * @return
      */
     @Override
     public BigDecimal countTotalByPeriodAndMovementClass(FinancialPeriod period, MovementClass movementClass) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
         criteria.createAlias("financialPeriod", "fp");
@@ -250,12 +250,12 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
         criteria.createAlias("apportionments", "ap");
         criteria.createAlias("ap.movementClass", "mc");
         criteria.add(Restrictions.eq("mc.id", movementClass.getId()));
-        
+
         criteria.setProjection(Projections.sum("value"));
 
         return (BigDecimal) criteria.uniqueResult();
     }
-    
+
     /**
      *
      * @param period

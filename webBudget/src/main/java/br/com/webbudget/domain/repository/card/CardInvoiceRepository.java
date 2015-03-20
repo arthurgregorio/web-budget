@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.card;
 
 import br.com.webbudget.domain.entity.card.CardInvoice;
@@ -28,25 +27,25 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 18/10/2013
  */
 @Repository
 public class CardInvoiceRepository extends GenericRepository<CardInvoice, Long> implements ICardInvoiceRepository {
 
     /**
-     * 
+     *
      * @param movement
-     * @return 
+     * @return
      */
     @Override
     public CardInvoice findByMovement(Movement movement) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         criteria.createAlias("movement", "mv");
         criteria.add(Restrictions.eq("mv.id", movement.getId()));
-        
+
         return (CardInvoice) criteria.uniqueResult();
     }
 }

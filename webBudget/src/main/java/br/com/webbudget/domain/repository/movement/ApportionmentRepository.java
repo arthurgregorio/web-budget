@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.Apportionment;
@@ -29,25 +28,25 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 22/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 22/04/2014
  */
 @Repository
 public class ApportionmentRepository extends GenericRepository<Apportionment, Long> implements IApportionmentRepository {
 
     /**
-     * 
+     *
      * @param movement
-     * @return 
+     * @return
      */
     @Override
     public List<Apportionment> listByMovement(Movement movement) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         criteria.createAlias("movement", "mv");
         criteria.add(Restrictions.eq("mv.id", movement.getId()));
-        
+
         return criteria.list();
     }
 }

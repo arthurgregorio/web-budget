@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.system;
 
 import br.com.webbudget.domain.entity.system.Configuration;
@@ -24,14 +23,14 @@ import br.com.webbudget.domain.repository.IGenericRepository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2013
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2013
  */
 public interface IConfigurationRepository extends IGenericRepository<Configuration, Long> {
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public Configuration findDefault();
 }

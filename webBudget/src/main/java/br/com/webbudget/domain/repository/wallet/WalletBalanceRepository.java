@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.wallet;
 
 import br.com.webbudget.domain.entity.wallet.Wallet;
@@ -32,29 +31,29 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 18/10/2013
  */
 @Repository
 public class WalletBalanceRepository extends GenericRepository<WalletBalance, Long> implements IWalletBalanceRepository {
 
     /**
-     * 
+     *
      * @param wallet
-     * @return 
+     * @return
      */
     @Override
     public WalletBalance findLastWalletBalance(Wallet wallet) {
 
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         criteria.createAlias("wallet", "wl");
         criteria.add(Restrictions.eq("wl.id", wallet.getId()));
 
         criteria.setProjection(Projections.max("id"));
-        
+
         final Object id = criteria.uniqueResult();
-        
+
         if (id != null) {
             return this.findById((Long) id, false);
         } else {
@@ -63,31 +62,31 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
     }
 
     /**
-     * 
+     *
      * @param walletBalanceType
-     * @return 
+     * @return
      */
     @Override
     public List<WalletBalance> listByType(WalletBalanceType walletBalanceType) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         criteria.add(Restrictions.eq("walletBalanceType", walletBalanceType));
 
         return criteria.list();
     }
-    
+
     /**
-     * 
+     *
      * @param wallet
      * @param walletBalanceTypes
-     * @return 
+     * @return
      */
     @Override
     public List<WalletBalance> listByWallet(Wallet wallet, WalletBalanceType... walletBalanceTypes) {
-       
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         criteria.createAlias("targetWallet", "wl");
         criteria.add(Restrictions.eq("wl.id", wallet.getId()));
 
@@ -96,29 +95,29 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
                 criteria.add(Restrictions.eq("walletBalanceType", type));
             }
         }
-        
+
         criteria.addOrder(Order.desc("inclusion"));
-        
+
         return criteria.list();
     }
 
     /**
-     * 
+     *
      * @param source
      * @param target
      * @param walletBalanceTypes
-     * @return 
+     * @return
      */
     @Override
     public List<WalletBalance> listByWallet(Wallet source, Wallet target, WalletBalanceType... walletBalanceTypes) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         if (target != null) {
             criteria.createAlias("targetWallet", "tgt");
             criteria.add(Restrictions.eq("tgt.id", target.getId()));
-        } 
-        
+        }
+
         if (source != null) {
             criteria.createAlias("sourceWallet", "src");
             criteria.add(Restrictions.eq("src.id", source.getId()));
@@ -129,9 +128,9 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
                 criteria.add(Restrictions.eq("walletBalanceType", type));
             }
         }
-        
+
         criteria.addOrder(Order.desc("inclusion"));
-        
+
         return criteria.list();
     }
 }

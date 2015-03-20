@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.wallet;
 
 import br.com.webbudget.domain.entity.wallet.Wallet;
@@ -30,50 +29,50 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 18/10/2013
  */
 @Repository
 public class WalletRepository extends GenericRepository<Wallet, Long> implements IWalletRepository {
 
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     @Override
     public List<Wallet> listByStatus(Boolean isBlocked) {
-       
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         if (isBlocked != null) {
             criteria.add(Restrictions.eq("blocked", isBlocked));
         }
-        
+
         criteria.addOrder(Order.asc("bank"));
-        
+
         return criteria.list();
     }
 
     /**
-     * 
+     *
      * @param name
      * @param bank
      * @param walletType
-     * @return 
+     * @return
      */
     @Override
     public Wallet findByNameAndBankAndType(String name, String bank, WalletType walletType) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
         criteria.add(Restrictions.eq("name", name));
         criteria.add(Restrictions.eq("walletType", walletType));
-        
+
         if (walletType == WalletType.BANK_ACCOUNT) {
             criteria.add(Restrictions.eq("bank", bank));
-        } 
-        
+        }
+
         return (Wallet) criteria.uniqueResult();
     }
 }

@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.CostCenter;
@@ -25,23 +24,23 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2013
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2013
  */
 public interface ICostCenterRepository extends IGenericRepository<CostCenter, Long> {
 
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     public List<CostCenter> listByStatus(Boolean isBlocked);
-    
+
     /**
-     * 
+     *
      * @param name
      * @param parent
-     * @return 
+     * @return
      */
     public CostCenter findByNameAndParent(String name, CostCenter parent);
 }

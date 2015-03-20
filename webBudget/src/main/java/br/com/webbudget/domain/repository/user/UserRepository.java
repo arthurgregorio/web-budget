@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.user;
 
 import br.com.webbudget.domain.entity.users.User;
@@ -28,61 +27,61 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 18/10/2013
  */
 @Repository
-public class UserRepository extends GenericRepository<User, Long> implements IUserRepository  {
+public class UserRepository extends GenericRepository<User, Long> implements IUserRepository {
 
     /**
-     * 
+     *
      * @param login
-     * @return 
+     * @return
      */
     @Override
     public User findByUsername(String login) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-                
+
         criteria.add(Restrictions.eq("username", login));
-        
+
         return (User) criteria.uniqueResult();
     }
 
     /**
-     * 
+     *
      * @param blocked
-     * @return 
+     * @return
      */
     @Override
     public List<User> listByStatus(Boolean blocked) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-                
+
         if (blocked != null) {
             criteria.add(Restrictions.eq("blocked", blocked));
         }
-        
+
         return criteria.list();
     }
 
     /**
-     * 
+     *
      * @param blocked
      * @param authenticated
-     * @return 
+     * @return
      */
     @Override
     public List<User> listByStatusAndRemoveAuthenticated(Boolean blocked, User authenticated) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-                
+
         if (blocked != null) {
             criteria.add(Restrictions.eq("blocked", blocked));
         }
-        
+
         criteria.add(Restrictions.ne("id", authenticated.getId()));
-        
+
         return criteria.list();
     }
 }

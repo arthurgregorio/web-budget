@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.wallet;
 
 import br.com.webbudget.domain.entity.wallet.Wallet;
@@ -26,24 +25,24 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2013
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2013
  */
 public interface IWalletRepository extends IGenericRepository<Wallet, Long> {
 
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     public List<Wallet> listByStatus(Boolean isBlocked);
-    
+
     /**
-     * 
+     *
      * @param name
      * @param bank
      * @param walletType
-     * @return 
+     * @return
      */
     public Wallet findByNameAndBankAndType(String name, String bank, WalletType walletType);
 }

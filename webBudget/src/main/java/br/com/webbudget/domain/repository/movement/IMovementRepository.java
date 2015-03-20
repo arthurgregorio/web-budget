@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.card.Card;
@@ -36,105 +35,105 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2013
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2013
  */
 public interface IMovementRepository extends IGenericRepository<Movement, Long> {
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public List<Movement> listByActiveFinancialPeriod();
-    
+
     /**
-     * 
+     *
      * @param filter
      * @param paid
-     * @return 
+     * @return
      */
     public List<Movement> listByFilter(String filter, Boolean paid);
 
     /**
-     * 
+     *
      * @param cardInvoice
-     * @return 
+     * @return
      */
     public List<Movement> listByCardInvoice(CardInvoice cardInvoice);
-    
+
     /**
-     * 
+     *
      * @param dueDate
      * @param showOverdue
-     * @return 
+     * @return
      */
     public List<Movement> listByDueDate(Date dueDate, boolean showOverdue);
-    
+
     /**
-     * 
+     *
      * @param period
      * @param type
-     * @return 
+     * @return
      */
     public List<Movement> listByPeriodAndCardType(FinancialPeriod period, CardType type);
 
     /**
-     * 
+     *
      * @param period
      * @param direction
-     * @return 
+     * @return
      */
     public List<Movement> listByPeriodAndDirection(FinancialPeriod period, MovementClassType direction);
-    
+
     /**
-     * 
+     *
      * @param period
      * @param state
-     * @return 
+     * @return
      */
     public List<Movement> listByPeriodAndState(FinancialPeriod period, MovementStateType state);
-    
+
     /**
-     * 
+     *
      * @param period
      * @param card
-     * @return 
+     * @return
      */
     public List<Movement> listPaidWithoutInvoiceByPeriodAndCard(FinancialPeriod period, Card card);
 
     /**
-     * 
+     *
      * @param period
      * @param movementClass
-     * @return 
+     * @return
      */
     public BigDecimal countTotalByPeriodAndMovementClass(FinancialPeriod period, MovementClass movementClass);
-    
+
     /**
-     * 
+     *
      * @param period
      * @param state
      * @param type
-     * @return 
+     * @return
      */
     public List<Movement> listByPeriodAndStateAndType(FinancialPeriod period, MovementStateType state, MovementType type);
-    
+
     /**
-     * 
+     *
      * @param period
      * @param costCenter
      * @param direction
-     * @return 
+     * @return
      */
     public List<Movement> listByPeriodAndCostCenterAndDirection(FinancialPeriod period, CostCenter costCenter, MovementClassType direction);
-    
+
     /**
-     * 
+     *
      * @param period
      * @param state
      * @param type
      * @param direction
-     * @return 
+     * @return
      */
     public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period, MovementStateType state, MovementType type, MovementClassType direction);
 }

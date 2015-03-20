@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.user;
 
 import br.com.webbudget.domain.entity.users.User;
@@ -25,30 +24,30 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2013
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2013
  */
 public interface IUserRepository extends IGenericRepository<User, Long> {
 
     /**
-     * 
+     *
      * @param username
-     * @return 
+     * @return
      */
     public User findByUsername(String username);
-    
+
     /**
-     * 
+     *
      * @param blocked
-     * @return 
+     * @return
      */
     public List<User> listByStatus(Boolean blocked);
-    
+
     /**
-     * 
+     *
      * @param blocked
      * @param authenticated
-     * @return 
+     * @return
      */
     public List<User> listByStatusAndRemoveAuthenticated(Boolean blocked, User authenticated);
 }

@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.card;
 
 import br.com.webbudget.domain.entity.card.Card;
@@ -26,37 +25,37 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2013
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2013
  */
 public interface ICardRepository extends IGenericRepository<Card, Long> {
 
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     public List<Card> listDebit(Boolean isBlocked);
-    
+
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     public List<Card> listCredit(Boolean isBlocked);
-    
+
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     public List<Card> listByStatus(Boolean isBlocked);
-   
+
     /**
-     * 
+     *
      * @param number
      * @param cardType
-     * @return 
-     */   
+     * @return
+     */
     public Card findByNumberAndType(String number, CardType cardType);
 }

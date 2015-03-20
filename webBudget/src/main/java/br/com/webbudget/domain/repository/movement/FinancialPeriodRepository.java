@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
@@ -29,58 +28,58 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 18/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 18/10/2013
  */
 @Repository
 public class FinancialPeriodRepository extends GenericRepository<FinancialPeriod, Long> implements IFinancialPeriodRepository {
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public List<FinancialPeriod> listOpen() {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         criteria.add(Restrictions.eq("closed", false));
         criteria.add(Restrictions.isNull("closing"));
-        
+
         criteria.addOrder(Order.asc("end"));
-        
+
         return criteria.list();
     }
 
     /**
-     * 
+     *
      * @param isClosed
-     * @return 
+     * @return
      */
     @Override
     public List<FinancialPeriod> listByStatus(Boolean isClosed) {
-       
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         if (isClosed != null) {
             criteria.add(Restrictions.eq("closed", isClosed));
         }
-        
+
         return criteria.list();
     }
-    
+
     /**
-     * 
+     *
      * @param identification
-     * @return 
+     * @return
      */
     @Override
     public FinancialPeriod findByIdentification(String identification) {
 
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-        
+
         criteria.add(Restrictions.eq("identification", identification));
-        
+
         return (FinancialPeriod) criteria.uniqueResult();
     }
 }

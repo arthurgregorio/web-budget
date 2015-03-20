@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.Apportionment;
@@ -26,15 +25,15 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 22/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 22/04/2014
  */
 public interface IApportionmentRepository extends IGenericRepository<Apportionment, Long> {
 
     /**
-     * 
+     *
      * @param movement
-     * @return 
+     * @return
      */
     public List<Apportionment> listByMovement(Movement movement);
 }

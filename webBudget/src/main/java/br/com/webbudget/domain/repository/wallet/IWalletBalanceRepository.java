@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.repository.wallet;
 
 import br.com.webbudget.domain.entity.wallet.Wallet;
@@ -27,39 +26,39 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2013
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2013
  */
 public interface IWalletBalanceRepository extends IGenericRepository<WalletBalance, Long> {
 
     /**
-     * 
+     *
      * @param wallet
-     * @return 
+     * @return
      */
     public WalletBalance findLastWalletBalance(Wallet wallet);
-    
+
     /**
-     * 
+     *
      * @param walletBalanceType
-     * @return 
+     * @return
      */
     public List<WalletBalance> listByType(WalletBalanceType walletBalanceType);
-    
+
     /**
-     * 
+     *
      * @param wallet
      * @param walletBalanceTypes
-     * @return 
+     * @return
      */
     public List<WalletBalance> listByWallet(Wallet wallet, WalletBalanceType... walletBalanceTypes);
-    
+
     /**
-     * 
+     *
      * @param source
      * @param target
      * @param walletBalanceTypes
-     * @return 
+     * @return
      */
     public List<WalletBalance> listByWallet(Wallet source, Wallet target, WalletBalanceType... walletBalanceTypes);
 }
