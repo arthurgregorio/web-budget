@@ -42,8 +42,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 06/10/2013
+ * @version 1.0.0
+ * @since 1.0.0, 06/10/2013
  */
 @Entity
 @Table(name = "users")

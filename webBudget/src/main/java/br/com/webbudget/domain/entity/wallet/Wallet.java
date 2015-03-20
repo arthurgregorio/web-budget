@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.wallet;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -37,8 +36,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 12/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 12/03/2014
  */
 @Entity
 @Table(name = "wallets")
@@ -80,13 +79,13 @@ public class Wallet extends PersistentEntity {
     @Setter
     @Column(name = "blocked")
     private boolean blocked;
-    
+
     @Getter
     @Setter
     @NotNull(message = "{wallet.wallet-type}")
     @Column(name = "wallet_type", nullable = false)
     private WalletType walletType;
-    
+
     @Getter
     @OneToMany(mappedBy = "wallet")
     private List<Payment> payments;
@@ -98,37 +97,37 @@ public class Wallet extends PersistentEntity {
     private BigDecimal adjustmentValue;
 
     /**
-     * 
+     *
      */
     public Wallet() {
         this.balance = BigDecimal.ZERO;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getAccountFormatted() {
-       
+
         final StringBuilder builder = new StringBuilder();
-        
+
         builder.append(this.agency);
         builder.append(" ");
         builder.append(this.account);
         builder.append("-");
         builder.append(this.digit);
-        
+
         return builder.toString();
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getFriendlyName() {
         if (this.walletType == WalletType.BANK_ACCOUNT) {
             return this.name + " - " + this.bank;
-        } 
+        }
         return this.name;
     }
 }

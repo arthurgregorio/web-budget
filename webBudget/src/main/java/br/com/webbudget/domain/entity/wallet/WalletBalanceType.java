@@ -14,38 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.wallet;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 03/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 03/04/2014
  */
 public enum WalletBalanceType {
 
     PAYMENT("beans.wallet-balance.payment"),
     REVENUE("beans.wallet-balance.revenue"),
-    ADJUSTMENT("beans.wallet-balance.adjustment"), 
+    ADJUSTMENT("beans.wallet-balance.adjustment"),
     TRANSFERENCE("beans.wallet-balance.transference"),
     PAYMENT_RETURN("beans.wallet-balance.payment-return"),
-    TRANSFER_ADJUSTMENT("beans.wallet-balance.transfer-adjustment"); 
-    
+    TRANSFER_ADJUSTMENT("beans.wallet-balance.transfer-adjustment");
+
     private final String i18nKey;
 
     /**
-     * 
-     * @param i18nKey 
+     *
+     * @param i18nKey
      */
     private WalletBalanceType(String i18nKey) {
         this.i18nKey = i18nKey;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String toString() {

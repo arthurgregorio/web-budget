@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.users;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -28,11 +27,11 @@ import lombok.ToString;
 
 /**
  * TODO cadastro de contatos/clientes e vinculo com movimentos
- * 
+ *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 21/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 21/03/2014
  */
 @Entity
 @Table(name = "contacts")

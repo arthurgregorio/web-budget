@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -41,8 +40,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 20/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 20/03/2014
  */
 @Entity
 @Table(name = "financial_periods")
@@ -72,20 +71,20 @@ public class FinancialPeriod extends PersistentEntity {
     @Setter
     @Column(name = "closed")
     private boolean closed;
-    
+
     @Setter
     @Getter
     @OneToOne
     @JoinColumn(name = "id_closing")
     private Closing closing;
-    
+
     /**
      * Se o periodo ja expirou ou nao
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isExpired() {
-       
+
         final Calendar today = Calendar.getInstance();
         today.setTime(new Date());
 
@@ -94,37 +93,37 @@ public class FinancialPeriod extends PersistentEntity {
 
         return today.compareTo(finish) > 0;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getStartFormatted() {
         return new SimpleDateFormat("dd/MM/yyyy").format(this.start);
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getEndFormatted() {
         return new SimpleDateFormat("dd/MM/yyyy").format(this.end);
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getFriendlyName() {
-       
+
         final StringBuilder builder = new StringBuilder();
-        
+
         builder.append(this.identification);
         builder.append(" | ");
         builder.append(this.getStartFormatted());
         builder.append(" - ");
         builder.append(this.getEndFormatted());
-        
+
         return builder.toString();
     }
 }

@@ -14,15 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.movement;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 15/05/2014
+ * @version 1.0.0
+ * @since 1.0.0, 15/05/2014
  */
 public enum MovementType {
 
@@ -32,16 +31,16 @@ public enum MovementType {
     private final String i18nKey;
 
     /**
-     * 
-     * @param i18nKey 
+     *
+     * @param i18nKey
      */
     private MovementType(String i18nKey) {
         this.i18nKey = i18nKey;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String toString() {

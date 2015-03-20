@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -37,8 +36,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2014
  */
 @Entity
 @Table(name = "movement_classes")
@@ -65,21 +64,21 @@ public class MovementClass extends PersistentEntity {
     @NotNull(message = "{movement-class.movement-class-type}")
     @Column(name = "movement_class_type", nullable = false)
     private MovementClassType movementClassType;
-    
+
     @Getter
     @Setter
     @ManyToOne
     @NotNull(message = "{movement-class.cost-center}")
     @JoinColumn(name = "id_cost_center", nullable = false)
     private CostCenter costCenter;
-    
+
     @Getter
     @Setter
     @Transient
     private BigDecimal totalMovements;
 
     /**
-     * 
+     *
      */
     public MovementClass() {
         this.totalMovements = BigDecimal.ZERO;

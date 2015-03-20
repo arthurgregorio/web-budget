@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -39,15 +38,15 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 03/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 03/04/2014
  */
 @Entity
 @Table(name = "payments")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")
 public class Payment extends PersistentEntity {
-    
+
     @Getter
     @Setter
     @Column(name = "code", nullable = false, length = 8, unique = true)
@@ -77,31 +76,31 @@ public class Payment extends PersistentEntity {
     private Wallet wallet;
 
     /**
-     * 
+     *
      */
     public Payment() {
         this.paymentDate = new Date();
         this.code = this.createPaymentCode();
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     private String createPaymentCode() {
-        
+
         long decimalNumber = System.nanoTime();
-        
+
         String generated = "";
         final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        
+
         synchronized (this.getClass()) {
-            
+
             int mod;
             int authCodeLength = 0;
 
             while (decimalNumber != 0 && authCodeLength < 5) {
-                
+
                 mod = (int) (decimalNumber % 36);
                 generated = digits.substring(mod, mod + 1) + generated;
                 decimalNumber = decimalNumber / 36;

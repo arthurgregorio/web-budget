@@ -35,8 +35,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 03/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 03/04/2014
  */
 @Entity
 @Table(name = "cards")
@@ -100,7 +100,7 @@ public class Card extends PersistentEntity {
 
         builder.append(this.name);
         builder.append(" - ");
-        
+
         // fix #31
         if (this.number.length() > 3) {
             builder.append(this.number.substring(this.number.length() - 4,
@@ -108,7 +108,7 @@ public class Card extends PersistentEntity {
         } else {
             builder.append(this.number);
         }
-        
+
         builder.append(" - ");
         builder.append(this.flag);
 

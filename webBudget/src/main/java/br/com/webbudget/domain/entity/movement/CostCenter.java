@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -36,8 +35,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 28/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 28/03/2014
  */
 @Entity
 @Table(name = "cost_centers")
@@ -63,13 +62,13 @@ public class CostCenter extends PersistentEntity {
     @Setter
     @Column(name = "description", length = 255)
     private String description;
-    
+
     @Setter
     @Getter
     @ManyToOne
     @JoinColumn(name = "id_parent_cost_center")
-    private CostCenter parentCostCenter;    
-    
+    private CostCenter parentCostCenter;
+
     @Setter
     @Getter
     @Transient
@@ -80,7 +79,7 @@ public class CostCenter extends PersistentEntity {
     private BigDecimal totalMovements;
 
     /**
-     * 
+     *
      */
     public CostCenter() {
         this.percentage = BigDecimal.ZERO;

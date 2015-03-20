@@ -38,8 +38,8 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 01/05/2014
+ * @version 1.0.0
+ * @since 1.0.0, 01/05/2014
  */
 @Entity
 @Table(name = "card_invoices")
@@ -112,8 +112,8 @@ public class CardInvoice extends PersistentEntity {
     }
 
     /**
-     * 
-     * @param prefix 
+     *
+     * @param prefix
      */
     public void setIdentificationPefix(String prefix) {
 
@@ -125,7 +125,7 @@ public class CardInvoice extends PersistentEntity {
 
         this.identification = builder.toString();
     }
-    
+
     /**
      * Gera o total da fatura
      *
@@ -136,9 +136,9 @@ public class CardInvoice extends PersistentEntity {
         BigDecimal total = null;
 
         if (!this.movements.isEmpty()) {
-            
+
             total = BigDecimal.ZERO;
-            
+
             for (Movement m : this.movements) {
                 total = total.add(m.getValue());
             }
