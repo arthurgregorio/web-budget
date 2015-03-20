@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.users;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -32,8 +31,8 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 12/05/2014
+ * @version 1.0.0
+ * @since 1.0.0, 12/05/2014
  */
 @Entity
 @ToString(callSuper = true)
@@ -49,7 +48,7 @@ public class UserPrivateMessage extends PersistentEntity {
     @Setter
     @Column(name = "deleted")
     private boolean deleted;
-    
+
     @Getter
     @Setter
     @ManyToOne

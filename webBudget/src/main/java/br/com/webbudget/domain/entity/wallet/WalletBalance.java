@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.wallet;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
-import br.com.webbudget.domain.entity.closing.Closing;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,8 +33,8 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 20/05/2014
+ * @version 1.0.0
+ * @since 1.0.0, 20/05/2014
  */
 @Entity
 @ToString(callSuper = true)
@@ -65,7 +63,7 @@ public class WalletBalance extends PersistentEntity {
     @Setter
     @Column(name = "wallet_balance_type", nullable = false)
     private WalletBalanceType walletBalanceType;
-    
+
     @Getter
     @Setter
     @ManyToOne
@@ -77,5 +75,5 @@ public class WalletBalance extends PersistentEntity {
     @ManyToOne
     @NotNull(message = "{wallet-balance.null-source}")
     @JoinColumn(name = "id_source_wallet")
-    private Wallet sourceWallet; 
+    private Wallet sourceWallet;
 }

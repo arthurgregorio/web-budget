@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.components;
 
 import br.com.webbudget.domain.entity.card.CardType;
@@ -35,12 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 22/02/2015
+ * @version 1.0.0
+ * @since 1.0.0, 22/02/2015
  */
 @Component
 public class MovementsCalculator {
-    
+
     @Autowired
     private IMovementRepository movementRepository;
     @Autowired
@@ -48,78 +47,78 @@ public class MovementsCalculator {
 
     /**
      * Calcula o total de movimentos contidos em cada classe de movimento
-     * 
+     *
      * @param period o periodo
      * @param direction a direcao da classe, se e entrada ou saida
-     * 
+     *
      * @return as classes com sesus valores de movimentos do periodo
      */
     public List<MovementClass> calculateTotalByMovementClass(FinancialPeriod period, MovementClassType direction) {
-       
-        final List<MovementClass> classes = 
-                this.movementClassRepository.listByTypeAndStatus(direction, false);
-        
+
+        final List<MovementClass> classes
+                = this.movementClassRepository.listByTypeAndStatus(direction, false);
+
         final List<MovementClass> onlyValidClasses = new ArrayList<>();
-        
+
         for (MovementClass movementClass : classes) {
-            
+
             final BigDecimal total = this.movementRepository
                     .countTotalByPeriodAndMovementClass(period, movementClass);
-            
+
             if (total != null) {
                 movementClass.setTotalMovements(total);
                 onlyValidClasses.add(movementClass);
             }
         }
-        
+
         return onlyValidClasses;
     }
-    
+
     /**
      * Calcula o total dos movimentos de mesmo tipo
-     * 
+     *
      * @param period o periodo de busca
      * @param direction a direcao do movimento (receita ou despesa)
-     * 
+     *
      * @return o total para aquele tipo
      */
     @Transactional(readOnly = true)
-    public BigDecimal calculateTotalByDirection(FinancialPeriod period, 
+    public BigDecimal calculateTotalByDirection(FinancialPeriod period,
             MovementClassType direction) {
-        
+
         final List<Movement> movements = this.movementRepository
                 .listByPeriodAndDirection(period, direction);
-        
+
         BigDecimal total = BigDecimal.ZERO;
-        
+
         for (Movement movement : movements) {
             total = total.add(movement.getValue());
         }
-        
+
         return total;
     }
-    
+
     /**
-     * Lista os movimentos do perido totalizando os cosnsumos em cartao de 
+     * Lista os movimentos do perido totalizando os cosnsumos em cartao de
      * debito e credito
-     * 
+     *
      * @param period o periodo a pesquisar
      * @param type o tipo do cartao
-     * 
+     *
      * @return o total de consumo para aquele tipo
      */
     @Transactional(readOnly = true)
     public BigDecimal calculateCardExpenses(FinancialPeriod period, CardType type) {
-       
+
         final List<Movement> movements = this.movementRepository
                 .listByPeriodAndCardType(period, type);
-        
+
         BigDecimal total = BigDecimal.ZERO;
-        
+
         for (Movement movement : movements) {
             total = total.add(movement.getValue());
         }
-        
+
         return total;
     }
 }

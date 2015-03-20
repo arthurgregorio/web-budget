@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.users;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -33,8 +32,8 @@ import org.springframework.security.core.GrantedAuthority;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 24/06/2014
+ * @version 1.0.0
+ * @since 1.0.0, 24/06/2014
  */
 @Entity
 @Table(name = "permissions")
@@ -45,16 +44,16 @@ public class Permission extends PersistentEntity implements GrantedAuthority {
     @Setter
     @Column(name = "authority", nullable = false)
     private String authority;
-    
+
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String getAuthority() {

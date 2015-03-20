@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.users;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -35,8 +34,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 07/05/2014
+ * @version 1.0.0
+ * @since 1.0.0, 07/05/2014
  */
 @Entity
 @Table(name = "private_messages")
@@ -61,43 +60,43 @@ public class PrivateMessage extends PersistentEntity {
     @Setter
     @Column(name = "deleted")
     private boolean deleted;
-    
+
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_sender", nullable = false)
     private User sender;
-    
+
     @Getter
     @Setter
     @Transient
     private List<User> recipients;
 
     /**
-     * 
+     *
      */
     public PrivateMessage() {
         this.code = this.createMessagetCode();
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     private String createMessagetCode() {
-        
+
         long decimalNumber = System.nanoTime();
-        
+
         String generated = "";
         final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        
+
         synchronized (this.getClass()) {
-            
+
             int mod;
             int authCodeLength = 0;
 
             while (decimalNumber != 0 && authCodeLength < 5) {
-                
+
                 mod = (int) (decimalNumber % 36);
                 generated = digits.substring(mod, mod + 1) + generated;
                 decimalNumber = decimalNumber / 36;

@@ -19,7 +19,6 @@ package br.com.webbudget.domain.entity.closing;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.movement.MovementClass;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -38,8 +37,8 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 09/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 09/04/2014
  */
 @Entity
 @Table(name = "closings")

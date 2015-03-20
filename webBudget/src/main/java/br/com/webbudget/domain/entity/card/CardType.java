@@ -14,34 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.card;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 03/04/2014
+ * @version 1.0.0
+ * @since 1.0.0, 03/04/2014
  */
 public enum CardType {
 
     DEBIT("beans.card-type.debit"),
     CREDIT("beans.card-type.credit");
-    
+
     private final String i18nKey;
 
     /**
-     * 
-     * @param i18nKey 
+     *
+     * @param i18nKey
      */
     private CardType(String i18nKey) {
         this.i18nKey = i18nKey;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String toString() {

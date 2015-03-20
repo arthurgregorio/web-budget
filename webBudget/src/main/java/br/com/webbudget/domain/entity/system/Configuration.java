@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entity.system;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
@@ -33,8 +32,8 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 15/02/2015
+ * @version 1.0.0
+ * @since 1.0.0, 15/02/2015
  */
 @Entity
 @ToString(callSuper = true)

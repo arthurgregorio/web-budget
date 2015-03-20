@@ -51,8 +51,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 04/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2014
  */
 @Entity
 @Table(name = "movements")
@@ -138,7 +138,7 @@ public class Movement extends PersistentEntity {
     @Getter
     @Transient
     private final List<Apportionment> deletedApportionments;
-    
+
     /**
      *
      */
@@ -186,16 +186,16 @@ public class Movement extends PersistentEntity {
      * @param apportionment
      */
     public void addApportionment(Apportionment apportionment) {
-        
+
         // checa se nao esta sendo inserido outro exatamente igual
         if (this.apportionments.contains(apportionment)) {
             throw new ApplicationException("movement.validate.apportionment-duplicated");
-        } 
-        
+        }
+
         // checa se nao esta inserindo outro para o mesmo CC e MC
         for (Apportionment a : this.apportionments) {
-            if (a.getCostCenter().equals(apportionment.getCostCenter()) && 
-                    a.getMovementClass().equals(apportionment.getMovementClass())) {
+            if (a.getCostCenter().equals(apportionment.getCostCenter())
+                    && a.getMovementClass().equals(apportionment.getMovementClass())) {
                 throw new ApplicationException("movement.validate.apportionment-duplicated");
             }
         }
@@ -203,81 +203,82 @@ public class Movement extends PersistentEntity {
         // verificamos se os movimentos partem na mesma direcao, para que nao
         // haja rateios com debitos e creditos juntos
         if (!this.apportionments.isEmpty()) {
-            
+
             final MovementClassType direction = this.getDirection();
-            final MovementClassType apportionmentDirection = 
-                    apportionment.getMovementClass().getMovementClassType();
-            
-            if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT) || 
-                    (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN))  {
+            final MovementClassType apportionmentDirection
+                    = apportionment.getMovementClass().getMovementClassType();
+
+            if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT)
+                    || (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN)) {
                 throw new ApplicationException("movement.validate.apportionment-debit-credit");
             }
         }
-        
+
         this.apportionments.add(apportionment);
     }
-    
+
     /**
-     * 
-     * @param id 
+     *
+     * @param id
      */
     public void removeApportionment(String id) {
-        
+
         Apportionment toRemove = null;
-        
+
         for (Apportionment apportionment : this.apportionments) {
             if (id.equals(apportionment.getCode())) {
                 toRemove = apportionment;
             }
         }
-        
+
         this.apportionments.remove(toRemove);
         this.addDeletedApportionment(toRemove);
     }
-    
+
     /**
-     * 
-     * @param apportionment 
+     *
+     * @param apportionment
      */
     public void removeApportionment(Apportionment apportionment) {
         this.apportionments.remove(apportionment);
         this.addDeletedApportionment(apportionment);
     }
-    
+
     /**
-     * Usado em caso de um rateio jah persistente ser apagado, ele precisara
-     * ser removido do banco tambem 
-     * 
-     * @param apportionment o rateio removido da lista que sera colocado na 
-     *        lista de deletados somente se ele ja houve sido persistido
+     * Usado em caso de um rateio jah persistente ser apagado, ele precisara ser
+     * removido do banco tambem
+     *
+     * @param apportionment o rateio removido da lista que sera colocado na
+     * lista de deletados somente se ele ja houve sido persistido
      */
     private void addDeletedApportionment(Apportionment apportionment) {
         if (apportionment.isSaved()) {
             this.deletedApportionments.add(apportionment);
         }
     }
-    
+
     /**
      * @return o valor da somatoria dos rateios
      */
     public BigDecimal getApportionmentsTotal() {
-        
+
         BigDecimal total = BigDecimal.ZERO;
-        
+
         for (Apportionment apportionment : this.apportionments) {
             total = total.add(apportionment.getValue());
         }
 
         return total;
     }
-    
+
     /**
-     * @return false se o valor dos rateios for menor ou maior que o do movimento
+     * @return false se o valor dos rateios for menor ou maior que o do
+     * movimento
      */
     public boolean isApportionmentsValid() {
-        
+
         final BigDecimal total = this.getApportionmentsTotal();
-        
+
         return total.compareTo(this.value) == 0;
     }
 
@@ -287,7 +288,7 @@ public class Movement extends PersistentEntity {
     public BigDecimal getApportionmentsDifference() {
         return this.getApportionmentsTotal().subtract(this.value);
     }
-    
+
     /**
      *
      * @return
