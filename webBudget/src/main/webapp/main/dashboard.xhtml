@@ -28,9 +28,11 @@
     </f:metadata>
 
     <ui:define name="content">
-        <div class="ui-grid-row">
+        <p:outputPanel styleClass="ui-grid-row" deferred="true">
             <div class="ui-grid-col-7 flat-box graph-box">
-                <p:tabView styleClass="dashboard-graphs">
+                <p:tabView cache="true"
+                           dynamic="true" 
+                           styleClass="dashboard-graphs">
                     <p:tab title="#{messages['dashboard.graphs.expenses']}"
                            rendered="#{empty dashboardBean.expensesModel.data}"> 
                         <div class="empty-graph-text">
@@ -95,8 +97,8 @@
                     </div>
                 </div> 
             </div>
-        </div>
-        <div class="ui-grid-row flat-box">
+        </p:outputPanel>
+        <p:outputPanel styleClass="ui-grid-row flat-box" deferred="true">
             <div class="ui-grid-col-12">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-12 form-header">
@@ -147,7 +149,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </p:outputPanel>
     </ui:define>
 
     <ui:define name="popups">
