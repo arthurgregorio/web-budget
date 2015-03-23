@@ -58,7 +58,26 @@ public class WalletService {
             throw new ApplicationException("wallet.validate.duplicated");
         }
 
-        this.walletRepository.save(wallet);
+        wallet = this.walletRepository.save(wallet);
+
+        // se a carteira teve um saldo inicial != 0, entao ajustamos ela para o
+        // saldo informado pelo usuario
+        if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
+
+            // saldo antigo era 0
+            final BigDecimal oldBalance = BigDecimal.ZERO;
+
+            final WalletBalance walletBalance = new WalletBalance();
+
+            // gravamos o historico do saldo
+            walletBalance.setTargetWallet(wallet);
+            walletBalance.setMovimentedValue(wallet.getBalance());
+            walletBalance.setOldBalance(oldBalance);
+            walletBalance.setActualBalance(oldBalance.add(wallet.getBalance()));
+            walletBalance.setWalletBalanceType(WalletBalanceType.ADJUSTMENT);
+
+            this.walletBalanceRepository.save(walletBalance);
+        }
     }
 
     /**
@@ -92,9 +111,9 @@ public class WalletService {
 
         final List<WalletBalance> balaces = this.listBalancesByWallet(wallet);
 
-        for (WalletBalance balance : balaces) {
+        balaces.stream().forEach((balance) -> {
             this.walletBalanceRepository.delete(balance);
-        }
+        });
 
         this.walletRepository.delete(wallet);
     }
