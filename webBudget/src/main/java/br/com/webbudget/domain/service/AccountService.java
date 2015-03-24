@@ -90,6 +90,14 @@ public class AccountService implements UserDetailsService {
         }
         return false;
     }
+    
+    /**
+     * Realiza o logout do usuario
+     */
+    public void logout() {
+        SecurityContextHolder.clearContext();
+        SecurityContextHolder.createEmptyContext();
+    }
 
     /**
      * Cria uma nova conta de usuario
@@ -105,6 +113,11 @@ public class AccountService implements UserDetailsService {
             throw new ApplicationException("user-account.validate.username-used");
         }
 
+        // checa se informou a senha
+        if (user.getUnsecurePassword() == null || user.getUnsecurePassword().isEmpty()) {
+            throw new ApplicationException("user-account.validate.invalid-password");
+        }
+        
         // checa se tem permissoes
         if (user.getPermissions().isEmpty()) {
             throw new ApplicationException("user-account.validate.no-permissions");
@@ -153,9 +166,9 @@ public class AccountService implements UserDetailsService {
         // excluimos todas as permissoes atuais
         final Set<Permission> oldPermissions = new HashSet<>(this.permissionRepository.listByUser(user));
 
-        for (Permission permission : oldPermissions) {
+        oldPermissions.stream().forEach((permission) -> {
             this.permissionRepository.delete(permission);
-        }
+        });
 
         // salvamos novamente as permissions
         for (Permission permission : newPermissions) {

@@ -33,6 +33,13 @@ import lombok.Getter;
 public class Authority {
 
     @Getter
+    @AuthorityGroup("configuration.authority")
+    public final String CONFIGURATION_VIEW = "configuration.authority.view";
+    @Getter
+    @AuthorityGroup("configuration.authority")
+    public final String CONFIGURATION_INSERT = "configuration.authority.insert";
+    
+    @Getter
     @AuthorityGroup("card.authority")
     public final String CARD_VIEW = "card.authority.view";
     @Getter

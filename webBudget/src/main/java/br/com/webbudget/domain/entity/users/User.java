@@ -92,8 +92,6 @@ public class User extends PersistentEntity implements UserDetails {
     @Getter
     @Setter
     @Transient
-    @NotEmpty(message = "{user-account.password}")
-    @Length(min = 5, max = 64, message = "{user-account.password-gt-5}")
     private String unsecurePassword;
     @Getter
     @Setter
