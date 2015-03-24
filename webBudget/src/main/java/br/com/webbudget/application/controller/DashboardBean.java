@@ -66,6 +66,9 @@ public class DashboardBean extends AbstractBean {
     private PieChartModel revenueModel;
 
     @Setter
+    @ManagedProperty("#{accountService}")
+    private transient AccountService accountService;
+    @Setter
     @ManagedProperty("#{movementService}")
     private transient MovementService movementService;
     @Setter
@@ -152,7 +155,8 @@ public class DashboardBean extends AbstractBean {
      * @return a URL de logout do sistema
      */
     public String doLogout() {
-        return "logout.xhtml?faces-redirect=true";
+        this.accountService.logout();
+        return "/home.xhtml?faces-redirect=true";
     }
 
     /**
