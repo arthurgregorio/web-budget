@@ -107,6 +107,10 @@
                                         <p:menuitem value="#{menu['tools.users']}"    
                                                     url="/main/tools/user/listUserAccounts.xhtml"/>
                                     </sec:authorize>
+                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CONFIGURATION_VIEW}">
+                                        <p:menuitem value="#{menu['tools.configuration']}"    
+                                                    url="/main/tools/configurations/configurations.xhtml"/>
+                                    </sec:authorize>
                                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.PRIVATE_MESSAGES_VIEW}">
                                         <p:menuitem value="#{menu['tools.private-messages']}"    
                                                     url="/main/tools/privateMessage/listPrivateMessages.xhtml"/>

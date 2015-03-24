@@ -23,6 +23,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,10 +46,12 @@ public class Configuration extends PersistentEntity {
     @Setter
     @OneToOne
     @JoinColumn(name = "id_invoice_default_cost_center")
+    @NotNull(message = "{configuration.invoice-cost-center}")
     private CostCenter invoiceDefaultCostCenter;
     @Getter
     @Setter
     @OneToOne
     @JoinColumn(name = "id_invoice_default_movement_class")
+    @NotNull(message = "{configuration.invoice-movement-class}")
     private MovementClass invoiceDefaultMovementClass;
 }
