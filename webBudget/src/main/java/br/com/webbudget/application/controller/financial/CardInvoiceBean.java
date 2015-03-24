@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
@@ -39,10 +38,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Controller para a tela de faturas de cartao e historico das faturas
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 28/04/2014
  */
 @ViewScoped
@@ -51,7 +51,7 @@ public class CardInvoiceBean extends AbstractBean {
 
     @Getter
     private CardInvoice cardInvoice;
-    
+
     @Getter
     public List<Card> cards;
     @Getter
@@ -59,10 +59,12 @@ public class CardInvoiceBean extends AbstractBean {
     @Getter
     public List<CostCenter> costCenters;
     @Getter
+    public List<CardInvoice> cardInvoices;
+    @Getter
     public List<MovementClass> movementClasses;
     @Getter
     public List<FinancialPeriod> financialPeriods;
-    
+
     @Setter
     @ManagedProperty("#{cardService}")
     private CardService cardService;
@@ -74,42 +76,40 @@ public class CardInvoiceBean extends AbstractBean {
     private FinancialPeriodService financialPeriodService;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     protected Logger initializeLogger() {
         return LoggerFactory.getLogger(CardInvoiceBean.class);
     }
-    
+
     /**
      * Inicializa o formulario listando os cartoes de credito e o periodo
      */
     public void initialize() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            
+
             this.cardInvoice = new CardInvoice();
-            
+
             this.cards = this.cardService.listCreditCards(false);
             this.costCenters = this.movementService.listCostCenters(false);
             this.financialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
         }
     }
-    
+
     /**
-     * Cancela e volta para a listagem
-     *
-     * @return
+     * @return cancela e volta para a listagem
      */
     public String doCancel() {
         return "generateCardInvoice.xhtml?faces-redirect=true";
     }
-    
+
     /**
-     * 
+     * Gera a fatura para o cartao e periodo selecionado
      */
     public void generateInvoice() {
-        
+
         if (this.cardInvoice.getCard() == null || this.cardInvoice.getFinancialPeriod() == null) {
             this.error("card-invoice.validate.null-period-card", true);
             return;
@@ -117,7 +117,7 @@ public class CardInvoiceBean extends AbstractBean {
 
         try {
             this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
-            
+
             if (this.cardInvoice.getMovements().isEmpty()) {
                 this.info("card-invoice.action.no-movements-to-pay", true);
                 this.cardInvoice = new CardInvoice();
@@ -133,27 +133,40 @@ public class CardInvoiceBean extends AbstractBean {
     }
     
     /**
+     * 
+     */
+    public void loadHistory() {
+        
+    }
+
+    /**
      * Invoca a criacao do movimento para a fatura
      */
     public void createInvoiceMovement() {
-        
+
         try {
-            this.cardService.createMovement(this.cardInvoice, 
+            this.cardService.createMovement(this.cardInvoice,
                     this.translate("card-invoice.identification"));
-            
-            this.openDialog("moveInvoiceDialog","dialogMoveInvoice");
+
+            this.openDialog("moveInvoiceDialog", "dialogMoveInvoice");
         } catch (ApplicationException ex) {
             this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
             this.fixedError(ex.getMessage(), true);
         }
     }
+
+    /**
+     * @return a pagina do historico de faturas
+     */
+    public String changeToHistory() {
+        return "invoiceHistory.xhtml?faces-redirect=true";
+    }
     
     /**
-     * 
-     * @return 
+     * @return se pode ou nao pagar esta fatura
      */
     public boolean canPay() {
-        return (this.cardInvoice != null && this.cardInvoice.getMovements() != null 
+        return (this.cardInvoice != null && this.cardInvoice.getMovements() != null
                 && !this.cardInvoice.getMovements().isEmpty());
     }
 }

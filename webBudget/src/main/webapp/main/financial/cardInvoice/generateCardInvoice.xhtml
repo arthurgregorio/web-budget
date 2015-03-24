@@ -167,7 +167,11 @@
                     </div>
                 </div>
                 <div class="ui-grid-row card-details-footer">
-                    <div class="ui-grid-col-10 div-align-right">
+                    <div class="ui-grid-col-7">
+                        <p:commandLink value="#{messages['card-invoice.history']}"
+                                       action="#{cardInvoiceBean.changeToHistory()}"/>
+                    </div>
+                    <div class="ui-grid-col-7 div-align-right">
                         <p:outputLabel styleClass="card-info"
                                        value="#{messages['card-invoice.card.total']}:"/>
                     </div>
