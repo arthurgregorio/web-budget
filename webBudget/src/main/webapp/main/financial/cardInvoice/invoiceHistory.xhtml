@@ -25,7 +25,7 @@
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
-        <f:viewAction action="#{cardInvoiceBean.initialize()}"/>
+        <f:viewAction action="#{cardInvoiceBean.initializeHistory()}"/>
     </f:metadata>
 
     <ui:define name="breadcrumb">
@@ -49,37 +49,23 @@
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-4 filter-card-invoice">
                     <div class="form-filter-box">
-                        <p:outputLabel for="inFinancialPeriods"
-                                       value="#{messages['card-invoice.filter.financial-period']}: "/>
-                        <p:selectOneMenu id="inFinancialPeriods" 
-                                         converter="omnifaces.SelectItemsConverter"
-                                         value="#{cardInvoiceBean.cardInvoice.financialPeriod}">
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{messages['card-invoice.select-one']}" />
-                            <f:selectItems var="financialPeriod" 
-                                           itemValue="#{financialPeriod}"
-                                           value="#{cardInvoiceBean.financialPeriods}" 
-                                           itemLabel="#{financialPeriod.identification}"/> 
-                        </p:selectOneMenu>
-                    </div>
-                </div>
-                <div class="ui-grid-col-4 filter-card-invoice">
-                    <div class="form-filter-box">
                         <p:outputLabel for="inCards"
-                                       value="#{messages['card-invoice.filter.card']}: "/>
+                                       value="#{messages['invoice-history.filter.card']}: "/>
                         <p:selectOneMenu id="inCards" 
                                          converter="omnifaces.SelectItemsConverter"
-                                         value="#{cardInvoiceBean.cardInvoice.card}">
+                                         value="#{cardInvoiceBean.selectedCard}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{messages['card-invoice.select-one']}" />
+                                          itemLabel="#{messages['invoice-history.select-one']}" />
                             <f:selectItems var="card"
                                            itemValue="#{card}"
                                            itemLabel="#{card.readableName}"
                                            value="#{cardInvoiceBean.cards}"/>
                         </p:selectOneMenu>
                     </div>
+                </div>
+                <div class="ui-grid-col-4">
+
                 </div>
                 <div class="ui-grid-col-4 div-align-right">
                     <p:commandButton update="controlsForm"
@@ -93,7 +79,48 @@
 
         <div class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
-                
+                <p:dataTable id="invoicesList" 
+                             rows="30"
+                             var="invoice"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{cardInvoiceBean.cardInvoices}"
+                             emptyMessage="#{messages['invoice-history.list.empty']}">
+
+                    <p:column width="20%" 
+                              style="text-align: center"
+                              headerText="#{messages['invoice-history.list.generation']}">
+                        <h:outputText value="#{invoice.inclusion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText> 
+                    </p:column>
+                    <p:column style="text-align: center"
+                              headerText="#{messages['invoice-history.list.identification']}">
+                        #{invoice.identification}
+                    </p:column>
+                    <p:column style="text-align: center"
+                              headerText="#{messages['invoice-history.list.movement']}">
+                        #{invoice.movement.code}
+                    </p:column>
+                    <p:column style="text-align: center"
+                              headerText="#{messages['invoice-history.list.period']}">
+                        #{invoice.financialPeriod.identification}
+                    </p:column>
+                    <p:column style="text-align: center"
+                              headerText="#{messages['invoice-history.list.total']}">
+                        <h:outputText value="#{invoice.value}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </p:column>
+                    <p:column width="12%" 
+                              style="text-align: center"
+                              headerText="#{menu['actions']}">
+                        <p:commandButton icon="ui-icon-search"
+                                         title="#{menu['detail']}"
+                                         actionListener="#{cardInvoiceBean.detailInvoice(invoice.id)}" />
+                    </p:column>
+                </p:dataTable>
             </div>
         </div>
     </ui:define>

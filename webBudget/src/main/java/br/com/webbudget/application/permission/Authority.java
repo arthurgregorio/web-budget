@@ -132,6 +132,9 @@ public class Authority {
     @Getter
     @AuthorityGroup("card-invoice.authority")
     public final String CARD_INVOICE_PROCESS = "card-invoice.authority.process";
+    @Getter
+    @AuthorityGroup("card-invoice.authority")
+    public final String CARD_INVOICE_VIEW_HISTORY = "card-invoice.authority.view-history";
 
     @Getter
     @AuthorityGroup("balance-transfer.authority")

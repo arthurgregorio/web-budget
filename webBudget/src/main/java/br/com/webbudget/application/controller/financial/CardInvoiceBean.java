@@ -20,18 +20,16 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
-import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
-import br.com.webbudget.domain.service.MovementService;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -51,13 +49,18 @@ public class CardInvoiceBean extends AbstractBean {
 
     @Getter
     private CardInvoice cardInvoice;
+    
+    @Getter
+    @Setter
+    private Card selectedCard;
+    @Getter
+    @Setter
+    private FinancialPeriod selectedFinancialPeriod;
 
     @Getter
     public List<Card> cards;
     @Getter
     public List<Wallet> wallets;
-    @Getter
-    public List<CostCenter> costCenters;
     @Getter
     public List<CardInvoice> cardInvoices;
     @Getter
@@ -68,9 +71,6 @@ public class CardInvoiceBean extends AbstractBean {
     @Setter
     @ManagedProperty("#{cardService}")
     private CardService cardService;
-    @Setter
-    @ManagedProperty("#{movementService}")
-    private MovementService movementService;
     @Setter
     @ManagedProperty("#{financialPeriodService}")
     private FinancialPeriodService financialPeriodService;
@@ -85,17 +85,25 @@ public class CardInvoiceBean extends AbstractBean {
     }
 
     /**
-     * Inicializa o formulario listando os cartoes de credito e o periodo
+     * Inicializa o formulario listando os cartoes de credito e o periodo para 
+     * entao o usuario realizar a geracao de uma nova fatura
      */
     public void initialize() {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
+        this.cardInvoice = new CardInvoice();
 
-            this.cardInvoice = new CardInvoice();
+        this.cards = this.cardService.listCreditCards(false);
+        this.financialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
+    }
 
-            this.cards = this.cardService.listCreditCards(false);
-            this.costCenters = this.movementService.listCostCenters(false);
-            this.financialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
-        }
+    /**
+     * Inicializa a tela de historico das faturas
+     */
+    public void initializeHistory() {
+
+        this.cardInvoices = new ArrayList<>();
+
+        this.cards = this.cardService.listCreditCards(false);
+        this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
     }
 
     /**
@@ -131,14 +139,24 @@ public class CardInvoiceBean extends AbstractBean {
             this.update("detailsPanel");
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public void loadHistory() {
+
         
     }
 
+    /**
+     * 
+     * @param id 
+     */
+    public void detailInvoice(long id) {
+       
+        
+    }
+    
     /**
      * Invoca a criacao do movimento para a fatura
      */
@@ -161,7 +179,7 @@ public class CardInvoiceBean extends AbstractBean {
     public String changeToHistory() {
         return "invoiceHistory.xhtml?faces-redirect=true";
     }
-    
+
     /**
      * @return se pode ou nao pagar esta fatura
      */
