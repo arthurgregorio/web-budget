@@ -49,7 +49,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 04/03/2014
  */
 @Service
@@ -284,13 +284,15 @@ public class MovementService {
                 = this.movementRepository.listByCardInvoice(cardInvoice);
 
         // limpamos as flags para cada moveimento
-        for (Movement invoiceMovement : invoiceMovements) {
-
+        invoiceMovements.stream().map((invoiceMovement) -> {
             invoiceMovement.setCardInvoice(null);
+            return invoiceMovement;
+        }).map((invoiceMovement) -> {
             invoiceMovement.setCardInvoicePaid(false);
-
+            return invoiceMovement;
+        }).forEach((invoiceMovement) -> {
             this.movementRepository.save(invoiceMovement);
-        }
+        });
 
         // se houve pagamento, devolve o valor para a origem
         if (movement.getMovementStateType() == MovementStateType.PAID) {
@@ -469,7 +471,7 @@ public class MovementService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<Movement> listByFilter(String filter, Boolean paid) {
+    public List<Movement> listMovementsByFilter(String filter, Boolean paid) {
         return this.movementRepository.listByFilter(filter, paid);
     }
 
@@ -494,5 +496,15 @@ public class MovementService {
     @Transactional(readOnly = true)
     public CostCenter findCostCenterByNameAndParent(String name, CostCenter parent) {
         return this.costCenterRepository.findByNameAndParent(name, parent);
+    }
+    
+    /**
+     * 
+     * @param cardInvoice
+     * @return 
+     */
+    @Transactional(readOnly = true)
+    public List<Movement> listMovementsByCardInvoice(CardInvoice cardInvoice) {
+        return this.movementRepository.listByCardInvoice(cardInvoice);
     }
 }

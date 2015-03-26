@@ -101,7 +101,8 @@
                     </p:column>
                     <p:column style="text-align: center"
                               headerText="#{messages['invoice-history.list.movement']}">
-                        #{invoice.movement.code}
+                        <p:link value="#{invoice.movement.code}" 
+                                href="#{cardInvoiceBean.changeToViewMovement(invoice.movement.id)}"/>
                     </p:column>
                     <p:column style="text-align: center"
                               headerText="#{messages['invoice-history.list.period']}">
@@ -118,10 +119,14 @@
                               headerText="#{menu['actions']}">
                         <p:commandButton icon="ui-icon-search"
                                          title="#{menu['detail']}"
-                                         actionListener="#{cardInvoiceBean.detailInvoice(invoice.id)}" />
+                                         actionListener="#{cardInvoiceBean.detailInvoice(invoice)}" />
                     </p:column>
                 </p:dataTable>
             </div>
         </div>
+    </ui:define>
+
+    <ui:define name="popups">
+        <ui:include src="dialogInvoiceDetails.xhtml"/>
     </ui:define>
 </ui:composition>

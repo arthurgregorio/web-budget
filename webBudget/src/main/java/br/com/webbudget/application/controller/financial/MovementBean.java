@@ -183,7 +183,8 @@ public class MovementBean extends AbstractBean {
      * Pesquisa com filtro
      */
     public void filterList() {
-        this.movements = this.movementService.listByFilter(this.filter, this.filterPaid);
+        this.movements = this.movementService
+                .listMovementsByFilter(this.filter, this.filterPaid);
         this.update("movementsList");
     }
 

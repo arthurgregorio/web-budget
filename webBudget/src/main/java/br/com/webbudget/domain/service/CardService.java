@@ -29,7 +29,6 @@ import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
-import br.com.webbudget.domain.repository.movement.IPaymentRepository;
 import br.com.webbudget.domain.repository.system.IConfigurationRepository;
 import java.util.Calendar;
 import java.util.List;
@@ -41,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 06/04/2014
  */
 @Service
@@ -50,8 +49,6 @@ public class CardService {
 
     @Autowired
     private ICardRepository cardRepository;
-    @Autowired
-    private IPaymentRepository paymentRepository;
     @Autowired
     private IMovementRepository movementRepository;
     @Autowired
@@ -252,5 +249,16 @@ public class CardService {
         cardInvoice.setMovements(movements);
 
         return cardInvoice;
+    }
+    
+    /**
+     * Lista todas as faturas de um determinado cartao recebido como parametro
+     * 
+     * @param card o cartao da qual se deseja ver as faturas
+     * @return a lista de faturas
+     */
+    @Transactional(readOnly = true)
+    public List<CardInvoice> listInvoicesByCard(Card card) {
+        return this.cardInvoiceRepository.listByCard(card);
     }
 }

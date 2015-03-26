@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 04/03/2013
  */
 public interface IMovementRepository extends IGenericRepository<Movement, Long> {
