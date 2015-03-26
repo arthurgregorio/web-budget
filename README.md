@@ -24,18 +24,17 @@ Entre outras...
 
 #### Informações Técnicas:
 
-O sistema foi desenvolvido utilizando uma plataforma baseada na tecnologia Java versão 7 e seus frameworks para WEB, possui um ambiente de execução simples de ser estruturado e de fácil manutenção. Dentre as tecnologias adotadas, as principais são:
+O sistema foi desenvolvido utilizando uma plataforma baseada na tecnologia Java versão 8 e seus frameworks para WEB, possui um ambiente de execução simples de ser estruturado e de fácil manutenção. Dentre as tecnologias adotadas, as principais são:
 
-- JSF 2.1 
-- JPA 2.0
+- JSF 2.2 
+- JPA 2.1
 - Primefaces 5.1
-- Spring Framework 3.2
+- Spring Framework 4
 - Spring Security 3.2
-- Tomcat 7
+- Tomcat 8
 - Hibernate 4.3
-- Thymeleaf 2.1
 
-Devido ao suporte a JPA, o banco de dados torna-se independente da aplicação, porém a versão homologada para uso e 100% testada é o MySQL 5.5.
+Devido ao suporte a JPA, o banco de dados torna-se independente da aplicação, porém os SGBD's homologados para uso, 100% testados são *MySQL 5* ou *MariaDB 10*.
 
 #### Uso e Comercialização:
 
