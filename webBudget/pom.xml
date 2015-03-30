@@ -135,6 +135,23 @@
                 <orm.show_sql>false</orm.show_sql>
             </properties>
         </profile>
+        <profile>
+            <id>jelastic</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env</name>
+                    <value>jelastic</value>
+                </property>
+            </activation>
+            <properties>
+                <application.version>${project.version}</application.version>
+                <db.connectionURL>jdbc:mysql://${jelastic_db_url}/webbudget</db.connectionURL>
+                <db.username>${jelastic_db_username}</db.username>
+                <db.password>${jelastic_db_password}</db.password>
+                <orm.show_sql>false</orm.show_sql>
+            </properties>
+        </profile>
     </profiles>
     
     <repositories>
