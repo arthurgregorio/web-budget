@@ -40,7 +40,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 18/10/2013
  */
 @Repository
@@ -76,6 +76,8 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
 
         criteria.createAlias("cardInvoice", "ci");
         criteria.add(Restrictions.eq("ci.id", cardInvoice.getId()));
+
+        criteria.addOrder(Order.desc("inclusion"));
 
         return criteria.list();
     }

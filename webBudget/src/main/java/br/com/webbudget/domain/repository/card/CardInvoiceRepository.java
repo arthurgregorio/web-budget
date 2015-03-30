@@ -16,9 +16,11 @@
  */
 package br.com.webbudget.domain.repository.card;
 
+import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.repository.GenericRepository;
+import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -33,6 +35,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CardInvoiceRepository extends GenericRepository<CardInvoice, Long> implements ICardInvoiceRepository {
 
+    /**
+     * 
+     * @param card
+     * @return 
+     */
+    @Override
+    public List<CardInvoice> listByCard(Card card) {
+        
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+
+        criteria.createAlias("card", "ca");
+        criteria.add(Restrictions.eq("ca.id", card.getId()));
+
+        return criteria.list();
+    }
+    
     /**
      *
      * @param movement

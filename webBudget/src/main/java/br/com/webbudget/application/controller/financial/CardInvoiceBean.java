@@ -21,10 +21,12 @@ import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
+import br.com.webbudget.domain.service.MovementService;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -49,13 +51,10 @@ public class CardInvoiceBean extends AbstractBean {
 
     @Getter
     private CardInvoice cardInvoice;
-    
+
     @Getter
     @Setter
     private Card selectedCard;
-    @Getter
-    @Setter
-    private FinancialPeriod selectedFinancialPeriod;
 
     @Getter
     public List<Card> cards;
@@ -72,6 +71,9 @@ public class CardInvoiceBean extends AbstractBean {
     @ManagedProperty("#{cardService}")
     private CardService cardService;
     @Setter
+    @ManagedProperty("#{movementService}")
+    private MovementService movementService;
+    @Setter
     @ManagedProperty("#{financialPeriodService}")
     private FinancialPeriodService financialPeriodService;
 
@@ -85,7 +87,7 @@ public class CardInvoiceBean extends AbstractBean {
     }
 
     /**
-     * Inicializa o formulario listando os cartoes de credito e o periodo para 
+     * Inicializa o formulario listando os cartoes de credito e o periodo para
      * entao o usuario realizar a geracao de uma nova fatura
      */
     public void initialize() {
@@ -145,18 +147,38 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void loadHistory() {
 
-        
+        if (this.selectedCard == null) {
+            this.error("card-invoice.validate.null-card", true);
+            return;
+        }
+
+        try {
+            this.cardInvoices = this.cardService.listInvoicesByCard(this.selectedCard);
+        } catch (ApplicationException ex) {
+            this.logger.error("CardInvoiceBean#loadHistory found errors", ex);
+            this.fixedError(ex.getMessage(), true);
+        } finally {
+            this.update("invoicesList");
+        }
     }
 
     /**
+     * Carrega e mostra a dialog de detalhes da fatura para o usuario
      * 
-     * @param id 
+     * @param cardInvoice a invoice a ser detalhada
      */
-    public void detailInvoice(long id) {
-       
+    public void detailInvoice(CardInvoice cardInvoice) {
+
+        this.cardInvoice = cardInvoice;
         
+        // listamos os movimentos da fatura e carregamos no objeto selecionado
+        this.cardInvoice.setMovements(this.movementService
+                .listMovementsByCardInvoice(cardInvoice));
+        
+        // atualizamos a dialog e mostramos na tela
+        this.openDialog("invoiceDetailsDialog", "dialogInvoiceDetails");
     }
-    
+
     /**
      * Invoca a criacao do movimento para a fatura
      */
@@ -178,6 +200,17 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public String changeToHistory() {
         return "invoiceHistory.xhtml?faces-redirect=true";
+    }
+    
+    /**
+     * Redireciona o usuario para ver o movimento referente a fatura
+     * 
+     * @param movementId o id do movimento
+     * @return a URL para visualizar o movimento
+     */
+    public String changeToViewMovement(long movementId) {
+        return "../movement/formMovement.xhtml?faces-redirect=true"
+                + "&movementId=" + movementId + "&detailing=true";
     }
 
     /**

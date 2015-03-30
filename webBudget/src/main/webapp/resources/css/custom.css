@@ -22,6 +22,27 @@
 
 @charset "utf-8";
 
+/* corrige o label dos treenodes da arvore de permissoes */
+.ui-treenode-label {
+    position: relative;
+    top: 2px;
+    left: 3px;
+}
+.ui-tree-toggler {
+    position: relative !important;
+    top: 6px !important;
+}
+.ui-icon-triangle-1-e {
+    top: 2px;
+    background-position: initial !important;
+    background-image: url("#{resource['images:ui-icon-arrow-right.png']}") !important;
+}
+.ui-icon-triangle-1-s {
+    top: 2px;
+    background-position: initial !important;
+    background-image: url("#{resource['images:ui-icon-arrow-down.png']}") !important;
+}
+
 /* remove todos os efeitos arredondadinhos dos elementos */
 .ui-corner-all {
     border-radius: 0 !important;
@@ -61,11 +82,6 @@ span.ui-tree-toggler {
 .ui-breadcrumb a {
     font-size: 11pt;
     text-decoration: none;
-}
-.ui-icon-triangle-1-e {
-    top: 2px;
-    background-position: initial !important;
-    background-image: url("#{resource['images:ui-icon-arrow-right.png']}") !important;
 }
 
 /* corrige a borda do paginador das datatables */
