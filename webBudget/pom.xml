@@ -146,9 +146,9 @@
             </activation>
             <properties>
                 <application.version>${project.version}</application.version>
-                <db.connectionURL>jdbc:mysql://${jelastic_db_url}/webbudget</db.connectionURL>
-                <db.username>${jelastic_db_username}</db.username>
-                <db.password>${jelastic_db_password}</db.password>
+                <db.connectionURL></db.connectionURL>
+                <db.username>sa_webbudget</db.username>
+                <db.password></db.password>
                 <orm.show_sql>false</orm.show_sql>
             </properties>
         </profile>
@@ -259,7 +259,6 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>
             <version>8.0.20</version>
-            <scope>provided</scope>
         </dependency>
         
         <!-- jdbc do mysql -->
