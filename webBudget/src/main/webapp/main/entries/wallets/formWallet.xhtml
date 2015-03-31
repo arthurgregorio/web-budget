@@ -26,7 +26,7 @@
     <f:metadata>
         <f:viewAction action="#{walletBean.initializeForm(param.walletId)}"/>
     </f:metadata>
-    
+
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['entries']}" />
@@ -97,6 +97,28 @@
                                          value="#{walletBean.wallet.bank}" 
                                          disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}"/>
                         </div>                        
+                    </div>
+                    <div class="form-cell">
+                        <p:outputLabel for="inAccount" 
+                                       value="#{i18n['wallet.form.account']}: "/>
+                        <br/>
+                        <p:inputText id="inAccount"
+                                     maxlength="45"
+                                     value="#{walletBean.wallet.account}"
+                                     disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
+                            <pe:keyFilter regEx="/[\d\-.]/"/>  
+                        </p:inputText>
+                        <p:spacer width="10"/>
+                        <p:outputLabel for="inDigit" 
+                                       value="-"/>
+                        <p:spacer width="10"/>
+                        <p:inputText id="inDigit"
+                                     size="2"
+                                     maxlength="4"
+                                     value="#{walletBean.wallet.digit}"
+                                     disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
+                            <pe:keyFilter regEx="/[a-z0-9_]/i"/>
+                        </p:inputText>
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-s">
