@@ -100,6 +100,7 @@ public class JPAConfiguration {
         dataSource.setTestOnBorrow(true);
         dataSource.setTestWhileIdle(true);
         dataSource.setValidationInterval(30000);
+        dataSource.setValidationQuery("SELECT 1");
         
         // desabilita o autocommit
         dataSource.setDefaultAutoCommit(false);
