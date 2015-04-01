@@ -397,6 +397,11 @@ td {
     font-size: 11pt !important;
 }
 
+/* form de carteiras ------------------------- */
+.account-box {
+    display: inherit !important;
+}
+
 /* form de movimentos ------------------------ */
 .financial-period-info {
     font-size: 15pt;    

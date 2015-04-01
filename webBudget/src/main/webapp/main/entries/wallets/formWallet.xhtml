@@ -98,28 +98,6 @@
                                          disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}"/>
                         </div>                        
                     </div>
-                    <div class="form-cell">
-                        <p:outputLabel for="inAccount" 
-                                       value="#{i18n['wallet.form.account']}: "/>
-                        <br/>
-                        <p:inputText id="inAccount"
-                                     maxlength="45"
-                                     value="#{walletBean.wallet.account}"
-                                     disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
-                            <pe:keyFilter regEx="/[\d\-.]/"/>  
-                        </p:inputText>
-                        <p:spacer width="10"/>
-                        <p:outputLabel for="inDigit" 
-                                       value="-"/>
-                        <p:spacer width="10"/>
-                        <p:inputText id="inDigit"
-                                     size="2"
-                                     maxlength="4"
-                                     value="#{walletBean.wallet.digit}"
-                                     disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
-                            <pe:keyFilter regEx="/[a-z0-9_]/i"/>
-                        </p:inputText>
-                    </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-s">
                             <p:outputLabel for="inAgency" 
@@ -131,6 +109,30 @@
                                 <pe:keyFilter regEx="/[\d\-]/"/>  
                             </p:inputText>
                         </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-s">
+                            <p:outputLabel for="inAccount" 
+                                           value="#{messages['wallet.form.account']}: "/>
+                            <p:inputText id="inAccount"
+                                         maxlength="45"
+                                         value="#{walletBean.wallet.account}"
+                                         disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
+                                <pe:keyFilter regEx="/[\d\-.]/"/>  
+                            </p:inputText>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-s">
+                            <p:outputLabel for="inDigit" 
+                                           value="#{messages['wallet.form.digit']}: "/>
+                            <p:inputText id="inDigit"
+                                         maxlength="4"
+                                         value="#{walletBean.wallet.digit}"
+                                         disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
+                                <pe:keyFilter regEx="/[a-z0-9_]/i"/>
+                            </p:inputText>
+                        </div>
                     </div>
                     <h:panelGroup style="block" 
                                   styleClass="ui-grid-row"
