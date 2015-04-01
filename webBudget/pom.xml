@@ -121,7 +121,6 @@
         <profile>
             <id>openshift</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
                 <property>
                     <name>env</name>
                     <value>openshift</value>
@@ -138,7 +137,6 @@
         <profile>
             <id>jelastic</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
                 <property>
                     <name>env</name>
                     <value>jelastic</value>
