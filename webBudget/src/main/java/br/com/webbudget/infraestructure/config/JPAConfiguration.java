@@ -96,6 +96,10 @@ public class JPAConfiguration {
         dataSource.setMaxActive(25);
         dataSource.setMaxIdle(10);
         dataSource.setMinIdle(5);
+        dataSource.setMaxAge(180000);
+        dataSource.setTestOnBorrow(true);
+        dataSource.setTestWhileIdle(true);
+        dataSource.setValidationInterval(30000);
         
         // desabilita o autocommit
         dataSource.setDefaultAutoCommit(false);
