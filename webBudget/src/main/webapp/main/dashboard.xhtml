@@ -21,135 +21,163 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:of="http://omnifaces.org/functions"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
-    <f:metadata>
-        <f:viewAction action="#{dashboardBean.initialize()}"/>
-    </f:metadata>
+    <ui:define name="head">
+        <script type="text/javascript">
+            $(document).ready(function () {
+                doAfterPageLoad();
+            });
+        </script>
+    </ui:define>
 
     <ui:define name="content">
-        <p:outputPanel styleClass="ui-grid-row" deferred="true">
-            <div class="ui-grid-col-7 flat-box graph-box">
-                <p:tabView cache="true"
-                           dynamic="true" 
-                           styleClass="dashboard-graphs">
-                    <p:tab title="#{messages['dashboard.graphs.expenses']}"
-                           rendered="#{empty dashboardBean.expensesModel.data}"> 
-                        <div class="empty-graph-text">
-                            #{messages['dashboard.graphs.no-data-expenses']}
+
+        <h:form prependId="false">
+            <p:remoteCommand name="doAfterPageLoad"
+                             onstart="PF('loadingBlock').block()"
+                             oncomplete="PF('loadingBlock').unblock()"
+                             action="#{dashboardBean.initializeData()}"/>
+        </h:form>
+
+        <p:outputPanel id="contentPanel">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-7 flat-box graph-box">
+                    <p:tabView cache="true"
+                               dynamic="true" 
+                               styleClass="dashboard-graphs">
+                        <p:tab title="#{messages['dashboard.graphs.expenses']}"
+                               rendered="#{empty dashboardBean.expensesModel.data}"> 
+                            <div class="empty-graph-text">
+                                #{messages['dashboard.graphs.no-data-expenses']}
+                            </div>
+                        </p:tab>
+                        <p:tab title="#{messages['dashboard.graphs.revenue']}"
+                               rendered="#{empty dashboardBean.revenueModel.data}"> 
+                            <div class="empty-graph-text">
+                                #{messages['dashboard.graphs.no-data-revenue']}
+                            </div>
+                        </p:tab>
+                        <p:tab title="#{messages['dashboard.graphs.expenses']}"
+                               rendered="#{not empty dashboardBean.expensesModel.data}"> 
+                            <p:chart type="pie" 
+                                     model="#{dashboardBean.expensesModel}"/>
+                        </p:tab>
+                        <p:tab title="#{messages['dashboard.graphs.revenue']}"
+                               rendered="#{not empty dashboardBean.revenueModel.data}"> 
+                            <p:chart type="pie" 
+                                     model="#{dashboardBean.revenueModel}"/>
+                        </p:tab>
+                    </p:tabView>
+                </div>
+                <div class="ui-grid-col-5 flat-box">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-header">
+                            #{messages['dashboard.private-messages']}
                         </div>
-                    </p:tab>
-                    <p:tab title="#{messages['dashboard.graphs.revenue']}"
-                           rendered="#{empty dashboardBean.revenueModel.data}"> 
-                        <div class="empty-graph-text">
-                            #{messages['dashboard.graphs.no-data-revenue']}
+                    </div> 
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <h:form prependId="false">
+                                <p:dataTable id="messagesList" 
+                                             rows="10"
+                                             paginator="true" 
+                                             var="userMessage"
+                                             selectionMode="single"
+                                             rowKey="#{userMessage.id}"
+                                             paginatorPosition="bottom" 
+                                             paginatorAlwaysVisible="false"
+                                             value="#{dashboardBean.userPrivateMessages}"
+                                             selection="#{dashboardBean.selectedPrivateMessage}"
+                                             emptyMessage="#{messages['dashboard.messages.no-messages']}"
+                                             rowStyleClass="#{userMessage.wasRead eq false ? 'unread-message' : ''}">
+
+                                    <p:ajax event="rowSelect" 
+                                            listener="#{dashboardBean.displayMessage()}" />
+
+                                    <p:column headerText="#{messages['dashboard.messages.title']}">
+                                        #{userMessage.privateMessage.title}
+                                    </p:column>
+                                    <p:column width="40%" 
+                                              style="text-align: center" 
+                                              headerText="#{messages['dashboard.messages.received']}">
+                                        <h:outputText value="#{userMessage.privateMessage.inclusion}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
                         </div>
-                    </p:tab>
-                    <p:tab title="#{messages['dashboard.graphs.expenses']}"
-                           rendered="#{not empty dashboardBean.expensesModel.data}"> 
-                        <p:chart type="pie" 
-                                 model="#{dashboardBean.expensesModel}"/>
-                    </p:tab>
-                    <p:tab title="#{messages['dashboard.graphs.revenue']}"
-                           rendered="#{not empty dashboardBean.revenueModel.data}"> 
-                        <p:chart type="pie" 
-                                 model="#{dashboardBean.revenueModel}"/>
-                    </p:tab>
-                </p:tabView>
+                    </div> 
+                </div>
             </div>
-            <div class="ui-grid-col-5 flat-box">
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12 form-header">
-                        #{messages['dashboard.private-messages']}
-                    </div>
-                </div> 
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12">
-                        <h:form prependId="false">
-                            <p:dataTable id="messagesList" 
-                                         rows="10"
+            <div class="ui-grid-row flat-box">
+                <div class="ui-grid-col-12">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-header">
+                            #{messages['dashboard.movements.to-pay']}
+                        </div>
+                    </div> 
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <p:dataTable id="movementsList" 
+                                         rows="6"
+                                         var="movement"
                                          paginator="true" 
-                                         var="userMessage"
-                                         selectionMode="single"
-                                         rowKey="#{userMessage.id}"
-                                         paginatorPosition="bottom" 
+                                         paginatorPosition="bottom"
+                                         value="#{dashboardBean.movements}"
                                          paginatorAlwaysVisible="false"
-                                         value="#{dashboardBean.userPrivateMessages}"
-                                         selection="#{dashboardBean.selectedPrivateMessage}"
-                                         emptyMessage="#{messages['dashboard.messages.no-messages']}"
-                                         rowStyleClass="#{userMessage.wasRead eq false ? 'unread-message' : ''}">
+                                         emptyMessage="#{messages['dashboard.movements.list.no-movements']}"
+                                         rowStyleClass="#{movement.overdue eq true ? 'overdue-movement' : ''}">
 
-                                <p:ajax event="rowSelect" 
-                                        listener="#{dashboardBean.displayMessage()}" />
-
-                                <p:column headerText="#{messages['dashboard.messages.title']}">
-                                    #{userMessage.privateMessage.title}
-                                </p:column>
-                                <p:column width="40%" 
+                                <p:column width="10%" 
                                           style="text-align: center" 
-                                          headerText="#{messages['dashboard.messages.received']}">
-                                    <h:outputText value="#{userMessage.privateMessage.inclusion}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                    </h:outputText>
+                                          headerText="#{messages['dashboard.movements.list.code']}">
+                                    #{movement.code}
+                                </p:column>
+                                <p:column headerText="#{messages['dashboard.movements.list.description']}">
+                                    #{of:abbreviate(movement.description,50)}
+                                </p:column>
+                                <p:column width="15%"
+                                          style="text-align: center" 
+                                          headerText="#{messages['dashboard.movements.list.value']}">
+                                    <h:outputText value="R$ #{movement.value}" />
+                                </p:column>
+                                <p:column width="15%"
+                                          style="text-align: center" 
+                                          headerText="#{messages['dashboard.movements.list.due-date']}">
+                                    <h:outputText value="#{movement.dueDate}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText> 
+                                </p:column>
+                                <p:column width="10%" 
+                                          style="text-align: center"
+                                          headerText="#{menu['actions']}">
+                                    <p:commandButton icon="ui-icon-check"
+                                                     title="#{menu['pay']}"
+                                                     rendered="#{movement.payable eq true}"
+                                                     action="#{dashboardBean.changeToPay(movement.id)}" />
                                 </p:column>
                             </p:dataTable>
-                        </h:form>
-                    </div>
-                </div> 
-            </div>
-        </p:outputPanel>
-        <p:outputPanel styleClass="ui-grid-row flat-box" deferred="true">
-            <div class="ui-grid-col-12">
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12 form-header">
-                        #{messages['dashboard.movements.to-pay']}
-                    </div>
-                </div> 
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12">
-                        <p:dataTable id="movementsList" 
-                                     rows="6"
-                                     var="movement"
-                                     paginator="true" 
-                                     paginatorPosition="bottom"
-                                     value="#{dashboardBean.movements}"
-                                     paginatorAlwaysVisible="false"
-                                     emptyMessage="#{messages['dashboard.movements.list.no-movements']}"
-                                     rowStyleClass="#{movement.overdue eq true ? 'overdue-movement' : ''}">
-
-                            <p:column width="10%" 
-                                      style="text-align: center" 
-                                      headerText="#{messages['dashboard.movements.list.code']}">
-                                #{movement.code}
-                            </p:column>
-                            <p:column headerText="#{messages['dashboard.movements.list.description']}">
-                                #{of:abbreviate(movement.description,50)}
-                            </p:column>
-                            <p:column width="15%"
-                                      style="text-align: center" 
-                                      headerText="#{messages['dashboard.movements.list.value']}">
-                                <h:outputText value="R$ #{movement.value}" />
-                            </p:column>
-                            <p:column width="15%"
-                                      style="text-align: center" 
-                                      headerText="#{messages['dashboard.movements.list.due-date']}">
-                                <h:outputText value="#{movement.dueDate}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:outputText> 
-                            </p:column>
-                            <p:column width="10%" 
-                                      style="text-align: center"
-                                      headerText="#{menu['actions']}">
-                                <p:commandButton icon="ui-icon-check"
-                                                 title="#{menu['pay']}"
-                                                 rendered="#{movement.payable eq true}"
-                                                 action="#{dashboardBean.changeToPay(movement.id)}" />
-                            </p:column>
-                        </p:dataTable>
+                        </div>
                     </div>
                 </div>
             </div>
         </p:outputPanel>
+
+        <pe:blockUI target="contentPanel"
+                    widgetVar="loadingBlock">
+            <div class="div-align-center">
+                <p:graphicImage width="32" 
+                                height="32"
+                                library="images" 
+                                name="ui-loading.gif" />
+            </div>
+            <div class="loading-text">
+                #{menu['loading']}
+            </div>        
+        </pe:blockUI>        
     </ui:define>
 
     <ui:define name="popups">
