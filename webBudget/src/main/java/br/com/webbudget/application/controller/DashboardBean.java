@@ -91,7 +91,7 @@ public class DashboardBean extends AbstractBean {
      * Inicializa os graficos e tambem carrega as mensagens privadas no box
      * de mensagens
      */
-    public void initialize() {
+    public void initializeData() {
 
         // carregamos os graficos
         this.revenueModel = this.graphModelService.buildRevenueModelByCostCenter();
@@ -103,6 +103,8 @@ public class DashboardBean extends AbstractBean {
 
         // carregamos os movimentos para pagamento
         this.movements = this.movementService.listMovementsByDueDate(new Date(), true);
+        
+        
     }
 
     /**
