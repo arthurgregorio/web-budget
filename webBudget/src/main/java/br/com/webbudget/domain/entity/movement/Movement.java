@@ -270,6 +270,13 @@ public class Movement extends PersistentEntity {
 
         return total;
     }
+    
+    /**
+     * @return o valor a ser rateado descontando o valor ja rateado
+     */
+    public BigDecimal getValueToDivide() {
+        return this.value.subtract(this.getApportionmentsTotal());
+    }
 
     /**
      * @return false se o valor dos rateios for menor ou maior que o do

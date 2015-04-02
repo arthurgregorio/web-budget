@@ -422,7 +422,10 @@ public class MovementBean extends AbstractBean {
      *
      */
     public void showApportionmentDialog() {
+        
         this.apportionment = new Apportionment();
+        this.apportionment.setValue(this.movement.getValueToDivide());
+        
         this.openDialog("apportionmentDialog", "dialogApportionment");
     }
 
