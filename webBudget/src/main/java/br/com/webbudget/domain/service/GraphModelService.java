@@ -220,9 +220,9 @@ public class GraphModelService implements Serializable {
 
         series.setLabel(this.messages.getMessage("period-details.chart.classes"));
 
-        for (MovementClass movementClass : classes) {
+        classes.stream().forEach((movementClass) -> {
             series.set(movementClass.getName(), movementClass.getTotalMovements());
-        }
+        });
 
         return series;
     }
@@ -238,9 +238,9 @@ public class GraphModelService implements Serializable {
 
         series.setLabel(this.messages.getMessage("period-details.chart.budget-line"));
 
-        for (MovementClass movementClass : classes) {
+        classes.stream().forEach((movementClass) -> {
             series.set(movementClass.getName(), movementClass.getBudget());
-        }
+        });
 
         return series;
     }
@@ -260,8 +260,8 @@ public class GraphModelService implements Serializable {
                 = this.financialPeriodRepository.listOpen();
 
         // para cada centro de custo
-        for (CostCenter costCenter : costCenters) {
-
+        costCenters.stream().forEach((costCenter) -> {
+          
             BigDecimal total = BigDecimal.ZERO;
 
             // pegamos os periodos abertos
@@ -281,7 +281,7 @@ public class GraphModelService implements Serializable {
                 }
             }
             costCenter.setTotalMovements(total);
-        }
+        });
 
         return costCenters;
     }
