@@ -402,6 +402,7 @@ public class MovementBean extends AbstractBean {
     public void addApportionment() {
         try {
             this.movement.addApportionment(this.apportionment);
+        
             this.update("apportionmentList");
             this.closeDialog("dialogApportionment");
         } catch (ApplicationException ex) {
@@ -422,6 +423,13 @@ public class MovementBean extends AbstractBean {
      *
      */
     public void showApportionmentDialog() {
+        
+        // se o valor do rateio for igual ao total do movimento nem deixa exibir
+        // a tela de rateios para que nao seja feito cagada
+        if (this.movement.isApportionmentsValid()) {
+            this.error("movement.validate.no-value-divide", true);
+            return;
+        }
         
         this.apportionment = new Apportionment();
         this.apportionment.setValue(this.movement.getValueToDivide());

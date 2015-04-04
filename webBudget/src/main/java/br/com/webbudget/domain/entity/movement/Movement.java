@@ -214,6 +214,16 @@ public class Movement extends PersistentEntity {
             }
         }
 
+        // impossivel ter um rateio com valor igual a zero
+        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0) {
+            throw new ApplicationException("movement.validate.apportionment-invalid-value");
+        }
+        
+        // impossivel ter um rateio com valor maior que o do movimento
+        if (apportionment.getValue().compareTo(this.value) > 0) {
+            throw new ApplicationException("movement.validate.apportionment-invalid-value");
+        }
+        
         this.apportionments.add(apportionment);
     }
 
