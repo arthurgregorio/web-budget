@@ -49,8 +49,8 @@
                 </div> 
             </div> 
             <h:panelGroup layout="block" 
-                          styleClass="ui-grid-row financial-period-info flat-box"
-                          rendered="#{movementBean.haveOpenPeriod() eq true}">
+                          rendered="#{movementBean.haveOpenPeriod() eq true}"
+                          styleClass="ui-grid-row financial-period-info flat-box">
                 <div class="ui-grid-col-5 active-period-text">
                     <h:outputText value="#{messages['movement.form.current-period']}: "/>
                     <p:spacer width="10"/>
@@ -77,8 +77,8 @@
                 </div>
             </h:panelGroup>
             <h:panelGroup layout="block" 
-                          styleClass="ui-grid-row financial-period-info flat-box"
-                          rendered="#{movementBean.haveOpenPeriod() eq false}">
+                          rendered="#{movementBean.haveOpenPeriod() eq false}"
+                          styleClass="ui-grid-row financial-period-info flat-box">
                 <div class="ui-grid-col-8 no-period-text">
                     <h:outputText value="#{messages['movement.form.financial-period-not-open']}" />
                 </div>
@@ -99,7 +99,9 @@
                                          value="#{movementBean.movement.code}" />
                         </div>                        
                     </div>
-                    <div class="ui-grid-row">
+                    <h:panelGroup id="valuePanel"
+                                  layout="block" 
+                                  class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inValue" 
                                            value="#{messages['movement.form.value']}: "/>
@@ -108,11 +110,12 @@
                                             decimalPlaces="2" 
                                             decimalSeparator="," 
                                             thousandSeparator="." 
-                                            value="#{movementBean.movement.value}">
+                                            value="#{movementBean.movement.value}"
+                                            disabled="#{not empty movementBean.movement.apportionments}">
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </pe:inputNumber>  
                         </div>                        
-                    </div>
+                    </h:panelGroup>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inDueDate" 
