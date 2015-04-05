@@ -403,6 +403,7 @@ public class MovementBean extends AbstractBean {
         try {
             this.movement.addApportionment(this.apportionment);
         
+            this.update("valuePanel");
             this.update("apportionmentList");
             this.closeDialog("dialogApportionment");
         } catch (ApplicationException ex) {
@@ -416,6 +417,7 @@ public class MovementBean extends AbstractBean {
      */
     public void deleteApportionment(String id) {
         this.movement.removeApportionment(id);
+        this.update("valuePanel");
         this.update("apportionmentList");
     }
 
