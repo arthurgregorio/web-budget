@@ -54,8 +54,7 @@
                     </div>
                     <div class="menu">
                         <h:form id="menuForm" prependId="false">
-                            <p:menubar autoDisplay="false"
-                                       styleClass="main-menu header-background" >
+                            <p:menubar styleClass="main-menu header-background" >
                                 <p:submenu label="#{menu['entries']}" 
                                            styleClass="main-menu-item">
                                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_VIEW}">
