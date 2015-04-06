@@ -29,7 +29,7 @@ public enum WalletBalanceType {
     REVENUE("beans.wallet-balance.revenue"),
     ADJUSTMENT("beans.wallet-balance.adjustment"),
     TRANSFERENCE("beans.wallet-balance.transference"),
-    PAYMENT_RETURN("beans.wallet-balance.payment-return"),
+    BALANCE_RETURN("beans.wallet-balance.balance-return"),
     TRANSFER_ADJUSTMENT("beans.wallet-balance.transfer-adjustment");
 
     private final String i18nKey;

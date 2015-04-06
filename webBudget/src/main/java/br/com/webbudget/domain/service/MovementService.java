@@ -253,10 +253,19 @@ public class MovementService {
                 paymentWallet = payment.getWallet();
             }
 
+            final BigDecimal movimentedValue;
+            
+            // se entrada, valor negativo, se saida valor positivo
+            if (movement.getDirection() == MovementClassType.OUT) {
+                movimentedValue = movement.getValue();
+            } else {
+                movimentedValue = movement.getValue().negate();
+            }
+            
             final BigDecimal oldBalance = paymentWallet.getBalance();
-            final BigDecimal newBalance = oldBalance.add(movement.getValue());
 
-            this.returnBalance(paymentWallet, oldBalance, newBalance, movement.getValue());
+            this.returnBalance(paymentWallet, oldBalance, 
+                    oldBalance.add(movimentedValue), movimentedValue);
         }
 
         this.movementRepository.delete(movement);
@@ -370,7 +379,7 @@ public class MovementService {
         balance.setOldBalance(oldBalance);
         balance.setActualBalance(newBalance);
         balance.setMovimentedValue(movimentedValue);
-        balance.setWalletBalanceType(WalletBalanceType.PAYMENT_RETURN);
+        balance.setWalletBalanceType(WalletBalanceType.BALANCE_RETURN);
 
         return this.walletBalanceRepository.save(balance);
     }
