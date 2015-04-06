@@ -23,10 +23,9 @@
                 xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:define name="head">
-        <f:event type="preRenderView" 
-                 listener="#{transferenceBean.initializeForm()}" />
-    </ui:define>
+    <f:metadata>
+        <f:viewAction action="#{transferenceBean.initializeForm()}"/>
+    </f:metadata>
 
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
@@ -70,10 +69,10 @@
                             <p:selectOneMenu id="inWalletSource" 
                                              converter="omnifaces.SelectItemsConverter"
                                              value="#{transferenceBean.walletBalance.sourceWallet}">
-                                
+
                                 <p:ajax event="change" 
-                                        update="sourceBalancePanel" />
-                                
+                                        listener="#{transferenceBean.updateBalances()}" />
+
                                 <f:selectItem itemValue="#{null}"
                                               noSelectionOption="true"
                                               itemLabel="#{messages['transfer.form.select-one']}" />
@@ -91,10 +90,10 @@
                             <p:selectOneMenu id="inWalletDestiny" 
                                              converter="omnifaces.SelectItemsConverter"
                                              value="#{transferenceBean.walletBalance.targetWallet}">
-                                
+
                                 <p:ajax event="change" 
-                                        update="destinyBalancePanel" />
-                                
+                                        listener="#{transferenceBean.updateBalances()}" />
+
                                 <f:selectItem itemValue="#{null}"
                                               noSelectionOption="true"
                                               itemLabel="#{messages['transfer.form.select-one']}" />
@@ -106,42 +105,38 @@
                         </div>                        
                     </div>
                 </div>
-                <div class="ui-grid-col-6"> 
+                <h:panelGroup id="balancesPanel"
+                              layout="block" 
+                              styleClass="ui-grid-col-6"> 
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12">
                             <p:fieldset legend="#{messages['transfer.form.source-balance']}">
-                                <h:panelGroup id="sourceBalancePanel"
-                                              layout="block">
-                                    <h:outputText value="R$ #{transferenceBean.walletBalance.sourceWallet.balance}"
-                                                  rendered="#{transferenceBean.walletBalance.sourceWallet ne null}"
-                                                  style="#{transferenceBean.walletBalance.sourceWallet.balance.signum() 
-                                                           lt 0 ? 'color: red;' : 'color: green;'}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                    <h:outputText value="#{messages['transfer.form.select-source']}"
-                                                  rendered="#{transferenceBean.walletBalance.sourceWallet eq null}"/>
-                                </h:panelGroup> 
+                                <h:outputText value="R$ #{transferenceBean.walletBalance.sourceWallet.balance}"
+                                              rendered="#{transferenceBean.walletBalance.sourceWallet ne null}"
+                                              style="#{transferenceBean.walletBalance.sourceWallet.balance.signum() 
+                                                       lt 0 ? 'color: red;' : 'color: green;'}">
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                </h:outputText>
+                                <h:outputText value="#{messages['transfer.form.select-source']}"
+                                              rendered="#{transferenceBean.walletBalance.sourceWallet eq null}"/>
                             </p:fieldset>
                         </div>
                     </div>
                     <div class="ui-grid-row div-pd-tb-10">
                         <div class="ui-grid-col-12">
                             <p:fieldset legend="#{messages['transfer.form.destiny-balance']}">
-                                <h:panelGroup id="destinyBalancePanel"
-                                              layout="block">
-                                    <h:outputText rendered="#{transferenceBean.walletBalance.targetWallet ne null}"
-                                                  value="#{transferenceBean.walletBalance.targetWallet.balance}"
-                                                  style="#{transferenceBean.walletBalance.targetWallet.balance.signum() 
-                                                           lt 0 ? 'color: red;' : 'color: green;'}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                    <h:outputText value="#{messages['transfer.form.select-destiny']}"
-                                                  rendered="#{transferenceBean.walletBalance.targetWallet eq null}"/>
-                                </h:panelGroup> 
+                                <h:outputText rendered="#{transferenceBean.walletBalance.targetWallet ne null}"
+                                              value="#{transferenceBean.walletBalance.targetWallet.balance}"
+                                              style="#{transferenceBean.walletBalance.targetWallet.balance.signum() 
+                                                       lt 0 ? 'color: red;' : 'color: green;'}">
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                </h:outputText>
+                                <h:outputText value="#{messages['transfer.form.select-destiny']}"
+                                              rendered="#{transferenceBean.walletBalance.targetWallet eq null}"/>
                             </p:fieldset>
                         </div>
                     </div>
-                </div>
+                </h:panelGroup>
             </div>
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-6">

@@ -119,11 +119,10 @@
                         </sec:authorize>
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_CLOSE}">
                             <p:spacer width="10"/>
-                            <p:commandButton immediate="true"
-                                             icon="ui-icon-calculator"
-                                             title="#{menu['calculate']}"
-                                             rendered="#{financialPeriod.closed eq false}"
-                                             action="#{financialPeriodBean.changeToClosing(financialPeriod.id)}" />
+                            <p:button icon="ui-icon-calculator"
+                                      title="#{menu['calculate']}"
+                                      rendered="#{financialPeriod.closed eq false}" 
+                                      href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"/>
                         </sec:authorize>
                     </p:column>
                 </p:dataTable>

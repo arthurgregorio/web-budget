@@ -69,7 +69,7 @@ public class TransferenceBean extends AbstractBean {
     }
 
     /**
-     *
+     * Inicializa a listagem de alimentos
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
@@ -77,32 +77,33 @@ public class TransferenceBean extends AbstractBean {
     }
 
     /**
-     *
+     * Inicializa o form de transferencias
      */
     public void initializeForm() {
         this.viewState = ViewState.ADDING;
+        
         this.walletBalance = new WalletBalance();
+        
+        // lista a carteiras
         this.wallets = this.walletService.listWallets(false);
     }
 
     /**
-     *
-     * @return
+     * @return envia para o form de adicionar transferencias
      */
     public String changeToAdd() {
         return "formTransfer.xhtml?faces-redirect=true";
     }
 
     /**
-     *
-     * @return
+     * @return cancela e volta
      */
     public String doCancel() {
         return "listTransfers.xhtml?faces-redirect=true";
     }
 
     /**
-     *
+     * Transfere a grana
      */
     public void doTransference() {
 
@@ -120,7 +121,7 @@ public class TransferenceBean extends AbstractBean {
     }
 
     /**
-     *
+     * Filtra as transferencias e lista
      */
     public void filterTransfers() {
 
@@ -136,5 +137,12 @@ public class TransferenceBean extends AbstractBean {
         } else {
             this.update("transferencesList");
         }
+    }
+    
+    /**
+     * Atualiza o fragment que tem os saldos
+     */
+    public void updateBalances() {
+        this.update("balancesPanel");
     }
 }
