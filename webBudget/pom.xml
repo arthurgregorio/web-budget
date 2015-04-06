@@ -144,9 +144,9 @@
             </activation>
             <properties>
                 <application.version>${project.version}</application.version>
-                <db.connectionURL>jdbc:mysql://mariadb45434-webbudget.jelasticlw.com.br/webbudget</db.connectionURL>
-                <db.username>sa_webbudget</db.username>
-                <db.password>4nPcrHjjqeY6w5D7</db.password>
+                <db.connectionURL>jdbc:mysql://${wb_db_host}/webbudget</db.connectionURL>
+                <db.username>${wb_db_username}</db.username>
+                <db.password>${wb_db_password}</db.password>
                 <orm.show_sql>false</orm.show_sql>
             </properties>
         </profile>
