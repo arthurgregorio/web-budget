@@ -107,16 +107,16 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
             final BigDecimal value = new BigDecimal(filter);
             criteria.add(Restrictions.or(Restrictions.eq("code", filter),
                     Restrictions.eq("value", value),
-                    Restrictions.ilike("description", filter + "%"),
-                    Restrictions.ilike("mc.name", filter + "%"),
-                    Restrictions.ilike("cc.name", filter + "%"),
-                    Restrictions.ilike("fp.identification", filter + "%")));
+                    Restrictions.ilike("description", "%" + filter + "%"),
+                    Restrictions.ilike("mc.name", "%" + filter + "%"),
+                    Restrictions.ilike("cc.name", "%" + filter + "%"),
+                    Restrictions.ilike("fp.identification", "%" + filter + "%")));
         } catch (NumberFormatException ex) {
             criteria.add(Restrictions.or(Restrictions.eq("code", filter),
-                    Restrictions.ilike("description", filter + "%"),
-                    Restrictions.ilike("mc.name", filter + "%"),
-                    Restrictions.ilike("cc.name", filter + "%"),
-                    Restrictions.ilike("fp.identification", filter + "%")));
+                    Restrictions.ilike("description", "%" + filter + "%"),
+                    Restrictions.ilike("mc.name", "%" + filter + "%"),
+                    Restrictions.ilike("cc.name", "%" + filter + "%"),
+                    Restrictions.ilike("fp.identification", "%" + filter + "%")));
         }
 
         criteria.addOrder(Order.desc("inclusion"));
