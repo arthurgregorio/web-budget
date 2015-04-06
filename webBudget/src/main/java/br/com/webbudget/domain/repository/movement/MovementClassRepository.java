@@ -50,7 +50,7 @@ public class MovementClassRepository extends GenericRepository<MovementClass, Lo
             criteria.add(Restrictions.eq("blocked", isBlocked));
         }
 
-        criteria.addOrder(Order.asc("name"));
+        criteria.addOrder(Order.asc("costCenter"));
 
         return criteria.list();
     }
