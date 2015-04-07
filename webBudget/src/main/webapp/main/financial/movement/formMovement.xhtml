@@ -26,7 +26,7 @@
     <f:metadata>
         <f:viewAction action="#{movementBean.initializeForm(param.movementId, param.detailing)}"/>
     </f:metadata>
-    
+
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['financial']}" />
@@ -111,7 +111,8 @@
                                             decimalSeparator="," 
                                             thousandSeparator="." 
                                             value="#{movementBean.movement.value}"
-                                            disabled="#{not empty movementBean.movement.apportionments}">
+                                            disabled="#{movementBean.viewState eq 'EDITING' or 
+                                                        not empty movementBean.movement.apportionments}">
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </pe:inputNumber>  
                         </div>                        
@@ -195,7 +196,7 @@
             </div>
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-6">
-                    
+
                 </div>
                 <div class="ui-grid-col-6 form-controls-box">
                     <p:commandButton immediate="true"
