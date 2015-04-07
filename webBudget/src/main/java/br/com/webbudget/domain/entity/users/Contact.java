@@ -26,12 +26,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * TODO cadastro de contatos/clientes e vinculo com movimentos
+ * Classe que mapeia os atributos necessarios para a existencia de um contato
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 21/03/2014
+ * @since 1.2.0, 07/04/2015
  */
 @Entity
 @Table(name = "contacts")
@@ -40,7 +40,48 @@ import lombok.ToString;
 public class Contact extends PersistentEntity {
 
     @Getter
+    @Column(name = "code", nullable = false, length = 8, unique = true)
+    private String code;
+    @Getter
     @Setter
     @Column(name = "name", nullable = false, length = 90)
     private String name;
+    
+    @Getter
+    @Setter
+    @Column(name = "blocked")
+    private boolean blocked;
+
+    /**
+     * Inicializa o contato
+     */
+    public Contact() {
+        this.code = this.createContactCode();
+    }
+    
+    /**
+     * @return um codigo unico para este contato
+     */
+    private String createContactCode() {
+
+        long decimalNumber = System.nanoTime();
+
+        String generated = "";
+        final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        synchronized (this.getClass()) {
+
+            int mod;
+            int authCodeLength = 0;
+
+            while (decimalNumber != 0 && authCodeLength < 5) {
+
+                mod = (int) (decimalNumber % 36);
+                generated = digits.substring(mod, mod + 1) + generated;
+                decimalNumber = decimalNumber / 36;
+                authCodeLength++;
+            }
+        }
+        return generated;
+    }
 }

@@ -65,6 +65,10 @@
                                         <p:menuitem value="#{menu['entries.wallets']}"
                                                     url="/main/entries/wallets/listWallets.xhtml"/>
                                     </sec:authorize>
+                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CONTACT_VIEW}">
+                                        <p:menuitem value="#{menu['entries.contacts']}"    
+                                                    url="/main/entries/contacts/listContacts.xhtml"/>
+                                    </sec:authorize>
                                     <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_VIEW}">
                                         <p:menuitem value="#{menu['entries.cost-center']}"    
                                                     url="/main/entries/costCenter/listCostCenters.xhtml"/>
