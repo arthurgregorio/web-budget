@@ -31,7 +31,7 @@
         <p:menuitem url="#"
                     value="#{breadcrumb['entries']}" />
         <p:menuitem url="listContacts.xhtml"
-                    value="#{breadcrumb['entries.contact']}" />
+                    value="#{breadcrumb['entries.contacts']}" />
     </ui:define>
 
     <ui:define name="content">
@@ -74,6 +74,19 @@
                               headerText="#{messages['contact.list.blocked']}">
                         <p:selectBooleanCheckbox disabled="true" 
                                                  value="#{contact.blocked}" />
+                    </p:column>
+                    <p:column headerText="#{messages['contact.list.name']}">
+                        #{contact.name}
+                    </p:column>
+                    <p:column width="20%" 
+                              styleClass="div-align-center"
+                              headerText="#{messages['contact.list.type']}">
+                        #{contact.contactType}
+                    </p:column>
+                    <p:column width="20%" 
+                              styleClass="div-align-center"
+                              headerText="#{messages['contact.list.document']}">
+                        #{contact.document}
                     </p:column>
                     
                     <p:column width="15%" 

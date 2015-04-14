@@ -14,16 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entity.users;
+package br.com.webbudget.domain.entity.contact;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Classe que mapeia os atributos necessarios para a existencia de um contato
@@ -35,8 +42,8 @@ import lombok.ToString;
  */
 @Entity
 @Table(name = "contacts")
-@ToString(callSuper = true, of = "name")
-@EqualsAndHashCode(callSuper = true, of = "name")
+@ToString(callSuper = true, of = "code")
+@EqualsAndHashCode(callSuper = true, of = "code")
 public class Contact extends PersistentEntity {
 
     @Getter
@@ -44,13 +51,69 @@ public class Contact extends PersistentEntity {
     private String code;
     @Getter
     @Setter
+    @NotNull(message = "{contact.validate.name}")
+    @NotBlank(message = "{contact.validate.name}")
     @Column(name = "name", nullable = false, length = 90)
     private String name;
+    @Setter
+    @Getter
+    @Column(name = "document", length = 25)
+    private String document;
+    @Setter
+    @Getter
+    @Past(message = "{contact.validate.birth-date}")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "birth_date")
+    private Date birthDate;
+
+    @Setter
+    @Getter
+    @Column(name = "zipcode", length = 9)
+    private String zipcode;
+    @Setter
+    @Getter
+    @Column(name = "street", length = 90)
+    private String street;
+    @Setter
+    @Getter
+    @Column(name = "number", length = 8)
+    private String number;
+    @Setter
+    @Getter
+    @Column(name = "complement", length = 45)
+    private String complement;
+    @Setter
+    @Getter
+    @Column(name = "neighborhood", length = 45)
+    private String neighborhood;
+    @Setter
+    @Getter
+    @NotNull(message = "{contact.validate.province}")
+    @NotBlank(message = "{contact.validate.province}")
+    @Column(name = "province", length = 45)
+    private String province;
+    @Setter
+    @Getter
+    @NotNull(message = "{contact.validate.city}")
+    @NotBlank(message = "{contact.validate.city}")
+    @Column(name = "city", length = 45)
+    private String city;
+    @Setter
+    @Getter
+    @Column(name = "email", length = 90)
+    private String email;
     
     @Getter
     @Setter
     @Column(name = "blocked")
     private boolean blocked;
+    
+    @Setter
+    @Getter
+    @NotNull(message = "contact.validate.contact-type")
+    @Enumerated
+    @Column(name = "contact_type", nullable = false)
+    private ContactType contactType;
 
     /**
      * Inicializa o contato
