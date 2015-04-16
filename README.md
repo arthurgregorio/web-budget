@@ -38,7 +38,7 @@ Devido ao suporte a JPA, o banco de dados torna-se independente da aplicação, 
 
 #### Uso e Comercialização:
 
-De acordo com a licença GPLv3, não há restrições quanto ao uso deste software em âmbito comercial ou pessoal, porém, qualquer tipo de suporte/correção/implementação que se faça necessário e que esteja fora do ciclo normal de desenvolvimento da ferramenta, será cobrado conforme orçamento previamente acordado entre as partes. O contato referente a estas demandas deverá ser feito através do e-mail contato@arthurgregorio.eti.br.
+De acordo com a licença GPLv3, não há restrições quanto ao uso deste software em âmbito comercial ou pessoal, porém, qualquer tipo de suporte/correção/implementação que se faça necessário e que esteja fora do ciclo normal de desenvolvimento da ferramenta, não esta incluído ou garantido pela licença citada. Para mais informações entre em contato pelo endereço contato@arthurgregorio.eti.br.
 
 Ou ainda você poderá abrir uma requisição de implementação/correção/melhoria e aguardar até que esta seja aprovada e entre no cronograma de evolução da ferramenta. Você pode ainda contribuir para o projeto, realizando a implementação e disponibilizando para a comunidade de acordo com o estabelecido na licença, sem custos e de maneira livre.
 
