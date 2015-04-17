@@ -19,6 +19,7 @@ package br.com.webbudget.application.controller.entries;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.contact.ContactType;
+import br.com.webbudget.domain.service.AddressFinderService;
 import br.com.webbudget.domain.service.ContactService;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -49,6 +50,9 @@ public class ContactBean extends AbstractBean {
     @Setter
     @ManagedProperty("#{contactService}")
     private ContactService contactService;
+    @Setter
+    @ManagedProperty("#{addressFinderService}")
+    private AddressFinderService addressFinderService;
 
     /**
      *
@@ -171,6 +175,17 @@ public class ContactBean extends AbstractBean {
             this.update("contactsList");
             this.closeDialog("dialogDeleteContact");
         }
+    }
+    
+    /**
+     * Chama o servico de busca dos enderecos e completa o endereco do caboclo
+     */
+    public void completeAddress() {
+        
+        final AddressFinderService.Address address = this.addressFinderService
+                .findAddressByZipcode(this.contact.getZipcode());
+        
+        System.out.println(address);
     }
 
     /**

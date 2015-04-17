@@ -521,3 +521,17 @@ td {
 .denied-text {
     font-size: 15pt;
 }
+
+/* fomulario de contatos --------------------- */
+#inBirthDate {
+    display: flex;
+}
+#inBirthDate button {
+    height: 34px;
+}
+.zipcode-box {
+    display: flex;
+}
+.zipcode-box button {
+    height: 34px;
+}
