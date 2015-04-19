@@ -17,17 +17,18 @@
 package br.com.webbudget.domain.entity.contact;
 
 /**
- * Definicao dos tipos de contato
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
- * @since 1.2.0, 11/04/2015
+ * @version 1.0
+ * @since 1.0, 19/04/2015
  */
-public enum ContactType {
+public enum NumberType {
 
-    LEGAL("beans.contact-type.legal"),
-    PERSONAL("beans.contact-type.personal");
+    OTHER("beans.number-type.other"),
+    FIXED("beans.number-type.fixed"),
+    MOBILE("beans.number-type.mobile"),
+    COMMERCIAL("beans.number-type.commercial");
 
     private final String i18nKey;
 
@@ -35,7 +36,7 @@ public enum ContactType {
      *
      * @param i18nKey
      */
-    private ContactType(String i18nKey) {
+    private NumberType(String i18nKey) {
         this.i18nKey = i18nKey;
     }
 

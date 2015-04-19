@@ -16,9 +16,13 @@
  */
 package br.com.webbudget.application.controller.entries;
 
+import br.com.caelum.stella.validation.CNPJValidator;
+import br.com.caelum.stella.validation.CPFValidator;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.contact.ContactType;
+import br.com.webbudget.domain.entity.contact.NumberType;
+import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.service.AddressFinderService;
 import br.com.webbudget.domain.service.ContactService;
 import java.util.List;
@@ -31,8 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Controller para o CRUD de contatos 
- * 
+ * Controller para o CRUD de contatos
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -43,7 +47,14 @@ import org.slf4j.LoggerFactory;
 public class ContactBean extends AbstractBean {
 
     @Getter
+    @Setter
+    private String filter;
+    
+    @Getter
     private Contact contact;
+    @Getter
+    private Telephone telephone;
+    
     @Getter
     private List<Contact> contacts;
 
@@ -86,6 +97,14 @@ public class ContactBean extends AbstractBean {
         }
     }
 
+    /**
+     * Pesquisa com filtro
+     */
+    public void filterList() {
+        this.contacts = this.contactService.listContactsByFilter(this.filter);
+        this.update("contactsList");
+    }
+    
     /**
      *
      * @return
@@ -132,10 +151,14 @@ public class ContactBean extends AbstractBean {
      */
     public void doSave() {
 
+        if (!this.validateDocument()) {
+            this.error("contact.validate.document", true);
+            return;
+        }
+        
         try {
             this.contactService.saveContact(this.contact);
             this.contact = new Contact();
-
             this.info("contact.action.saved", true);
         } catch (Exception ex) {
             this.logger.error("ContactBean#doSave found erros", ex);
@@ -148,9 +171,13 @@ public class ContactBean extends AbstractBean {
      */
     public void doUpdate() {
 
+        if (!this.validateDocument()) {
+            this.error("contact.validate.document", true);
+            return;
+        }
+        
         try {
             this.contact = this.contactService.updateContact(this.contact);
-
             this.info("contact.action.updated", true);
         } catch (Exception ex) {
             this.logger.error("ContactBean#doUpdate found erros", ex);
@@ -176,23 +203,93 @@ public class ContactBean extends AbstractBean {
             this.closeDialog("dialogDeleteContact");
         }
     }
-    
+
     /**
      * Chama o servico de busca dos enderecos e completa o endereco do caboclo
      */
-    public void completeAddress() {
-        
-        final AddressFinderService.Address address = this.addressFinderService
-                .findAddressByZipcode(this.contact.getZipcode());
-        
-        System.out.println(address);
+    public void doAddressFind() {
+
+        try {
+            final AddressFinderService.Address address = this.addressFinderService
+                    .findAddressByZipcode(this.contact.getZipcode());
+
+            this.contact.setStreet(address.getLogradouro());
+            this.contact.setComplement(address.getComplemento());
+            this.contact.setProvince(address.getFullUfName());
+            this.contact.setCity(address.getLocalidade());
+            this.contact.setNeighborhood(address.getBairro());
+
+            this.update("addressPanel");
+        } catch (Exception ex) {
+            this.logger.error("ContactBean#completeAddress found erros", ex);
+            this.error("contact.action.find-address-error", true);
+        }
+    }
+    
+    /**
+     * Abre a popup de adicionar telefones
+     */
+    public void showTelephoneDialog() {
+        this.telephone = new Telephone();
+        this.openDialog("telephoneDialog", "dialogTelephone");
+    }
+    
+    /**
+     * Adiciona um telefone
+     */
+    public void addTelephone() {
+        this.contact.addTelephone(this.telephone);
+        this.update("telephonesList");
+        this.closeDialog("dialogTelephone");
+    }
+    
+    /**
+     * Deleta um telefone da lista
+     * 
+     * @param telephone o telefone a ser deletado
+     */
+    public void deleteTelephone(Telephone telephone) {
+        this.contact.removeTelephone(telephone);
+        this.update("telephonesList");
     }
 
     /**
-     *
-     * @return
+     * Valida o documento do contato, se informado
+     * 
+     * @return true se valido, false se nao
+     */
+    private boolean validateDocument() {
+
+        try {
+            String document = this.contact.getDocument();
+
+            if (document != null && !document.isEmpty()) {
+                
+                document = document.replace("\\w", "");
+
+                if (this.contact.getContactType() == ContactType.LEGAL) {
+                    new CNPJValidator().assertValid(document);
+                } else {
+                    new CPFValidator().assertValid(document);
+                }
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @return os tipos de contato disponiveis para cadastro
      */
     public ContactType[] getAvailableContactTypes() {
         return ContactType.values();
+    }
+    
+    /**
+     * @return os tipos de numero de telefone disponiveis
+     */
+    public NumberType[] getAvailableNumberTypes() {
+        return NumberType.values();
     }
 }

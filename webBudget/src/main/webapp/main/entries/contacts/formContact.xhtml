@@ -57,7 +57,7 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
+                        <div class="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inContactType" 
                                            value="#{messages['contact.form.contact-type']}: "/>
                             <p:selectOneMenu id="inContactType" 
@@ -99,7 +99,7 @@
                                            value="#{messages['contact.form.document']}: "/>
                             <p:inputText id="inDocument" 
                                          maxlength="45"
-                                         value="#{contactBean.contact.name}" />
+                                         value="#{contactBean.contact.document}" />
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
@@ -111,8 +111,54 @@
                                          value="#{contactBean.contact.email}" />
                         </div>                        
                     </div>
+                    <h:panelGroup id="telephonesPanel" 
+                                  layout="block"
+                                  styleClass="ui-grid-row"> 
+                        <div class="ui-grid-col-12">
+                            <div class="ui-grid-row div-pd-tb-10">
+                                <div class="ui-grid-col-11">
+                                    <p:dataTable id="telephonesList" 
+                                                 rows="5"
+                                                 var="telephone"
+                                                 paginator="true"
+                                                 paginatorPosition="bottom"
+                                                 paginatorAlwaysVisible="false"
+                                                 value="#{contactBean.contact.telephones}"
+                                                 emptyMessage="#{messages['telephone.empty']}">
+
+                                        <p:column styleClass="div-align-center"
+                                                  headerText="#{messages['telephone.number']}">
+                                            #{telephone.number}
+                                        </p:column>
+                                        <p:column styleClass="div-align-center"
+                                                  headerText="#{messages['telephone.type']}">
+                                            #{messages[telephone.numberType]}
+                                        </p:column>
+                                        <p:column width="10%" 
+                                                  styleClass="div-align-center"
+                                                  headerText="#{menu['actions']}">
+                                            <p:commandButton immediate="true"
+                                                             icon="ui-icon-trash"
+                                                             title="#{menu['delete']}"
+                                                             actionListener="#{contactBean.deleteTelephone(telephone)}" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </div>
+                            </div>
+                            <div class="ui-grid-row div-pd-tb-10">
+                                <div class="ui-grid-col-11 div-align-right">
+                                    <p:commandButton immediate="true"
+                                                     value="#{menu['add']}"
+                                                     styleClass="ui-button-info"
+                                                     action="#{contactBean.showTelephoneDialog()}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
                 </div>
-                <div class="ui-grid-col-6"> 
+                <h:panelGroup id="addressPanel" 
+                              layout="block"
+                              styleClass="ui-grid-col-6"> 
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-s">
                             <p:outputLabel for="inZipcode" 
@@ -124,21 +170,32 @@
                                              value="#{contactBean.contact.zipcode}" />
                                 <p:commandButton process="@this inZipcode"
                                                  icon="ui-icon-search" 
-                                                 actionListener="#{contactBean.completeAddress()}"/>
+                                                 onstart="PF('searchAddressBlock').block()"
+                                                 oncomplete="PF('searchAddressBlock').unblock()"
+                                                 actionListener="#{contactBean.doAddressFind()}"/>
                             </div>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
+                        <div class="ui-grid-col-9 form-group form-group-xl">
                             <p:outputLabel for="inStreet" 
                                            value="#{messages['contact.form.street']}: "/>
                             <p:inputText id="inStreet" 
                                          maxlength="120"
                                          value="#{contactBean.contact.street}" />
                         </div>                        
+                        <div class="ui-grid-col-3 form-group form-group-l">
+                            <p:outputLabel for="inNumber" 
+                                           value="#{messages['contact.form.number']}: "/>
+                            <p:inputText id="inNumber" 
+                                         maxlength="6"
+                                         value="#{contactBean.contact.number}">
+                                <pe:keyFilter mask="num"/>
+                            </p:inputText>
+                        </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
+                        <div class="ui-grid-col-12 form-group form-group-xl">
                             <p:outputLabel for="inComplement" 
                                            value="#{messages['contact.form.complement']}: "/>
                             <p:inputText id="inComplement" 
@@ -173,7 +230,7 @@
                                          value="#{contactBean.contact.province}" />
                         </div>                        
                     </div>
-                </div>
+                </h:panelGroup>
             </div>
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-6">
@@ -187,17 +244,34 @@
                     <p:commandButton update="contactForm"
                                      process="contactForm"
                                      value="#{menu['save']}"
-                                     action="#{contactBean.doSave()}"
                                      styleClass="ui-button-success"
+                                     action="#{contactBean.doSave()}"
                                      rendered="#{contactBean.viewState eq 'ADDING'}"/>
                     <p:commandButton update="contactForm"
                                      process="contactForm"
                                      value="#{menu['update']}"
-                                     action="#{contactBean.doUpdate()}"
                                      styleClass="ui-button-success"
+                                     action="#{contactBean.doUpdate()}"
                                      rendered="#{contactBean.viewState eq 'EDITING'}"/>
                 </div>
             </div>
+
+            <pe:blockUI target="addressPanel" 
+                        widgetVar="searchAddressBlock">
+                <div class="div-align-center">
+                    <p:graphicImage width="32" 
+                                    height="32"
+                                    library="images" 
+                                    name="ui-loading.gif" />
+                </div>
+                <div style="margin-top: 5px">
+                    #{messages['contact.looking-address']}
+                </div>        
+            </pe:blockUI> 
         </h:form>
+    </ui:define>
+    
+    <ui:define name="popups">
+        <ui:include src="dialogTelephone.xhtml" />
     </ui:define>
 </ui:composition>

@@ -17,7 +17,9 @@
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.domain.entity.contact.Contact;
+import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.repository.contact.IContactRepository;
+import br.com.webbudget.domain.repository.contact.ITelephoneRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,36 +38,71 @@ public class ContactService {
 
     @Autowired
     private IContactRepository contactRepository;
-    
+    @Autowired
+    private ITelephoneRepository telephoneRepository;
+
     /**
-     * 
-     * @param contact 
+     * Salva um contato
+     *
+     * @param contact o contato a ser salvo
      */
     public void saveContact(Contact contact) {
-        this.contactRepository.save(contact);
+
+        final List<Telephone> telephones = contact.getTelephones();
+
+        contact = this.contactRepository.save(contact);
+
+        for (Telephone telephone : telephones) {
+            telephone.setContact(contact);
+            this.telephoneRepository.save(telephone);
+        }
     }
-    
+
     /**
-     * 
-     * @param contact
-     * @return 
+     * Atualiza um contato
+     *
+     * @param contact o contato a ser atualizado
+     * @return o contato atualizado
      */
     public Contact updateContact(Contact contact) {
-        return this.contactRepository.save(contact);
+
+        // deleta os telefone deletados na grid
+        if (!contact.getDeletedTelephones().isEmpty()) {
+            for (Telephone telephone : contact.getDeletedTelephones()) {
+                this.telephoneRepository.delete(telephone);
+            }
+        }
+
+        // captura a lista dos telefones restantes
+        final List<Telephone> telephones = contact.getTelephones();
+
+        contact = this.contactRepository.save(contact);
+
+        // limpa a lista de telefones
+        contact.getTelephones().clear();
+        
+        // atualiza
+        for (Telephone telephone : telephones) {
+            telephone.setContact(contact);
+            contact.addTelephone(this.telephoneRepository.save(telephone));
+        }
+
+        return contact;
     }
-    
+
     /**
-     * 
-     * @param contact 
+     * Deleta um contato
+     *
+     * @param contact o contato a ser deletado
      */
     public void deleteContact(Contact contact) {
         this.contactRepository.delete(contact);
     }
-    
+
     /**
-     * 
+     *
      * @param blocked
-     * @return 
+     * @return
      */
     public List<Contact> listContacts(Boolean blocked) {
         return this.contactRepository.listByStatus(blocked);
@@ -73,8 +110,17 @@ public class ContactService {
     
     /**
      * 
-     * @param contactId
+     * @param filter
      * @return 
+     */
+    public List<Contact> listContactsByFilter(String filter) {
+        return this.contactRepository.listByFilter(filter);
+    }
+
+    /**
+     *
+     * @param contactId
+     * @return
      */
     public Contact findContactById(long contactId) {
         return this.contactRepository.findById(contactId, false);

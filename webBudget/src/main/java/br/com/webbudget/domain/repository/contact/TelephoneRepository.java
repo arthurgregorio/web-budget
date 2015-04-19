@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,37 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entity.contact;
+package br.com.webbudget.domain.repository.contact;
+
+import br.com.webbudget.domain.entity.contact.Telephone;
+import br.com.webbudget.domain.repository.GenericRepository;
+import org.springframework.stereotype.Repository;
 
 /**
- * Definicao dos tipos de contato
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.2.0, 11/04/2015
+ * @since 1.2.0, 12/04/2015
  */
-public enum ContactType {
+@Repository
+public class TelephoneRepository extends GenericRepository<Telephone, Long> implements ITelephoneRepository {
 
-    LEGAL("beans.contact-type.legal"),
-    PERSONAL("beans.contact-type.personal");
-
-    private final String i18nKey;
-
-    /**
-     *
-     * @param i18nKey
-     */
-    private ContactType(String i18nKey) {
-        this.i18nKey = i18nKey;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String toString() {
-        return this.i18nKey;
-    }
 }

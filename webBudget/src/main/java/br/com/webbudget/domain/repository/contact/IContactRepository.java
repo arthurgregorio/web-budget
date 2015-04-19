@@ -30,6 +30,13 @@ import java.util.List;
 public interface IContactRepository extends IGenericRepository<Contact, Long> {
 
     /**
+     * 
+     * @param filter
+     * @return 
+     */
+    public List<Contact> listByFilter(String filter);
+    
+    /**
      *
      * @param blocked
      * @return

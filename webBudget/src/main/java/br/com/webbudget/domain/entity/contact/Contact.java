@@ -17,19 +17,27 @@
 package br.com.webbudget.domain.entity.contact;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import static javax.persistence.FetchType.EAGER;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -51,7 +59,6 @@ public class Contact extends PersistentEntity {
     private String code;
     @Getter
     @Setter
-    @NotNull(message = "{contact.validate.name}")
     @NotBlank(message = "{contact.validate.name}")
     @Column(name = "name", nullable = false, length = 90)
     private String name;
@@ -88,13 +95,11 @@ public class Contact extends PersistentEntity {
     private String neighborhood;
     @Setter
     @Getter
-    @NotNull(message = "{contact.validate.province}")
     @NotBlank(message = "{contact.validate.province}")
     @Column(name = "province", length = 45)
     private String province;
     @Setter
     @Getter
-    @NotNull(message = "{contact.validate.city}")
     @NotBlank(message = "{contact.validate.city}")
     @Column(name = "city", length = 45)
     private String city;
@@ -116,10 +121,26 @@ public class Contact extends PersistentEntity {
     private ContactType contactType;
 
     /**
+     * Eager pois ao pesquisarmos um contato os telefones devem vir junto
+     * para compor a view adequadamente
+     */
+    @Getter
+    @Setter
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "contact", fetch = EAGER, cascade = REMOVE)
+    private List<Telephone> telephones;
+    
+    @Getter
+    @Transient
+    private List<Telephone> deletedTelephones;
+    
+    /**
      * Inicializa o contato
      */
     public Contact() {
         this.code = this.createContactCode();
+        this.telephones = new ArrayList<>();
+        this.deletedTelephones = new ArrayList<>();
     }
     
     /**
@@ -146,5 +167,32 @@ public class Contact extends PersistentEntity {
             }
         }
         return generated;
+    }
+    
+    /**
+     * 
+     * @param telephone 
+     */
+    public void addTelephone(Telephone telephone) {
+        this.telephones.add(telephone);
+    }
+
+    /**
+     *
+     * @param telephone
+     */
+    public void removeTelephone(Telephone telephone) {
+        this.telephones.remove(telephone);
+        this.addDeletedTelephone(telephone);
+    }
+
+    /**
+     * 
+     * @param telephone 
+     */
+    private void addDeletedTelephone(Telephone telephone) {
+        if (telephone.isSaved()) {
+            this.deletedTelephones.add(telephone);
+        }
     }
 }

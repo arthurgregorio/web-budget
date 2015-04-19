@@ -23,7 +23,7 @@
 
     <groupId>br.com.webbudget</groupId>
     <artifactId>webBudget</artifactId>
-    <version>1.1.2</version>
+    <version>1.2.0</version>
     <packaging>war</packaging>
 
     <name>webBudget</name>
@@ -250,6 +250,13 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator-annotation-processor</artifactId>
             <version>${hibernate.validator.version}</version>
+        </dependency>
+        
+        <!-- caelum stella -->
+        <dependency>
+            <groupId>br.com.caelum.stella</groupId>
+            <artifactId>caelum-stella-core</artifactId>
+            <version>2.1.2</version>
         </dependency>
         
         <!-- datasource -->
@@ -523,6 +530,18 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.3m</version>
+        </dependency>
+                
+        <!-- jackson mapper -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.13</version>
         </dependency>
                 
         <!-- spring aspects -->

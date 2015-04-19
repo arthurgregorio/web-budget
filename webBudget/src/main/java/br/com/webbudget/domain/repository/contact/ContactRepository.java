@@ -34,6 +34,28 @@ import org.springframework.stereotype.Repository;
 public class ContactRepository extends GenericRepository<Contact, Long> implements IContactRepository {
 
     /**
+     * 
+     * @param filter
+     * @return 
+     */
+    @Override
+    public List<Contact> listByFilter(String filter) {
+        
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+
+        if (filter != null) {
+            criteria.add(Restrictions.or(
+                    Restrictions.ilike("name", "%" + filter + "%"),
+                    Restrictions.ilike("email", "%" + filter + "%"),
+                    Restrictions.eq("document", filter),
+                    Restrictions.ilike("city", "%" + filter + "%")
+            ));
+        }
+
+        return criteria.list();
+    }
+    
+    /**
      *
      * @param blocked
      * @return
