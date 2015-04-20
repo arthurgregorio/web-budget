@@ -32,6 +32,8 @@
         <h:outputStylesheet library="css" name="custom.css" />
         <h:outputStylesheet library="css" name="style.css" />
 
+        <h:outputScript library="omnifaces" name="fixviewstate.js"/>
+
         <f:metadata>
             <f:viewAction action="#{authenticationBean.initialize()}"/>
         </f:metadata>
@@ -55,10 +57,23 @@
                             value="#{authenticationBean.user.password}" 
                             placeholder="#{messages['authentication.password']}"/>
                 <div class="div-align-center">
-                    <p:commandButton update="authenticationForm"
-                                     process="authenticationForm"
-                                     action="#{authenticationBean.doLogin()}"
-                                     value="#{messages['authentication.authenticate']}" />
+                    <p:ajaxStatus>
+                        <f:facet name="default">
+                            <p:commandButton update="authenticationForm"
+                                             process="authenticationForm"
+                                             action="#{authenticationBean.doLogin()}"
+                                             value="#{messages['authentication.authenticate']}" />
+                        </f:facet>
+                        <f:facet name="start">
+                            <p:graphicImage width="34" 
+                                            height="34"
+                                            library="images" 
+                                            name="ui-loading.gif" />
+                        </f:facet>
+                        <f:facet name="complete">
+                            <h:outputText value="#{messages['authentication.redirecting']}" />
+                        </f:facet>
+                    </p:ajaxStatus>
                 </div>
             </h:form>
         </div>  

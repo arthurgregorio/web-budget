@@ -42,6 +42,9 @@ public class AuthenticationBean extends AbstractBean {
 
     @Getter
     private User user;
+    
+    @Getter
+    private boolean loading;
 
     @Setter
     @ManagedProperty("#{accountService}")
@@ -87,6 +90,6 @@ public class AuthenticationBean extends AbstractBean {
         } catch (ApplicationException ex) {
             this.error(ex.getMessage(), true);
             return null;
-        }
+        } 
     }
 }
