@@ -34,28 +34,6 @@ import org.springframework.stereotype.Repository;
 public class ContactRepository extends GenericRepository<Contact, Long> implements IContactRepository {
 
     /**
-     * 
-     * @param filter
-     * @return 
-     */
-    @Override
-    public List<Contact> listByFilter(String filter) {
-        
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-
-        if (filter != null) {
-            criteria.add(Restrictions.or(
-                    Restrictions.ilike("name", "%" + filter + "%"),
-                    Restrictions.ilike("email", "%" + filter + "%"),
-                    Restrictions.eq("document", filter),
-                    Restrictions.ilike("city", "%" + filter + "%")
-            ));
-        }
-
-        return criteria.list();
-    }
-    
-    /**
      *
      * @param blocked
      * @return
@@ -69,6 +47,33 @@ public class ContactRepository extends GenericRepository<Contact, Long> implemen
             criteria.add(Restrictions.eq("blocked", blocked));
         }
 
+        return criteria.list();
+    }
+    
+    /**
+     * 
+     * @param filter
+     * @param blocked
+     * @return 
+     */
+    @Override
+    public List<Contact> listByFilter(String filter, Boolean blocked) {
+        
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+
+        if (filter != null) {
+            criteria.add(Restrictions.or(
+                    Restrictions.ilike("name", "%" + filter + "%"),
+                    Restrictions.ilike("email", "%" + filter + "%"),
+                    Restrictions.eq("document", filter),
+                    Restrictions.ilike("city", "%" + filter + "%")
+            ));
+        }
+
+        if (blocked != null) {
+            criteria.add(Restrictions.eq("blocked", blocked));
+        }
+        
         return criteria.list();
     }
 }

@@ -101,7 +101,7 @@ public class ContactBean extends AbstractBean {
      * Pesquisa com filtro
      */
     public void filterList() {
-        this.contacts = this.contactService.listContactsByFilter(this.filter);
+        this.contacts = this.contactService.listContactsByFilter(this.filter, null);
         this.update("contactsList");
     }
     

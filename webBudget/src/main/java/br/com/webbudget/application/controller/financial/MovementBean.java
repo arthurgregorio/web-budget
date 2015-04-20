@@ -19,6 +19,7 @@ package br.com.webbudget.application.controller.financial;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
+import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
@@ -30,9 +31,11 @@ import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.service.CardService;
+import br.com.webbudget.domain.service.ContactService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -80,6 +83,8 @@ public class MovementBean extends AbstractBean {
     @Getter
     private List<Card> creditCards;
     @Getter
+    private List<Contact> contacts;
+    @Getter
     private List<Movement> movements;
     @Getter
     private List<CostCenter> costCenters;
@@ -96,6 +101,9 @@ public class MovementBean extends AbstractBean {
     @Setter
     @ManagedProperty("#{walletService}")
     private WalletService walletService;
+    @Setter
+    @ManagedProperty("#{contactService}")
+    private ContactService contactService;
     @Setter
     @ManagedProperty("#{movementService}")
     private MovementService movementService;
@@ -135,7 +143,7 @@ public class MovementBean extends AbstractBean {
         this.costCenters = this.movementService.listCostCenters(false);
         this.financialPeriod = this.financialPeriodService.findActiveFinancialPeriod();
         this.openFinancialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
-
+        
         if (movementId == 0 && !detailing) {
             this.viewState = ViewState.ADDING;
 
@@ -182,10 +190,18 @@ public class MovementBean extends AbstractBean {
     /**
      * Pesquisa com filtro
      */
-    public void filterList() {
+    public void filterMovementsList() {
         this.movements = this.movementService
                 .listMovementsByFilter(this.filter, this.filterPaid);
         this.update("movementsList");
+    }
+    
+    /**
+     * Pesquisa os contatos pelo filtro
+     */
+    public void filterContactsList() {
+        this.contacts = this.contactService.listContactsByFilter(this.filter, false);
+        this.update("contactsList");
     }
 
     /**
@@ -421,6 +437,25 @@ public class MovementBean extends AbstractBean {
         this.update("apportionmentList");
     }
 
+    /**
+     * Limpa os filtros e listas para entao buscar do zero
+     */
+    public void showContactDialog() {
+        
+        this.filter = null;
+        this.contacts = new ArrayList<>();
+        
+        this.openDialog("contactDialog", "dialogContact");
+    }
+    
+    /**
+     * Quando selecionar o contato, fecha a dialog e atualiza a view
+     */
+    public void onContactSelect() {
+        this.update("movementForm");
+        this.closeDialog("dialogContact");
+    }
+    
     /**
      *
      */

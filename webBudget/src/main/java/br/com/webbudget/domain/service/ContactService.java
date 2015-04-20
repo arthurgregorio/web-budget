@@ -111,10 +111,11 @@ public class ContactService {
     /**
      * 
      * @param filter
+     * @param blocked 
      * @return 
      */
-    public List<Contact> listContactsByFilter(String filter) {
-        return this.contactRepository.listByFilter(filter);
+    public List<Contact> listContactsByFilter(String filter, Boolean blocked) {
+        return this.contactRepository.listByFilter(filter, blocked);
     }
 
     /**

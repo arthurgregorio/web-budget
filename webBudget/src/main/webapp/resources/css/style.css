@@ -236,6 +236,13 @@ td {
     width: 25% !important;
 }
 
+.input-and-button-box {
+    display: flex;
+}
+.input-and-button-box button {
+    height: 34px;
+}
+
 .form-header {
     margin-bottom: 20px;
     padding: 5px 0;
@@ -448,6 +455,9 @@ td {
 .apportionment-control-box {
     padding-top: 18px;
 }
+.dialog-search-contatct {
+    margin-top: 25px;
+}
 
 /* form de cadastro de periodos -------------- */
 .warn-financial-period {
@@ -527,11 +537,5 @@ td {
     display: flex;
 }
 #inBirthDate button {
-    height: 34px;
-}
-.zipcode-box {
-    display: flex;
-}
-.zipcode-box button {
     height: 34px;
 }

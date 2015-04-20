@@ -92,11 +92,15 @@
                 <div class="ui-grid-col-6">
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-m">
-                            <p:outputLabel for="inCode" 
-                                           value="#{messages['movement.form.code']}: "/>
-                            <p:inputText id="inCode" 
-                                         readonly="true"
-                                         value="#{movementBean.movement.code}" />
+                            <p:outputLabel for="inContact" 
+                                           value="#{messages['movement.form.contact']}: "/>
+                            <div class="input-and-button-box">
+                                <p:inputText id="inContact" 
+                                             value="#{movementBean.movement.contact.name}" />
+                                <p:commandButton immediate="true"
+                                                 icon="ui-icon-search" 
+                                                 actionListener="#{movementBean.showContactDialog()}"/>
+                            </div>
                         </div>                        
                     </div>
                     <h:panelGroup id="valuePanel"
@@ -236,6 +240,7 @@
     </ui:define>
 
     <ui:define name="popups">
+        <ui:include src="dialogContact.xhtml" />
         <ui:include src="dialogPayment.xhtml" />
         <ui:include src="dialogApportionment.xhtml" />
         <ui:include src="dialogDetailPayment.xhtml" />
