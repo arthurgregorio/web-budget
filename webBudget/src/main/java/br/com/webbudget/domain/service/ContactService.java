@@ -16,10 +16,13 @@
  */
 package br.com.webbudget.domain.service;
 
+import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.contact.Telephone;
+import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.repository.contact.IContactRepository;
 import br.com.webbudget.domain.repository.contact.ITelephoneRepository;
+import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,8 @@ public class ContactService {
 
     @Autowired
     private IContactRepository contactRepository;
+    @Autowired
+    private IMovementRepository movementRepository;
     @Autowired
     private ITelephoneRepository telephoneRepository;
 
@@ -96,6 +101,15 @@ public class ContactService {
      * @param contact o contato a ser deletado
      */
     public void deleteContact(Contact contact) {
+        
+        final List<Movement> movements = 
+                this.movementRepository.listByContact(contact);
+        
+        // se tem vinculos, nao deleta
+        if (!movements.isEmpty()) {
+            throw new ApplicationException("contact.validate.has-movements");
+        }
+        
         this.contactRepository.delete(contact);
     }
 

@@ -19,6 +19,7 @@ package br.com.webbudget.domain.repository.movement;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.card.CardType;
+import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
@@ -64,6 +65,24 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
         return criteria.list();
     }
 
+    /**
+     * 
+     * @param contact
+     * @return 
+     */
+    @Override
+    public List<Movement> listByContact(Contact contact) {
+        
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+
+        criteria.createAlias("contact", "ct");
+        criteria.add(Restrictions.eq("ct.id", contact.getId()));
+
+        criteria.addOrder(Order.desc("inclusion"));
+
+        return criteria.list();
+    }
+    
     /**
      *
      * @param cardInvoice

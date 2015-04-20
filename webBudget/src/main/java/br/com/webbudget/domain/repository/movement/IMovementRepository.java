@@ -19,6 +19,7 @@ package br.com.webbudget.domain.repository.movement;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.card.CardType;
+import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
@@ -45,6 +46,13 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      * @return
      */
     public List<Movement> listByActiveFinancialPeriod();
+    
+    /**
+     * 
+     * @param contact
+     * @return 
+     */
+    public List<Movement> listByContact(Contact contact);
 
     /**
      *
