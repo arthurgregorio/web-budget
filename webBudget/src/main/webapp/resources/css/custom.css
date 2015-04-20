@@ -134,6 +134,7 @@ button[role="button"].ui-state-default {
     border: none !important;
 }
 .jqplot-table-legend-label {
+    padding-left: 3px !important;
     padding-right: 5px !important;
 }
 
