@@ -44,7 +44,7 @@ public class AuthenticationBean extends AbstractBean {
     private User user;
     
     @Getter
-    private boolean loading;
+    private boolean loginError;
 
     @Setter
     @ManagedProperty("#{accountService}")
@@ -67,6 +67,7 @@ public class AuthenticationBean extends AbstractBean {
      */
     public String initialize() {
         
+        // se ja tem gente logada, manda para a dashboard
         if (AccountService.getCurrentAuthenticatedUser() != null) {
             return "/main/dashboard.xhtml?faces-redirect=true";
         }
@@ -89,7 +90,8 @@ public class AuthenticationBean extends AbstractBean {
             return "/main/dashboard.xhtml?faces-redirect=true";
         } catch (ApplicationException ex) {
             this.error(ex.getMessage(), true);
-            return null;
+            this.loginError = true;
+            return "";
         } 
     }
 }

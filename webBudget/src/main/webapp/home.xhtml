@@ -41,13 +41,16 @@
 
     <h:body>
         <div class="login">
-            <h:form id="authenticationForm" prependId="false">
+            <h:form id="authenticationForm" prependId="false" >
+
                 <div class="div-align-center">
                     <p:graphicImage library="images" name="ui-wb-logo-2.png"/>
                 </div>            
+
                 <div class="messages-row">
                     <p:messages id="messages" closable="true" globalOnly="true" />
                 </div>
+
                 <p:inputText autocomplete="false"
                              styleClass="username-input" 
                              value="#{authenticationBean.user.username}" 
@@ -56,10 +59,12 @@
                             styleClass="password-input" 
                             value="#{authenticationBean.user.password}" 
                             placeholder="#{messages['authentication.password']}"/>
+
                 <div class="div-align-center">
                     <p:ajaxStatus>
                         <f:facet name="default">
-                            <p:commandButton update="authenticationForm"
+                            <p:commandButton global="true"
+                                             update="authenticationForm"
                                              process="authenticationForm"
                                              action="#{authenticationBean.doLogin()}"
                                              value="#{messages['authentication.authenticate']}" />
@@ -71,7 +76,14 @@
                                             name="ui-loading.gif" />
                         </f:facet>
                         <f:facet name="complete">
-                            <h:outputText value="#{messages['authentication.redirecting']}" />
+                            <h:outputText value="#{messages['authentication.redirecting']}" 
+                                          rendered="#{authenticationBean.loginError eq false}"/>
+                            <p:commandButton global="true"
+                                             update="authenticationForm"
+                                             process="authenticationForm"
+                                             action="#{authenticationBean.doLogin()}"
+                                             rendered="#{authenticationBean.loginError}"
+                                             value="#{messages['authentication.authenticate']}" />
                         </f:facet>
                     </p:ajaxStatus>
                 </div>

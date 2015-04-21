@@ -117,7 +117,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .logout()
                 .invalidateHttpSession(true)
                 .logoutUrl("/main/logout.xhtml")
-                .logoutSuccessUrl("/home.xhtml?logout=true")
+                .logoutSuccessUrl("/home.xhtml?faces-redirect=true")
                 .permitAll();
     }
 
