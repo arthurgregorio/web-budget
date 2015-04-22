@@ -116,6 +116,7 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
             criteria.add(Restrictions.isNotNull("payment"));
         }
 
+        criteria.createAlias("contact", "co");
         criteria.createAlias("apportionments", "ap");
         criteria.createAlias("ap.movementClass", "mc");
         criteria.createAlias("ap.costCenter", "cc");
@@ -129,12 +130,14 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
                     Restrictions.ilike("description", "%" + filter + "%"),
                     Restrictions.ilike("mc.name", "%" + filter + "%"),
                     Restrictions.ilike("cc.name", "%" + filter + "%"),
+                    Restrictions.ilike("co.name", "%" + filter + "%"),
                     Restrictions.ilike("fp.identification", "%" + filter + "%")));
         } catch (NumberFormatException ex) {
             criteria.add(Restrictions.or(Restrictions.eq("code", filter),
                     Restrictions.ilike("description", "%" + filter + "%"),
                     Restrictions.ilike("mc.name", "%" + filter + "%"),
                     Restrictions.ilike("cc.name", "%" + filter + "%"),
+                    Restrictions.ilike("co.name", "%" + filter + "%"),
                     Restrictions.ilike("fp.identification", "%" + filter + "%")));
         }
 
