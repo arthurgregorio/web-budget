@@ -115,7 +115,7 @@ public class Contact extends PersistentEntity {
     
     @Setter
     @Getter
-    @NotNull(message = "contact.validate.contact-type")
+    @NotNull(message = "{contact.validate.contact-type}")
     @Enumerated
     @Column(name = "contact_type", nullable = false)
     private ContactType contactType;
