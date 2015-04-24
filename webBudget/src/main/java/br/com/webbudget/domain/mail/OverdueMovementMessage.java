@@ -16,6 +16,8 @@
  */
 package br.com.webbudget.domain.mail;
 
+import org.springframework.mail.SimpleMailMessage;
+
 /**
  *
  * @author Arthur Gregorio
@@ -23,6 +25,6 @@ package br.com.webbudget.domain.mail;
  * @version 1.0.0
  * @since 1.2.0, 22/04/2015
  */
-public class OverdueMovementMessage implements MailMessage {
+public class OverdueMovementMessage extends SimpleMailMessage {
 
 }

@@ -16,16 +16,20 @@
  */
 package br.com.webbudget.infraestructure;
 
-import br.com.webbudget.domain.mail.MailMessage;
 import br.com.webbudget.domain.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailMessage;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
- * O nosso carteiro, ele envia todas as mensagens de email pela abstracao de 
- * {@link MailMessage}
+ * O nosso carteiro, ele envia todas as mensagens de email pela abstracao de
+ * {@link SimpleMailMessage}
  *
  * @author Arthur Gregorio
  *
@@ -35,20 +39,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class Postman {
 
+    @Autowired
+    private MailSender mailSender;
+
     private final Logger LOG = LoggerFactory.getLogger(Postman.class);
-    
+
     /**
      * Metodo utilizado para pegar a mensagem montada e enviar para o destino
-     * 
+     *
      * Este metodo apenas realiza o envio, nenhum processamento extra deve ser
      * realizado aqui pois a mensagem deve vir montada partindo da implementacao
-     * de uma {@link MailMessage} e passando pelo servico de montagem definido 
+     * de uma {@link MailMessage} e passando pelo servico de montagem definido
      * em {@link EmailService}
-     * 
-     * @param mailMessage a mensagem a ser enviada
+     *
+     * @param message a mensagem a ser enviada
      */
     @Async
-    public void sendMail(MailMessage mailMessage) {
-        
+    public void sendMail(SimpleMailMessage message) {
+        try {
+            this.mailSender.send(message);
+        } catch (MailException ex) {
+            LOG.error("Error trying to send email to {0}", message.getTo(), ex);
+        }
     }
 }

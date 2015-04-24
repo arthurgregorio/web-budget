@@ -18,9 +18,17 @@ package br.com.webbudget.domain.service;
 
 import br.com.webbudget.infraestructure.Postman;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 /**
+ * O servico de envio de email, por este cara invocamos o {@link Postman} que 
+ * fara envio da mensagem para o envio
+ * 
+ * E neste servico que os metodos de envio especificos para cada mensagem devem
+ * ser criados, a montagem da mesma deve seguir a prerrogativa que todas as 
+ * mensagens devem implementar {@link SimpleMailMessage} para que o postman a 
+ * reconheca e envie
  *
  * @author Arthur Gregorio
  *
@@ -32,5 +40,6 @@ public class EmailService {
 
     @Autowired
     private Postman postman;
+    
     
 }
