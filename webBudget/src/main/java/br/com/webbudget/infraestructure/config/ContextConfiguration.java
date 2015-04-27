@@ -16,7 +16,16 @@
  */
 package br.com.webbudget.infraestructure.config;
 
+import br.com.webbudget.infraestructure.Postman;
+import java.io.IOException;
 import java.util.Properties;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.VelocityException;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.NumberTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -35,7 +44,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.1.0, 07/03/2015
  */
 @Configuration
@@ -51,7 +60,7 @@ public class ContextConfiguration {
     private Environment env;
 
     /**
-     * @return nosso property placeholder para que possamos trabalhar com os 
+     * @return nosso property placeholder para que possamos trabalhar com os
      * arquivos *.property
      */
     @Bean
@@ -78,7 +87,7 @@ public class ContextConfiguration {
 
     /**
      * Configura a sessao do javamail para que possamos enviar emails
-     * 
+     *
      * @return a sessao do javamail a ser usada no {@link Postman}
      */
     @Bean
@@ -103,12 +112,45 @@ public class ContextConfiguration {
     }
 
     /**
+     * Constroi e produz uma instancia de {@link VelocityEngine} para que possamos
+     * processar as templates de email e envia-las pelo {@link Postman}
+     * 
+     * @return a engine de processamento de templates pronta e configurada
+     * 
+     * @throws VelocityException
+     * @throws IOException 
+     */
+    @Bean
+    public VelocityEngine velocityEngine() throws VelocityException, IOException {
+        
+        final VelocityEngine engine = new VelocityEngine();
+
+        // manda carregar os recursos dos resources
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "class");
+        engine.setProperty("class.resource.loader.class", 
+                ClasspathResourceLoader.class.getName());
+
+        final Properties properties = new Properties();
+
+        // joga os logs do velocity no log do server
+        properties.put("runtime.log.logsystem.class",
+                "org.apache.velocity.runtime.log.SimpleLog4JLogSystem");
+        properties.put("runtime.log.logsystem.log4j.category", "velocity");
+        properties.put("runtime.log.logsystem.log4j.logger", "velocity");
+
+        engine.init(properties);
+
+        return engine;
+    }
+
+    /**
      * Nosso password encoder
-     * 
+     *
      * OBS: ele esta aqui pois precisamos dele pronto antes de termos a confi-
-     * guracao do contexto de seguranca devido ao fato de este precisar 
-     * ser injetado na classe que configura a seguranca {@link SecurityConfiguration}
-     * 
+     * guracao do contexto de seguranca devido ao fato de este precisar ser
+     * injetado na classe que configura a seguranca
+     * {@link SecurityConfiguration}
+     *
      * @return o nosso password encoder com forca setada param 13
      */
     @Bean

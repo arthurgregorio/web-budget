@@ -49,8 +49,8 @@ public class Postman {
      *
      * Este metodo apenas realiza o envio, nenhum processamento extra deve ser
      * realizado aqui pois a mensagem deve vir montada partindo da implementacao
-     * de uma {@link MailMessage} e passando pelo servico de montagem definido
-     * em {@link EmailService}
+     * de uma {@link SimpleMailMessage} e passando pelo servico de montagem 
+     * definido em {@link EmailService}
      *
      * @param message a mensagem a ser enviada
      */
