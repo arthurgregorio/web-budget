@@ -77,7 +77,11 @@ public class ContextConfiguration {
         final ReloadableResourceBundleMessageSource source
                 = new ReloadableResourceBundleMessageSource();
 
-        source.setBasename("classpath:/i18n/messages");
+        source.setBasenames(
+                "classpath:/i18n/mail", 
+                "classpath:/i18n/messages"
+        );
+        
         source.setUseCodeAsDefaultMessage(true);
         source.setDefaultEncoding("UTF-8");
         source.setCacheSeconds(5);
@@ -104,7 +108,7 @@ public class ContextConfiguration {
 
         properties.put("mail.debug", this.env.getProperty("mail.debug"));
         properties.put("mail.smtp.auth", true);
-        properties.put("mail.smtp.starttls.enable", true);
+        properties.put("mail.smtp.starttls.enable", false);
 
         transport.setJavaMailProperties(properties);
 

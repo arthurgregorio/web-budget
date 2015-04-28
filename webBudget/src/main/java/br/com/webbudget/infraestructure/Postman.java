@@ -17,19 +17,17 @@
 package br.com.webbudget.infraestructure;
 
 import br.com.webbudget.domain.service.EmailService;
+import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailMessage;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 /**
  * O nosso carteiro, ele envia todas as mensagens de email pela abstracao de
- * {@link SimpleMailMessage}
+ * {@link MimeMessage}
  *
  * @author Arthur Gregorio
  *
@@ -40,7 +38,7 @@ import org.springframework.stereotype.Component;
 public class Postman {
 
     @Autowired
-    private MailSender mailSender;
+    private JavaMailSender javaMailSender;
 
     private final Logger LOG = LoggerFactory.getLogger(Postman.class);
 
@@ -49,17 +47,23 @@ public class Postman {
      *
      * Este metodo apenas realiza o envio, nenhum processamento extra deve ser
      * realizado aqui pois a mensagem deve vir montada partindo da implementacao
-     * de uma {@link SimpleMailMessage} e passando pelo servico de montagem 
+     * de uma {@link MimeMessage} e passando pelo servico de montagem 
      * definido em {@link EmailService}
      *
      * @param message a mensagem a ser enviada
      */
-    @Async
-    public void sendMail(SimpleMailMessage message) {
+    public void sendMail(MimeMessage message) {
         try {
-            this.mailSender.send(message);
+            this.javaMailSender.send(message);
         } catch (MailException ex) {
-            LOG.error("Error trying to send email to {0}", message.getTo(), ex);
+            LOG.error("Error trying to send e-mail message", ex);
         }
+    }
+    
+    /**
+     * @return uma rich message para montagem e envio
+     */
+    public MimeMessage createMimeMessage() {
+        return this.javaMailSender.createMimeMessage();
     }
 }

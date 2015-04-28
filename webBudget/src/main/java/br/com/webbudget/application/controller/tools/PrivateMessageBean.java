@@ -16,19 +16,20 @@
  */
 package br.com.webbudget.application.controller.tools;
 
-import br.com.webbudget.infraestructure.Postman;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.PrivateMessage;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.entity.users.UserPrivateMessage;
 import br.com.webbudget.domain.service.AccountService;
+import br.com.webbudget.domain.service.EmailService;
 import br.com.webbudget.domain.service.PrivateMessageService;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.mail.MessagingException;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -58,8 +59,8 @@ public class PrivateMessageBean extends AbstractBean {
     private List<PrivateMessage> privateMessages;
 
     @Setter
-    @ManagedProperty("#{postman}")
-    private transient Postman postman;
+    @ManagedProperty("#{emailService}")
+    private transient EmailService emailService;
     @Setter
     @ManagedProperty("#{privateMessageService}")
     private transient PrivateMessageService privateMessageService;
@@ -105,13 +106,12 @@ public class PrivateMessageBean extends AbstractBean {
                     .listPrivateMessageReceipts(this.privateMessage);
 
             // marcamos para mostrar na tabela
-            for (User user : this.users) {
-                for (UserPrivateMessage userPrivateMessage : receipts) {
-                    if (userPrivateMessage.getRecipient().equals(user)) {
-                        user.setSelected(true);
-                    }
-                }
-            }
+            this.users.stream().forEach((User user) -> {
+                receipts.stream().filter((userPrivateMessage) -> 
+                        (userPrivateMessage.getRecipient().equals(user))).forEach((item) -> {
+                    user.setSelected(true);
+                });
+            });
         }
     }
 
@@ -157,11 +157,9 @@ public class PrivateMessageBean extends AbstractBean {
         // pegamos os destinatarios
         final List<User> receipts = new ArrayList<>();
 
-        for (User user : this.users) {
-            if (user.isSelected()) {
-                receipts.add(user);
-            }
-        }
+        this.users.stream().filter((user) -> (user.isSelected())).forEach((user) -> {
+            receipts.add(user);
+        });
 
         // setamos eles na mensagem
         this.privateMessage.setRecipients(receipts);
@@ -169,21 +167,22 @@ public class PrivateMessageBean extends AbstractBean {
         try {
             this.privateMessageService.savePrivateMessage(this.privateMessage);
 
-//            FIXME arumar isso, voltar a enviar email
-            // notificamos os usuarios por email 
-//            for (User user : receipts) {
-//                this.postman.newMessageWarning(user);
-//            }
             // limpamos o form
             this.privateMessage = new PrivateMessage();
             this.privateMessage.setSender(AccountService.getCurrentAuthenticatedUser());
 
             this.users = this.privateMessageService.listUsersByStatus(false, true);
 
+            // notifica a galera por email
+            this.emailService.notifyNewMessage(this.privateMessage, receipts);
+            
             this.info("private-message.action.sent", true);
         } catch (ApplicationException ex) {
             this.logger.error("PrivateMessageBean#doSave found erros", ex);
             this.fixedError(ex.getMessage(), true);
+        } catch (MessagingException ex) {
+            this.logger.warn("PrivateMessageBean#doSave found erros", ex);
+            this.warn("private-message.action.mail-error", true);
         }
     }
 

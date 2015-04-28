@@ -16,19 +16,24 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.users.PrivateMessage;
+import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.infraestructure.MessagesFactory;
 import br.com.webbudget.infraestructure.Postman;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.NumberTool;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,7 +42,7 @@ import org.springframework.stereotype.Service;
  *
  * E neste servico que os metodos de envio especificos para cada mensagem devem
  * ser criados, a montagem da mesma deve seguir a prerrogativa que todas as
- * mensagens devem implementar {@link SimpleMailMessage} para que o postman a
+ * mensagens devem implementar {@link MimeMessage} para que o postman a
  * reconheca e envie
  *
  * @author Arthur Gregorio
@@ -55,81 +60,84 @@ public class EmailService {
     @Autowired
     private MessagesFactory messagesFactory;
 
+    private final ResourceBundle mailConfig = ResourceBundle.getBundle("config.webbudget");
+
     /**
-     * 
-     * @param period 
+     *
+     * @param privateMessage
+     * @param receipts
+     *
+     * @throws MessagingException
      */
-    public void notifyPeriodEnd(FinancialPeriod  period) {
+    @Async
+    public void notifyNewMessage(PrivateMessage privateMessage, List<User> receipts)
+            throws MessagingException {
 
-        final SimpleMailMessage message = new SimpleMailMessage();       
-        
-        //mensagens internacionalizadas
-        final Map<String, String> i18n = new HashMap<>();
+        // iteramos na lista de destinatarios e enviamos as mensagens
+        for (User receipt : receipts) {
 
-        i18n.put("email-header", this.messagesFactory.getMessage("email.header"));
+            final MimeMessageHelper helper = new MimeMessageHelper(
+                    this.postman.createMimeMessage());
 
-        final VelocityContext context = this.createContext();
-        
-        context.put("period", period);
-        context.put("i18n", i18n);
+            helper.setTo(receipt.getEmail());
+            helper.setSubject(this.messagesFactory.getMessage("new-message.title"));
+            helper.setFrom(this.mailConfig.getString("mail.user"));
 
-        this.prepareToSend("/mail/periodEnd.vm", message, context);
+            //mensagens internacionalizadas
+            final Map<String, String> i18n = new HashMap<>();
+
+            i18n.put("header", this.messagesFactory.getMessage(
+                    "new-message.header"));
+            i18n.put("hi-user", this.messagesFactory.getMessage(
+                    "new-message.hi-user"));
+            i18n.put("new-message-warning", this.messagesFactory.getMessage(
+                    "new-message.new-message-warning"));
+            i18n.put("tip", this.messagesFactory.getMessage("new-message.tip"));
+
+            final VelocityContext context = this.createContext();
+
+            context.put("i18n", i18n);
+            context.put("receipt", receipt.getName());
+            context.put("sender", privateMessage.getSender().getName());
+
+            // manda a mensagem para montagem e envio
+            this.prepareToSend("/mail/newPrivateMessage.html", helper, context);
+        }
     }
-    
-    /**
-     * 
-     * @param privateMessage 
-     */
-    public void notifyNewMessage(PrivateMessage privateMessage) {
 
-        final SimpleMailMessage message = new SimpleMailMessage();       
-        
-        //mensagens internacionalizadas
-        final Map<String, String> i18n = new HashMap<>();
-
-        i18n.put("email-header", this.messagesFactory.getMessage("email.header"));
-
-        final VelocityContext context = this.createContext();
-        
-        context.put("privateMessage", privateMessage);
-        context.put("i18n", i18n);
-
-        this.prepareToSend("/mail/newPrivateMessage.vm", message, context);
-    }
-    
     /**
      * Prepara a mensagem de acordo com a template e invoca o {@link Postman}
      * para que ela seja enviada
-     * 
-     * @param template a templa a ser mesclada
-     * @param message a mensagem
+     *
+     * @param template a template a ser mesclada
+     * @param helper o helper de montagem da mensagem
      * @param context o contexto do velocity
      */
-    private void prepareToSend(String template, SimpleMailMessage message, 
-            VelocityContext context) {
-        
+    private void prepareToSend(String template, MimeMessageHelper helper,
+            VelocityContext context) throws MessagingException {
+
         final StringWriter writer = new StringWriter();
 
         this.engine.getTemplate(template, "UTF-8").merge(context, writer);
 
-        message.setText(writer.toString());
-        
-        this.postman.sendMail(message);
+        helper.setText(writer.toString(), true);
+
+        this.postman.sendMail(helper.getMimeMessage());
     }
-    
+
     /**
-     * Cria um contexto do velocity para manipulacao de datas e numeros na 
+     * Cria um contexto do velocity para manipulacao de datas e numeros na
      * template de e-mail
-     * 
+     *
      * @return o contexto
      */
     private VelocityContext createContext() {
-        
+
         final VelocityContext context = new VelocityContext();
 
         context.put("date", new DateTool());
         context.put("number", new NumberTool());
-        
+
         return context;
     }
 }
