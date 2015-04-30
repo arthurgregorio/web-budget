@@ -19,13 +19,10 @@ package br.com.webbudget.infraestructure.config;
 import br.com.webbudget.infraestructure.Postman;
 import java.io.IOException;
 import java.util.Properties;
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.VelocityException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.apache.velocity.tools.generic.DateTool;
-import org.apache.velocity.tools.generic.NumberTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -84,7 +81,7 @@ public class ContextConfiguration {
         
         source.setUseCodeAsDefaultMessage(true);
         source.setDefaultEncoding("UTF-8");
-        source.setCacheSeconds(5);
+        source.setCacheSeconds(0);
 
         return source;
     }

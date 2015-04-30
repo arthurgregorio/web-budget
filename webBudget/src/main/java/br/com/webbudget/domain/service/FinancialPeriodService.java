@@ -27,6 +27,7 @@ import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,11 @@ public class FinancialPeriodService {
             if (financialPeriod.getStart().compareTo(fp.getEnd()) <= 0) {
                 throw new ApplicationException("financial-period.validate.truncated-dates");
             }
+        }
+        
+        // se o fim for o mesmo dia ou anterior a data atual, erro!
+        if (financialPeriod.getEnd().compareTo(LocalDate.now()) < 1) {
+            throw new ApplicationException("financial-period.validate.invalid-end");
         }
 
         this.financialPeriodRepository.save(financialPeriod);
