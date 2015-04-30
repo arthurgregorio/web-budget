@@ -16,12 +16,16 @@
  */
 package br.com.webbudget.domain.entity.movement;
 
+import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.closing.Closing;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -57,16 +61,15 @@ public class FinancialPeriod extends PersistentEntity {
     @Getter
     @Setter
     @NotNull(message = "{financial-period.start}")
-    @Temporal(TemporalType.DATE)
+    @Convert(converter = JPALocalDateConverter.class)
     @Column(name = "start", nullable = false)
-    private Date start;
+    private LocalDate start;
     @Getter
     @Setter
-    @Future(message = "{financial-period.end-must-future}")
     @NotNull(message = "{financial-period.end}")
-    @Temporal(TemporalType.DATE)
+    @Convert(converter = JPALocalDateConverter.class)
     @Column(name = "end", nullable = false)
-    private Date end;
+    private LocalDate end;
     @Getter
     @Setter
     @Column(name = "closed")
@@ -84,14 +87,7 @@ public class FinancialPeriod extends PersistentEntity {
      * @return
      */
     public boolean isExpired() {
-
-        final Calendar today = Calendar.getInstance();
-        today.setTime(new Date());
-
-        final Calendar finish = Calendar.getInstance();
-        finish.setTime(this.end);
-
-        return today.compareTo(finish) > 0;
+        return LocalDate.now().compareTo(this.end) > 0;
     }
 
     /**

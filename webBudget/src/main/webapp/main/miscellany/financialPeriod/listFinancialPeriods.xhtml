@@ -83,14 +83,14 @@
                               style="text-align: center"
                               headerText="#{messages['financial-period.list.start']}">
                         <h:outputText value="#{financialPeriod.start}" >
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                            <f:converter converterId="localDateConverter" />
                         </h:outputText>
                     </p:column>
                     <p:column width="12%" 
                               style="text-align: center"
                               headerText="#{messages['financial-period.list.end']}">
                         <h:outputText value="#{financialPeriod.end}" >
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                            <f:converter converterId="localDateConverter" />
                         </h:outputText>
                     </p:column>
                     <p:column width="12%" 
@@ -101,10 +101,12 @@
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                         <h:outputText style="color: green; font-weight: bold;"
-                                      rendered="#{financialPeriod.expired eq false and financialPeriod.closed eq false}"
+                                      rendered="#{financialPeriod.expired eq false 
+                                                  and financialPeriod.closed eq false}"
                                       value="#{messages['financial-period.list.open']}" />    
                         <h:outputText style="color: red; font-weight: bold;"
-                                      rendered="#{financialPeriod.expired eq true and financialPeriod.closed eq false}"
+                                      rendered="#{financialPeriod.expired eq true 
+                                                  and financialPeriod.closed eq false}"
                                       value="#{messages['financial-period.list.expired']}" />    
                     </p:column>
 

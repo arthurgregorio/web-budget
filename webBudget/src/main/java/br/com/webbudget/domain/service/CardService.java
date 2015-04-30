@@ -30,7 +30,9 @@ import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.system.IConfigurationRepository;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -147,19 +149,15 @@ public class CardService {
         int dueDate = cardInvoice.getCard().getExpirationDay();
 
         if (dueDate != 0) {
-
-            final Calendar periodCompentence = Calendar.getInstance();
-
-            periodCompentence.setTime(cardInvoice.getFinancialPeriod().getEnd());
-
-            final Calendar calendar = Calendar.getInstance();
-
-            calendar.set(calendar.get(Calendar.YEAR),
-                    periodCompentence.get(Calendar.MONTH) + 1, dueDate);
-
-            movement.setDueDate(calendar.getTime());
+            LocalDate endDate = cardInvoice.getFinancialPeriod().getEnd();
+            endDate = endDate.withDayOfMonth(dueDate).plusMonths(1);
+            
+            movement.setDueDate(Date.from(endDate.atStartOfDay()
+                    .atZone(ZoneId.systemDefault()).toInstant()));
         } else {
-            movement.setDueDate(cardInvoice.getFinancialPeriod().getEnd());
+            final LocalDate endDate = cardInvoice.getFinancialPeriod().getEnd();
+            movement.setDueDate(Date.from(endDate.atStartOfDay()
+                    .atZone(ZoneId.systemDefault()).toInstant()));
         }
 
         movement.setFinancialPeriod(cardInvoice.getFinancialPeriod());
