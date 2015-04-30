@@ -16,17 +16,16 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:sec="http://www.springframework.org/security/tags"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:define name="head">
-        <f:event type="preRenderView" 
-                 listener="#{financialPeriodBean.initializeListing()}" />
-    </ui:define>
+    <f:metadata>
+        <f:viewAction action="#{financialPeriodBean.initializeListing()}"/>
+    </f:metadata>
 
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
@@ -71,7 +70,7 @@
                              emptyMessage="#{messages['financial-period.list.empty']}">
 
                     <p:column width="10%" 
-                              style="text-align: center"
+                              styleClass="div-align-center"
                               headerText="#{messages['financial-period.list.closed']}">
                         <p:selectBooleanCheckbox disabled="true" 
                                                  value="#{financialPeriod.closed}" />
@@ -80,38 +79,38 @@
                         #{financialPeriod.identification}
                     </p:column>
                     <p:column width="12%" 
-                              style="text-align: center"
+                              styleClass="div-align-center"
                               headerText="#{messages['financial-period.list.start']}">
                         <h:outputText value="#{financialPeriod.start}" >
                             <f:converter converterId="localDateConverter" />
                         </h:outputText>
                     </p:column>
                     <p:column width="12%" 
-                              style="text-align: center"
+                              styleClass="div-align-center"
                               headerText="#{messages['financial-period.list.end']}">
                         <h:outputText value="#{financialPeriod.end}" >
                             <f:converter converterId="localDateConverter" />
                         </h:outputText>
                     </p:column>
                     <p:column width="12%" 
-                              style="text-align: center"
+                              styleClass="div-align-center"
                               headerText="#{messages['financial-period.list.closing-date']}">
                         <h:outputText rendered="#{financialPeriod.closed eq true}"
                                       value="#{financialPeriod.closing.closingDate}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
-                        <h:outputText style="color: green; font-weight: bold;"
+                        <h:outputText styleClass="green-heavy-test"
                                       rendered="#{financialPeriod.expired eq false 
                                                   and financialPeriod.closed eq false}"
                                       value="#{messages['financial-period.list.open']}" />    
-                        <h:outputText style="color: red; font-weight: bold;"
+                        <h:outputText styleClass="red-heavy-test"
                                       rendered="#{financialPeriod.expired eq true 
                                                   and financialPeriod.closed eq false}"
                                       value="#{messages['financial-period.list.expired']}" />    
                     </p:column>
 
                     <p:column width="15%" 
-                              style="text-align: center"
+                              styleClass="div-align-center"
                               headerText="#{menu['actions']}">
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_DETAILS}">
                             <p:commandButton immediate="true"
@@ -126,9 +125,19 @@
                                       rendered="#{financialPeriod.closed eq false}" 
                                       href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"/>
                         </sec:authorize>
+                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_DELETE}">
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             title="#{menu['delete']}"
+                                             actionListener="#{financialPeriodBean.changeToDelete(financialPeriod.id)}" />
+                        </sec:authorize>
                     </p:column>
                 </p:dataTable>
             </div>
         </div>
+    </ui:define>
+
+    <ui:define name="popups">
+        <ui:include src="dialogDeletePeriod.xhtml"/>
     </ui:define>
 </ui:composition>

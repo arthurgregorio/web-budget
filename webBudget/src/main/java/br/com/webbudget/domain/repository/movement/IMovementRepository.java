@@ -70,6 +70,13 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
     public List<Movement> listByCardInvoice(CardInvoice cardInvoice);
 
     /**
+     * 
+     * @param financialPeriod
+     * @return 
+     */
+    public List<Movement> listByPeriod(FinancialPeriod financialPeriod);
+    
+    /**
      *
      * @param dueDate
      * @param showOverdue

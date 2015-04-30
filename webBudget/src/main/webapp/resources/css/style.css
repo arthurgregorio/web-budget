@@ -133,6 +133,15 @@ td {
     padding: 15px;
 }
 
+.green-heavy-test {
+    font-weight: 700;
+    color: green;
+}
+.red-heavy-test {
+    font-weight: 700;
+    color: green;
+}
+
 .font-15-pt {
     font-size: 15pt;
 }

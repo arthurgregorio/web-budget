@@ -43,6 +43,11 @@
     background-image: url("#{resource['images:ui-icon-arrow-down.png']}") !important;
 }
 
+/* remove aquele asterisco porco dos forms */
+.ui-outputlabel-rfi {
+    display: none;
+}
+
 /* remove todos os efeitos arredondadinhos dos elementos */
 .ui-corner-all {
     border-radius: 0 !important;
@@ -75,7 +80,6 @@ span.ui-tree-toggler {
 
 /* acerta o breadcrumb na template */
 .ui-breadcrumb {
-    /* padding: 5px 10px 10px !important; */
     border: none !important;
     background: none !important;
 }

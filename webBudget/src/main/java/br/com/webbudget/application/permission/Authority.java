@@ -151,6 +151,9 @@ public class Authority {
     public final String FINANCIAL_PERIOD_INSERT = "financial-period.authority.insert";
     @Getter
     @AuthorityGroup("financial-period.authority")
+    public final String FINANCIAL_PERIOD_DELETE = "financial-period.authority.delete";
+    @Getter
+    @AuthorityGroup("financial-period.authority")
     public final String FINANCIAL_PERIOD_CLOSE = "financial-period.authority.close";
     @Getter
     @AuthorityGroup("financial-period.authority")

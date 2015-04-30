@@ -21,9 +21,11 @@ import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.components.MovementsCalculator;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
+import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 20/03/2014
  */
 @Service
@@ -43,6 +45,8 @@ public class FinancialPeriodService {
     @Autowired
     private MovementsCalculator movementsCalculator;
 
+    @Autowired
+    private IMovementRepository movementRepository;
     @Autowired
     private IFinancialPeriodRepository financialPeriodRepository;
 
@@ -71,6 +75,25 @@ public class FinancialPeriodService {
         }
 
         this.financialPeriodRepository.save(financialPeriod);
+    }
+    
+    /**
+     * 
+     * @param financialPeriod 
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deletePeriod(FinancialPeriod financialPeriod) {
+        
+        final List<Movement> movements = 
+                this.movementRepository.listByPeriod(financialPeriod);
+        
+        // se houver movimentos, lanca o erro
+        if (movements != null && !movements.isEmpty()) {
+            throw new ApplicationException("financial-period.validate.has-movements");
+        } 
+        
+        // nao tem movimentos entao deleta
+        this.financialPeriodRepository.delete(financialPeriod);
     }
 
     /**

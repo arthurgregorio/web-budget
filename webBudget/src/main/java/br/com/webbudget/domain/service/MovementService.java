@@ -20,6 +20,7 @@ import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.CostCenter;
+import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
@@ -453,6 +454,16 @@ public class MovementService {
         return this.costCenterRepository.listByStatus(isBlocked);
     }
 
+    /**
+     * 
+     * @param financialPeriod
+     * @return 
+     */
+    @Transactional(readOnly = true)
+    public List<Movement> listMovementsByPeriod(FinancialPeriod financialPeriod) {
+        return this.movementRepository.listByPeriod(financialPeriod);
+    }
+    
     /**
      *
      * @return

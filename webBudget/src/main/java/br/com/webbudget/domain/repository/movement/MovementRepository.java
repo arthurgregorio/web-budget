@@ -102,6 +102,22 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
     }
 
     /**
+     * 
+     * @param financialPeriod
+     * @return 
+     */
+    @Override
+    public List<Movement> listByPeriod(FinancialPeriod financialPeriod) {
+       
+        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+
+        criteria.createAlias("financialPeriod", "fp");
+        criteria.add(Restrictions.eq("fp.id", financialPeriod.getId()));
+
+        return criteria.list();
+    }
+    
+    /**
      *
      * @param filter
      * @param paid

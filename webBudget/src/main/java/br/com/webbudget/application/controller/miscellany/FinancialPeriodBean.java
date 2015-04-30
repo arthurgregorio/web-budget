@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 23/03/2014
  */
 @ViewScoped
@@ -112,9 +112,19 @@ public class FinancialPeriodBean extends AbstractBean {
     public String changeToClosing(long financialPeriodId) {
         return "../closing/closeFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId=" + financialPeriodId;
     }
+    
+    /**
+     * 
+     * @param periodId 
+     */
+    public void changeToDelete(long periodId) {
+        this.financialPeriod = this.financialPeriodService
+                .findFinancialPeriodById(periodId);
+        this.openDialog("deletePeriodDialog", "dialogDeletePeriod");
+    }
 
     /**
-     *
+     * Salva o periodo
      */
     public void doSave() {
 
@@ -130,6 +140,28 @@ public class FinancialPeriodBean extends AbstractBean {
         } catch (Exception ex) {
             this.logger.error("FinancialPeriodBean#doSave found errors", ex);
             this.fixedError(ex.getMessage(), true);
+        }
+    }
+    
+    /**
+     * Deleta um periodo
+     */
+    public void doDelete() {
+
+        try {
+            this.financialPeriodService.deletePeriod(this.financialPeriod);
+            
+            // listamos novamente os periodos
+            this.financialPeriods = 
+                    this.financialPeriodService.listFinancialPeriods(null);
+            
+            this.info("financial-period.action.deleted", true);
+        } catch (Exception ex) {
+            this.logger.error("FinancialPeriodBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        } finally {
+            this.update("financialPeriodsList");
+            this.closeDialog("dialogDeletePeriod");
         }
     }
 
