@@ -89,12 +89,12 @@
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group">
                             <p:outputLabel for="inReason"
-                                           value="#{messages['adjustment.form.reason']}"/>
+                                           value="#{messages['adjustment.form.reason']}:"/>
                             <p:inputTextarea id="inReason"
                                              maxlength="255"
                                              autoResize="false"
-                                             styleClass="adjustment-reason-input"
-                                             value="#{walletBean.wallet.adjustmentReason}"/>
+                                             value="#{walletBean.wallet.reason}"
+                                             styleClass="adjustment-reason-input"/>
                         </div>
                     </div>
                 </div>                        

@@ -184,7 +184,7 @@ public class WalletService {
         walletBalance.setMovimentedValue(wallet.getAdjustmentValue());
         walletBalance.setOldBalance(oldBalance);
         walletBalance.setActualBalance(newBalance);
-        walletBalance.setAdjustmentReason(wallet.getAdjustmentReason());
+        walletBalance.setReason(wallet.getReason());
         walletBalance.setWalletBalanceType(WalletBalanceType.ADJUSTMENT);
 
         this.walletBalanceRepository.save(walletBalance);

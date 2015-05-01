@@ -104,6 +104,16 @@
                             </p:selectOneMenu>
                         </div>                        
                     </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inReason"
+                                           value="#{messages['transfer.form.reason']}:"/>
+                            <p:inputTextarea id="inReason"
+                                             maxlength="255"
+                                             autoResize="false"
+                                             value="#{transferenceBean.walletBalance.reason}"/>
+                        </div>
+                    </div>
                 </div>
                 <h:panelGroup id="balancesPanel"
                               layout="block" 

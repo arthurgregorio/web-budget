@@ -93,7 +93,7 @@ public class Wallet extends PersistentEntity {
     @Getter
     @Setter
     @Transient
-    private String adjustmentReason;
+    private String reason;
     @Getter
     @Setter
     @Transient

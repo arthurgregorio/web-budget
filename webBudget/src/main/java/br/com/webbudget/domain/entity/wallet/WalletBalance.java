@@ -61,8 +61,8 @@ public class WalletBalance extends PersistentEntity {
     private String movementCode;
     @Getter
     @Setter
-    @Column(name = "adjustment_reason", length = 255)
-    private String adjustmentReason;
+    @Column(name = "reason", length = 255)
+    private String reason;
     @Getter
     @Setter
     @Column(name = "wallet_balance_type", nullable = false)
