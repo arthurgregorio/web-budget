@@ -114,21 +114,22 @@
                               headerText="#{menu['actions']}">
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_DETAILS}">
                             <p:commandButton immediate="true"
-                                             icon="ui-icon-search"
+                                             icon="fa fa-search"
                                              title="#{menu['detail']}"
                                              action="#{financialPeriodBean.changeToDetails(financialPeriod.id)}" />
                         </sec:authorize>
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_CLOSE}">
                             <p:spacer width="10"/>
-                            <p:button icon="ui-icon-calculator"
+                            <p:button icon="fa fa-calculator"
                                       title="#{menu['calculate']}"
                                       rendered="#{financialPeriod.closed eq false}" 
                                       href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"/>
                         </sec:authorize>
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_DELETE}">
                             <p:spacer width="10"/>
-                            <p:commandButton icon="ui-icon-trash"
+                            <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
+                                             rendered="#{financialPeriod.closed eq false}" 
                                              actionListener="#{financialPeriodBean.changeToDelete(financialPeriod.id)}" />
                         </sec:authorize>
                     </p:column>

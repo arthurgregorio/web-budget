@@ -98,7 +98,7 @@
                                 <p:inputText id="inContact" 
                                              value="#{movementBean.movement.contact.name}" />
                                 <p:commandButton immediate="true"
-                                                 icon="ui-icon-search" 
+                                                 icon="fa fa-search" 
                                                  actionListener="#{movementBean.showContactDialog()}"/>
                             </div>
                         </div>                        
@@ -127,7 +127,7 @@
                                            value="#{messages['movement.form.due-date']}: "/>
                             <p:calendar id="inDueDate" 
                                         mask="true"
-                                        showOn="button"
+                                        showOn="button" 
                                         pattern="dd/MM/yyyy"
                                         value="#{movementBean.movement.dueDate}" />
                         </div>                        

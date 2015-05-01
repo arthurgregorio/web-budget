@@ -146,7 +146,7 @@
                                   style="text-align: center"
                                   headerText="#{menu['actions']}">
                             <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_PAY}">
-                                <p:commandButton icon="ui-icon-check"
+                                <p:commandButton icon="fa fa-money"
                                                  title="#{menu['pay']}"
                                                  rendered="#{movement.payable eq true}"
                                                  action="#{movementBean.changeToPay(movement.id)}" />
@@ -154,7 +154,7 @@
                             <p:spacer width="10" 
                                       rendered="#{movement.payable eq true}"/>
                             <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_UPDATE}">
-                                <p:commandButton icon="ui-icon-pencil"
+                                <p:commandButton icon="fa fa-edit"
                                                  title="#{menu['edit']}"
                                                  rendered="#{movement.editable eq true}"
                                                  action="#{movementBean.changeToEdit(movement.id)}" />
@@ -162,7 +162,7 @@
                             <p:spacer width="10" 
                                       rendered="#{movement.editable eq true}"/>
                             <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_DELETE}">
-                                <p:commandButton icon="ui-icon-trash"
+                                <p:commandButton icon="fa fa-remove"
                                                  title="#{menu['delete']}"
                                                  rendered="#{movement.deletable eq true}"
                                                  actionListener="#{movementBean.changeToDelete(movement.id)}" />

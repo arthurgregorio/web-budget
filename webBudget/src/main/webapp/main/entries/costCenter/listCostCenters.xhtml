@@ -87,13 +87,13 @@
                               style="text-align: center"
                               headerText="#{menu['actions']}">
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_UPDATE}">
-                            <p:commandButton icon=" ui-icon-pencil"
+                            <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              action="#{costCenterBean.changeToEdit(costCenter.id)}" />
                         </sec:authorize>
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_DELETE}">
                             <p:spacer width="10"/>
-                            <p:commandButton icon="ui-icon-trash"
+                            <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              actionListener="#{costCenterBean.changeToDelete(costCenter.id)}" />
                         </sec:authorize>

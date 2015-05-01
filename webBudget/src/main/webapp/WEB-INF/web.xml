@@ -119,11 +119,16 @@
         <session-timeout>30</session-timeout>
     </session-config>
     
-    
-    <!-- remove o tema do primefaces -->
+    <!-- tema do primefaces -->
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>bootstrap</param-value>
+    </context-param>
+    
+    <!-- habilita o font awesome no primefaces -->
+    <context-param>
+        <param-name>primefaces.FONT_AWESOME</param-name>
+        <param-value>true</param-value>
     </context-param>
 
     <!-- parametros do contexto --> 

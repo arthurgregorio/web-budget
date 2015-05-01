@@ -98,13 +98,13 @@
                               style="text-align: center"
                               headerText="#{menu['actions']}">
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.CONTACT_UPDATE}">
-                            <p:commandButton icon="ui-icon-pencil"
+                            <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              action="#{contactBean.changeToEdit(contact.id)}" />
                         </sec:authorize>
                         <sec:authorize ifAnyGranted="#{permissionsBean.authority.CONTACT_DELETE}">
                             <p:spacer width="10"/>
-                            <p:commandButton icon="ui-icon-trash"
+                            <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              actionListener="#{contactBean.changeToDelete(contact.id)}" />
                         </sec:authorize>
