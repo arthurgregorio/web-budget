@@ -552,3 +552,9 @@ td {
 #inBirthDate button {
     height: 34px;
 }
+
+/* formulario de ajust de saldo -------------- */
+.adjustment-reason-input {
+    width: 95%;
+    height: 162px !important; 
+}

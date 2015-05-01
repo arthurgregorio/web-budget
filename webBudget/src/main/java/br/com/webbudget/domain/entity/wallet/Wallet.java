@@ -93,6 +93,10 @@ public class Wallet extends PersistentEntity {
     @Getter
     @Setter
     @Transient
+    private String adjustmentReason;
+    @Getter
+    @Setter
+    @Transient
     @NotNull(message = "{wallet.adjustment-value}")
     private BigDecimal adjustmentValue;
 
