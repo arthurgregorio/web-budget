@@ -43,6 +43,10 @@ import org.slf4j.LoggerFactory;
 public class WalletBean extends AbstractBean {
 
     @Getter
+    @Setter
+    private WalletBalance selectedBalance;
+    
+    @Getter
     private Wallet wallet;
 
     @Getter
@@ -92,14 +96,6 @@ public class WalletBean extends AbstractBean {
      */
     public void initializeAdjustment(long walletId) {
         this.wallet = this.walletService.findWalletById(walletId);
-    }
-
-    public void showBalance(long walletId) {
-
-        this.wallet = this.walletService.findWalletById(walletId);
-        this.walletBalances = this.walletService.listBalancesByWallet(wallet);
-
-        this.openDialog("balanceHistoryDialog", "dialogBalanceHistory");
     }
 
     /**
@@ -226,6 +222,27 @@ public class WalletBean extends AbstractBean {
             this.update("walletsList");
             this.closeDialog("dialogDeleteWallet");
         }
+    }
+    
+    /**
+     * 
+     * @param walletId 
+     */
+    public void showBalance(long walletId) {
+
+        this.wallet = this.walletService.findWalletById(walletId);
+        this.walletBalances = this.walletService.listBalancesByWallet(this.wallet);
+        
+        // se nao tem saldo, nao mostra a popup
+        if (this.walletBalances.isEmpty()) {
+            this.warn("wallet.action.no-balances", true);
+            return;
+        }
+
+        // se tem saldos, ja pega o primeiro e sai mostrando
+        this.selectedBalance = this.getWalletBalances().get(0);
+        
+        this.openDialog("balanceHistoryDialog", "dialogBalanceHistory");
     }
 
     /**
