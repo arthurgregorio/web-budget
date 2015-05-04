@@ -401,6 +401,10 @@ td {
     margin-bottom: 20px !important;
     background: url("#{resource['images:ui-icon-key.png']}") no-repeat scroll 7px 9px !important;
 }
+.redirecting-text {
+    position: relative;
+    top: 4px;
+}
 
 /* dashboard --------------------------------- */
 .dashboard-graphs div.ui-tabs-panels {

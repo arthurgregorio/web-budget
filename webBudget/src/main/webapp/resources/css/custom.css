@@ -22,6 +22,16 @@
 
 @charset "utf-8";
 
+/* customiza os icones dos datepickers para o fontawesome */
+.ui-datepicker-trigger {
+    display: inline-block !important;
+    font: normal normal normal 14px/1 FontAwesome !important;
+    font-size: inherit !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
 /* corrige o label dos treenodes da arvore de permissoes */
 .ui-treenode-label {
     position: relative;

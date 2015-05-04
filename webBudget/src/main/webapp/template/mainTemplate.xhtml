@@ -168,6 +168,19 @@
 
         <ui:insert name="popups" />
 
+        <!--
+            Coloca todos os componentes que nao possuem por padrao acesso para 
+            propriedade icon para que possamos usar o font awesome
+        
+            referente #76
+        -->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.ui-datepicker-trigger').children()
+                        .removeClass('ui-icon-calendar').addClass('fa fa-calendar');
+            });
+        </script>
+        
         <div style="clear: both"/>
     </h:body>
 </html>

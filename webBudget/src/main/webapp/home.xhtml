@@ -76,7 +76,8 @@
                                             name="ui-loading.gif" />
                         </f:facet>
                         <f:facet name="complete">
-                            <h:outputText value="#{messages['authentication.redirecting']}" 
+                            <h:outputText styleClass="redirecting-text"
+                                          value="#{messages['authentication.redirecting']}" 
                                           rendered="#{authenticationBean.loginError eq false}"/>
                             <p:commandButton global="true"
                                              update="authenticationForm"
