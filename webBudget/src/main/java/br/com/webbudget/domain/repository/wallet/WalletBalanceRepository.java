@@ -73,6 +73,8 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
 
         criteria.add(Restrictions.eq("walletBalanceType", walletBalanceType));
 
+        criteria.addOrder(Order.desc("inclusion"));
+        
         return criteria.list();
     }
 

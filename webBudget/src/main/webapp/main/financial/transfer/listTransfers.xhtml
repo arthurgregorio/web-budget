@@ -96,37 +96,50 @@
 
         <div class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
-                <p:dataTable id="transferencesList" 
-                             rows="15"
-                             paginator="true"
-                             var="transference"
-                             paginatorPosition="bottom"
-                             paginatorAlwaysVisible="false"
-                             value="#{transferenceBean.transferences}"
-                             emptyMessage="#{messages['transfer.list.empty']}">
+                <h:form prependId="false">
+                    
+                    <p:dataTable id="transferencesList" 
+                                 rows="15"
+                                 paginator="true"
+                                 var="transference"
+                                 selectionMode="single"
+                                 paginatorPosition="bottom"
+                                 rowKey="#{transference.id}"
+                                 paginatorAlwaysVisible="false"
+                                 value="#{transferenceBean.transferences}"
+                                 selection="#{transferenceBean.selectedTransfer}"
+                                 emptyMessage="#{messages['transfer.list.empty']}">
 
-                    <p:column width="15%"
-                              style="text-align: center"
-                              headerText="#{messages['transfer.list.transfer-date']}">
-                        <h:outputText value="#{transference.inclusion}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText> 
-                    </p:column>
-                    <p:column width="20%"
-                              style="text-align: center"
-                              headerText="#{messages['transfer.list.transfer-value']}">
-                        <h:outputText value="#{transference.movimentedValue}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="#{messages['transfer.list.source-wallet']}">
-                        #{transference.sourceWallet.friendlyName}
-                    </p:column>
-                    <p:column headerText="#{messages['transfer.list.destiny-wallet']}">
-                        #{transference.targetWallet.friendlyName}
-                    </p:column>
-                </p:dataTable>
+                        <p:ajax event="rowSelect"
+                                listener="#{transferenceBean.showTransferReasonDialog()}"/>
+
+                        <p:column width="15%"
+                                  style="text-align: center"
+                                  headerText="#{messages['transfer.list.transfer-date']}">
+                            <h:outputText value="#{transference.inclusion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText> 
+                        </p:column>
+                        <p:column width="20%"
+                                  style="text-align: center"
+                                  headerText="#{messages['transfer.list.transfer-value']}">
+                            <h:outputText value="#{transference.movimentedValue}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages['transfer.list.source-wallet']}">
+                            #{transference.sourceWallet.friendlyName}
+                        </p:column>
+                        <p:column headerText="#{messages['transfer.list.destiny-wallet']}">
+                            #{transference.targetWallet.friendlyName}
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
             </div>
         </div>
+    </ui:define>
+    
+    <ui:define name="popups">
+        <ui:include src="dialogTransferReason.xhtml"/>
     </ui:define>
 </ui:composition>

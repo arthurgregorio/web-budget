@@ -46,6 +46,9 @@ public class TransferenceBean extends AbstractBean {
     @Getter
     @Setter
     private Wallet targetWallet;
+    @Getter
+    @Setter
+    private WalletBalance selectedTransfer;
 
     @Getter
     private WalletBalance walletBalance;
@@ -137,6 +140,13 @@ public class TransferenceBean extends AbstractBean {
         } else {
             this.update("transferencesList");
         }
+    }
+    
+    /**
+     * Exibe a dialog com o motivo da transferencia
+     */
+    public void showTransferReasonDialog() {
+        this.openDialog("transferReasonDialog", "dialogTransferReason");
     }
     
     /**

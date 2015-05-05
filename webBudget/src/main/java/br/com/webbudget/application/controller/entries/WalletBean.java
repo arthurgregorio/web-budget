@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 04/03/2014
  */
 @ViewScoped
@@ -246,7 +246,15 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     *
+     * Atualiza os dados do saldo na tela
+     */
+    public void updateBalanceDetails() {
+        this.update("detailsPanel");
+    }
+    
+    /**
+     * Carrega os dados referentes a conta bancaria quando o tipo a ser cadast-
+     * rado e uma conta bancaria
      */
     public void loadBankData() {
         this.update("inBank");

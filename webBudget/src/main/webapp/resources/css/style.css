@@ -146,6 +146,10 @@ td {
     font-size: 15pt;
 }
 
+.display-block {
+    display: block;
+}
+
 .div-pd-tb-10 {
     padding: 10px 0;
 }
@@ -154,6 +158,9 @@ td {
 }
 .div-mg-b-15 {
     margin-bottom: 15px;
+}
+.div-mg-l-15 {
+    margin-left: 15px;
 }
 .div-mg-t-15 {
     margin-top: 15px;
@@ -560,4 +567,22 @@ td {
 /* formulario de ajust de saldo -------------- */
 .adjustment-reason-input {
     width: 95%;
+}
+
+/* formulario de ajust de saldo -------------- */
+.balance-text {
+    display: block;
+    font-size: 14pt;
+    font-weight: 700;
+}
+.balance-value {
+    display: block;
+    font-size: 18pt;
+}
+.balance-detail-row {
+    margin: 15px 0;
+}
+.balance-detail-label {
+    display: block;
+    font-weight: 700;
 }
