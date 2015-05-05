@@ -27,7 +27,7 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.2.0
  * @since 1.0.0, 24/06/2014
  */
 public class Authority {
@@ -242,11 +242,10 @@ public class Authority {
 
                     final Set<String> grouped = new HashSet<>();
 
-                    for (String authority : allAuthorities) {
-                        if (authority.contains(group)) {
-                            grouped.add(authority);
-                        }
-                    }
+                    allAuthorities.stream().filter((authority) -> 
+                            (authority.contains(group))).forEach((authority) -> {
+                        grouped.add(authority);
+                    });
                     authorities.put(group, grouped);
                 }
             }

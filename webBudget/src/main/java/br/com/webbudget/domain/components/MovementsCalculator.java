@@ -31,6 +31,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * Calculadora de movimentos, utilizada para dar melhor agilidade no calculo dos
+ * valores de movimentacao financeira dentro da aplicacao.
+ * 
+ * Nao e um servico, ou seja, nao executa operacoes de escrita no banco, apenas 
+ * leitura. Assim, todos os seus metodos sao apenas readOnly
  *
  * @author Arthur Gregorio
  *
@@ -53,6 +58,7 @@ public class MovementsCalculator {
      *
      * @return as classes com sesus valores de movimentos do periodo
      */
+    @Transactional(readOnly = true)
     public List<MovementClass> calculateTotalByMovementClass(FinancialPeriod period, MovementClassType direction) {
 
         final List<MovementClass> classes
@@ -60,16 +66,14 @@ public class MovementsCalculator {
 
         final List<MovementClass> onlyValidClasses = new ArrayList<>();
 
-        for (MovementClass movementClass : classes) {
-
+        classes.stream().forEach((movementClass) -> {
             final BigDecimal total = this.movementRepository
                     .countTotalByPeriodAndMovementClass(period, movementClass);
-
             if (total != null) {
                 movementClass.setTotalMovements(total);
                 onlyValidClasses.add(movementClass);
             }
-        }
+        });
 
         return onlyValidClasses;
     }

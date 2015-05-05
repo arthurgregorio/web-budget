@@ -32,9 +32,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * Classe base para indicar que se trata de uma entiade, nela temos os dados
- * <br/>
- * basicos e comuns para que a classe possa ser persistente.
+ * Classe base para indicar que se trata de uma entidade, nela temos os atributos
+ * basicos para que a classe possa ser persistente.
  *
  * @author Arthur Gregorio
  *
@@ -42,11 +41,12 @@ import lombok.ToString;
  * @since 1.0.0, 06/10/2013
  */
 @MappedSuperclass
-@ToString(of = "id")
-@EqualsAndHashCode(of = "id")
+@ToString(of = {"id","inclusion"})
+@EqualsAndHashCode(of = {"id","inclusion"})
 public abstract class PersistentEntity implements IPersistentEntity<Long>, Serializable {
 
     @Id
+    @Getter
     @Column(name = "id", unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -69,7 +69,7 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     }
 
     /**
-     * Antes de inserir, define a hora de inserção e o usuário que inseriu
+     * Executa operacoes no prePersist da entidade
      */
     @PrePersist
     protected void prePersist() {
@@ -77,18 +77,10 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     }
 
     /**
-     * Antes de atualizar, muda a hora de atualização e o usuário que atualizou
+     * Executa operacoes no preUpdate da entidade
      */
     @PreUpdate
     protected void preUpdate() {
         this.lastEdition = new Date();
-    }
-
-    /**
-     * @return {@inheritDoc}
-     */
-    @Override
-    public Long getId() {
-        return this.id;
     }
 }

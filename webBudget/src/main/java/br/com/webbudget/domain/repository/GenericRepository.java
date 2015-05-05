@@ -24,19 +24,23 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 /**
+ * A implementacao padrao do repositorio generico, com esta classe habilitamos
+ * o suporte as funcionalidades basicas de um repositorio de dados no banco
  *
- * @param <T>
- * @param <ID>
+ * @param <T> a classe persistente para este repositorio
+ * @param <ID> o tipo de nossos ID
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 1.0.0, 03/03/2013
  */
-public abstract class GenericRepository<T extends IPersistentEntity, ID extends Serializable> implements IGenericRepository<T, ID>, Serializable {
+public abstract class GenericRepository<T extends IPersistentEntity, 
+        ID extends Serializable> implements IGenericRepository<T, ID>, Serializable {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -44,16 +48,17 @@ public abstract class GenericRepository<T extends IPersistentEntity, ID extends 
     private final Class<T> persistentClass;
 
     /**
-     *
+     * Inicia o repositorio identificando qual e a classe de nossa entidade, seu
+     * tipo {@link Class<?>}
      */
     @SuppressWarnings({"unchecked", "unsafe"})
     public GenericRepository() {
-        this.persistentClass = (Class< T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.persistentClass = (Class< T>) ((ParameterizedType)
+                this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     /**
-     *
-     * @return
+     * @return nosso entityManager, inicializado e configurado
      */
     protected EntityManager getEntityManager() {
         if (this.entityManager == null) {
@@ -63,23 +68,23 @@ public abstract class GenericRepository<T extends IPersistentEntity, ID extends 
     }
 
     /**
-     *
-     * @return
+     * @return a {@link Session} do Hibernate para que possamos usar nossa 
+     * {@link Criteria} para buscas
      */
     protected Session getSession() {
         return (Session) this.getEntityManager().getDelegate();
     }
 
     /**
-     *
-     * @return
+     * @return a classe de nossa entidade persistente
      */
     public Class<T> getPersistentClass() {
         return this.persistentClass;
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @param id
      * @param lock
      * @return
@@ -96,23 +101,23 @@ public abstract class GenericRepository<T extends IPersistentEntity, ID extends 
             entity = (T) this.getEntityManager().find(
                     this.getPersistentClass(), id);
         }
-
         return entity;
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @return
      */
     @Override
     public List<T> listAll() {
         final Query query = this.getEntityManager().createQuery(
                 "from " + getPersistentClass().getSimpleName());
-
         return query.getResultList();
     }
 
     /**
+     * {@inheritDoc}
      *
      * @param entity
      * @return
@@ -123,15 +128,14 @@ public abstract class GenericRepository<T extends IPersistentEntity, ID extends 
     }
 
     /**
+     * {@inheritDoc}
      *
      * @param entity
      */
     @Override
     public void delete(T entity) {
-
         final T persistentEntity = this.getEntityManager().getReference(
                 this.getPersistentClass(), entity.getId());
-
         this.getEntityManager().remove(persistentEntity);
     }
 }

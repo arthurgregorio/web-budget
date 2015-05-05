@@ -21,9 +21,11 @@ import java.util.List;
 import java.io.Serializable;
 
 /**
+ * Repositorio generico para facilitar o uso de repositorios no desenvolvimento
+ * de novas funcionalidade com acesso aos dados do banco
  *
- * @param <T>
- * @param <ID>
+ * @param <T> o tipo de entidade deste repositorio
+ * @param <ID> o tipo de id que sera usado
  *
  * @author Arthur Gregorio
  *
@@ -33,29 +35,37 @@ import java.io.Serializable;
 public interface IGenericRepository<T extends IPersistentEntity, ID extends Serializable> {
 
     /**
+     * Lista todos os itens, sem filtro
      *
-     * @return
+     * @return todos os itens daquela entidade
      */
     List<T> listAll();
 
     /**
+     * Tras apenas um objeto, filtrado pelo seu ID
      *
-     * @param id
-     * @param lock
-     * @return
+     * @param id o id que se deseja buscar
+     * @param lock se devemos usar ou nao o lock
+     * 
+     * @return o objeto pesquisado
      */
     T findById(ID id, boolean lock);
 
     /**
+     * Salva um entidade no banco caso ela nao exista ou atualiza ela caso o 
+     * objeto passado como parametro ja exista 
      *
-     * @param entity
-     * @return
+     * @param entity a entidade a ser salva (incluida ou atualizada)
+     * 
+     * @return a entidade manipulada. Se ela acaba de ser  incluida entao o seu
+     *         o seu ID sera setado no objeto de retorno
      */
     T save(T entity);
 
     /**
+     * Deleta uma entidade pelo seu objeto persistente
      *
-     * @param entity
+     * @param entity a entidade a ser deletada
      */
     void delete(T entity);
 }

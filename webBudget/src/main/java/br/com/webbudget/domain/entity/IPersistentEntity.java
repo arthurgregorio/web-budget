@@ -20,7 +20,6 @@ import java.io.Serializable;
 
 /**
  * Interface que devines os metodos minimos que uma entidade deve possuir para
- * <br/>
  * ser considerada uma entitdade valida na regra de negocios deste sistema
  *
  * @param <T> qualquer coisa que seja serializavel
@@ -43,7 +42,7 @@ public interface IPersistentEntity<T extends Serializable> {
      * Metodo que indica se uma entidade ja foi ou nao persistida (salva)
      *
      * @return se a entidade ja foi persistida, retorna <code>true</code>
-     * indicando <br/>
+     * indicando
      * que a mesma ja foi salva se nao retorna <code>false</code>
      */
     public boolean isSaved();
