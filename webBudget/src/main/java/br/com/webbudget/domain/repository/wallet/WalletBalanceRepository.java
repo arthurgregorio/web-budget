@@ -31,7 +31,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0, 18/10/2013
  */
 @Repository
