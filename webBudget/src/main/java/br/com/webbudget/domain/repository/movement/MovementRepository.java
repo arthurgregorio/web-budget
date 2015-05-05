@@ -32,9 +32,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -132,7 +134,7 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
             criteria.add(Restrictions.isNotNull("payment"));
         }
 
-        criteria.createAlias("contact", "co");
+        criteria.createAlias("contact", "co", JoinType.LEFT_OUTER_JOIN);
         criteria.createAlias("apportionments", "ap");
         criteria.createAlias("ap.movementClass", "mc");
         criteria.createAlias("ap.costCenter", "cc");
