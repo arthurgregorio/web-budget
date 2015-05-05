@@ -266,6 +266,17 @@ public class Movement extends PersistentEntity {
             this.deletedApportionments.add(apportionment);
         }
     }
+    
+    /**
+     * @return o nome do contato vinculado ao movimento
+     */
+    public String getContactName() {
+        if (this.contact != null) {
+            return this.contact.getName();
+        } else {
+            return null;
+        }
+    }
 
     /**
      * @return o valor da somatoria dos rateios

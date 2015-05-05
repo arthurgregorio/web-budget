@@ -96,7 +96,8 @@
                                            value="#{messages['movement.form.contact']}: "/>
                             <div class="input-and-button-box">
                                 <p:inputText id="inContact" 
-                                             value="#{movementBean.movement.contact.name}" />
+                                             readonly="true"
+                                             value="#{movementBean.movement.contactName}" />
                                 <p:commandButton immediate="true"
                                                  icon="fa fa-search" 
                                                  actionListener="#{movementBean.showContactDialog()}"/>

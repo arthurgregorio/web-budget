@@ -101,6 +101,7 @@ span.ui-tree-toggler {
 /* corrige a borda do paginador das datatables */
 div.ui-paginator {
     border: 1px solid #dddddd !important; 
+    border-top: 0px !important;
 }
 
 /* reposicionamento dos labels dos radiobuttons */
