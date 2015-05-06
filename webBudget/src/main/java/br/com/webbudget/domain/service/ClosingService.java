@@ -120,6 +120,18 @@ public class ClosingService {
         final BigDecimal creditCardExpenses = this.movementsCalculator.
                 calculateCardExpenses(financialPeriod, CardType.CREDIT);
 
+        // pegamos tudo que foi paga de movimento e entao alteramos o status
+        // para calculado a fim de manter tudo inalterado
+        final List<Movement> movements = this.movementRepository
+                .listByPeriodAndState(financialPeriod, MovementStateType.PAID);
+        
+        movements.stream().map((movement) -> {
+            movement.setMovementStateType(MovementStateType.CALCULATED);
+            return movement;
+        }).forEach((movement) -> {
+            this.movementRepository.save(movement);
+        });
+        
         // criamos e salvamos o fechamento
         Closing closing = new Closing();
 
