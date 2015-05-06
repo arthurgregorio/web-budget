@@ -83,9 +83,8 @@
                     <h:outputText value="#{messages['movement.form.financial-period-not-open']}" />
                 </div>
                 <div class="ui-grid-col-4 div-align-right">
-                    <p:commandLink immediate="true"
-                                   action="#{movementBean.changeToOpenFinancialPeriod()}"
-                                   value="#{messages['movement.form.financial-period-open']}" />
+                    <p:link href="#{movementBean.changeToOpenFinancialPeriod()}"
+                            value="#{messages['movement.form.financial-period-open']}" />
                 </div>
             </h:panelGroup>
             <div class="ui-grid-row flat-box">

@@ -234,7 +234,7 @@ public class MovementBean extends AbstractBean {
      * @return
      */
     public String changeToOpenFinancialPeriod() {
-        return "../../miscellany/financialPeriod/formFinancialPeriod.xhtml?faces-redirect=true";
+        return "/main/miscellany/financialPeriod/formFinancialPeriod.xhtml";
     }
 
     /**
