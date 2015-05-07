@@ -32,7 +32,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -142,7 +141,14 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
 
         // se conseguir castar para bigdecimal trata como um filtro
         try {
+            
+            // removemos a virgula e trocamos por um ponto
+            if (filter.contains(",")) {
+                filter = filter.replace(",", ".");
+            }
+            
             final BigDecimal value = new BigDecimal(filter);
+            
             criteria.add(Restrictions.or(Restrictions.eq("code", filter),
                     Restrictions.eq("value", value),
                     Restrictions.ilike("description", "%" + filter + "%"),
