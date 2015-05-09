@@ -21,6 +21,7 @@ import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
@@ -96,7 +97,9 @@ public class MovementsCalculator {
         BigDecimal total = BigDecimal.ZERO;
 
         for (Movement movement : movements) {
-            total = total.add(movement.getValue());
+            if (movement.getMovementType() == MovementType.MOVEMENT) {
+                total = total.add(movement.getValue());
+            }
         }
 
         return total;
