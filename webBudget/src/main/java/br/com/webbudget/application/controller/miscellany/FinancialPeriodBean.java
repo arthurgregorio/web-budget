@@ -21,23 +21,20 @@ import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
-import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 23/03/2014
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class FinancialPeriodBean extends AbstractBean {
 
     @Getter
@@ -51,18 +48,8 @@ public class FinancialPeriodBean extends AbstractBean {
     @Getter
     private List<FinancialPeriod> financialPeriods;
 
-    @Setter
-    @ManagedProperty("#{financialPeriodService}")
+    @Inject
     private transient FinancialPeriodService financialPeriodService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(FinancialPeriodBean.class);
-    }
 
     /**
      *

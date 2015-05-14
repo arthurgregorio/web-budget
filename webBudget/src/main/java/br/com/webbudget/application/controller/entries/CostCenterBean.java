@@ -21,24 +21,21 @@ import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
-import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 04/03/2014
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class CostCenterBean extends AbstractBean {
 
     @Getter
@@ -46,18 +43,8 @@ public class CostCenterBean extends AbstractBean {
     @Getter
     private List<CostCenter> costCenters;
 
-    @Setter
-    @ManagedProperty("#{movementService}")
+    @Inject
     private MovementService movementService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(CostCenterBean.class);
-    }
 
     /**
      *

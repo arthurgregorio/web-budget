@@ -26,27 +26,24 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 02/03/2014
  */
-@ViewScoped
-@ManagedBean
+@Named
+@javax.faces.view.ViewScoped
 public class UserAccountBean extends AbstractBean {
 
     @Getter
@@ -61,18 +58,8 @@ public class UserAccountBean extends AbstractBean {
     @Setter
     private TreeNode[] selectedAuthorities;
 
-    @Setter
-    @ManagedProperty("#{accountService}")
+    @Inject
     private transient AccountService accountService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(UserAccountBean.class);
-    }
 
     /**
      * Inicializa o usuario para edicao da conta pelas preferencias

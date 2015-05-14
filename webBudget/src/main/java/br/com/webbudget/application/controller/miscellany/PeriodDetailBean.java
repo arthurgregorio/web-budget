@@ -19,24 +19,21 @@ package br.com.webbudget.application.controller.miscellany;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
-import lombok.Setter;
 import org.primefaces.model.chart.CartesianChartModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 11/04/2014
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class PeriodDetailBean extends AbstractBean {
 
     @Getter
@@ -47,21 +44,10 @@ public class PeriodDetailBean extends AbstractBean {
     @Getter
     private CartesianChartModel revenuesModel;
 
-    @Setter
-    @ManagedProperty("#{graphModelService}")
+    @Inject
     private transient GraphModelService graphModelService;
-    @Setter
-    @ManagedProperty("#{financialPeriodService}")
+    @Inject
     private transient FinancialPeriodService financialPeriodService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(PeriodDetailBean.class);
-    }
 
     /**
      *

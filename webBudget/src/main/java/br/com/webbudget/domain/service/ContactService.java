@@ -24,9 +24,8 @@ import br.com.webbudget.domain.repository.contact.IContactRepository;
 import br.com.webbudget.domain.repository.contact.ITelephoneRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -35,15 +34,14 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.0.0
  * @since 1.2.0, 12/04/2015
  */
-@Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional
 public class ContactService {
 
-    @Autowired
+    @Inject
     private IContactRepository contactRepository;
-    @Autowired
+    @Inject
     private IMovementRepository movementRepository;
-    @Autowired
+    @Inject
     private ITelephoneRepository telephoneRepository;
 
     /**

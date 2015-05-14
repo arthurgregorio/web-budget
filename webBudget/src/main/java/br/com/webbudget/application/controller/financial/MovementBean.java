@@ -37,15 +37,13 @@ import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import org.omnifaces.util.Faces;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -54,8 +52,8 @@ import org.slf4j.LoggerFactory;
  * @version 1.0.0
  * @since 1.0.0, 18/03/2014
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class MovementBean extends AbstractBean {
 
     @Getter
@@ -95,30 +93,16 @@ public class MovementBean extends AbstractBean {
     @Getter
     private List<FinancialPeriod> openFinancialPeriods;
 
-    @Setter
-    @ManagedProperty("#{cardService}")
+    @Inject
     private CardService cardService;
-    @Setter
-    @ManagedProperty("#{walletService}")
+    @Inject
     private WalletService walletService;
-    @Setter
-    @ManagedProperty("#{contactService}")
+    @Inject
     private ContactService contactService;
-    @Setter
-    @ManagedProperty("#{movementService}")
+    @Inject
     private MovementService movementService;
-    @Setter
-    @ManagedProperty("#{financialPeriodService}")
+    @Inject
     private FinancialPeriodService financialPeriodService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(MovementBean.class);
-    }
 
     /**
      *

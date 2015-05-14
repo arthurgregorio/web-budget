@@ -27,9 +27,9 @@ import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  * Calculadora de movimentos, utilizada para dar melhor agilidade no calculo dos
@@ -40,15 +40,15 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 22/02/2015
  */
-@Component
+@RequestScoped
 public class MovementsCalculator {
 
-    @Autowired
+    @Inject
     private IMovementRepository movementRepository;
-    @Autowired
+    @Inject
     private IMovementClassRepository movementClassRepository;
 
     /**
@@ -59,7 +59,7 @@ public class MovementsCalculator {
      *
      * @return as classes com sesus valores de movimentos do periodo
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<MovementClass> calculateTotalByMovementClass(FinancialPeriod period, MovementClassType direction) {
 
         final List<MovementClass> classes
@@ -87,7 +87,7 @@ public class MovementsCalculator {
      *
      * @return o total para aquele tipo
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public BigDecimal calculateTotalByDirection(FinancialPeriod period,
             MovementClassType direction) {
 
@@ -114,7 +114,7 @@ public class MovementsCalculator {
      *
      * @return o total de consumo para aquele tipo
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public BigDecimal calculateCardExpenses(FinancialPeriod period, CardType type) {
 
         final List<Movement> movements = this.movementRepository

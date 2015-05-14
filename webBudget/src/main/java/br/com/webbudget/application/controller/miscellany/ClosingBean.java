@@ -23,13 +23,11 @@ import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.service.ClosingService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * MBean que contem os metodos para encerramento dos periodos financeiros e
@@ -38,11 +36,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 14/04/2014
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class ClosingBean extends AbstractBean {
 
     @Getter
@@ -55,21 +53,10 @@ public class ClosingBean extends AbstractBean {
     @Getter
     private List<FinancialPeriod> financialPeriods;
 
-    @Setter
-    @ManagedProperty("#{closingService}")
+    @Inject
     private transient ClosingService closingService;
-    @Setter
-    @ManagedProperty("#{financialPeriodService}")
+    @Inject
     private transient FinancialPeriodService financialPeriodService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(ClosingBean.class);
-    }
 
     /**
      * Inicializa o form do fechamento com os periodos disponiveis para

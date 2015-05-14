@@ -29,9 +29,8 @@ import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -40,22 +39,21 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.1.0
  * @since 1.0.0, 20/03/2014
  */
-@Service
 public class FinancialPeriodService {
 
-    @Autowired
+    @Inject
     private MovementsCalculator movementsCalculator;
 
-    @Autowired
+    @Inject
     private IMovementRepository movementRepository;
-    @Autowired
+    @Inject
     private IFinancialPeriodRepository financialPeriodRepository;
 
     /**
      *
      * @param financialPeriod
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public void openPeriod(FinancialPeriod financialPeriod) {
 
         final FinancialPeriod found = this.findFinancialPeriodByIdentification(
@@ -87,7 +85,7 @@ public class FinancialPeriodService {
      * 
      * @param financialPeriod 
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public void deletePeriod(FinancialPeriod financialPeriod) {
         
         final List<Movement> movements = 

@@ -42,9 +42,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -53,25 +52,23 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.1.0
  * @since 1.0.0, 04/03/2014
  */
-@Service
-@Transactional(rollbackFor = Exception.class)
 public class MovementService {
 
-    @Autowired
+    @Inject
     private IWalletRepository walletRepository;
-    @Autowired
+    @Inject
     private IPaymentRepository paymentRepository;
-    @Autowired
+    @Inject
     private IMovementRepository movementRepository;
-    @Autowired
+    @Inject
     private ICostCenterRepository costCenterRepository;
-    @Autowired
+    @Inject
     private ICardInvoiceRepository cardInvoiceRepository;
-    @Autowired
+    @Inject
     private IApportionmentRepository apportionmentRepository;
-    @Autowired
+    @Inject
     private IMovementClassRepository movementClassRepository;
-    @Autowired
+    @Inject
     private IWalletBalanceRepository walletBalanceRepository;
 
     /**
@@ -398,7 +395,7 @@ public class MovementService {
      * @param movementClassId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public MovementClass findMovementClassById(long movementClassId) {
         return this.movementClassRepository.findById(movementClassId, false);
     }
@@ -408,7 +405,7 @@ public class MovementService {
      * @param costCenterId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public CostCenter findCostCenterById(long costCenterId) {
         return this.costCenterRepository.findById(costCenterId, false);
     }
@@ -418,7 +415,7 @@ public class MovementService {
      * @param movementId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Movement findMovementById(long movementId) {
         return this.movementRepository.findById(movementId, false);
     }
@@ -428,7 +425,7 @@ public class MovementService {
      * @param isBlocked
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<MovementClass> listMovementClasses(Boolean isBlocked) {
         return this.movementClassRepository.listByStatus(isBlocked);
     }
@@ -439,7 +436,7 @@ public class MovementService {
      * @param type
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<MovementClass> listMovementClassesByCostCenterAndType(CostCenter costCenter, MovementClassType type) {
         return this.movementClassRepository.listByCostCenterAndType(costCenter, type);
     }
@@ -449,7 +446,7 @@ public class MovementService {
      * @param isBlocked
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<CostCenter> listCostCenters(Boolean isBlocked) {
         return this.costCenterRepository.listByStatus(isBlocked);
     }
@@ -459,7 +456,7 @@ public class MovementService {
      * @param financialPeriod
      * @return 
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Movement> listMovementsByPeriod(FinancialPeriod financialPeriod) {
         return this.movementRepository.listByPeriod(financialPeriod);
     }
@@ -468,7 +465,7 @@ public class MovementService {
      *
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Movement> listMovementsByActiveFinancialPeriod() {
         return this.movementRepository.listByActiveFinancialPeriod();
     }
@@ -479,7 +476,7 @@ public class MovementService {
      * @param showOverdue
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Movement> listMovementsByDueDate(Date dueDate, boolean showOverdue) {
         return this.movementRepository.listByDueDate(dueDate, showOverdue);
     }
@@ -490,7 +487,7 @@ public class MovementService {
      * @param paid
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Movement> listMovementsByFilter(String filter, Boolean paid) {
         return this.movementRepository.listByFilter(filter, paid);
     }
@@ -502,7 +499,7 @@ public class MovementService {
      * @param costCenter
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public MovementClass findMovementClassByNameAndTypeAndCostCenter(String name, MovementClassType type, CostCenter costCenter) {
         return this.movementClassRepository.findByNameAndTypeAndCostCenter(name, type, costCenter);
     }
@@ -513,7 +510,7 @@ public class MovementService {
      * @param parent
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public CostCenter findCostCenterByNameAndParent(String name, CostCenter parent) {
         return this.costCenterRepository.findByNameAndParent(name, parent);
     }
@@ -523,7 +520,7 @@ public class MovementService {
      * @param cardInvoice
      * @return 
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Movement> listMovementsByCardInvoice(CardInvoice cardInvoice) {
         return this.movementRepository.listByCardInvoice(cardInvoice);
     }

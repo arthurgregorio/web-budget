@@ -34,9 +34,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -45,19 +44,18 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.1.0
  * @since 1.0.0, 06/04/2014
  */
-@Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional
 public class CardService {
 
-    @Autowired
+    @Inject
     private ICardRepository cardRepository;
-    @Autowired
+    @Inject
     private IMovementRepository movementRepository;
-    @Autowired
+    @Inject
     private ICardInvoiceRepository cardInvoiceRepository;
-    @Autowired
+    @Inject
     private IApportionmentRepository apportionmentRepository;
-    @Autowired
+    @Inject
     private IConfigurationRepository configurationRepository;
 
     /**
@@ -187,7 +185,7 @@ public class CardService {
      * @param cardId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Card findCardById(long cardId) {
         return this.cardRepository.findById(cardId, false);
     }
@@ -197,7 +195,7 @@ public class CardService {
      * @param isBlocked
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Card> listCards(Boolean isBlocked) {
         return this.cardRepository.listByStatus(isBlocked);
     }
@@ -207,7 +205,7 @@ public class CardService {
      * @param isBlocked
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Card> listCreditCards(Boolean isBlocked) {
         return this.cardRepository.listCredit(isBlocked);
     }
@@ -217,7 +215,7 @@ public class CardService {
      * @param isBlocked
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Card> listDebitCards(Boolean isBlocked) {
         return this.cardRepository.listDebit(isBlocked);
     }
@@ -228,7 +226,7 @@ public class CardService {
      * @param cardType
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Card findCardByNumberAndType(String number, CardType cardType) {
         return this.cardRepository.findByNumberAndType(number, cardType);
     }
@@ -238,7 +236,7 @@ public class CardService {
      * @param cardInvoice
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public CardInvoice fillCardInvoice(CardInvoice cardInvoice) {
 
         final List<Movement> movements = this.movementRepository.listPaidWithoutInvoiceByPeriodAndCard(
@@ -255,7 +253,7 @@ public class CardService {
      * @param card o cartao da qual se deseja ver as faturas
      * @return a lista de faturas
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<CardInvoice> listInvoicesByCard(Card card) {
         return this.cardInvoiceRepository.listByCard(card);
     }

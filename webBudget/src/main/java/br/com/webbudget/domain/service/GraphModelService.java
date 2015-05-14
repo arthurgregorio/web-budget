@@ -31,6 +31,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartSeries;
@@ -39,9 +41,6 @@ import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.PieChartModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -50,23 +49,22 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.0.0
  * @since 1.0.0, 13/04/2014
  */
-@Service
 public class GraphModelService implements Serializable {
 
-    @Autowired
+    @Inject
     private MessagesFactory messages;
-    @Autowired
+    @Inject
     private IMovementRepository movementRepository;
-    @Autowired
+    @Inject
     private ICostCenterRepository costCenterRepository;
-    @Autowired
+    @Inject
     private IFinancialPeriodRepository financialPeriodRepository;
 
     /**
      *
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public PieChartModel buildExpensesModelByCostCenter() {
 
         final List<CostCenter> costCenters
@@ -110,7 +108,7 @@ public class GraphModelService implements Serializable {
      *
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public PieChartModel buildRevenueModelByCostCenter() {
 
         final List<CostCenter> costCenters

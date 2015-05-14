@@ -25,9 +25,8 @@ import br.com.webbudget.domain.repository.user.IUserPrivateMessageRepository;
 import br.com.webbudget.domain.repository.user.IUserRepository;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -36,15 +35,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.0.0
  * @since 1.0.0, 07/05/2014
  */
-@Service
-@Transactional
 public class PrivateMessageService {
 
-    @Autowired
+    @Inject
     private IUserRepository userRepository;
-    @Autowired
+    @Inject
     private IPrivateMessageRepository privateMessageRepository;
-    @Autowired
+    @Inject
     private IUserPrivateMessageRepository userPrivateMessageRepository;
 
     /**
@@ -108,7 +105,7 @@ public class PrivateMessageService {
      * @param privateMessageId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public PrivateMessage findPrivateMessageById(long privateMessageId) {
         return this.privateMessageRepository.findById(privateMessageId, false);
     }
@@ -118,7 +115,7 @@ public class PrivateMessageService {
      * @param userPrivateMessageId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public UserPrivateMessage findUserPrivateMessageById(long userPrivateMessageId) {
         return this.userPrivateMessageRepository.findById(userPrivateMessageId, false);
     }
@@ -129,7 +126,7 @@ public class PrivateMessageService {
      * @param showUnread
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<UserPrivateMessage> listMessagesByUser(User user, Boolean showUnread) {
         return this.userPrivateMessageRepository.listByUser(user, showUnread);
     }
@@ -139,7 +136,7 @@ public class PrivateMessageService {
      * @param showUnread
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<UserPrivateMessage> listMessagesByCurrentUser(Boolean showUnread) {
         final User user = AccountService.getCurrentAuthenticatedUser();
         return this.userPrivateMessageRepository.listByUser(user, showUnread);
@@ -149,7 +146,7 @@ public class PrivateMessageService {
      *
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<PrivateMessage> listPrivateMessagesSent() {
         return this.privateMessageRepository.listSent(AccountService.getCurrentAuthenticatedUser());
     }
@@ -159,7 +156,7 @@ public class PrivateMessageService {
      * @param privateMessage
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<UserPrivateMessage> listPrivateMessageReceipts(PrivateMessage privateMessage) {
         return this.userPrivateMessageRepository.listReceipts(privateMessage);
     }

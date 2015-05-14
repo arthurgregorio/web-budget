@@ -31,9 +31,8 @@ import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  * Classe que realiza todo o processo de fechamento do periodo
@@ -43,20 +42,18 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.0.0
  * @since 1.0.0, 09/04/2014
  */
-@Service
-@Transactional
 public class ClosingService {
 
-    @Autowired
+    @Inject
     private MovementsCalculator movementsCalculator;
 
-    @Autowired
+    @Inject
     private ICardRepository cardRepository;
-    @Autowired
+    @Inject
     private IClosingRepository closingRepository;
-    @Autowired
+    @Inject
     private IMovementRepository movementRepository;
-    @Autowired
+    @Inject
     private IFinancialPeriodRepository financialPeriodRepository;
 
     /**
@@ -66,7 +63,7 @@ public class ClosingService {
      * @param financialPeriod o periodo a ser processado
      * @return o resumo do fechamento
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Closing process(FinancialPeriod financialPeriod) {
 
         final Closing closing = new Closing();

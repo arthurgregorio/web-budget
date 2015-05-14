@@ -25,9 +25,8 @@ import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
 import br.com.webbudget.domain.repository.wallet.IWalletRepository;
 import java.math.BigDecimal;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -36,13 +35,11 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.0.0
  * @since 1.0.0, 12/03/2014
  */
-@Service
-@Transactional(rollbackFor = Exception.class)
 public class WalletService {
 
-    @Autowired
+    @Inject
     private IWalletRepository walletRepository;
-    @Autowired
+    @Inject
     private IWalletBalanceRepository walletBalanceRepository;
 
     /**
@@ -195,7 +192,7 @@ public class WalletService {
      * @param walletId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Wallet findWalletById(long walletId) {
         return this.walletRepository.findById(walletId, false);
     }
@@ -205,7 +202,7 @@ public class WalletService {
      * @param isBlocked
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Wallet> listWallets(Boolean isBlocked) {
         return this.walletRepository.listByStatus(isBlocked);
     }
@@ -217,7 +214,7 @@ public class WalletService {
      * @param walletType
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Wallet findWalletByNameAndBankAndType(String name, String bank, WalletType walletType) {
         return this.walletRepository.findByNameAndBankAndType(name, bank, walletType);
     }
@@ -226,7 +223,7 @@ public class WalletService {
      *
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<WalletBalance> listTransferences() {
         return this.walletBalanceRepository.listByType(WalletBalanceType.TRANSFERENCE);
     }
@@ -236,7 +233,7 @@ public class WalletService {
      * @param wallet
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<WalletBalance> listTransfersByWallet(Wallet wallet) {
         return this.walletBalanceRepository.listByWallet(wallet, WalletBalanceType.TRANSFERENCE);
     }
@@ -247,7 +244,7 @@ public class WalletService {
      * @param target
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<WalletBalance> listTransfersByWallet(Wallet source, Wallet target) {
         return this.walletBalanceRepository.listByWallet(source, target, WalletBalanceType.TRANSFERENCE);
     }
@@ -257,7 +254,7 @@ public class WalletService {
      * @param wallet
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<WalletBalance> listBalancesByWallet(Wallet wallet) {
         return this.walletBalanceRepository.listByWallet(wallet);
     }

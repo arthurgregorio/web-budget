@@ -5,19 +5,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Servico de busca de enderecos para o cadastro de contatos do sistema
  * 
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.2.0, 16/04/2015
  */
-@Service
 public class AddressFinderService {
 
     private final ResourceBundle configBundle;

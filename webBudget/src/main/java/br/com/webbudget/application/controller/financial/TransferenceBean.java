@@ -21,23 +21,21 @@ import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.service.WalletService;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 20/05/2014
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class TransferenceBean extends AbstractBean {
 
     @Getter
@@ -58,18 +56,8 @@ public class TransferenceBean extends AbstractBean {
     @Getter
     private List<WalletBalance> transferences;
 
-    @Setter
-    @ManagedProperty("#{walletService}")
+    @Inject
     private WalletService walletService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(TransferenceBean.class);
-    }
 
     /**
      * Inicializa a listagem de alimentos

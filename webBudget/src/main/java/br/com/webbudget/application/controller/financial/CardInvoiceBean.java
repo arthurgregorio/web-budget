@@ -28,24 +28,21 @@ import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Controller para a tela de faturas de cartao e historico das faturas
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.0.0, 28/04/2014
  */
-@ViewScoped
-@ManagedBean
+@Named
+@javax.faces.view.ViewScoped
 public class CardInvoiceBean extends AbstractBean {
 
     @Getter
@@ -66,24 +63,12 @@ public class CardInvoiceBean extends AbstractBean {
     @Getter
     public List<FinancialPeriod> financialPeriods;
 
-    @Setter
-    @ManagedProperty("#{cardService}")
+    @Inject
     private CardService cardService;
-    @Setter
-    @ManagedProperty("#{movementService}")
+    @Inject
     private MovementService movementService;
-    @Setter
-    @ManagedProperty("#{financialPeriodService}")
+    @Inject
     private FinancialPeriodService financialPeriodService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(CardInvoiceBean.class);
-    }
 
     /**
      * Inicializa o formulario listando os cartoes de credito e o periodo para

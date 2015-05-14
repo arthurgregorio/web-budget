@@ -23,24 +23,21 @@ import br.com.webbudget.domain.entity.system.Configuration;
 import br.com.webbudget.domain.service.ConfigurationService;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
-import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Controller para a pagina de configuracao do sistema
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.1.0, 23/03/2015
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class ConfigurationBean extends AbstractBean {
 
     @Getter
@@ -51,20 +48,10 @@ public class ConfigurationBean extends AbstractBean {
     @Getter
     private List<MovementClass> movementClasses;
     
-    @Setter
-    @ManagedProperty("#{movementService}")
+    @Inject
     private MovementService movementService;
-    @Setter
-    @ManagedProperty("#{configurationService}")
+    @Inject
     private ConfigurationService configurationService;
-    
-    /**
-     * @return o logger da classe
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(ConfigurationBean.class);
-    }
     
     /**
      * Inicializa a configuracao default

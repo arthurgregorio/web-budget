@@ -25,16 +25,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.NumberTool;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 /**
  * O servico de envio de email, por este cara invocamos o {@link Postman} que
@@ -50,14 +47,13 @@ import org.springframework.stereotype.Service;
  * @version 1.0.0
  * @since 1.2.0, 22/04/2015
  */
-@Service
 public class EmailService {
 
-    @Autowired
+    @Inject
     private Postman postman;
-    @Autowired
+    @Inject
     private VelocityEngine engine;
-    @Autowired
+    @Inject
     private MessagesFactory messagesFactory;
 
     private final ResourceBundle mailConfig = ResourceBundle.getBundle("config.webbudget");
@@ -69,7 +65,6 @@ public class EmailService {
      *
      * @throws MessagingException
      */
-    @Async
     public void notifyNewMessage(PrivateMessage privateMessage, List<User> receipts)
             throws MessagingException {
 

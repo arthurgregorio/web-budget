@@ -23,23 +23,20 @@ import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.WalletService;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
-import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 06/04/2014
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class CardBean extends AbstractBean {
 
     @Getter
@@ -47,23 +44,12 @@ public class CardBean extends AbstractBean {
     @Getter
     private List<Card> cards;
     @Getter
-    public List<Wallet> wallets;
+    private List<Wallet> wallets;
 
-    @Setter
-    @ManagedProperty("#{cardService}")
+    @Inject
     private CardService cardService;
-    @Setter
-    @ManagedProperty("#{walletService}")
+    @Inject
     private WalletService walletService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(CardBean.class);
-    }
 
     /**
      *

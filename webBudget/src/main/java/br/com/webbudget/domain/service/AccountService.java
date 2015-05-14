@@ -17,45 +17,25 @@
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
-import br.com.webbudget.domain.entity.users.Permission;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.repository.user.IPermissionRepository;
 import br.com.webbudget.domain.repository.user.IUserRepository;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 06/10/2013
  */
-@Service
-@Transactional(rollbackFor = Exception.class)
-public class AccountService implements UserDetailsService {
+public class AccountService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
+    @Inject
     private IUserRepository userRepository;
-    @Autowired
+    @Inject
     private IPermissionRepository permissionRepository;
 
     /**
@@ -67,36 +47,17 @@ public class AccountService implements UserDetailsService {
      * @throws ApplicationException se houver algum erro ou o usuario for
      * invalido
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public boolean login(User user) throws ApplicationException {
 
-        final String password = user.getPassword();
-        user = this.userRepository.findByUsername(user.getUsername());
-
-        if (user == null) {
-            throw new ApplicationException("authentication.error.invalid-user");
-        }
-
-        try {
-            final Authentication authenticate = this.authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), password));
-
-            if (authenticate.isAuthenticated()) {
-                SecurityContextHolder.getContext().setAuthentication(authenticate);
-                return true;
-            }
-        } catch (AuthenticationException ex) {
-            throw new ApplicationException("authentication.error");
-        }
-        return false;
+        return true;
     }
     
     /**
      * Realiza o logout do usuario
      */
     public void logout() {
-        SecurityContextHolder.clearContext();
-        SecurityContextHolder.createEmptyContext();
+        
     }
 
     /**
@@ -104,39 +65,10 @@ public class AccountService implements UserDetailsService {
      *
      * @param user o usuario a ser criado no sistema
      */
+    @Transactional
     public void createAccount(User user) {
 
-        // checa se o cara ja existe
-        final User found = this.findUserByUsername(user.getUsername());
-
-        if (found != null) {
-            throw new ApplicationException("user-account.validate.username-used");
-        }
-
-        // checa se informou a senha
-        if (user.getUnsecurePassword() == null || user.getUnsecurePassword().isEmpty()) {
-            throw new ApplicationException("user-account.validate.invalid-password");
-        }
         
-        // checa se tem permissoes
-        if (user.getPermissions().isEmpty()) {
-            throw new ApplicationException("user-account.validate.no-permissions");
-        }
-
-        user.setPassword(this.passwordEncoder.encode(user.getUnsecurePassword()));
-
-        // pegamos as novas permissoes antes de salvar o user, 
-        // se pegar depois vem null pq o JPA da limpa o que e transient
-        final Set<Permission> permissions = user.getPermissions();
-
-        // salva o usuario
-        user = this.userRepository.save(user);
-
-        // salvamos novamente as permissions
-        for (Permission permission : permissions) {
-            permission.setUser(user);
-            this.permissionRepository.save(permission);
-        }
     }
 
     /**
@@ -144,37 +76,10 @@ public class AccountService implements UserDetailsService {
      *
      * @param user a conta a ser atualizada
      */
+    @Transactional
     public void updateAccount(User user) {
 
-        // checa se tem permissoes
-        if (user.getPermissions().isEmpty()) {
-            throw new ApplicationException("user-account.validate.no-permissions");
-        }
-
-        // atualiza o password se precisar
-        if (user.getUnsecurePassword() != null && !user.getUnsecurePassword().isEmpty()) {
-            user.setPassword(this.passwordEncoder.encode(user.getUnsecurePassword()));
-        }
-
-        // pegamos as novas permissoes antes de salvar o user, 
-        // se pegar depois vem null pq o JPA da limpa o que e transient
-        final Set<Permission> newPermissions = user.getPermissions();
-
-        // salva o usuario
-        user = this.userRepository.save(user);
-
-        // excluimos todas as permissoes atuais
-        final Set<Permission> oldPermissions = new HashSet<>(this.permissionRepository.listByUser(user));
-
-        oldPermissions.stream().forEach((permission) -> {
-            this.permissionRepository.delete(permission);
-        });
-
-        // salvamos novamente as permissions
-        for (Permission permission : newPermissions) {
-            permission.setUser(user);
-            this.permissionRepository.save(permission);
-        }
+        
     }
 
     /**
@@ -182,6 +87,7 @@ public class AccountService implements UserDetailsService {
      *
      * @param user a conta a ser deletada
      */
+    @Transactional
     public void deleteAccount(User user) {
         this.userRepository.delete(user);
     }
@@ -193,11 +99,7 @@ public class AccountService implements UserDetailsService {
      */
     public static User getCurrentAuthenticatedUser() {
 
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            return (User) authentication.getPrincipal();
-        }
+        
         return null;
     }
 
@@ -206,7 +108,7 @@ public class AccountService implements UserDetailsService {
      * @param username
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public User findUserByUsername(String username) {
         return this.userRepository.findByUsername(username);
     }
@@ -216,7 +118,7 @@ public class AccountService implements UserDetailsService {
      * @param userId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public User findAccountById(long userId) {
         return this.userRepository.findById(userId, false);
     }
@@ -225,30 +127,8 @@ public class AccountService implements UserDetailsService {
      *
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<User> listAccounts() {
         return this.userRepository.listAll();
-    }
-
-    /**
-     * Metodo default da interface UserDetailsService do spring security
-     *
-     * @see UserDetailsService#loadUserByUsername(java.lang.String)
-     *
-     * @param username
-     * @return
-     *
-     * @throws UsernameNotFoundException
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        final User user = this.userRepository.findByUsername(username);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("authentication.error.invalid_user");
-        }
-        return user;
     }
 }

@@ -26,24 +26,22 @@ import br.com.webbudget.domain.service.EmailService;
 import br.com.webbudget.domain.service.PrivateMessageService;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.mail.MessagingException;
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 12/05/2014
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class PrivateMessageBean extends AbstractBean {
 
     @Getter
@@ -58,21 +56,10 @@ public class PrivateMessageBean extends AbstractBean {
     @Getter
     private List<PrivateMessage> privateMessages;
 
-    @Setter
-    @ManagedProperty("#{emailService}")
+    @Inject
     private transient EmailService emailService;
-    @Setter
-    @ManagedProperty("#{privateMessageService}")
+    @Inject
     private transient PrivateMessageService privateMessageService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(PrivateMessageBean.class);
-    }
 
     /**
      *
