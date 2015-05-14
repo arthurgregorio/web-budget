@@ -26,14 +26,12 @@ import br.com.webbudget.domain.service.PrivateMessageService;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.chart.PieChartModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Mbean utilizado na dashboard do sistema, por ele carregamos os graficos da 
@@ -45,8 +43,8 @@ import org.slf4j.LoggerFactory;
  * @version 1.1.0
  * @since 1.0.0, 27/02/2014
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class DashboardBean extends AbstractBean {
 
     @Getter
@@ -61,31 +59,18 @@ public class DashboardBean extends AbstractBean {
     private List<UserPrivateMessage> userPrivateMessages;
 
     @Getter
-    private PieChartModel expensesModel;
-    @Getter
     private PieChartModel revenueModel;
+    @Getter
+    private PieChartModel expensesModel;
 
-    @Setter
-    @ManagedProperty("#{accountService}")
+    @Inject
     private transient AccountService accountService;
-    @Setter
-    @ManagedProperty("#{movementService}")
+    @Inject
     private transient MovementService movementService;
-    @Setter
-    @ManagedProperty("#{graphModelService}")
+    @Inject
     private transient GraphModelService graphModelService;
-    @Setter
-    @ManagedProperty("#{privateMessageService}")
+    @Inject
     private transient PrivateMessageService privateMessageService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(DashboardBean.class);
-    }
 
     /**
      * Inicializa os graficos e tambem carrega as mensagens privadas no box

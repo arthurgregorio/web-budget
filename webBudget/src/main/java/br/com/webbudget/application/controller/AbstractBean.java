@@ -19,12 +19,10 @@ package br.com.webbudget.application.controller;
 import br.com.webbudget.infraestructure.MessagesFactory;
 import java.io.Serializable;
 import java.util.Iterator;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import lombok.Getter;
-import lombok.Setter;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -36,37 +34,23 @@ import org.slf4j.Logger;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 18/01/2015
  */
 public abstract class AbstractBean implements Serializable {
 
-    protected Logger logger;
-
-    protected transient FacesContext facesContext;
-    protected transient RequestContext requestContext;
-
     @Getter
     protected ViewState viewState;
+    
+    @Inject
+    protected Logger logger;
+    @Inject
+    protected FacesContext facesContext;
+    @Inject
+    protected RequestContext requestContext;
 
-    @Setter
-    @ManagedProperty("#{messagesFactory}")
+    @Inject
     private MessagesFactory messagesFactory;
-
-    /**
-     * Metodo que executa os hooks para inicializacao do bean
-     */
-    @PostConstruct
-    public void runInitializers() {
-
-        this.logger = this.initializeLogger();
-
-        if (logger == null) {
-            throw new NullPointerException("Logger instance can't be null!");
-        }
-
-        this.initializeCustom();
-    }
 
     /**
      * Traduz uma chave para a sua versao internacionalizada
@@ -79,21 +63,10 @@ public abstract class AbstractBean implements Serializable {
     }
 
     /**
-     * Metodo tosco para carregar o contexto antes de usar, como o lixo do
-     * spring nao tem um meio de produzir as dependencias em escopo de request
-     * fiz esse gambito para resolver provisoriamente ate a migracao para o JEE
-     */
-    private void loadContext() {
-        this.facesContext = FacesContext.getCurrentInstance();
-        this.requestContext = RequestContext.getCurrentInstance();
-    }
-
-    /**
      *
      * @param componentId
      */
     protected void update(String componentId) {
-        this.loadContext();
         this.requestContext.update(componentId);
     }
 
@@ -102,7 +75,6 @@ public abstract class AbstractBean implements Serializable {
      * @param script
      */
     protected void execute(String script) {
-        this.loadContext();
         this.requestContext.execute(script);
     }
 
@@ -111,7 +83,6 @@ public abstract class AbstractBean implements Serializable {
      * @param widgetVar
      */
     protected void openDialog(String widgetVar) {
-        this.loadContext();
         this.requestContext.execute("PF('" + widgetVar + "').show()");
     }
 
@@ -121,7 +92,6 @@ public abstract class AbstractBean implements Serializable {
      * @param widgetVar
      */
     protected void openDialog(String id, String widgetVar) {
-        this.loadContext();
         this.requestContext.update(id);
         this.requestContext.execute("PF('" + widgetVar + "').show()");
     }
@@ -131,7 +101,6 @@ public abstract class AbstractBean implements Serializable {
      * @param widgetVar
      */
     protected void closeDialog(String widgetVar) {
-        this.loadContext();
         this.requestContext.execute("PF('" + widgetVar + "').hide()");
     }
 
@@ -151,8 +120,6 @@ public abstract class AbstractBean implements Serializable {
      * @param useTimer se deve ou nao setar o timer
      */
     protected void updateMessages(String componentId, boolean useTimer) {
-
-        this.loadContext();
 
         this.requestContext.update(componentId);
 
@@ -224,8 +191,6 @@ public abstract class AbstractBean implements Serializable {
      */
     public String getErrorMessage(String componentId) {
 
-        this.loadContext();
-
         final Iterator<FacesMessage> iterator
                 = this.facesContext.getMessages(componentId);
 
@@ -234,21 +199,6 @@ public abstract class AbstractBean implements Serializable {
         }
         return "";
     }
-
-    /**
-     * Se usado, inicializa partes customizadas do bean que implementar este
-     * metodo
-     */
-    public void initializeCustom() { }
-
-    /**
-     * Inicializa o logger, deve ser implementado
-     *
-     * Ex.: return LoggerFactory.getLogger(SomeClass.class);
-     *
-     * @return a instancia do logger
-     */
-    protected abstract Logger initializeLogger();
 
     /**
      * Enum que guarda os possiveis estados da tela

@@ -17,7 +17,6 @@
 package br.com.webbudget.application.exceptions;
 
 import lombok.Getter;
-import org.springframework.security.core.AuthenticationException;
 
 /**
  * Uma exception customizada para que possamos trafegar os erros gerados na 
@@ -25,10 +24,10 @@ import org.springframework.security.core.AuthenticationException;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 06/11/2013
  */
-public final class ApplicationException extends AuthenticationException {
+public final class ApplicationException extends RuntimeException {
 
     @Getter
     private Object[] parameters;

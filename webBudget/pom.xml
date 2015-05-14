@@ -90,6 +90,7 @@
             </activation>
             <properties>
                 <application.version>${project.version}</application.version>
+                <orm.show-sql>true</orm.show-sql>
                 <email.host>mail.somehost.com.br</email.host>
                 <email.port>587</email.port>
                 <email.user>someuser@somehost.com</email.user>
@@ -106,6 +107,7 @@
             </activation>
             <properties>
                 <application.version>${project.version}</application.version>
+                <orm.show-sql>false</orm.show-sql>
                 <email.host>mail.somehost.com.br</email.host>
                 <email.port>587</email.port>
                 <email.user>someuser@somehost.com</email.user>
@@ -122,6 +124,7 @@
             </activation>
             <properties>
                 <application.version>${project.version}</application.version>
+                <orm.show-sql>false</orm.show-sql>
                 <email.host>mail.somehost.com.br</email.host>
                 <email.port>587</email.port>
                 <email.user>someuser@somehost.com</email.user>
@@ -138,6 +141,7 @@
             </activation>
             <properties>
                 <application.version>${project.version}</application.version>
+                <orm.show-sql>false</orm.show-sql>
                 <email.host>${wb_mail_host}</email.host>
                 <email.port>587</email.port>
                 <email.user>${wb_mail_user}</email.user>

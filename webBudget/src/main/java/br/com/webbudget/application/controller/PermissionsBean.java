@@ -18,8 +18,8 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.permission.Authority;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 import lombok.Getter;
 
 /**
@@ -28,10 +28,10 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 29/06/2014
  */
-@ManagedBean
+@Named
 @RequestScoped
 public class PermissionsBean {
 

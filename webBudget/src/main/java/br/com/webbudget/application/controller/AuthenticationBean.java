@@ -19,13 +19,10 @@ package br.com.webbudget.application.controller;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.service.AccountService;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
-import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Bean que controla a autenticacao no sistema, por ele invocamos o gerenciador
@@ -33,11 +30,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.1
+ * @version 1.1.1
  * @since 1.0.0, 06/10/2013
  */
+@Named
 @ViewScoped
-@ManagedBean
 public class AuthenticationBean extends AbstractBean {
 
     @Getter
@@ -46,18 +43,8 @@ public class AuthenticationBean extends AbstractBean {
     @Getter
     private boolean loginError;
 
-    @Setter
-    @ManagedProperty("#{accountService}")
+    @Inject
     private transient AccountService accountService;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected Logger initializeLogger() {
-        return LoggerFactory.getLogger(AuthenticationBean.class);
-    }
 
     /**
      * Inicializa a pagina, verificamos se ja nao existe alguem logado, se nao
