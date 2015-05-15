@@ -36,7 +36,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
-import org.springframework.stereotype.Repository;
 
 /**
  *
@@ -45,7 +44,6 @@ import org.springframework.stereotype.Repository;
  * @version 1.1.0
  * @since 1.0.0, 18/10/2013
  */
-@Repository
 public class MovementRepository extends GenericRepository<Movement, Long> implements IMovementRepository {
 
     /**
