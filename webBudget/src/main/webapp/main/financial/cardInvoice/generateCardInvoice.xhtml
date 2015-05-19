@@ -149,26 +149,34 @@
                                                      : messages['card-invoice.list.empty']}">
 
                             <p:column width="10%" 
-                                      style="text-align: center"
+                                      styleClass="div-align-center"
                                       headerText="#{messages['card-invoice.list.code']}">
-                                #{movement.code}
+                                <p:link value="#{movement.code}" 
+                                        href="#{cardInvoiceBean.changeToViewMovement(movement.id)}"/>
                             </p:column>
                             <p:column headerText="#{messages['card-invoice.list.description']}">
                                 #{of:abbreviate(movement.description,50)}
                             </p:column>
                             <p:column width="15%"
-                                      style="text-align: center" 
+                                      styleClass="div-align-center" 
                                       headerText="#{messages['card-invoice.list.pay-date']}">
                                 <h:outputText value="#{movement.inclusion}">
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText> 
                             </p:column>
                             <p:column width="15%"
-                                      style="text-align: center" 
+                                      styleClass="div-align-center" 
                                       headerText="#{messages['card-invoice.list.value']}">
                                 <h:outputText value="#{movement.value}">
                                     <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                 </h:outputText>
+                            </p:column>
+                            <p:column width="10%" 
+                                      styleClass="div-align-center"
+                                      headerText="#{messages['card-invoice.list.conferred']}">
+                                <p:inputSwitch value="#{movement.checked}" 
+                                               onLabel="#{messages['card-invoice.list.checked']}"
+                                               offLabel="#{messages['card-invoice.list.unchecked']}"/>
                             </p:column>
                         </p:dataTable>
                     </div>

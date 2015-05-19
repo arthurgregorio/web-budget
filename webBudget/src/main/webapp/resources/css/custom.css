@@ -22,6 +22,15 @@
 
 @charset "utf-8";
 
+/* corrige o texto dentro do inputswitch e o backgroud*/
+.ui-inputswitch-on {
+    background: #A3F2A3 !important;
+}
+.ui-inputswitch-on > span, .ui-inputswitch-off > span {
+    position: relative;
+    bottom: 3px;
+}
+
 /* customiza os icones dos datepickers para o fontawesome */
 .ui-datepicker-trigger {
     display: inline-block !important;
