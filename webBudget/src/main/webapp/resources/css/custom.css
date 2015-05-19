@@ -22,6 +22,16 @@
 
 @charset "utf-8";
 
+/* corrige o texto dentro do inputswitch e o backgroud*/
+.ui-inputswitch-on {
+    background: none !important;
+    color: green;
+}
+.ui-inputswitch-on > span, .ui-inputswitch-off > span {
+    position: relative;
+    bottom: 3px;
+}
+
 /* customiza os icones dos datepickers para o fontawesome */
 .ui-datepicker-trigger {
     display: inline-block !important;
@@ -59,7 +69,7 @@
 }
 
 /* remove todos os efeitos arredondadinhos dos elementos */
-.ui-corner-all {
+.ui-corner-all, .ui-state-default {
     border-radius: 0 !important;
 }
 .ui-selectonemenu-trigger {

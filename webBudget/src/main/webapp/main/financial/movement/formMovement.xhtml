@@ -90,7 +90,9 @@
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-6">
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
+                        <h:panelGroup id="contactPanel" 
+                                      layout="block" 
+                                      styleClass="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inContact" 
                                            value="#{messages['movement.form.contact']}: "/>
                             <div class="input-and-button-box">
@@ -101,7 +103,7 @@
                                                  icon="fa fa-search" 
                                                  actionListener="#{movementBean.showContactDialog()}"/>
                             </div>
-                        </div>                        
+                        </h:panelGroup>                        
                     </div>
                     <h:panelGroup id="valuePanel"
                                   layout="block" 
