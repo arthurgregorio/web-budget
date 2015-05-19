@@ -24,7 +24,8 @@
 
 /* corrige o texto dentro do inputswitch e o backgroud*/
 .ui-inputswitch-on {
-    background: #A3F2A3 !important;
+    background: none !important;
+    color: green;
 }
 .ui-inputswitch-on > span, .ui-inputswitch-off > span {
     position: relative;
@@ -68,7 +69,7 @@
 }
 
 /* remove todos os efeitos arredondadinhos dos elementos */
-.ui-corner-all {
+.ui-corner-all, .ui-state-default {
     border-radius: 0 !important;
 }
 .ui-selectonemenu-trigger {
