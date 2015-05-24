@@ -19,7 +19,6 @@ package br.com.webbudget.domain.repository.system;
 import br.com.webbudget.domain.entity.system.Configuration;
 import br.com.webbudget.domain.repository.GenericRepository;
 import org.hibernate.Criteria;
-import org.springframework.stereotype.Repository;
 
 /**
  *
@@ -28,7 +27,6 @@ import org.springframework.stereotype.Repository;
  * @version 1.0.0
  * @since 1.0.0, 18/10/2013
  */
-@Repository
 public class ConfigurationRepository extends GenericRepository<Configuration, Long> implements IConfigurationRepository {
 
     /**

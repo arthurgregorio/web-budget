@@ -44,7 +44,7 @@ import org.apache.velocity.tools.generic.NumberTool;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.2.0, 22/04/2015
  */
 public class EmailService {

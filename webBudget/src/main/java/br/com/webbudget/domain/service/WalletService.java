@@ -32,7 +32,7 @@ import javax.transaction.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 12/03/2014
  */
 public class WalletService {

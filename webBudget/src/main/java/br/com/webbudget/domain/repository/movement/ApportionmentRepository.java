@@ -22,7 +22,6 @@ import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 
 /**
  *
@@ -31,7 +30,6 @@ import org.springframework.stereotype.Repository;
  * @version 1.0.0
  * @since 1.0.0, 22/04/2014
  */
-@Repository
 public class ApportionmentRepository extends GenericRepository<Apportionment, Long> implements IApportionmentRepository {
 
     /**

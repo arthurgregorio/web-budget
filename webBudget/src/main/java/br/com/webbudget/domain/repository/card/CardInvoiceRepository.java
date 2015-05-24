@@ -23,7 +23,6 @@ import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 
 /**
  *
@@ -32,7 +31,6 @@ import org.springframework.stereotype.Repository;
  * @version 1.0.0
  * @since 1.0.0, 18/10/2013
  */
-@Repository
 public class CardInvoiceRepository extends GenericRepository<CardInvoice, Long> implements ICardInvoiceRepository {
 
     /**

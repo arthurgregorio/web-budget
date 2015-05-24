@@ -26,7 +26,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
 
 /**
  *
@@ -39,7 +38,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Table(name = "permissions")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Permission extends PersistentEntity implements GrantedAuthority {
+public class Permission extends PersistentEntity {
 
     @Setter
     @Column(name = "authority", nullable = false)
@@ -50,13 +49,4 @@ public class Permission extends PersistentEntity implements GrantedAuthority {
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String getAuthority() {
-        return this.authority;
-    }
 }
