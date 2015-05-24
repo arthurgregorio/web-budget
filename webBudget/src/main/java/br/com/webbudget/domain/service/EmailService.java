@@ -19,7 +19,7 @@ package br.com.webbudget.domain.service;
 import br.com.webbudget.domain.entity.users.PrivateMessage;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.infraestructure.MessagesFactory;
-import br.com.webbudget.infraestructure.Postman;
+import br.com.webbudget.infraestructure.mail.Postman;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;

@@ -16,135 +16,136 @@
  */
 package br.com.webbudget.infraestructure.config;
 
-import br.com.webbudget.application.permission.Authority;
-import br.com.webbudget.domain.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+import org.picketlink.config.SecurityConfigurationBuilder;
+import org.picketlink.event.SecurityConfigurationEvent;
+import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.credential.encoder.BCryptPasswordEncoder;
+import org.picketlink.idm.credential.handler.PasswordCredentialHandler;
+import org.picketlink.internal.EntityManagerContextInitializer;
 
 /**
  * Configura toda infra de seguranca do sistema atraves do spring security
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.2.0
  * @since 1.1.0, 07/03/2015
  */
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@ApplicationScoped
+public class SecurityConfiguration {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserDetailsService userDetailsService;
-
+    @Inject
+    private EntityManagerContextInitializer contextInitializer;
+    
     /**
-     * Registra o contexto global de seguranca
+     * Configura o contexto de seguranca do picketlink atraves do evento de 
+     * inicializacao do {@link IdentityManager}
      * 
-     * @param auth
-     * @throws Exception 
+     * @param event o evento de configuracao
      */
-    @Autowired
-    public void registerGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder);
-    }
+    public void configureInternal(@Observes SecurityConfigurationEvent event) {
 
-    /**
-     * Configura as url's que nao devem ser interceptadas
-     *
-     * @param web 
-     * @throws Exception
-     */
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-                .antMatchers("/favicon.ico*")
-                .antMatchers("/javax.faces.resource/**");
-    }
-
-    /**
-     * Configura as url's que devem ser inteceptadas pelo filtro de seguranca e 
-     * tambem define a url de logout e login
-     *
-     * @param http
-     * @throws Exception
-     */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-        // criamos o objeto que contem as roles
-        final Authority authority = new Authority();
+        final SecurityConfigurationBuilder builder = event.getBuilder();
         
-        // configuramos a seguranca
-        http
-            .csrf()
-                .disable()
-            .formLogin()
-                .loginPage("/home.xhtml")
-                .loginProcessingUrl("/loginSpring")
-                .failureUrl("/home.xhtml?failure=true")
-                .defaultSuccessUrl("/main/dashboard.xhtml?faces-redirect=true")
-                .permitAll()
-            .and()
-            .authorizeRequests()
-                .anyRequest()
-                    .authenticated()
-                .antMatchers("/main/entries/cards/**")
-                    .hasRole(authority.CARD_VIEW)
-                .antMatchers("/main/entries/contacts/**")
-                    .hasRole(authority.CONTACT_VIEW)
-                .antMatchers("/main/entries/costCenter/**")
-                    .hasRole(authority.COST_CENTER_VIEW)
-                .antMatchers("/main/entries/movementClass/**")
-                    .hasRole(authority.MOVEMENT_CLASS_VIEW)
-                .antMatchers("/main/entries/wallets/**")
-                    .hasRole(authority.WALLET_VIEW)
-                .antMatchers("/main/financial/cardInvoice/**")
-                    .hasRole(authority.CARD_INVOICE_VIEW)
-                .antMatchers("/main/financial/movement/**")
-                    .hasRole(authority.MOVEMENT_VIEW)
-                .antMatchers("/main/financial/transfer/**")
-                    .hasRole(authority.BALANCE_TRANSFER_VIEW)
-                .antMatchers("/main/miscellany/closing/**")
-                    .hasRole(authority.CLOSING_VIEW)
-                .antMatchers("/main/miscellany/financialPeriod/**")
-                    .hasRole(authority.FINANCIAL_PERIOD_VIEW)
-                .antMatchers("/main/tools/user/**")
-                    .hasRole(authority.ACCOUNTS_VIEW)
-                .antMatchers("/main/tools/configurations/**")
-                    .hasRole(authority.CONFIGURATION_VIEW)
-                .antMatchers("/main/tools/privateMessage/**")
-                    .hasRole(authority.PRIVATE_MESSAGES_VIEW)
-            .and()
-            .logout()
-                .invalidateHttpSession(true)
-                .logoutUrl("/main/logout.xhtml")
-                .logoutSuccessUrl("/home.xhtml?faces-redirect=true")
-                .permitAll();
+        builder.idmConfig()
+                .named("jpa.config")
+                .stores()
+                .jpa()
+                .supportType(
+                        User.class,
+                        Role.class,
+                        Group.class,
+                        Partition.class)
+                .supportGlobalRelationship(  
+                        Grant.class,  
+                        GroupMembership.class)  
+                .supportCredentials(true)
+                .mappedEntity(
+                        RoleTypeEntity.class,
+                        UserTypeEntity.class,
+                        GrantTypeEntity.class,
+                        GroupTypeEntity.class,
+                        RealmTypeEntity.class,
+                        PartitionTypeEntity.class,
+                        RelationshipTypeEntity.class,
+                        GroupMembershipTypeEntity.class,
+                        PasswordCredentialTypeEntity.class,
+                        RelationshipIdentityTypeEntity.class)
+                .addContextInitializer(this.contextInitializer)
+                .setCredentialHandlerProperty(
+                        PasswordCredentialHandler.PASSWORD_ENCODER, 
+                        new BCryptPasswordEncoder(9));
     }
-
+    
     /**
-     * Disponibiliza a AuthenticationManager para injecao em outras classes
+     * Configuracao das regras de navegacao HTTP do sistema atraves do evento
+     * de configuracado do picketlink
      * 
-     * @see AccountService#login(br.com.webbudget.domain.entity.users.User) 
-     * 
-     * @return
-     * @throws Exception 
+     * @param event o evento de configuracao
      */
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public void configureHttpSecurity(@Observes SecurityConfigurationEvent event) {
+        
+        final SecurityConfigurationBuilder builder = event.getBuilder();
+
+        builder.http()
+                .allPaths()
+                    .authenticateWith()
+                    .form()
+                        .loginPage("/home.xhtml")
+                        .errorPage("/home.xhtml?failure=true")
+                .forPath("/logout.xhtml")
+                    .logout()
+                    .redirectTo("/home.xhtml?faces-redirect=true")
+                .forPath("/javax.faces.resource/*")
+                    .unprotected();
+        
+//        http
+//            .csrf()
+//                .disable()
+//            .formLogin()
+//                .loginPage("/home.xhtml")
+//                .loginProcessingUrl("/loginSpring")
+//                .failureUrl("/home.xhtml?failure=true")
+//                .defaultSuccessUrl("/main/dashboard.xhtml?faces-redirect=true")
+//                .permitAll()
+//            .and()
+//            .authorizeRequests()
+//                .anyRequest()
+//                    .authenticated()
+//                .antMatchers("/main/entries/cards/**")
+//                    .hasRole(authority.CARD_VIEW)
+//                .antMatchers("/main/entries/contacts/**")
+//                    .hasRole(authority.CONTACT_VIEW)
+//                .antMatchers("/main/entries/costCenter/**")
+//                    .hasRole(authority.COST_CENTER_VIEW)
+//                .antMatchers("/main/entries/movementClass/**")
+//                    .hasRole(authority.MOVEMENT_CLASS_VIEW)
+//                .antMatchers("/main/entries/wallets/**")
+//                    .hasRole(authority.WALLET_VIEW)
+//                .antMatchers("/main/financial/cardInvoice/**")
+//                    .hasRole(authority.CARD_INVOICE_VIEW)
+//                .antMatchers("/main/financial/movement/**")
+//                    .hasRole(authority.MOVEMENT_VIEW)
+//                .antMatchers("/main/financial/transfer/**")
+//                    .hasRole(authority.BALANCE_TRANSFER_VIEW)
+//                .antMatchers("/main/miscellany/closing/**")
+//                    .hasRole(authority.CLOSING_VIEW)
+//                .antMatchers("/main/miscellany/financialPeriod/**")
+//                    .hasRole(authority.FINANCIAL_PERIOD_VIEW)
+//                .antMatchers("/main/tools/user/**")
+//                    .hasRole(authority.ACCOUNTS_VIEW)
+//                .antMatchers("/main/tools/configurations/**")
+//                    .hasRole(authority.CONFIGURATION_VIEW)
+//                .antMatchers("/main/tools/privateMessage/**")
+//                    .hasRole(authority.PRIVATE_MESSAGES_VIEW)
+//            .and()
+//            .logout()
+//                .invalidateHttpSession(true)
+//                .logoutUrl("/main/logout.xhtml")
+//                .logoutSuccessUrl("/home.xhtml?faces-redirect=true")
+//                .permitAll();
     }
 }

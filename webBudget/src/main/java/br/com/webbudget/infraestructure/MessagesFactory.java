@@ -16,13 +16,12 @@
  */
 package br.com.webbudget.infraestructure;
 
-import java.io.Serializable;
-import java.util.Locale;
-import javax.faces.context.FacesContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.NoSuchMessageException;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.stereotype.Component;
+import br.com.webbudget.application.producer.qualifier.I18n;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import org.slf4j.Logger;
 
 /**
  * Factory que constroi e mantem em sessao uma instancia para uso do bundle de 
@@ -30,54 +29,36 @@ import org.springframework.stereotype.Component;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 28/02/2014
  */
-@Component
-public class MessagesFactory implements Serializable {
+@ApplicationScoped
+public class MessagesFactory {
 
-    @Autowired
-    private transient ReloadableResourceBundleMessageSource messages;
+    @Inject
+    private Logger logger;
+    
+    @I18n
+    @Inject
+    private ResourceBundle resourceBundle;
     
     /**
-     * Dada uma key retorna o seu respectivo valor no bundle para a localizacao
-     * atual da aplicacao
+     * Prove as mensagens para os beans da aplicacao, por este metodo conseguimos
+     * pegar as mensagens do contexto no bundle e usa-las nos managedbeans
      * 
-     * @param key a chave
-     * @return o valor da chave
+     * Caso nao encontre a chave ou ela esteja em branco, retorna a propria chave
+     * 
+     * @param key a chave para pegar a traducao
+     * @return a traducao/texto para a chave indicada
      */
-    public String getMessage(String key) {
-        
-        this.messages.clearCache();
-        
-        final Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+    public String get(String key) {
         
         try {
-            return this.messages.getMessage(key, null, locale);
-        } catch (NoSuchMessageException ex) {
-            return (key == null) ? this.messages.getMessage("error.unknow", null, locale) : key;
+            final String message = this.resourceBundle.getString(key);
+            return (message == null || message.isEmpty()) ? key : message;
+        } catch (MissingResourceException ex) {
+            this.logger.error("Can't find message for {}", key);
+            return key;
         }
-    }
-
-    /**
-     * Dada uma key retorna o seu respectivo valor no bundle para a localizacao
-     * atual da aplicacao injetando na reposta os parametros para compor a 
-     * mensagem
-     * 
-     * @param key a chave
-     * @param parameters os parametros
-     * @return o valor da chave
-     */
-    public String getMessage(String key, String... parameters) {
-        
-        this.messages.clearCache();
-
-        final Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
-        
-        try {
-            return this.messages.getMessage(key, parameters, null, locale);
-        } catch (NoSuchMessageException ex) {
-            return (key == null) ? this.messages.getMessage("error.unknow", null, locale) : key;
-        }
-    }
+    } 
 }
