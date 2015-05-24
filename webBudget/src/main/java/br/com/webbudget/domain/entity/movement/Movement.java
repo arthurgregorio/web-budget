@@ -126,14 +126,14 @@ public class Movement extends PersistentEntity {
     @OneToMany(mappedBy = "movement", fetch = EAGER, cascade = REMOVE)
     private List<Apportionment> apportionments;
 
+    /**
+     * Atributo usado para o controle da view no momento de checar se um deter-
+     * minado movimento foi ou nao conferido na fatura do cartao
+     */
     @Getter
     @Setter
     @Transient
-    private boolean delete;
-    @Getter
-    @Setter
-    @Transient
-    private boolean transfer;
+    private boolean checked;
 
     @Getter
     @Transient

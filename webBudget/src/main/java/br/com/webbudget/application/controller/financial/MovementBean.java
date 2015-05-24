@@ -436,7 +436,7 @@ public class MovementBean extends AbstractBean {
      * Quando selecionar o contato, fecha a dialog e atualiza a view
      */
     public void onContactSelect() {
-        this.update("movementForm");
+        this.update("contactPanel");
         this.closeDialog("dialogContact");
     }
     
