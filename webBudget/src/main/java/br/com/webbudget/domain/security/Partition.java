@@ -14,39 +14,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entity.users;
+package br.com.webbudget.domain.security;
 
-import br.com.webbudget.domain.entity.PersistentEntity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import org.picketlink.idm.model.AbstractPartition;
+import org.picketlink.idm.model.annotation.AttributeProperty;
+import org.picketlink.idm.model.annotation.IdentityPartition;
 
 /**
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 24/06/2014
+ * @since 2.0.0, 26/05/2015
  */
-@Entity
-@Table(name = "permissions")
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class Permission extends PersistentEntity {
-
-    @Setter
-    @Column(name = "authority", nullable = false)
-    private String authority;
+@IdentityPartition(supportedTypes = {User.class, Role.class, Group.class})
+public class Partition extends AbstractPartition {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
-    private User user;
+    @AttributeProperty
+    private int numberFailedLoginAttempts;
+    
+    public static final String DEFAULT = "webBudget";
+
+    /**
+     * 
+     */
+    private Partition() { 
+        super(null); 
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public Partition(String name) {
+        super(name);
+    }
 }

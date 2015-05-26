@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.users.UserPrivateMessage;
+import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.service.MovementService;

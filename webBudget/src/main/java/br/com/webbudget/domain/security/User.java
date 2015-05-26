@@ -14,38 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entity.users;
+package br.com.webbudget.domain.security;
 
-import br.com.webbudget.domain.entity.PersistentEntity;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Transient;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.picketlink.idm.model.AbstractIdentityType;
+import org.picketlink.idm.model.Account;
+import org.picketlink.idm.model.annotation.IdentityStereotype;
+import org.picketlink.idm.query.QueryParameter;
+import static org.picketlink.idm.model.annotation.IdentityStereotype.Stereotype.USER;
 
 /**
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 06/10/2013
+ * @since 2.0.0, 26/05/2015
  */
-@Entity
-@Table(name = "users")
-@ToString(callSuper = true, of = {"email", "username"})
-@EqualsAndHashCode(callSuper = true, of = {"email", "username"})
-public class User extends PersistentEntity {
+@IdentityStereotype(USER)
+public class User extends AbstractIdentityType implements Account {
 
     @Getter
     @Setter
@@ -63,35 +54,29 @@ public class User extends PersistentEntity {
     @NotEmpty(message = "{user-account.username}")
     @Column(name = "username", length = 45, nullable = false)
     private String username;
-    @Getter
-    @Setter
-    @Column(name = "password", length = 64, nullable = false)
-    private String password;
-    @Getter
-    @Setter
-    @Column(name = "blocked")
-    private boolean blocked;
-
-    /**
-     * as permissoes do usuario, eager pq se for lazy quando o spring solicitar
-     * as authoritys vai bater no proxy do hibernate e estourar um lazyinitiexp
-     */
-    @Getter
-    @Setter
-    @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private Set<Permission> permissions;
 
     @Getter
     @Setter
     @Transient
     private boolean selected;
-    @Getter
-    @Setter
-    @Transient
-    private String unsecurePassword;
-    @Getter
-    @Setter
-    @Transient
-    private String unsecurePasswordConfirmation;
+
+    public static final QueryParameter NAME = QUERY_ATTRIBUTE.byName("name");
+    public static final QueryParameter EMAIL = QUERY_ATTRIBUTE.byName("email");
+    public static final QueryParameter USER_NAME = QUERY_ATTRIBUTE.byName("username");
+    public static final QueryParameter ORGANIZATION = QUERY_ATTRIBUTE.byName("organization");
+
+    /**
+     *
+     */
+    public User() {
+        this(null);
+    }
+
+    /**
+     *
+     * @param username 
+     */
+    public User(String username) {
+        this.username = username;
+    }
 }

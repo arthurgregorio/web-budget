@@ -25,7 +25,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  *
@@ -158,9 +157,9 @@ public class CostCenterBean extends AbstractBean {
             this.costCenters = this.movementService.listCostCenters(false);
 
             this.info("cost-center.action.deleted", true);
-        } catch (DataIntegrityViolationException ex) {
-            this.logger.error("CostCenterBean#doDelete found erros", ex);
-            this.fixedError("cost-center.action.delete-used", true);
+//        } catch (DataIntegrityViolationException ex) {
+//            this.logger.error("CostCenterBean#doDelete found erros", ex);
+//            this.fixedError("cost-center.action.delete-used", true);
         } catch (Exception ex) {
             this.logger.error("CostCenterBean#doDelete found erros", ex);
             this.fixedError(ex.getMessage(), true);

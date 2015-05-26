@@ -14,26 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repository.user;
-
-import br.com.webbudget.domain.entity.message.PrivateMessage;
-import br.com.webbudget.domain.entity.users.User;
-import br.com.webbudget.domain.repository.IGenericRepository;
-import java.util.List;
+package br.com.webbudget.domain.security;
 
 /**
- *
+ * 
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 04/03/2013
+ * @since 2.0.0, 26/05/2015
  */
-public interface IPrivateMessageRepository extends IGenericRepository<PrivateMessage, Long> {
+public interface ApplicationRoles {
 
-    /**
-     *
-     * @param user
-     * @return
-     */
-    public List<PrivateMessage> listSent(User user);
+    public final String ADMINISTRATOR = "administrator";
 }

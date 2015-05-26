@@ -33,7 +33,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
-import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  *
@@ -223,9 +222,9 @@ public class UserAccountBean extends AbstractBean {
             this.users = this.accountService.listAccounts();
 
             this.info("user-account.action.deleted", true);
-        } catch (DataIntegrityViolationException ex) {
-            this.logger.error("UserAccountBean#doDelete found erros", ex);
-            this.fixedError("user-account.action.delete-used", true);
+//        } catch (DataIntegrityViolationException ex) {
+//            this.logger.error("UserAccountBean#doDelete found erros", ex);
+//            this.fixedError("user-account.action.delete-used", true);
         } catch (Exception ex) {
             this.logger.error("UserAccountBean#doDelete found erros", ex);
             this.fixedError(ex.getMessage(), true);
@@ -314,26 +313,26 @@ public class UserAccountBean extends AbstractBean {
 
         final Set<TreeNode> selected = new HashSet<>();
 
-        for (Permission permission : this.user.getPermissions()) {
-
-            for (TreeNode node : this.authorityNodes.getChildren()) {
-
-                if (permission.getAuthority().contains((String) node.getData())) {
-                    node.setSelected(true);
-                    selected.add(node);
-                }
-
-                if (!node.getChildren().isEmpty()) {
-                    for (TreeNode childNode : node.getChildren()) {
-                        if (permission.getAuthority().contains((String) childNode.getData())) {
-                            childNode.setSelected(true);
-                            selected.add(childNode);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+//        for (Permission permission : this.user.getPermissions()) {
+//
+//            for (TreeNode node : this.authorityNodes.getChildren()) {
+//
+//                if (permission.getAuthority().contains((String) node.getData())) {
+//                    node.setSelected(true);
+//                    selected.add(node);
+//                }
+//
+//                if (!node.getChildren().isEmpty()) {
+//                    for (TreeNode childNode : node.getChildren()) {
+//                        if (permission.getAuthority().contains((String) childNode.getData())) {
+//                            childNode.setSelected(true);
+//                            selected.add(childNode);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         this.selectedAuthorities = new TreeNode[selected.size()];
         this.selectedAuthorities = selected.toArray(this.selectedAuthorities);

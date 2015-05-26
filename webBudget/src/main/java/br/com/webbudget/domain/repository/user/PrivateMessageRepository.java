@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.repository.user;
 
-import br.com.webbudget.domain.entity.users.PrivateMessage;
+import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;

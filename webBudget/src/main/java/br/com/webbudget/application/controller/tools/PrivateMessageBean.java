@@ -18,9 +18,9 @@ package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
-import br.com.webbudget.domain.entity.users.PrivateMessage;
+import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.entity.users.User;
-import br.com.webbudget.domain.entity.users.UserPrivateMessage;
+import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.EmailService;
 import br.com.webbudget.domain.service.PrivateMessageService;

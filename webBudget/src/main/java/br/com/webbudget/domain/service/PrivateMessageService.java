@@ -17,9 +17,9 @@
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
-import br.com.webbudget.domain.entity.users.PrivateMessage;
+import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.entity.users.User;
-import br.com.webbudget.domain.entity.users.UserPrivateMessage;
+import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.repository.user.IPrivateMessageRepository;
 import br.com.webbudget.domain.repository.user.IUserPrivateMessageRepository;
 import br.com.webbudget.domain.repository.user.IUserRepository;

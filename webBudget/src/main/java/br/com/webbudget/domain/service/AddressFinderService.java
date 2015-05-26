@@ -33,16 +33,17 @@ public class AddressFinderService {
      */
     public Address findAddressByZipcode(String zipcode) {
         
-        final String wsURL = this.configBundle.getString("ws.cep");
-        
-        // se a url estiver zicada ja tora o pau e nao deixa passar
-        if(wsURL == null || wsURL.isEmpty()) {
-            throw new IllegalStateException("Invalid URL for address search");
-        }
-
-        final RestTemplate template = new RestTemplate();
-        
-        return template.getForObject(String.format(wsURL, zipcode), Address.class);
+//        final String wsURL = this.configBundle.getString("ws.cep");
+//        
+//        // se a url estiver zicada ja tora o pau e nao deixa passar
+//        if(wsURL == null || wsURL.isEmpty()) {
+//            throw new IllegalStateException("Invalid URL for address search");
+//        }
+//
+//        final RestTemplate template = new RestTemplate();
+//        
+//        return template.getForObject(String.format(wsURL, zipcode), Address.class);
+        return null;
     }
     
     /**
@@ -50,7 +51,6 @@ public class AddressFinderService {
      */
     @ToString
     @EqualsAndHashCode
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Address {
 
         @Getter

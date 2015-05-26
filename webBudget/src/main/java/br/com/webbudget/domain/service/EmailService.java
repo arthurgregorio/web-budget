@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.domain.entity.users.PrivateMessage;
+import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.entity.users.User;
 import br.com.webbudget.infraestructure.Translator;
 import br.com.webbudget.infraestructure.mail.Postman;

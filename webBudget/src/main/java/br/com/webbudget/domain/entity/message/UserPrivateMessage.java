@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entity.users;
+package br.com.webbudget.domain.entity.message;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
+import br.com.webbudget.domain.entity.users.User;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

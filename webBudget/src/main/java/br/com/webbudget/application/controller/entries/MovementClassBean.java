@@ -27,7 +27,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  *
@@ -160,9 +159,9 @@ public class MovementClassBean extends AbstractBean {
             this.movementClasses = this.movementService.listMovementClasses(false);
 
             this.info("movement-class.action.deleted", true);
-        } catch (DataIntegrityViolationException ex) {
-            this.logger.error("MovementClassBean#doDelete found erros", ex);
-            this.fixedError("movement-class.action.delete-used", true);
+//        } catch (DataIntegrityViolationException ex) {
+//            this.logger.error("MovementClassBean#doDelete found erros", ex);
+//            this.fixedError("movement-class.action.delete-used", true);
         } catch (Exception ex) {
             this.logger.error("MovementClassBean#doDelete found erros", ex);
             this.fixedError(ex.getMessage(), true);

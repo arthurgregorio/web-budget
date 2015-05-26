@@ -52,32 +52,14 @@ public class SecurityConfiguration {
         
         builder.idmConfig()
                 .named("jpa.config")
-                .stores()
-                .jpa()
-                .supportType(
-                        User.class,
-                        Role.class,
-                        Group.class,
-                        Partition.class)
-                .supportGlobalRelationship(  
-                        Grant.class,  
-                        GroupMembership.class)  
-                .supportCredentials(true)
-                .mappedEntity(
-                        RoleTypeEntity.class,
-                        UserTypeEntity.class,
-                        GrantTypeEntity.class,
-                        GroupTypeEntity.class,
-                        RealmTypeEntity.class,
-                        PartitionTypeEntity.class,
-                        RelationshipTypeEntity.class,
-                        GroupMembershipTypeEntity.class,
-                        PasswordCredentialTypeEntity.class,
-                        RelationshipIdentityTypeEntity.class)
-                .addContextInitializer(this.contextInitializer)
-                .setCredentialHandlerProperty(
-                        PasswordCredentialHandler.PASSWORD_ENCODER, 
-                        new BCryptPasswordEncoder(9));
+                    .stores()
+                        .jpa()
+                            .supportType(User.class)
+                            .supportAllFeatures()
+                        .addContextInitializer(this.contextInitializer)
+                        .setCredentialHandlerProperty(
+                                PasswordCredentialHandler.PASSWORD_ENCODER, 
+                                new BCryptPasswordEncoder(9));
     }
     
     /**
