@@ -104,7 +104,7 @@ public class FinancialPeriodService {
      *
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public FinancialPeriod findActiveFinancialPeriod() {
 
         final List<FinancialPeriod> financialPeriods = this.financialPeriodRepository.listOpen();
@@ -128,7 +128,7 @@ public class FinancialPeriodService {
      * @param periodId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public PeriodDetailsDTO previewPeriod(long periodId) {
 
         final PeriodDetailsDTO periodDetailsDTO = new PeriodDetailsDTO();
@@ -176,7 +176,7 @@ public class FinancialPeriodService {
      * @param financialPeriodId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public FinancialPeriod findFinancialPeriodById(long financialPeriodId) {
         return this.financialPeriodRepository.findById(financialPeriodId, false);
     }
@@ -186,7 +186,7 @@ public class FinancialPeriodService {
      * @param identification
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public FinancialPeriod findFinancialPeriodByIdentification(String identification) {
         return this.financialPeriodRepository.findByIdentification(identification);
     }
@@ -196,7 +196,7 @@ public class FinancialPeriodService {
      * @param isClosed
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<FinancialPeriod> listFinancialPeriods(Boolean isClosed) {
         return this.financialPeriodRepository.listAll();
     }
@@ -205,7 +205,7 @@ public class FinancialPeriodService {
      *
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<FinancialPeriod> listOpenFinancialPeriods() {
         return this.financialPeriodRepository.listOpen();
     }

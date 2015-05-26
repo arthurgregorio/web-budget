@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.infraestructure.MessagesFactory;
+import br.com.webbudget.infraestructure.Translator;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
@@ -52,7 +52,8 @@ import org.primefaces.model.chart.PieChartModel;
 public class GraphModelService implements Serializable {
 
     @Inject
-    private MessagesFactory messages;
+    private Translator translator;
+    
     @Inject
     private IMovementRepository movementRepository;
     @Inject
@@ -216,7 +217,7 @@ public class GraphModelService implements Serializable {
 
         final ChartSeries series = new BarChartSeries();
 
-        series.setLabel(this.messages.getMessage("period-details.chart.classes"));
+        series.setLabel(this.translator.translate("period-details.chart.classes"));
 
         classes.stream().forEach((movementClass) -> {
             series.set(movementClass.getName(), movementClass.getTotalMovements());
@@ -234,7 +235,7 @@ public class GraphModelService implements Serializable {
 
         final ChartSeries series = new LineChartSeries();
 
-        series.setLabel(this.messages.getMessage("period-details.chart.budget-line"));
+        series.setLabel(this.translator.translate("period-details.chart.budget-line"));
 
         classes.stream().forEach((movementClass) -> {
             series.set(movementClass.getName(), movementClass.getBudget());

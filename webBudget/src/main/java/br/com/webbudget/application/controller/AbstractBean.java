@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.infraestructure.MessagesFactory;
+import br.com.webbudget.infraestructure.Translator;
 import java.io.Serializable;
 import java.util.Iterator;
 import javax.faces.application.FacesMessage;
@@ -50,16 +50,16 @@ public abstract class AbstractBean implements Serializable {
     protected RequestContext requestContext;
 
     @Inject
-    private MessagesFactory messagesFactory;
+    private Translator translator;
 
     /**
      * Traduz uma chave para a sua versao internacionalizada
      *
-     * @param key a chave a ser internacionalizada
+     * @param message a chave a ser internacionalizada
      * @return a internacionalizacao da chae em questao
      */
-    protected String translate(String key) {
-        return this.messagesFactory.getMessage(key);
+    protected String translate(String message) {
+        return this.translator.translate(message);
     }
 
     /**
@@ -137,7 +137,7 @@ public abstract class AbstractBean implements Serializable {
      * @param parameters parametros para montar a mensagem
      */
     protected void warn(String message, boolean useTimer, Object... parameters) {
-        Messages.addWarn(null, this.messagesFactory.getMessage(message), parameters);
+        Messages.addWarn(null, this.translator.translate(message), parameters);
         this.updateMessages(useTimer);
     }
 
@@ -150,7 +150,7 @@ public abstract class AbstractBean implements Serializable {
      * @param parameters parametros para montar a mensagem
      */
     protected void info(String message, boolean useTimer, Object... parameters) {
-        Messages.addInfo(null, this.messagesFactory.getMessage(message), parameters);
+        Messages.addInfo(null, this.translator.translate(message), parameters);
         this.updateMessages(useTimer);
     }
 
@@ -164,7 +164,7 @@ public abstract class AbstractBean implements Serializable {
      * @param parameters parametros para montar a mensagem
      */
     protected void fixedError(String message, boolean updateMessages, Object... parameters) {
-        Messages.addError(null, this.messagesFactory.getMessage(message), parameters);
+        Messages.addError(null, this.translator.translate(message), parameters);
         if (updateMessages) {
             this.updateMessages(false);
         }
@@ -179,7 +179,7 @@ public abstract class AbstractBean implements Serializable {
      * @param parameters parametros para montar a mensagem
      */
     protected void error(String message, boolean useTimer, Object... parameters) {
-        Messages.addError(null, this.messagesFactory.getMessage(message), parameters);
+        Messages.addError(null, this.translator.translate(message), parameters);
         this.updateMessages(useTimer);
     }
 
@@ -195,7 +195,7 @@ public abstract class AbstractBean implements Serializable {
                 = this.facesContext.getMessages(componentId);
 
         if (iterator.hasNext()) {
-            return this.messagesFactory.getMessage(iterator.next().getDetail());
+            return this.translator.translate(iterator.next().getDetail());
         }
         return "";
     }

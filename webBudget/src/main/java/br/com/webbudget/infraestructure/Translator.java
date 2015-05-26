@@ -33,7 +33,7 @@ import org.slf4j.Logger;
  * @since 1.0.0, 28/02/2014
  */
 @ApplicationScoped
-public class MessagesFactory {
+public class Translator {
 
     @Inject
     private Logger logger;
@@ -48,17 +48,17 @@ public class MessagesFactory {
      * 
      * Caso nao encontre a chave ou ela esteja em branco, retorna a propria chave
      * 
-     * @param key a chave para pegar a traducao
+     * @param message a chave para pegar a traducao
      * @return a traducao/texto para a chave indicada
      */
-    public String get(String key) {
+    public String translate(String message) {
         
         try {
-            final String message = this.resourceBundle.getString(key);
-            return (message == null || message.isEmpty()) ? key : message;
+            final String text = this.resourceBundle.getString(message);
+            return (text == null || text.isEmpty()) ? message : text;
         } catch (MissingResourceException ex) {
-            this.logger.error("Can't find message for {}", key);
-            return key;
+            this.logger.error("Can't find message for {}", message);
+            return message;
         }
     } 
 }

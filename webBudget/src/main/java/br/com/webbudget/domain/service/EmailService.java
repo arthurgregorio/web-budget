@@ -18,7 +18,7 @@ package br.com.webbudget.domain.service;
 
 import br.com.webbudget.domain.entity.users.PrivateMessage;
 import br.com.webbudget.domain.entity.users.User;
-import br.com.webbudget.infraestructure.MessagesFactory;
+import br.com.webbudget.infraestructure.Translator;
 import br.com.webbudget.infraestructure.mail.Postman;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -54,7 +54,7 @@ public class EmailService {
     @Inject
     private VelocityEngine engine;
     @Inject
-    private MessagesFactory messagesFactory;
+    private Translator messagesFactory;
 
     private final ResourceBundle mailConfig = ResourceBundle.getBundle("config.webbudget");
 
@@ -69,35 +69,35 @@ public class EmailService {
             throws MessagingException {
 
         // iteramos na lista de destinatarios e enviamos as mensagens
-        for (User receipt : receipts) {
-
-            final MimeMessageHelper helper = new MimeMessageHelper(
-                    this.postman.createMimeMessage());
-
-            helper.setTo(receipt.getEmail());
-            helper.setSubject(this.messagesFactory.getMessage("new-message.title"));
-            helper.setFrom(this.mailConfig.getString("mail.user"));
-
-            //mensagens internacionalizadas
-            final Map<String, String> i18n = new HashMap<>();
-
-            i18n.put("header", this.messagesFactory.getMessage(
-                    "new-message.header"));
-            i18n.put("hi-user", this.messagesFactory.getMessage(
-                    "new-message.hi-user"));
-            i18n.put("new-message-warning", this.messagesFactory.getMessage(
-                    "new-message.new-message-warning"));
-            i18n.put("tip", this.messagesFactory.getMessage("new-message.tip"));
-
-            final VelocityContext context = this.createContext();
-
-            context.put("i18n", i18n);
-            context.put("receipt", receipt.getName());
-            context.put("sender", privateMessage.getSender().getName());
-
-            // manda a mensagem para montagem e envio
-            this.prepareToSend("/mail/newPrivateMessage.html", helper, context);
-        }
+//        for (User receipt : receipts) {
+//
+//            final MimeMessageHelper helper = new MimeMessageHelper(
+//                    this.postman.createMimeMessage());
+//
+//            helper.setTo(receipt.getEmail());
+//            helper.setSubject(this.messagesFactory.getMessage("new-message.title"));
+//            helper.setFrom(this.mailConfig.getString("mail.user"));
+//
+//            //mensagens internacionalizadas
+//            final Map<String, String> i18n = new HashMap<>();
+//
+//            i18n.put("header", this.messagesFactory.getMessage(
+//                    "new-message.header"));
+//            i18n.put("hi-user", this.messagesFactory.getMessage(
+//                    "new-message.hi-user"));
+//            i18n.put("new-message-warning", this.messagesFactory.getMessage(
+//                    "new-message.new-message-warning"));
+//            i18n.put("tip", this.messagesFactory.getMessage("new-message.tip"));
+//
+//            final VelocityContext context = this.createContext();
+//
+//            context.put("i18n", i18n);
+//            context.put("receipt", receipt.getName());
+//            context.put("sender", privateMessage.getSender().getName());
+//
+//            // manda a mensagem para montagem e envio
+//            this.prepareToSend("/mail/newPrivateMessage.html", helper, context);
+//        }
     }
 
     /**
@@ -108,17 +108,17 @@ public class EmailService {
      * @param helper o helper de montagem da mensagem
      * @param context o contexto do velocity
      */
-    private void prepareToSend(String template, MimeMessageHelper helper,
-            VelocityContext context) throws MessagingException {
-
-        final StringWriter writer = new StringWriter();
-
-        this.engine.getTemplate(template, "UTF-8").merge(context, writer);
-
-        helper.setText(writer.toString(), true);
-
-        this.postman.sendMail(helper.getMimeMessage());
-    }
+//    private void prepareToSend(String template, MimeMessageHelper helper,
+//            VelocityContext context) throws MessagingException {
+//
+//        final StringWriter writer = new StringWriter();
+//
+//        this.engine.getTemplate(template, "UTF-8").merge(context, writer);
+//
+//        helper.setText(writer.toString(), true);
+//
+//        this.postman.sendMail(helper.getMimeMessage());
+//    }
 
     /**
      * Cria um contexto do velocity para manipulacao de datas e numeros na
@@ -126,13 +126,13 @@ public class EmailService {
      *
      * @return o contexto
      */
-    private VelocityContext createContext() {
-
-        final VelocityContext context = new VelocityContext();
-
-        context.put("date", new DateTool());
-        context.put("number", new NumberTool());
-
-        return context;
-    }
+//    private VelocityContext createContext() {
+//
+//        final VelocityContext context = new VelocityContext();
+//
+//        context.put("date", new DateTool());
+//        context.put("number", new NumberTool());
+//
+//        return context;
+//    }
 }
