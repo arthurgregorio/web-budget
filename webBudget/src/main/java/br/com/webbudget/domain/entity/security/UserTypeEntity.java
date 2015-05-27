@@ -61,6 +61,6 @@ public class UserTypeEntity extends AbstractIdentityTypeEntity {
     @Setter
     @OwnerReference
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_realm", nullable = false)
-    private RealmTypeEntity realm;
+    @JoinColumn(name = "id_partition", nullable = false)
+    private PartitionTypeEntity partition;
 }

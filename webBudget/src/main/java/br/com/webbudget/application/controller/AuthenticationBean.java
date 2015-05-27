@@ -17,7 +17,7 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
-import br.com.webbudget.domain.entity.users.User;
+import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.service.AccountService;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -55,9 +55,9 @@ public class AuthenticationBean extends AbstractBean {
     public String initialize() {
         
         // se ja tem gente logada, manda para a dashboard
-        if (AccountService.getCurrentAuthenticatedUser() != null) {
-            return "/main/dashboard.xhtml?faces-redirect=true";
-        }
+//        if (AccountService.getCurrentAuthenticatedUser() != null) {
+//            return "/main/dashboard.xhtml?faces-redirect=true";
+//        }
         
         this.user = new User();
         
@@ -73,7 +73,7 @@ public class AuthenticationBean extends AbstractBean {
     public String doLogin() {
 
         try {
-            this.accountService.login(this.user);
+//            this.accountService.login(this.user);
             return "/main/dashboard.xhtml?faces-redirect=true";
         } catch (ApplicationException ex) {
             this.error(ex.getMessage(), true);

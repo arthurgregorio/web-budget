@@ -18,11 +18,10 @@ package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.message.PrivateMessage;
-import br.com.webbudget.domain.entity.users.User;
+import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.repository.user.IPrivateMessageRepository;
 import br.com.webbudget.domain.repository.user.IUserPrivateMessageRepository;
-import br.com.webbudget.domain.repository.user.IUserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -37,8 +36,6 @@ import javax.transaction.Transactional;
  */
 public class PrivateMessageService {
 
-    @Inject
-    private IUserRepository userRepository;
     @Inject
     private IPrivateMessageRepository privateMessageRepository;
     @Inject
@@ -136,20 +133,20 @@ public class PrivateMessageService {
      * @param showUnread
      * @return
      */
-    @Transactional
-    public List<UserPrivateMessage> listMessagesByCurrentUser(Boolean showUnread) {
-        final User user = AccountService.getCurrentAuthenticatedUser();
-        return this.userPrivateMessageRepository.listByUser(user, showUnread);
-    }
+//    @Transactional
+//    public List<UserPrivateMessage> listMessagesByCurrentUser(Boolean showUnread) {
+//        final User user = AccountService.getCurrentAuthenticatedUser();
+//        return this.userPrivateMessageRepository.listByUser(user, showUnread);
+//    }
 
     /**
      *
      * @return
      */
-    @Transactional
-    public List<PrivateMessage> listPrivateMessagesSent() {
-        return this.privateMessageRepository.listSent(AccountService.getCurrentAuthenticatedUser());
-    }
+//    @Transactional
+//    public List<PrivateMessage> listPrivateMessagesSent() {
+//        return this.privateMessageRepository.listSent(AccountService.getCurrentAuthenticatedUser());
+//    }
 
     /**
      *
@@ -169,13 +166,13 @@ public class PrivateMessageService {
      *
      * @return lista de usuarios
      */
-    public List<User> listUsersByStatus(boolean blocked, boolean removeCurrent) {
-
-        if (removeCurrent) {
-            return this.userRepository.listByStatusAndRemoveAuthenticated(
-                    blocked, AccountService.getCurrentAuthenticatedUser());
-        } else {
-            return this.userRepository.listByStatus(blocked);
-        }
-    }
+//    public List<User> listUsersByStatus(boolean blocked, boolean removeCurrent) {
+//
+//        if (removeCurrent) {
+//            return this.userRepository.listByStatusAndRemoveAuthenticated(
+//                    blocked, AccountService.getCurrentAuthenticatedUser());
+//        } else {
+//            return this.userRepository.listByStatus(blocked);
+//        }
+//    }
 }

@@ -16,6 +16,22 @@
  */
 package br.com.webbudget.infraestructure.config;
 
+import br.com.webbudget.domain.entity.security.GrantTypeEntity;
+import br.com.webbudget.domain.entity.security.GroupMembershipTypeEntity;
+import br.com.webbudget.domain.entity.security.GroupTypeEntity;
+import br.com.webbudget.domain.entity.security.PartitionTypeEntity;
+import br.com.webbudget.domain.entity.security.PasswordTypeEntity;
+import br.com.webbudget.domain.entity.security.RelationshipIdentityTypeEntity;
+import br.com.webbudget.domain.entity.security.RelationshipTypeEntity;
+import br.com.webbudget.domain.entity.security.RoleTypeEntity;
+import br.com.webbudget.domain.entity.security.UserTypeEntity;
+import br.com.webbudget.domain.security.Grant;
+import br.com.webbudget.domain.security.Authorization;
+import br.com.webbudget.domain.security.Group;
+import br.com.webbudget.domain.security.GroupMembership;
+import br.com.webbudget.domain.security.Partition;
+import br.com.webbudget.domain.security.Role;
+import br.com.webbudget.domain.security.User;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -52,14 +68,31 @@ public class SecurityConfiguration {
         
         builder.idmConfig()
                 .named("jpa.config")
-                    .stores()
-                        .jpa()
-                            .supportType(User.class)
-                            .supportAllFeatures()
-                        .addContextInitializer(this.contextInitializer)
-                        .setCredentialHandlerProperty(
-                                PasswordCredentialHandler.PASSWORD_ENCODER, 
-                                new BCryptPasswordEncoder(9));
+                .stores()
+                .jpa()
+                .supportType(
+                        User.class,
+                        Role.class,
+                        Group.class,
+                        Partition.class)
+                .supportGlobalRelationship(  
+                        Grant.class,  
+                        GroupMembership.class)  
+                .supportCredentials(true)
+                .mappedEntity(
+                        RoleTypeEntity.class,
+                        UserTypeEntity.class,
+                        GrantTypeEntity.class,
+                        GroupTypeEntity.class,
+                        PasswordTypeEntity.class,
+                        PartitionTypeEntity.class,
+                        RelationshipTypeEntity.class,
+                        GroupMembershipTypeEntity.class,
+                        RelationshipIdentityTypeEntity.class)
+                .addContextInitializer(this.contextInitializer)
+                .setCredentialHandlerProperty(
+                        PasswordCredentialHandler.PASSWORD_ENCODER, 
+                        new BCryptPasswordEncoder(6));
     }
     
     /**
@@ -69,6 +102,9 @@ public class SecurityConfiguration {
      * @param event o evento de configuracao
      */
     public void configureHttpSecurity(@Observes SecurityConfigurationEvent event) {
+        
+        // as autoriazacoes possiveis 
+        final Authorization authorization = new Authorization();
         
         final SecurityConfigurationBuilder builder = event.getBuilder();
 
@@ -82,52 +118,34 @@ public class SecurityConfiguration {
                     .logout()
                     .redirectTo("/home.xhtml?faces-redirect=true")
                 .forPath("/javax.faces.resource/*")
-                    .unprotected();
-        
-//        http
-//            .csrf()
-//                .disable()
-//            .formLogin()
-//                .loginPage("/home.xhtml")
-//                .loginProcessingUrl("/loginSpring")
-//                .failureUrl("/home.xhtml?failure=true")
-//                .defaultSuccessUrl("/main/dashboard.xhtml?faces-redirect=true")
-//                .permitAll()
-//            .and()
-//            .authorizeRequests()
-//                .anyRequest()
-//                    .authenticated()
-//                .antMatchers("/main/entries/cards/**")
-//                    .hasRole(authority.CARD_VIEW)
-//                .antMatchers("/main/entries/contacts/**")
-//                    .hasRole(authority.CONTACT_VIEW)
-//                .antMatchers("/main/entries/costCenter/**")
-//                    .hasRole(authority.COST_CENTER_VIEW)
-//                .antMatchers("/main/entries/movementClass/**")
-//                    .hasRole(authority.MOVEMENT_CLASS_VIEW)
-//                .antMatchers("/main/entries/wallets/**")
-//                    .hasRole(authority.WALLET_VIEW)
-//                .antMatchers("/main/financial/cardInvoice/**")
-//                    .hasRole(authority.CARD_INVOICE_VIEW)
-//                .antMatchers("/main/financial/movement/**")
-//                    .hasRole(authority.MOVEMENT_VIEW)
-//                .antMatchers("/main/financial/transfer/**")
-//                    .hasRole(authority.BALANCE_TRANSFER_VIEW)
-//                .antMatchers("/main/miscellany/closing/**")
-//                    .hasRole(authority.CLOSING_VIEW)
-//                .antMatchers("/main/miscellany/financialPeriod/**")
-//                    .hasRole(authority.FINANCIAL_PERIOD_VIEW)
-//                .antMatchers("/main/tools/user/**")
-//                    .hasRole(authority.ACCOUNTS_VIEW)
-//                .antMatchers("/main/tools/configurations/**")
-//                    .hasRole(authority.CONFIGURATION_VIEW)
-//                .antMatchers("/main/tools/privateMessage/**")
-//                    .hasRole(authority.PRIVATE_MESSAGES_VIEW)
-//            .and()
-//            .logout()
-//                .invalidateHttpSession(true)
-//                .logoutUrl("/main/logout.xhtml")
-//                .logoutSuccessUrl("/home.xhtml?faces-redirect=true")
-//                .permitAll();
+                    .unprotected()
+                .forPath("/favicon.ico*")
+                    .unprotected()
+                .forPath("/main/entries/cards/**")
+                    .authorizeWith().role(authorization.CARD_VIEW)
+                .forPath("/main/entries/contacts/**")
+                    .authorizeWith().role(authorization.CONTACT_VIEW)
+                .forPath("/main/entries/costCenter/**")
+                    .authorizeWith().role(authorization.COST_CENTER_VIEW)
+                .forPath("/main/financial/movement/**")
+                    .authorizeWith().role(authorization.MOVEMENT_VIEW)
+                .forPath("/main/entries/wallets/**")
+                    .authorizeWith().role(authorization.WALLET_VIEW)
+                .forPath("/main/financial/cardInvoice/**")
+                    .authorizeWith().role(authorization.CARD_INVOICE_VIEW)
+                .forPath("/main/entries/movementClass/**")
+                    .authorizeWith().role(authorization.MOVEMENT_CLASS_VIEW)
+                .forPath("/main/financial/transfer/**")
+                    .authorizeWith().role(authorization.BALANCE_TRANSFER_VIEW)
+                .forPath("/main/miscellany/closing/**")
+                    .authorizeWith().role(authorization.CLOSING_VIEW)
+                .forPath("/main/miscellany/financialPeriod/**")
+                    .authorizeWith().role(authorization.FINANCIAL_PERIOD_VIEW)
+                .forPath("/main/tools/user/**")
+                    .authorizeWith().role(authorization.ACCOUNTS_VIEW)
+                .forPath("/main/tools/configurations/**")
+                    .authorizeWith().role(authorization.CONFIGURATION_VIEW)
+                .forPath("/main/tools/privateMessage/**")
+                    .authorizeWith().role(authorization.PRIVATE_MESSAGES_VIEW);
     }
 }

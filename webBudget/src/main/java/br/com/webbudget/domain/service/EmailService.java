@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.domain.entity.message.PrivateMessage;
-import br.com.webbudget.domain.entity.users.User;
+import br.com.webbudget.domain.security.User;
 import br.com.webbudget.infraestructure.Translator;
 import br.com.webbudget.infraestructure.mail.Postman;
 import java.io.StringWriter;
@@ -65,7 +65,7 @@ public class EmailService {
      *
      * @throws MessagingException
      */
-    public void notifyNewMessage(PrivateMessage privateMessage, List<User> receipts)
+    public void notifyNewMessage(PrivateMessage privateMessage, List<User> receipts) 
             throws MessagingException {
 
         // iteramos na lista de destinatarios e enviamos as mensagens

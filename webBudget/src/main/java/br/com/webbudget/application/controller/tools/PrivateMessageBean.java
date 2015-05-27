@@ -19,7 +19,7 @@ package br.com.webbudget.application.controller.tools;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.message.PrivateMessage;
-import br.com.webbudget.domain.entity.users.User;
+import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.EmailService;
@@ -66,7 +66,7 @@ public class PrivateMessageBean extends AbstractBean {
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.privateMessages = this.privateMessageService.listPrivateMessagesSent();
+//        this.privateMessages = this.privateMessageService.listPrivateMessagesSent();
     }
 
     /**
@@ -75,31 +75,31 @@ public class PrivateMessageBean extends AbstractBean {
      */
     public void initializeForm(long privateMessageId) {
 
-        // preenchemos a lista de usuarios
-        this.users = this.privateMessageService.listUsersByStatus(false, true);
-
-        if (privateMessageId == 0) {
-            this.viewState = ViewState.ADDING;
-
-            // iniciamos e dizemos que o cara logado e o dono da mensagem
-            this.privateMessage = new PrivateMessage();
-            this.privateMessage.setSender(AccountService.getCurrentAuthenticatedUser());
-        } else {
-
-            this.privateMessage = this.privateMessageService.findPrivateMessageById(privateMessageId);
-
-            // pegamos os destinatarios
-            final List<UserPrivateMessage> receipts = this.privateMessageService
-                    .listPrivateMessageReceipts(this.privateMessage);
-
-            // marcamos para mostrar na tabela
-            this.users.stream().forEach((User user) -> {
-                receipts.stream().filter((userPrivateMessage) -> 
-                        (userPrivateMessage.getRecipient().equals(user))).forEach((item) -> {
-                    user.setSelected(true);
-                });
-            });
-        }
+//        // preenchemos a lista de usuarios
+//        this.users = this.privateMessageService.listUsersByStatus(false, true);
+//
+//        if (privateMessageId == 0) {
+//            this.viewState = ViewState.ADDING;
+//
+//            // iniciamos e dizemos que o cara logado e o dono da mensagem
+//            this.privateMessage = new PrivateMessage();
+//            this.privateMessage.setSender(AccountService.getCurrentAuthenticatedUser());
+//        } else {
+//
+//            this.privateMessage = this.privateMessageService.findPrivateMessageById(privateMessageId);
+//
+//            // pegamos os destinatarios
+//            final List<UserPrivateMessage> receipts = this.privateMessageService
+//                    .listPrivateMessageReceipts(this.privateMessage);
+//
+//            // marcamos para mostrar na tabela
+//            this.users.stream().forEach((User user) -> {
+//                receipts.stream().filter((userPrivateMessage) -> 
+//                        (userPrivateMessage.getRecipient().equals(user))).forEach((item) -> {
+//                    user.setSelected(true);
+//                });
+//            });
+//        }
     }
 
     /**
@@ -141,36 +141,36 @@ public class PrivateMessageBean extends AbstractBean {
      */
     public void doSave() {
 
-        // pegamos os destinatarios
-        final List<User> receipts = new ArrayList<>();
-
-        this.users.stream().filter((user) -> (user.isSelected())).forEach((user) -> {
-            receipts.add(user);
-        });
-
-        // setamos eles na mensagem
-        this.privateMessage.setRecipients(receipts);
-
-        try {
-            this.privateMessageService.savePrivateMessage(this.privateMessage);
-
-            // limpamos o form
-            this.privateMessage = new PrivateMessage();
-            this.privateMessage.setSender(AccountService.getCurrentAuthenticatedUser());
-
-            this.users = this.privateMessageService.listUsersByStatus(false, true);
-
-            // notifica a galera por email
-            this.emailService.notifyNewMessage(this.privateMessage, receipts);
-            
-            this.info("private-message.action.sent", true);
-        } catch (ApplicationException ex) {
-            this.logger.error("PrivateMessageBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        } catch (MessagingException ex) {
-            this.logger.warn("PrivateMessageBean#doSave found erros", ex);
-            this.warn("private-message.action.mail-error", true);
-        }
+//        // pegamos os destinatarios
+//        final List<User> receipts = new ArrayList<>();
+//
+//        this.users.stream().filter((user) -> (user.isSelected())).forEach((user) -> {
+//            receipts.add(user);
+//        });
+//
+//        // setamos eles na mensagem
+//        this.privateMessage.setRecipients(receipts);
+//
+//        try {
+//            this.privateMessageService.savePrivateMessage(this.privateMessage);
+//
+//            // limpamos o form
+//            this.privateMessage = new PrivateMessage();
+//            this.privateMessage.setSender(AccountService.getCurrentAuthenticatedUser());
+//
+//            this.users = this.privateMessageService.listUsersByStatus(false, true);
+//
+//            // notifica a galera por email
+//            this.emailService.notifyNewMessage(this.privateMessage, receipts);
+//            
+//            this.info("private-message.action.sent", true);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("PrivateMessageBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        } catch (MessagingException ex) {
+//            this.logger.warn("PrivateMessageBean#doSave found erros", ex);
+//            this.warn("private-message.action.mail-error", true);
+//        }
     }
 
     /**
@@ -178,18 +178,18 @@ public class PrivateMessageBean extends AbstractBean {
      */
     public void doDelete() {
 
-        try {
-            this.privateMessageService.deletePrivateMessage(this.privateMessage);
-            this.privateMessages = this.privateMessageService.listPrivateMessagesSent();
-
-            this.info("private-message.action.deleted", true);
-        } catch (ApplicationException ex) {
-            this.logger.error("PrivateMessageBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        } finally {
-            this.update("privateMessagesList");
-            this.closeDialog("dialogDeletePrivateMessage");
-        }
+//        try {
+//            this.privateMessageService.deletePrivateMessage(this.privateMessage);
+//            this.privateMessages = this.privateMessageService.listPrivateMessagesSent();
+//
+//            this.info("private-message.action.deleted", true);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("PrivateMessageBean#doDelete found erros", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        } finally {
+//            this.update("privateMessagesList");
+//            this.closeDialog("dialogDeletePrivateMessage");
+//        }
     }
 
     /**

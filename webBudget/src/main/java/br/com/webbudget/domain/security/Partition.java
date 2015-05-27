@@ -16,10 +16,7 @@
  */
 package br.com.webbudget.domain.security;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.picketlink.idm.model.AbstractPartition;
-import org.picketlink.idm.model.annotation.AttributeProperty;
 import org.picketlink.idm.model.annotation.IdentityPartition;
 
 /**
@@ -32,11 +29,6 @@ import org.picketlink.idm.model.annotation.IdentityPartition;
 @IdentityPartition(supportedTypes = {User.class, Role.class, Group.class})
 public class Partition extends AbstractPartition {
 
-    @Getter
-    @Setter
-    @AttributeProperty
-    private int numberFailedLoginAttempts;
-    
     public static final String DEFAULT = "webBudget";
 
     /**

@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.permission;
+package br.com.webbudget.domain.security;
 
+import br.com.webbudget.application.permission.AuthorityGroup;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +31,7 @@ import lombok.Getter;
  * @version 1.2.0
  * @since 1.0.0, 24/06/2014
  */
-public class Authority {
+public class Authorization {
 
     @Getter
     @AuthorityGroup("configuration.authority")
@@ -210,7 +211,7 @@ public class Authority {
 
                 // adiciona as permissoes especificas
                 try {
-                    authorities.add((String) field.get(Authority.this));
+                    authorities.add((String) field.get(Authorization.this));
                 } catch (IllegalAccessException ex) {
                 }
             }

@@ -82,9 +82,9 @@ public class DashboardBean extends AbstractBean {
         this.revenueModel = this.graphModelService.buildRevenueModelByCostCenter();
         this.expensesModel = this.graphModelService.buildExpensesModelByCostCenter();
 
-        // carrega as mensagens do usuario
-        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
-                AccountService.getCurrentAuthenticatedUser(), null);
+//        // carrega as mensagens do usuario
+//        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
+//                AccountService.getCurrentAuthenticatedUser(), null);
 
         // carregamos os movimentos para pagamento
         this.movements = this.movementService.listMovementsByDueDate(new Date(), true);
@@ -103,8 +103,8 @@ public class DashboardBean extends AbstractBean {
      */
     public void closeMessge() {
         this.selectedPrivateMessage = null;
-        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
-                AccountService.getCurrentAuthenticatedUser(), null);
+//        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
+//                AccountService.getCurrentAuthenticatedUser(), null);
 
         this.update("messagesList");
         this.closeDialog("dialogDisplayPrivateMessage");
@@ -117,8 +117,8 @@ public class DashboardBean extends AbstractBean {
 
         this.privateMessageService.markAsDeleted(this.selectedPrivateMessage);
 
-        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
-                AccountService.getCurrentAuthenticatedUser(), null);
+//        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
+//                AccountService.getCurrentAuthenticatedUser(), null);
 
         this.update("messagesList");
         this.closeDialog("dialogDisplayPrivateMessage");
@@ -140,7 +140,7 @@ public class DashboardBean extends AbstractBean {
      * @return a URL de logout do sistema
      */
     public String doLogout() {
-        this.accountService.logout();
+//        this.accountService.logout();
         return "/home.xhtml?faces-redirect=true";
     }
 
@@ -148,7 +148,8 @@ public class DashboardBean extends AbstractBean {
      * @return o nome do usuario logado atualmente no sistema
      */
     public String getCurrentUserName() {
-        return AccountService.getCurrentAuthenticatedUser().getName();
+//        return AccountService.getCurrentAuthenticatedUser().getName();
+        return null;
     }
 
     /**

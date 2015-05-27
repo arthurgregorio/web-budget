@@ -17,9 +17,7 @@
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.exceptions.ApplicationException;
-import br.com.webbudget.domain.entity.users.User;
-import br.com.webbudget.domain.repository.user.IPermissionRepository;
-import br.com.webbudget.domain.repository.user.IUserRepository;
+import br.com.webbudget.domain.security.User;
 import java.util.List;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -33,102 +31,4 @@ import javax.transaction.Transactional;
  */
 public class AccountService {
 
-    @Inject
-    private IUserRepository userRepository;
-    @Inject
-    private IPermissionRepository permissionRepository;
-
-    /**
-     * Realiza o a autenticacao do usuario
-     *
-     * @param user o usuario a ser autenticado
-     * @return true ou false indicando se ele pode ou nao realizar login
-     *
-     * @throws ApplicationException se houver algum erro ou o usuario for
-     * invalido
-     */
-    @Transactional
-    public boolean login(User user) throws ApplicationException {
-
-        return true;
-    }
-    
-    /**
-     * Realiza o logout do usuario
-     */
-    public void logout() {
-        
-    }
-
-    /**
-     * Cria uma nova conta de usuario
-     *
-     * @param user o usuario a ser criado no sistema
-     */
-    @Transactional
-    public void createAccount(User user) {
-
-        
-    }
-
-    /**
-     * Atualiza uma conta de usuario
-     *
-     * @param user a conta a ser atualizada
-     */
-    @Transactional
-    public void updateAccount(User user) {
-
-        
-    }
-
-    /**
-     * Deleta a conta de usuario
-     *
-     * @param user a conta a ser deletada
-     */
-    @Transactional
-    public void deleteAccount(User user) {
-        this.userRepository.delete(user);
-    }
-
-    /**
-     * Retorna o usuario autenticado no contexto atual
-     *
-     * @return o usuario autenticado no contexto
-     */
-    public static User getCurrentAuthenticatedUser() {
-
-        
-        return null;
-    }
-
-    /**
-     *
-     * @param username
-     * @return
-     */
-    @Transactional
-    public User findUserByUsername(String username) {
-        return this.userRepository.findByUsername(username);
-    }
-
-    /**
-     *
-     * @param userId
-     * @return
-     */
-    @Transactional
-    public User findAccountById(long userId) {
-        return this.userRepository.findById(userId, false);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Transactional
-    public List<User> listAccounts() {
-        return this.userRepository.listAll();
-    }
 }

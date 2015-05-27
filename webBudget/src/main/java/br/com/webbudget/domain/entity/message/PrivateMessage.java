@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entity.message;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
-import br.com.webbudget.domain.entity.users.User;
+import br.com.webbudget.domain.security.User;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;

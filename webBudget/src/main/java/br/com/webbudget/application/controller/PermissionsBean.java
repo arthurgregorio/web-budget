@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.permission.Authority;
+import br.com.webbudget.domain.security.Authorization;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -36,13 +36,13 @@ import lombok.Getter;
 public class PermissionsBean {
 
     @Getter
-    private Authority authority;
+    private Authorization authority;
 
     /**
      * Inicializa a authority
      */
     @PostConstruct
     protected void initialize() {
-        this.authority = new Authority();
+        this.authority = new Authorization();
     }
 }
