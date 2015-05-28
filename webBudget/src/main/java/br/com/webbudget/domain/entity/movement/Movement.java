@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.entity.movement;
 
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.card.CardInvoice;

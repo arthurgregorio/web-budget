@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.permission;
+package br.com.webbudget.domain.security;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AuthorityGroup {
+public @interface AuthorizationGroup {
 
     /**
      * @return o agrupador para a authority anotada
