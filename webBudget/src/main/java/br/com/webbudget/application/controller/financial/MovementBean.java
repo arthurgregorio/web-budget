@@ -17,7 +17,6 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.movement.Apportionment;
@@ -270,18 +269,18 @@ public class MovementBean extends AbstractBean {
      */
     public void doSave() {
 
-        try {
-            this.movementService.saveMovement(this.movement);
-
-            // reiniciamos o form
-            this.movement = new Movement();
-            this.movement.setFinancialPeriod(this.financialPeriod);
-
-            this.info("movement.action.saved", true);
-        } catch (ApplicationException ex) {
-            this.logger.error("MovementBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        }
+//        try {
+//            this.movementService.saveMovement(this.movement);
+//
+//            // reiniciamos o form
+//            this.movement = new Movement();
+//            this.movement.setFinancialPeriod(this.financialPeriod);
+//
+//            this.info("movement.action.saved", true);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("MovementBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        }
     }
 
     /**
@@ -289,15 +288,15 @@ public class MovementBean extends AbstractBean {
      */
     public void doSaveAndPay() {
 
-        try {
-            this.movement = this.movementService.saveMovement(this.movement);
-
-            // invoca os metodos para mostrar a popup de pagamento
-            this.displayPaymentPopup();
-        } catch (ApplicationException ex) {
-            this.logger.error("MovementBean#doSaveAndPay found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        }
+//        try {
+//            this.movement = this.movementService.saveMovement(this.movement);
+//
+//            // invoca os metodos para mostrar a popup de pagamento
+//            this.displayPaymentPopup();
+//        } catch (ApplicationException ex) {
+//            this.logger.error("MovementBean#doSaveAndPay found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        }
     }
 
     /**
@@ -305,26 +304,26 @@ public class MovementBean extends AbstractBean {
      */
     public void doPayment() {
 
-        // setamos o pagamento
-        this.movement.setPayment(this.payment);
-
-        try {
-            if (this.payment.getCard() == null && this.payment.getWallet() == null) {
-                this.error("movement.validate.payment-font", true);
-            } else {
-                this.movementService.payAndUpdateMovement(this.movement);
-
-                this.openDialog("confirmPaymentDialog", "dialogConfirmPayment");
-
-                this.movement = new Movement();
-                this.movement.setFinancialPeriod(this.financialPeriod);
-            }
-        } catch (ApplicationException ex) {
-            this.logger.error("MovementBean#doPayment found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        } finally {
-            this.update("paymentForm");
-        }
+//        // setamos o pagamento
+//        this.movement.setPayment(this.payment);
+//
+//        try {
+//            if (this.payment.getCard() == null && this.payment.getWallet() == null) {
+//                this.error("movement.validate.payment-font", true);
+//            } else {
+//                this.movementService.payAndUpdateMovement(this.movement);
+//
+//                this.openDialog("confirmPaymentDialog", "dialogConfirmPayment");
+//
+//                this.movement = new Movement();
+//                this.movement.setFinancialPeriod(this.financialPeriod);
+//            }
+//        } catch (ApplicationException ex) {
+//            this.logger.error("MovementBean#doPayment found erros", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        } finally {
+//            this.update("paymentForm");
+//        }
     }
 
     /**
@@ -332,27 +331,27 @@ public class MovementBean extends AbstractBean {
      */
     public void doPaymentAfterSave() {
 
-        // setamos o pagamento
-        this.movement.setPayment(this.payment);
-
-        try {
-            if (this.payment.getCard() == null && this.payment.getWallet() == null) {
-                this.error("movement.validate.payment-font", true);
-            } else {
-                this.movementService.payAndUpdateMovement(this.movement);
-
-                this.movement = new Movement();
-                this.movement.setFinancialPeriod(this.financialPeriod);
-
-                this.closeDialog("dialogPayment");
-                this.info("movement.action.saved-and-paid", true);
-            }
-        } catch (ApplicationException ex) {
-            this.logger.error("MovementBean#doPayment found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        } finally {
-            this.update("movementForm");
-        }
+//        // setamos o pagamento
+//        this.movement.setPayment(this.payment);
+//
+//        try {
+//            if (this.payment.getCard() == null && this.payment.getWallet() == null) {
+//                this.error("movement.validate.payment-font", true);
+//            } else {
+//                this.movementService.payAndUpdateMovement(this.movement);
+//
+//                this.movement = new Movement();
+//                this.movement.setFinancialPeriod(this.financialPeriod);
+//
+//                this.closeDialog("dialogPayment");
+//                this.info("movement.action.saved-and-paid", true);
+//            }
+//        } catch (ApplicationException ex) {
+//            this.logger.error("MovementBean#doPayment found erros", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        } finally {
+//            this.update("movementForm");
+//        }
     }
 
     /**
@@ -360,13 +359,13 @@ public class MovementBean extends AbstractBean {
      */
     public void doUpdate() {
 
-        try {
-            this.movement = this.movementService.saveMovement(this.movement);
-            this.info("movement.action.updated", true);
-        } catch (ApplicationException ex) {
-            this.logger.error("MovementBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        }
+//        try {
+//            this.movement = this.movementService.saveMovement(this.movement);
+//            this.info("movement.action.updated", true);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("MovementBean#doUpdate found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        }
     }
 
     /**
@@ -374,41 +373,41 @@ public class MovementBean extends AbstractBean {
      */
     public void doDelete() {
 
-        try {
-            final MovementType movementType = this.movement.getMovementType();
-
-            // fazemos a selecao do tipo de delecao a ser executado
-            if (movementType == MovementType.MOVEMENT) {
-                this.movementService.deleteMovement(this.movement);
-            } else if (movementType == MovementType.CARD_INVOICE) {
-                this.movementService.deleteCardInvoiceMovement(this.movement);
-            }
-
-            this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
-
-            this.info("movement.action.deleted", true);
-        } catch (ApplicationException ex) {
-            this.logger.error("MovementBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        } finally {
-            this.update("movementsList");
-            this.closeDialog("dialogDeleteMovement");
-        }
+//        try {
+//            final MovementType movementType = this.movement.getMovementType();
+//
+//            // fazemos a selecao do tipo de delecao a ser executado
+//            if (movementType == MovementType.MOVEMENT) {
+//                this.movementService.deleteMovement(this.movement);
+//            } else if (movementType == MovementType.CARD_INVOICE) {
+//                this.movementService.deleteCardInvoiceMovement(this.movement);
+//            }
+//
+//            this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
+//
+//            this.info("movement.action.deleted", true);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("MovementBean#doDelete found erros", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        } finally {
+//            this.update("movementsList");
+//            this.closeDialog("dialogDeleteMovement");
+//        }
     }
 
     /**
      *
      */
     public void addApportionment() {
-        try {
-            this.movement.addApportionment(this.apportionment);
-        
-            this.update("valuePanel");
-            this.update("apportionmentList");
-            this.closeDialog("dialogApportionment");
-        } catch (ApplicationException ex) {
-            this.fixedError(ex.getMessage(), false);
-        }
+//        try {
+//            this.movement.addApportionment(this.apportionment);
+//        
+//            this.update("valuePanel");
+//            this.update("apportionmentList");
+//            this.closeDialog("dialogApportionment");
+//        } catch (ApplicationException ex) {
+//            this.fixedError(ex.getMessage(), false);
+//        }
     }
 
     /**

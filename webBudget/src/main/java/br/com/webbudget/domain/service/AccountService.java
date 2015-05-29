@@ -16,12 +16,6 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.application.exceptions.ApplicationException;
-import br.com.webbudget.domain.security.User;
-import java.util.List;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
 /**
  *
  * @author Arthur Gregorio

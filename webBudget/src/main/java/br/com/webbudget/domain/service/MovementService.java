@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.CostCenter;
@@ -81,7 +80,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null) {
-            throw new ApplicationException("movement-class.validate.duplicated");
+//            throw new ApplicationException("movement-class.validate.duplicated");
         }
 
         this.movementClassRepository.save(movementClass);
@@ -98,7 +97,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null && !found.equals(movementClass)) {
-            throw new ApplicationException("movement-class.validate.duplicated");
+//            throw new ApplicationException("movement-class.validate.duplicated");
         }
 
         return this.movementClassRepository.save(movementClass);
@@ -122,18 +121,18 @@ public class MovementService {
         // validamos se os rateios estao corretos
         if (!movement.getApportionments().isEmpty()) {
             if (!movement.isApportionmentsValid()) {
-                throw new ApplicationException("movement.validate.apportionment-value",
-                        movement.getApportionmentsDifference());
+//                throw new ApplicationException("movement.validate.apportionment-value",
+//                        movement.getApportionmentsDifference());
             }
         } else {
-            throw new ApplicationException("movement.validate.empty-apportionment");
+//            throw new ApplicationException("movement.validate.empty-apportionment");
         }
 
         // se for uma edicao, checa se existe alguma inconsistencia
         if (movement.isSaved()) {
 
             if (movement.getFinancialPeriod().isClosed()) {
-                throw new ApplicationException("maintenance.validate.closed-financial-period");
+//                throw new ApplicationException("maintenance.validate.closed-financial-period");
             }
 
             // remove algum rateio editado
@@ -229,12 +228,12 @@ public class MovementService {
     public void deleteMovement(Movement movement) {
 
         if (movement.getFinancialPeriod().isClosed()) {
-            throw new ApplicationException("maintenance.validate.closed-financial-period");
+//            throw new ApplicationException("maintenance.validate.closed-financial-period");
         }
 
         // se tem vinculo com fatura, nao pode ser excluido
         if (movement.isCardInvoicePaid()) {
-            throw new ApplicationException("maintenance.validate.has-card-invoice");
+//            throw new ApplicationException("maintenance.validate.has-card-invoice");
         }
 
         // devolve o saldo na carteira se for o caso
@@ -283,7 +282,7 @@ public class MovementService {
 
         // se a invoice for de um periodo fechado, bloqueia o processo
         if (cardInvoice.getFinancialPeriod().isClosed()) {
-            throw new ApplicationException("maintenance.validate.closed-financial-period");
+//            throw new ApplicationException("maintenance.validate.closed-financial-period");
         }
 
         // listamos os movimentos da invoice
@@ -329,7 +328,7 @@ public class MovementService {
                 costCenter.getParentCostCenter());
 
         if (found != null) {
-            throw new ApplicationException("cost-center.validate.duplicated");
+//            throw new ApplicationException("cost-center.validate.duplicated");
         }
 
         this.costCenterRepository.save(costCenter);
@@ -346,7 +345,7 @@ public class MovementService {
                 costCenter.getParentCostCenter());
 
         if (found != null && !found.equals(costCenter)) {
-            throw new ApplicationException("cost-center.validate.duplicated");
+//            throw new ApplicationException("cost-center.validate.duplicated");
         }
 
         return this.costCenterRepository.save(costCenter);

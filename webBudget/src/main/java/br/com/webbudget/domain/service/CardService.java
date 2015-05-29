@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.card.CardType;
@@ -67,13 +66,13 @@ public class CardService {
         final Card found = this.findCardByNumberAndType(card.getNumber(),
                 card.getCardType());
 
-        if (found != null) {
-            throw new ApplicationException("card.validate.duplicated");
-        }
-
-        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-            throw new ApplicationException("card.validate.no-debit-wallet");
-        }
+//        if (found != null) {
+//            throw new ApplicationException("card.validate.duplicated");
+//        }
+//
+//        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
+//            throw new ApplicationException("card.validate.no-debit-wallet");
+//        }
 
         this.cardRepository.save(card);
     }
@@ -88,13 +87,13 @@ public class CardService {
         final Card found = this.findCardByNumberAndType(card.getNumber(),
                 card.getCardType());
 
-        if (found != null && !found.equals(card)) {
-            throw new ApplicationException("card.validate.duplicated");
-        }
-
-        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-            throw new ApplicationException("card.validate.no-debit-wallet");
-        }
+//        if (found != null && !found.equals(card)) {
+//            throw new ApplicationException("card.validate.duplicated");
+//        }
+//
+//        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
+//            throw new ApplicationException("card.validate.no-debit-wallet");
+//        }
 
         return this.cardRepository.save(card);
     }

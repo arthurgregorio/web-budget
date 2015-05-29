@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.service.AccountService;
 import javax.faces.view.ViewScoped;
@@ -72,13 +71,13 @@ public class AuthenticationBean extends AbstractBean {
      */
     public String doLogin() {
 
-        try {
+//        try {
 //            this.accountService.login(this.user);
             return "/main/dashboard.xhtml?faces-redirect=true";
-        } catch (ApplicationException ex) {
-            this.error(ex.getMessage(), true);
-            this.loginError = true;
-            return "";
-        } 
+//        } catch (ApplicationException ex) {
+//            this.error(ex.getMessage(), true);
+//            this.loginError = true;
+//            return "";
+//        } 
     }
 }

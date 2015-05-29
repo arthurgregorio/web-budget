@@ -17,7 +17,6 @@
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.controller.miscellany.PeriodDetailsDTO;
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.components.MovementsCalculator;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
@@ -60,7 +59,7 @@ public class FinancialPeriodService {
                 financialPeriod.getIdentification());
 
         if (found != null && !found.equals(financialPeriod)) {
-            throw new ApplicationException("financial-period.validate.duplicated");
+//            throw new ApplicationException("financial-period.validate.duplicated");
         }
 
         // validamos se o periodo informado já foi contemplado em outro 
@@ -69,13 +68,13 @@ public class FinancialPeriodService {
 
         for (FinancialPeriod fp : periods) {
             if (financialPeriod.getStart().compareTo(fp.getEnd()) <= 0) {
-                throw new ApplicationException("financial-period.validate.truncated-dates");
+//                throw new ApplicationException("financial-period.validate.truncated-dates");
             }
         }
         
         // se o fim for o mesmo dia ou anterior a data atual, erro!
         if (financialPeriod.getEnd().compareTo(LocalDate.now()) < 1) {
-            throw new ApplicationException("financial-period.validate.invalid-end");
+//            throw new ApplicationException("financial-period.validate.invalid-end");
         }
 
         this.financialPeriodRepository.save(financialPeriod);
@@ -93,7 +92,7 @@ public class FinancialPeriodService {
         
         // se houver movimentos, lanca o erro
         if (movements != null && !movements.isEmpty()) {
-            throw new ApplicationException("financial-period.validate.has-movements");
+//            throw new ApplicationException("financial-period.validate.has-movements");
         } 
         
         // nao tem movimentos entao deleta

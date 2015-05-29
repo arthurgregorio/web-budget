@@ -17,19 +17,14 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.security.User;
-import br.com.webbudget.domain.entity.message.UserPrivateMessage;
-import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.EmailService;
 import br.com.webbudget.domain.service.PrivateMessageService;
-import java.util.ArrayList;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.mail.MessagingException;
 import lombok.Getter;
 import lombok.Setter;
 

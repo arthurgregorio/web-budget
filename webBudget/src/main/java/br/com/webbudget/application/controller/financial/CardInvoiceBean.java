@@ -17,7 +17,6 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
@@ -28,6 +27,7 @@ import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -42,7 +42,7 @@ import lombok.Setter;
  * @since 1.0.0, 28/04/2014
  */
 @Named
-@javax.faces.view.ViewScoped
+@ViewScoped
 public class CardInvoiceBean extends AbstractBean {
 
     @Getter
@@ -109,21 +109,21 @@ public class CardInvoiceBean extends AbstractBean {
             return;
         }
 
-        try {
-            this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
-
-            if (this.cardInvoice.getMovements().isEmpty()) {
-                this.info("card-invoice.action.no-movements-to-pay", true);
-                this.cardInvoice = new CardInvoice();
-            } else {
-                this.info("card-invoice.action.generated", true);
-            }
-        } catch (ApplicationException ex) {
-            this.logger.error("CardInvoiceBean#generateInvoice found errors", ex);
-            this.fixedError(ex.getMessage(), true);
-        } finally {
-            this.update("detailsPanel");
-        }
+//        try {
+//            this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
+//
+//            if (this.cardInvoice.getMovements().isEmpty()) {
+//                this.info("card-invoice.action.no-movements-to-pay", true);
+//                this.cardInvoice = new CardInvoice();
+//            } else {
+//                this.info("card-invoice.action.generated", true);
+//            }
+//        } catch (ApplicationException ex) {
+//            this.logger.error("CardInvoiceBean#generateInvoice found errors", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        } finally {
+//            this.update("detailsPanel");
+//        }
     }
 
     /**
@@ -136,14 +136,14 @@ public class CardInvoiceBean extends AbstractBean {
             return;
         }
 
-        try {
-            this.cardInvoices = this.cardService.listInvoicesByCard(this.selectedCard);
-        } catch (ApplicationException ex) {
-            this.logger.error("CardInvoiceBean#loadHistory found errors", ex);
-            this.fixedError(ex.getMessage(), true);
-        } finally {
-            this.update("invoicesList");
-        }
+//        try {
+//            this.cardInvoices = this.cardService.listInvoicesByCard(this.selectedCard);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("CardInvoiceBean#loadHistory found errors", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        } finally {
+//            this.update("invoicesList");
+//        }
     }
 
     /**
@@ -168,15 +168,15 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void createInvoiceMovement() {
 
-        try {
-            this.cardService.createMovement(this.cardInvoice,
-                    this.translate("card-invoice.identification"));
-
-            this.openDialog("moveInvoiceDialog", "dialogMoveInvoice");
-        } catch (ApplicationException ex) {
-            this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
-            this.fixedError(ex.getMessage(), true);
-        }
+//        try {
+//            this.cardService.createMovement(this.cardInvoice,
+//                    this.translate("card-invoice.identification"));
+//
+//            this.openDialog("moveInvoiceDialog", "dialogMoveInvoice");
+//        } catch (ApplicationException ex) {
+//            this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        }
     }
 
     /**

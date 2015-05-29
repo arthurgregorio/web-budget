@@ -17,7 +17,6 @@
 package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.service.ClosingService;
@@ -89,19 +88,19 @@ public class ClosingBean extends AbstractBean {
      */
     public void process() {
 
-        if (this.financialPeriod == null) {
-            this.error("closing.validate.null-period", true);
-            return;
-        }
-
-        try {
-            this.closing = this.closingService.process(this.financialPeriod);
-        } catch (ApplicationException ex) {
-            this.logger.error("ClosingBean#process found errors", ex);
-            this.fixedError(ex.getMessage(), true);
-        } finally {
-            this.update("closingPanel");
-        }
+//        if (this.financialPeriod == null) {
+//            this.error("closing.validate.null-period", true);
+//            return;
+//        }
+//
+//        try {
+//            this.closing = this.closingService.process(this.financialPeriod);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("ClosingBean#process found errors", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        } finally {
+//            this.update("closingPanel");
+//        }
     }
 
     /**

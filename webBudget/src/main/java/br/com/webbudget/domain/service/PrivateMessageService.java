@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
@@ -48,7 +47,7 @@ public class PrivateMessageService {
     public void savePrivateMessage(PrivateMessage privateMessage) {
 
         if (privateMessage.getRecipients() == null || privateMessage.getRecipients().isEmpty()) {
-            throw new ApplicationException("private-message.validate.no-receipts");
+//            throw new ApplicationException("private-message.validate.no-receipts");
         }
 
         // pegamos os destinatarios

@@ -17,7 +17,6 @@
 package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.List;
@@ -118,18 +117,18 @@ public class CostCenterBean extends AbstractBean {
      */
     public void doSave() {
 
-        try {
-            this.movementService.saveCostCenter(this.costCenter);
-            this.costCenter = new CostCenter();
-
-            // busca novamente os centros de custo para atualizar a lista de parentes
-            this.costCenters = this.movementService.listCostCenters(false);
-
-            this.info("cost-center.action.saved", true);
-        } catch (ApplicationException ex) {
-            this.logger.error("CostCenterBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        }
+//        try {
+//            this.movementService.saveCostCenter(this.costCenter);
+//            this.costCenter = new CostCenter();
+//
+//            // busca novamente os centros de custo para atualizar a lista de parentes
+//            this.costCenters = this.movementService.listCostCenters(false);
+//
+//            this.info("cost-center.action.saved", true);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("CostCenterBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        }
     }
 
     /**
@@ -137,14 +136,14 @@ public class CostCenterBean extends AbstractBean {
      */
     public void doUpdate() {
 
-        try {
-            this.costCenter = this.movementService.updateCostCenter(this.costCenter);
-
-            this.info("cost-center.action.updated", true);
-        } catch (ApplicationException ex) {
-            this.logger.error("CostCenterBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        }
+//        try {
+//            this.costCenter = this.movementService.updateCostCenter(this.costCenter);
+//
+//            this.info("cost-center.action.updated", true);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("CostCenterBean#doUpdate found erros", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        }
     }
 
     /**

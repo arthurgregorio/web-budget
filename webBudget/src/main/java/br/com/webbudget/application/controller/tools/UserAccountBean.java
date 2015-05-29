@@ -18,14 +18,12 @@ package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.domain.security.Authorization;
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.security.User;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;

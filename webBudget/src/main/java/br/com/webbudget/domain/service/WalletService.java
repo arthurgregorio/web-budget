@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
@@ -52,7 +51,7 @@ public class WalletService {
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null) {
-            throw new ApplicationException("wallet.validate.duplicated");
+//            throw new ApplicationException("wallet.validate.duplicated");
         }
 
         wallet = this.walletRepository.save(wallet);
@@ -88,7 +87,7 @@ public class WalletService {
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null && !found.equals(wallet)) {
-            throw new ApplicationException("wallet.validate.duplicated");
+//            throw new ApplicationException("wallet.validate.duplicated");
         }
 
         return this.walletRepository.save(wallet);
@@ -103,7 +102,7 @@ public class WalletService {
         // checa se a carteira nao tem saldo menor ou maior que zero
         // se houve, dispara o erro, comente carteiras zeradas sao deletaveis
         if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-            throw new ApplicationException("wallet.validate.has-balance");
+//            throw new ApplicationException("wallet.validate.has-balance");
         }
 
         final List<WalletBalance> balaces = this.listBalancesByWallet(wallet);
@@ -122,7 +121,7 @@ public class WalletService {
     public void transfer(WalletBalance walletBalance) {
 
         if (walletBalance.getSourceWallet().equals(walletBalance.getTargetWallet())) {
-            throw new ApplicationException("transfer.validate.same-wallet");
+//            throw new ApplicationException("transfer.validate.same-wallet");
         }
 
         // atualizamos a origem

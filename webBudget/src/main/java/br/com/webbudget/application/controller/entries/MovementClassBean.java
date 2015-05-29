@@ -17,7 +17,6 @@
 package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.exceptions.ApplicationException;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
@@ -123,15 +122,15 @@ public class MovementClassBean extends AbstractBean {
      */
     public void doSave() {
 
-        try {
-            this.movementService.saveMovementClass(this.movementClass);
-            this.movementClass = new MovementClass();
-
-            this.info("movement-class.action.saved", true);
-        } catch (ApplicationException ex) {
-            this.logger.error("MovementClassBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        }
+//        try {
+//            this.movementService.saveMovementClass(this.movementClass);
+//            this.movementClass = new MovementClass();
+//
+//            this.info("movement-class.action.saved", true);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("MovementClassBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        }
     }
 
     /**
@@ -139,14 +138,14 @@ public class MovementClassBean extends AbstractBean {
      */
     public void doUpdate() {
 
-        try {
-            this.movementClass = this.movementService.updateMovementClass(this.movementClass);
-
-            this.info("movement-class.action.updated", true);
-        } catch (ApplicationException ex) {
-            this.logger.error("MovementClassBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true);
-        }
+//        try {
+//            this.movementClass = this.movementService.updateMovementClass(this.movementClass);
+//
+//            this.info("movement-class.action.updated", true);
+//        } catch (ApplicationException ex) {
+//            this.logger.error("MovementClassBean#doUpdate found erros", ex);
+//            this.fixedError(ex.getMessage(), true);
+//        }
     }
 
     /**
