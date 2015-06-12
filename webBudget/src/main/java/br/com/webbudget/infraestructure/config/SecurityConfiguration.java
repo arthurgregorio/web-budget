@@ -32,7 +32,6 @@ import br.com.webbudget.domain.security.GroupMembership;
 import br.com.webbudget.domain.security.Partition;
 import br.com.webbudget.domain.security.Role;
 import br.com.webbudget.domain.security.User;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import org.picketlink.config.SecurityConfigurationBuilder;
@@ -50,7 +49,6 @@ import org.picketlink.internal.EntityManagerContextInitializer;
  * @version 1.2.0
  * @since 1.1.0, 07/03/2015
  */
-@ApplicationScoped
 public class SecurityConfiguration {
 
     @Inject

@@ -16,6 +16,9 @@
  */
 package br.com.webbudget.infraestructure.config;
 
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+
 /**
  *
  * @author Arthur Gregorio
@@ -23,6 +26,8 @@ package br.com.webbudget.infraestructure.config;
  * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
+@Startup
+@Singleton
 public class SecurityInitializer {
 
 }
