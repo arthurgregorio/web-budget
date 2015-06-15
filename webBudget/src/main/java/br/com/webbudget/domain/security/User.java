@@ -27,6 +27,9 @@ import org.picketlink.idm.model.Account;
 import org.picketlink.idm.model.annotation.IdentityStereotype;
 import org.picketlink.idm.query.QueryParameter;
 import static org.picketlink.idm.model.annotation.IdentityStereotype.Stereotype.USER;
+import org.picketlink.idm.model.annotation.StereotypeProperty;
+import static org.picketlink.idm.model.annotation.StereotypeProperty.Property.IDENTITY_USER_NAME;
+import org.picketlink.idm.model.annotation.Unique;
 
 /**
  *
@@ -51,6 +54,8 @@ public class User extends AbstractIdentityType implements Account {
     private String email;
     @Setter
     @Getter
+    @Unique
+    @StereotypeProperty(IDENTITY_USER_NAME)
     @NotEmpty(message = "{user-account.username}")
     @Column(name = "username", length = 45, nullable = false)
     private String username;

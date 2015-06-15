@@ -64,9 +64,8 @@ public class PrivateMessage extends PersistentEntity {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_sender", nullable = false)
-    private User sender;
+    @Column(name = "sender", nullable = false, length = 90)
+    private String sender;
 
     @Getter
     @Setter

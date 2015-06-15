@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entity.message;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
-import br.com.webbudget.domain.security.User;
+import br.com.webbudget.domain.entity.security.UserTypeEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -54,7 +54,7 @@ public class UserPrivateMessage extends PersistentEntity {
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_recipient")
-    private User recipient;
+    private UserTypeEntity recipient;
     @Getter
     @Setter
     @ManyToOne

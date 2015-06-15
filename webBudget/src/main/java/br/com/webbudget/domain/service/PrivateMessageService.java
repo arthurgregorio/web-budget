@@ -46,27 +46,27 @@ public class PrivateMessageService {
      */
     public void savePrivateMessage(PrivateMessage privateMessage) {
 
-        if (privateMessage.getRecipients() == null || privateMessage.getRecipients().isEmpty()) {
+//        if (privateMessage.getRecipients() == null || privateMessage.getRecipients().isEmpty()) {
 //            throw new ApplicationException("private-message.validate.no-receipts");
-        }
-
-        // pegamos os destinatarios
-        final List<User> receipts = new ArrayList<>(privateMessage.getRecipients());
-
-        // salvamos a mensagem
-        privateMessage = this.privateMessageRepository.save(privateMessage);
-
-        // enviamos para os usuarios pela associacao das tabelas
-        for (User user : receipts) {
-
-            final UserPrivateMessage associative = new UserPrivateMessage();
-
-            associative.setRecipient(user);
-            associative.setPrivateMessage(privateMessage);
-
-            // salva a mensagem
-            this.userPrivateMessageRepository.save(associative);
-        }
+//        }
+//
+//        // pegamos os destinatarios
+//        final List<User> receipts = new ArrayList<>(privateMessage.getRecipients());
+//
+//        // salvamos a mensagem
+//        privateMessage = this.privateMessageRepository.save(privateMessage);
+//
+//        // enviamos para os usuarios pela associacao das tabelas
+//        for (User user : receipts) {
+//
+//            final UserPrivateMessage associative = new UserPrivateMessage();
+//
+//            associative.setRecipient(user);
+//            associative.setPrivateMessage(privateMessage);
+//
+//            // salva a mensagem
+//            this.userPrivateMessageRepository.save(associative);
+//        }
     }
 
     /**

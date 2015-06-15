@@ -53,15 +53,15 @@ public class CardInvoiceBean extends AbstractBean {
     private Card selectedCard;
 
     @Getter
-    public List<Card> cards;
+    private List<Card> cards;
     @Getter
-    public List<Wallet> wallets;
+    private List<Wallet> wallets;
     @Getter
-    public List<CardInvoice> cardInvoices;
+    private List<CardInvoice> cardInvoices;
     @Getter
-    public List<MovementClass> movementClasses;
+    private List<MovementClass> movementClasses;
     @Getter
-    public List<FinancialPeriod> financialPeriods;
+    private List<FinancialPeriod> financialPeriods;
 
     @Inject
     private CardService cardService;
