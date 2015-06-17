@@ -18,6 +18,7 @@ package br.com.webbudget.domain.repository.contact;
 
 import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.repository.GenericRepository;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  *
@@ -26,6 +27,7 @@ import br.com.webbudget.domain.repository.GenericRepository;
  * @version 1.0.0
  * @since 1.2.0, 12/04/2015
  */
+@ApplicationScoped
 public class TelephoneRepository extends GenericRepository<Telephone, Long> implements ITelephoneRepository {
 
 }

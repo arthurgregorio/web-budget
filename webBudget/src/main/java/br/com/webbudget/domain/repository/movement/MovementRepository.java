@@ -31,6 +31,7 @@ import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -44,6 +45,7 @@ import org.hibernate.sql.JoinType;
  * @version 1.1.0
  * @since 1.0.0, 18/10/2013
  */
+@ApplicationScoped
 public class MovementRepository extends GenericRepository<Movement, Long> implements IMovementRepository {
 
     /**

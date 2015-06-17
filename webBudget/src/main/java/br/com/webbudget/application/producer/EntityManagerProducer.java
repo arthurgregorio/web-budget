@@ -33,6 +33,7 @@ import org.picketlink.annotations.PicketLink;
  * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
+@ApplicationScoped
 public class EntityManagerProducer {
     
     @PersistenceContext
@@ -43,7 +44,6 @@ public class EntityManagerProducer {
      */
     @Produces
     @PicketLink
-    @ApplicationScoped
     EntityManager produceEntityManager() {
         return this.entityManager;
     }

@@ -1,7 +1,7 @@
-package br.com.webbudget.domain.service;
+package br.com.webbudget.domain.misc;
 
 import java.util.ResourceBundle;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,15 +15,15 @@ import lombok.ToString;
  * @version 1.1.0
  * @since 1.2.0, 16/04/2015
  */
-@ApplicationScoped
-public class AddressFinderService {
+@RequestScoped
+public class AddressFinder {
 
     private final ResourceBundle configBundle;
 
     /**
      * Inicializa o bundle de configuracao
      */
-    public AddressFinderService() {
+    public AddressFinder() {
         this.configBundle = ResourceBundle.getBundle("config.webbudget");
     }
     

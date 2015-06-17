@@ -18,6 +18,7 @@ package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.repository.GenericRepository;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  *
@@ -26,6 +27,7 @@ import br.com.webbudget.domain.repository.GenericRepository;
  * @version 1.0.0
  * @since 1.0.0, 18/10/2013
  */
+@ApplicationScoped
 public class PaymentRepository extends GenericRepository<Payment, Long> implements IPaymentRepository {
 
 }

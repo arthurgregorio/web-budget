@@ -18,6 +18,7 @@ package br.com.webbudget.domain.repository.system;
 
 import br.com.webbudget.domain.entity.system.Configuration;
 import br.com.webbudget.domain.repository.GenericRepository;
+import javax.enterprise.context.ApplicationScoped;
 import org.hibernate.Criteria;
 
 /**
@@ -27,6 +28,7 @@ import org.hibernate.Criteria;
  * @version 1.0.0
  * @since 1.0.0, 18/10/2013
  */
+@ApplicationScoped
 public class ConfigurationRepository extends GenericRepository<Configuration, Long> implements IConfigurationRepository {
 
     /**

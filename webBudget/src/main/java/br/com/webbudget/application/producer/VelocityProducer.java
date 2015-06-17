@@ -17,7 +17,7 @@
 package br.com.webbudget.application.producer;
 
 import java.util.Properties;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -34,7 +34,7 @@ import org.apache.velocity.tools.generic.NumberTool;
  * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
-@ApplicationScoped
+@RequestScoped
 public class VelocityProducer {
 
     /**

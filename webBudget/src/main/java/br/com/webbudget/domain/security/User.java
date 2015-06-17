@@ -63,6 +63,10 @@ public class User extends AbstractIdentityType implements Account {
     @Getter
     @Setter
     @Transient
+    private String password;
+    @Getter
+    @Setter
+    @Transient
     private boolean selected;
 
     public static final QueryParameter NAME = QUERY_ATTRIBUTE.byName("name");

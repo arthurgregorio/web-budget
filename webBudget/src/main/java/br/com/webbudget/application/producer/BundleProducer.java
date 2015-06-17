@@ -19,7 +19,7 @@ package br.com.webbudget.application.producer;
 import br.com.webbudget.application.producer.qualifier.I18n;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -33,6 +33,7 @@ import javax.inject.Inject;
  * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
+@RequestScoped
 public class BundleProducer {
 
     @Inject
@@ -44,7 +45,6 @@ public class BundleProducer {
      */
     @I18n
     @Produces
-    @ApplicationScoped
     ResourceBundle produceMessageBundle() {
         return ResourceBundle.getBundle("i18n.messages", this.getCurrentLocale());
     }

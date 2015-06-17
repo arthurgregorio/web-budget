@@ -23,9 +23,6 @@
               version="2.2">
 
     <application>
-        <!-- integracao JSF x Spring para ler as EL expressions -->
-        <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
-        
         <!-- configuracao da locale -->
         <locale-config>  
             <default-locale>pt_BR</default-locale>  

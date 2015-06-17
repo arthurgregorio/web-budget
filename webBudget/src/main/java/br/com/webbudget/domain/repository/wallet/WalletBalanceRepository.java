@@ -21,6 +21,7 @@ import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -33,6 +34,7 @@ import org.hibernate.criterion.Restrictions;
  * @version 1.0.1
  * @since 1.0.0, 18/10/2013
  */
+@ApplicationScoped
 public class WalletBalanceRepository extends GenericRepository<WalletBalance, Long> implements IWalletBalanceRepository {
 
     /**

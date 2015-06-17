@@ -29,6 +29,7 @@ import org.primefaces.context.RequestContext;
  * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
+@RequestScoped
 public class FacesContextProducer {
 
     /**
@@ -37,7 +38,6 @@ public class FacesContextProducer {
      * @return um {@link RequestContext} valido
      */
     @Produces
-    @RequestScoped
     RequestContext produceRequestContext() {
         return RequestContext.getCurrentInstance();
     }
@@ -48,7 +48,6 @@ public class FacesContextProducer {
      * @return um {@link FacesContext} valido
      */
     @Produces
-    @RequestScoped
     FacesContext produceFacesContext() {
         return FacesContext.getCurrentInstance();
     }

@@ -23,7 +23,7 @@ import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.contact.ContactType;
 import br.com.webbudget.domain.entity.contact.NumberType;
 import br.com.webbudget.domain.entity.contact.Telephone;
-import br.com.webbudget.domain.service.AddressFinderService;
+import br.com.webbudget.domain.misc.AddressFinder;
 import br.com.webbudget.domain.service.ContactService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -59,7 +59,7 @@ public class ContactBean extends AbstractBean {
     @Inject
     private ContactService contactService;
     @Inject
-    private AddressFinderService addressFinderService;
+    private AddressFinder addressFinderService;
 
     /**
      *
@@ -197,7 +197,7 @@ public class ContactBean extends AbstractBean {
     public void doAddressFind() {
 
         try {
-            final AddressFinderService.Address address = this.addressFinderService
+            final AddressFinder.Address address = this.addressFinderService
                     .findAddressByZipcode(this.contact.getZipcode());
 
             this.contact.setStreet(address.getLogradouro());

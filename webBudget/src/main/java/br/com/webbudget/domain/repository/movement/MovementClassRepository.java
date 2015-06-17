@@ -21,6 +21,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -32,6 +33,7 @@ import org.hibernate.criterion.Restrictions;
  * @version 1.0.0
  * @since 1.0.0, 18/10/2013
  */
+@ApplicationScoped
 public class MovementClassRepository extends GenericRepository<MovementClass, Long> implements IMovementClassRepository {
 
     /**

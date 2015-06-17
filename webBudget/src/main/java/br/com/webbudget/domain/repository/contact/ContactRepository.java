@@ -19,6 +19,7 @@ package br.com.webbudget.domain.repository.contact;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
@@ -29,6 +30,7 @@ import org.hibernate.criterion.Restrictions;
  * @version 1.0.0
  * @since 1.2.0, 12/04/2015
  */
+@ApplicationScoped
 public class ContactRepository extends GenericRepository<Contact, Long> implements IContactRepository {
 
     /**

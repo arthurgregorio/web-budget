@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
-import javax.inject.Singleton;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -37,7 +37,7 @@ import javax.mail.internet.MimeMessage;
  * @version 1.2.0
  * @since 1.0.0, 06/07/2014
  */
-@Singleton
+@RequestScoped
 public class Postman {
 
     @Resource(name = "java:/mail/webBudget")
