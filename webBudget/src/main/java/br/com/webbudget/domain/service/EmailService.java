@@ -20,18 +20,13 @@ import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.infraestructure.Translator;
 import br.com.webbudget.infraestructure.mail.Postman;
-import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.tools.generic.DateTool;
-import org.apache.velocity.tools.generic.NumberTool;
 
 /**
  * O servico de envio de email, por este cara invocamos o {@link Postman} que
@@ -47,6 +42,7 @@ import org.apache.velocity.tools.generic.NumberTool;
  * @version 1.1.0
  * @since 1.2.0, 22/04/2015
  */
+@ApplicationScoped
 public class EmailService {
 
     @Inject

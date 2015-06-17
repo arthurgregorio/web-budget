@@ -41,6 +41,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -51,6 +52,7 @@ import javax.transaction.Transactional;
  * @version 1.2.0
  * @since 1.0.0, 04/03/2014
  */
+@ApplicationScoped
 public class MovementService {
 
     @Inject

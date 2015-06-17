@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.domain.components.MovementsCalculator;
+import br.com.webbudget.domain.misc.MovementsCalculator;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.closing.Closing;
@@ -31,6 +31,7 @@ import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -42,6 +43,7 @@ import javax.transaction.Transactional;
  * @version 1.1.0
  * @since 1.0.0, 09/04/2014
  */
+@ApplicationScoped
 public class ClosingService {
 
     @Inject

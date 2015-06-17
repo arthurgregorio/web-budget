@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -44,6 +45,7 @@ import javax.transaction.Transactional;
  * @since 1.0.0, 06/04/2014
  */
 @Transactional
+@ApplicationScoped
 public class CardService {
 
     @Inject

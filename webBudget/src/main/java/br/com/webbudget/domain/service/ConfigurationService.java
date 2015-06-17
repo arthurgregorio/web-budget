@@ -18,6 +18,7 @@ package br.com.webbudget.domain.service;
 
 import br.com.webbudget.domain.entity.system.Configuration;
 import br.com.webbudget.domain.repository.system.IConfigurationRepository;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -28,6 +29,7 @@ import javax.transaction.Transactional;
  * @version 1.1.0
  * @since 1.0.0, 06/04/2014
  */
+@ApplicationScoped
 public class ConfigurationService {
 
     @Inject
@@ -38,6 +40,7 @@ public class ConfigurationService {
      * @param configuration
      * @return 
      */
+    @Transactional
     public Configuration saveConfiguration(Configuration configuration) {
         return this.configurationRepository.save(configuration);
     }

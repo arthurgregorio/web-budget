@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import org.primefaces.model.chart.Axis;
@@ -49,6 +50,7 @@ import org.primefaces.model.chart.PieChartModel;
  * @version 1.1.0
  * @since 1.0.0, 13/04/2014
  */
+@ApplicationScoped
 public class GraphModelService implements Serializable {
 
     @Inject

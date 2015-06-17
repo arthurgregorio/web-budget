@@ -24,6 +24,7 @@ import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
 import br.com.webbudget.domain.repository.wallet.IWalletRepository;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -34,6 +35,7 @@ import javax.transaction.Transactional;
  * @version 1.1.0
  * @since 1.0.0, 12/03/2014
  */
+@ApplicationScoped
 public class WalletService {
 
     @Inject

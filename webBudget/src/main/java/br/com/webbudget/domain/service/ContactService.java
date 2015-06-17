@@ -23,6 +23,7 @@ import br.com.webbudget.domain.repository.contact.IContactRepository;
 import br.com.webbudget.domain.repository.contact.ITelephoneRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -33,7 +34,7 @@ import javax.transaction.Transactional;
  * @version 1.1.0
  * @since 1.2.0, 12/04/2015
  */
-@Transactional
+@ApplicationScoped
 public class ContactService {
 
     @Inject
@@ -48,6 +49,7 @@ public class ContactService {
      *
      * @param contact o contato a ser salvo
      */
+    @Transactional
     public void saveContact(Contact contact) {
 
         final List<Telephone> telephones = contact.getTelephones();
@@ -66,6 +68,7 @@ public class ContactService {
      * @param contact o contato a ser atualizado
      * @return o contato atualizado
      */
+    @Transactional
     public Contact updateContact(Contact contact) {
 
         // deleta os telefone deletados na grid
@@ -97,6 +100,7 @@ public class ContactService {
      *
      * @param contact o contato a ser deletado
      */
+    @Transactional
     public void deleteContact(Contact contact) {
         
         final List<Movement> movements = 

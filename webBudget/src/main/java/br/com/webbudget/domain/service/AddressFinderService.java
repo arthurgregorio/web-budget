@@ -1,6 +1,7 @@
 package br.com.webbudget.domain.service;
 
 import java.util.ResourceBundle;
+import javax.enterprise.context.ApplicationScoped;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import lombok.ToString;
  * @version 1.1.0
  * @since 1.2.0, 16/04/2015
  */
+@ApplicationScoped
 public class AddressFinderService {
 
     private final ResourceBundle configBundle;

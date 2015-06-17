@@ -21,8 +21,8 @@ import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.repository.user.IPrivateMessageRepository;
 import br.com.webbudget.domain.repository.user.IUserPrivateMessageRepository;
-import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -33,6 +33,7 @@ import javax.transaction.Transactional;
  * @version 1.1.0
  * @since 1.0.0, 07/05/2014
  */
+@ApplicationScoped
 public class PrivateMessageService {
 
     @Inject

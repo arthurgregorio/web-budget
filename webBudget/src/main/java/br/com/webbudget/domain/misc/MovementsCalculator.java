@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.components;
+package br.com.webbudget.domain.misc;
 
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
