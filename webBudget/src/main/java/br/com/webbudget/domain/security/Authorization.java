@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import javax.enterprise.context.Dependent;
 import lombok.Getter;
 
 /**
@@ -30,6 +31,7 @@ import lombok.Getter;
  * @version 1.2.0
  * @since 1.0.0, 24/06/2014
  */
+@Dependent
 public class Authorization {
 
     @Getter
@@ -195,7 +197,7 @@ public class Authorization {
      *
      * @return um set com todas as authorities disponiveis
      */
-    public Set<String> getAllAvailableAuthorities() {
+    public Set<String> getAllAuthorizations() {
 
         final Set<String> authorities = new HashSet<>();
 
@@ -223,10 +225,10 @@ public class Authorization {
      *
      * @return hashmap com os valores: grupo e itens do grupo
      */
-    public HashMap<String, Set<String>> getAllAvailableAuthoritiesGrouped() {
+    public HashMap<String, Set<String>> getAllAuthorizationsGrouped() {
 
         final HashMap<String, Set<String>> authorities = new HashMap<>();
-        final Set<String> allAuthorities = this.getAllAvailableAuthorities();
+        final Set<String> allAuthorities = this.getAllAuthorizations();
 
         final Field[] fields = this.getClass().getDeclaredFields();
 

@@ -242,7 +242,7 @@ public class UserAccountBean extends AbstractBean {
 
         // pega todas as authorities da lista de authorities do sistema
         final HashMap<String, Set<String>> authorities
-                = new Authorization().getAllAvailableAuthoritiesGrouped();
+                = new Authorization().getAllAuthorizationsGrouped();
 
         for (String key : authorities.keySet()) {
 
@@ -270,7 +270,7 @@ public class UserAccountBean extends AbstractBean {
 
         // pegamos as agrupadoras
         final Set<String> authoritiesGroups
-                = new Authorization().getAllAvailableAuthoritiesGrouped().keySet();
+                = new Authorization().getAllAuthorizationsGrouped().keySet();
 
         // filtramos manualmente
         for (TreeNode node : this.selectedAuthorities) {
