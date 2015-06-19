@@ -177,7 +177,7 @@ public class SecurityInitializer {
         final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
         final IdentityQuery<Role> query = queryBuilder.createIdentityQuery(Role.class);
 
-        query.where(queryBuilder.equal(Role.NAME, role));
+        query.where(queryBuilder.equal(Role.AUTHORIZATION, role));
 
         return !query.getResultList().isEmpty();
     }

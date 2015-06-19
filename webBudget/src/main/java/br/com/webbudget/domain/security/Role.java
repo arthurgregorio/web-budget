@@ -44,7 +44,7 @@ public class Role extends AbstractIdentityType {
     @StereotypeProperty(IDENTITY_ROLE_NAME)
     private String authorization;
     
-    public static final QueryParameter NAME = QUERY_ATTRIBUTE.byName("authorization");
+    public static final QueryParameter AUTHORIZATION = QUERY_ATTRIBUTE.byName("authorization");
 
     /**
      * 
