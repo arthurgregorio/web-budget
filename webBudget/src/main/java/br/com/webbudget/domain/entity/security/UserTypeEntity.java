@@ -44,23 +44,23 @@ public class UserTypeEntity extends AbstractIdentityTypeEntity {
     @Getter
     @Setter
     @AttributeValue
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
     @Getter
     @Setter
     @AttributeValue
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
     @Getter
     @Setter
     @AttributeValue
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
   
     @Getter
     @Setter
     @OwnerReference
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_partition", nullable = false)
+    @JoinColumn(name = "id_partition")
     private PartitionTypeEntity partition;
 }

@@ -51,21 +51,21 @@ public class PartitionTypeEntity implements Serializable {
 
     @Id
     @Identifier
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "id", unique = true)
     private String id;
     @Getter
     @Setter
     @AttributeValue
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
     @Getter
     @Setter
     @PartitionClass
-    @Column(name = "type_name", nullable = false)
+    @Column(name = "type_name")
     private String typeName;
     @Getter
     @Setter
     @ConfigurationName
-    @Column(name = "configuration", nullable = false)
+    @Column(name = "configuration")
     private String configuration;
 }

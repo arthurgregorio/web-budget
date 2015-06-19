@@ -50,4 +50,11 @@
             <var>breadcrumb</var>
         </resource-bundle>  
     </application>
+    
+    <faces-config-extension>
+        <facelets-processing>
+            <file-extension>.xhtml</file-extension>
+            <process-as>xhtml</process-as>
+        </facelets-processing>
+    </faces-config-extension>
 </faces-config>

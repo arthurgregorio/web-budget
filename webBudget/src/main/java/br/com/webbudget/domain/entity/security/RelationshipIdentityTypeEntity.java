@@ -53,23 +53,23 @@ public class RelationshipIdentityTypeEntity implements Serializable {
     @Getter
     @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "id", unique = true)
     private Long id;
     @Getter
     @Setter
     @RelationshipDescriptor
-    @Column(name = "descriptor", nullable = false)
+    @Column(name = "descriptor")
     private String descriptor;
     @Getter
     @Setter
     @RelationshipMember
-    @Column(name = "identity_type", nullable = false)
+    @Column(name = "identity_type")
     private String identityType;
     
     @Getter
     @Setter
     @ManyToOne
     @OwnerReference
-    @JoinColumn(name = "id_owner", nullable = false)
+    @JoinColumn(name = "id_owner")
     private RelationshipTypeEntity owner;
 }

@@ -49,11 +49,11 @@ public class RelationshipTypeEntity implements Serializable {
 
     @Id
     @Identifier
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "id", unique = true)
     private String id;
     @Getter
     @Setter
     @RelationshipClass
-    @Column(name = "type_name", nullable = false)
+    @Column(name = "type_name")
     private String typeName;
 }

@@ -44,19 +44,19 @@ public class GroupTypeEntity extends AbstractIdentityTypeEntity {
     @Getter
     @Setter
     @AttributeValue
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Getter
     @Setter
     @ManyToOne
     @AttributeValue
-    @JoinColumn(name = "id_parent", nullable = false)
+    @JoinColumn(name = "id_parent")
     private GroupTypeEntity parent;
     @Getter
     @Setter
     @OwnerReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_partition", nullable = false)
+    @JoinColumn(name = "id_partition")
     private PartitionTypeEntity partition;
 }

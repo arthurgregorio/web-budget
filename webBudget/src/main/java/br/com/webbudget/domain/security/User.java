@@ -72,7 +72,6 @@ public class User extends AbstractIdentityType implements Account {
     public static final QueryParameter NAME = QUERY_ATTRIBUTE.byName("name");
     public static final QueryParameter EMAIL = QUERY_ATTRIBUTE.byName("email");
     public static final QueryParameter USER_NAME = QUERY_ATTRIBUTE.byName("username");
-    public static final QueryParameter ORGANIZATION = QUERY_ATTRIBUTE.byName("organization");
 
     /**
      *

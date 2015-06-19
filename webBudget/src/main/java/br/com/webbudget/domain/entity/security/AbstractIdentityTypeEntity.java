@@ -17,13 +17,15 @@
 package br.com.webbudget.domain.entity.security;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 import org.picketlink.idm.jpa.annotations.AttributeValue;
 import org.picketlink.idm.jpa.annotations.Identifier;
 import org.picketlink.idm.jpa.annotations.IdentityClass;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,26 +45,28 @@ public abstract class AbstractIdentityTypeEntity implements Serializable {
 
     @Id
     @Identifier
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "id", unique = true)
     private String id;
     @Getter
     @Setter
     @IdentityClass
-    @Column(name = "type_name", nullable = false)
+    @Column(name = "type_name")
     private String typeName;
     @Getter
     @Setter
     @AttributeValue
-    @Column(name = "created_date", nullable = false)
-    private LocalDate createdDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date")
+    private Date createdDate;
     @Getter
     @Setter
     @AttributeValue
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expiration_date")
-    private LocalDate expirationDate;
+    private Date expirationDate;
     @Getter
     @Setter
     @AttributeValue
-    @Column(name = "enable", nullable = false)
+    @Column(name = "enable")
     private boolean enabled;
 }

@@ -17,6 +17,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<jboss-web xmlns="http://www.jboss.com/xml/ns/javaee">
-    <context-root>/webBudget</context-root>
-</jboss-web>
+<jboss-deployment-structure>
+    <deployment>
+        <exclusions>
+            <module name="org.hibernate" />
+            <module name="org.picketlink.core"/>
+        </exclusions>
+    </deployment>
+</jboss-deployment-structure>

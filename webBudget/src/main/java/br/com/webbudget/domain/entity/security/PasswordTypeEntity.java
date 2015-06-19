@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entity.security;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 import org.picketlink.idm.credential.storage.EncodedPasswordStorage;
 import org.picketlink.idm.jpa.annotations.CredentialClass;
 import org.picketlink.idm.jpa.annotations.CredentialProperty;
@@ -33,6 +33,8 @@ import javax.persistence.Column;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,38 +58,40 @@ public class PasswordTypeEntity implements Serializable {
     @Getter
     @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "id", unique = true)
     private Long id;
     @Getter
     @Setter
     @CredentialClass
-    @Column(name = "type_name", nullable = false)
+    @Column(name = "type_name")
     private String typeName;
     @Getter
     @Setter
     @EffectiveDate
-    @Column(name = "effective_date", nullable = false)
-    private LocalDate effectiveDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "effective_date")
+    private Date effectiveDate;
     @Getter
     @Setter
     @ExpiryDate
-    @Column(name = "expiry_date", nullable = false)
-    private LocalDate expiryDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "expiry_date")
+    private Date expiryDate;
     @Getter
     @Setter
     @CredentialProperty(name = "encodedHash")
-    @Column(name = "encoded_hash", nullable = false)
+    @Column(name = "encoded_hash")
     private String encodedHash;
     @Getter
     @Setter
     @CredentialProperty(name = "salt")
-    @Column(name = "salt", nullable = false)
+    @Column(name = "salt")
     private String salt;
     
     @Getter
     @Setter
     @ManyToOne
     @OwnerReference
-    @JoinColumn(name = "id_owner", nullable = false)
+    @JoinColumn(name = "id_owner")
     private UserTypeEntity owner;
 }

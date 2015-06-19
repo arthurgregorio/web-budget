@@ -52,6 +52,8 @@ import org.picketlink.internal.EntityManagerContextInitializer;
 public class SecurityConfiguration {
 
     @Inject
+    private Authorization authorization;
+    @Inject
     private EntityManagerContextInitializer contextInitializer;
     
     /**
@@ -90,7 +92,7 @@ public class SecurityConfiguration {
                 .addContextInitializer(this.contextInitializer)
                 .setCredentialHandlerProperty(
                         PasswordCredentialHandler.PASSWORD_ENCODER, 
-                        new BCryptPasswordEncoder(6));
+                        new BCryptPasswordEncoder(10));
     }
     
     /**
@@ -100,9 +102,6 @@ public class SecurityConfiguration {
      * @param event o evento de configuracao
      */
     public void configureHttpSecurity(@Observes SecurityConfigurationEvent event) {
-        
-        // as autoriazacoes possiveis 
-        final Authorization authorization = new Authorization();
         
         final SecurityConfigurationBuilder builder = event.getBuilder();
 
@@ -120,30 +119,30 @@ public class SecurityConfiguration {
                 .forPath("/favicon.ico*")
                     .unprotected()
                 .forPath("/main/entries/cards/**")
-                    .authorizeWith().role(authorization.CARD_VIEW)
+                    .authorizeWith().role(this.authorization.CARD_VIEW)
                 .forPath("/main/entries/contacts/**")
-                    .authorizeWith().role(authorization.CONTACT_VIEW)
+                    .authorizeWith().role(this.authorization.CONTACT_VIEW)
                 .forPath("/main/entries/costCenter/**")
-                    .authorizeWith().role(authorization.COST_CENTER_VIEW)
+                    .authorizeWith().role(this.authorization.COST_CENTER_VIEW)
                 .forPath("/main/financial/movement/**")
-                    .authorizeWith().role(authorization.MOVEMENT_VIEW)
+                    .authorizeWith().role(this.authorization.MOVEMENT_VIEW)
                 .forPath("/main/entries/wallets/**")
-                    .authorizeWith().role(authorization.WALLET_VIEW)
+                    .authorizeWith().role(this.authorization.WALLET_VIEW)
                 .forPath("/main/financial/cardInvoice/**")
-                    .authorizeWith().role(authorization.CARD_INVOICE_VIEW)
+                    .authorizeWith().role(this.authorization.CARD_INVOICE_VIEW)
                 .forPath("/main/entries/movementClass/**")
-                    .authorizeWith().role(authorization.MOVEMENT_CLASS_VIEW)
+                    .authorizeWith().role(this.authorization.MOVEMENT_CLASS_VIEW)
                 .forPath("/main/financial/transfer/**")
-                    .authorizeWith().role(authorization.BALANCE_TRANSFER_VIEW)
+                    .authorizeWith().role(this.authorization.BALANCE_TRANSFER_VIEW)
                 .forPath("/main/miscellany/closing/**")
-                    .authorizeWith().role(authorization.CLOSING_VIEW)
+                    .authorizeWith().role(this.authorization.CLOSING_VIEW)
                 .forPath("/main/miscellany/financialPeriod/**")
-                    .authorizeWith().role(authorization.FINANCIAL_PERIOD_VIEW)
+                    .authorizeWith().role(this.authorization.FINANCIAL_PERIOD_VIEW)
                 .forPath("/main/tools/user/**")
-                    .authorizeWith().role(authorization.ACCOUNTS_VIEW)
+                    .authorizeWith().role(this.authorization.ACCOUNTS_VIEW)
                 .forPath("/main/tools/configurations/**")
-                    .authorizeWith().role(authorization.CONFIGURATION_VIEW)
+                    .authorizeWith().role(this.authorization.CONFIGURATION_VIEW)
                 .forPath("/main/tools/privateMessage/**")
-                    .authorizeWith().role(authorization.PRIVATE_MESSAGES_VIEW);
+                    .authorizeWith().role(this.authorization.PRIVATE_MESSAGES_VIEW);
     }
 }
