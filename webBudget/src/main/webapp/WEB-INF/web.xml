@@ -50,6 +50,11 @@
         <welcome-file>home.xhtml</welcome-file>
     </welcome-file-list>
     
+    <!-- tempo de sessao -->
+    <session-config>
+        <session-timeout>40</session-timeout>
+    </session-config>
+    
     <!-- paginas de erro -->
     <error-page>  
         <error-code>403</error-code>
@@ -59,11 +64,6 @@
         <error-code>404</error-code>
         <location>/error.xhtml</location>  
     </error-page>
-    
-    <!-- tempo de sessao -->
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
     
     <!-- tema do primefaces -->
     <context-param>
@@ -98,4 +98,16 @@
         <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>
+    
+    <!-- faz o primefaces processar as annotation do bean validation -->
+    <context-param>
+        <param-name>primefaces.TRANSFORM_METADATA</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <!-- tipos mime -->
+    <mime-mapping>
+        <extension>ico</extension>
+        <mime-type>image/x-icon</mime-type>
+    </mime-mapping>
 </web-app>
