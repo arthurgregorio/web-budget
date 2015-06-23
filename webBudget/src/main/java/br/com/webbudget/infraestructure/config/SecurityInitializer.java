@@ -37,7 +37,7 @@ import org.picketlink.idm.query.IdentityQuery;
 import org.picketlink.idm.query.IdentityQueryBuilder;
 
 /**
- * Classe de inicializacao do modelo de seguranca do sistema, por ela toda o 
+ * Classe de inicializacao do modelo de seguranca do sistema, por ela toda o
  * mecanismo de seguranca sera inicializado para uso no sistema
  *
  * @author Arthur Gregorio
@@ -107,12 +107,12 @@ public class SecurityInitializer {
             // criamos um gerenciador de relacionamentos
             final RelationshipManager relationshipManager
                     = this.partitionManager.createRelationshipManager();
-            
+
             // adicionamos no grupo, todas as roles do sistema
             for (Role role : this.getRoles()) {
                 relationshipManager.add(new Grant(role, group));
             }
- 
+
             // garantimos ao admin que ele faz parte do grupo administradores
             relationshipManager.add(new GroupMembership(group, user));
         }
@@ -136,7 +136,7 @@ public class SecurityInitializer {
 
     /**
      * Verifica se o usuario informado existe ou nao
-     * 
+     *
      * @param user o usuario a ser buscado
      * @return se o usuario existe ou nao
      */
@@ -152,7 +152,7 @@ public class SecurityInitializer {
 
     /**
      * Verifica se o grupo informado existe ou nao
-     * 
+     *
      * @param group o grupo a ser verificado
      * @return se o grupo existe ou nao
      */
@@ -168,7 +168,7 @@ public class SecurityInitializer {
 
     /**
      * Verifica se a role existe ou nao
-     * 
+     *
      * @param role a role a ser verificada
      * @return se a role existe ou nao
      */
@@ -184,7 +184,7 @@ public class SecurityInitializer {
 
     /**
      * Busca um grupo em especifico
-     * 
+     *
      * @param group o grupo a ser buscado
      * @return o grupo encontrado
      */

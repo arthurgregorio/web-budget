@@ -152,10 +152,16 @@
     
     <repositories>
         <repository>
-            <url>http://repository.primefaces.org/</url>
-            <id>PrimeFaces-maven-lib</id>
+            <id>primefaces</id>
             <layout>default</layout>
-            <name>Repository for library PrimeFaces-maven-lib</name>
+            <name>primefaces-repo</name>
+            <url>http://repository.primefaces.org/</url>
+        </repository>
+        <repository>
+            <id>jboss</id>
+            <name>jboss</name>
+            <layout>default</layout>
+            <url>https://repository.jboss.org/</url>
         </repository>
     </repositories>
 
