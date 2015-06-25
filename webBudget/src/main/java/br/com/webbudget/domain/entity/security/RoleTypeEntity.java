@@ -43,8 +43,8 @@ public class RoleTypeEntity extends AbstractIdentityTypeEntity {
     @Getter
     @Setter
     @AttributeValue
-    @Column(name = "name")
-    private String name;
+    @Column(name = "authorization")
+    private String authorization;
     @Getter
     @Setter
     @ManyToOne
