@@ -26,10 +26,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  *
@@ -38,9 +36,7 @@ import lombok.ToString;
  * @version 1.0.0
  * @since 2.0.0, 26/05/2015
  */
-@ToString
 @MappedSuperclass
-@EqualsAndHashCode
 public abstract class AbstractIdentityTypeEntity implements Serializable {
 
     @Id

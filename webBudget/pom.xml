@@ -158,10 +158,10 @@
             <url>http://repository.primefaces.org/</url>
         </repository>
         <repository>
-            <id>jboss</id>
-            <name>jboss</name>
+            <id>picketlink-snapshot</id>
+            <name>picketlink-snapshot</name>
             <layout>default</layout>
-            <url>https://repository.jboss.org/</url>
+            <url>http://repository-picketlink.forge.cloudbees.com/snapshot/</url>
         </repository>
     </repositories>
 

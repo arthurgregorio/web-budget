@@ -40,7 +40,7 @@ public class Authorization {
     @Getter
     @AuthorizationGroup("configuration.authority")
     public final String CONFIGURATION_INSERT = "configuration.authority.insert";
-    
+
     @Getter
     @AuthorizationGroup("card.authority")
     public final String CARD_VIEW = "card.authority.view";
@@ -244,10 +244,10 @@ public class Authorization {
 
                     final Set<String> grouped = new HashSet<>();
 
-                    allAuthorities.stream().filter((authority) -> 
-                            (authority.contains(group))).forEach((authority) -> {
-                        grouped.add(authority);
-                    });
+                    allAuthorities.stream().filter((authority)
+                            -> (authority.contains(group))).forEach((authority) -> {
+                                grouped.add(authority);
+                            });
                     authorities.put(group, grouped);
                 }
             }
