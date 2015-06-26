@@ -19,15 +19,13 @@ package br.com.webbudget.application.producer;
 import br.com.webbudget.domain.security.Partition;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import org.picketlink.annotations.PicketLink;
+import org.picketlink.idm.PartitionManager;
 
 /**
  * Um producer para os recursos necessarios ao Picketlink:
  * 
- * {@link EntityManager} para que o PL possa gerenciar nosso modelo de seguranca
- * baseado em JPA
  * {@link Partition} para que nossa producao do gerenciador de identidades ja 
  * saia configurada de fabrica
  * 
@@ -36,20 +34,29 @@ import org.picketlink.annotations.PicketLink;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.0.0, 21/05/2015
+ * @since 2.0.0, 26/06/2015
  */
 @ApplicationScoped
-public class EntityManagerProducer {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+public class DefaultPatitionProducer {
+
+    @Inject
+    private PartitionManager partitionManager;
     
     /**
-     * @return um entityManager configurado para o nosso webBudgetPU
+     * @return a particao default da aplicacao para que o sistema possa iniciar
+     * o gerenciamento das identidades
      */
     @Produces
     @PicketLink
-    EntityManager produceEntityManager() {
-        return this.entityManager;
+    Partition defaultPartitionProducer() {
+        
+        final Partition partition = this.partitionManager.getPartition(
+                Partition.class, Partition.DEFAULT);
+
+        if (partition == null) {
+            throw new IllegalStateException("No default partition found");
+        }
+
+        return partition;
     }
 }

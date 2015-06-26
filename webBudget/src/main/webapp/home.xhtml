@@ -23,7 +23,8 @@
 
     <h:head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
+        <meta http-equiv="refresh" content="${request.session.maxInactiveInterval};url=/webBudget/logout"/>
+        
         <title>#{messages['application.title']}</title>
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['images:favicon.ico']}"/>
 
@@ -53,11 +54,11 @@
 
                 <p:inputText autocomplete="false"
                              styleClass="username-input" 
-                             value="#{authenticationBean.user.username}" 
+                             value="#{loginCredentials.userId}" 
                              placeholder="#{messages['authentication.user']}" />
                 <p:password autocomplete="false"
                             styleClass="password-input" 
-                            value="#{authenticationBean.user.password}" 
+                            value="#{loginCredentials.password}" 
                             placeholder="#{messages['authentication.password']}"/>
 
                 <div class="control-box">
@@ -78,13 +79,13 @@
                         <f:facet name="complete">
                             <h:outputText styleClass="redirecting-text"
                                           value="#{messages['authentication.redirecting']}" 
-                                          rendered="#{authenticationBean.loginError eq false}"/>
+                                          rendered="#{authenticationBean.authenticationError eq false}"/>
                             <p:commandButton global="true"
                                              update="authenticationForm"
                                              process="authenticationForm"
                                              action="#{authenticationBean.doLogin()}"
-                                             rendered="#{authenticationBean.loginError}"
-                                             value="#{messages['authentication.authenticate']}" />
+                                             value="#{messages['authentication.authenticate']}" 
+                                             rendered="#{authenticationBean.authenticationError}"/>
                         </f:facet>
                     </p:ajaxStatus>
                 </div>

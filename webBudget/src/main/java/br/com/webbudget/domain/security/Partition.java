@@ -29,7 +29,7 @@ import org.picketlink.idm.model.annotation.IdentityPartition;
 @IdentityPartition(supportedTypes = {User.class, Role.class, Group.class})
 public class Partition extends AbstractPartition {
 
-    public static final String DEFAULT = "webBudget";
+    public static final String DEFAULT = "default";
 
     /**
      * 

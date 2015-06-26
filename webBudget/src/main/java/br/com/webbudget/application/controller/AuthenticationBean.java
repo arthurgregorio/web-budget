@@ -16,12 +16,12 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.domain.security.User;
-import br.com.webbudget.domain.service.AccountService;
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.picketlink.Identity;
+import org.picketlink.Identity.AuthenticationResult;
 
 /**
  * Bean que controla a autenticacao no sistema, por ele invocamos o gerenciador
@@ -29,21 +29,18 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.1
+ * @version 2.0.0
  * @since 1.0.0, 06/10/2013
  */
 @Named
-@ViewScoped
+@RequestScoped
 public class AuthenticationBean extends AbstractBean {
 
     @Getter
-    private User user;
+    private boolean authenticationError;
     
-    @Getter
-    private boolean loginError;
-
     @Inject
-    private transient AccountService accountService;
+    private transient Identity identity;
 
     /**
      * Inicializa a pagina, verificamos se ja nao existe alguem logado, se nao
@@ -52,15 +49,14 @@ public class AuthenticationBean extends AbstractBean {
      * @return pagina para redirecionar
      */
     public String initialize() {
+       
+        this.logger.debug("Starting {}", this.getClass().getSimpleName());
         
-        // se ja tem gente logada, manda para a dashboard
-//        if (AccountService.getCurrentAuthenticatedUser() != null) {
-//            return "/main/dashboard.xhtml?faces-redirect=true";
-//        }
-        
-        this.user = new User();
-        
-        return null;
+        if (this.identity.isLoggedIn()) {
+            return "/main/dashboard.xhtml?faces-redirect=true";
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -70,14 +66,15 @@ public class AuthenticationBean extends AbstractBean {
      * @return a home autenticada ou a home de login caso acesso negado
      */
     public String doLogin() {
-
-//        try {
-//            this.accountService.login(this.user);
+        
+        final AuthenticationResult result = this.identity.login();
+        
+        if (result == AuthenticationResult.FAILED) {
+            this.authenticationError = true;
+            this.error("authentication.error", true);
+            return null;
+        } else {
             return "/main/dashboard.xhtml?faces-redirect=true";
-//        } catch (ApplicationException ex) {
-//            this.error(ex.getMessage(), true);
-//            this.loginError = true;
-//            return "";
-//        } 
+        }
     }
 }
