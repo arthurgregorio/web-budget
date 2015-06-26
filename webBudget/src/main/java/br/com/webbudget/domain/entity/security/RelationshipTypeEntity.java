@@ -27,10 +27,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  *
@@ -40,14 +38,14 @@ import lombok.ToString;
  * @since 2.0.0, 26/05/2015
  */
 @Entity
-@ToString
-@EqualsAndHashCode
 @Table(name = "relationships")
 @IdentityManaged(Relationship.class)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class RelationshipTypeEntity implements Serializable {
 
     @Id
+    @Getter
+    @Setter
     @Identifier
     @Column(name = "id", unique = true)
     private String id;

@@ -35,10 +35,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  *
@@ -48,8 +46,6 @@ import lombok.ToString;
  * @since 2.0.0, 26/05/2015
  */
 @Entity
-@ToString
-@EqualsAndHashCode
 @Table(name = "passwords")
 @ManagedCredential(EncodedPasswordStorage.class)
 public class PasswordTypeEntity implements Serializable {

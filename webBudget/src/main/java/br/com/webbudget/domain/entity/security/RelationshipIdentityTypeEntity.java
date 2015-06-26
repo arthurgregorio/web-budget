@@ -30,10 +30,8 @@ import javax.persistence.Column;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  *
@@ -43,8 +41,6 @@ import lombok.ToString;
  * @since 2.0.0, 26/05/2015
  */
 @Entity
-@ToString
-@EqualsAndHashCode
 @IdentityManaged(Relationship.class)
 @Table(name = "identity_relationships")
 public class RelationshipIdentityTypeEntity implements Serializable {
