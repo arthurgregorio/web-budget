@@ -17,10 +17,18 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.domain.security.Authorization;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
+import br.com.webbudget.domain.security.Role;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.picketlink.Identity;
+import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.RelationshipManager;
+import org.picketlink.idm.model.Account;
+import org.picketlink.idm.model.basic.BasicModel;
+import static org.picketlink.idm.model.basic.BasicModel.getRole;
 
 /**
  * Bean utlizado pelo sistema para requisitar as authorities disponiveis no
@@ -28,21 +36,37 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
- * @since 1.0.0, 29/06/2014
+ * @version 1.0.0
+ * @since 2.0.0, 27/06/2015
  */
 @Named
-@RequestScoped
-public class PermissionsBean {
+@ApplicationScoped
+public class AuthorizationBean {
 
     @Getter
-    private Authorization authority;
+    @Inject
+    private Authorization authorization;
+    
+    @Inject
+    private Instance<Identity> identityInstance;
 
     /**
-     * Inicializa a authority
+     * 
+     * @return 
      */
-    @PostConstruct
-    protected void initialize() {
-        this.authority = new Authorization();
+    private Identity getIdentity() {
+        return this.identityInstance.get();
+    }
+
+    /**
+     * Checa pela role do usuario logado
+     *
+     * @param applicationRole
+     * @return
+     */
+    private boolean hasRole(String roleName) {
+        
+        
+        return BasicModel.hasRole(this.relationshipManager, account, role);
     }
 }
