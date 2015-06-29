@@ -19,7 +19,6 @@ package br.com.webbudget.application.controller;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
-import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.PrivateMessageService;
@@ -36,11 +35,11 @@ import org.primefaces.model.chart.PieChartModel;
 /**
  * Mbean utilizado na dashboard do sistema, por ele carregamos os graficos da 
  * dashboard e tambem alguns elementos da template, como o nome no botao de 
- * informacoes da conta e logout
+ * informacoes da conta do usuario
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 2.0.0
  * @since 1.0.0, 27/02/2014
  */
 @Named
@@ -63,8 +62,6 @@ public class DashboardBean extends AbstractBean {
     @Getter
     private PieChartModel expensesModel;
 
-    @Inject
-    private transient AccountService accountService;
     @Inject
     private transient MovementService movementService;
     @Inject
@@ -137,27 +134,11 @@ public class DashboardBean extends AbstractBean {
     }
 
     /**
-     * @return a URL de logout do sistema
-     */
-    public String doLogout() {
-//        this.accountService.logout();
-        return "/home.xhtml?faces-redirect=true";
-    }
-
-    /**
-     * @return o nome do usuario logado atualmente no sistema
-     */
-    public String getCurrentUserName() {
-//        return AccountService.getCurrentAuthenticatedUser().getName();
-        return null;
-    }
-
-    /**
      * Pega do bundle da aplicacao o numero da versao setado no maven
      *
      * @return a versao da aplicacao
      */
     public String getVersion() {
-        return ResourceBundle.getBundle("config/webbudget").getString("application.version");
+        return ResourceBundle.getBundle("webbudget").getString("application.version");
     }
 }

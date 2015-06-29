@@ -57,76 +57,63 @@
                             <p:menubar styleClass="main-menu header-background" >
                                 <p:submenu label="#{menu['entries']}" 
                                            styleClass="main-menu-item">
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_VIEW}">
-                                        <p:menuitem value="#{menu['entries.cards']}"    
-                                                    url="/main/entries/cards/listCards.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.WALLET_VIEW}">
-                                        <p:menuitem value="#{menu['entries.wallets']}"
-                                                    url="/main/entries/wallets/listWallets.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CONTACT_VIEW}">
-                                        <p:menuitem value="#{menu['entries.contacts']}"    
-                                                    url="/main/entries/contacts/listContacts.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.COST_CENTER_VIEW}">
-                                        <p:menuitem value="#{menu['entries.cost-center']}"    
-                                                    url="/main/entries/costCenter/listCostCenters.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_CLASS_VIEW}">
-                                        <p:menuitem value="#{menu['entries.movement-classes']}"
-                                                    url="/main/entries/movementClass/listMovementClasses.xhtml"/>
-                                    </sec:authorize>
+                                    <p:menuitem value="#{menu['entries.cards']}"    
+                                                url="/main/entries/cards/listCards.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.CARD_VIEW)}"/>
+                                    <p:menuitem value="#{menu['entries.wallets']}"
+                                                url="/main/entries/wallets/listWallets.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.WALLET_VIEW)}"/>
+                                    <p:menuitem value="#{menu['entries.contacts']}"    
+                                                url="/main/entries/contacts/listContacts.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.CONTACT_VIEW)}"/>
+                                    <p:menuitem value="#{menu['entries.cost-center']}"    
+                                                url="/main/entries/costCenter/listCostCenters.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.COST_CENTER_VIEW)}"/>
+                                    <p:menuitem value="#{menu['entries.movement-classes']}"
+                                                url="/main/entries/movementClass/listMovementClasses.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.MOVEMENT_CLASS_VIEW)}"/>
                                 </p:submenu>
                                 <p:submenu styleClass="main-menu-item"
                                            label="#{menu['financial']}" >
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_VIEW}">
-                                        <p:menuitem value="#{menu['financial.movements']}"    
-                                                    url="/main/financial/movement/listMovements.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CARD_INVOICE_VIEW}">
-                                        <p:menuitem value="#{menu['financial.card-invoice']}"    
-                                                    url="/main/financial/cardInvoice/generateCardInvoice.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.BALANCE_TRANSFER_VIEW}">
-                                        <p:menuitem value="#{menu['financial.transfers']}"    
-                                                    url="/main/financial/transfer/listTransfers.xhtml"/>
-                                    </sec:authorize>
+                                    <p:menuitem value="#{menu['financial.movements']}"    
+                                                url="/main/financial/movement/listMovements.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.MOVEMENT_VIEW)}"/>
+                                    <p:menuitem value="#{menu['financial.card-invoice']}"    
+                                                url="/main/financial/cardInvoice/generateCardInvoice.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.CARD_INVOICE_VIEW)}"/>
+                                    <p:menuitem value="#{menu['financial.transfers']}"    
+                                                url="/main/financial/transfer/listTransfers.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.BALANCE_TRANSFER_VIEW)}"/>
                                 </p:submenu>
                                 <p:submenu styleClass="main-menu-item"
                                            label="#{menu['miscellany']}" >
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CLOSING_VIEW}">
-                                        <p:menuitem value="#{menu['miscellany.closing']}"    
-                                                    url="/main/miscellany/closing/closeFinancialPeriod.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.FINANCIAL_PERIOD_VIEW}">
-                                        <p:menuitem value="#{menu['miscellany.financial-periods']}"    
-                                                    url="/main/miscellany/financialPeriod/listFinancialPeriods.xhtml"/>
-                                    </sec:authorize>
+                                    <p:menuitem value="#{menu['miscellany.closing']}"    
+                                                url="/main/miscellany/closing/closeFinancialPeriod.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.CLOSING_VIEW)}"/>
+                                    <p:menuitem value="#{menu['miscellany.financial-periods']}"    
+                                                url="/main/miscellany/financialPeriod/listFinancialPeriods.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.FINANCIAL_PERIOD_VIEW)}"/>
                                 </p:submenu>
                                 <p:submenu label="#{menu['tools']}" 
                                            styleClass="main-menu-item">
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_VIEW}">
-                                        <p:menuitem value="#{menu['tools.users']}"    
-                                                    url="/main/tools/user/listUserAccounts.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.CONFIGURATION_VIEW}">
-                                        <p:menuitem value="#{menu['tools.configuration']}"    
-                                                    url="/main/tools/configurations/configurations.xhtml"/>
-                                    </sec:authorize>
-                                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.PRIVATE_MESSAGES_VIEW}">
-                                        <p:menuitem value="#{menu['tools.private-messages']}"    
-                                                    url="/main/tools/privateMessage/listPrivateMessages.xhtml"/>
-                                    </sec:authorize>
+                                    <p:menuitem value="#{menu['tools.users']}"    
+                                                url="/main/tools/user/listUserAccounts.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.ACCOUNTS_VIEW)}"/>
+                                    <p:menuitem value="#{menu['tools.configuration']}"    
+                                                url="/main/tools/configurations/configurations.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.CONFIGURATION_VIEW)}"/>
+                                    <p:menuitem value="#{menu['tools.private-messages']}"    
+                                                url="/main/tools/privateMessage/listPrivateMessages.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.PRIVATE_MESSAGES_VIEW)}"/>
                                 </p:submenu>
 
                                 <f:facet name="options">
                                     <p:menuButton id="btSession"
                                                   iconPos="left"
                                                   styleClass="session-button"
-                                                  value="#{dashboardBean.currentUserName}">
+                                                  value="#{authorizationBean.authenticatedUserName}">
                                         <p:menuitem value="#{menu['dashboard.logout']}" 
-                                                    action="#{dashboardBean.doLogout()}"/>
+                                                    action="#{authenticationBean.doLogout()}"/>
                                         <p:menuitem value="#{menu['dashboard.account']}" 
                                                     action="/main/tools/user/accountPreferences.xhtml?faces-redirect=true"/>
                                     </p:menuButton>
@@ -180,7 +167,7 @@
                         .removeClass('ui-icon-calendar').addClass('fa fa-calendar');
             });
         </script>
-        
+
         <div style="clear: both"/>
     </h:body>
 </html>

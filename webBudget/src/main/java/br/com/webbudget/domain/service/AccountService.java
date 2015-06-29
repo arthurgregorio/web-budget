@@ -18,10 +18,10 @@ package br.com.webbudget.domain.service;
 
 import br.com.webbudget.domain.security.Grant;
 import br.com.webbudget.domain.security.Group;
-import br.com.webbudget.domain.security.GroupGrant;
 import br.com.webbudget.domain.security.GroupMembership;
 import br.com.webbudget.domain.security.Role;
 import br.com.webbudget.domain.security.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -29,7 +29,6 @@ import org.picketlink.idm.IdentityManagementException;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.RelationshipManager;
 import org.picketlink.idm.model.Account;
-import org.picketlink.idm.model.IdentityType;
 import org.picketlink.idm.query.IdentityQueryBuilder;
 import org.picketlink.idm.query.RelationshipQuery;
 
@@ -110,6 +109,27 @@ public class AccountService {
             throw new IdentityManagementException("account.error.duplicated-groups");
         }
     }
+    
+    /**
+     * 
+     * @param user
+     * @return 
+     */
+    public List<Group> listUserGroups(User user) {
+
+        final RelationshipQuery<GroupMembership> query = 
+                this.relationshipManager.createRelationshipQuery(GroupMembership.class);
+
+        query.setParameter(GroupMembership.MEMBER, user);
+        
+        final List<Group> groups = new ArrayList<>();
+        
+        for (GroupMembership membership : query.getResultList()) {
+            groups.add(membership.getGroup());
+        }
+        
+        return groups;
+    }
 
     /**
      * 
@@ -170,9 +190,18 @@ public class AccountService {
      */
     public boolean userHasRole(User user, Role role) {
        
-                
+        final List<Group> groups = this.listUserGroups(user);
+        
+        boolean hasRole = false;
+        
+        for (Group group : groups) {
+            if (this.groupHasRole(group, role)) {
+                hasRole = true;
+                break;
+            }
+        }
 
-        return false;
+        return hasRole;
     }
     
     /**

@@ -16,8 +16,11 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
 import br.com.webbudget.domain.security.Authorization;
 import br.com.webbudget.domain.security.Role;
+import br.com.webbudget.domain.security.User;
+import br.com.webbudget.domain.service.AccountService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -48,25 +51,30 @@ public class AuthorizationBean {
     private Authorization authorization;
     
     @Inject
-    private Instance<Identity> identityInstance;
+    @AuthenticatedUser
+    private User authenticatedUser;
+    
+    @Inject
+    private AccountService accountService;
 
     /**
+     * Checa pela role de um respectivo usuario
      * 
-     * @return 
+     * @param roleName a role que espera-se que este usuario tenha
+     * @return se existe ou nao uma instancia desta role atribuida a ele
      */
-    private Identity getIdentity() {
-        return this.identityInstance.get();
+    public boolean hasRole(String roleName) {
+        
+        boolean hasRole = this.accountService.userHasRole(this.authenticatedUser, 
+                this.accountService.findRoleByName(roleName));
+        
+        return hasRole;
     }
-
+    
     /**
-     * Checa pela role do usuario logado
-     *
-     * @param applicationRole
-     * @return
+     * @return o nome do usuario logado atualmente no sistema
      */
-    private boolean hasRole(String roleName) {
-        
-        
-        return BasicModel.hasRole(this.relationshipManager, account, role);
+    public String getAuthenticatedUserName() {
+        return this.authenticatedUser.getName();
     }
 }

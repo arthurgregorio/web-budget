@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 import lombok.Getter;
 
 /**
@@ -31,6 +32,7 @@ import lombok.Getter;
  * @version 1.2.0
  * @since 1.0.0, 24/06/2014
  */
+@Named
 @Dependent
 public class Authorization {
 

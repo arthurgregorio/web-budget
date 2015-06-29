@@ -40,7 +40,7 @@ public class AuthenticationBean extends AbstractBean {
     private boolean authenticationError;
     
     @Inject
-    private transient Identity identity;
+    private Identity identity;
 
     /**
      * Inicializa a pagina, verificamos se ja nao existe alguem logado, se nao
@@ -76,5 +76,15 @@ public class AuthenticationBean extends AbstractBean {
         } else {
             return "/main/dashboard.xhtml?faces-redirect=true";
         }
+    }
+    
+    /**
+     * Realiza logout do sistema
+     * 
+     * @return a home para login
+     */
+    public String doLogout() {
+        this.identity.logout();
+        return "/home.xhtml?faces-redirect=true";
     }
 }
