@@ -16,7 +16,22 @@
  */
 package br.com.webbudget.domain.service;
 
+import br.com.webbudget.domain.security.Grant;
+import br.com.webbudget.domain.security.Group;
+import br.com.webbudget.domain.security.GroupGrant;
+import br.com.webbudget.domain.security.GroupMembership;
+import br.com.webbudget.domain.security.Role;
+import br.com.webbudget.domain.security.User;
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import org.picketlink.idm.IdentityManagementException;
+import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.RelationshipManager;
+import org.picketlink.idm.model.Account;
+import org.picketlink.idm.model.IdentityType;
+import org.picketlink.idm.query.IdentityQueryBuilder;
+import org.picketlink.idm.query.RelationshipQuery;
 
 /**
  *
@@ -28,210 +43,91 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class AccountService {
 
+    @Inject
+    private IdentityManager identityManager;
+    @Inject
+    private RelationshipManager relationshipManager;
+    
     /**
-     * <p> Returns an {@link Agent} instance with the given <code>loginName</code>. </p>
-     *
-     * @param loginName The agent's login name.
-     *
-     * @return An {@link Agent} instance or null if the <code>loginName</code> is null or an empty string. {@link User}
-     *         are also agents, so if the <code>loginName</code> maps to an user, it will be returned.
-     *
-     * @throws IdentityManagementException If the method fails.
+     * 
+     * @param username
+     * @return 
      */
-    public static Agent getAgent(IdentityManager identityManager, String loginName) throws IdentityManagementException {
-        if (identityManager == null) {
-            throw MESSAGES.nullArgument("IdentityManager");
-        }
+    public User findUserByUsername(String username) {
+       
+        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
+        
+        List<User> users = queryBuilder.createIdentityQuery(User.class)
+                .where(queryBuilder.equal(User.USER_NAME, username)).getResultList();
 
-        if (isNullOrEmpty(loginName)) {
+        if (users.isEmpty()) {
             return null;
-        }
-
-        IdentityQueryBuilder queryBuilder = identityManager.getQueryBuilder();
-        List<Agent> agents = queryBuilder.createIdentityQuery(Agent.class)
-                .where(queryBuilder.equal(Agent.LOGIN_NAME, loginName)).getResultList();
-
-        if (agents.isEmpty()) {
-            return null;
-        } else if (agents.size() == 1) {
-            return agents.get(0);
+        } else if (users.size() == 1) {
+            return users.get(0);
         } else {
-            throw new IdentityManagementException("Error - multiple Agent objects found with same login name");
+            throw new IdentityManagementException("account.error.duplicated-usernames");
         }
     }
 
     /**
-     * <p> Returns an {@link User} instance with the given <code>loginName</code>. </p>
-     *
-     * @param loginName The agent's login name.
-     *
-     * @return An {@link User} instance or null if the <code>loginName</code> is null or an empty string.
-     *
-     * @throws IdentityManagementException If the method fails.
+     * 
+     * @param authorization
+     * @return 
      */
-    public static User getUser(IdentityManager identityManager, String loginName) throws IdentityManagementException {
-        if (identityManager == null) {
-            throw MESSAGES.nullArgument("IdentityManager");
-        }
+    public Role findRoleByName(String authorization) {
+        
+        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
 
-        if (isNullOrEmpty(loginName)) {
-            return null;
-        }
-
-        IdentityQueryBuilder queryBuilder = identityManager.getQueryBuilder();
-        List<User> agents = queryBuilder.createIdentityQuery(User.class)
-                .where(queryBuilder.equal(User.LOGIN_NAME, loginName)).getResultList();
-
-        if (agents.isEmpty()) {
-            return null;
-        } else if (agents.size() == 1) {
-            return agents.get(0);
-        } else {
-            throw new IdentityManagementException("Error - multiple Agent objects found with same login name");
-        }
-    }
-
-    /**
-     * <p> Returns an {@link Role} instance with the given <code>name</code>. </p>
-     *
-     * @param name The role's name.
-     *
-     * @return An {@link Role} instance or null if the <code>name</code> is null or an empty string.
-     *
-     * @throws IdentityManagementException If the method fails.
-     */
-    public static Role getRole(IdentityManager identityManager, String name) throws IdentityManagementException {
-        if (identityManager == null) {
-            throw MESSAGES.nullArgument("IdentityManager");
-        }
-
-        if (isNullOrEmpty(name)) {
-            return null;
-        }
-
-        IdentityQueryBuilder queryBuilder = identityManager.getQueryBuilder();
-        List<Role> roles = queryBuilder.createIdentityQuery(Role.class)
-            .where(queryBuilder.equal(Role.NAME, name)).getResultList();
+        final List<Role> roles = queryBuilder.createIdentityQuery(Role.class)
+            .where(queryBuilder.equal(Role.AUTHORIZATION, authorization)).getResultList();
 
         if (roles.isEmpty()) {
             return null;
         } else if (roles.size() == 1) {
             return roles.get(0);
         } else {
-            throw new IdentityManagementException("Error - multiple Role objects found with same name");
+            throw new IdentityManagementException("account.error.duplicated-roles");
         }
     }
 
     /**
-     * <p> Returns a {@link Group} instance with the specified <code>groupPath</code>. Eg.: /groupA/groupB/groupC. </p>
-     *
-     * @param groupPath The group's path or its name without the group separator. In this last case, the returned group
-     * will be the root group. Eg.: Administrators == /Administrators.
-     *
-     * @return An {@link Group} instance or null if the <code>groupPath</code> is null or an empty string.
-     *
-     * @throws IdentityManagementException If the method fails.
+     * 
+     * @param groupName
+     * @return 
      */
-    public static Group getGroup(IdentityManager identityManager, String groupPath) throws IdentityManagementException {
-        if (identityManager == null) {
-            throw MESSAGES.nullArgument("IdentityManager");
-        }
+    public Group findGroupByName(String groupName) {
 
-        if (isNullOrEmpty(groupPath)) {
+        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
+
+        final List<Group> groups = queryBuilder.createIdentityQuery(Group.class)
+            .where(queryBuilder.equal(Group.NAME, groupName)).getResultList();
+
+        if (groups.isEmpty()) {
             return null;
+        } else if (groups.size() == 1) {
+            return groups.get(0);
+        } else {
+            throw new IdentityManagementException("account.error.duplicated-groups");
         }
-
-        if (!groupPath.startsWith("/")) {
-            groupPath = "/" + groupPath;
-        }
-
-        Group group = null;
-        String[] paths = groupPath.split("/");
-
-        if (paths.length > 0) {
-            String name = paths[paths.length - 1];
-            IdentityQueryBuilder queryBuilder = identityManager.getQueryBuilder();
-            IdentityQuery<Group> query = queryBuilder.createIdentityQuery(Group.class)
-                .where(queryBuilder.equal(Group.NAME, name));
-
-            List<Group> result = query.getResultList();
-
-            for (Group storedGroup : result) {
-                if (storedGroup.getPath().equals(groupPath)) {
-                    return storedGroup;
-                }
-
-                if (storedGroup.getPath().endsWith(groupPath)) {
-                    group = storedGroup;
-                }
-            }
-        }
-
-        return group;
     }
 
     /**
-     * <p> Returns the {@link Group} with the given <code>groupName</code> and child of the given <code>parent</code>
-     * {@link Group}. </p>
-     *
-     * @param groupName The group's name.
-     * @param parent A {@link Group} instance with a valid identifier or null. In this last case, the returned group
-     * will be always a root group.
-     *
-     * @return An {@link Group} instance or null if the <code>groupName</code> is null or an empty string.
-     *
-     * @throws IdentityManagementException If the method fails.
+     * 
+     * @param member
+     * @param group
+     * @return 
      */
-    public static Group getGroup(IdentityManager identityManager, String groupName, Group parent) throws IdentityManagementException {
-        if (identityManager == null) {
-            throw MESSAGES.nullArgument("IdentityManager");
-        }
+    public boolean isMember(User member, Group group) {
 
-        if (groupName == null || parent == null) {
-            return null;
-        }
-
-        return getGroup(identityManager, new Group(groupName, parent).getPath());
-    }
-
-    // Relationship management
-
-    /**
-     * <p> Checks if the given {@link IdentityType} is a member of a specific {@link Group}. </p>
-     *
-     * @param member A previously loaded {@link Account} instance.
-     * @param group A previously loaded {@link Group} instance.
-     *
-     * @return True if the {@link Account} is a member of the provided {@link Group}. Otherwise this method returns
-     *         false.
-     *
-     * @throws IdentityManagementException If the method fails.
-     */
-    public static boolean isMember(RelationshipManager relationshipManager, Account member, Group group) throws IdentityManagementException {
-        if (relationshipManager == null) {
-            throw MESSAGES.nullArgument("RelationshipManager");
-        }
-
-        if (member == null) {
-            throw MESSAGES.nullArgument("Account");
-        }
-
-        if (group == null) {
-            throw MESSAGES.nullArgument("Group");
-        }
-
-        RelationshipQuery<GroupMembership> query = relationshipManager.createRelationshipQuery(GroupMembership.class);
+        final RelationshipQuery<GroupMembership> query = 
+                this.relationshipManager.createRelationshipQuery(GroupMembership.class);
 
         query.setParameter(GroupMembership.MEMBER, member);
 
-        List<GroupMembership> result = query.getResultList();
+        final List<GroupMembership> memberships = query.getResultList();
 
-        for (GroupMembership membership : result) {
+        for (GroupMembership membership : memberships) {
             if (membership.getGroup().getId().equals(group.getId())) {
-                return true;
-            }
-
-            if (membership.getGroup().getPath().startsWith(group.getPath())) {
                 return true;
             }
         }
@@ -240,279 +136,91 @@ public class AccountService {
     }
 
     /**
-     * <p> Adds the given {@link Account} as a member of the provided {@link Group}. </p>
-     *
-     * @param member A previously loaded {@link Account} instance.
-     * @param group A previously loaded {@link Group} instance.
-     *
-     * @throws IdentityManagementException If the method fails.
+     * 
+     * @param group 
+     * @param account
      */
-    public static void addToGroup(RelationshipManager relationshipManager, Account member, Group group) throws IdentityManagementException {
-        if (relationshipManager == null) {
-            throw MESSAGES.nullArgument("RelationshipManager");
-        }
-
-        if (member == null) {
-            throw MESSAGES.nullArgument("Account");
-        }
-
-        if (group == null) {
-            throw MESSAGES.nullArgument("Group");
-        }
-
-        relationshipManager.add(new GroupMembership(member, group));
+    public void addToGroup(Group group, Account account) {
+        this.relationshipManager.add(new GroupMembership(group, account));
     }
 
     /**
-     * <p> Removes the given {@link Account} from the provided {@link Group}. </p>
-     *
-     * @param member A previously loaded {@link Account} instance.
-     * @param group A previously loaded {@link Group} instance.
-     *
-     * @throws IdentityManagementException If the method fails.
+     * 
+     * @param group
+     * @param account 
      */
-    public static void removeFromGroup(RelationshipManager relationshipManager, Account member, Group group) throws IdentityManagementException {
-        if (relationshipManager == null) {
-            throw MESSAGES.nullArgument("RelationshipManager");
-        }
+    public void removeFromGroup(Group group, Account account) {
+        
+        final RelationshipQuery<GroupMembership> query = 
+                this.relationshipManager.createRelationshipQuery(GroupMembership.class);
 
-        if (member == null) {
-            throw MESSAGES.nullArgument("Account");
-        }
-
-        if (group == null) {
-            throw MESSAGES.nullArgument("Group");
-        }
-
-        RelationshipQuery<GroupMembership> query = relationshipManager.createRelationshipQuery(GroupMembership.class);
-
-        query.setParameter(GroupMembership.MEMBER, member);
         query.setParameter(GroupMembership.GROUP, group);
+        query.setParameter(GroupMembership.MEMBER, account);
 
         for (GroupMembership membership : query.getResultList()) {
-            relationshipManager.remove(membership);
+            this.relationshipManager.remove(membership);
         }
     }
 
     /**
-     * <p> Checks if the given {@link IdentityType}, {@link Role} and {@link Group} instances maps to a {@link
-     * GroupRole} relationship. </p>
-     *
-     * @param assignee A previously loaded {@link IdentityType} instance.
-     * @param role A previously loaded {@link Role} instance.
-     * @param group A previously loaded {@link Group} instance.
-     *
-     * @return True if the given <code>assignee</code>, <code>role</code> and <code>group</code> map to a previously stored
-     *         {@link GroupRole} relationship. Otherwise this method returns false.
-     *
-     * @throws IdentityManagementException If the method fails.
+     * 
+     * @param user
+     * @param role
+     * @return 
      */
-    public static boolean hasGroupRole(RelationshipManager relationshipManager, IdentityType assignee, Role role, Group group) throws IdentityManagementException {
-        if (relationshipManager == null) {
-            throw MESSAGES.nullArgument("RelationshipManager");
-        }
-
-        if (assignee == null) {
-            throw MESSAGES.nullArgument("IdentityType");
-        }
-
-        if (role == null) {
-            throw MESSAGES.nullArgument("Role");
-        }
-
-        if (group == null) {
-            throw MESSAGES.nullArgument("Group");
-        }
-
-        RelationshipQuery<GroupRole> query = relationshipManager.createRelationshipQuery(GroupRole.class);
-
-        query.setParameter(GroupRole.ASSIGNEE, assignee);
-        query.setParameter(GroupRole.ROLE, role);
-
-        List<GroupRole> result = query.getResultList();
-
-        for (GroupRole membership : result) {
-            if (membership.getGroup().getId().equals(group.getId())) {
-                return true;
-            }
-
-            if (group.getPath().startsWith(membership.getGroup().getPath())) {
-                return true;
-            }
-        }
+    public boolean userHasRole(User user, Role role) {
+       
+                
 
         return false;
     }
-
+    
     /**
-     * <p> Creates a {@link GroupRole} relationship for the given {@link IdentityType}, {@link Role} and {@link Group}
-     * instances. </p>
-     *
-     * @param assignee A previously loaded {@link IdentityType} instance.
-     * @param role A previously loaded {@link Role} instance.
-     * @param group A previously loaded {@link Group} instance.
-     *
-     * @throws IdentityManagementException If the method fails.
+     * 
+     * @param group
+     * @param role
+     * @return 
      */
-    public static void grantGroupRole(RelationshipManager relationshipManager, IdentityType assignee, Role role, Group group) throws IdentityManagementException {
-        if (relationshipManager == null) {
-            throw MESSAGES.nullArgument("RelationshipManager");
-        }
+    public boolean groupHasRole(Group group, Role role) {
+        
+        final RelationshipQuery<Grant> query = this.relationshipManager.createRelationshipQuery(Grant.class);
 
-        if (assignee == null) {
-            throw MESSAGES.nullArgument("IdentityType");
-        }
-
-        if (role == null) {
-            throw MESSAGES.nullArgument("Role");
-        }
-
-        if (group == null) {
-            throw MESSAGES.nullArgument("Group");
-        }
-
-        relationshipManager.add(new GroupRole(assignee, group, role));
-    }
-
-    /**
-     * <p> Revokes a {@link GroupRole} relationship for the given {@link IdentityType}, {@link Role} and {@link Group}
-     * instances. </p>
-     *
-     * @param assignee A previously loaded {@link IdentityType} instance.
-     * @param role A previously loaded {@link Role} instance.
-     * @param group A previously loaded {@link Group} instance.
-     *
-     * @throws IdentityManagementException If the method fails.
-     */
-    public static void revokeGroupRole(RelationshipManager relationshipManager, IdentityType assignee, Role role, Group group) throws IdentityManagementException {
-        if (relationshipManager == null) {
-            throw MESSAGES.nullArgument("RelationshipManager");
-        }
-
-        if (assignee == null) {
-            throw MESSAGES.nullArgument("IdentityType");
-        }
-
-        if (role == null) {
-            throw MESSAGES.nullArgument("Role");
-        }
-
-        if (group == null) {
-            throw MESSAGES.nullArgument("Group");
-        }
-
-        RelationshipQuery<GroupRole> query = relationshipManager.createRelationshipQuery(GroupRole.class);
-
-        query.setParameter(GroupRole.ASSIGNEE, assignee);
-        query.setParameter(GroupRole.GROUP, group);
-        query.setParameter(GroupRole.ROLE, role);
-
-        for (GroupRole groupRole : query.getResultList()) {
-            relationshipManager.remove(groupRole);
-        }
-    }
-
-    /**
-     * <p> Checks if the given {@link Role} is granted to the provided {@link IdentityType}. </p>
-     *
-     * @param assignee A previously loaded {@link IdentityType} instance. Valid instances are only from the {@link Account} and {@link Group} types.
-     * @param role A previously loaded {@link Role} instance.
-     *
-     * @return True if the give {@link Role} is granted. Otherwise this method returns false.
-     *
-     * @throws IdentityManagementException If the method fails.
-     */
-    public static boolean hasRole(RelationshipManager relationshipManager, IdentityType assignee, Role role) throws IdentityManagementException {
-        if (relationshipManager == null) {
-            throw MESSAGES.nullArgument("RelationshipManager");
-        }
-
-        if (assignee == null) {
-            throw MESSAGES.nullArgument("IdentityType");
-        }
-
-        if (!Account.class.isInstance(assignee) && !Group.class.isInstance(assignee)) {
-            throw MESSAGES.unexpectedType(assignee.getClass());
-        }
-
-        if (role == null) {
-            throw MESSAGES.nullArgument("Role");
-        }
-
-        RelationshipQuery<Grant> query = relationshipManager.createRelationshipQuery(Grant.class);
-
-        query.setParameter(Grant.ASSIGNEE, assignee);
-        query.setParameter(GroupRole.ROLE, role);
-
-        boolean hasRole = !query.getResultList().isEmpty();
-
-        if (!hasRole) {
-            return relationshipManager.inheritsPrivileges(assignee, role);
-        }
-
-        return hasRole;
-    }
-
-    /**
-     * <p> Grants the given {@link Role} to the provided {@link IdentityType}. </p>
-     *
-     * @param assignee A previously loaded {@link IdentityType} instance. Valid instances are only from the {@link Account} and {@link Group} types.
-     * @param role A previously loaded {@link Role} instance.
-     *
-     * @throws IdentityManagementException If the method fails.
-     */
-    public static void grantRole(RelationshipManager relationshipManager, IdentityType assignee, Role role) throws IdentityManagementException {
-        if (relationshipManager == null) {
-            throw MESSAGES.nullArgument("RelationshipManager");
-        }
-
-        if (assignee == null) {
-            throw MESSAGES.nullArgument("IdentityType");
-        }
-
-        if (!Account.class.isInstance(assignee) && !Group.class.isInstance(assignee)) {
-            throw MESSAGES.unexpectedType(assignee.getClass());
-        }
-
-        if (role == null) {
-            throw MESSAGES.nullArgument("Role");
-        }
-
-        relationshipManager.add(new Grant(assignee, role));
-    }
-
-    /**
-     * <p> Revokes the given {@link Role} from the provided {@link IdentityType}. </p>
-     *
-     * @param assignee A previously loaded {@link IdentityType} instance. Valid instances are only from the {@link Account} and {@link Group} types.
-     * @param role A previously loaded {@link Role} instance.
-     *
-     * @throws IdentityManagementException If the method fails.
-     */
-    public static void revokeRole(RelationshipManager relationshipManager, IdentityType assignee, Role role) throws IdentityManagementException {
-        if (relationshipManager == null) {
-            throw MESSAGES.nullArgument("RelationshipManager");
-        }
-
-        if (assignee == null) {
-            throw MESSAGES.nullArgument("IdentityType");
-        }
-
-        if (!Account.class.isInstance(assignee) && !Group.class.isInstance(assignee)) {
-            throw MESSAGES.unexpectedType(assignee.getClass());
-        }
-
-        if (role == null) {
-            throw MESSAGES.nullArgument("Role");
-        }
-
-        RelationshipQuery<Grant> query = relationshipManager.createRelationshipQuery(Grant.class);
-
-        query.setParameter(Grant.ASSIGNEE, assignee);
+        query.setParameter(Grant.ASSIGNEE, group);
         query.setParameter(Grant.ROLE, role);
 
         for (Grant grant : query.getResultList()) {
-            relationshipManager.remove(grant);
+            if (grant.getAssignee().getId().equals(group.getId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 
+     * @param role
+     * @param group 
+     */
+    public void grantToGroup(Role role, Group group) {
+        this.relationshipManager.add(new Grant(role, group));
+    }
+
+    /**
+     * 
+     * @param role
+     * @param group 
+     */
+    public void revokeGroupGrant(Role role, Group group) {
+        
+        final RelationshipQuery<Grant> query = 
+                this.relationshipManager.createRelationshipQuery(Grant.class);
+
+        query.setParameter(Grant.ASSIGNEE, group);
+        query.setParameter(Grant.ROLE, role);
+
+        for (Grant grant : query.getResultList()) {
+            this.relationshipManager.remove(grant);
         }
     }
 }
