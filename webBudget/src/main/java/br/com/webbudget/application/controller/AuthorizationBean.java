@@ -18,20 +18,13 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
 import br.com.webbudget.domain.security.Authorization;
-import br.com.webbudget.domain.security.Role;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.service.AccountService;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.RelationshipManager;
-import org.picketlink.idm.model.Account;
-import org.picketlink.idm.model.basic.BasicModel;
-import static org.picketlink.idm.model.basic.BasicModel.getRole;
 
 /**
  * Bean utlizado pelo sistema para requisitar as authorities disponiveis no
@@ -51,8 +44,7 @@ public class AuthorizationBean {
     private Authorization authorization;
     
     @Inject
-    @AuthenticatedUser
-    private User authenticatedUser;
+    private Identity identity;
     
     @Inject
     private AccountService accountService;
@@ -65,7 +57,7 @@ public class AuthorizationBean {
      */
     public boolean hasRole(String roleName) {
         
-        boolean hasRole = this.accountService.userHasRole(this.authenticatedUser, 
+        boolean hasRole = this.accountService.userHasRole(this.getAuthenticatedUser(), 
                 this.accountService.findRoleByName(roleName));
         
         return hasRole;
@@ -75,6 +67,13 @@ public class AuthorizationBean {
      * @return o nome do usuario logado atualmente no sistema
      */
     public String getAuthenticatedUserName() {
-        return this.authenticatedUser.getName();
+        return this.getAuthenticatedUser().getName();
+    }
+    
+    /**
+     * @return o usuario autenticado
+     */
+    private User getAuthenticatedUser() {
+        return (User) this.identity.getAccount();
     }
 }

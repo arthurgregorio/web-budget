@@ -29,6 +29,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,6 +41,7 @@ import lombok.Setter;
  * @since 2.0.0, 26/05/2015
  */
 @Entity
+@EqualsAndHashCode
 @Table(name = "partitions")
 @IdentityManaged(Partition.class)
 @Inheritance(strategy = InheritanceType.JOINED)

@@ -18,7 +18,6 @@ package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.repository.GenericRepository;
-import javax.enterprise.context.ApplicationScoped;
 
 /**
  *
@@ -27,7 +26,6 @@ import javax.enterprise.context.ApplicationScoped;
  * @version 1.0.0
  * @since 1.0.0, 22/04/2014
  */
-@ApplicationScoped
 public class ClosingRepository extends GenericRepository<Closing, Long> implements IClosingRepository {
 
 }

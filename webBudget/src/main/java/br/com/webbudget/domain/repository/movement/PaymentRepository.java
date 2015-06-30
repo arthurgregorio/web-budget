@@ -27,7 +27,6 @@ import javax.enterprise.context.ApplicationScoped;
  * @version 1.0.0
  * @since 1.0.0, 18/10/2013
  */
-@ApplicationScoped
 public class PaymentRepository extends GenericRepository<Payment, Long> implements IPaymentRepository {
 
 }
