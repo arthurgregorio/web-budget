@@ -140,6 +140,7 @@ public class MovementBean extends AbstractBean {
         } else {
             this.viewState = ViewState.DETAILING;
             this.movement = this.movementService.findMovementById(movementId);
+            this.openFinancialPeriods = this.financialPeriodService.listFinancialPeriods(true);
         }
     }
 
