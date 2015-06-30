@@ -111,7 +111,7 @@ public class SecurityConfiguration {
                     .form()
                         .loginPage("/home.xhtml")
                         .errorPage("/home.xhtml?failure=true")
-                .forPath("/logout.xhtml")
+                .forPath("/logout")
                     .logout()
                     .redirectTo("/home.xhtml?faces-redirect=true")
                 .forPath("/javax.faces.resource/*")

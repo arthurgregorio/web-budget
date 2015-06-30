@@ -22,7 +22,6 @@ import org.picketlink.idm.jpa.annotations.AttributeValue;
 import org.picketlink.idm.jpa.annotations.OwnerReference;
 import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -55,8 +54,8 @@ public class GroupTypeEntity extends AbstractIdentityTypeEntity {
     private GroupTypeEntity parent;
     @Getter
     @Setter
+    @ManyToOne
     @OwnerReference
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_partition")
     private PartitionTypeEntity partition;
 }

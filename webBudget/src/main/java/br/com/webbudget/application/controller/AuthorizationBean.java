@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
 import br.com.webbudget.domain.security.Authorization;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.service.AccountService;
