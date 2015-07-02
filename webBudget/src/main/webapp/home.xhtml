@@ -24,7 +24,7 @@
     <h:head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta http-equiv="refresh" content="${request.session.maxInactiveInterval};url=/webBudget/logout"/>
-        
+
         <title>#{messages['application.title']}</title>
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['images:favicon.ico']}"/>
 
@@ -66,9 +66,9 @@
                         <f:facet name="default">
                             <p:commandButton global="true"
                                              update="authenticationForm"
-                                             process="authenticationForm"
-                                             action="#{authenticationBean.doLogin()}"
-                                             value="#{messages['authentication.authenticate']}" />
+                                     process="authenticationForm"
+                                     action="#{authenticationBean.doLogin()}"
+                                     value="#{messages['authentication.authenticate']}" />
                         </f:facet>
                         <f:facet name="start">
                             <p:graphicImage width="34" 

@@ -33,7 +33,6 @@ import javax.inject.Inject;
  * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
-@RequestScoped
 public class BundleProducer {
 
     @Inject

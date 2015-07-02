@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.application.producer;
 
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
@@ -32,7 +31,6 @@ import org.slf4j.LoggerFactory;
  * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
-@RequestScoped
 public class LoggerProducer {
 
     /**

@@ -41,16 +41,16 @@ public abstract class AbstractBean implements Serializable {
 
     @Getter
     protected ViewState viewState;
-    
-    @Inject
-    protected transient Logger logger;
-    @Inject
-    protected transient FacesContext facesContext;
-    @Inject
-    protected transient RequestContext requestContext;
 
     @Inject
     private Translator translator;
+    
+    @Inject
+    protected transient Logger logger;
+    @Inject 
+    protected transient FacesContext facesContext;
+    @Inject
+    protected transient RequestContext requestContext;
 
     /**
      * Traduz uma chave para a sua versao internacionalizada
