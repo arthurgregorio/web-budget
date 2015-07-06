@@ -56,7 +56,7 @@ public class AccountService {
        
         final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
         
-        List<User> users = queryBuilder.createIdentityQuery(User.class)
+        final List<User> users = queryBuilder.createIdentityQuery(User.class)
                 .where(queryBuilder.equal(User.USER_NAME, username)).getResultList();
 
         if (users.isEmpty()) {
@@ -124,11 +124,52 @@ public class AccountService {
         
         final List<Group> groups = new ArrayList<>();
         
-        for (GroupMembership membership : query.getResultList()) {
+        query.getResultList().stream().forEach((membership) -> {
             groups.add(membership.getGroup());
-        }
+        });
         
         return groups;
+    }
+    
+    /**
+     * 
+     * @param user
+     * @return 
+     */
+    public List<Group> listUserGroupsAndGrants(User user) {
+
+        final RelationshipQuery<GroupMembership> query = 
+                this.relationshipManager.createRelationshipQuery(GroupMembership.class);
+
+        query.setParameter(GroupMembership.MEMBER, user);
+        
+        final List<Group> groups = new ArrayList<>();
+        
+        query.getResultList().stream().forEach((membership) -> {
+            groups.add(membership.getGroup());
+        });
+        
+        // preenchemos os grants do grupo
+        groups.stream().forEach((group) -> {
+            group.setGrants(this.listGrantsByGroup(group));
+        });
+        
+        return groups;
+    }
+    
+    /**
+     * 
+     * @param group
+     * @return 
+     */
+    public List<Grant> listGrantsByGroup(Group group) {
+        
+        final RelationshipQuery<Grant> query = this.relationshipManager
+                .createRelationshipQuery(Grant.class);
+
+        query.setParameter(Grant.ASSIGNEE, group);
+
+        return query.getResultList();
     }
 
     /**
@@ -146,10 +187,9 @@ public class AccountService {
 
         final List<GroupMembership> memberships = query.getResultList();
 
-        for (GroupMembership membership : memberships) {
-            if (membership.getGroup().getId().equals(group.getId())) {
-                return true;
-            }
+        if (memberships.stream().anyMatch((membership) -> 
+                (membership.getGroup().getId().equals(group.getId())))) {
+            return true;
         }
 
         return false;
@@ -217,15 +257,14 @@ public class AccountService {
         query.setParameter(Grant.ASSIGNEE, group);
         query.setParameter(Grant.ROLE, role);
 
-        for (Grant grant : query.getResultList()) {
-            if (grant.getAssignee().getId().equals(group.getId())) {
-                return true;
-            }
+        if (query.getResultList().stream().anyMatch((grant) -> 
+                (grant.getAssignee().getId().equals(group.getId())))) {
+            return true;
         }
 
         return false;
     }
-
+    
     /**
      * 
      * @param role

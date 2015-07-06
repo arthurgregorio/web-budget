@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.security;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.picketlink.idm.model.AbstractIdentityType;
@@ -49,6 +50,14 @@ public class Group extends AbstractIdentityType {
     @AttributeProperty
     @InheritsPrivileges
     private Group parent;
+    
+    /**
+     * Cache dos grants deste grupo preenchido pelo metodo 
+     * {@link AccountService#listUserGroupsAndGrants(User user)}
+     */
+    @Getter
+    @Setter
+    private List<Grant> grants;
     
     public static final QueryParameter NAME = QUERY_ATTRIBUTE.byName("name");
     public static final QueryParameter PARENT = QUERY_ATTRIBUTE.byName("parent");

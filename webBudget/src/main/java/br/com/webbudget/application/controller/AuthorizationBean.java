@@ -17,13 +17,19 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.domain.security.Authorization;
+import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.service.AccountService;
+import java.util.ArrayList;
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import org.picketlink.Identity;
+import org.picketlink.authentication.event.LoggedInEvent;
+import org.picketlink.authentication.event.PostLoggedOutEvent;
 
 /**
  * Bean utlizado pelo sistema para requisitar as authorities disponiveis no
@@ -38,6 +44,8 @@ import org.picketlink.Identity;
 @ApplicationScoped
 public class AuthorizationBean {
 
+    private List<Group> userGroups;
+    
     @Getter
     @Inject
     private Authorization authorization;
@@ -49,6 +57,22 @@ public class AuthorizationBean {
     private AccountService accountService;
 
     /**
+     * 
+     * @param event 
+     */
+    protected void initialize(@Observes LoggedInEvent event) {
+        this.userGroups = new ArrayList<>();
+    }
+    
+    /**
+     * 
+     * @param event 
+     */
+    protected void destroy(@Observes PostLoggedOutEvent event) {
+        this.userGroups = null;
+    }
+    
+    /**
      * Checa pela role de um respectivo usuario
      * 
      * @param roleName a role que espera-se que este usuario tenha
@@ -56,10 +80,33 @@ public class AuthorizationBean {
      */
     public boolean hasRole(String roleName) {
         
-        boolean hasRole = this.accountService.userHasRole(this.getAuthenticatedUser(), 
-                this.accountService.findRoleByName(roleName));
+        if (this.userGroups.isEmpty()) {
+            this.userGroups = this.accountService
+                    .listUserGroupsAndGrants(this.getAuthenticatedUser());
+        }
         
-        return hasRole;
+        return this.checkForGrantTo(roleName);
+    }
+    
+    /**
+     * 
+     * @param role 
+     */
+    private boolean checkForGrantTo(String role) {
+        
+        for (Group group : this.userGroups) {
+            
+            // se o group nao contiver grants, falha
+            if (!group.getGrants().isEmpty()) {
+                
+                if (group.getGrants().stream().anyMatch((grant) ->
+                        (grant.getRole().getAuthorization().equals(role)))) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
     
     /**
