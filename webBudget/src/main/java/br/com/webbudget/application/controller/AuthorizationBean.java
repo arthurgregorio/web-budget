@@ -20,9 +20,10 @@ import br.com.webbudget.domain.security.Authorization;
 import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.service.AccountService;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -41,20 +42,20 @@ import org.picketlink.authentication.event.PostLoggedOutEvent;
  * @since 2.0.0, 27/06/2015
  */
 @Named
-@ApplicationScoped
-public class AuthorizationBean {
+@SessionScoped
+public class AuthorizationBean implements Serializable {
 
     private List<Group> userGroups;
     
     @Getter
     @Inject
-    private Authorization authorization;
+    private transient Authorization authorization;
     
     @Inject
-    private Identity identity;
+    private transient Identity identity;
     
     @Inject
-    private AccountService accountService;
+    private transient AccountService accountService;
 
     /**
      * 
