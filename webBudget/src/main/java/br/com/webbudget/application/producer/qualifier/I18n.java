@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.application.producer.qualifier;
 
+import br.com.webbudget.application.producer.BundleProducer;
 import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -27,11 +28,13 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
+ * Qualidficador CDI que identifica a producao/injecao de instancias do nosso
+ * bundle de mensagens internacionalizados pelo produto {@link BundleProducer}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 21/05/2015
+ * @since 2.0.0, 21/05/2015
  */
 @Qualifier
 @Documented

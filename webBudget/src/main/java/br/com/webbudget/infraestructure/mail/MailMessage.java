@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.infraestructure.mail;
 
+import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 
 /**
@@ -32,19 +33,29 @@ public interface MailMessage {
      * @return o titulo da mensagem
      */
     public String getTitle();
-
+    
     /**
      * @return o conteudo da mensagem
      */
     public String getContent();
-
+    
+    /**
+     * @return os emissores
+     */
+    public Address getFrom();
+    
     /**
      * @return os emails usados para caso o cliente quiser responder o email
      */
-    public InternetAddress[] getReplyTo();
-
+    public Address getReplyTo();
+    
     /**
      * @return os destinatarios
      */
     public InternetAddress[] getAddressees();
+    
+    /**
+     * @return os destinatarios em copia
+     */
+    public InternetAddress[] getCcs();
 }

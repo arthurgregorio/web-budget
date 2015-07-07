@@ -33,7 +33,8 @@ import org.picketlink.idm.credential.UsernamePasswordCredentials;
 import org.slf4j.Logger;
 
 /**
- * O autenticador do sistema, por ele todos o sistema 
+ * O autenticador do sistema, por ele realizamos o processo de autenticacao de 
+ * um usuario atraves de suas credenciais informadas na tela de login
  *
  * @author Arthur Gregorio
  *

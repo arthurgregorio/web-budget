@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.mail.Message;
 import javax.mail.Session;
@@ -34,10 +34,10 @@ import javax.mail.internet.MimeMessage;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 2.0.0
  * @since 1.0.0, 06/07/2014
  */
-@RequestScoped
+@ApplicationScoped
 public class Postman {
 
     @Resource(name = "java:/mail/webBudget")
@@ -57,10 +57,11 @@ public class Postman {
         final MimeMessage message = new MimeMessage(this.mailSession);
 
         // header da mensagem
-        message.setFrom(this.config.getString("email.from"));
+        message.setFrom(mailMessage.getFrom());
         message.setSubject(mailMessage.getTitle());
         message.setRecipients(Message.RecipientType.TO, mailMessage.getAddressees());
-
+        message.setRecipients(Message.RecipientType.CC, mailMessage.getCcs());
+        
         // a mensagem
         message.setText(mailMessage.getContent(), "UTF-8", "html");
         message.setSentDate(new Date());

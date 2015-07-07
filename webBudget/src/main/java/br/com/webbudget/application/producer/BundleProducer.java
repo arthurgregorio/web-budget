@@ -19,7 +19,6 @@ package br.com.webbudget.application.producer;
 import br.com.webbudget.application.producer.qualifier.I18n;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
