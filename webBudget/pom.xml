@@ -189,7 +189,7 @@
         <dependency>
             <groupId>org.primefaces.extensions</groupId>  
             <artifactId>primefaces-extensions</artifactId>  
-            <version>3.1.0</version>  
+            <version>3.2.0</version>  
             <exclusions>
                 <exclusion>
                     <groupId>org.primefaces</groupId>  
@@ -209,7 +209,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.2</version>
+            <version>1.16.4</version>
         </dependency>
         
         <!-- picketlink -->
@@ -306,7 +306,7 @@
         </dependency>
         <dependency>
             <groupId>velocity-tools</groupId>
-            <artifactId>velocity-tools-generic</artifactId>
+            <artifactId>velocity-tools</artifactId>
             <version>1.4</version>
         </dependency>
     </dependencies>
