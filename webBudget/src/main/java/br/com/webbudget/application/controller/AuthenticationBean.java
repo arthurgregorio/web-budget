@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -33,7 +33,7 @@ import org.picketlink.Identity.AuthenticationResult;
  * @since 1.0.0, 06/10/2013
  */
 @Named
-@RequestScoped
+@ViewScoped
 public class AuthenticationBean extends AbstractBean {
 
     @Getter

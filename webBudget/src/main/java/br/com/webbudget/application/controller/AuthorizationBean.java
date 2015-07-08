@@ -21,7 +21,6 @@ import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.service.AccountService;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
@@ -58,16 +57,20 @@ public class AuthorizationBean implements Serializable {
     private transient AccountService accountService;
 
     /**
+     * Inicializamos a sessao do usuario carregando os grupos dele e suas roles
      * 
-     * @param event 
+     * @param event o evento de login
      */
     protected void initialize(@Observes LoggedInEvent event) {
-        this.userGroups = new ArrayList<>();
+        this.userGroups = this.accountService
+                .listUserGroupsAndGrants(this.getAuthenticatedUser());
     }
     
     /**
+     * Destruimos a sessao, forcando que em um proximo login os grupos sejam 
+     * carregados novamente
      * 
-     * @param event 
+     * @param event o evento de logout
      */
     protected void destroy(@Observes PostLoggedOutEvent event) {
         this.userGroups = null;
@@ -80,20 +83,17 @@ public class AuthorizationBean implements Serializable {
      * @return se existe ou nao uma instancia desta role atribuida a ele
      */
     public boolean hasRole(String roleName) {
-        
-        if (this.userGroups.isEmpty()) {
-            this.userGroups = this.accountService
-                    .listUserGroupsAndGrants(this.getAuthenticatedUser());
-        }
-        
-        return this.checkForGrantTo(roleName);
+        return this.hasGrantTo(roleName);
     }
     
     /**
+     * Buscamos nos grupos do usuario que fez login se em algum deles existe um
+     * grant para a role desejada
      * 
-     * @param role 
+     * @param role a role que esperamos que o usuario tenha
+     * @return se ha ou nao a o grant para aquela role em algum dos grupos
      */
-    private boolean checkForGrantTo(String role) {
+    private boolean hasGrantTo(String role) {
         
         for (Group group : this.userGroups) {
             
