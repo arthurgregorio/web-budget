@@ -74,7 +74,7 @@ public class Authenticator extends BaseAuthenticator {
             } 
         } catch (Exception ex) {
             this.setStatus(AuthenticationStatus.FAILURE);
-            logger.error("Error when authenticate user {0}", this.credentials.getUserId(), ex);
+            logger.error("Error in an attempt to authenticate {}", this.credentials.getUserId(), ex);
         }
     }
     
