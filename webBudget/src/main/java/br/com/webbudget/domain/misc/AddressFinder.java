@@ -18,15 +18,6 @@ import lombok.ToString;
 @RequestScoped
 public class AddressFinder {
 
-    private final ResourceBundle configBundle;
-
-    /**
-     * Inicializa o bundle de configuracao
-     */
-    public AddressFinder() {
-        this.configBundle = ResourceBundle.getBundle("config.webbudget");
-    }
-    
     /**
      * Busca os dados referentes a um endereco partindo do CEP como referencia
      * 
