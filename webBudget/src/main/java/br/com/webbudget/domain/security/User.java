@@ -18,6 +18,7 @@ package br.com.webbudget.domain.security;
 
 import javax.persistence.Column;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
@@ -43,23 +44,33 @@ public class User extends AbstractIdentityType implements Account {
 
     @Getter
     @Setter
-    @NotEmpty(message = "{user-account.name}")
+    @NotEmpty(message = "{user.name}")
     @Column(name = "name", length = 90, nullable = false)
     private String name;
     @Getter
     @Setter
-    @Email(message = "{user-account.email}")
-    @NotEmpty(message = "{user-account.email}")
+    @Email(message = "{user.email}")
+    @NotEmpty(message = "{user.email}")
     @Column(name = "email", length = 90, nullable = false)
     private String email;
     @Setter
     @Getter
     @Unique
     @StereotypeProperty(IDENTITY_USER_NAME)
-    @NotEmpty(message = "{user-account.username}")
+    @NotEmpty(message = "{user.username}")
     @Column(name = "username", length = 45, nullable = false)
     private String username;
 
+    @Getter
+    @Setter
+    @Transient
+    @NotNull(message = "{user.no-group}")
+    private Group group;
+    
+    @Getter
+    @Setter
+    @Transient
+    private boolean selected;
     @Getter
     @Setter
     @Transient
@@ -67,7 +78,7 @@ public class User extends AbstractIdentityType implements Account {
     @Getter
     @Setter
     @Transient
-    private boolean selected;
+    private String passwordConfirmation;
 
     public static final QueryParameter NAME = QUERY_ATTRIBUTE.byName("name");
     public static final QueryParameter EMAIL = QUERY_ATTRIBUTE.byName("email");
@@ -86,5 +97,21 @@ public class User extends AbstractIdentityType implements Account {
      */
     public User(String username) {
         this.username = username;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean isBlocked() {
+        return !this.isEnabled();
+    }
+    
+    /**
+     * 
+     * @param blocked 
+     */
+    public void setBlocked(boolean blocked) {
+        this.setEnabled(!blocked);
     }
 }

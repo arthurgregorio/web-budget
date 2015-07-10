@@ -1,7 +1,7 @@
 <!--
   Copyright (C) 2015 Arthur Gregorio, AG.Software
  
-  This program is free software: you can redistribute it and/or modify
+  This program is free softwareyou can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
@@ -23,7 +23,7 @@
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
-        <f:viewAction action="#{userAccountBean.initializeForm(param.userId)}"/>
+        <f:viewAction action="#{userBean.initializeForm(param.userId)}"/>
     </f:metadata>
 
     <ui:define name="breadcrumb">
@@ -33,15 +33,15 @@
                     value="#{breadcrumb['tools.user']}" />
         <p:menuitem url="formUserAccount.xhtml"
                     value="#{breadcrumb['inclusion']}" 
-                    rendered="#{userAccountBean.viewState eq 'ADDING'}"/>
+                    rendered="#{userBean.viewState eq 'ADDING'}"/>
         <p:menuitem url="#"
                     value="#{breadcrumb['edition']}" 
-                    rendered="#{userAccountBean.viewState eq 'EDITING'}"/>
+                    rendered="#{userBean.viewState eq 'EDITING'}"/>
     </ui:define>
 
     <ui:define name="content">
 
-        <h:form id="userAccountForm" prependId="false">
+        <h:form id="userForm" prependId="false">
             <div class="ui-grid-row">
                 <div class="ui-grid-col-12">
                     <p:messages id="messages" closable="true" />
@@ -51,82 +51,77 @@
                 <div class="ui-grid-col-6"> 
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group">
-                            <p:selectBooleanCheckbox id="inBlocked" 
-                                                     value="#{userAccountBean.user.blocked}"
-                                                     itemLabel="#{messages['user-account.form.blocked']}"/>
+                            <p:selectBooleanCheckbox value="#{userBean.user.blocked}"
+                                                     itemLabel="#{messages['user.form.blocked']}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inGroup" 
+                                           value="#{messages['user.form.group']}"/>
+                            <p:selectOneMenu id="inGroup" 
+                                             value="#{userBean.user.group}" 
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{messages['user.form.select-one']}" />
+                                <f:selectItems var="group" 
+                                               itemValue="#{group}"
+                                               itemLabel="#{group.name}"
+                                               value="#{userBean.groups}" /> 
+                            </p:selectOneMenu>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inName" 
-                                           value="#{messages['user-account.form.name']}: "/>
+                                           value="#{messages['user.form.name']}"/>
                             <p:inputText id="inName" 
                                          maxlength="90"
-                                         value="#{userAccountBean.user.name}" />
+                                         value="#{userBean.user.name}" />
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inEmail" 
-                                           value="#{messages['user-account.form.email']}: "/>
+                                           value="#{messages['user.form.email']}"/>
                             <p:inputText id="inEmail" 
                                          maxlength="90"
-                                         value="#{userAccountBean.user.email}"/>
+                                         value="#{userBean.user.email}"/>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inUsername" 
-                                           value="#{messages['user-account.form.username']}: "/>
+                                           value="#{messages['user.form.username']}"/>
                             <p:inputText id="inUsername" 
                                          maxlength="45"
-                                         value="#{userAccountBean.user.username}" 
-                                         readonly="#{userAccountBean.user.saved}"/>
+                                         value="#{userBean.user.username}" 
+                                         readonly="#{userBean.user.id ne null}"/>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inPassword" 
-                                           value="#{messages['user-account.form.password']}: "/>
+                                           value="#{messages['user.form.password']}"/>
                             <p:password id="inPassword" 
                                         match="inConfirmPassword"
-                                        value="#{userAccountBean.user.unsecurePassword}"
-                                        validatorMessage="#{validation['user-account.password-not-match']}"/>
+                                        value="#{userBean.user.password}"
+                                        required="#{userBean.user.id eq null}"
+                                        validatorMessage="#{validation['user.password-not-match']}"/>
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inConfirmPassword" 
-                                           value="#{messages['user-account.form.confirm-password']}: "/>
+                                           value="#{messages['user.form.confirm-password']}"/>
                             <p:password id="inConfirmPassword"
-                                        value="#{userAccountBean.user.unsecurePasswordConfirmation}"/>
+                                        value="#{userBean.user.passwordConfirmation}"/>
                         </div>                        
                     </div>
                 </div>
                 <div class="ui-grid-col-6"> 
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-header">
-                            <h:outputText value="#{messages['user-account.form.permissions-tree']}" />
-                        </div> 
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
-                            <p:tree id="permissionTree"
-                                    var="node"  
-                                    cache="false" 
-                                    animate="true"
-                                    dynamic="true"
-                                    highlight="false" 
-                                    selectionMode="checkbox"
-                                    styleClass="permission-tree"
-                                    value="#{userAccountBean.authorityNodes}"
-                                    selection="#{userAccountBean.selectedAuthorities}">
-                                <p:treeNode>
-                                    <h:outputText value="#{messages[node]}"/>
-                                </p:treeNode>
-                            </p:tree>
-                        </div> 
-                    </div>
+
                 </div>
             </div>
             <div class="ui-grid-row flat-box">
@@ -136,20 +131,20 @@
                 <div class="ui-grid-col-6 form-controls-box">
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
-                                     action="#{userAccountBean.doCancel()}"/>
+                                     action="#{userBean.doCancel()}"/>
                     <p:spacer width="10"/>
-                    <p:commandButton value="#{menu['save']}"
-                                     update="userAccountForm"
-                                     process="userAccountForm"
+                    <p:commandButton update="userForm"
+                                     process="userForm"
+                                     value="#{menu['save']}"
+                                     action="#{userBean.doSave()}"
                                      styleClass="ui-button-success"
-                                     action="#{userAccountBean.doSave()}"
-                                     rendered="#{userAccountBean.viewState eq 'ADDING'}" />
-                    <p:commandButton update="userAccountForm"
-                                     process="userAccountForm"
+                                     rendered="#{userBean.viewState eq 'ADDING'}" />
+                    <p:commandButton update="userForm"
+                                     process="userForm"
                                      value="#{menu['update']}"
                                      styleClass="ui-button-success"
-                                     action="#{userAccountBean.doUpdate()}"
-                                     rendered="#{userAccountBean.viewState eq 'EDITING'}"/>
+                                     action="#{userBean.doUpdate()}"
+                                     rendered="#{userBean.viewState eq 'EDITING'}"/>
                 </div>
             </div>
         </h:form>

@@ -20,17 +20,16 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:sec="http://www.springframework.org/security/tags"
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
-        <f:viewAction action="#{userAccountBean.initializeListing()}"/>
+        <f:viewAction action="#{userBean.initializeListing()}"/>
     </f:metadata>
 
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['tools']}" />
-        <p:menuitem url="listUserAccounts.xhtml"
+        <p:menuitem url="listUsers.xhtml"
                     value="#{breadcrumb['tools.user']}" />
     </ui:define>
 
@@ -48,12 +47,11 @@
 
                 </div>
                 <div class="ui-grid-col-2 div-align-right">
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_INSERT}">
-                        <p:commandButton immediate="true"
-                                         value="#{menu['add']}"
-                                         styleClass="ui-button-info"
-                                         action="#{userAccountBean.changeToAdd()}"/>
-                    </sec:authorize>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['add']}"
+                                     styleClass="ui-button-info"
+                                     action="#{userBean.changeToAdd()}"
+                                     rendered="#{authorizationBean.hasRole(authorization.ACCOUNTS_INSERT)}"/>
                 </div>
             </div>
         </h:form>
@@ -64,40 +62,38 @@
                              rows="15"
                              var="user"
                              paginator="true"
+                             value="#{userBean.users}"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
-                             value="#{userAccountBean.users}"
-                             emptyMessage="#{messages['user-account.list.empty']}">
+                             emptyMessage="#{messages['user.list.empty']}">
 
                     <p:column width="10%" 
-                              style="text-align: center"
-                              headerText="#{messages['user-account.list.blocked']}">
+                              styleClass="div-align-center"
+                              headerText="#{messages['user.list.blocked']}">
                         <p:selectBooleanCheckbox disabled="true" 
                                                  value="#{user.blocked}"/>
                     </p:column>
-                    <p:column headerText="#{messages['user-account.list.name']}">
+                    <p:column headerText="#{messages['user.list.name']}">
                         #{user.name}
                     </p:column>
                     <p:column width="25%" 
-                              style="text-align: center"
-                              headerText="#{messages['user-account.list.username']}">
+                              styleClass="div-align-center"
+                              headerText="#{messages['user.list.username']}">
                         #{user.username}
                     </p:column>
 
                     <p:column width="15%" 
-                              style="text-align: center"
+                              styleClass="div-align-center"
                               headerText="#{menu['actions']}">
-                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_UPDATE}">
-                            <p:commandButton icon="fa fa-edit"
-                                             title="#{menu['edit']}"
-                                             action="#{userAccountBean.changeToEdit(user.id)}" />
-                        </sec:authorize>
-                        <sec:authorize ifAnyGranted="#{permissionsBean.authority.ACCOUNTS_DELETE}">
-                            <p:spacer width="10"/>
-                            <p:commandButton icon="fa fa-remove"
-                                             title="#{menu['delete']}"
-                                             actionListener="#{userAccountBean.changeToDelete(user.id)}" />
-                        </sec:authorize>
+                        <p:commandButton icon="fa fa-edit"
+                                         title="#{menu['edit']}"
+                                         action="#{userBean.changeToEdit(user.id)}"
+                                         rendered="#{authorizationBean.hasRole(authorization.ACCOUNTS_UPDATE)}"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton icon="fa fa-remove"
+                                         title="#{menu['delete']}"
+                                         actionListener="#{userBean.changeToDelete(user.id)}"
+                                         rendered="#{authorizationBean.hasRole(authorization.ACCOUNTS_DELETE)}"/>
                     </p:column>
                 </p:dataTable>
             </div>
@@ -105,6 +101,6 @@
     </ui:define>
 
     <ui:define name="popups">
-        <ui:include src="dialogDeleteUserAccount.xhtml"/>
+        <ui:include src="dialogDeleteUser.xhtml"/>
     </ui:define>
 </ui:composition>
