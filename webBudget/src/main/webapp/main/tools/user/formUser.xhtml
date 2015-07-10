@@ -29,9 +29,9 @@
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['tools']}" />
-        <p:menuitem url="listUserAccounts.xhtml"
+        <p:menuitem url="listUserAs.xhtml"
                     value="#{breadcrumb['tools.user']}" />
-        <p:menuitem url="formUserAccount.xhtml"
+        <p:menuitem url="formUser.xhtml"
                     value="#{breadcrumb['inclusion']}" 
                     rendered="#{userBean.viewState eq 'ADDING'}"/>
         <p:menuitem url="#"
@@ -60,7 +60,7 @@
                             <p:outputLabel for="inGroup" 
                                            value="#{messages['user.form.group']}"/>
                             <p:selectOneMenu id="inGroup" 
-                                             value="#{userBean.user.group}" 
+                                             value="#{userBean.user.groupMembership.group}" 
                                              converter="omnifaces.SelectItemsConverter">
                                 <f:selectItem itemValue="#{null}"
                                               noSelectionOption="true"

@@ -67,11 +67,12 @@ public class UserBean extends AbstractBean {
      * @param userId
      */
     public void initializeForm(String userId) {
+            
+        this.groups = this.accountService.listGroups(null);
 
         if (userId.isEmpty()) {
             this.viewState = ViewState.ADDING;
             this.user = new User();
-            this.groups = this.accountService.listGroups(null);
         } else {
             this.viewState = ViewState.EDITING;
             this.user = this.accountService.findUserById(userId);

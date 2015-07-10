@@ -57,8 +57,8 @@ public class AccountService {
     @Transactional
     public void save(User user) {
 
-        // pegamos o grupo
-        final Group group = user.getGroup();
+        // pegamos o grupo e setamos o user no membership dele
+        final GroupMembership groupMembership = user.getGroupMembership();
         
         // pegamos a senha antes de salvar o usuario
         final String unsecurePassword = user.getPassword();
@@ -70,7 +70,7 @@ public class AccountService {
         this.identityManager.updateCredential(user, new Password(unsecurePassword));
         
         // concedemos ao usuario o grant para o grupo que ele escolheu
-        this.relationshipManager.add(new GroupMembership(group, user));
+        this.relationshipManager.add(groupMembership);
     }
     
     /**
@@ -81,13 +81,13 @@ public class AccountService {
     public void update(User user) {
 
         // pegamos o grupo
-        final Group group = user.getGroup();
+        final GroupMembership groupMembership = user.getGroupMembership();
         
         // pegamos a senha antes de salvar o usuario
         final String unsecurePassword = user.getPassword();
         
         // salvamos
-        this.identityManager.add(user);
+        this.identityManager.update(user);
         
         // atualizamos o usuario com a senha
         if (unsecurePassword != null && !unsecurePassword.isEmpty()) {
@@ -95,7 +95,7 @@ public class AccountService {
         }
         
         // concedemos ao usuario o grant para o grupo que ele escolheu
-        this.relationshipManager.add(new GroupMembership(group, user));
+        this.relationshipManager.update(groupMembership);
     }
     
     /**
@@ -104,6 +104,12 @@ public class AccountService {
      */
     @Transactional
     public void delete(User user) {
+        
+        // removemos os relacioanamentos
+        for (GroupMembership membership : this.listMembershipsByUser(user)) {
+            this.relationshipManager.remove(membership);
+        }
+        
         // removemos o usuario do contexto de seguranca
         this.identityManager.remove(user);
     }
@@ -144,7 +150,9 @@ public class AccountService {
         if (users.isEmpty()) {
             return null;
         } else if (users.size() == 1) {
-            return users.get(0);
+            final User user = users.get(0);
+            user.setGroupMembership(this.listMembershipsByUser(user).get(0));
+            return user;            
         } else {
             throw new IdentityManagementException("account.error.duplicated-usernames");
         }
@@ -190,6 +198,21 @@ public class AccountService {
         } else {
             throw new IdentityManagementException("account.error.duplicated-groups");
         }
+    }
+    
+    /**
+     * 
+     * @param user
+     * @return 
+     */
+    public List<GroupMembership> listMembershipsByUser(User user) {
+
+        final RelationshipQuery<GroupMembership> query
+                = this.relationshipManager.createRelationshipQuery(GroupMembership.class);
+
+        query.setParameter(GroupMembership.MEMBER, user);
+        
+        return query.getResultList();
     }
 
     /**

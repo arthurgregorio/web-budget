@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.security;
 
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.picketlink.idm.model.AbstractAttributedType;
@@ -41,6 +42,7 @@ public class GroupMembership extends AbstractAttributedType implements Relations
 
     @Getter
     @Setter
+    @NotNull(message = "{user.no-group}")
     @StereotypeProperty(RELATIONSHIP_GROUP_MEMBERSHIP_GROUP)
     private Group group;
     @Getter

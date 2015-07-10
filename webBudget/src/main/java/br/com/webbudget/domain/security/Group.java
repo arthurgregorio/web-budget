@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.security;
 
+import br.com.webbudget.domain.service.AccountService;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;

@@ -18,7 +18,6 @@ package br.com.webbudget.domain.security;
 
 import javax.persistence.Column;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
@@ -64,8 +63,7 @@ public class User extends AbstractIdentityType implements Account {
     @Getter
     @Setter
     @Transient
-    @NotNull(message = "{user.no-group}")
-    private Group group;
+    private GroupMembership groupMembership;
     
     @Getter
     @Setter
@@ -97,6 +95,7 @@ public class User extends AbstractIdentityType implements Account {
      */
     public User(String username) {
         this.username = username;
+        this.groupMembership = new GroupMembership(null, this);
     }
     
     /**
