@@ -24,6 +24,7 @@ import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.entity.system.Configuration;
+import br.com.webbudget.domain.misc.ex.WbServiceException;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
@@ -38,6 +39,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
+ * Service
  *
  * @author Arthur Gregorio
  *
@@ -68,13 +70,13 @@ public class CardService {
         final Card found = this.findCardByNumberAndType(card.getNumber(),
                 card.getCardType());
 
-//        if (found != null) {
-//            throw new ApplicationException("card.validate.duplicated");
-//        }
-//
-//        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-//            throw new ApplicationException("card.validate.no-debit-wallet");
-//        }
+        if (found != null) {
+            throw new WbServiceException("card.validate.duplicated");
+        }
+
+        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
+            throw new WbServiceException("card.validate.no-debit-wallet");
+        }
 
         this.cardRepository.save(card);
     }
@@ -89,13 +91,13 @@ public class CardService {
         final Card found = this.findCardByNumberAndType(card.getNumber(),
                 card.getCardType());
 
-//        if (found != null && !found.equals(card)) {
-//            throw new ApplicationException("card.validate.duplicated");
-//        }
-//
-//        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-//            throw new ApplicationException("card.validate.no-debit-wallet");
-//        }
+        if (found != null && !found.equals(card)) {
+            throw new WbServiceException("card.validate.duplicated");
+        }
+
+        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
+            throw new WbServiceException("card.validate.no-debit-wallet");
+        }
 
         return this.cardRepository.save(card);
     }

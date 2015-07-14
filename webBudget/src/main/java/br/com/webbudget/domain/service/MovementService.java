@@ -29,6 +29,7 @@ import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
+import br.com.webbudget.domain.misc.ex.WbServiceException;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
@@ -82,7 +83,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null) {
-//            throw new ApplicationException("movement-class.validate.duplicated");
+            throw new WbServiceException("movement-class.validate.duplicated");
         }
 
         this.movementClassRepository.save(movementClass);
@@ -99,7 +100,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null && !found.equals(movementClass)) {
-//            throw new ApplicationException("movement-class.validate.duplicated");
+            throw new WbServiceException("movement-class.validate.duplicated");
         }
 
         return this.movementClassRepository.save(movementClass);
@@ -123,18 +124,18 @@ public class MovementService {
         // validamos se os rateios estao corretos
         if (!movement.getApportionments().isEmpty()) {
             if (!movement.isApportionmentsValid()) {
-//                throw new ApplicationException("movement.validate.apportionment-value",
-//                        movement.getApportionmentsDifference());
+                throw new WbServiceException("movement.validate.apportionment-value",
+                        movement.getApportionmentsDifference());
             }
         } else {
-//            throw new ApplicationException("movement.validate.empty-apportionment");
+            throw new WbServiceException("movement.validate.empty-apportionment");
         }
 
         // se for uma edicao, checa se existe alguma inconsistencia
         if (movement.isSaved()) {
 
             if (movement.getFinancialPeriod().isClosed()) {
-//                throw new ApplicationException("maintenance.validate.closed-financial-period");
+                throw new WbServiceException("maintenance.validate.closed-financial-period");
             }
 
             // remove algum rateio editado
@@ -230,12 +231,12 @@ public class MovementService {
     public void deleteMovement(Movement movement) {
 
         if (movement.getFinancialPeriod().isClosed()) {
-//            throw new ApplicationException("maintenance.validate.closed-financial-period");
+            throw new WbServiceException("maintenance.validate.closed-financial-period");
         }
 
         // se tem vinculo com fatura, nao pode ser excluido
         if (movement.isCardInvoicePaid()) {
-//            throw new ApplicationException("maintenance.validate.has-card-invoice");
+            throw new WbServiceException("maintenance.validate.has-card-invoice");
         }
 
         // devolve o saldo na carteira se for o caso
@@ -253,17 +254,17 @@ public class MovementService {
             }
 
             final BigDecimal movimentedValue;
-            
+
             // se entrada, valor negativo, se saida valor positivo
             if (movement.getDirection() == MovementClassType.OUT) {
                 movimentedValue = movement.getValue();
             } else {
                 movimentedValue = movement.getValue().negate();
             }
-            
+
             final BigDecimal oldBalance = paymentWallet.getBalance();
 
-            this.returnBalance(paymentWallet, oldBalance, 
+            this.returnBalance(paymentWallet, oldBalance,
                     oldBalance.add(movimentedValue), movimentedValue);
         }
 
@@ -284,7 +285,7 @@ public class MovementService {
 
         // se a invoice for de um periodo fechado, bloqueia o processo
         if (cardInvoice.getFinancialPeriod().isClosed()) {
-//            throw new ApplicationException("maintenance.validate.closed-financial-period");
+            throw new WbServiceException("maintenance.validate.closed-financial-period");
         }
 
         // listamos os movimentos da invoice
@@ -324,13 +325,14 @@ public class MovementService {
      *
      * @param costCenter
      */
+    @Transactional
     public void saveCostCenter(CostCenter costCenter) {
 
         final CostCenter found = this.findCostCenterByNameAndParent(costCenter.getName(),
                 costCenter.getParentCostCenter());
 
         if (found != null) {
-//            throw new ApplicationException("cost-center.validate.duplicated");
+            throw new WbServiceException("cost-center.validate.duplicated");
         }
 
         this.costCenterRepository.save(costCenter);
@@ -341,13 +343,14 @@ public class MovementService {
      * @param costCenter
      * @return
      */
+    @Transactional
     public CostCenter updateCostCenter(CostCenter costCenter) {
 
         final CostCenter found = this.findCostCenterByNameAndParent(costCenter.getName(),
                 costCenter.getParentCostCenter());
 
         if (found != null && !found.equals(costCenter)) {
-//            throw new ApplicationException("cost-center.validate.duplicated");
+            throw new WbServiceException("cost-center.validate.duplicated");
         }
 
         return this.costCenterRepository.save(costCenter);
@@ -362,6 +365,7 @@ public class MovementService {
      *
      * @return
      */
+    @Transactional
     private WalletBalance returnBalance(Wallet wallet, BigDecimal oldBalance,
             BigDecimal newBalance, BigDecimal movimentedValue) {
 
@@ -387,6 +391,7 @@ public class MovementService {
      *
      * @param costCenter
      */
+    @Transactional
     public void deleteCostCenter(CostCenter costCenter) {
         this.costCenterRepository.delete(costCenter);
     }
@@ -453,15 +458,15 @@ public class MovementService {
     }
 
     /**
-     * 
+     *
      * @param financialPeriod
-     * @return 
+     * @return
      */
     @Transactional
     public List<Movement> listMovementsByPeriod(FinancialPeriod financialPeriod) {
         return this.movementRepository.listByPeriod(financialPeriod);
     }
-    
+
     /**
      *
      * @return
@@ -515,11 +520,11 @@ public class MovementService {
     public CostCenter findCostCenterByNameAndParent(String name, CostCenter parent) {
         return this.costCenterRepository.findByNameAndParent(name, parent);
     }
-    
+
     /**
-     * 
+     *
      * @param cardInvoice
-     * @return 
+     * @return
      */
     @Transactional
     public List<Movement> listMovementsByCardInvoice(CardInvoice cardInvoice) {

@@ -29,10 +29,11 @@ import javax.inject.Named;
 import lombok.Getter;
 
 /**
+ * Controller para a view do manutencao dos cartoes de credito
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 06/04/2014
  */
 @Named
@@ -52,7 +53,7 @@ public class CardBean extends AbstractBean {
     private WalletService walletService;
 
     /**
-     *
+     * 
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
@@ -60,8 +61,8 @@ public class CardBean extends AbstractBean {
     }
 
     /**
-     *
-     * @param cardId
+     * 
+     * @param cardId 
      */
     public void initializeForm(long cardId) {
 
@@ -77,33 +78,29 @@ public class CardBean extends AbstractBean {
     }
 
     /**
-     *
-     * @return
+     * @return 
      */
     public String changeToAdd() {
         return "formCard.xhtml?faces-redirect=true";
     }
 
     /**
-     *
-     * @return
+     * @return 
      */
     public String changeToListing() {
         return "listCards.xhtml?faces-redirect=true";
     }
 
     /**
-     *
-     * @param cardId
-     * @return
+     * @param cardId 
+     * @return 
      */
     public String changeToEdit(long cardId) {
         return "formCard.xhtml?faces-redirect=true&cardId=" + cardId;
     }
 
     /**
-     *
-     * @param cardId
+     * @param cardId 
      */
     public void changeToDelete(long cardId) {
         this.card = this.cardService.findCardById(cardId);
@@ -111,16 +108,14 @@ public class CardBean extends AbstractBean {
     }
 
     /**
-     * Cancela e volta para a listagem
-     *
-     * @return
+     * @return 
      */
     public String doCancel() {
         return "listCards.xhtml?faces-redirect=true";
     }
 
     /**
-     *
+     * 
      */
     public void doSave() {
 
@@ -170,8 +165,7 @@ public class CardBean extends AbstractBean {
     }
 
     /**
-     *
-     * @return
+     * @return a lista de tipos validos para cartoes
      */
     public CardType[] getAvailableCardTypes() {
         return CardType.values();

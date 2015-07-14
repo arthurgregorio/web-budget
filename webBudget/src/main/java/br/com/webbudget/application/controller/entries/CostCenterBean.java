@@ -26,10 +26,11 @@ import javax.inject.Named;
 import lombok.Getter;
 
 /**
+ * Controller da view de centros de custo
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 04/03/2014
  */
 @Named
@@ -53,7 +54,6 @@ public class CostCenterBean extends AbstractBean {
     }
 
     /**
-     *
      * @param costCenterId
      */
     public void initializeForm(long costCenterId) {
@@ -70,7 +70,6 @@ public class CostCenterBean extends AbstractBean {
     }
 
     /**
-     *
      * @return
      */
     public String changeToAdd() {
@@ -78,7 +77,6 @@ public class CostCenterBean extends AbstractBean {
     }
 
     /**
-     *
      * @return
      */
     public String changeToListing() {
@@ -86,7 +84,6 @@ public class CostCenterBean extends AbstractBean {
     }
 
     /**
-     *
      * @param costCenterId
      * @return
      */
@@ -95,7 +92,6 @@ public class CostCenterBean extends AbstractBean {
     }
 
     /**
-     *
      * @param costCenterId
      */
     public void changeToDelete(long costCenterId) {
@@ -104,8 +100,6 @@ public class CostCenterBean extends AbstractBean {
     }
 
     /**
-     * Cancela e volta para a listagem
-     *
      * @return
      */
     public String doCancel() {
@@ -117,18 +111,18 @@ public class CostCenterBean extends AbstractBean {
      */
     public void doSave() {
 
-//        try {
-//            this.movementService.saveCostCenter(this.costCenter);
-//            this.costCenter = new CostCenter();
-//
-//            // busca novamente os centros de custo para atualizar a lista de parentes
-//            this.costCenters = this.movementService.listCostCenters(false);
-//
-//            this.info("cost-center.action.saved", true);
-//        } catch (ApplicationException ex) {
-//            this.logger.error("CostCenterBean#doSave found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
-//        }
+        try {
+            this.movementService.saveCostCenter(this.costCenter);
+            this.costCenter = new CostCenter();
+
+            // busca novamente os centros de custo para atualizar a lista de parentes
+            this.costCenters = this.movementService.listCostCenters(false);
+
+            this.info("cost-center.action.saved", true);
+        } catch (Exception ex) {
+            this.logger.error("CostCenterBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        }
     }
 
     /**
@@ -136,14 +130,14 @@ public class CostCenterBean extends AbstractBean {
      */
     public void doUpdate() {
 
-//        try {
-//            this.costCenter = this.movementService.updateCostCenter(this.costCenter);
-//
-//            this.info("cost-center.action.updated", true);
-//        } catch (ApplicationException ex) {
-//            this.logger.error("CostCenterBean#doUpdate found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
-//        }
+        try {
+            this.costCenter = this.movementService.updateCostCenter(this.costCenter);
+
+            this.info("cost-center.action.updated", true);
+        } catch (Exception ex) {
+            this.logger.error("CostCenterBean#doUpdate found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        }
     }
 
     /**
@@ -156,7 +150,7 @@ public class CostCenterBean extends AbstractBean {
             this.costCenters = this.movementService.listCostCenters(false);
 
             this.info("cost-center.action.deleted", true);
-//        } catch (DataIntegrityViolationException ex) {
+//        } catch (DataIntegrityViolationException ex) { 
 //            this.logger.error("CostCenterBean#doDelete found erros", ex);
 //            this.fixedError("cost-center.action.delete-used", true);
         } catch (Exception ex) {

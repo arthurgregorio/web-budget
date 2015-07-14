@@ -33,11 +33,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Controller para o CRUD de contatos
+ * Controller para a view de contatos
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.2.0, 12/04/2015
  */
 @Named
@@ -70,7 +70,6 @@ public class ContactBean extends AbstractBean {
     }
 
     /**
-     *
      * @param contactId
      */
     public void initializeForm(long contactId) {
@@ -93,7 +92,6 @@ public class ContactBean extends AbstractBean {
     }
     
     /**
-     *
      * @return
      */
     public String changeToAdd() {
@@ -101,7 +99,6 @@ public class ContactBean extends AbstractBean {
     }
 
     /**
-     *
      * @return
      */
     public String changeToListing() {
@@ -109,7 +106,6 @@ public class ContactBean extends AbstractBean {
     }
 
     /**
-     *
      * @param contactId
      * @return
      */
@@ -118,7 +114,6 @@ public class ContactBean extends AbstractBean {
     }
 
     /**
-     *
      * @param contactId
      */
     public void changeToDelete(long contactId) {
@@ -127,7 +122,7 @@ public class ContactBean extends AbstractBean {
     }
 
     /**
-     * @return pagina para cancelar e voltar para a listagem
+     * @return
      */
     public String doCancel() {
         return "listContacts.xhtml?faces-redirect=true";

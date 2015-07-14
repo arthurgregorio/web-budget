@@ -19,6 +19,7 @@ package br.com.webbudget.domain.service;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.misc.ex.WbServiceException;
 import br.com.webbudget.domain.repository.contact.IContactRepository;
 import br.com.webbudget.domain.repository.contact.ITelephoneRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
@@ -28,10 +29,11 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
+ * Service responsavel pro todos os processos relacionados aos contatos
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.2.0, 12/04/2015
  */
 @ApplicationScoped
@@ -107,9 +109,9 @@ public class ContactService {
                 this.movementRepository.listByContact(contact);
         
         // se tem vinculos, nao deleta
-//        if (!movements.isEmpty()) {
-//            throw new ApplicationException("contact.validate.has-movements");
-//        }
+        if (!movements.isEmpty()) {
+            throw new WbServiceException("contact.validate.has-movements");
+        }
         
         this.contactRepository.delete(contact);
     }

@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * Controller para a view do manutencao de carteiras
  *
  * @author Arthur Gregorio
  *
@@ -64,7 +65,6 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     *
      * @param walletId
      */
     public void initializeForm(long walletId) {
@@ -79,7 +79,6 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     *
      * @param walletId
      */
     public void initializeAdjustment(long walletId) {
@@ -87,7 +86,6 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     *
      * @return o form de inclusao
      */
     public String changeToAdd() {
@@ -95,7 +93,6 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     *
      * @return
      */
     public String changeToListing() {
@@ -103,7 +100,6 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     *
      * @param walletId
      * @return
      */
@@ -112,7 +108,6 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     *
      * @param walletId
      * @return
      */
@@ -121,7 +116,6 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     *
      * @param walletId
      */
     public void changeToDelete(long walletId) {
@@ -130,8 +124,6 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     * Cancela e volta para a listagem
-     *
      * @return
      */
     public String doCancel() {
@@ -213,7 +205,6 @@ public class WalletBean extends AbstractBean {
     }
     
     /**
-     * 
      * @param walletId 
      */
     public void showBalance(long walletId) {
@@ -252,8 +243,7 @@ public class WalletBean extends AbstractBean {
     }
 
     /**
-     *
-     * @return
+     * @return os tipos de carteira disponiveis para cadastro
      */
     public WalletType[] getAvailableWalletTypes() {
         return WalletType.values();
