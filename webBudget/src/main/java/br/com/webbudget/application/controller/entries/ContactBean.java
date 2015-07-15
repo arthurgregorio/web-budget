@@ -144,7 +144,7 @@ public class ContactBean extends AbstractBean {
             this.info("contact.action.saved", true);
         } catch (Exception ex) {
             this.logger.error("ContactBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -163,7 +163,7 @@ public class ContactBean extends AbstractBean {
             this.info("contact.action.updated", true);
         } catch (Exception ex) {
             this.logger.error("ContactBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -179,7 +179,7 @@ public class ContactBean extends AbstractBean {
             this.info("contact.action.deleted", true);
         } catch (Exception ex) {
             this.logger.error("ContactBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
             this.update("contactsList");
             this.closeDialog("dialogDeleteContact");

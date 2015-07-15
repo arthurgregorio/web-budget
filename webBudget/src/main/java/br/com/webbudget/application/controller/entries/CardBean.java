@@ -126,7 +126,7 @@ public class CardBean extends AbstractBean {
             this.info("card.action.saved", true);
         } catch (Exception ex) {
             this.logger.error("CardBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -141,7 +141,7 @@ public class CardBean extends AbstractBean {
             this.info("card.action.updated", true);
         } catch (Exception ex) {
             this.logger.error("CardBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -157,7 +157,7 @@ public class CardBean extends AbstractBean {
             this.info("card.action.deleted", true);
         } catch (Exception ex) {
             this.logger.error("CardBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
             this.update("cardsList");
             this.closeDialog("dialogDeleteCard");

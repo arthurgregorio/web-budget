@@ -44,10 +44,10 @@ public abstract class AbstractBean implements Serializable {
 
     @Inject
     private Translator translator;
-    
+
     @Inject
     protected transient Logger logger;
-    @Inject 
+    @Inject
     protected transient FacesContext facesContext;
     @Inject
     protected transient RequestContext requestContext;
@@ -164,7 +164,15 @@ public abstract class AbstractBean implements Serializable {
      * @param parameters parametros para montar a mensagem
      */
     protected void fixedError(String message, boolean updateMessages, Object... parameters) {
-        Messages.addError(null, this.translator.translate(message), parameters);
+        
+        message = this.translator.translate(message);
+        
+        if (parameters.length != 0) {
+            Messages.addError(null, message + ": {0}", parameters);
+        } else {
+            Messages.addError(null, message, parameters);
+        }
+        
         if (updateMessages) {
             this.updateMessages(false);
         }
@@ -201,9 +209,31 @@ public abstract class AbstractBean implements Serializable {
     }
 
     /**
+     * Metodo para desempacotar a pilha de excessoes a fim de que possamos
+     * tratar de forma mais elegante exceptions do tipo constraints violadas
+     *
+     * @param exception a exception que buscamos
+     * @param stack a stack
+     * @return se ela existe ou nao nao nesta stack
+     */
+    public boolean containsException(Class<? extends Exception> exception, Throwable stack) {
+
+        // se nao tem stack nao ha o que fazer!
+        if (stack == null) return false;
+        
+        // navegamos recursivamente na stack
+        if (stack.getClass().isAssignableFrom(exception)) {
+            return true;
+        } else {
+            return this.containsException(exception, stack.getCause());
+        }
+    }
+
+    /**
      * Enum que guarda os possiveis estados da tela
      */
     public enum ViewState {
-        ADDING,LISTING,EDITING,DELETING,DETAILING;
+
+        ADDING, LISTING, EDITING, DELETING, DETAILING;
     }
 }
