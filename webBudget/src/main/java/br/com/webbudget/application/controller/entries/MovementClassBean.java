@@ -26,12 +26,14 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
+ * Controller da view de classes de movimento
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 04/03/2014
  */
 @Named
@@ -58,7 +60,6 @@ public class MovementClassBean extends AbstractBean {
     }
 
     /**
-     *
      * @param movementClassId
      */
     public void initializeForm(long movementClassId) {
@@ -75,7 +76,6 @@ public class MovementClassBean extends AbstractBean {
     }
 
     /**
-     *
      * @return o form de inclusao
      */
     public String changeToAdd() {
@@ -83,7 +83,6 @@ public class MovementClassBean extends AbstractBean {
     }
 
     /**
-     *
      * @return
      */
     public String changeToListing() {
@@ -91,7 +90,6 @@ public class MovementClassBean extends AbstractBean {
     }
 
     /**
-     *
      * @param movementClassId
      * @return
      */
@@ -100,7 +98,6 @@ public class MovementClassBean extends AbstractBean {
     }
 
     /**
-     *
      * @param movementClassId
      */
     public void changeToDelete(long movementClassId) {
@@ -109,8 +106,6 @@ public class MovementClassBean extends AbstractBean {
     }
 
     /**
-     * Cancela e volta para a listagem
-     *
      * @return
      */
     public String doCancel() {
@@ -122,15 +117,15 @@ public class MovementClassBean extends AbstractBean {
      */
     public void doSave() {
 
-//        try {
-//            this.movementService.saveMovementClass(this.movementClass);
-//            this.movementClass = new MovementClass();
-//
-//            this.info("movement-class.action.saved", true);
-//        } catch (ApplicationException ex) {
-//            this.logger.error("MovementClassBean#doSave found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
-//        }
+        try {
+            this.movementService.saveMovementClass(this.movementClass);
+            this.movementClass = new MovementClass();
+
+            this.info("movement-class.action.saved", true);
+        } catch (Exception ex) {
+            this.logger.error("MovementClassBean#doSave found erros", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        }
     }
 
     /**
@@ -138,14 +133,14 @@ public class MovementClassBean extends AbstractBean {
      */
     public void doUpdate() {
 
-//        try {
-//            this.movementClass = this.movementService.updateMovementClass(this.movementClass);
-//
-//            this.info("movement-class.action.updated", true);
-//        } catch (ApplicationException ex) {
-//            this.logger.error("MovementClassBean#doUpdate found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
-//        }
+        try {
+            this.movementClass = this.movementService.updateMovementClass(this.movementClass);
+
+            this.info("movement-class.action.updated", true);
+        } catch (Exception ex) {
+            this.logger.error("MovementClassBean#doUpdate found erros", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        }
     }
 
     /**
@@ -158,12 +153,14 @@ public class MovementClassBean extends AbstractBean {
             this.movementClasses = this.movementService.listMovementClasses(false);
 
             this.info("movement-class.action.deleted", true);
-//        } catch (DataIntegrityViolationException ex) {
-//            this.logger.error("MovementClassBean#doDelete found erros", ex);
-//            this.fixedError("movement-class.action.delete-used", true);
         } catch (Exception ex) {
-            this.logger.error("MovementClassBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            if (this.containsException(ConstraintViolationException.class, ex)) {
+                this.logger.error("MovementClassBean#doDelete found erros", ex);
+                this.fixedError("movement-class.action.delete-used", true);
+            } else {
+                this.logger.error("MovementClassBean#doDelete found erros", ex);
+                this.fixedError("generic.operation-error", true, ex.getMessage());
+            }
         } finally {
             this.update("movementClassesList");
             this.closeDialog("dialogDeleteMovementClass");

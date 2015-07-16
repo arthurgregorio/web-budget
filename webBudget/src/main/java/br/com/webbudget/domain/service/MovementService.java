@@ -77,6 +77,7 @@ public class MovementService {
      *
      * @param movementClass
      */
+    @Transactional
     public void saveMovementClass(MovementClass movementClass) {
 
         final MovementClass found = this.findMovementClassByNameAndTypeAndCostCenter(movementClass.getName(),
@@ -94,6 +95,7 @@ public class MovementService {
      * @param movementClass
      * @return
      */
+    @Transactional    
     public MovementClass updateMovementClass(MovementClass movementClass) {
 
         final MovementClass found = this.findMovementClassByNameAndTypeAndCostCenter(movementClass.getName(),
@@ -110,6 +112,7 @@ public class MovementService {
      *
      * @param movementClass
      */
+    @Transactional
     public void deleteMovementClass(MovementClass movementClass) {
         this.movementClassRepository.delete(movementClass);
     }
@@ -119,6 +122,7 @@ public class MovementService {
      * @param movement
      * @return
      */
+    @Transactional
     public Movement saveMovement(Movement movement) {
 
         // validamos se os rateios estao corretos
@@ -228,6 +232,7 @@ public class MovementService {
      *
      * @param movement
      */
+    @Transactional
     public void deleteMovement(Movement movement) {
 
         if (movement.getFinancialPeriod().isClosed()) {
@@ -278,6 +283,7 @@ public class MovementService {
      *
      * @param movement o movimento referenciando a invoice
      */
+    @Transactional
     public void deleteCardInvoiceMovement(Movement movement) {
 
         final CardInvoice cardInvoice

@@ -147,7 +147,7 @@ public class WalletBean extends AbstractBean {
             this.info("wallet.action.saved", true);
         } catch (Exception ex) {
             this.logger.error("WalletBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -164,7 +164,7 @@ public class WalletBean extends AbstractBean {
             this.openDialog("adjustmentDialog", "dialogAdjustment");
         } catch (Exception ex) {
             this.logger.error("WalletBean#doAdjustment found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
             this.update("walletsList");
         }
@@ -181,7 +181,7 @@ public class WalletBean extends AbstractBean {
             this.info("wallet.action.updated", true);
         } catch (Exception ex) {
             this.logger.error("WalletBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -197,7 +197,7 @@ public class WalletBean extends AbstractBean {
             this.info("wallet.action.deleted", true);
         } catch (Exception ex) {
             this.logger.error("WalletBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
             this.update("walletsList");
             this.closeDialog("dialogDeleteWallet");
