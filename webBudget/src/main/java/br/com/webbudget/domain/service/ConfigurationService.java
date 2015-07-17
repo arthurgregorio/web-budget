@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
+ * Servico responsavel por todas as operacoes para configuracao do sistema
  *
  * @author Arthur Gregorio
  *
@@ -48,7 +49,6 @@ public class ConfigurationService {
     /**
      * @return a configuracao default do sistema
      */
-    @Transactional
     public Configuration loadDefault() {
         return this.configurationRepository.findDefault();
     }

@@ -49,6 +49,7 @@ public class WalletService {
      *
      * @param wallet
      */
+    @Transactional
     public void saveWallet(Wallet wallet) {
 
         final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(),
@@ -85,6 +86,7 @@ public class WalletService {
      * @param wallet
      * @return
      */
+    @Transactional
     public Wallet updateWallet(Wallet wallet) {
 
         final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(),
@@ -101,6 +103,7 @@ public class WalletService {
      *
      * @param wallet
      */
+    @Transactional
     public void deleteWallet(Wallet wallet) {
 
         // checa se a carteira nao tem saldo menor ou maior que zero
@@ -122,6 +125,7 @@ public class WalletService {
      *
      * @param walletBalance
      */
+    @Transactional
     public void transfer(WalletBalance walletBalance) {
 
         if (walletBalance.getSourceWallet().equals(walletBalance.getTargetWallet())) {
@@ -167,6 +171,7 @@ public class WalletService {
      *
      * @param wallet
      */
+    @Transactional
     public void adjustBalance(Wallet wallet) {
 
         // atualizamos o novo saldo
@@ -195,7 +200,6 @@ public class WalletService {
      * @param walletId
      * @return
      */
-    @Transactional
     public Wallet findWalletById(long walletId) {
         return this.walletRepository.findById(walletId, false);
     }
@@ -205,7 +209,6 @@ public class WalletService {
      * @param isBlocked
      * @return
      */
-    @Transactional
     public List<Wallet> listWallets(Boolean isBlocked) {
         return this.walletRepository.listByStatus(isBlocked);
     }
@@ -217,7 +220,6 @@ public class WalletService {
      * @param walletType
      * @return
      */
-    @Transactional
     public Wallet findWalletByNameAndBankAndType(String name, String bank, WalletType walletType) {
         return this.walletRepository.findByNameAndBankAndType(name, bank, walletType);
     }
@@ -226,7 +228,6 @@ public class WalletService {
      *
      * @return
      */
-    @Transactional
     public List<WalletBalance> listTransferences() {
         return this.walletBalanceRepository.listByType(WalletBalanceType.TRANSFERENCE);
     }
@@ -236,7 +237,6 @@ public class WalletService {
      * @param wallet
      * @return
      */
-    @Transactional
     public List<WalletBalance> listTransfersByWallet(Wallet wallet) {
         return this.walletBalanceRepository.listByWallet(wallet, WalletBalanceType.TRANSFERENCE);
     }
@@ -247,7 +247,6 @@ public class WalletService {
      * @param target
      * @return
      */
-    @Transactional
     public List<WalletBalance> listTransfersByWallet(Wallet source, Wallet target) {
         return this.walletBalanceRepository.listByWallet(source, target, WalletBalanceType.TRANSFERENCE);
     }
@@ -257,7 +256,6 @@ public class WalletService {
      * @param wallet
      * @return
      */
-    @Transactional
     public List<WalletBalance> listBalancesByWallet(Wallet wallet) {
         return this.walletBalanceRepository.listByWallet(wallet);
     }

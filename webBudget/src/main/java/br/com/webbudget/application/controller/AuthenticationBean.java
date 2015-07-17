@@ -40,7 +40,7 @@ public class AuthenticationBean extends AbstractBean {
     private boolean authenticationError;
     
     @Inject
-    private Identity identity;
+    private transient Identity identity;
 
     /**
      * Inicializa a pagina, verificamos se ja nao existe alguem logado, se nao

@@ -52,7 +52,7 @@ public class UserBean extends AbstractBean {
     private List<Group> groups;
 
     @Inject
-    private AccountService accountService;
+    private transient AccountService accountService;
 
     /**
      *

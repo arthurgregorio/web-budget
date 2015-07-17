@@ -30,12 +30,11 @@ import lombok.Setter;
 
 /**
  * MBean que contem os metodos para encerramento dos periodos financeiros e
- * <br/>
  * calculo do fechamento
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 14/04/2014
  */
 @Named
@@ -75,7 +74,6 @@ public class ClosingBean extends AbstractBean {
     }
 
     /**
-     *
      * @return
      */
     public String doCancel() {
@@ -88,19 +86,19 @@ public class ClosingBean extends AbstractBean {
      */
     public void process() {
 
-//        if (this.financialPeriod == null) {
-//            this.error("closing.validate.null-period", true);
-//            return;
-//        }
-//
-//        try {
-//            this.closing = this.closingService.process(this.financialPeriod);
-//        } catch (ApplicationException ex) {
-//            this.logger.error("ClosingBean#process found errors", ex);
-//            this.fixedError(ex.getMessage(), true);
-//        } finally {
-//            this.update("closingPanel");
-//        }
+        if (this.financialPeriod == null) {
+            this.error("closing.validate.null-period", true);
+            return;
+        }
+
+        try {
+            this.closing = this.closingService.process(this.financialPeriod);
+        } catch (Exception ex) {
+            this.logger.error("ClosingBean#process found errors", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        } finally {
+            this.update("closingPanel");
+        }
     }
 
     /**
@@ -116,7 +114,7 @@ public class ClosingBean extends AbstractBean {
             this.openDialog("closingConfirmationDialog", "dialogClosingConfirmation");
         } catch (Exception ex) {
             this.logger.error("ClosingBean#close found errors", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
             this.update("closingPanel");
         }

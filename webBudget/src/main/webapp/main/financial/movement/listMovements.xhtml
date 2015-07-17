@@ -21,7 +21,6 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:of="http://omnifaces.org/functions"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:sec="http://www.springframework.org/security/tags"
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
@@ -59,13 +58,12 @@
                 <div class="ui-grid-col-4 div-align-right">
                     <p:commandButton value="#{menu['filter']}"
                                      action="#{movementBean.filterMovementsList()}"/>
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_INSERT}">
-                        <p:spacer width="10" />
-                        <p:commandButton immediate="true"
-                                         value="#{menu['add']}"
-                                         styleClass="ui-button-info" 
-                                         action="#{movementBean.changeToAdd()}"/>
-                    </sec:authorize>
+                    <p:spacer width="10" />
+                    <p:commandButton immediate="true"
+                                     value="#{menu['add']}"
+                                     styleClass="ui-button-info" 
+                                     action="#{movementBean.changeToAdd()}"
+                                     rendered="#{authorizationBean.hasRole(authorization.MOVEMENT_INSERT)}"/>
                 </div>
             </div>
         </h:form>
@@ -145,28 +143,25 @@
                         <p:column width="18%" 
                                   style="text-align: center"
                                   headerText="#{menu['actions']}">
-                            <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_PAY}">
-                                <p:commandButton icon="fa fa-money"
-                                                 title="#{menu['pay']}"
-                                                 rendered="#{movement.payable eq true}"
-                                                 action="#{movementBean.changeToPay(movement.id)}" />
-                            </sec:authorize>
+                            <p:commandButton icon="fa fa-money"
+                                             title="#{menu['pay']}"
+                                             rendered="#{movement.payable eq true 
+                                                         and authorizationBean.hasRole(authorization.MOVEMENT_PAY)}"
+                                             action="#{movementBean.changeToPay(movement.id)}" />
                             <p:spacer width="10" 
                                       rendered="#{movement.payable eq true}"/>
-                            <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_UPDATE}">
-                                <p:commandButton icon="fa fa-edit"
-                                                 title="#{menu['edit']}"
-                                                 rendered="#{movement.editable eq true}"
-                                                 action="#{movementBean.changeToEdit(movement.id)}" />
-                            </sec:authorize>
+                            <p:commandButton icon="fa fa-edit"
+                                             title="#{menu['edit']}"
+                                             rendered="#{movement.editable eq true 
+                                                         and authorizationBean.hasRole(authorization.MOVEMENT_UPDATE)}"
+                                             action="#{movementBean.changeToEdit(movement.id)}"/>
                             <p:spacer width="10" 
                                       rendered="#{movement.editable eq true}"/>
-                            <sec:authorize ifAnyGranted="#{permissionsBean.authority.MOVEMENT_DELETE}">
-                                <p:commandButton icon="fa fa-remove"
-                                                 title="#{menu['delete']}"
-                                                 rendered="#{movement.deletable eq true}"
-                                                 actionListener="#{movementBean.changeToDelete(movement.id)}" />
-                            </sec:authorize>
+                            <p:commandButton icon="fa fa-remove"
+                                             title="#{menu['delete']}"
+                                             rendered="#{movement.deletable eq true 
+                                                         and authorizationBean.hasRole(authorization.MOVEMENT_DELETE)}"
+                                             actionListener="#{movementBean.changeToDelete(movement.id)}" />
                             <h:outputText value="-" 
                                           rendered="#{movement.movementStateType eq 'CALCULATED'}" />
                         </p:column>

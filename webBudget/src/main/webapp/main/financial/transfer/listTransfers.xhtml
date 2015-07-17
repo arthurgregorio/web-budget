@@ -20,7 +20,6 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:sec="http://www.springframework.org/security/tags"
                 template="/template/mainTemplate.xhtml">
 
     <ui:define name="head">
@@ -83,13 +82,12 @@
                 <div class="ui-grid-col-4 div-align-right">
                     <p:commandButton value="#{menu['filter']}"
                                      action="#{transferenceBean.filterTransfers()}"/>
-                    <sec:authorize ifAnyGranted="#{permissionsBean.authority.BALANCE_TRANSFER_MAKE}">
-                        <p:spacer width="10"/>
-                        <p:commandButton immediate="true"
-                                         value="#{menu['add']}"
-                                         styleClass="ui-button-info" 
-                                         action="#{transferenceBean.changeToAdd()}"/>
-                    </sec:authorize>
+                    <p:spacer width="10"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['add']}"
+                                     styleClass="ui-button-info" 
+                                     action="#{transferenceBean.changeToAdd()}"
+                                     rendered="#{authorizationBean.hasRole(authorization.BALANCE_TRANSFER_MAKE)}"/>
                 </div>
             </div>
         </h:form>
@@ -97,7 +95,7 @@
         <div class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
                 <h:form prependId="false">
-                    
+
                     <p:dataTable id="transferencesList" 
                                  rows="15"
                                  paginator="true"
@@ -138,7 +136,7 @@
             </div>
         </div>
     </ui:define>
-    
+
     <ui:define name="popups">
         <ui:include src="dialogTransferReason.xhtml"/>
     </ui:define>

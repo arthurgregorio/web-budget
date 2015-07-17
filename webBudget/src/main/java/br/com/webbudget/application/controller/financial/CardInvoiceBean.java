@@ -38,7 +38,7 @@ import lombok.Setter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.0.0, 28/04/2014
  */
 @Named
@@ -109,21 +109,21 @@ public class CardInvoiceBean extends AbstractBean {
             return;
         }
 
-//        try {
-//            this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
-//
-//            if (this.cardInvoice.getMovements().isEmpty()) {
-//                this.info("card-invoice.action.no-movements-to-pay", true);
-//                this.cardInvoice = new CardInvoice();
-//            } else {
-//                this.info("card-invoice.action.generated", true);
-//            }
-//        } catch (ApplicationException ex) {
-//            this.logger.error("CardInvoiceBean#generateInvoice found errors", ex);
-//            this.fixedError(ex.getMessage(), true);
-//        } finally {
-//            this.update("detailsPanel");
-//        }
+        try {
+            this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
+
+            if (this.cardInvoice.getMovements().isEmpty()) {
+                this.info("card-invoice.action.no-movements-to-pay", true);
+                this.cardInvoice = new CardInvoice();
+            } else {
+                this.info("card-invoice.action.generated", true);
+            }
+        } catch (Exception ex) {
+            this.logger.error("CardInvoiceBean#generateInvoice found errors", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        } finally {
+            this.update("detailsPanel");
+        }
     }
 
     /**
@@ -136,14 +136,14 @@ public class CardInvoiceBean extends AbstractBean {
             return;
         }
 
-//        try {
-//            this.cardInvoices = this.cardService.listInvoicesByCard(this.selectedCard);
-//        } catch (ApplicationException ex) {
-//            this.logger.error("CardInvoiceBean#loadHistory found errors", ex);
-//            this.fixedError(ex.getMessage(), true);
-//        } finally {
-//            this.update("invoicesList");
-//        }
+        try {
+            this.cardInvoices = this.cardService.listInvoicesByCard(this.selectedCard);
+        } catch (Exception ex) {
+            this.logger.error("CardInvoiceBean#loadHistory found errors", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        } finally {
+            this.update("invoicesList");
+        }
     }
 
     /**
@@ -168,15 +168,15 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void createInvoiceMovement() {
 
-//        try {
-//            this.cardService.createMovement(this.cardInvoice,
-//                    this.translate("card-invoice.identification"));
-//
-//            this.openDialog("moveInvoiceDialog", "dialogMoveInvoice");
-//        } catch (ApplicationException ex) {
-//            this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
-//            this.fixedError(ex.getMessage(), true);
-//        }
+        try {
+            this.cardService.createMovement(this.cardInvoice,
+                    this.translate("card-invoice.identification"));
+
+            this.openDialog("moveInvoiceDialog", "dialogMoveInvoice");
+        } catch (Exception ex) {
+            this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        }
     }
 
     /**

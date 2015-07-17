@@ -21,7 +21,6 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import lombok.Getter;
@@ -34,7 +33,7 @@ import lombok.Setter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.2.0
  * @since 1.0.0, 21/02/2015
  */
 public class PeriodDetailsDTO implements Serializable {
@@ -90,30 +89,17 @@ public class PeriodDetailsDTO implements Serializable {
     public BigDecimal getCardsTotal() {
         return this.creditCardExpenses.add(this.debitCardExpenses);
     }
-    
+
     /**
      * Metodo que realiza a organizacao das classes
      */
     public void sortMovementClasses() {
-        Collections.sort(this.revenueClasses, new MovementClassComparator());
-        Collections.sort(this.expenseClasses, new MovementClassComparator());
-    }
 
-    /**
-     * Comparator para organizar as listas de classes
-     */
-    private class MovementClassComparator implements Comparator<MovementClass> {
-
-        /**
-         * @see Comparator#compare(java.lang.Object, java.lang.Object) 
-         * 
-         * @param c1
-         * @param c2
-         * @return 
-         */
-        @Override
-        public int compare(MovementClass c1, MovementClass c2) {
+        final Comparator<MovementClass> comparator = (c1, c2) -> {
             return c2.getTotalMovements().compareTo(c1.getTotalMovements());
-        }
+        };
+
+        this.revenueClasses.sort(comparator);
+        this.expenseClasses.sort(comparator);
     }
 }

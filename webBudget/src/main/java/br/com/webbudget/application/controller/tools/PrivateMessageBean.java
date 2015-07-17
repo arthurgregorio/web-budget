@@ -29,10 +29,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * Controle da view de mensagens privadas
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 12/05/2014
  */
 @Named

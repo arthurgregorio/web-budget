@@ -34,7 +34,7 @@ import org.slf4j.Logger;
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 18/01/2015
  */
 public abstract class AbstractBean implements Serializable {

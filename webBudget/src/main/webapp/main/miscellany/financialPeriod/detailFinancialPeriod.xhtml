@@ -22,10 +22,11 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="/template/mainTemplate.xhtml">
 
+    <f:metadata>
+        <f:viewAction action="#{periodDetailBean.initializeDetails(param.financialPeriodId)}"/>
+    </f:metadata>
+    
     <ui:define name="head">
-        <f:event type="preRenderView" 
-                 listener="#{periodDetailBean.initializeDetails(param.financialPeriodId)}" />
-
         <script type="text/javascript">
             function extendLegend() {
                 this.cfg.legend = {

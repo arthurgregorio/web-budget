@@ -46,7 +46,6 @@ import javax.transaction.Transactional;
  * @version 1.2.0
  * @since 1.0.0, 06/04/2014
  */
-@Transactional
 @ApplicationScoped
 public class CardService {
 
@@ -65,6 +64,7 @@ public class CardService {
      *
      * @param card
      */
+    @Transactional
     public void saveCard(Card card) {
 
         final Card found = this.findCardByNumberAndType(card.getNumber(),
@@ -86,6 +86,7 @@ public class CardService {
      * @param card
      * @return
      */
+    @Transactional
     public Card updateCard(Card card) {
 
         final Card found = this.findCardByNumberAndType(card.getNumber(),
@@ -106,6 +107,7 @@ public class CardService {
      *
      * @param card
      */
+    @Transactional
     public void deleteCard(Card card) {
         this.cardRepository.delete(card);
     }
@@ -117,6 +119,7 @@ public class CardService {
      * @param identificationPrefix prefixo a ser colocado antes do numerod da
      * invoice
      */
+    @Transactional
     public void createMovement(CardInvoice cardInvoice, String identificationPrefix) {
 
         final List<Movement> movements = cardInvoice.getMovements();
@@ -188,7 +191,6 @@ public class CardService {
      * @param cardId
      * @return
      */
-    @Transactional
     public Card findCardById(long cardId) {
         return this.cardRepository.findById(cardId, false);
     }
@@ -198,7 +200,6 @@ public class CardService {
      * @param isBlocked
      * @return
      */
-    @Transactional
     public List<Card> listCards(Boolean isBlocked) {
         return this.cardRepository.listByStatus(isBlocked);
     }
@@ -208,7 +209,6 @@ public class CardService {
      * @param isBlocked
      * @return
      */
-    @Transactional
     public List<Card> listCreditCards(Boolean isBlocked) {
         return this.cardRepository.listCredit(isBlocked);
     }
@@ -218,7 +218,6 @@ public class CardService {
      * @param isBlocked
      * @return
      */
-    @Transactional
     public List<Card> listDebitCards(Boolean isBlocked) {
         return this.cardRepository.listDebit(isBlocked);
     }
@@ -229,7 +228,6 @@ public class CardService {
      * @param cardType
      * @return
      */
-    @Transactional
     public Card findCardByNumberAndType(String number, CardType cardType) {
         return this.cardRepository.findByNumberAndType(number, cardType);
     }
@@ -239,7 +237,6 @@ public class CardService {
      * @param cardInvoice
      * @return
      */
-    @Transactional
     public CardInvoice fillCardInvoice(CardInvoice cardInvoice) {
 
         final List<Movement> movements = this.movementRepository.listPaidWithoutInvoiceByPeriodAndCard(
@@ -256,7 +253,6 @@ public class CardService {
      * @param card o cartao da qual se deseja ver as faturas
      * @return a lista de faturas
      */
-    @Transactional
     public List<CardInvoice> listInvoicesByCard(Card card) {
         return this.cardInvoiceRepository.listByCard(card);
     }

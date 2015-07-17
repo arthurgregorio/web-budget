@@ -27,10 +27,12 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
+ * Servico de mensagens privadas, ele faz todo o trabalho relacionado as mensa-
+ * gens privadas do sistema
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 07/05/2014
  */
 @ApplicationScoped

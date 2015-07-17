@@ -26,10 +26,11 @@ import lombok.Getter;
 import org.primefaces.model.chart.CartesianChartModel;
 
 /**
+ * Bean responsavel pelo controle da view de detalhes do periodo
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 11/04/2014
  */
 @Named
@@ -50,7 +51,6 @@ public class PeriodDetailBean extends AbstractBean {
     private transient FinancialPeriodService financialPeriodService;
 
     /**
-     *
      * @param financialPeriodId
      */
     public void initializeDetails(long financialPeriodId) {
@@ -67,8 +67,6 @@ public class PeriodDetailBean extends AbstractBean {
     }
 
     /**
-     * Cancela e volta para a listagem
-     *
      * @return
      */
     public String doCancel() {
@@ -76,7 +74,6 @@ public class PeriodDetailBean extends AbstractBean {
     }
 
     /**
-     *
      * @return
      */
     public String doRefresh() {

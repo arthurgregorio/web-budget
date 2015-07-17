@@ -33,7 +33,7 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.1.0, 23/03/2015
  */
 @Named
@@ -49,9 +49,9 @@ public class ConfigurationBean extends AbstractBean {
     private List<MovementClass> movementClasses;
     
     @Inject
-    private MovementService movementService;
+    private transient MovementService movementService;
     @Inject
-    private ConfigurationService configurationService;
+    private transient ConfigurationService configurationService;
     
     /**
      * Inicializa a configuracao default

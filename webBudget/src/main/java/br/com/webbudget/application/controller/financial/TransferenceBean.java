@@ -28,6 +28,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * Bean que realiza as operacoes de transferencia de valores entre as carteiras
  *
  * @author Arthur Gregorio
  *
@@ -107,7 +108,7 @@ public class TransferenceBean extends AbstractBean {
             this.info("transfer.action.transfered", true);
         } catch (Exception ex) {
             this.logger.error("TransferenceBean#doTransference found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 

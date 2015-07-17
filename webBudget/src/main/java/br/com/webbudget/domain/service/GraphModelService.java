@@ -47,7 +47,7 @@ import org.primefaces.model.chart.PieChartModel;
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 13/04/2014
  */
 @ApplicationScoped

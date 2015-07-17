@@ -27,6 +27,7 @@ import javax.inject.Named;
 import lombok.Getter;
 
 /**
+ * Controller da view de periodos financeiros
  *
  * @author Arthur Gregorio
  *
@@ -75,7 +76,6 @@ public class FinancialPeriodBean extends AbstractBean {
     }
 
     /**
-     *
      * @return
      */
     public String changeToAdd() {
@@ -83,7 +83,6 @@ public class FinancialPeriodBean extends AbstractBean {
     }
 
     /**
-     *
      * @param financialPeriodId
      * @return
      */
@@ -92,7 +91,6 @@ public class FinancialPeriodBean extends AbstractBean {
     }
 
     /**
-     *
      * @param financialPeriodId
      * @return
      */
@@ -153,8 +151,6 @@ public class FinancialPeriodBean extends AbstractBean {
     }
 
     /**
-     * Cancela e volta para a listagem
-     *
      * @return
      */
     public String doCancel() {
