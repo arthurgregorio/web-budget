@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.security;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -175,24 +174,37 @@ public class Authorization {
     public final String CLOSING_PROCESS = "closing.authority.process";
 
     @Getter
-    @AuthorizationGroup("account.authority")
-    public final String ACCOUNTS_VIEW = "account.authority.view";
+    @AuthorizationGroup("user.authority")
+    public final String USER_VIEW = "user.authority.view";
     @Getter
-    @AuthorizationGroup("account.authority")
-    public final String ACCOUNTS_INSERT = "account.authority.insert";
+    @AuthorizationGroup("user.authority")
+    public final String USER_INSERT = "user.authority.insert";
     @Getter
-    @AuthorizationGroup("account.authority")
-    public final String ACCOUNTS_UPDATE = "account.authority.update";
+    @AuthorizationGroup("user.authority")
+    public final String USER_UPDATE = "user.authority.update";
     @Getter
-    @AuthorizationGroup("account.authority")
-    public final String ACCOUNTS_DELETE = "account.authority.delete";
+    @AuthorizationGroup("user.authority")
+    public final String USER_DELETE = "user.authority.delete";
+    
+    @Getter
+    @AuthorizationGroup("group.authority")
+    public final String GROUP_VIEW = "group.authority.view";
+    @Getter
+    @AuthorizationGroup("group.authority")
+    public final String GROUP_INSERT = "group.authority.insert";
+    @Getter
+    @AuthorizationGroup("group.authority")
+    public final String GROUP_UPDATE = "group.authority.update";
+    @Getter
+    @AuthorizationGroup("group.authority")
+    public final String GROUP_DELETE = "group.authority.delete";
 
     @Getter
     @AuthorizationGroup("private-message.authority")
-    public final String PRIVATE_MESSAGES_VIEW = "private-message.authority.view";
+    public final String PRIVATE_MESSAGE_VIEW = "private-message.authority.view";
     @Getter
     @AuthorizationGroup("private-message.authority")
-    public final String PRIVATE_MESSAGES_SEND = "private-message.authority.send";
+    public final String PRIVATE_MESSAGE_SEND = "private-message.authority.send";
 
     /**
      * Lista todas as authorities disponiveis para uso, este metodo e utilzado

@@ -17,10 +17,8 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
 import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.service.AccountService;
-import br.com.webbudget.domain.security.User;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -31,23 +29,16 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
- * @since 1.0.0, 02/03/2014
+ * @version 1.0.0
+ * @since 2.0.0, 22/07/2015
  */
 @Named
 @ViewScoped
-public class UserBean extends AbstractBean {
+public class GroupBean extends AbstractBean {
 
     @Getter
-    private User user;
+    private Group group;
 
-    @Getter
-    @Inject
-    @AuthenticatedUser
-    private User authenticatedUser;
-
-    @Getter
-    private List<User> users;
     @Getter
     private List<Group> groups;
 
@@ -59,46 +50,50 @@ public class UserBean extends AbstractBean {
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.users = this.accountService.listUsers(null);
+        this.groups = this.accountService.listGroups(null);
     }
 
     /**
-     * @param userId
+     *
+     * @param groupId
      */
-    public void initializeForm(String userId) {
+    public void initializeForm(String groupId) {
             
         this.groups = this.accountService.listGroups(null);
 
-        if (userId.isEmpty()) {
+        if (groupId.isEmpty()) {
             this.viewState = ViewState.ADDING;
-            this.user = new User();
+            this.group = new Group();
         } else {
             this.viewState = ViewState.EDITING;
-            this.user = this.accountService.findUserById(userId);
+            this.group = this.accountService.findGroupById(groupId);
         }
     }
 
     /**
+     *
      * @return o form de inclusao
      */
     public String changeToAdd() {
-        return "formUser.xhtml?faces-redirect=true";
+        return "formGroup.xhtml?faces-redirect=true";
     }
 
     /**
-     * @param userId
+     *
+     * @param groupId
      * @return
      */
-    public String changeToEdit(String userId) {
-        return "formUser.xhtml?faces-redirect=true&userId=" + userId;
+    public String changeToEdit(String groupId) {
+        return "formGroup.xhtml?faces-redirect=true&groupId=" + groupId;
     }
 
     /**
-     * @param userId
+     *
+     * @param groupId
      */
-    public void changeToDelete(String userId) {
-        this.user = this.accountService.findUserById(userId);
-        this.openDialog("deleteUserDialog", "dialogDeleteUser");
+    public void changeToDelete(String groupId) {
+        this.group = this.accountService.findGroupById(groupId);
+        this.openDialog("deleteGroupDialog", "dialogDeleteGroup");
     }
 
     /**
@@ -107,13 +102,13 @@ public class UserBean extends AbstractBean {
     public void doSave() {
 
         try {
-            this.accountService.save(this.user);
+            this.accountService.save(this.group);
 
-            this.user = new User();
+            this.group = new Group();
 
-            this.info("user.action.saved", true);
+            this.info("group.action.saved", true);
         } catch (Exception ex) {
-            this.logger.error("UserBean#doSave found erros", ex);
+            this.logger.error("GroupBean#doSave found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
         } 
     }
@@ -124,11 +119,11 @@ public class UserBean extends AbstractBean {
     public void doUpdate() {
 
         try {
-            this.accountService.update(this.user);
+            this.accountService.update(this.group);
 
-            this.info("user.action.updated", true);
+            this.info("group.action.updated", true);
         } catch (Exception ex) {
-            this.logger.error("UserBean#doUpdate has found erros", ex);
+            this.logger.error("GroupBean#doUpdate has found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
@@ -139,16 +134,16 @@ public class UserBean extends AbstractBean {
     public void doDelete() {
 
         try {
-            this.accountService.delete(this.user);
-            this.users = this.accountService.listUsers(null);
+            this.accountService.delete(this.group);
+            this.groups = this.accountService.listGroups(null);
 
-            this.info("user.action.deleted", true);
+            this.info("group.action.deleted", true);
         } catch (Exception ex) {
-            this.logger.error("UserBean#doDelete found erros", ex);
+            this.logger.error("GroupBean#doDelete found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
-            this.update("usersList");
-            this.closeDialog("dialogDeleteUser");
+            this.update("groupsList");
+            this.closeDialog("dialogDeleteGroup");
         }
     }
     
@@ -160,13 +155,15 @@ public class UserBean extends AbstractBean {
     }
 
     /**
+     *
      * @return
      */
     public String doCancel() {
-        return "listUsers.xhtml?faces-redirect=true";
+        return "listGroups.xhtml?faces-redirect=true";
     }
 
     /**
+     *
      * @return
      */
     public String toDashboard() {

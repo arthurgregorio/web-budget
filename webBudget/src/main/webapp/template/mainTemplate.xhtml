@@ -98,13 +98,16 @@
                                            styleClass="main-menu-item">
                                     <p:menuitem value="#{menu['tools.users']}"    
                                                 url="/main/tools/user/listUsers.xhtml"
-                                                rendered="#{authorizationBean.hasRole(authorization.ACCOUNTS_VIEW)}"/>
+                                                rendered="#{authorizationBean.hasRole(authorization.USER_VIEW)}"/>
+                                    <p:menuitem value="#{menu['tools.groups']}"    
+                                                url="/main/tools/user/listGroups.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.GROUP_VIEW)}"/>
                                     <p:menuitem value="#{menu['tools.configuration']}"    
                                                 url="/main/tools/configurations/configurations.xhtml"
                                                 rendered="#{authorizationBean.hasRole(authorization.CONFIGURATION_VIEW)}"/>
                                     <p:menuitem value="#{menu['tools.private-messages']}"    
                                                 url="/main/tools/privateMessage/listPrivateMessages.xhtml"
-                                                rendered="#{authorizationBean.hasRole(authorization.PRIVATE_MESSAGES_VIEW)}"/>
+                                                rendered="#{authorizationBean.hasRole(authorization.PRIVATE_MESSAGE_VIEW)}"/>
                                 </p:submenu>
 
                                 <f:facet name="options">

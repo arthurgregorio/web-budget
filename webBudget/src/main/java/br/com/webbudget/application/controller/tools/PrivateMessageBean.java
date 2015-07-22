@@ -162,7 +162,7 @@ public class PrivateMessageBean extends AbstractBean {
 //            this.info("private-message.action.sent", true);
 //        } catch (ApplicationException ex) {
 //            this.logger.error("PrivateMessageBean#doSave found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
 //        } catch (MessagingException ex) {
 //            this.logger.warn("PrivateMessageBean#doSave found erros", ex);
 //            this.warn("private-message.action.mail-error", true);
@@ -181,7 +181,7 @@ public class PrivateMessageBean extends AbstractBean {
 //            this.info("private-message.action.deleted", true);
 //        } catch (ApplicationException ex) {
 //            this.logger.error("PrivateMessageBean#doDelete found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
 //        } finally {
 //            this.update("privateMessagesList");
 //            this.closeDialog("dialogDeletePrivateMessage");

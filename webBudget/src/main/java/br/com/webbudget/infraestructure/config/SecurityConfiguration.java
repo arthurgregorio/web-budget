@@ -139,10 +139,12 @@ public class SecurityConfiguration {
                 .forPath("/main/miscellany/financialPeriod/**")
                     .authorizeWith().role(this.authorization.FINANCIAL_PERIOD_VIEW)
                 .forPath("/main/tools/user/**")
-                    .authorizeWith().role(this.authorization.ACCOUNTS_VIEW)
+                    .authorizeWith().role(this.authorization.USER_VIEW)
+                .forPath("/main/tools/group/**")
+                    .authorizeWith().role(this.authorization.GROUP_VIEW)
                 .forPath("/main/tools/configurations/**")
                     .authorizeWith().role(this.authorization.CONFIGURATION_VIEW)
                 .forPath("/main/tools/privateMessage/**")
-                    .authorizeWith().role(this.authorization.PRIVATE_MESSAGES_VIEW);
+                    .authorizeWith().role(this.authorization.PRIVATE_MESSAGE_VIEW);
     }
 }

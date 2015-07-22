@@ -124,7 +124,7 @@ public class FinancialPeriodBean extends AbstractBean {
             this.info("financial-period.action.saved", true);
         } catch (Exception ex) {
             this.logger.error("FinancialPeriodBean#doSave found errors", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
     
@@ -143,7 +143,7 @@ public class FinancialPeriodBean extends AbstractBean {
             this.info("financial-period.action.deleted", true);
         } catch (Exception ex) {
             this.logger.error("FinancialPeriodBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
             this.update("financialPeriodsList");
             this.closeDialog("dialogDeletePeriod");

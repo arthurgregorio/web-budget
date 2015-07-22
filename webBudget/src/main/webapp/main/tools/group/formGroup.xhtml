@@ -1,0 +1,152 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free softwareyou can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/mainTemplate.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{groupBean.initializeForm(param.groupId)}"/>
+    </f:metadata>
+
+    <ui:define name="breadcrumb">
+        <p:menuitem url="#"
+                    value="#{breadcrumb['tools']}" />
+        <p:menuitem url="listUserAs.xhtml"
+                    value="#{breadcrumb['tools.group']}" />
+        <p:menuitem url="formUser.xhtml"
+                    value="#{breadcrumb['inclusion']}" 
+                    rendered="#{groupBean.viewState eq 'ADDING'}"/>
+        <p:menuitem url="#"
+                    value="#{breadcrumb['edition']}" 
+                    rendered="#{groupBean.viewState eq 'EDITING'}"/>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="groupForm" prependId="false">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+                    <p:messages id="messages" closable="true" />
+                </div> 
+            </div> 
+            <div class="ui-grid-row flat-box">
+                <div class="ui-grid-col-6"> 
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group">
+                            <p:selectBooleanCheckbox value="#{groupBean.group.blocked}"
+                                                     itemLabel="#{messages['group.form.blocked']}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inGroup" 
+                                           value="#{messages['group.form.group']}"/>
+                            <p:selectOneMenu id="inGroup" 
+                                             value="#{groupBean.group.groupMembership.group}" 
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{messages['group.form.select-one']}" />
+                                <f:selectItems var="group" 
+                                               itemValue="#{group}"
+                                               itemLabel="#{group.name}"
+                                               value="#{groupBean.groups}" /> 
+                            </p:selectOneMenu>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inName" 
+                                           value="#{messages['group.form.name']}"/>
+                            <p:inputText id="inName" 
+                                         maxlength="90"
+                                         value="#{groupBean.group.name}" />
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inEmail" 
+                                           value="#{messages['group.form.email']}"/>
+                            <p:inputText id="inEmail" 
+                                         maxlength="90"
+                                         value="#{groupBean.group.email}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inUsername" 
+                                           value="#{messages['group.form.groupname']}"/>
+                            <p:inputText id="inUsername" 
+                                         maxlength="45"
+                                         value="#{groupBean.group.groupname}" 
+                                         readonly="#{groupBean.group.id ne null}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inPassword" 
+                                           value="#{messages['group.form.password']}"/>
+                            <p:password id="inPassword" 
+                                        match="inConfirmPassword"
+                                        value="#{groupBean.group.password}"
+                                        required="#{groupBean.group.id eq null}"
+                                        validatorMessage="#{validation['group.password-not-match']}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-l">
+                            <p:outputLabel for="inConfirmPassword" 
+                                           value="#{messages['group.form.confirm-password']}"/>
+                            <p:password id="inConfirmPassword"
+                                        value="#{groupBean.group.passwordConfirmation}"/>
+                        </div>                        
+                    </div>
+                </div>
+                <div class="ui-grid-col-6"> 
+
+                </div>
+            </div>
+            <div class="ui-grid-row flat-box">
+                <div class="ui-grid-col-6">
+
+                </div>
+                <div class="ui-grid-col-6 form-controls-box">
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{groupBean.doCancel()}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton update="groupForm"
+                                     process="groupForm"
+                                     value="#{menu['save']}"
+                                     action="#{groupBean.doSave()}"
+                                     styleClass="ui-button-success"
+                                     rendered="#{groupBean.viewState eq 'ADDING'}" />
+                    <p:commandButton update="groupForm"
+                                     process="groupForm"
+                                     value="#{menu['update']}"
+                                     styleClass="ui-button-success"
+                                     action="#{groupBean.doUpdate()}"
+                                     rendered="#{groupBean.viewState eq 'EDITING'}"/>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

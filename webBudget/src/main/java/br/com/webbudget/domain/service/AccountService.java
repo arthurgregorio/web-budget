@@ -116,6 +116,34 @@ public class AccountService {
     }
 
     /**
+     * 
+     * @param group 
+     */
+    @Transactional
+    public void save(Group group) {
+        
+    }
+    
+    /**
+     * 
+     * @param group
+     * @return 
+     */
+    @Transactional
+    public Group update(Group group) {
+        return group;
+    }
+    
+    /**
+     * 
+     * @param group 
+     */
+    @Transactional
+    public void delete(Group group) {
+        
+    }
+
+    /**
      *
      * @param username
      * @return
@@ -191,6 +219,27 @@ public class AccountService {
 
         final List<Group> groups = queryBuilder.createIdentityQuery(Group.class)
                 .where(queryBuilder.equal(Group.NAME, groupName)).getResultList();
+
+        if (groups.isEmpty()) {
+            return null;
+        } else if (groups.size() == 1) {
+            return groups.get(0);
+        } else {
+            throw new IdentityManagementException("account.error.duplicated-groups");
+        }
+    }
+    
+    /**
+     * 
+     * @param groupId
+     * @return 
+     */
+    public Group findGroupById(String groupId) {
+
+        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
+
+        final List<Group> groups = queryBuilder.createIdentityQuery(Group.class)
+                .where(queryBuilder.equal(Group.ID, groupId)).getResultList();
 
         if (groups.isEmpty()) {
             return null;

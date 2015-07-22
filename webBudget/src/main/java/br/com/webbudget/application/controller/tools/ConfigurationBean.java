@@ -83,7 +83,7 @@ public class ConfigurationBean extends AbstractBean {
             this.info("configuration.action.saved", true);
         } catch (Exception ex) {
             this.logger.error("ConfigurationBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
         } 
     }
     
