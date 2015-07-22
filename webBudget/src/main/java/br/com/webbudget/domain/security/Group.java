@@ -85,4 +85,20 @@ public class Group extends AbstractIdentityType {
         this.name = name;
         this.parent = parent;
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean isBlocked() {
+        return !this.isEnabled();
+    }
+    
+    /**
+     * 
+     * @param blocked 
+     */
+    public void setBlocked(boolean blocked) {
+        this.setEnabled(!blocked);
+    }
 }
