@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.service;
 
+import br.com.webbudget.domain.misc.ex.WbServiceException;
 import br.com.webbudget.domain.security.Grant;
 import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.security.GroupMembership;
@@ -57,6 +58,13 @@ public class AccountService {
      */
     @Transactional
     public void save(User user) {
+        
+        // validamos os dados do usuario
+        final User found = this.findUserByUsername(user.getUsername());
+        
+        if (found != null) {
+            throw new WbServiceException("user.error.duplicated-username");
+        }
 
         // pegamos o grupo e setamos o user no membership dele
         final GroupMembership groupMembership = user.getGroupMembership();
@@ -160,7 +168,7 @@ public class AccountService {
         } else if (users.size() == 1) {
             return users.get(0);
         } else {
-            throw new IdentityManagementException("account.error.duplicated-usernames");
+            throw new IdentityManagementException("user.error.duplicated-usernames");
         }
     }
 
@@ -183,7 +191,7 @@ public class AccountService {
             user.setGroupMembership(this.listMembershipsByUser(user).get(0));
             return user;            
         } else {
-            throw new IdentityManagementException("account.error.duplicated-usernames");
+            throw new IdentityManagementException("user.error.duplicated-usernames");
         }
     }
 
@@ -204,7 +212,7 @@ public class AccountService {
         } else if (roles.size() == 1) {
             return roles.get(0);
         } else {
-            throw new IdentityManagementException("account.error.duplicated-roles");
+            throw new IdentityManagementException("user.error.duplicated-roles");
         }
     }
 
@@ -225,7 +233,7 @@ public class AccountService {
         } else if (groups.size() == 1) {
             return groups.get(0);
         } else {
-            throw new IdentityManagementException("account.error.duplicated-groups");
+            throw new IdentityManagementException("user.error.duplicated-groups");
         }
     }
     
@@ -246,7 +254,7 @@ public class AccountService {
         } else if (groups.size() == 1) {
             return groups.get(0);
         } else {
-            throw new IdentityManagementException("account.error.duplicated-groups");
+            throw new IdentityManagementException("user.error.duplicated-groups");
         }
     }
     
