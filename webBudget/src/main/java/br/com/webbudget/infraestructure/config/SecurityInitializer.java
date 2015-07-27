@@ -74,7 +74,7 @@ public class SecurityInitializer {
                 .createIdentityManager(partition);
 
         // checamos se todas as roles estao dentro do sistema
-        for (String role : this.authorization.getAllAuthorizations()) {
+        for (String role : this.authorization.listAuthorizations()) {
             if (!this.hasRole(role)) {
                 this.identityManager.add(new Role(role));
             }

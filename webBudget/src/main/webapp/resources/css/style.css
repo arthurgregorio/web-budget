@@ -145,6 +145,10 @@ td {
 .font-15-pt {
     font-size: 15pt;
 }
+.font-12-pt-heavy {
+    font-size: 13pt;
+    font-weight: 600;
+}
 
 .display-block {
     display: block;
@@ -490,8 +494,9 @@ td {
 
 /* form contas de usuario -------------------- */
 .permission-tree {
+    margin-top: 15px;
     overflow: auto;
-    height: 338px !important;
+    height: 300px !important;
     width: auto !important;
 }
 
