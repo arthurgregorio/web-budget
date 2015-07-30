@@ -96,12 +96,12 @@
                                 </p:submenu>
                                 <p:submenu label="#{menu['tools']}" 
                                            styleClass="main-menu-item">
-                                    <p:menuitem value="#{menu['tools.users']}"    
-                                                url="/main/tools/user/listUsers.xhtml"
-                                                rendered="#{authorizationBean.hasRole(authorization.USER_VIEW)}"/>
                                     <p:menuitem value="#{menu['tools.groups']}"    
                                                 url="/main/tools/group/listGroups.xhtml"
                                                 rendered="#{authorizationBean.hasRole(authorization.GROUP_VIEW)}"/>
+                                    <p:menuitem value="#{menu['tools.users']}"    
+                                                url="/main/tools/user/listUsers.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.USER_VIEW)}"/>
                                     <p:menuitem value="#{menu['tools.configuration']}"    
                                                 url="/main/tools/configurations/configurations.xhtml"
                                                 rendered="#{authorizationBean.hasRole(authorization.CONFIGURATION_VIEW)}"/>

@@ -23,9 +23,8 @@ import br.com.webbudget.domain.security.GroupMembership;
 import br.com.webbudget.domain.security.Role;
 import br.com.webbudget.domain.security.User;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -34,6 +33,7 @@ import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.RelationshipManager;
 import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.model.Account;
+import org.picketlink.idm.query.Condition;
 import org.picketlink.idm.query.IdentityQuery;
 import org.picketlink.idm.query.IdentityQueryBuilder;
 import org.picketlink.idm.query.RelationshipQuery;
@@ -86,6 +86,38 @@ public class AccountService {
     
     /**
      * 
+     * @param group
+     * @param authorizations 
+     */
+    @Transactional
+    public void save(Group group, List<String> authorizations) {
+        
+        // validamos os dados do grupo
+        final Group found = this.findGroupByName(group.getName());
+        
+        if (found != null) {
+            throw new WbServiceException("group.error.duplicated-group");
+        }
+        
+        // checamos se existem permissoes para este grupo
+        if (authorizations == null || authorizations.isEmpty()) {
+            throw new WbServiceException("group.error.empty-authorizations");
+        }
+        
+        // cria o grupo
+        this.identityManager.add(group);
+        
+        // criamos os grants para aquele grupo
+        for (String authorization : authorizations) {
+            
+            final Role role = this.findRoleByName(authorization);
+            
+            this.relationshipManager.add(new Grant(role, group));
+        }
+    }
+    
+    /**
+     * 
      * @param user 
      */
     @Transactional
@@ -111,6 +143,38 @@ public class AccountService {
     
     /**
      * 
+     * @param group
+     * @param authorizations 
+     */
+    @Transactional
+    public void update(Group group, List<String> authorizations) {
+        
+        // checamos se existem permissoes para este grupo
+        if (authorizations == null || authorizations.isEmpty()) {
+            throw new WbServiceException("group.error.empty-authorizations");
+        }
+        
+        // removemos todos os grants atuais
+        final List<Grant> oldGrants = this.listGrantsByGroup(group);
+        
+        for (Grant grant : oldGrants) {
+            this.relationshipManager.remove(grant);
+        }
+        
+        // atualiza o grupo
+        this.identityManager.update(group);
+        
+        // recriamos os grants para aquele grupo
+        for (String authorization : authorizations) {
+            
+            final Role role = this.findRoleByName(authorization);
+            
+            this.relationshipManager.add(new Grant(role, group));
+        }
+    }
+    
+    /**
+     * 
      * @param user 
      */
     @Transactional
@@ -124,25 +188,6 @@ public class AccountService {
         // removemos o usuario do contexto de seguranca
         this.identityManager.remove(user);
     }
-
-    /**
-     * 
-     * @param group 
-     */
-    @Transactional
-    public void save(Group group) {
-        
-    }
-    
-    /**
-     * 
-     * @param group
-     * @return 
-     */
-    @Transactional
-    public Group update(Group group) {
-        return group;
-    }
     
     /**
      * 
@@ -151,7 +196,17 @@ public class AccountService {
     @Transactional
     public void delete(Group group) {
         
+        // removemos todos os grants
+        final List<Grant> oldGrants = this.listGrantsByGroup(group);
+        
+        for (Grant grant : oldGrants) {
+            this.relationshipManager.remove(grant);
+        }
+        
+        // remove o grupo
+        this.identityManager.remove(group);
     }
+
 
     /**
      *
@@ -173,6 +228,27 @@ public class AccountService {
             throw new IdentityManagementException("user.error.duplicated-usernames");
         }
     }
+    
+    /**
+     * 
+     * @param email
+     * @return 
+     */
+    public User findUserByEmail(String email) {
+
+        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
+
+        final List<User> users = queryBuilder.createIdentityQuery(User.class)
+                .where(queryBuilder.equal(User.EMAIL, email)).getResultList();
+
+        if (users.isEmpty()) {
+            return null;
+        } else if (users.size() == 1) {
+            return users.get(0);
+        } else {
+            throw new IdentityManagementException("user.error.duplicated-emails");
+        }
+    }
 
     /**
      *
@@ -191,9 +267,32 @@ public class AccountService {
         } else if (users.size() == 1) {
             final User user = users.get(0);
             user.setGroupMembership(this.listMembershipsByUser(user).get(0));
-            return user;            
+            return user;
         } else {
             throw new IdentityManagementException("user.error.duplicated-usernames");
+        }
+    }
+    
+    /**
+     *
+     * @param groupId
+     * @return
+     */
+    public Group findGroupById(String groupId) {
+
+        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
+
+        final List<Group> groups = queryBuilder.createIdentityQuery(Group.class)
+                .where(queryBuilder.equal(User.ID, groupId)).getResultList();
+
+        if (groups.isEmpty()) {
+            return null;
+        } else if (groups.size() == 1) {
+            final Group group = groups.get(0);
+            group.setGrants(this.listGrantsByGroup(group));
+            return group;
+        } else {
+            throw new IdentityManagementException("group.error.duplicated-groups");
         }
     }
 
@@ -214,7 +313,7 @@ public class AccountService {
         } else if (roles.size() == 1) {
             return roles.get(0);
         } else {
-            throw new IdentityManagementException("user.error.duplicated-roles");
+            throw new IdentityManagementException("role.error.duplicated-roles");
         }
     }
 
@@ -235,35 +334,14 @@ public class AccountService {
         } else if (groups.size() == 1) {
             return groups.get(0);
         } else {
-            throw new IdentityManagementException("user.error.duplicated-groups");
+            throw new IdentityManagementException("group.error.duplicated-groups");
         }
     }
-    
+
     /**
-     * 
-     * @param groupId
-     * @return 
-     */
-    public Group findGroupById(String groupId) {
-
-        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
-
-        final List<Group> groups = queryBuilder.createIdentityQuery(Group.class)
-                .where(queryBuilder.equal(Group.ID, groupId)).getResultList();
-
-        if (groups.isEmpty()) {
-            return null;
-        } else if (groups.size() == 1) {
-            return groups.get(0);
-        } else {
-            throw new IdentityManagementException("user.error.duplicated-groups");
-        }
-    }
-    
-    /**
-     * 
+     *
      * @param user
-     * @return 
+     * @return
      */
     public List<GroupMembership> listMembershipsByUser(User user) {
 
@@ -271,7 +349,7 @@ public class AccountService {
                 = this.relationshipManager.createRelationshipQuery(GroupMembership.class);
 
         query.setParameter(GroupMembership.MEMBER, user);
-        
+
         return query.getResultList();
     }
 
@@ -298,35 +376,97 @@ public class AccountService {
 
     /**
      *
-     * @param enabled
+     * @param isBlocked
      * @return
      */
-    public List<User> listUsers(Boolean enabled) {
+    public List<User> listUsers(Boolean isBlocked) {
 
         final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
 
         final IdentityQuery<User> query = queryBuilder.createIdentityQuery(User.class);
 
-        if (enabled != null) {
-            query.where(queryBuilder.equal(User.ENABLED, enabled));
+        if (isBlocked != null) {
+            query.where(queryBuilder.equal(User.ENABLED, !isBlocked));
         }
 
         return query.getResultList();
     }
     
     /**
+     *
+     * @param filter
+     * @param isBlocked
+     * @return
+     */
+    public List<User> listUsersByFilter(String filter, Boolean isBlocked) {
+
+        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
+
+        final IdentityQuery<User> query = queryBuilder.createIdentityQuery(User.class);
+
+        List<Condition> conditions = new ArrayList<>();
+
+        // considera que a busca ira ou nao bucar os bloqueados
+        if (isBlocked != null) {
+            conditions.add(queryBuilder.equal(User.ENABLED, !isBlocked));
+        } 
+        
+        // considere que os filtros devem ser setados
+        if (filter != null && !filter.isEmpty()) {
+            conditions = Arrays.asList(
+                    queryBuilder.like(User.USER_NAME, "%" + filter + "%"),
+                    queryBuilder.like(User.NAME, "%" + filter + "%"));
+        }
+
+        query.where(conditions.toArray(new Condition[]{}));
+
+        return query.getResultList();
+    }
+    
+    /**
      * 
-     * @param enabled
+     * @param filter
+     * @param isBlocked
      * @return 
      */
-    public List<Group> listGroups(Boolean enabled) {
+    public List<Group> listGroupsByFilter(String filter, Boolean isBlocked) {
 
         final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
 
         final IdentityQuery<Group> query = queryBuilder.createIdentityQuery(Group.class);
 
-        if (enabled != null) {
-            query.where(queryBuilder.equal(User.ENABLED, enabled));
+        List<Condition> conditions = new ArrayList<>();
+
+        // considera que a busca ira ou nao bucar os bloqueados
+        if (isBlocked != null) {
+            conditions.add(queryBuilder.equal(User.ENABLED, !isBlocked));
+        } 
+        
+        // considere que os filtros devem ser setados
+        if (filter != null && !filter.isEmpty()) {
+            conditions = Arrays.asList(
+                    queryBuilder.like(User.USER_NAME, "%" + filter + "%"),
+                    queryBuilder.like(User.NAME, "%" + filter + "%"));
+        }
+
+        query.where(conditions.toArray(new Condition[]{}));
+
+        return query.getResultList();
+    }
+
+    /**
+     *
+     * @param isBlocked
+     * @return
+     */
+    public List<Group> listGroups(Boolean isBlocked) {
+
+        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
+
+        final IdentityQuery<Group> query = queryBuilder.createIdentityQuery(Group.class);
+
+        if (isBlocked != null) {
+            query.where(queryBuilder.equal(User.ENABLED, !isBlocked));
         }
 
         return query.getResultList();

@@ -17,11 +17,12 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.domain.misc.ex.WbServiceException;
 import br.com.webbudget.domain.security.Authorization;
 import br.com.webbudget.domain.security.Grant;
 import br.com.webbudget.domain.security.Group;
-import br.com.webbudget.domain.security.Role;
 import br.com.webbudget.domain.service.AccountService;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -71,7 +72,6 @@ public class GroupBean extends AbstractBean {
     }
 
     /**
-     *
      * @param groupId
      */
     public void initializeForm(String groupId) {
@@ -86,11 +86,12 @@ public class GroupBean extends AbstractBean {
         } else {
             this.viewState = ViewState.EDITING;
             this.group = this.accountService.findGroupById(groupId);
+            
+            this.selectAuthorizations();
         }
     }
 
     /**
-     *
      * @return o form de inclusao
      */
     public String changeToAdd() {
@@ -98,7 +99,6 @@ public class GroupBean extends AbstractBean {
     }
 
     /**
-     *
      * @param groupId
      * @return
      */
@@ -107,7 +107,6 @@ public class GroupBean extends AbstractBean {
     }
 
     /**
-     *
      * @param groupId
      */
     public void changeToDelete(String groupId) {
@@ -121,15 +120,17 @@ public class GroupBean extends AbstractBean {
     public void doSave() {
 
         try {
-            this.accountService.save(this.group);
-
+            this.accountService.save(this.group, this.nodesToAuthorizations());
             this.group = new Group();
-
+            this.unselectAuthorizations();
             this.info("group.action.saved", true);
+        } catch (WbServiceException ex) {
+            this.logger.error("GroupBean#doSave has found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
-            this.logger.error("GroupBean#doSave found erros", ex);
+            this.logger.error("GroupBean#doSave has found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
-        } 
+        }
     }
 
     /**
@@ -138,11 +139,13 @@ public class GroupBean extends AbstractBean {
     public void doUpdate() {
 
         try {
-            this.accountService.update(this.group);
-
+            this.accountService.update(this.group, this.nodesToAuthorizations());
             this.info("group.action.updated", true);
-        } catch (Exception ex) {
+        } catch (WbServiceException ex) {
             this.logger.error("GroupBean#doUpdate has found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        } catch (Exception ex) {
+            this.logger.error("GroupBean#doSave has found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
@@ -155,7 +158,6 @@ public class GroupBean extends AbstractBean {
         try {
             this.accountService.delete(this.group);
             this.groups = this.accountService.listGroups(null);
-
             this.info("group.action.deleted", true);
         } catch (Exception ex) {
             this.logger.error("GroupBean#doDelete found erros", ex);
@@ -167,12 +169,40 @@ public class GroupBean extends AbstractBean {
     }
     
     /**
+     * Transforma as permissoes selecionadas em uma lista de chaves para depois
+     * serem tranformadas em roles do sistema
      * 
+     * @return a lista de chaves de autorizacao selecionadas
+     */
+    private List<String> nodesToAuthorizations() {
+
+        final List<String> authorizations = new ArrayList<>();
+
+        // pegamos as agrupadoras
+        final Set<String> groupers = 
+                this.authorization.listGroupedAuthorizations().keySet();
+
+        // filtramos manualmente
+        for (TreeNode node : this.selectedAuthorizations) {
+
+            final String authority = (String) node.getData();
+
+            // se estiver no set de keys, eh uma agrupadora e nao adicionamos
+            if (!groupers.contains(authority)) {
+                authorizations.add(authority);
+            }
+        }
+
+        return authorizations;
+    }
+    
+    /**
+     * Cria o model para arvore de permissoes
      */
     private void createAuthorizationsTree() {
 
         // instancia o node principal, root
-        this.treeRoot = new DefaultTreeNode(this.translate("group.form.roles"), null);
+        this.treeRoot = new DefaultTreeNode("roles");
 
         // pega todas as authorities da lista de authorities do sistema
         final HashMap<String, Set<String>> roles = this.authorization.listGroupedAuthorizations();
@@ -191,7 +221,7 @@ public class GroupBean extends AbstractBean {
             this.treeRoot.getChildren().add(rootNode);
         }
     }
-    
+
     /**
      * Metodo que tira a selecao dos nodes, utilizamos ele para nao ter que
      * chamar novamente a construcao da tela o que tornaria a execucao lenta
@@ -210,7 +240,7 @@ public class GroupBean extends AbstractBean {
     }
 
     /**
-     * Selecione os nodes de acordo com o usuario carregado
+     * Selecione os nodes de acordo com o grupo carregado
      */
     private void selectAuthorizations() {
 
@@ -220,14 +250,14 @@ public class GroupBean extends AbstractBean {
 
             for (TreeNode node : this.treeRoot.getChildren()) {
 
-                if (grant.getGrantAuthorization().contains((String) node.getData())) {
+                if (grant.getAuthorization().contains((String) node.getData())) {
                     node.setSelected(true);
                     selected.add(node);
                 }
 
                 if (!node.getChildren().isEmpty()) {
                     for (TreeNode childNode : node.getChildren()) {
-                        if (grant.getGrantAuthorization().contains((String) childNode.getData())) {
+                        if (grant.getAuthorization().contains((String) childNode.getData())) {
                             childNode.setSelected(true);
                             selected.add(childNode);
                             break;
@@ -236,13 +266,10 @@ public class GroupBean extends AbstractBean {
                 }
             }
         }
-
-        this.selectedAuthorizations = new TreeNode[selected.size()];
-        this.selectedAuthorizations = selected.toArray(this.selectedAuthorizations);
+        this.selectedAuthorizations = selected.toArray(new TreeNode[]{});
     }
 
     /**
-     *
      * @return
      */
     public String doCancel() {
@@ -250,7 +277,6 @@ public class GroupBean extends AbstractBean {
     }
 
     /**
-     *
      * @return
      */
     public String toDashboard() {

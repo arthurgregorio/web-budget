@@ -74,4 +74,12 @@ public class Grant extends AbstractAttributedType implements Relationship {
     public String getGrantAuthorization() {
         return role.getAuthorization();
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    public String getAuthorization() {
+        return this.role.getAuthorization();
+    }
 }

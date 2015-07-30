@@ -20,6 +20,7 @@ import br.com.webbudget.domain.service.AccountService;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.picketlink.idm.model.AbstractIdentityType;
 import org.picketlink.idm.model.annotation.AttributeProperty;
 import org.picketlink.idm.model.annotation.IdentityStereotype;
@@ -44,6 +45,7 @@ public class Group extends AbstractIdentityType {
     @Setter
     @Unique
     @AttributeProperty
+    @NotEmpty(message = "{group.name}")
     @StereotypeProperty(IDENTITY_GROUP_NAME)
     private String name;
     @Getter
