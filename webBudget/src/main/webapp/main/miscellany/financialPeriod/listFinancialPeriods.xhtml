@@ -122,7 +122,7 @@
                                   title="#{menu['calculate']}"
                                   href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"
                                   rendered="#{financialPeriod.closed eq false 
-                                              and authorizationBean.hasRole(authorization.FINANCIAL_PERIOD_CLOSE)}"/>
+                                              and authorizationBean.hasRole(authorization.CLOSING_CLOSE)}"/>
                         <p:spacer width="10" 
                                   rendered="#{financialPeriod.closed eq false 
                                               and authorizationBean.hasRole(authorization.FINANCIAL_PERIOD_DELETE)}"/>

@@ -25,7 +25,7 @@ import javax.inject.Named;
 import lombok.Getter;
 
 /**
- * Mapeamento das authorities do sistema
+ * Mapeamento das permissoes individuais do sistema
  *
  * @author Arthur Gregorio
  *
@@ -38,46 +38,46 @@ public class Authorization {
 
     @Getter
     @AuthorizationGroup("authority.configuration")
-    public final String CONFIGURATION_VIEW = "authority.configuration.view";
+    public final String CONFIGURATION_VIEW = "authority.configuration.access";
     @Getter
     @AuthorizationGroup("authority.configuration")
-    public final String CONFIGURATION_INSERT = "authority.configuration.insert";
+    public final String CONFIGURATION_INSERT = "authority.configuration.add";
 
     @Getter
     @AuthorizationGroup("authority.card")
-    public final String CARD_VIEW = "authority.card.view";
+    public final String CARD_VIEW = "authority.card.access";
     @Getter
     @AuthorizationGroup("authority.card")
-    public final String CARD_INSERT = "authority.card.insert";
+    public final String CARD_INSERT = "authority.card.add";
     @Getter
     @AuthorizationGroup("authority.card")
-    public final String CARD_UPDATE = "authority.card.update";
+    public final String CARD_UPDATE = "authority.card.edit";
     @Getter
     @AuthorizationGroup("authority.card")
     public final String CARD_DELETE = "authority.card.delete";
 
     @Getter
     @AuthorizationGroup("authority.contact")
-    public final String CONTACT_VIEW = "authority.contact.view";
+    public final String CONTACT_VIEW = "authority.contact.access";
     @Getter
     @AuthorizationGroup("authority.contact")
-    public final String CONTACT_INSERT = "authority.contact.insert";
+    public final String CONTACT_INSERT = "authority.contact.add";
     @Getter
     @AuthorizationGroup("authority.contact")
-    public final String CONTACT_UPDATE = "authority.contact.update";
+    public final String CONTACT_UPDATE = "authority.contact.edit";
     @Getter
     @AuthorizationGroup("authority.contact")
     public final String CONTACT_DELETE = "authority.contact.delete";
 
     @Getter
     @AuthorizationGroup("authority.wallet")
-    public final String WALLET_VIEW = "authority.wallet.view";
+    public final String WALLET_VIEW = "authority.wallet.access";
     @Getter
     @AuthorizationGroup("authority.wallet")
-    public final String WALLET_INSERT = "authority.wallet.insert";
+    public final String WALLET_INSERT = "authority.wallet.add";
     @Getter
     @AuthorizationGroup("authority.wallet")
-    public final String WALLET_UPDATE = "authority.wallet.update";
+    public final String WALLET_UPDATE = "authority.wallet.edit";
     @Getter
     @AuthorizationGroup("authority.wallet")
     public final String WALLET_DELETE = "authority.wallet.delete";
@@ -87,39 +87,39 @@ public class Authorization {
 
     @Getter
     @AuthorizationGroup("authority.cost-center")
-    public final String COST_CENTER_VIEW = "authority.cost-center.view";
+    public final String COST_CENTER_VIEW = "authority.cost-center.access";
     @Getter
     @AuthorizationGroup("authority.cost-center")
-    public final String COST_CENTER_INSERT = "authority.cost-center.insert";
+    public final String COST_CENTER_INSERT = "authority.cost-center.add";
     @Getter
     @AuthorizationGroup("authority.cost-center")
-    public final String COST_CENTER_UPDATE = "authority.cost-center.update";
+    public final String COST_CENTER_UPDATE = "authority.cost-center.edit";
     @Getter
     @AuthorizationGroup("authority.cost-center")
     public final String COST_CENTER_DELETE = "authority.cost-center.delete";
 
     @Getter
     @AuthorizationGroup("authority.movement-class")
-    public final String MOVEMENT_CLASS_VIEW = "authority.movement-class.view";
+    public final String MOVEMENT_CLASS_VIEW = "authority.movement-class.access";
     @Getter
     @AuthorizationGroup("authority.movement-class")
-    public final String MOVEMENT_CLASS_INSERT = "authority.movement-class.insert";
+    public final String MOVEMENT_CLASS_INSERT = "authority.movement-class.add";
     @Getter
     @AuthorizationGroup("authority.movement-class")
-    public final String MOVEMENT_CLASS_UPDATE = "authority.movement-class.update";
+    public final String MOVEMENT_CLASS_UPDATE = "authority.movement-class.edit";
     @Getter
     @AuthorizationGroup("authority.movement-class")
     public final String MOVEMENT_CLASS_DELETE = "authority.movement-class.delete";
 
     @Getter
     @AuthorizationGroup("authority.movement")
-    public final String MOVEMENT_VIEW = "authority.movement.view";
+    public final String MOVEMENT_VIEW = "authority.movement.access";
     @Getter
     @AuthorizationGroup("authority.movement")
-    public final String MOVEMENT_INSERT = "authority.movement.insert";
+    public final String MOVEMENT_INSERT = "authority.movement.add";
     @Getter
     @AuthorizationGroup("authority.movement")
-    public final String MOVEMENT_UPDATE = "authority.movement.update";
+    public final String MOVEMENT_UPDATE = "authority.movement.edit";
     @Getter
     @AuthorizationGroup("authority.movement")
     public final String MOVEMENT_PAY = "authority.movement.pay";
@@ -132,7 +132,7 @@ public class Authorization {
     public final String CARD_INVOICE_PAY = "authority.card-invoice.pay";
     @Getter
     @AuthorizationGroup("authority.card-invoice")
-    public final String CARD_INVOICE_VIEW = "authority.card-invoice.view";
+    public final String CARD_INVOICE_VIEW = "authority.card-invoice.access";
     @Getter
     @AuthorizationGroup("authority.card-invoice")
     public final String CARD_INVOICE_PROCESS = "authority.card-invoice.process";
@@ -142,30 +142,27 @@ public class Authorization {
 
     @Getter
     @AuthorizationGroup("authority.balance-transfer")
-    public final String BALANCE_TRANSFER_VIEW = "authority.balance-transfer.view";
+    public final String BALANCE_TRANSFER_VIEW = "authority.balance-transfer.access";
     @Getter
     @AuthorizationGroup("authority.balance-transfer")
     public final String BALANCE_TRANSFER_MAKE = "authority.balance-transfer.make";
 
     @Getter
     @AuthorizationGroup("authority.financial-period")
-    public final String FINANCIAL_PERIOD_VIEW = "authority.financial-period.view";
+    public final String FINANCIAL_PERIOD_VIEW = "authority.financial-period.access";
     @Getter
     @AuthorizationGroup("authority.financial-period")
-    public final String FINANCIAL_PERIOD_INSERT = "authority.financial-period.insert";
+    public final String FINANCIAL_PERIOD_INSERT = "authority.financial-period.add";
     @Getter
     @AuthorizationGroup("authority.financial-period")
     public final String FINANCIAL_PERIOD_DELETE = "authority.financial-period.delete";
-    @Getter
-    @AuthorizationGroup("authority.financial-period")
-    public final String FINANCIAL_PERIOD_CLOSE = "authority.financial-period.close";
     @Getter
     @AuthorizationGroup("authority.financial-period")
     public final String FINANCIAL_PERIOD_DETAILS = "authority.financial-period.details";
 
     @Getter
     @AuthorizationGroup("authority.closing")
-    public final String CLOSING_VIEW = "authority.closing.view";
+    public final String CLOSING_VIEW = "authority.closing.access";
     @Getter
     @AuthorizationGroup("authority.closing")
     public final String CLOSING_CLOSE = "authority.closing.close";
@@ -175,33 +172,33 @@ public class Authorization {
 
     @Getter
     @AuthorizationGroup("authority.user")
-    public final String USER_VIEW = "authority.user.view";
+    public final String USER_VIEW = "authority.user.access";
     @Getter
     @AuthorizationGroup("authority.user")
-    public final String USER_INSERT = "authority.user.insert";
+    public final String USER_INSERT = "authority.user.add";
     @Getter
     @AuthorizationGroup("authority.user")
-    public final String USER_UPDATE = "authority.user.update";
+    public final String USER_UPDATE = "authority.user.edit";
     @Getter
     @AuthorizationGroup("authority.user")
     public final String USER_DELETE = "authority.user.delete";
     
     @Getter
     @AuthorizationGroup("authority.group")
-    public final String GROUP_VIEW = "authority.group.view";
+    public final String GROUP_VIEW = "authority.group.access";
     @Getter
     @AuthorizationGroup("authority.group")
-    public final String GROUP_INSERT = "authority.group.insert";
+    public final String GROUP_INSERT = "authority.group.add";
     @Getter
     @AuthorizationGroup("authority.group")
-    public final String GROUP_UPDATE = "authority.group.update";
+    public final String GROUP_UPDATE = "authority.group.edit";
     @Getter
     @AuthorizationGroup("authority.group")
     public final String GROUP_DELETE = "authority.group.delete";
 
     @Getter
     @AuthorizationGroup("authority.private-message")
-    public final String PRIVATE_MESSAGE_VIEW = "authority.private-message.view";
+    public final String PRIVATE_MESSAGE_VIEW = "authority.private-message.access";
     @Getter
     @AuthorizationGroup("authority.private-message")
     public final String PRIVATE_MESSAGE_SEND = "authority.private-message.send";
@@ -242,7 +239,7 @@ public class Authorization {
     public HashMap<String, Set<String>> listGroupedAuthorizations() {
 
         final HashMap<String, Set<String>> authorities = new HashMap<>();
-        final Set<String> allAuthorities = this.listAuthorizations();
+        final Set<String> authorizations = this.listAuthorizations();
 
         final Field[] fields = this.getClass().getDeclaredFields();
 
@@ -258,9 +255,9 @@ public class Authorization {
 
                     final Set<String> grouped = new HashSet<>();
 
-                    allAuthorities.stream().filter((authority)
-                            -> (authority.contains(group))).forEach((authority) -> {
-                                grouped.add(authority);
+                    authorizations.stream().filter((authorization)
+                            -> (authorization.contains(group))).forEach((key) -> {
+                                grouped.add(key);
                             });
                     authorities.put(group, grouped);
                 }

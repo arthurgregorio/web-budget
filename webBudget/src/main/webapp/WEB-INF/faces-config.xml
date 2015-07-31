@@ -49,6 +49,10 @@
             <base-name>i18n.breadcrumb</base-name>  
             <var>breadcrumb</var>
         </resource-bundle>  
+        <resource-bundle>  
+            <base-name>i18n.authorizations</base-name>  
+            <var>authorizations</var>
+        </resource-bundle>  
     </application>
     
     <faces-config-extension>
