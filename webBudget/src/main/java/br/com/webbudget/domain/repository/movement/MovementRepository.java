@@ -29,9 +29,11 @@ import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -65,13 +67,13 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
     }
 
     /**
-     * 
+     *
      * @param contact
-     * @return 
+     * @return
      */
     @Override
     public List<Movement> listByContact(Contact contact) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
         criteria.createAlias("contact", "ct");
@@ -81,7 +83,7 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
 
         return criteria.list();
     }
-    
+
     /**
      *
      * @param cardInvoice
@@ -101,13 +103,13 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
     }
 
     /**
-     * 
+     *
      * @param financialPeriod
-     * @return 
+     * @return
      */
     @Override
     public List<Movement> listByPeriod(FinancialPeriod financialPeriod) {
-       
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
         criteria.createAlias("financialPeriod", "fp");
@@ -115,7 +117,7 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
 
         return criteria.list();
     }
-    
+
     /**
      *
      * @param filter
@@ -137,31 +139,21 @@ public class MovementRepository extends GenericRepository<Movement, Long> implem
         criteria.createAlias("ap.costCenter", "cc");
         criteria.createAlias("financialPeriod", "fp");
 
+        final List<Criterion> criterions = new ArrayList<>();
+
+        criterions.add(Restrictions.eq("code", filter));
+        criterions.add(Restrictions.ilike("description", "%" + filter + "%"));
+        criterions.add(Restrictions.ilike("mc.name", "%" + filter + "%"));
+        criterions.add(Restrictions.ilike("cc.name", "%" + filter + "%"));
+        criterions.add(Restrictions.ilike("co.name", "%" + filter + "%"));
+        criterions.add(Restrictions.ilike("fp.identification", "%" + filter + "%"));
+
         // se conseguir castar para bigdecimal trata como um filtro
         try {
-            
-            // removemos a virgula e trocamos por um ponto
-            if (filter.contains(",")) {
-                filter = filter.replace(",", ".");
-            }
-            
-            final BigDecimal value = new BigDecimal(filter);
-            
-            criteria.add(Restrictions.or(Restrictions.eq("code", filter),
-                    Restrictions.eq("value", value),
-                    Restrictions.ilike("description", "%" + filter + "%"),
-                    Restrictions.ilike("mc.name", "%" + filter + "%"),
-                    Restrictions.ilike("cc.name", "%" + filter + "%"),
-                    Restrictions.ilike("co.name", "%" + filter + "%"),
-                    Restrictions.ilike("fp.identification", "%" + filter + "%")));
-        } catch (NumberFormatException ex) {
-            criteria.add(Restrictions.or(Restrictions.eq("code", filter),
-                    Restrictions.ilike("description", "%" + filter + "%"),
-                    Restrictions.ilike("mc.name", "%" + filter + "%"),
-                    Restrictions.ilike("cc.name", "%" + filter + "%"),
-                    Restrictions.ilike("co.name", "%" + filter + "%"),
-                    Restrictions.ilike("fp.identification", "%" + filter + "%")));
-        }
+            criterions.add(Restrictions.eq("value", new BigDecimal(filter)));
+        } catch (NumberFormatException ex) { }
+
+        criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));
 
         criteria.addOrder(Order.desc("inclusion"));
 

@@ -109,11 +109,12 @@ public class MovementBean extends AbstractBean {
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
 
         // preenche os campos de filtro
         this.costCenters = this.movementService.listCostCenters(false);
         this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
+        
+        this.filterMovementsList();
     }
 
     /**
@@ -174,17 +175,36 @@ public class MovementBean extends AbstractBean {
      * Pesquisa com filtro
      */
     public void filterMovementsList() {
-        this.movements = this.movementService
-                .listMovementsByFilter(this.filter, this.filterPaid);
-        this.update("movementsList");
+        
+        try {
+            if (filter == null) {
+                this.movements = this.movementService
+                        .listMovementsByActiveFinancialPeriod();
+            } else {
+                this.movements = this.movementService.listMovementsByFilter(
+                        this.filter, this.filterPaid);
+            }
+        } catch (Exception ex) {
+            this.logger.error("MovementBean#filterMovementsList found erros", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        } finally {
+            this.update("movementsList");
+        }
     }
     
     /**
      * Pesquisa os contatos pelo filtro
      */
     public void filterContactsList() {
-        this.contacts = this.contactService.listContactsByFilter(this.filter, false);
-        this.update("contactsList");
+        
+        try {
+            this.contacts = this.contactService.listContactsByFilter(this.filter, false);
+        } catch (Exception ex) {
+            this.logger.error("MovementBean#filterContactsList found erros", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        } finally {
+            this.update("contactsList");
+        }
     }
 
     /**
