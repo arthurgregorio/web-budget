@@ -117,7 +117,7 @@
                                          rendered="#{authorizationBean.hasRole(authorization.FINANCIAL_PERIOD_DETAILS)}" />
                         <p:spacer width="10"
                                   rendered="#{financialPeriod.closed eq false 
-                                              and authorizationBean.hasRole(authorization.FINANCIAL_PERIOD_CLOSE)}"/>
+                                              and authorizationBean.hasRole(authorization.CLOSING_CLOSE)}"/>
                         <p:button icon="fa fa-calculator"
                                   title="#{menu['calculate']}"
                                   href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"
