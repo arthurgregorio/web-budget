@@ -20,7 +20,7 @@ import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.entity.wallet.WalletType;
-import br.com.webbudget.domain.misc.ex.WbServiceException;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
 import br.com.webbudget.domain.repository.wallet.IWalletRepository;
 import java.math.BigDecimal;
@@ -56,7 +56,7 @@ public class WalletService {
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null) {
-            throw new WbServiceException("wallet.validate.duplicated");
+            throw new WbDomainException("wallet.validate.duplicated");
         }
 
         wallet = this.walletRepository.save(wallet);
@@ -93,7 +93,7 @@ public class WalletService {
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null && !found.equals(wallet)) {
-            throw new WbServiceException("wallet.validate.duplicated");
+            throw new WbDomainException("wallet.validate.duplicated");
         }
 
         return this.walletRepository.save(wallet);
@@ -109,7 +109,7 @@ public class WalletService {
         // checa se a carteira nao tem saldo menor ou maior que zero
         // se houve, dispara o erro, comente carteiras zeradas sao deletaveis
         if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-            throw new WbServiceException("wallet.validate.has-balance");
+            throw new WbDomainException("wallet.validate.has-balance");
         }
 
         final List<WalletBalance> balaces = this.listBalancesByWallet(wallet);
@@ -129,7 +129,7 @@ public class WalletService {
     public void transfer(WalletBalance walletBalance) {
 
         if (walletBalance.getSourceWallet().equals(walletBalance.getTargetWallet())) {
-            throw new WbServiceException("transfer.validate.same-wallet");
+            throw new WbDomainException("transfer.validate.same-wallet");
         }
 
         // atualizamos a origem

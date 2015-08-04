@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.domain.misc.ex.WbServiceException;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.security.Grant;
 import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.security.GroupMembership;
@@ -65,7 +65,7 @@ public class AccountService {
         final User found = this.findUserByUsername(user.getUsername());
         
         if (found != null) {
-            throw new WbServiceException("user.error.duplicated-username");
+            throw new WbDomainException("user.error.duplicated-username");
         }
 
         // pegamos o grupo e setamos o user no membership dele
@@ -96,12 +96,12 @@ public class AccountService {
         final Group found = this.findGroupByName(group.getName());
         
         if (found != null) {
-            throw new WbServiceException("group.error.duplicated-group");
+            throw new WbDomainException("group.error.duplicated-group");
         }
         
         // checamos se existem permissoes para este grupo
         if (authorizations == null || authorizations.isEmpty()) {
-            throw new WbServiceException("group.error.empty-authorizations");
+            throw new WbDomainException("group.error.empty-authorizations");
         }
         
         // cria o grupo
@@ -151,7 +151,7 @@ public class AccountService {
         
         // checamos se existem permissoes para este grupo
         if (authorizations == null || authorizations.isEmpty()) {
-            throw new WbServiceException("group.error.empty-authorizations");
+            throw new WbDomainException("group.error.empty-authorizations");
         }
         
         // removemos todos os grants atuais

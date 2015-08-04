@@ -29,7 +29,7 @@ import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
-import br.com.webbudget.domain.misc.ex.WbServiceException;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
@@ -84,7 +84,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null) {
-            throw new WbServiceException("movement-class.validate.duplicated");
+            throw new WbDomainException("movement-class.validate.duplicated");
         }
 
         this.movementClassRepository.save(movementClass);
@@ -102,7 +102,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null && !found.equals(movementClass)) {
-            throw new WbServiceException("movement-class.validate.duplicated");
+            throw new WbDomainException("movement-class.validate.duplicated");
         }
 
         return this.movementClassRepository.save(movementClass);
@@ -128,18 +128,18 @@ public class MovementService {
         // validamos se os rateios estao corretos
         if (!movement.getApportionments().isEmpty()) {
             if (!movement.isApportionmentsValid()) {
-                throw new WbServiceException("movement.validate.apportionment-value",
+                throw new WbDomainException("movement.validate.apportionment-value",
                         movement.getApportionmentsDifference());
             }
         } else {
-            throw new WbServiceException("movement.validate.empty-apportionment");
+            throw new WbDomainException("movement.validate.empty-apportionment");
         }
 
         // se for uma edicao, checa se existe alguma inconsistencia
         if (movement.isSaved()) {
 
             if (movement.getFinancialPeriod().isClosed()) {
-                throw new WbServiceException("maintenance.validate.closed-financial-period");
+                throw new WbDomainException("maintenance.validate.closed-financial-period");
             }
 
             // remove algum rateio editado
@@ -237,12 +237,12 @@ public class MovementService {
     public void deleteMovement(Movement movement) {
 
         if (movement.getFinancialPeriod().isClosed()) {
-            throw new WbServiceException("maintenance.validate.closed-financial-period");
+            throw new WbDomainException("maintenance.validate.closed-financial-period");
         }
 
         // se tem vinculo com fatura, nao pode ser excluido
         if (movement.isCardInvoicePaid()) {
-            throw new WbServiceException("maintenance.validate.has-card-invoice");
+            throw new WbDomainException("maintenance.validate.has-card-invoice");
         }
 
         // devolve o saldo na carteira se for o caso
@@ -292,7 +292,7 @@ public class MovementService {
 
         // se a invoice for de um periodo fechado, bloqueia o processo
         if (cardInvoice.getFinancialPeriod().isClosed()) {
-            throw new WbServiceException("maintenance.validate.closed-financial-period");
+            throw new WbDomainException("maintenance.validate.closed-financial-period");
         }
 
         // listamos os movimentos da invoice
@@ -339,7 +339,7 @@ public class MovementService {
                 costCenter.getParentCostCenter());
 
         if (found != null) {
-            throw new WbServiceException("cost-center.validate.duplicated");
+            throw new WbDomainException("cost-center.validate.duplicated");
         }
 
         this.costCenterRepository.save(costCenter);
@@ -357,7 +357,7 @@ public class MovementService {
                 costCenter.getParentCostCenter());
 
         if (found != null && !found.equals(costCenter)) {
-            throw new WbServiceException("cost-center.validate.duplicated");
+            throw new WbDomainException("cost-center.validate.duplicated");
         }
 
         return this.costCenterRepository.save(costCenter);

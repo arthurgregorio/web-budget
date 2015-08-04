@@ -17,7 +17,7 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.misc.ex.WbServiceException;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.security.Authorization;
 import br.com.webbudget.domain.security.Grant;
 import br.com.webbudget.domain.security.Group;
@@ -124,7 +124,7 @@ public class GroupBean extends AbstractBean {
             this.group = new Group();
             this.unselectAuthorizations();
             this.info("group.action.saved", true);
-        } catch (WbServiceException ex) {
+        } catch (WbDomainException ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
             this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
@@ -141,7 +141,7 @@ public class GroupBean extends AbstractBean {
         try {
             this.accountService.update(this.group, this.nodesToAuthorizations());
             this.info("group.action.updated", true);
-        } catch (WbServiceException ex) {
+        } catch (WbDomainException ex) {
             this.logger.error("GroupBean#doUpdate has found erros", ex);
             this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {

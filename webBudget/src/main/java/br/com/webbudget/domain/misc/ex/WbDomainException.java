@@ -19,13 +19,16 @@ package br.com.webbudget.domain.misc.ex;
 import lombok.Getter;
 
 /**
+ * Exception customizada utilizada para encapsular todos os erros da aplicacao
+ * a fim de que as mensagens de erro cheguem para o usuario da forma mais clara
+ * possivel
  *
- * @author arthur
+ * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 2.0.0, 14/07/2015
  */
-public class WbServiceException extends RuntimeException {
+public class WbDomainException extends RuntimeException {
 
     @Getter
     private Object[] parameters;
@@ -35,7 +38,7 @@ public class WbServiceException extends RuntimeException {
      * 
      * @param message a mensagem de erro
      */
-    public WbServiceException(String message) {
+    public WbDomainException(String message) {
         super(message);
     }
 
@@ -46,7 +49,7 @@ public class WbServiceException extends RuntimeException {
      * @param message a mensagem de erro
      * @param parameters os parametros do erro
      */
-    public WbServiceException(String message, Object... parameters) {
+    public WbDomainException(String message, Object... parameters) {
         super(message);
         this.parameters = parameters;
     }
@@ -59,7 +62,7 @@ public class WbServiceException extends RuntimeException {
      * @param throwable o detalhamento do erro
      * @param parameters os parametros do erro
      */
-    public WbServiceException(String message, Throwable throwable, Object... parameters) {
+    public WbDomainException(String message, Throwable throwable, Object... parameters) {
         super(message, throwable);
         this.parameters = parameters;
     }

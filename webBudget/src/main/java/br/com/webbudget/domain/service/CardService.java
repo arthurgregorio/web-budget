@@ -24,7 +24,7 @@ import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.entity.system.Configuration;
-import br.com.webbudget.domain.misc.ex.WbServiceException;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
@@ -39,7 +39,8 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
- * Service
+ * Service responsavel por todas as operacoes que envolvem cartoes no sistema
+ * desde a parte de fatura, cadastros e coisas do tipo
  *
  * @author Arthur Gregorio
  *
@@ -71,11 +72,11 @@ public class CardService {
                 card.getCardType());
 
         if (found != null) {
-            throw new WbServiceException("card.validate.duplicated");
+            throw new WbDomainException("card.validate.duplicated");
         }
 
         if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-            throw new WbServiceException("card.validate.no-debit-wallet");
+            throw new WbDomainException("card.validate.no-debit-wallet");
         }
 
         this.cardRepository.save(card);
@@ -93,11 +94,11 @@ public class CardService {
                 card.getCardType());
 
         if (found != null && !found.equals(card)) {
-            throw new WbServiceException("card.validate.duplicated");
+            throw new WbDomainException("card.validate.duplicated");
         }
 
         if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-            throw new WbServiceException("card.validate.no-debit-wallet");
+            throw new WbDomainException("card.validate.no-debit-wallet");
         }
 
         return this.cardRepository.save(card);

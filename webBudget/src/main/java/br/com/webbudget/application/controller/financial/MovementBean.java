@@ -29,7 +29,7 @@ import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
-import br.com.webbudget.domain.misc.ex.WbServiceException;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.ContactService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
@@ -289,7 +289,7 @@ public class MovementBean extends AbstractBean {
             this.movement.setFinancialPeriod(this.financialPeriod);
 
             this.info("movement.action.saved", true);
-        } catch (WbServiceException ex) {
+        } catch (WbDomainException ex) {
             this.logger.error("MovementBean#doSave found erros", ex);
             this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
@@ -308,7 +308,7 @@ public class MovementBean extends AbstractBean {
 
             // invoca os metodos para mostrar a popup de pagamento
             this.displayPaymentPopup();
-        } catch (WbServiceException ex) {
+        } catch (WbDomainException ex) {
             this.logger.error("MovementBean#doSaveAndPay found erros", ex);
             this.fixedError(ex.getMessage(), true, ex.getParameters());
         }  catch (Exception ex) {
@@ -336,7 +336,7 @@ public class MovementBean extends AbstractBean {
                 this.movement = new Movement();
                 this.movement.setFinancialPeriod(this.financialPeriod);
             }
-        } catch (WbServiceException ex) {
+        } catch (WbDomainException ex) {
             this.logger.error("MovementBean#doPayment found erros", ex);
             this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
@@ -383,7 +383,7 @@ public class MovementBean extends AbstractBean {
         try {
             this.movement = this.movementService.saveMovement(this.movement);
             this.info("movement.action.updated", true);
-        } catch (WbServiceException ex) {
+        } catch (WbDomainException ex) {
             this.logger.error("MovementBean#doUpdate found erros", ex);
             this.fixedError(ex.getMessage(), true, ex.getParameters());
         }  catch (Exception ex) {

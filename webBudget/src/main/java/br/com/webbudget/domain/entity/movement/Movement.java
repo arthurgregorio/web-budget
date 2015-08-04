@@ -19,6 +19,7 @@ package br.com.webbudget.domain.entity.movement;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.card.CardInvoice;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -186,44 +187,44 @@ public class Movement extends PersistentEntity {
      */
     public void addApportionment(Apportionment apportionment) {
 
-//        // checa se nao esta sendo inserido outro exatamente igual
-//        if (this.apportionments.contains(apportionment)) {
-//            throw new ApplicationException("movement.validate.apportionment-duplicated");
-//        }
-//
-//        // checa se nao esta inserindo outro para o mesmo CC e MC
-//        for (Apportionment a : this.apportionments) {
-//            if (a.getCostCenter().equals(apportionment.getCostCenter())
-//                    && a.getMovementClass().equals(apportionment.getMovementClass())) {
-//                throw new ApplicationException("movement.validate.apportionment-duplicated");
-//            }
-//        }
-//
-//        // verificamos se os movimentos partem na mesma direcao, para que nao
-//        // haja rateios com debitos e creditos juntos
-//        if (!this.apportionments.isEmpty()) {
-//
-//            final MovementClassType direction = this.getDirection();
-//            final MovementClassType apportionmentDirection
-//                    = apportionment.getMovementClass().getMovementClassType();
-//
-//            if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT)
-//                    || (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN)) {
-//                throw new ApplicationException("movement.validate.apportionment-debit-credit");
-//            }
-//        }
-//
-//        // impossivel ter um rateio com valor igual a zero
-//        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0) {
-//            throw new ApplicationException("movement.validate.apportionment-invalid-value");
-//        }
-//        
-//        // impossivel ter um rateio com valor maior que o do movimento
-//        if (apportionment.getValue().compareTo(this.value) > 0) {
-//            throw new ApplicationException("movement.validate.apportionment-invalid-value");
-//        }
-//        
-//        this.apportionments.add(apportionment);
+        // checa se nao esta sendo inserido outro exatamente igual
+        if (this.apportionments.contains(apportionment)) {
+            throw new WbDomainException("movement.validate.apportionment-duplicated");
+        }
+
+        // checa se nao esta inserindo outro para o mesmo CC e MC
+        for (Apportionment a : this.apportionments) {
+            if (a.getCostCenter().equals(apportionment.getCostCenter())
+                    && a.getMovementClass().equals(apportionment.getMovementClass())) {
+                throw new WbDomainException("movement.validate.apportionment-duplicated");
+            }
+        }
+
+        // verificamos se os movimentos partem na mesma direcao, para que nao
+        // haja rateios com debitos e creditos juntos
+        if (!this.apportionments.isEmpty()) {
+
+            final MovementClassType direction = this.getDirection();
+            final MovementClassType apportionmentDirection
+                    = apportionment.getMovementClass().getMovementClassType();
+
+            if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT)
+                    || (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN)) {
+                throw new WbDomainException("movement.validate.apportionment-debit-credit");
+            }
+        }
+
+        // impossivel ter um rateio com valor igual a zero
+        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0) {
+            throw new WbDomainException("movement.validate.apportionment-invalid-value");
+        }
+        
+        // impossivel ter um rateio com valor maior que o do movimento
+        if (apportionment.getValue().compareTo(this.value) > 0) {
+            throw new WbDomainException("movement.validate.apportionment-invalid-value");
+        }
+        
+        this.apportionments.add(apportionment);
     }
 
     /**

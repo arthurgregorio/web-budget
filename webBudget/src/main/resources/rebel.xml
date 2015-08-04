@@ -20,10 +20,8 @@
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com"
              xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
     
-    <!-- -Xms128m -Xmx256m -Dwebbudget.root=C:/Users/Arthur/Documents/workspaces/webbudget-project/project/trunk/webBudget -->
-    <!-- -Xms128m -Xmx256m -Dwebbudget.root=D:/Workspaces/projetos/ag-software/implementation/webBudget -->
-    <!-- -Xms128m -Xmx256m -Dwebbudget.root=/home/arthur/Documentos/workspaces/webbudget-project/project/trunk/webBudget -->
-
+    <!-- -Xms128m -Xmx256m -Dwebbudget.root= -->
+    
     <classpath>
         <dir name="${webbudget.root}/target/classes"/>
         <dir name="${webbudget.root}/src/main/resources"/>
