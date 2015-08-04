@@ -16,17 +16,9 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.domain.entity.message.PrivateMessage;
-import br.com.webbudget.domain.security.User;
-import br.com.webbudget.infraestructure.Translator;
 import br.com.webbudget.infraestructure.mail.Postman;
-import java.util.List;
-import java.util.ResourceBundle;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import org.apache.velocity.app.VelocityEngine;
 
 /**
  * O servico de envio de email, por este cara invocamos o {@link Postman} que
@@ -45,90 +37,4 @@ import org.apache.velocity.app.VelocityEngine;
 @ApplicationScoped
 public class EmailService {
 
-    @Inject
-    private Postman postman;
-    @Inject
-    private VelocityEngine engine;
-    @Inject
-    private Translator messagesFactory;
-
-    private final ResourceBundle mailConfig = ResourceBundle.getBundle("config.webbudget");
-
-    /**
-     *
-     * @param privateMessage
-     * @param receipts
-     *
-     * @throws MessagingException
-     */
-    public void notifyNewMessage(PrivateMessage privateMessage, List<User> receipts) 
-            throws MessagingException {
-
-        // iteramos na lista de destinatarios e enviamos as mensagens
-//        for (User receipt : receipts) {
-//
-//            final MimeMessageHelper helper = new MimeMessageHelper(
-//                    this.postman.createMimeMessage());
-//
-//            helper.setTo(receipt.getEmail());
-//            helper.setSubject(this.messagesFactory.getMessage("new-message.title"));
-//            helper.setFrom(this.mailConfig.getString("mail.user"));
-//
-//            //mensagens internacionalizadas
-//            final Map<String, String> i18n = new HashMap<>();
-//
-//            i18n.put("header", this.messagesFactory.getMessage(
-//                    "new-message.header"));
-//            i18n.put("hi-user", this.messagesFactory.getMessage(
-//                    "new-message.hi-user"));
-//            i18n.put("new-message-warning", this.messagesFactory.getMessage(
-//                    "new-message.new-message-warning"));
-//            i18n.put("tip", this.messagesFactory.getMessage("new-message.tip"));
-//
-//            final VelocityContext context = this.createContext();
-//
-//            context.put("i18n", i18n);
-//            context.put("receipt", receipt.getName());
-//            context.put("sender", privateMessage.getSender().getName());
-//
-//            // manda a mensagem para montagem e envio
-//            this.prepareToSend("/mail/newPrivateMessage.html", helper, context);
-//        }
-    }
-
-    /**
-     * Prepara a mensagem de acordo com a template e invoca o {@link Postman}
-     * para que ela seja enviada
-     *
-     * @param template a template a ser mesclada
-     * @param helper o helper de montagem da mensagem
-     * @param context o contexto do velocity
-     */
-//    private void prepareToSend(String template, MimeMessageHelper helper,
-//            VelocityContext context) throws MessagingException {
-//
-//        final StringWriter writer = new StringWriter();
-//
-//        this.engine.getTemplate(template, "UTF-8").merge(context, writer);
-//
-//        helper.setText(writer.toString(), true);
-//
-//        this.postman.sendMail(helper.getMimeMessage());
-//    }
-
-    /**
-     * Cria um contexto do velocity para manipulacao de datas e numeros na
-     * template de e-mail
-     *
-     * @return o contexto
-     */
-//    private VelocityContext createContext() {
-//
-//        final VelocityContext context = new VelocityContext();
-//
-//        context.put("date", new DateTool());
-//        context.put("number", new NumberTool());
-//
-//        return context;
-//    }
 }

@@ -17,7 +17,6 @@
 package br.com.webbudget.infraestructure.mail;
 
 import java.util.Date;
-import java.util.ResourceBundle;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
 import javax.enterprise.context.ApplicationScoped;
@@ -42,18 +41,16 @@ public class Postman {
 
     @Resource(name = "java:/mail/webBudget")
     private Session mailSession;
-
-    private final ResourceBundle config = ResourceBundle.getBundle("webbudget");
-
+    
     /**
      * Escuta por eventos de envio de e-mail
-     *
+     * 
      * @param mailMessage a mensagem a ser enviada
      * @throws Exception caso haja problemas, dispara exception
      */
     @Asynchronous
     public void send(@Observes MailMessage mailMessage) throws Exception {
-
+       
         final MimeMessage message = new MimeMessage(this.mailSession);
 
         // header da mensagem
