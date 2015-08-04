@@ -83,31 +83,47 @@ public class AuthorizationBean implements Serializable {
      * @return se existe ou nao uma instancia desta role atribuida a ele
      */
     public boolean hasRole(String roleName) {
-        return this.hasGrantTo(roleName);
+        
+        boolean hasRole = false;
+        
+        for (Group group : this.userGroups) {
+            hasRole = this.hasGrantTo(roleName, group);
+        }
+        
+        return hasRole;
     }
     
     /**
      * Buscamos nos grupos do usuario que fez login se em algum deles existe um
      * grant para a role desejada
-     * 
+     *
      * @param role a role que esperamos que o usuario tenha
+     * @param group o grupo que pretendemos checar pela role
      * @return se ha ou nao a o grant para aquela role em algum dos grupos
      */
-    private boolean hasGrantTo(String role) {
+    private boolean hasGrantTo(String role, Group group) {
         
-        for (Group group : this.userGroups) {
-            
-            // se o group nao contiver grants, falha
-            if (!group.getGrants().isEmpty()) {
-                
-                if (group.getGrants().stream().anyMatch((grant) ->
-                        (grant.getRole().getAuthorization().equals(role)))) {
-                    return true;
-                }
+        // se for um grupo parente, os grants vem vazio, entao preenchemos
+        if (group.getGrants() == null) {
+            group.setGrants(this.accountService.listGrantsByGroup(group));
+        }
+        
+        // agora iteramos nos grupos
+        if (!group.getGrants().isEmpty()) {
+
+            if (group.getGrants().stream().anyMatch((grant)
+                    -> (grant.getRole().getAuthorization().equals(role)))) {
+                return true;
             }
         }
         
-        return false;
+        // se nao tem acesso em primeira instancia, checamos pelos outros grupos
+        // aninhados dentro daquele grupo
+        if (group.getParent() != null) {
+            return this.hasGrantTo(role, group.getParent());
+        } else {
+            return false;
+        }
     }
     
     /**
