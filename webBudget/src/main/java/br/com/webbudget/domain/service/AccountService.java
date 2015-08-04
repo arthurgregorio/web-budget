@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.repository.user.IUserRepository;
 import br.com.webbudget.domain.security.Grant;
 import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.security.GroupMembership;
@@ -54,6 +55,9 @@ public class AccountService {
     @Inject
     private RelationshipManager relationshipManager;
 
+    @Inject
+    private IUserRepository userRepository;
+    
     /**
      * 
      * @param user 

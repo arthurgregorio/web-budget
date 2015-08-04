@@ -19,8 +19,10 @@ package br.com.webbudget.domain.service;
 import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.repository.user.IPrivateMessageRepository;
 import br.com.webbudget.domain.repository.user.IUserPrivateMessageRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -49,27 +51,27 @@ public class PrivateMessageService {
      */
     public void savePrivateMessage(PrivateMessage privateMessage) {
 
-//        if (privateMessage.getRecipients() == null || privateMessage.getRecipients().isEmpty()) {
-//            throw new ApplicationException("private-message.validate.no-receipts");
-//        }
-//
-//        // pegamos os destinatarios
-//        final List<User> receipts = new ArrayList<>(privateMessage.getRecipients());
-//
-//        // salvamos a mensagem
-//        privateMessage = this.privateMessageRepository.save(privateMessage);
-//
-//        // enviamos para os usuarios pela associacao das tabelas
-//        for (User user : receipts) {
-//
-//            final UserPrivateMessage associative = new UserPrivateMessage();
-//
-//            associative.setRecipient(user);
-//            associative.setPrivateMessage(privateMessage);
-//
-//            // salva a mensagem
-//            this.userPrivateMessageRepository.save(associative);
-//        }
+        if (privateMessage.getRecipients() == null || privateMessage.getRecipients().isEmpty()) {
+            throw new WbDomainException("private-message.validate.no-receipts");
+        }
+
+        // pegamos os destinatarios
+        final List<User> receipts = new ArrayList<>(privateMessage.getRecipients());
+
+        // salvamos a mensagem
+        privateMessage = this.privateMessageRepository.save(privateMessage);
+
+        // enviamos para os usuarios pela associacao das tabelas
+        for (User user : receipts) {
+
+            final UserPrivateMessage associative = new UserPrivateMessage();
+
+            associative.setRecipient(user);
+            associative.setPrivateMessage(privateMessage);
+
+            // salva a mensagem
+            this.userPrivateMessageRepository.save(associative);
+        }
     }
 
     /**
@@ -131,24 +133,14 @@ public class PrivateMessageService {
     }
 
     /**
-     *
-     * @param showUnread
-     * @return
+     * 
+     * @param userId
+     * @return 
      */
-//    @Transactional
-//    public List<UserPrivateMessage> listMessagesByCurrentUser(Boolean showUnread) {
-//        final User user = AccountService.getCurrentAuthenticatedUser();
-//        return this.userPrivateMessageRepository.listByUser(user, showUnread);
-//    }
-
-    /**
-     *
-     * @return
-     */
-//    @Transactional
-//    public List<PrivateMessage> listPrivateMessagesSent() {
-//        return this.privateMessageRepository.listSent(AccountService.getCurrentAuthenticatedUser());
-//    }
+    @Transactional
+    public List<PrivateMessage> listPrivateMessagesSent(String userId) {
+        return this.privateMessageRepository.listSent(userId);
+    }
 
     /**
      *
@@ -159,22 +151,4 @@ public class PrivateMessageService {
     public List<UserPrivateMessage> listPrivateMessageReceipts(PrivateMessage privateMessage) {
         return this.userPrivateMessageRepository.listReceipts(privateMessage);
     }
-
-    /**
-     * Lista os usuarios pelo seu status
-     *
-     * @param blocked se quer o nao os usuarios bloqueados
-     * @param removeCurrent remove o usuario logado da lista
-     *
-     * @return lista de usuarios
-     */
-//    public List<User> listUsersByStatus(boolean blocked, boolean removeCurrent) {
-//
-//        if (removeCurrent) {
-//            return this.userRepository.listByStatusAndRemoveAuthenticated(
-//                    blocked, AccountService.getCurrentAuthenticatedUser());
-//        } else {
-//            return this.userRepository.listByStatus(blocked);
-//        }
-//    }
 }

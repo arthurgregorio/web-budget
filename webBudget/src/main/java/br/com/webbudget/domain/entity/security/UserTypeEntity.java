@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.entity.security;
 
+import br.com.webbudget.domain.entity.IPersistentEntity;
 import br.com.webbudget.domain.security.User;
 import javax.persistence.Column;
 import org.picketlink.idm.jpa.annotations.AttributeValue;
@@ -39,7 +40,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 @IdentityManaged(User.class)
-public class UserTypeEntity extends AbstractIdentityTypeEntity {
+public class UserTypeEntity extends AbstractIdentityTypeEntity implements IPersistentEntity<String> {
 
     @Getter
     @Setter
@@ -63,4 +64,12 @@ public class UserTypeEntity extends AbstractIdentityTypeEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_partition")
     private PartitionTypeEntity partition;
+
+    /**
+     * @return se esta entidade ja foi ou nao salva
+     */
+    @Override
+    public boolean isSaved() {
+        return this.getId() != null && !this.getId().isEmpty();
+    }
 }

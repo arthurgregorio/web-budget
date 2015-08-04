@@ -40,6 +40,7 @@ import lombok.Setter;
 public abstract class AbstractIdentityTypeEntity implements Serializable {
 
     @Id
+    @Getter
     @Identifier
     @Column(name = "id", unique = true)
     private String id;

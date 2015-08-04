@@ -36,7 +36,7 @@ import org.hibernate.Session;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 03/03/2013
  */
 public abstract class GenericRepository<T extends IPersistentEntity, 
@@ -65,6 +65,13 @@ public abstract class GenericRepository<T extends IPersistentEntity,
             throw new IllegalStateException("The entityManager is not initialized");
         }
         return this.entityManager;
+    }
+    
+    /**
+     * @return a {@link Criteria} do hibernate setada para a classe do repositorio
+     */
+    protected Criteria getHbmCriteria() {
+        return this.getSession().createCriteria(this.getPersistentClass());
     }
 
     /**

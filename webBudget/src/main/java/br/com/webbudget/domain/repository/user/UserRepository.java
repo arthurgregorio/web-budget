@@ -16,12 +16,8 @@
  */
 package br.com.webbudget.domain.repository.user;
 
-import br.com.webbudget.domain.entity.message.PrivateMessage;
+import br.com.webbudget.domain.entity.security.UserTypeEntity;
 import br.com.webbudget.domain.repository.GenericRepository;
-import java.util.List;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -30,25 +26,6 @@ import org.hibernate.criterion.Restrictions;
  * @version 1.1.0
  * @since 1.0.0, 18/10/2013
  */
-public class PrivateMessageRepository extends GenericRepository<PrivateMessage, Long> implements IPrivateMessageRepository {
+public class UserRepository extends GenericRepository<UserTypeEntity, Long> implements IUserRepository {
 
-    /**
-     * 
-     * @param userId
-     * @return 
-     */
-    @Override
-    public List<PrivateMessage> listSent(String userId) {
-
-        final Criteria criteria = this.getHbmCriteria();
-
-        criteria.add(Restrictions.eq("sender", userId));
-
-        // nao mostra mensagens deletadas nunca
-        criteria.add(Restrictions.eq("deleted", false));
-
-        criteria.addOrder(Order.desc("inclusion"));
-
-        return criteria.list();
-    }
 }

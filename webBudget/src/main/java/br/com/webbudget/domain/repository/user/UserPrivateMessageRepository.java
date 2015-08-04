@@ -29,7 +29,7 @@ import org.hibernate.criterion.Restrictions;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 18/10/2013
  */
 public class UserPrivateMessageRepository extends GenericRepository<UserPrivateMessage, Long> implements IUserPrivateMessageRepository {
@@ -43,7 +43,7 @@ public class UserPrivateMessageRepository extends GenericRepository<UserPrivateM
     @Override
     public List<UserPrivateMessage> listByUser(User user, Boolean showUnread) {
 
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+        final Criteria criteria = this.getHbmCriteria();
 
         criteria.createAlias("recipient", "u");
         criteria.add(Restrictions.eq("u.id", user.getId()));
@@ -65,7 +65,7 @@ public class UserPrivateMessageRepository extends GenericRepository<UserPrivateM
     @Override
     public List<UserPrivateMessage> listReceipts(PrivateMessage privateMessage) {
 
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+        final Criteria criteria = this.getHbmCriteria();
 
         criteria.createAlias("privateMessage", "pm");
         criteria.add(Restrictions.eq("pm.id", privateMessage.getId()));

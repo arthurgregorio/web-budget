@@ -17,7 +17,6 @@
 package br.com.webbudget.domain.repository.user;
 
 import br.com.webbudget.domain.entity.message.PrivateMessage;
-import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 
@@ -25,15 +24,15 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 04/03/2013
  */
 public interface IPrivateMessageRepository extends IGenericRepository<PrivateMessage, Long> {
 
     /**
-     *
-     * @param user
-     * @return
+     * 
+     * @param userId
+     * @return 
      */
-    public List<PrivateMessage> listSent(User user);
+    public List<PrivateMessage> listSent(String userId);
 }

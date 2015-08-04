@@ -14,36 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entity;
+package br.com.webbudget.domain.repository.user;
 
-import java.io.Serializable;
+import br.com.webbudget.domain.entity.security.UserTypeEntity;
+import br.com.webbudget.domain.repository.IGenericRepository;
 
 /**
- * Interface que devines os metodos minimos que uma entidade deve possuir para
- * ser considerada uma entitdade valida na regra de negocios deste sistema
- *
- * @param <T> qualquer coisa que seja serializavel
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 06/10/2013
+ * @since 1.0.0, 04/03/2013
  */
-public interface IPersistentEntity<T extends Serializable> {
+public interface IUserRepository extends IGenericRepository<UserTypeEntity, Long> {
 
-    /**
-     * Getter para o ID da entidade
-     *
-     * @return o id da entidade
-     */
-    public T getId();
-
-    /**
-     * Metodo que indica se uma entidade ja foi ou nao persistida (salva)
-     *
-     * @return se a entidade ja foi persistida, retorna <code>true</code>
-     * indicando
-     * que a mesma ja foi salva se nao retorna <code>false</code>
-     */
-    public boolean isSaved();
 }
