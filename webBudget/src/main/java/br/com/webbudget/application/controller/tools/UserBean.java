@@ -18,6 +18,7 @@ package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.security.User;
@@ -112,10 +113,13 @@ public class UserBean extends AbstractBean {
             this.user = new User();
 
             this.info("user.action.saved", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("UserBean#doSave has found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
-            this.logger.error("UserBean#doSave found erros", ex);
+            this.logger.error("UserBean#doSave has found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
-        } 
+        }
     }
 
     /**
@@ -127,6 +131,9 @@ public class UserBean extends AbstractBean {
             this.accountService.update(this.user);
 
             this.info("user.action.updated", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("UserBean#doUpdate has found erros", ex);
+            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
             this.logger.error("UserBean#doUpdate has found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());

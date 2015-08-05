@@ -60,4 +60,14 @@ public class UserPrivateMessage extends PersistentEntity {
     @ManyToOne
     @JoinColumn(name = "id_private_message")
     private PrivateMessage privateMessage;
+    
+    /**
+     * Metodo criado apenas para encapsular o set ao nome do cara que enviou 
+     * a mensagem
+     * 
+     * @param senderName o nome do usuario que enviou
+     */
+    public void setSenderName(String senderName) {
+        this.privateMessage.setSenderName(senderName);
+    }
 }

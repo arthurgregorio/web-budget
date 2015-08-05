@@ -26,6 +26,6 @@ import br.com.webbudget.domain.repository.IGenericRepository;
  * @version 1.0.0
  * @since 1.0.0, 04/03/2013
  */
-public interface IUserRepository extends IGenericRepository<UserTypeEntity, Long> {
+public interface IUserRepository extends IGenericRepository<UserTypeEntity, String> {
 
 }

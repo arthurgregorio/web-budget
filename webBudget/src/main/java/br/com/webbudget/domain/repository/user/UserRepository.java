@@ -26,6 +26,6 @@ import br.com.webbudget.domain.repository.GenericRepository;
  * @version 1.1.0
  * @since 1.0.0, 18/10/2013
  */
-public class UserRepository extends GenericRepository<UserTypeEntity, Long> implements IUserRepository {
+public class UserRepository extends GenericRepository<UserTypeEntity, String> implements IUserRepository {
 
 }

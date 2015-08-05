@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.service;
 
+import br.com.webbudget.domain.entity.security.UserTypeEntity;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.repository.user.IUserRepository;
 import br.com.webbudget.domain.security.Grant;
@@ -211,6 +212,14 @@ public class AccountService {
         this.identityManager.remove(group);
     }
 
+    /**
+     * 
+     * @param user
+     * @return 
+     */
+    public UserTypeEntity userModelToUserEntity(User user) {
+        return this.userRepository.findById(user.getId(), false);
+    }
 
     /**
      *

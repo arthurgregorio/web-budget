@@ -19,6 +19,7 @@ package br.com.webbudget.domain.service;
 import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
+import br.com.webbudget.domain.entity.security.UserTypeEntity;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.repository.user.IPrivateMessageRepository;
 import br.com.webbudget.domain.repository.user.IUserPrivateMessageRepository;
@@ -41,6 +42,9 @@ import javax.transaction.Transactional;
 public class PrivateMessageService {
 
     @Inject
+    private AccountService accountService;
+
+    @Inject
     private IPrivateMessageRepository privateMessageRepository;
     @Inject
     private IUserPrivateMessageRepository userPrivateMessageRepository;
@@ -49,6 +53,7 @@ public class PrivateMessageService {
      *
      * @param privateMessage
      */
+    @Transactional
     public void savePrivateMessage(PrivateMessage privateMessage) {
 
         if (privateMessage.getRecipients() == null || privateMessage.getRecipients().isEmpty()) {
@@ -66,7 +71,10 @@ public class PrivateMessageService {
 
             final UserPrivateMessage associative = new UserPrivateMessage();
 
-            associative.setRecipient(user);
+            final UserTypeEntity userEntity
+                    = this.accountService.userModelToUserEntity(user);
+
+            associative.setRecipient(userEntity);
             associative.setPrivateMessage(privateMessage);
 
             // salva a mensagem
@@ -78,6 +86,7 @@ public class PrivateMessageService {
      *
      * @param privateMessage
      */
+    @Transactional
     public void deletePrivateMessage(PrivateMessage privateMessage) {
         privateMessage.setDeleted(true);
         this.privateMessageRepository.save(privateMessage);
@@ -87,6 +96,7 @@ public class PrivateMessageService {
      *
      * @param userPrivateMessage
      */
+    @Transactional
     public void markAsRead(UserPrivateMessage userPrivateMessage) {
         userPrivateMessage.setWasRead(true);
         this.userPrivateMessageRepository.save(userPrivateMessage);
@@ -96,6 +106,7 @@ public class PrivateMessageService {
      *
      * @param userPrivateMessage
      */
+    @Transactional
     public void markAsDeleted(UserPrivateMessage userPrivateMessage) {
         userPrivateMessage.setDeleted(true);
         this.userPrivateMessageRepository.save(userPrivateMessage);
@@ -106,7 +117,6 @@ public class PrivateMessageService {
      * @param privateMessageId
      * @return
      */
-    @Transactional
     public PrivateMessage findPrivateMessageById(long privateMessageId) {
         return this.privateMessageRepository.findById(privateMessageId, false);
     }
@@ -116,7 +126,6 @@ public class PrivateMessageService {
      * @param userPrivateMessageId
      * @return
      */
-    @Transactional
     public UserPrivateMessage findUserPrivateMessageById(long userPrivateMessageId) {
         return this.userPrivateMessageRepository.findById(userPrivateMessageId, false);
     }
@@ -127,17 +136,15 @@ public class PrivateMessageService {
      * @param showUnread
      * @return
      */
-    @Transactional
     public List<UserPrivateMessage> listMessagesByUser(User user, Boolean showUnread) {
         return this.userPrivateMessageRepository.listByUser(user, showUnread);
     }
 
     /**
-     * 
+     *
      * @param userId
-     * @return 
+     * @return
      */
-    @Transactional
     public List<PrivateMessage> listPrivateMessagesSent(String userId) {
         return this.privateMessageRepository.listSent(userId);
     }
@@ -147,7 +154,6 @@ public class PrivateMessageService {
      * @param privateMessage
      * @return
      */
-    @Transactional
     public List<UserPrivateMessage> listPrivateMessageReceipts(PrivateMessage privateMessage) {
         return this.userPrivateMessageRepository.listReceipts(privateMessage);
     }

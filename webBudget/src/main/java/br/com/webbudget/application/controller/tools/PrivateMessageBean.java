@@ -22,6 +22,7 @@ import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.security.User;
+import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.PrivateMessageService;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,8 @@ public class PrivateMessageBean extends AbstractBean {
     private List<PrivateMessage> privateMessages;
 
     @Inject
+    private transient AccountService accountService;
+    @Inject
     private transient PrivateMessageService privateMessageService;
 
     /**
@@ -73,13 +76,12 @@ public class PrivateMessageBean extends AbstractBean {
     }
 
     /**
-     *
      * @param privateMessageId
      */
     public void initializeForm(long privateMessageId) {
 
         // preenchemos a lista de usuarios
-        this.users = this.privateMessageService.listUsersByStatus(false, true);
+        this.users = this.accountService.listUsers(false);
 
         if (privateMessageId == 0) {
             this.viewState = ViewState.ADDING;
@@ -92,29 +94,30 @@ public class PrivateMessageBean extends AbstractBean {
             this.privateMessage = this.privateMessageService.findPrivateMessageById(privateMessageId);
 
             // pegamos os destinatarios
-            final List<UserPrivateMessage> receipts = this.privateMessageService
+            final List<UserPrivateMessage> associatives = this.privateMessageService
                     .listPrivateMessageReceipts(this.privateMessage);
 
             // marcamos para mostrar na tabela
-            this.users.stream().forEach((User user) -> {
-                receipts.stream().filter((userPrivateMessage) -> 
-                        (userPrivateMessage.getRecipient().equals(user))).forEach((item) -> {
-                    user.setSelected(true);
-                });
+            this.users.stream().forEach(user -> {
+                for (UserPrivateMessage associative : associatives) {
+                    
+                    final User receipt = this.accountService
+                            .findUserById(associative.getRecipient().getId());
+
+                    user.setSelected(receipt.equals(user));
+                }
             });
         }
     }
 
     /**
-     *
-     * @return o form de inclusao
+     * @return 
      */
     public String changeToAdd() {
         return "formPrivateMessage.xhtml?faces-redirect=true";
     }
 
     /**
-     *
      * @return
      */
     public String changeToListing() {
@@ -122,7 +125,6 @@ public class PrivateMessageBean extends AbstractBean {
     }
 
     /**
-     *
      * @param privateMessageId
      * @return
      */
@@ -131,7 +133,6 @@ public class PrivateMessageBean extends AbstractBean {
     }
 
     /**
-     *
      * @param privateMessageId
      */
     public void changeToDelete(long privateMessageId) {
@@ -161,7 +162,7 @@ public class PrivateMessageBean extends AbstractBean {
             this.privateMessage = new PrivateMessage();
             this.privateMessage.setSender(this.authenticatedUser.getId());
 
-            this.users = this.privateMessageService.listUsersByStatus(false, true);
+            this.users = this.accountService.listUsers(false);
 
             this.info("private-message.action.sent", true);
         } catch (WbDomainException ex) {
@@ -191,8 +192,6 @@ public class PrivateMessageBean extends AbstractBean {
     }
 
     /**
-     * Cancela e volta para a listagem
-     *
      * @return
      */
     public String doCancel() {

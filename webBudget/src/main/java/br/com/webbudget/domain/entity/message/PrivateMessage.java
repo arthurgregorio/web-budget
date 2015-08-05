@@ -64,6 +64,15 @@ public class PrivateMessage extends PersistentEntity {
     @Setter
     @Column(name = "sender", nullable = false, length = 90)
     private String sender;
+    
+    /**
+     * Atributo criado para que possamos mostrar o nome do cara que enviou
+     * a mensagem
+     */
+    @Getter
+    @Setter
+    @Transient
+    private String senderName;
 
     @Getter
     @Setter

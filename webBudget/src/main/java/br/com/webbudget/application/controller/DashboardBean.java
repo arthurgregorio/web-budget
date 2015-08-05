@@ -16,9 +16,13 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
+import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
+import br.com.webbudget.domain.security.User;
+import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.PrivateMessageService;
@@ -33,8 +37,8 @@ import lombok.Setter;
 import org.primefaces.model.chart.PieChartModel;
 
 /**
- * Mbean utilizado na dashboard do sistema, por ele carregamos os graficos da 
- * dashboard e tambem alguns elementos da template, como o nome no botao de 
+ * Mbean utilizado na dashboard do sistema, por ele carregamos os graficos da
+ * dashboard e tambem alguns elementos da template, como o nome no botao de
  * informacoes da conta do usuario
  *
  * @author Arthur Gregorio
@@ -63,6 +67,12 @@ public class DashboardBean extends AbstractBean {
     private PieChartModel expensesModel;
 
     @Inject
+    @AuthenticatedUser
+    private User authenticatedUser;
+
+    @Inject
+    private transient AccountService accountService;
+    @Inject
     private transient MovementService movementService;
     @Inject
     private transient GraphModelService graphModelService;
@@ -70,8 +80,8 @@ public class DashboardBean extends AbstractBean {
     private transient PrivateMessageService privateMessageService;
 
     /**
-     * Inicializa os graficos e tambem carrega as mensagens privadas no box
-     * de mensagens
+     * Inicializa os graficos e tambem carrega as mensagens privadas no box de
+     * mensagens
      */
     public void initialize() {
 
@@ -79,19 +89,29 @@ public class DashboardBean extends AbstractBean {
         this.revenueModel = this.graphModelService.buildRevenueModelByCostCenter();
         this.expensesModel = this.graphModelService.buildExpensesModelByCostCenter();
 
-//        // carrega as mensagens do usuario
-//        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
-//                AccountService.getCurrentAuthenticatedUser(), null);
+        // carrega as mensagens do usuario
+        this.userPrivateMessages = this.privateMessageService
+                .listMessagesByUser(this.authenticatedUser, null);
 
         // carregamos os movimentos para pagamento
         this.movements = this.movementService.listMovementsByDueDate(new Date(), true);
     }
 
     /**
-     * Pega mensagem selecionada e mostra a popup
+     * Pega mensagem selecionada e mostra a dialog
      */
     public void displayMessage() {
+        
+        // marca a mensagem como lida
         this.privateMessageService.markAsRead(this.selectedPrivateMessage);
+        
+        // carrega o nome do cara que enviou
+        final PrivateMessage message = this.selectedPrivateMessage.getPrivateMessage();
+        
+        final User sender = this.accountService.findUserById(message.getSender());
+        
+        message.setSenderName(sender.getName());
+        
         this.openDialog("displayPrivateMessageDialog", "dialogDisplayPrivateMessage");
     }
 
@@ -100,8 +120,8 @@ public class DashboardBean extends AbstractBean {
      */
     public void closeMessge() {
         this.selectedPrivateMessage = null;
-//        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
-//                AccountService.getCurrentAuthenticatedUser(), null);
+        this.userPrivateMessages = this.privateMessageService
+                .listMessagesByUser(this.authenticatedUser, null);
 
         this.update("messagesList");
         this.closeDialog("dialogDisplayPrivateMessage");
@@ -114,18 +134,18 @@ public class DashboardBean extends AbstractBean {
 
         this.privateMessageService.markAsDeleted(this.selectedPrivateMessage);
 
-//        this.userPrivateMessages = this.privateMessageService.listMessagesByUser(
-//                AccountService.getCurrentAuthenticatedUser(), null);
+        this.userPrivateMessages = this.privateMessageService
+                .listMessagesByUser(this.authenticatedUser, null);
 
         this.update("messagesList");
         this.closeDialog("dialogDisplayPrivateMessage");
     }
 
     /**
-     * Quando este metodo e invocado o sistema realiza um redirecionamento para 
+     * Quando este metodo e invocado o sistema realiza um redirecionamento para
      * a view de pagamento de movimentos para que o movimento selecionado seja
      * pago pelo usuario
-     * 
+     *
      * @param movementId o id do movimento a ser pago
      * @return a URL para redirecionar o usuario
      */

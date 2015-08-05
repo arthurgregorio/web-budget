@@ -47,21 +47,12 @@
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-6"> 
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
-                            <p:outputLabel for="inCode" 
-                                           value="#{messages['private-message.form.code']}: "/>
-                            <p:inputText id="inCode" 
-                                         readonly="true"
-                                         value="#{privateMessageBean.privateMessage.code}"/>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inSender" 
                                            value="#{messages['private-message.form.sender']}: "/>
                             <p:inputText id="inSender" 
                                          readonly="true"
-                                         value="#{privateMessageBean.privateMessage.sender.name}" />
+                                         value="#{privateMessageBean.authenticatedUser.name}" />
                         </div>                        
                     </div>
                     <div class="ui-grid-row">

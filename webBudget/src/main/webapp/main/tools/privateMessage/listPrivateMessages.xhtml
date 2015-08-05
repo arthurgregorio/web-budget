@@ -65,6 +65,11 @@
                              value="#{privateMessageBean.privateMessages}"
                              emptyMessage="#{messages['private-message.list.empty']}">
 
+                    <p:column width="10%"
+                              styleClass="div-align-center"
+                              headerText="#{messages['private-message.list.code']}">
+                        #{privateMessage.code}
+                    </p:column>
                     <p:column headerText="#{messages['private-message.list.title']}">
                         #{privateMessage.title}
                     </p:column>
