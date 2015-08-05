@@ -17,7 +17,7 @@ O sistema em sua versão atual possui várias funcionalidades baseadas na necess
 - Rateio de movimentos por centro de custo e classe, ou seja, um movimento pode ser dividido em vários CC para melhor divisão das contas
 - Pequeno sistema de mensageria interna
 - Período de lançamentos no estilo competência, com data de início e fim e acompanhamento gráfico dos movimentos
-- Controle de usuários através de permissões de acesso (visualização, inclusão, edição e deleção)
+- Controle de usuários através de permissões de acesso por grupos (visualização, inclusão, edição e deleção)
 - Transferências entre carteiras e controle iterativo de saldos
 
 Entre outras...
@@ -27,12 +27,12 @@ Entre outras...
 O sistema foi desenvolvido utilizando uma plataforma baseada na tecnologia Java versão 8 e seus frameworks para WEB, possui um ambiente de execução simples de ser estruturado e de fácil manutenção. Dentre as tecnologias adotadas, as principais são:
 
 - JSF 2.2 
+- Primefaces 5.2
 - JPA 2.1
-- Primefaces 5.1
-- Spring Framework 4
-- Spring Security 3.2
-- Tomcat 8
 - Hibernate 4.3
+- Weld 2.2
+- Picketlink 2.7
+- Wildfly 8
 
 Devido ao suporte a JPA, o banco de dados torna-se independente da aplicação, porém os SGBD's homologados para uso, 100% testados são *MySQL 5* ou *MariaDB 10*.
 
