@@ -1,6 +1,5 @@
 package br.com.webbudget.domain.misc;
 
-import java.util.ResourceBundle;
 import javax.enterprise.context.RequestScoped;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
