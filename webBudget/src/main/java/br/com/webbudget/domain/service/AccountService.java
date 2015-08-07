@@ -142,6 +142,11 @@ public class AccountService {
             this.identityManager.updateCredential(user, new Password(unsecurePassword));
         }
         
+        // removemos o vinculo antigo
+        this.listMembershipsByUser(user).forEach(membership -> {
+            this.removeFromGroup(membership.getGroup(), user);
+        });
+        
         // concedemos ao usuario o grant para o grupo que ele escolheu
         this.relationshipManager.update(groupMembership);
     }
