@@ -41,7 +41,7 @@ public class ApplicationUtils {
      */
     public static String getConfiguration(String configurationKey) {
 
-        final ResourceBundle bundle = ResourceBundle.getBundle("config.webbudget");
+        final ResourceBundle bundle = ResourceBundle.getBundle("webbudget");
 
         return bundle.getString(configurationKey);
     }

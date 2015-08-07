@@ -1,17 +1,21 @@
 package br.com.webbudget.domain.misc;
 
+import br.com.webbudget.infraestructure.ApplicationUtils;
 import javax.enterprise.context.RequestScoped;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import retrofit.RestAdapter;
+import retrofit.http.GET;
+import retrofit.http.Path;
 
 /**
  * Servico de busca de enderecos para o cadastro de contatos do sistema
  * 
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 2.0.0
  * @since 1.2.0, 16/04/2015
  */
 @RequestScoped
@@ -24,18 +28,28 @@ public class AddressFinder {
      * @return o endereco
      */
     public Address findAddressByZipcode(String zipcode) {
+
+        final RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ApplicationUtils.getConfiguration("ws.cep"))
+                .build();
         
-//        final String wsURL = this.configBundle.getString("ws.cep");
-//        
-//        // se a url estiver zicada ja tora o pau e nao deixa passar
-//        if(wsURL == null || wsURL.isEmpty()) {
-//            throw new IllegalStateException("Invalid URL for address search");
-//        }
-//
-//        final RestTemplate template = new RestTemplate();
-//        
-//        return template.getForObject(String.format(wsURL, zipcode), Address.class);
-        return null;
+        final ZipcodeService zipcodeService 
+                = restAdapter.create(ZipcodeService.class);
+        
+        return zipcodeService.findAddress(zipcode);
+    }
+    
+    /**
+     * Definição do servico de busca do CEP para o retrofit
+     */
+    public interface ZipcodeService {
+        
+        /**
+         * @param zipcode
+         * @return 
+         */
+        @GET("/ws/{zipcode}/json")
+        Address findAddress(@Path("zipcode") String zipcode);
     }
     
     /**
