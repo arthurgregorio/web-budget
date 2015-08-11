@@ -17,9 +17,9 @@
 package br.com.webbudget.domain.security;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import lombok.Getter;
@@ -209,13 +209,11 @@ public class Authorization {
      *
      * @return um set com todas as authorities disponiveis
      */
-    public Set<String> listAuthorizations() {
+    public List<String> listAuthorizations() {
 
-        final Set<String> authorities = new HashSet<>();
+        final List<String> authorities = new ArrayList<>();
 
-        final Field[] fields = this.getClass().getDeclaredFields();
-
-        for (Field field : fields) {
+        for (Field field : this.getClass().getDeclaredFields()) {
 
             field.setAccessible(true);
 
@@ -236,14 +234,12 @@ public class Authorization {
      *
      * @return hashmap com os valores: grupo e itens do grupo
      */
-    public HashMap<String, Set<String>> listGroupedAuthorizations() {
+    public HashMap<String, List<String>> listGroupedAuthorizations() {
 
-        final HashMap<String, Set<String>> authorities = new HashMap<>();
-        final Set<String> authorizations = this.listAuthorizations();
+        final HashMap<String, List<String>> authorities = new HashMap<>();
+        final List<String> authorizations = this.listAuthorizations();
 
-        final Field[] fields = this.getClass().getDeclaredFields();
-
-        for (Field field : fields) {
+        for (Field field : this.getClass().getDeclaredFields()) {
 
             field.setAccessible(true);
 
@@ -253,16 +249,17 @@ public class Authorization {
 
                 if (!authorities.containsKey(group)) {
 
-                    final Set<String> grouped = new HashSet<>();
+                    final List<String> grouped = new ArrayList<>();
 
                     authorizations.stream().filter((authorization)
-                            -> (authorization.contains(group))).forEach((key) -> {
+                            -> (authorization.contains(group + "."))).forEach((key) -> {
                                 grouped.add(key);
                             });
                     authorities.put(group, grouped);
                 }
             }
         }
+        
         return authorities;
     }
 }

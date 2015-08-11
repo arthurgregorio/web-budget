@@ -205,7 +205,7 @@ public class GroupBean extends AbstractBean {
         this.treeRoot = new DefaultTreeNode("roles");
 
         // pega todas as authorities da lista de authorities do sistema
-        final HashMap<String, Set<String>> roles = this.authorization.listGroupedAuthorizations();
+        final HashMap<String, List<String>> roles = this.authorization.listGroupedAuthorizations();
 
         for (String key : roles.keySet()) {
 
