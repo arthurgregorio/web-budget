@@ -131,24 +131,24 @@ public class AccountService {
         // pegamos o grupo
         final GroupMembership groupMembership = user.getGroupMembership();
         
-        // pegamos a senha antes de salvar o usuario
-        final String unsecurePassword = user.getPassword();
-        
-        // salvamos
-        this.identityManager.update(user);
-        
-        // atualizamos o usuario com a senha
-        if (unsecurePassword != null && !unsecurePassword.isEmpty()) {
-            this.identityManager.updateCredential(user, new Password(unsecurePassword));
-        }
-        
         // removemos o vinculo antigo
         this.listMembershipsByUser(user).forEach(membership -> {
             this.removeFromGroup(membership.getGroup(), user);
         });
         
+        // pegamos a senha antes de salvar o usuario
+        final String unsecurePassword = user.getPassword();
+        
+        // atualizamos o usuario com a senha
+        if (unsecurePassword != null && !unsecurePassword.isEmpty()) {
+            this.identityManager.updateCredential(user, new Password(unsecurePassword));
+        } else {
+            // salvamos
+            this.identityManager.update(user);
+        }
+        
         // concedemos ao usuario o grant para o grupo que ele escolheu
-        this.relationshipManager.update(groupMembership);
+        this.relationshipManager.add(groupMembership);
     }
     
     /**
