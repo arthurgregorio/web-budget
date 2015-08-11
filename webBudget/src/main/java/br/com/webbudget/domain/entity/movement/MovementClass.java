@@ -53,6 +53,7 @@ public class MovementClass extends PersistentEntity {
     @Getter
     @Setter
     @Column(name = "budget")
+    @NotNull(message = "{movement-class.budget}")
     private BigDecimal budget;
     @Getter
     @Setter
@@ -78,7 +79,7 @@ public class MovementClass extends PersistentEntity {
     private BigDecimal totalMovements;
 
     /**
-     *
+     * 
      */
     public MovementClass() {
         this.totalMovements = BigDecimal.ZERO;
