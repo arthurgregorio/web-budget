@@ -18,5 +18,5 @@
 -->
 
 <jboss-web xmlns="http://www.jboss.com/xml/ns/javaee">
-    <context-root>/webBudget</context-root>
+    <context-root>/</context-root>
 </jboss-web>
