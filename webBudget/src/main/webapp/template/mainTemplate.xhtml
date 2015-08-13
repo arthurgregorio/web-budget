@@ -117,8 +117,8 @@
                                                   value="#{authorizationBean.authenticatedUserName}">
                                         <p:menuitem value="#{menu['dashboard.logout']}" 
                                                     action="#{authenticationBean.doLogout()}"/>
-                                        <p:menuitem value="#{menu['dashboard.account']}" 
-                                                    action="/main/tools/user/accountPreferences.xhtml?faces-redirect=true"/>
+                                        <p:menuitem value="#{menu['dashboard.profile']}" 
+                                                    action="/main/tools/user/formUserProfile.xhtml?faces-redirect=true"/>
                                     </p:menuButton>
                                 </f:facet>
                             </p:menubar>

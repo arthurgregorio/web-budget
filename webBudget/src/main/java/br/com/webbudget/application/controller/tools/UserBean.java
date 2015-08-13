@@ -17,7 +17,6 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.service.AccountService;
@@ -27,12 +26,13 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.picketlink.Identity;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 02/03/2014
  */
 @Named
@@ -43,15 +43,13 @@ public class UserBean extends AbstractBean {
     private User user;
 
     @Getter
-    @Inject
-    @AuthenticatedUser
-    private User authenticatedUser;
-
-    @Getter
     private List<User> users;
     @Getter
     private List<Group> groups;
 
+    @Inject
+    private transient Identity identity;
+    
     @Inject
     private transient AccountService accountService;
 
@@ -63,6 +61,15 @@ public class UserBean extends AbstractBean {
         this.users = this.accountService.listUsers(null);
     }
 
+    /**
+     * Inicializa a parte do profile do usuario
+     */
+    public void initializeProfile() {
+        
+        // setamos no usuario o usuario autenticado
+        this.user = (User) this.identity.getAccount();
+    }
+    
     /**
      * @param userId
      */
@@ -162,8 +169,19 @@ public class UserBean extends AbstractBean {
     /**
      *
      */
-    public void doPasswordUpdate() {
+    public void doProfileUpdate() {
+        
+        try {
+            this.accountService.updateProfile(this.user);
 
+            this.info("user.action.profile-updated", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("UserBean#doProfileUpdate has found erros", ex);
+            this.fixedError(ex.getMessage(), true);
+        } catch (Exception ex) {
+            this.logger.error("UserBean#doProfileUpdate has found erros", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        }
     }
 
     /**

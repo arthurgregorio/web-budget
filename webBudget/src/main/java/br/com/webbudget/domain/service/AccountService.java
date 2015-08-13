@@ -153,6 +153,25 @@ public class AccountService {
     
     /**
      * 
+     * @param user 
+     */
+    @Transactional
+    public void updateProfile(User user) {
+
+        // pegamos a senha antes de salvar o usuario
+        final String unsecurePassword = user.getPassword();
+        
+        // atualizamos o usuario com a senha
+        if (unsecurePassword != null && !unsecurePassword.isEmpty()) {
+            this.identityManager.updateCredential(user, new Password(unsecurePassword));
+        } else {
+            // salvamos
+            this.identityManager.update(user);
+        }
+    }
+    
+    /**
+     * 
      * @param group
      * @param authorizations 
      */
