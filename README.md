@@ -11,14 +11,15 @@ Através dele é possível realizar controle de receitas e despesas por centro d
 
 O sistema em sua versão atual possui várias funcionalidades baseadas na necessidade de um controle financeiro simples e eficaz. Dentre todas, destacam-se:
 
-- Controle de carteiras, contas bancárias ou carteira física
-- Controle de cartões de crédito, com geração de faturas e acompanhamento de gastos
-- Centros de Custo e Classes de Despesas/Receitas, com definição de margem de limite (orçamento previsto)
-- Rateio de movimentos por centro de custo e classe, ou seja, um movimento pode ser dividido em vários CC para melhor divisão das contas
-- Pequeno sistema de mensageria interna
-- Período de lançamentos no estilo competência, com data de início e fim e acompanhamento gráfico dos movimentos
-- Controle de usuários através de permissões de acesso por grupos (visualização, inclusão, edição e deleção)
-- Transferências entre carteiras e controle iterativo de saldos
+-Controle de entradas e saídas atavés de movimentos classificados por centro de custo e classe
+-Controle de carteiras, contas bancárias ou carteira física
+-Controle de cartões de crédito, com geração de faturas e acompanhamento de gastos
+-Centros de custo e classes de despesas/receitas, com definição de margem de limite (orçamento previsto)
+-Rateio de movimentos por centro de custo e classe de movimentação, ou seja, um movimento pode ser dividido em vários CC para melhorar divisão das contas
+-Mecanismo interno de mensageria entre os usuários
+-Períodos de lançamentos no estilo competência, com data de início e fim e acompanhamento gráfico dos movimentos 
+-Controle de usuários através de permissões de acesso por grupos (visualização, inclusão, edição e deleção)
+-Transferências entre carteiras e controle iterativo de saldos
 
 Entre outras...
 
