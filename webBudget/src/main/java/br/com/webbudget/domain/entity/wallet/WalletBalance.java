@@ -52,9 +52,9 @@ public class WalletBalance extends PersistentEntity {
     private BigDecimal oldBalance;
     @Getter
     @Setter
-    @NotNull(message = "{wallet-balance.movimented-value}")
-    @Column(name = "movimented_value", nullable = false)
-    private BigDecimal movimentedValue;
+    @NotNull(message = "{wallet-balance.movemented-value}")
+    @Column(name = "movemented_value", nullable = false)
+    private BigDecimal movementedValue;
     @Getter
     @Setter
     @Column(name = "movement_code")

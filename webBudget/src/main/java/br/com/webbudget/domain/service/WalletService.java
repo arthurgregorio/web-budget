@@ -20,12 +20,15 @@ import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.entity.wallet.WalletType;
+import br.com.webbudget.domain.misc.dto.BalanceBuilder;
+import br.com.webbudget.domain.misc.events.UpdateBalanceEvent;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
 import br.com.webbudget.domain.repository.wallet.IWalletRepository;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -195,6 +198,15 @@ public class WalletService {
         this.walletBalanceRepository.save(walletBalance);
     }
 
+    /**
+     * 
+     * @param builder 
+     */
+    public void updateBalance(@Observes @UpdateBalanceEvent BalanceBuilder builder) {
+       
+        
+    }
+    
     /**
      *
      * @param walletId
