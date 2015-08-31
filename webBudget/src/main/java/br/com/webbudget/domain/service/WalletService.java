@@ -20,8 +20,7 @@ import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.entity.wallet.WalletType;
-import br.com.webbudget.domain.misc.dto.BalanceBuilder;
-import br.com.webbudget.domain.misc.events.UpdateBalanceEvent;
+import br.com.webbudget.domain.misc.BalanceBuilder;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
 import br.com.webbudget.domain.repository.wallet.IWalletRepository;
@@ -31,6 +30,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import br.com.webbudget.domain.misc.events.UpdateBalance;
 
 /**
  * Serice para manutencao dos processos relacionados a carteiras e saldos 
@@ -65,22 +65,18 @@ public class WalletService {
         wallet = this.walletRepository.save(wallet);
 
         // se a carteira teve um saldo inicial != 0, entao ajustamos ela para o
-        // saldo informado pelo usuario
+        // saldo informado pelo usuario no momento da criacao
         if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
 
-            // saldo antigo era 0
-            final BigDecimal oldBalance = BigDecimal.ZERO;
+            final BalanceBuilder builder = new BalanceBuilder();
+            
+            builder.forWallet(wallet)
+                    .withOldBalance(BigDecimal.ZERO)
+                    .withActualBalance(wallet.getBalance())
+                    .withMovementedValue(wallet.getBalance())
+                    .andType(WalletBalanceType.ADJUSTMENT);
 
-            final WalletBalance walletBalance = new WalletBalance();
-
-            // gravamos o historico do saldo
-            walletBalance.setTargetWallet(wallet);
-            walletBalance.setMovimentedValue(wallet.getBalance());
-            walletBalance.setOldBalance(oldBalance);
-            walletBalance.setActualBalance(oldBalance.add(wallet.getBalance()));
-            walletBalance.setWalletBalanceType(WalletBalanceType.ADJUSTMENT);
-
-            this.walletBalanceRepository.save(walletBalance);
+            this.updateBalance(builder);
         }
     }
 
@@ -135,44 +131,46 @@ public class WalletService {
             throw new WbDomainException("transfer.validate.same-wallet");
         }
 
-        // atualizamos a origem
-        final Wallet source = walletBalance.getSourceWallet();
-        final BigDecimal sourceOldBalance = source.getBalance();
-
-        source.setBalance(sourceOldBalance.subtract(walletBalance.getMovimentedValue()));
-
-        this.walletRepository.save(source);
-
         // atualizamos o destino
+        final BalanceBuilder builderTarget = new BalanceBuilder();
+        
         final Wallet target = walletBalance.getTargetWallet();
+        
         final BigDecimal targetOldBalance = target.getBalance();
+        final BigDecimal targetNewBalance = 
+                targetOldBalance.add(walletBalance.getMovementedValue());
 
-        target.setBalance(targetOldBalance.add(walletBalance.getMovimentedValue()));
+        builderTarget.forWallet(target)
+                .withOldBalance(targetOldBalance)
+                .withActualBalance(targetNewBalance)
+                .withMovementedValue(walletBalance.getMovementedValue())
+                .byTheReason(walletBalance.getReason())
+                .andType(WalletBalanceType.TRANSFERENCE);
+        
+        this.updateBalance(builderTarget);
 
-        this.walletRepository.save(target);
+        // atualizamos a origem
+        final BalanceBuilder builderSource = new BalanceBuilder();
+        
+        final Wallet source = walletBalance.getSourceWallet();
+        
+        final BigDecimal sourceOldBalance = source.getBalance();
+        final BigDecimal sourceNewBalance = 
+                sourceOldBalance.subtract(walletBalance.getMovementedValue());
 
-        // completamos a transferencia para o destino
-        walletBalance.setOldBalance(targetOldBalance);
-        walletBalance.setActualBalance(target.getBalance());
-        walletBalance.setWalletBalanceType(WalletBalanceType.TRANSFERENCE);
-
-        this.walletBalanceRepository.save(walletBalance);
-
-        // criamos novo saldo para a origem
-        final WalletBalance sourceBalance = new WalletBalance();
-
-        sourceBalance.setTargetWallet(source);
-        sourceBalance.setOldBalance(sourceOldBalance);
-        sourceBalance.setActualBalance(source.getBalance());
-        sourceBalance.setMovimentedValue(walletBalance.getMovimentedValue());
-        sourceBalance.setWalletBalanceType(WalletBalanceType.TRANSFER_ADJUSTMENT);
-
-        this.walletBalanceRepository.save(sourceBalance);
+        builderSource.forWallet(source)
+                .withOldBalance(sourceOldBalance)
+                .withActualBalance(sourceNewBalance)
+                .withMovementedValue(walletBalance.getMovementedValue())
+                .andType(WalletBalanceType.TRANSFER_ADJUSTMENT);
+        
+        this.updateBalance(builderSource);
     }
 
     /**
-     *
-     * @param wallet
+     * Chamada para ajuste do saldo da carteira
+     * 
+     * @param wallet a carteira a ser ajustada, dentro dela os dados do ajuste
      */
     @Transactional
     public void adjustBalance(Wallet wallet) {
@@ -180,31 +178,43 @@ public class WalletService {
         // atualizamos o novo saldo
         final BigDecimal oldBalance = wallet.getBalance();
         final BigDecimal newBalance = oldBalance.add(wallet.getAdjustmentValue());
+        
+        final BalanceBuilder builder = new BalanceBuilder();
 
-        wallet.setBalance(newBalance);
-
-        this.walletRepository.save(wallet);
-
-        final WalletBalance walletBalance = new WalletBalance();
-
-        // gravamos o ultimo saldo como historico
-        walletBalance.setTargetWallet(wallet);
-        walletBalance.setMovimentedValue(wallet.getAdjustmentValue());
-        walletBalance.setOldBalance(oldBalance);
-        walletBalance.setActualBalance(newBalance);
-        walletBalance.setReason(wallet.getReason());
-        walletBalance.setWalletBalanceType(WalletBalanceType.ADJUSTMENT);
-
-        this.walletBalanceRepository.save(walletBalance);
+        builder.forWallet(wallet)
+                .withOldBalance(oldBalance)
+                .withActualBalance(newBalance)
+                .withMovementedValue(wallet.getAdjustmentValue())
+                .byTheReason(wallet.getReason())
+                .andType(WalletBalanceType.ADJUSTMENT);
+        
+        this.updateBalance(builder);
     }
 
     /**
+     * Metodo que escuta por eventos de edicao do saldo das carteiras e entao
+     * ao receber uma chamada, atualiza o saldo e grava o historico de saldo
      * 
-     * @param builder 
+     * OBS: todas as atualizacoes de saldo dentro do sistema DEVEM seguir o 
+     * fluxo de evento chegando ate este metodo
+     * 
+     * @param builder o builder para contrucao do saldo
      */
-    public void updateBalance(@Observes @UpdateBalanceEvent BalanceBuilder builder) {
+    @Transactional
+    public void updateBalance(@Observes @UpdateBalance BalanceBuilder builder) {
        
+        final WalletBalance walletBalance = builder.build();
         
+        final Wallet wallet = walletBalance.getTargetWallet();
+        
+        // seta o saldo na carteira
+        wallet.setBalance(walletBalance.getActualBalance());
+
+        // salva carteira
+        this.walletRepository.save(wallet);
+
+        // salva o saldo
+        this.walletBalanceRepository.save(walletBalance);
     }
     
     /**

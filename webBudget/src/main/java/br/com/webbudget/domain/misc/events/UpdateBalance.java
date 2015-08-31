@@ -16,21 +16,24 @@
  */
 package br.com.webbudget.domain.misc.events;
 
-import br.com.webbudget.domain.misc.events.type.OperationType;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.PARAMETER;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
 /**
- * 
+ * Qualificador para identificarmos eventos de edicao de saldo das carteiras
  *
  * @author Arthur Gregorio
  *
- * @version 0.0.0
+ * @version 1.0.0
  * @since 2.1.0, 27/08/2015
  */
-public @interface UpdateBalanceEvent {
-    
-    /**
-     * @return qual a direcao que devemos trabalhar no saldo, se devemos aumentar
-     * ou diminuir o saldo da carteira
-     */
-    OperationType value() default OperationType.INCREASE;
-}
+@Qualifier
+@Retention(RUNTIME)
+@Target({TYPE, FIELD, METHOD, PARAMETER})
+public @interface UpdateBalance { }
