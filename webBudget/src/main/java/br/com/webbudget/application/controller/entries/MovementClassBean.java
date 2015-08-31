@@ -20,6 +20,7 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -122,6 +123,9 @@ public class MovementClassBean extends AbstractBean {
             this.movementClass = new MovementClass();
 
             this.info("movement-class.action.saved", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("MovementClassBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("MovementClassBean#doSave found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -137,6 +141,9 @@ public class MovementClassBean extends AbstractBean {
             this.movementClass = this.movementService.updateMovementClass(this.movementClass);
 
             this.info("movement-class.action.updated", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("MovementClassBean#doUpdate found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("MovementClassBean#doUpdate found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -153,6 +160,9 @@ public class MovementClassBean extends AbstractBean {
             this.movementClasses = this.movementService.listMovementClasses(false);
 
             this.info("movement-class.action.deleted", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("MovementClassBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             if (this.containsException(ConstraintViolationException.class, ex)) {
                 this.logger.error("MovementClassBean#doDelete found erros", ex);

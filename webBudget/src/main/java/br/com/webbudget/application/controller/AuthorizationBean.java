@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
 import br.com.webbudget.domain.security.Authorization;
 import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.security.User;
@@ -24,6 +25,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -136,6 +138,8 @@ public class AuthorizationBean implements Serializable {
     /**
      * @return o usuario autenticado
      */
+    @Produces
+    @AuthenticatedUser
     private User getAuthenticatedUser() {
         return (User) this.identity.getAccount();
     }

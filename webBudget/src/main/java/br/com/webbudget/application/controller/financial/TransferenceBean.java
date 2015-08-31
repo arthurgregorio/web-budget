@@ -19,6 +19,7 @@ package br.com.webbudget.application.controller.financial;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.service.WalletService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -106,6 +107,9 @@ public class TransferenceBean extends AbstractBean {
             this.wallets = this.walletService.listWallets(false);
 
             this.info("transfer.action.transfered", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("TransferenceBean#doTransference found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("TransferenceBean#doTransference found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());

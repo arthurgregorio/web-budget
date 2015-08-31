@@ -167,7 +167,7 @@ public abstract class AbstractBean implements Serializable {
         
         message = this.translator.translate(message);
         
-        if (parameters.length != 0) {
+        if (parameters != null && parameters.length != 0) {
             Messages.addError(null, message + ": {0}", parameters);
         } else {
             Messages.addError(null, message, parameters);

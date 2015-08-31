@@ -24,6 +24,7 @@ import br.com.webbudget.domain.entity.contact.ContactType;
 import br.com.webbudget.domain.entity.contact.NumberType;
 import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.misc.AddressFinder;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.service.ContactService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -142,6 +143,9 @@ public class ContactBean extends AbstractBean {
             this.contactService.saveContact(this.contact);
             this.contact = new Contact();
             this.info("contact.action.saved", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("ContactBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("ContactBean#doSave found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -161,6 +165,9 @@ public class ContactBean extends AbstractBean {
         try {
             this.contact = this.contactService.updateContact(this.contact);
             this.info("contact.action.updated", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("ContactBean#doUpdate found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("ContactBean#doUpdate found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -177,6 +184,9 @@ public class ContactBean extends AbstractBean {
             this.contacts = this.contactService.listContacts(false);
 
             this.info("contact.action.deleted", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("ContactBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("ContactBean#doDelete found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());

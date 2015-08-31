@@ -20,6 +20,7 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.WalletService;
 import java.util.List;
@@ -124,6 +125,9 @@ public class CardBean extends AbstractBean {
             this.card = new Card();
 
             this.info("card.action.saved", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("CardBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("CardBean#doSave found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -139,6 +143,9 @@ public class CardBean extends AbstractBean {
             this.card = this.cardService.updateCard(this.card);
 
             this.info("card.action.updated", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("CardBean#doUpdate found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("CardBean#doUpdate found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -155,6 +162,9 @@ public class CardBean extends AbstractBean {
             this.cards = this.cardService.listCards(false);
 
             this.info("card.action.deleted", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("CardBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("CardBean#doDelete found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());

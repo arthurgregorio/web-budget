@@ -76,8 +76,8 @@
                                           rendered="#{balance.walletBalanceType eq 'TRANSFER_ADJUSTMENT'}"/>
                         </p:column>
                         <p:column style="text-align: center"
-                                  headerText="#{messages['balance-history.list.movimented-value']}">
-                            <h:outputText value="#{balance.movimentedValue}">
+                                  headerText="#{messages['balance-history.list.movemented-value']}">
+                            <h:outputText value="#{balance.movementedValue}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                             </h:outputText>
                         </p:column>

@@ -27,8 +27,9 @@ import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
-import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
+import br.com.webbudget.domain.misc.BalanceBuilder;
+import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -56,6 +58,10 @@ import javax.transaction.Transactional;
 @ApplicationScoped
 public class MovementService {
 
+    @Inject
+    @UpdateBalance
+    private Event<BalanceBuilder> updateBalanceEvent;    
+    
     @Inject
     private IWalletRepository walletRepository;
     @Inject
@@ -139,7 +145,7 @@ public class MovementService {
         if (movement.isSaved()) {
 
             if (movement.getFinancialPeriod().isClosed()) {
-                throw new WbDomainException("maintenance.validate.closed-financial-period");
+                throw new WbDomainException("movement.validate.closed-financial-period");
             }
 
             // remove algum rateio editado
@@ -197,35 +203,24 @@ public class MovementService {
             }
 
             // atualizamos o novo saldo
+            final BalanceBuilder builder = new BalanceBuilder();
+            
             final BigDecimal oldBalance = wallet.getBalance();
 
-            // cria o historico do saldo
-            final WalletBalance walletBalance = new WalletBalance();
-
-            walletBalance.setMovementCode(movement.getCode());
-            walletBalance.setOldBalance(oldBalance);
-            walletBalance.setMovimentedValue(movement.getValue());
-
-            BigDecimal newBalance;
+            builder.forWallet(wallet)
+                    .withOldBalance(oldBalance)
+                    .withMovementedValue(movement.getValue())
+                    .referencingMovement(movement.getCode());
 
             if (movement.getDirection() == MovementClassType.OUT) {
-                newBalance = oldBalance.subtract(movement.getValue());
-                walletBalance.setWalletBalanceType(WalletBalanceType.PAYMENT);
+                builder.withActualBalance(oldBalance.subtract(movement.getValue()))
+                        .andType(WalletBalanceType.PAYMENT);
             } else {
-                newBalance = oldBalance.add(movement.getValue());
-                walletBalance.setWalletBalanceType(WalletBalanceType.REVENUE);
+                builder.withActualBalance(oldBalance.add(movement.getValue()))
+                        .andType(WalletBalanceType.REVENUE);
             }
 
-            walletBalance.setTargetWallet(wallet);
-            walletBalance.setActualBalance(newBalance);
-
-            // salva o historico do saldo
-            this.walletBalanceRepository.save(walletBalance);
-
-            wallet.setBalance(newBalance);
-
-            // atualiza a carteira com o novo saldo
-            this.walletRepository.save(wallet);
+            this.updateBalanceEvent.fire(builder);
         }
     }
 
@@ -237,12 +232,12 @@ public class MovementService {
     public void deleteMovement(Movement movement) {
 
         if (movement.getFinancialPeriod().isClosed()) {
-            throw new WbDomainException("maintenance.validate.closed-financial-period");
+            throw new WbDomainException("movement.validate.closed-financial-period");
         }
 
         // se tem vinculo com fatura, nao pode ser excluido
         if (movement.isCardInvoicePaid()) {
-            throw new WbDomainException("maintenance.validate.has-card-invoice");
+            throw new WbDomainException("movement.validate.has-card-invoice");
         }
 
         // devolve o saldo na carteira se for o caso
@@ -268,10 +263,16 @@ public class MovementService {
                 movimentedValue = movement.getValue().negate();
             }
 
-            final BigDecimal oldBalance = paymentWallet.getBalance();
+            // tratamos a devoluacao do saldo
+            final BalanceBuilder builder = new BalanceBuilder();
+            
+            builder.forWallet(paymentWallet)
+                    .withOldBalance(paymentWallet.getBalance())
+                    .withActualBalance(paymentWallet.getBalance().add(movimentedValue))
+                    .withMovementedValue(movimentedValue)
+                    .andType(WalletBalanceType.BALANCE_RETURN);
 
-            this.returnBalance(paymentWallet, oldBalance,
-                    oldBalance.add(movimentedValue), movimentedValue);
+            this.updateBalanceEvent.fire(builder);
         }
 
         this.movementRepository.delete(movement);
@@ -292,7 +293,7 @@ public class MovementService {
 
         // se a invoice for de um periodo fechado, bloqueia o processo
         if (cardInvoice.getFinancialPeriod().isClosed()) {
-            throw new WbDomainException("maintenance.validate.closed-financial-period");
+            throw new WbDomainException("movement.validate.closed-financial-period");
         }
 
         // listamos os movimentos da invoice
@@ -318,7 +319,15 @@ public class MovementService {
             final BigDecimal oldBalance = paymentWallet.getBalance();
             final BigDecimal newBalance = oldBalance.add(movement.getValue());
 
-            this.returnBalance(paymentWallet, oldBalance, newBalance, movement.getValue());
+            final BalanceBuilder builder = new BalanceBuilder();
+            
+            builder.forWallet(paymentWallet)
+                    .withOldBalance(oldBalance)
+                    .withActualBalance(newBalance)
+                    .withMovementedValue(movement.getValue())
+                    .andType(WalletBalanceType.BALANCE_RETURN);
+            
+            this.updateBalanceEvent.fire(builder);
         }
 
         // deletamos a movimentacao da invoice
@@ -361,37 +370,6 @@ public class MovementService {
         }
 
         return this.costCenterRepository.save(costCenter);
-    }
-
-    /**
-     *
-     * @param wallet
-     * @param oldBalance
-     * @param newBalance
-     * @param movimentedValue
-     *
-     * @return
-     */
-    @Transactional
-    private WalletBalance returnBalance(Wallet wallet, BigDecimal oldBalance,
-            BigDecimal newBalance, BigDecimal movimentedValue) {
-
-        // seta o saldo na carteira
-        wallet.setBalance(newBalance);
-
-        // salva carteira
-        this.walletRepository.save(wallet);
-
-        // coloca um novo saldo no historico
-        final WalletBalance balance = new WalletBalance();
-
-        balance.setTargetWallet(wallet);
-        balance.setOldBalance(oldBalance);
-        balance.setActualBalance(newBalance);
-        balance.setMovimentedValue(movimentedValue);
-        balance.setWalletBalanceType(WalletBalanceType.BALANCE_RETURN);
-
-        return this.walletBalanceRepository.save(balance);
     }
 
     /**

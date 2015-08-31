@@ -18,6 +18,7 @@ package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.movement.CostCenter;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -120,6 +121,9 @@ public class CostCenterBean extends AbstractBean {
             this.costCenters = this.movementService.listCostCenters(false);
 
             this.info("cost-center.action.saved", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("CostCenterBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("CostCenterBean#doSave found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -135,6 +139,9 @@ public class CostCenterBean extends AbstractBean {
             this.costCenter = this.movementService.updateCostCenter(this.costCenter);
 
             this.info("cost-center.action.updated", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("CostCenterBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("CostCenterBean#doUpdate found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -151,6 +158,9 @@ public class CostCenterBean extends AbstractBean {
             this.costCenters = this.movementService.listCostCenters(false);
 
             this.info("cost-center.action.deleted", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("CostCenterBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             if (this.containsException(ConstraintViolationException.class, ex)) {
                 this.logger.error("CostCenterBean#doDelete found erros", ex);

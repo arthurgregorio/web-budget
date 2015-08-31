@@ -14,30 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.producer.qualifier;
+package br.com.webbudget.domain.misc.events;
 
-import br.com.webbudget.application.controller.AuthorizationBean;
-import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.PARAMETER;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * Qualificador CDI para identificar a producao/injecao de dependencias do 
- * usuario autenticado no sistema pelo produto {@link AuthorizationBean}
- * 
+ * Qualificador para identificarmos eventos de edicao de saldo das carteiras
+ *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
- * @since 2.0.0, 20/06/2014
+ * @version 1.0.0
+ * @since 2.1.0, 27/08/2015
  */
 @Qualifier
-@Documented
 @Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface AuthenticatedUser { }
+@Target({TYPE, FIELD, METHOD, PARAMETER})
+public @interface UpdateBalance { }
