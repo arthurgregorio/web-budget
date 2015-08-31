@@ -20,6 +20,7 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletType;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.service.WalletService;
 import java.math.BigDecimal;
 import java.util.List;
@@ -145,6 +146,9 @@ public class WalletBean extends AbstractBean {
             this.wallet = new Wallet();
 
             this.info("wallet.action.saved", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("WalletBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("WalletBean#doSave found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -162,6 +166,9 @@ public class WalletBean extends AbstractBean {
             this.wallets = this.walletService.listWallets(null);
 
             this.openDialog("adjustmentDialog", "dialogAdjustment");
+        } catch (WbDomainException ex) {
+            this.logger.error("WalletBean#doAdjustment found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("WalletBean#doAdjustment found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -179,6 +186,9 @@ public class WalletBean extends AbstractBean {
             this.wallet = this.walletService.updateWallet(this.wallet);
 
             this.info("wallet.action.updated", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("WalletBean#doUpdate found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("WalletBean#doUpdate found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -195,6 +205,9 @@ public class WalletBean extends AbstractBean {
             this.wallets = this.walletService.listWallets(false);
 
             this.info("wallet.action.deleted", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("WalletBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("WalletBean#doDelete found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
