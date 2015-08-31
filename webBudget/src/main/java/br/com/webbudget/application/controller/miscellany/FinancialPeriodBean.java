@@ -19,6 +19,7 @@ package br.com.webbudget.application.controller.miscellany;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -122,6 +123,9 @@ public class FinancialPeriodBean extends AbstractBean {
             this.validateOpenPeriods();
 
             this.info("financial-period.action.saved", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("FinancialPeriodBean#doSave found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("FinancialPeriodBean#doSave found errors", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -141,6 +145,9 @@ public class FinancialPeriodBean extends AbstractBean {
                     this.financialPeriodService.listFinancialPeriods(null);
             
             this.info("financial-period.action.deleted", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("FinancialPeriodBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("FinancialPeriodBean#doDelete found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());

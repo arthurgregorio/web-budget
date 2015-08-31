@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.producer.qualifier;
 
-import br.com.webbudget.application.producer.AuthenticatedUserProducer;
+import br.com.webbudget.application.controller.AuthorizationBean;
 import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -29,11 +29,11 @@ import javax.inject.Qualifier;
 
 /**
  * Qualificador CDI para identificar a producao/injecao de dependencias do 
- * usuario autenticado no sistema pelo produto {@link AuthenticatedUserProducer}
+ * usuario autenticado no sistema pelo produto {@link AuthorizationBean}
  * 
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 2.0.0, 20/06/2014
  */
 @Qualifier
