@@ -51,9 +51,14 @@ public class CostCenter extends PersistentEntity {
     private String name;
     @Getter
     @Setter
-    @NotNull(message = "{cost-center.budget}")
-    @Column(name = "budget", nullable = false)
-    private BigDecimal budget;
+    @NotNull(message = "{cost-center.expenses-budget}")
+    @Column(name = "expenses_budget", nullable = false)
+    private BigDecimal expensesBudget;
+    @Getter
+    @Setter
+    @NotNull(message = "{cost-center.revenues-budget}")
+    @Column(name = "revenues_budget", nullable = false)
+    private BigDecimal revenuesBudget;
     @Getter
     @Setter
     @Column(name = "blocked")
@@ -84,5 +89,7 @@ public class CostCenter extends PersistentEntity {
     public CostCenter() {
         this.percentage = BigDecimal.ZERO;
         this.totalMovements = BigDecimal.ZERO;
+        this.revenuesBudget = BigDecimal.ZERO;
+        this.expensesBudget = BigDecimal.ZERO;
     }
 }

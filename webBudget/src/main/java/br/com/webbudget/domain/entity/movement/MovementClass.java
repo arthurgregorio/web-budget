@@ -82,6 +82,7 @@ public class MovementClass extends PersistentEntity {
      * 
      */
     public MovementClass() {
+        this.budget = BigDecimal.ZERO;
         this.totalMovements = BigDecimal.ZERO;
     }
 }

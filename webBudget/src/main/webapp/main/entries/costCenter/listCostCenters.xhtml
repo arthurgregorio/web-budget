@@ -76,8 +76,15 @@
                     </p:column>
                     <p:column width="20%" 
                               style="text-align: center"
-                              headerText="#{messages['cost-center.list.budget']}">
-                        <h:outputText value="#{costCenter.budget}">
+                              headerText="#{messages['cost-center.list.revenues-budget']}">
+                        <h:outputText value="#{costCenter.revenuesBudget}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </p:column>
+                    <p:column width="20%" 
+                              style="text-align: center"
+                              headerText="#{messages['cost-center.list.expenses-budget']}">
+                        <h:outputText value="#{costCenter.expensesBudget}">
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </p:column>

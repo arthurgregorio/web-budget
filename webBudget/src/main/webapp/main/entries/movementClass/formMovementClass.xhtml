@@ -83,20 +83,6 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-s">
-                            <p:outputLabel for="inBudget" 
-                                           value="#{messages['movement-class.form.budget']}: "/>
-                            <pe:inputNumber id="inBudget" 
-                                            symbol="R$ "
-                                            decimalPlaces="2" 
-                                            decimalSeparator="," 
-                                            thousandSeparator="." 
-                                            value="#{movementClassBean.movementClass.budget}">
-                                <f:converter converterId="javax.faces.BigDecimal" />
-                            </pe:inputNumber>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group">
                             <p:outputLabel for="inMovementClassType" 
                                            value="#{messages['movement-class.form.movement-class-type']}: "/>
@@ -110,6 +96,20 @@
                                                itemLabel="#{messages[movementClassType]}"
                                                value="#{movementClassBean.availableMovementsTypes}"/>
                             </p:selectOneRadio>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-s">
+                            <p:outputLabel for="inBudget" 
+                                           value="#{messages['movement-class.form.budget']}: "/>
+                            <pe:inputNumber id="inBudget" 
+                                            symbol="R$ "
+                                            decimalPlaces="2" 
+                                            decimalSeparator="," 
+                                            thousandSeparator="." 
+                                            value="#{movementClassBean.movementClass.budget}">
+                                <f:converter converterId="javax.faces.BigDecimal" />
+                            </pe:inputNumber>
                         </div>                        
                     </div>
                 </div>
