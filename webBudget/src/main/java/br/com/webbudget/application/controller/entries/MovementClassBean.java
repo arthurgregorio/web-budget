@@ -22,6 +22,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.service.MovementService;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

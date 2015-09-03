@@ -92,4 +92,17 @@ public class CostCenter extends PersistentEntity {
         this.revenuesBudget = BigDecimal.ZERO;
         this.expensesBudget = BigDecimal.ZERO;
     }
+    
+    /**
+     * @param classType a direcao do tipo de classe que estamos checando se
+     * controla o valor de orcamento
+     * @return true se houver orcamento para controlar, false se nao
+     */
+    public boolean controlBudget(MovementClassType classType) {
+        if (classType == MovementClassType.IN) {
+            return this.revenuesBudget.compareTo(BigDecimal.ZERO) > 0;
+        } else {
+            return this.expensesBudget.compareTo(BigDecimal.ZERO) > 0;
+        }
+    }
 }

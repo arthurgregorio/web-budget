@@ -60,8 +60,8 @@ public class MovementService {
 
     @Inject
     @UpdateBalance
-    private Event<BalanceBuilder> updateBalanceEvent;    
-    
+    private Event<BalanceBuilder> updateBalanceEvent;
+
     @Inject
     private IWalletRepository walletRepository;
     @Inject
@@ -93,6 +93,9 @@ public class MovementService {
             throw new WbDomainException("movement-class.validate.duplicated");
         }
 
+        // valida o orcamento, se estiver ok, salva!
+        this.hasValidBudget(movementClass);
+           
         this.movementClassRepository.save(movementClass);
     }
 
@@ -101,7 +104,7 @@ public class MovementService {
      * @param movementClass
      * @return
      */
-    @Transactional    
+    @Transactional
     public MovementClass updateMovementClass(MovementClass movementClass) {
 
         final MovementClass found = this.findMovementClassByNameAndTypeAndCostCenter(movementClass.getName(),
@@ -111,7 +114,50 @@ public class MovementService {
             throw new WbDomainException("movement-class.validate.duplicated");
         }
 
+        // valida o orcamento, se estiver ok, salva!
+        this.hasValidBudget(movementClass);
+
         return this.movementClassRepository.save(movementClass);
+    }
+
+    /**
+     * Aqui realizamos a regra de validacao do orcamento pelo centro de custo
+     * 
+     * @param movementClass a classe a ser validada
+     */
+    private boolean hasValidBudget(MovementClass movementClass) {
+        
+        final CostCenter costCenter = movementClass.getCostCenter();
+        final MovementClassType classType = movementClass.getMovementClassType();
+
+        if (costCenter.controlBudget(classType)) {
+            
+            final List<MovementClass> classes = 
+                    this.listMovementClassesByCostCenterAndType(costCenter, classType);
+
+            BigDecimal consumedBudget = classes.stream()
+                    .filter(mc -> !mc.equals(movementClass))
+                    .map(MovementClass::getBudget)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal availableBudget;
+
+            if (classType == MovementClassType.IN) {
+                availableBudget = costCenter.getRevenuesBudget().subtract(consumedBudget);
+            } else {
+                availableBudget = costCenter.getExpensesBudget().subtract(consumedBudget);
+            }
+     
+            // caso o valor disponivel seja menor que o desejado, exception!
+            if (availableBudget.compareTo(movementClass.getBudget()) <= 0) {
+                
+                final String value = "R$ " + String.format("%10.2f", availableBudget);
+                
+                throw new WbDomainException("movement-class.validate.no-budget", value);
+            }
+        }
+        
+        return true;
     }
 
     /**
@@ -204,7 +250,7 @@ public class MovementService {
 
             // atualizamos o novo saldo
             final BalanceBuilder builder = new BalanceBuilder();
-            
+
             final BigDecimal oldBalance = wallet.getBalance();
 
             builder.forWallet(wallet)
@@ -265,7 +311,7 @@ public class MovementService {
 
             // tratamos a devoluacao do saldo
             final BalanceBuilder builder = new BalanceBuilder();
-            
+
             builder.forWallet(paymentWallet)
                     .withOldBalance(paymentWallet.getBalance())
                     .withActualBalance(paymentWallet.getBalance().add(movimentedValue))
@@ -320,13 +366,13 @@ public class MovementService {
             final BigDecimal newBalance = oldBalance.add(movement.getValue());
 
             final BalanceBuilder builder = new BalanceBuilder();
-            
+
             builder.forWallet(paymentWallet)
                     .withOldBalance(oldBalance)
                     .withActualBalance(newBalance)
                     .withMovementedValue(movement.getValue())
                     .andType(WalletBalanceType.BALANCE_RETURN);
-            
+
             this.updateBalanceEvent.fire(builder);
         }
 
