@@ -149,14 +149,13 @@ public class MovementService {
             }
      
             // caso o valor disponivel seja menor que o desejado, exception!
-            if (availableBudget.compareTo(movementClass.getBudget()) <= 0) {
+            if (availableBudget.compareTo(movementClass.getBudget()) < 0) {
                 
                 final String value = "R$ " + String.format("%10.2f", availableBudget);
                 
                 throw new WbDomainException("movement-class.validate.no-budget", value);
             }
         }
-        
         return true;
     }
 
