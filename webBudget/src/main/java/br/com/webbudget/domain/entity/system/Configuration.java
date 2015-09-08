@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package br.com.webbudget.domain.entity.system;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.MovementClass;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -30,10 +31,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
+ * Classe responsavel pela representacao das configuracoes do sitema no banco
+ * de dados
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 15/02/2015
  */
 @Entity
@@ -42,6 +45,11 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class Configuration extends PersistentEntity {
 
+    @Getter
+    @Setter
+    @Column(name = "show_wallet_balances", nullable = false)
+    private boolean showWalletBalances;
+    
     @Getter
     @Setter
     @OneToOne
@@ -54,4 +62,11 @@ public class Configuration extends PersistentEntity {
     @JoinColumn(name = "id_invoice_default_movement_class")
     @NotNull(message = "{configuration.invoice-movement-class}")
     private MovementClass invoiceDefaultMovementClass;
+
+    /**
+     * Inicializa os atributos
+     */
+    public Configuration() {
+        this.showWalletBalances = false;
+    }
 }
