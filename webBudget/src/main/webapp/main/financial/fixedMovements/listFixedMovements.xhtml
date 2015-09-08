@@ -22,16 +22,16 @@
                 xmlns:of="http://omnifaces.org/functions"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
-
+                 
     <f:metadata>
-        <f:viewAction action="#{movementBean.initializeListing()}"/>
+        <f:viewAction action="#{fixedMovementBean.initializeListing()}"/>
     </f:metadata>
 
     <ui:define name="breadcrumb">
         <p:menuitem url="#"
                     value="#{breadcrumb['financial']}" />
-        <p:menuitem url="listMovements.xhtml"
-                    value="#{breadcrumb['financial.movement']}" />
+        <p:menuitem url="listFixedMovements.xhtml"
+                    value="#{breadcrumb['financial.fixed-movement']}" />
     </ui:define>
 
     <ui:define name="content">
@@ -46,23 +46,23 @@
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-7 filter-group form-group-l">
                     <p:inputText id="inFilter" 
-                                 value="#{movementBean.filter}" 
+                                 value="#{fixedMovementBean.filter}" 
                                  placeholder="#{messages['movement.filter.types']}"/>
                 </div>
                 <div class="ui-grid-col-1">
                     <p:selectBooleanCheckbox id="inIsPaid" 
                                              styleClass="check-paid"
-                                             value="#{movementBean.filterPaid}"
+                                             value="#{fixedMovementBean.filterPaid}"
                                              itemLabel="#{messages['movement.filter.set-paid']}"/>
                 </div>
                 <div class="ui-grid-col-4 div-align-right">
                     <p:commandButton value="#{menu['filter']}"
-                                     action="#{movementBean.filterMovementsList()}"/>
+                                     action="#{fixedMovementBean.filterMovementsList()}"/>
                     <p:spacer width="10" />
                     <p:commandButton immediate="true"
                                      value="#{menu['add']}"
                                      styleClass="ui-button-info" 
-                                     action="#{movementBean.changeToAdd()}"
+                                     action="#{fixedMovementBean.changeToAdd()}"
                                      rendered="#{authorizationBean.hasRole(authorization.MOVEMENT_INSERT)}"/>
                 </div>
             </div>
@@ -79,12 +79,12 @@
                                  rowKey="#{movement.id}"
                                  paginatorPosition="bottom"
                                  paginatorAlwaysVisible="false"
-                                 value="#{movementBean.movements}"
-                                 selection="#{movementBean.movement}"
+                                 value="#{fixedMovementBean.movements}"
+                                 selection="#{fixedMovementBean.movement}"
                                  emptyMessage="#{messages['movement.list.empty']}">
 
                         <p:ajax event="rowSelect" 
-                                listener="#{movementBean.changeToDetails()}" />
+                                listener="#{fixedMovementBean.changeToDetails()}" />
 
                         <p:column width="6%" 
                                   style="text-align: center"
@@ -147,21 +147,21 @@
                                              title="#{menu['pay']}"
                                              rendered="#{movement.payable eq true 
                                                          and authorizationBean.hasRole(authorization.MOVEMENT_PAY)}"
-                                             action="#{movementBean.changeToPay(movement.id)}" />
+                                             action="#{fixedMovementBean.changeToPay(movement.id)}" />
                             <p:spacer width="10" 
                                       rendered="#{movement.payable eq true}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              rendered="#{movement.editable eq true 
                                                          and authorizationBean.hasRole(authorization.MOVEMENT_UPDATE)}"
-                                             action="#{movementBean.changeToEdit(movement.id)}"/>
+                                             action="#{fixedMovementBean.changeToEdit(movement.id)}"/>
                             <p:spacer width="10" 
                                       rendered="#{movement.editable eq true}"/>
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              rendered="#{movement.deletable eq true 
                                                          and authorizationBean.hasRole(authorization.MOVEMENT_DELETE)}"
-                                             actionListener="#{movementBean.changeToDelete(movement.id)}" />
+                                             actionListener="#{fixedMovementBean.changeToDelete(movement.id)}" />
                             <h:outputText value="-" 
                                           rendered="#{movement.movementStateType eq 'CALCULATED'}" />
                         </p:column>
@@ -172,7 +172,7 @@
     </ui:define>
 
     <ui:define name="popups">
-        <ui:include src="dialogConfirmPayment.xhtml" />
-        <ui:include src="dialogDeleteMovement.xhtml" />
+        
     </ui:define>
 </ui:composition>
+
