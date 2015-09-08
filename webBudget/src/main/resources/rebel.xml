@@ -23,16 +23,12 @@
     <!-- -Xms128m -Xmx256m -Dwebbudget.root= -->
     
     <classpath>
-        <dirset dir="${webbudget.root}">
-            <include name="**/target/classes"/>
-            <include name="**/src/main/resources"/>
-        </dirset>
+        <dir name="${webbudget.root}/target/classes"/>
+        <dir name="${webbudget.root}/src/main/resources"/>
     </classpath>
     <web>
         <link target="/">
-            <dirset dir="${webbudget.root}">
-                <include name="**/src/main/webapp"/>
-            </dirset>
+            <dir name="${webbudget.root}/src/main/webapp"/>
         </link>
     </web>  
 </application>

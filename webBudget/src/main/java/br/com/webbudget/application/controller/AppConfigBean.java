@@ -19,11 +19,13 @@ package br.com.webbudget.application.controller;
 import br.com.webbudget.domain.entity.system.Configuration;
 import br.com.webbudget.domain.service.ConfigurationService;
 import java.io.Serializable;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.picketlink.authentication.event.LoggedInEvent;
+import org.picketlink.authentication.event.PostLoggedOutEvent;
 
 /**
  *
@@ -43,10 +45,18 @@ public class AppConfigBean implements Serializable {
     private transient ConfigurationService configurationService;
     
     /**
-     * Carrega a configuracao default do sitema
+     * 
+     * @param event 
      */
-    @PostConstruct
-    protected void initialize() {
+    protected void initialize(@Observes LoggedInEvent event) {
         this.configuration = this.configurationService.loadDefault();
+    }
+    
+    /**
+     * 
+     * @param event 
+     */
+    protected void destroy(@Observes PostLoggedOutEvent event) {
+        this.configuration = null;
     }
 }
