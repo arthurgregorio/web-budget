@@ -41,7 +41,8 @@ import org.hibernate.Session;
  * @version 1.1.0
  * @since 1.0.0, 03/03/2013
  */
-public abstract class GenericRepository<T extends IPersistentEntity, ID extends Serializable> implements IGenericRepository<T, ID>, Serializable {
+public abstract class GenericRepository<T extends IPersistentEntity, ID extends Serializable> 
+        implements IGenericRepository<T, ID>, Serializable {
 
     @PersistenceContext
     private EntityManager entityManager;

@@ -30,6 +30,7 @@ import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.AbstractLazyModel;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.ContactService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
@@ -92,6 +93,9 @@ public class MovementBean extends AbstractBean {
     private List<FinancialPeriod> financialPeriods;
     @Getter
     private List<FinancialPeriod> openFinancialPeriods;
+    
+    @Getter
+    private AbstractLazyModel<Movement> movementsModel;
 
     @Inject
     private CardService cardService;

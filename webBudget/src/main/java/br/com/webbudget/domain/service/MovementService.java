@@ -31,14 +31,13 @@ import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.AbstractLazyModel;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IPaymentRepository;
-import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
-import br.com.webbudget.domain.repository.wallet.IWalletRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,8 +62,6 @@ public class MovementService {
     private Event<BalanceBuilder> updateBalanceEvent;
 
     @Inject
-    private IWalletRepository walletRepository;
-    @Inject
     private IPaymentRepository paymentRepository;
     @Inject
     private IMovementRepository movementRepository;
@@ -76,9 +73,15 @@ public class MovementService {
     private IApportionmentRepository apportionmentRepository;
     @Inject
     private IMovementClassRepository movementClassRepository;
-    @Inject
-    private IWalletBalanceRepository walletBalanceRepository;
 
+    /**
+     * 
+     * @return 
+     */
+    public AbstractLazyModel<Movement> buildMovementModel() {
+        return new AbstractLazyModel<>(this.movementRepository);
+    }
+    
     /**
      *
      * @param movementClass

@@ -27,6 +27,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
+import br.com.webbudget.domain.misc.model.FilterBuilder;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -46,8 +47,14 @@ import org.hibernate.sql.JoinType;
  * @version 1.1.0
  * @since 1.0.0, 18/10/2013
  */
-public class MovementRepository extends GenericRepository<Movement, Long> implements IMovementRepository {
+public class MovementRepository extends GenericRepository<Movement, Long> 
+        implements IMovementRepository {
 
+    @Override
+    public List<Movement> loadLazy(FilterBuilder filterBuilder) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     /**
      *
      * @return

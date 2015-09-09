@@ -27,6 +27,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
+import br.com.webbudget.domain.misc.model.LazyLoaderAdapter;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -39,7 +40,8 @@ import java.util.List;
  * @version 1.1.0
  * @since 1.0.0, 04/03/2013
  */
-public interface IMovementRepository extends IGenericRepository<Movement, Long> {
+public interface IMovementRepository 
+        extends IGenericRepository<Movement, Long>, LazyLoaderAdapter<Movement> {
 
     /**
      *
