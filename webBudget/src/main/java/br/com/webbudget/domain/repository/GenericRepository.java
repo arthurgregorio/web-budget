@@ -20,16 +20,18 @@ import br.com.webbudget.domain.entity.IPersistentEntity;
 import java.util.List;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 /**
- * A implementacao padrao do repositorio generico, com esta classe habilitamos
- * o suporte as funcionalidades basicas de um repositorio de dados no banco
+ * A implementacao padrao do repositorio generico, com esta classe habilitamos o
+ * suporte as funcionalidades basicas de um repositorio de dados no banco
  *
  * @param <T> a classe persistente para este repositorio
  * @param <ID> o tipo de nossos ID
@@ -39,8 +41,7 @@ import org.hibernate.Session;
  * @version 1.1.0
  * @since 1.0.0, 03/03/2013
  */
-public abstract class GenericRepository<T extends IPersistentEntity, 
-        ID extends Serializable> implements IGenericRepository<T, ID>, Serializable {
+public abstract class GenericRepository<T extends IPersistentEntity, ID extends Serializable> implements IGenericRepository<T, ID>, Serializable {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -53,8 +54,7 @@ public abstract class GenericRepository<T extends IPersistentEntity,
      */
     @SuppressWarnings({"unchecked", "unsafe"})
     public GenericRepository() {
-        this.persistentClass = (Class< T>) ((ParameterizedType)
-                this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.persistentClass = (Class< T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     /**
@@ -66,16 +66,17 @@ public abstract class GenericRepository<T extends IPersistentEntity,
         }
         return this.entityManager;
     }
-    
+
     /**
-     * @return a {@link Criteria} do hibernate setada para a classe do repositorio
+     * @return a {@link Criteria} do hibernate setada para a classe do
+     * repositorio
      */
     protected Criteria getHbmCriteria() {
         return this.getSession().createCriteria(this.getPersistentClass());
     }
 
     /**
-     * @return a {@link Session} do Hibernate para que possamos usar nossa 
+     * @return a {@link Session} do Hibernate para que possamos usar nossa
      * {@link Criteria} para buscas
      */
     protected Session getSession() {
@@ -91,7 +92,7 @@ public abstract class GenericRepository<T extends IPersistentEntity,
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param id
      * @param lock
      * @return
@@ -113,14 +114,39 @@ public abstract class GenericRepository<T extends IPersistentEntity,
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @return
      */
     @Override
     public List<T> listAll() {
-        final Query query = this.getEntityManager().createQuery(
-                "from " + getPersistentClass().getSimpleName());
-        return query.getResultList();
+
+        final EntityManager manager = this.getEntityManager();
+
+        final CriteriaQuery<T> query = manager.getCriteriaBuilder()
+                .createQuery(this.getPersistentClass());
+        final TypedQuery<T> selectAll
+                = manager.createQuery(query.select(
+                        query.from(this.getPersistentClass())));
+
+        return selectAll.getResultList();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return 
+     */
+    @Override
+    public Long count() {
+        
+        final EntityManager manager = this.getEntityManager();
+
+        final CriteriaBuilder builder = manager.getCriteriaBuilder();
+        final CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        
+        query.select(builder.count(query.from(this.getPersistentClass())));
+        
+        return manager.createQuery(query).getSingleResult();
     }
 
     /**

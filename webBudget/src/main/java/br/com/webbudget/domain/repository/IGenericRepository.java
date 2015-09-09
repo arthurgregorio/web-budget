@@ -50,6 +50,13 @@ public interface IGenericRepository<T extends IPersistentEntity, ID extends Seri
      * @return o objeto pesquisado
      */
     T findById(ID id, boolean lock);
+    
+    /**
+     * Conta todos os registros da tabela
+     * 
+     * @return o numero de registros (rows) da tabela
+     */
+    Long count();
 
     /**
      * Salva um entidade no banco caso ela nao exista ou atualiza ela caso o 
