@@ -28,6 +28,7 @@ import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.misc.model.FilterBuilder;
+import br.com.webbudget.domain.misc.model.FilterBuilder.SortDirection;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -52,7 +53,19 @@ public class MovementRepository extends GenericRepository<Movement, Long>
 
     @Override
     public List<Movement> loadLazy(FilterBuilder filterBuilder) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        final Criteria criteria = this.getHbmCriteria();
+        
+        criteria.setFirstResult(filterBuilder.getFirstResult());
+        criteria.setMaxResults(filterBuilder.getPageSize());
+        
+        if (filterBuilder.getSortDirection() == SortDirection.ASC) {
+            criteria.addOrder(Order.asc(filterBuilder.getSortField()));
+        } else if (filterBuilder.getSortDirection() == SortDirection.DESC) {
+            criteria.addOrder(Order.desc(filterBuilder.getSortField()));
+        }
+        
+        return criteria.list();
     }
     
     /**

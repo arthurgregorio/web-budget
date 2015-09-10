@@ -181,13 +181,7 @@ public class MovementBean extends AbstractBean {
     public void filterMovementsList() {
         
         try {
-            if (filter == null) {
-                this.movements = this.movementService
-                        .listMovementsByActiveFinancialPeriod();
-            } else {
-                this.movements = this.movementService.listMovementsByFilter(
-                        this.filter, this.filterPaid);
-            }
+            this.movementsModel = this.movementService.buildMovementModel();
         } catch (Exception ex) {
             this.logger.error("MovementBean#filterMovementsList found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());

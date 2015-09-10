@@ -73,14 +73,16 @@
                 <h:form prependId="false">
                     <p:dataTable id="movementsList" 
                                  rows="15"
+                                 lazy="true"
                                  var="movement"
                                  paginator="true"
+                                 sortOrder="descending"
                                  selectionMode="single"
                                  rowKey="#{movement.id}"
                                  paginatorPosition="bottom"
                                  paginatorAlwaysVisible="false"
-                                 value="#{movementBean.movements}"
                                  selection="#{movementBean.movement}"
+                                 value="#{movementBean.movementsModel}"
                                  emptyMessage="#{messages['movement.list.empty']}">
 
                         <p:ajax event="rowSelect" 
