@@ -27,6 +27,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
+import br.com.webbudget.domain.misc.model.Page;
 import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.math.BigDecimal;
@@ -100,7 +101,7 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      * @param pageRequest
      * @return 
      */
-    public List<Movement> listLazilyByFilter(String filter, Boolean paid, PageRequest pageRequest);
+    public Page<Movement> listLazilyByFilter(String filter, Boolean paid, PageRequest pageRequest);
     
     /**
      *

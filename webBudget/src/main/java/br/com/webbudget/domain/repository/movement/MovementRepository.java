@@ -27,6 +27,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
+import br.com.webbudget.domain.misc.model.Page;
 import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.misc.model.PageRequest.SortDirection;
 import br.com.webbudget.domain.repository.GenericRepository;
@@ -129,7 +130,7 @@ public class MovementRepository extends GenericRepository<Movement, Long>
      * @return 
      */
     @Override
-    public List<Movement> listLazilyByFilter(String filter, Boolean paid, PageRequest pageRequest) {
+    public Page<Movement> listLazilyByFilter(String filter, Boolean paid, PageRequest pageRequest) {
 
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
@@ -159,6 +160,16 @@ public class MovementRepository extends GenericRepository<Movement, Long>
 
         criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));
 
+        // projetamos para pegar o total de paginas possiveis
+        criteria.setProjection(Projections.count("id"));
+        
+        final Long totalPages = (Long) criteria.uniqueResult();
+        
+        // limpamos a projection para que a criteria seja reusada
+        criteria.setProjection(null);
+        criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+        
+        // paginamos
         criteria.setFirstResult(pageRequest.getFirstResult());
         criteria.setMaxResults(pageRequest.getPageSize());
         
@@ -170,7 +181,8 @@ public class MovementRepository extends GenericRepository<Movement, Long>
 
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-        return criteria.list();
+        // montamos o resultado paginado
+        return new Page<>(criteria.list(), totalPages);
     }
 
     /**
