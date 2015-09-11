@@ -27,7 +27,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
-import br.com.webbudget.domain.misc.model.LazyLoaderAdapter;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -40,8 +40,7 @@ import java.util.List;
  * @version 1.1.0
  * @since 1.0.0, 04/03/2013
  */
-public interface IMovementRepository 
-        extends IGenericRepository<Movement, Long>, LazyLoaderAdapter<Movement> {
+public interface IMovementRepository extends IGenericRepository<Movement, Long> {
 
     /**
      *
@@ -55,14 +54,6 @@ public interface IMovementRepository
      * @return 
      */
     public List<Movement> listByContact(Contact contact);
-
-    /**
-     *
-     * @param filter
-     * @param paid
-     * @return
-     */
-    public List<Movement> listByFilter(String filter, Boolean paid);
 
     /**
      *
@@ -97,19 +88,20 @@ public interface IMovementRepository
     /**
      *
      * @param period
-     * @param direction
-     * @return
-     */
-    public List<Movement> listByPeriodAndDirection(FinancialPeriod period, MovementClassType direction);
-
-    /**
-     *
-     * @param period
      * @param state
      * @return
      */
     public List<Movement> listByPeriodAndState(FinancialPeriod period, MovementStateType state);
 
+    /**
+     * 
+     * @param filter
+     * @param paid
+     * @param pageRequest
+     * @return 
+     */
+    public List<Movement> listLazilyByFilter(String filter, Boolean paid, PageRequest pageRequest);
+    
     /**
      *
      * @param period
@@ -117,7 +109,15 @@ public interface IMovementRepository
      * @return
      */
     public List<Movement> listPaidWithoutInvoiceByPeriodAndCard(FinancialPeriod period, Card card);
-
+    
+    /**
+     *
+     * @param period
+     * @param direction
+     * @return
+     */
+    public List<Movement> listByPeriodAndDirection(FinancialPeriod period, MovementClassType direction);
+    
     /**
      *
      * @param period

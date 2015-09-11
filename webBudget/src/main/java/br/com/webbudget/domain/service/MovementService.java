@@ -31,7 +31,7 @@ import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
-import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
@@ -73,14 +73,6 @@ public class MovementService {
     private IApportionmentRepository apportionmentRepository;
     @Inject
     private IMovementClassRepository movementClassRepository;
-
-    /**
-     * 
-     * @return 
-     */
-    public AbstractLazyModel<Movement> buildMovementModel() {
-        return new AbstractLazyModel<>(this.movementRepository);
-    }
     
     /**
      *
@@ -512,13 +504,14 @@ public class MovementService {
     }
 
     /**
-     *
+     * 
      * @param filter
      * @param paid
-     * @return
+     * @param pageRequest
+     * @return 
      */
-    public List<Movement> listMovementsByFilter(String filter, Boolean paid) {
-        return this.movementRepository.listByFilter(filter, paid);
+    public List<Movement> listMovementsByFilter(String filter, Boolean paid, PageRequest pageRequest) {
+        return this.movementRepository.listLazilyByFilter(filter, paid, pageRequest);
     }
 
     /**

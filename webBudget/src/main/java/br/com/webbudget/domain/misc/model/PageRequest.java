@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.misc.model;
 
-import java.util.Map;
 import lombok.Getter;
 
 /**
@@ -27,14 +26,12 @@ import lombok.Getter;
  * @version 1.0.0
  * @since 2.1.0, 05/09/2015
  */
-public class FilterBuilder {
+public class PageRequest {
 
     @Getter
     private int firstResult;
     @Getter
     private int pageSize;
-    @Getter
-    private Map<String, Object> filters;
     @Getter
     private SortDirection sortDirection;
     
@@ -45,7 +42,7 @@ public class FilterBuilder {
      * @param first o primeiro resultado 
      * @return o builder
      */
-    public FilterBuilder onFirstResult(int first) {
+    public PageRequest setFirstResult(int first) {
         this.firstResult = first;
         return this;
     }
@@ -54,7 +51,7 @@ public class FilterBuilder {
      * @param size o tamanho maximo da pagina
      * @return o builder
      */
-    public FilterBuilder withPageSize(int size) {
+    public PageRequest withPageSize(int size) {
         this.pageSize = size;
         return this;
     }
@@ -64,7 +61,7 @@ public class FilterBuilder {
      * @param defaultField o campo a ser usado como ordenador padrao
      * @return o builder
      */
-    public FilterBuilder sortingBy(String field, String defaultField) {
+    public PageRequest sortingBy(String field, String defaultField) {
         this.sortField = field;
         this.defaultField = defaultField;
         return this;
@@ -74,7 +71,7 @@ public class FilterBuilder {
      * @param direction a direcao de ordenacao da tabela
      * @return o builder
      */
-    public FilterBuilder orderingBy(String direction) {
+    public PageRequest withDirection(String direction) {
         
         if (direction.equals("ASCENDING")) {
             this.sortDirection = SortDirection.ASC;
@@ -82,15 +79,6 @@ public class FilterBuilder {
             this.sortDirection = SortDirection.DESC;
         }
         
-        return this;
-    }
-    
-    /**
-     * @param filters o map de filtros a ser utilizado na pesquisa
-     * @return o builder
-     */
-    public FilterBuilder withFilters(Map<String, Object> filters) {
-        this.filters = filters;
         return this;
     }
 

@@ -19,17 +19,16 @@ package br.com.webbudget.domain.misc.model;
 import br.com.webbudget.domain.entity.IPersistentEntity;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
 /**
- * LazyDataModel generico para uso nas datatables do sistema. Como ele podemos 
- * definir a carga de um datatable on-demand 
+ * LazyDataModel generico para uso nas datatables do sistema. Como ele podemos
+ * definir a carga de um datatable on-demand
  *
  * @param <T> o tipo deste model
- * 
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -37,65 +36,41 @@ import org.primefaces.model.SortOrder;
  */
 public class AbstractLazyModel<T extends IPersistentEntity> extends LazyDataModel<T> {
 
-    private Long totalResults;
-    
-    private final LazyLoaderAdapter<T> loader;
-
     /**
-     * 
-     * @param loader 
-     */
-    public AbstractLazyModel(LazyLoaderAdapter<T> loader) {
-        this.loader = loader;
-    }
-
-    /**
-     * @see LazyDataModel#load(int, int, java.util.List, java.util.Map) 
-     * 
+     * @see LazyDataModel#load(int, int, java.util.List, java.util.Map)
+     *
      * @param first
      * @param pageSize
      * @param multiSortMeta
      * @param filters
-     * @return 
+     * @return
      */
     @Override
     public List<T> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
-        throw new IllegalStateException("Not implemented");
+        throw new IllegalStateException("Lazy loading not implemented");
     }
 
     /**
-     * @see LazyDataModel#load(int, int, java.lang.String, org.primefaces.model.SortOrder, java.util.Map)  
-     * 
+     * @see LazyDataModel#load(int, int, java.lang.String,
+     * org.primefaces.model.SortOrder, java.util.Map)
+     *
      * @param first
      * @param pageSize
      * @param sortField
      * @param sortOrder
      * @param filters
-     * @return 
+     * @return
      */
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
-        
-        Objects.requireNonNull(this.loader, "Lazy loader not set");
-        
-        // constroi o filtro
-        final FilterBuilder filterBuilder = new FilterBuilder();
-        
-        filterBuilder
-                .onFirstResult(first)
-                .withPageSize(pageSize)
-                .withFilters(filters)
-                .sortingBy(sortField, "inclusion")
-                .orderingBy(sortOrder.name());
-        
-        return this.loader.loadLazy(filterBuilder);
+        throw new IllegalStateException("Lazy loading not implemented");
     }
 
     /**
-     * @see LazyDataModel#getRowKey(java.lang.Object) 
-     * 
+     * @see LazyDataModel#getRowKey(java.lang.Object)
+     *
      * @param object
-     * @return 
+     * @return
      */
     @Override
     public Object getRowKey(T object) {
@@ -103,16 +78,16 @@ public class AbstractLazyModel<T extends IPersistentEntity> extends LazyDataMode
     }
 
     /**
-     * @see LazyDataModel#getRowData(java.lang.String)  
-     * 
+     * @see LazyDataModel#getRowData(java.lang.String)
+     *
      * @param rowKey
-     * @return 
+     * @return
      */
     @Override
     public T getRowData(String rowKey) {
-        
+
         final Long key = Long.parseLong(rowKey);
-        
+
         for (T t : this.getModelSource()) {
             if (t.getId().equals(key)) {
                 return t;
@@ -122,19 +97,6 @@ public class AbstractLazyModel<T extends IPersistentEntity> extends LazyDataMode
         return null;
     }
 
-    /**
-     * @see LazyDataModel#getRowCount() 
-     * 
-     * @return 
-     */
-    @Override
-    public int getRowCount() {
-        if (this.totalResults == null) {
-            this.totalResults = this.loader.count();
-        } 
-        return this.totalResults.intValue();
-    }
-    
     /**
      * @return a lista encapsulada por este model
      */

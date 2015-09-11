@@ -31,6 +31,7 @@ import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.ContactService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
@@ -38,6 +39,7 @@ import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -45,12 +47,14 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import org.omnifaces.util.Faces;
+import org.primefaces.model.SortOrder;
 
 /**
+ * Controle da tela de movimentos do sistema
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.0.0, 18/03/2014
  */
 @Named
@@ -93,7 +97,7 @@ public class MovementBean extends AbstractBean {
     private List<FinancialPeriod> financialPeriods;
     @Getter
     private List<FinancialPeriod> openFinancialPeriods;
-    
+
     @Getter
     private AbstractLazyModel<Movement> movementsModel;
 
@@ -109,6 +113,28 @@ public class MovementBean extends AbstractBean {
     private FinancialPeriodService financialPeriodService;
 
     /**
+     * Inicializamos os objetos necessarios
+     */
+    public MovementBean() {
+        
+        // montamos o datamodel de movimentos
+        this.movementsModel = new AbstractLazyModel<Movement>() {
+            @Override
+            public List<Movement> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+                
+                final PageRequest pageRequest = new PageRequest();
+                
+                pageRequest
+                        .setFirstResult(first)
+                        .withPageSize(pageSize)
+                        .withDirection(sortOrder.name());
+                
+                return movementService.listMovementsByFilter(filter, filterPaid, pageRequest);
+            }
+        };
+    }
+    
+    /**
      *
      */
     public void initializeListing() {
@@ -117,8 +143,6 @@ public class MovementBean extends AbstractBean {
         // preenche os campos de filtro
         this.costCenters = this.movementService.listCostCenters(false);
         this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
-        
-        this.filterMovementsList();
     }
 
     /**
@@ -131,7 +155,7 @@ public class MovementBean extends AbstractBean {
         this.costCenters = this.movementService.listCostCenters(false);
         this.financialPeriod = this.financialPeriodService.findActiveFinancialPeriod();
         this.openFinancialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
-        
+
         if (movementId == 0 && !detailing) {
             this.viewState = ViewState.ADDING;
 
@@ -176,25 +200,10 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     * Pesquisa com filtro
-     */
-    public void filterMovementsList() {
-        
-        try {
-            this.movementsModel = this.movementService.buildMovementModel();
-        } catch (Exception ex) {
-            this.logger.error("MovementBean#filterMovementsList found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("movementsList");
-        }
-    }
-    
-    /**
      * Pesquisa os contatos pelo filtro
      */
     public void filterContactsList() {
-        
+
         try {
             this.contacts = this.contactService.listContactsByFilter(this.filter, false);
         } catch (Exception ex) {
@@ -206,7 +215,7 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     * @return 
+     * @return
      */
     public String changeToAdd() {
         return "formMovement.xhtml?faces-redirect=true";
@@ -309,7 +318,7 @@ public class MovementBean extends AbstractBean {
         } catch (WbDomainException ex) {
             this.logger.error("MovementBean#doSaveAndPay found erros", ex);
             this.fixedError(ex.getMessage(), true, ex.getParameters());
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             this.logger.error("MovementBean#doSaveAndPay found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
         }
@@ -384,7 +393,7 @@ public class MovementBean extends AbstractBean {
         } catch (WbDomainException ex) {
             this.logger.error("MovementBean#doUpdate found erros", ex);
             this.fixedError(ex.getMessage(), true, ex.getParameters());
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             this.logger.error("MovementBean#doUpdate found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
         }
@@ -423,11 +432,11 @@ public class MovementBean extends AbstractBean {
     public void addApportionment() {
         try {
             this.movement.addApportionment(this.apportionment);
-        
+
             this.update("valuePanel");
             this.update("apportionmentList");
             this.closeDialog("dialogApportionment");
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             this.logger.error("MovementBean#addApportionment found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
         }
@@ -447,13 +456,13 @@ public class MovementBean extends AbstractBean {
      * Limpa os filtros e listas para entao buscar do zero
      */
     public void showContactDialog() {
-        
+
         this.filter = null;
         this.contacts = new ArrayList<>();
-        
+
         this.openDialog("contactDialog", "dialogContact");
     }
-    
+
     /**
      * Quando selecionar o contato, fecha a dialog e atualiza a view
      */
@@ -461,22 +470,22 @@ public class MovementBean extends AbstractBean {
         this.update("contactPanel");
         this.closeDialog("dialogContact");
     }
-    
+
     /**
      *
      */
     public void showApportionmentDialog() {
-        
+
         // se o valor do rateio for igual ao total do movimento nem deixa exibir
         // a tela de rateios para que nao seja feito cagada
         if (this.movement.isApportionmentsValid()) {
             this.error("movement.validate.no-value-divide", true);
             return;
         }
-        
+
         this.apportionment = new Apportionment();
         this.apportionment.setValue(this.movement.getValueToDivide());
-        
+
         this.openDialog("apportionmentDialog", "dialogApportionment");
     }
 
@@ -535,7 +544,7 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     * 
+     *
      */
     public void showPaymentDetails() {
 

@@ -27,8 +27,8 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
-import br.com.webbudget.domain.misc.model.FilterBuilder;
-import br.com.webbudget.domain.misc.model.FilterBuilder.SortDirection;
+import br.com.webbudget.domain.misc.model.PageRequest;
+import br.com.webbudget.domain.misc.model.PageRequest.SortDirection;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -51,23 +51,6 @@ import org.hibernate.sql.JoinType;
 public class MovementRepository extends GenericRepository<Movement, Long> 
         implements IMovementRepository {
 
-    @Override
-    public List<Movement> loadLazy(FilterBuilder filterBuilder) {
-        
-        final Criteria criteria = this.getHbmCriteria();
-        
-        criteria.setFirstResult(filterBuilder.getFirstResult());
-        criteria.setMaxResults(filterBuilder.getPageSize());
-        
-        if (filterBuilder.getSortDirection() == SortDirection.ASC) {
-            criteria.addOrder(Order.asc(filterBuilder.getSortField()));
-        } else if (filterBuilder.getSortDirection() == SortDirection.DESC) {
-            criteria.addOrder(Order.desc(filterBuilder.getSortField()));
-        }
-        
-        return criteria.list();
-    }
-    
     /**
      *
      * @return
@@ -139,13 +122,14 @@ public class MovementRepository extends GenericRepository<Movement, Long>
     }
 
     /**
-     *
+     * 
      * @param filter
      * @param paid
-     * @return
+     * @param pageRequest
+     * @return 
      */
     @Override
-    public List<Movement> listByFilter(String filter, Boolean paid) {
+    public List<Movement> listLazilyByFilter(String filter, Boolean paid, PageRequest pageRequest) {
 
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
@@ -175,7 +159,14 @@ public class MovementRepository extends GenericRepository<Movement, Long>
 
         criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));
 
-        criteria.addOrder(Order.desc("inclusion"));
+        criteria.setFirstResult(pageRequest.getFirstResult());
+        criteria.setMaxResults(pageRequest.getPageSize());
+        
+        if (pageRequest.getSortDirection() == SortDirection.ASC) {
+            criteria.addOrder(Order.asc(pageRequest.getSortField()));
+        } else if (pageRequest.getSortDirection() == SortDirection.DESC) {
+            criteria.addOrder(Order.desc(pageRequest.getSortField()));
+        }
 
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
