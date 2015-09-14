@@ -31,6 +31,7 @@ import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.Page;
 import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
@@ -510,7 +511,7 @@ public class MovementService {
      * @param pageRequest
      * @return 
      */
-    public List<Movement> listMovementsByFilter(String filter, Boolean paid, PageRequest pageRequest) {
+    public Page<Movement> listMovementsByFilter(String filter, Boolean paid, PageRequest pageRequest) {
         return this.movementRepository.listLazilyByFilter(filter, paid, pageRequest);
     }
 

@@ -43,7 +43,7 @@ public class UserPrivateMessageRepository extends GenericRepository<UserPrivateM
     @Override
     public List<UserPrivateMessage> listByUser(User user, Boolean showUnread) {
 
-        final Criteria criteria = this.getHbmCriteria();
+        final Criteria criteria = this.createCriteria();
 
         criteria.createAlias("recipient", "u");
         criteria.add(Restrictions.eq("u.id", user.getId()));
@@ -65,7 +65,7 @@ public class UserPrivateMessageRepository extends GenericRepository<UserPrivateM
     @Override
     public List<UserPrivateMessage> listReceipts(PrivateMessage privateMessage) {
 
-        final Criteria criteria = this.getHbmCriteria();
+        final Criteria criteria = this.createCriteria();
 
         criteria.createAlias("privateMessage", "pm");
         criteria.add(Restrictions.eq("pm.id", privateMessage.getId()));

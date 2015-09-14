@@ -72,7 +72,7 @@ public abstract class GenericRepository<T extends IPersistentEntity, ID extends 
      * @return a {@link Criteria} do hibernate setada para a classe do
      * repositorio
      */
-    protected Criteria getHbmCriteria() {
+    protected Criteria createCriteria() {
         return this.getSession().createCriteria(this.getPersistentClass());
     }
 

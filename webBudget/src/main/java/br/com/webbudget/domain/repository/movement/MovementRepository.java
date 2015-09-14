@@ -49,7 +49,7 @@ import org.hibernate.sql.JoinType;
  * @version 1.1.0
  * @since 1.0.0, 18/10/2013
  */
-public class MovementRepository extends GenericRepository<Movement, Long> 
+public class MovementRepository extends GenericRepository<Movement, Long>
         implements IMovementRepository {
 
     /**
@@ -123,19 +123,21 @@ public class MovementRepository extends GenericRepository<Movement, Long>
     }
 
     /**
-     * 
+     *
      * @param filter
      * @param paid
      * @param pageRequest
-     * @return 
+     * @return
      */
     @Override
     public Page<Movement> listLazilyByFilter(String filter, Boolean paid, PageRequest pageRequest) {
 
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+        final Criteria criteria = this.createCriteria();
 
+        final List<Criterion> criterions = new ArrayList<>();
+        
         if (paid != null && paid.equals(Boolean.TRUE)) {
-            criteria.add(Restrictions.isNotNull("payment"));
+            criterions.add(Restrictions.isNotNull("payment"));
         }
 
         criteria.createAlias("contact", "co", JoinType.LEFT_OUTER_JOIN);
@@ -143,36 +145,37 @@ public class MovementRepository extends GenericRepository<Movement, Long>
         criteria.createAlias("ap.movementClass", "mc");
         criteria.createAlias("ap.costCenter", "cc");
         criteria.createAlias("financialPeriod", "fp");
+        
+        if (filter != null) {
 
-        final List<Criterion> criterions = new ArrayList<>();
+            criterions.add(Restrictions.eq("code", filter));
+            criterions.add(Restrictions.ilike("description", "%" + filter + "%"));
+            criterions.add(Restrictions.ilike("mc.name", "%" + filter + "%"));
+            criterions.add(Restrictions.ilike("cc.name", "%" + filter + "%"));
+            criterions.add(Restrictions.ilike("co.name", "%" + filter + "%"));
+            criterions.add(Restrictions.ilike("fp.identification", "%" + filter + "%"));
 
-        criterions.add(Restrictions.eq("code", filter));
-        criterions.add(Restrictions.ilike("description", "%" + filter + "%"));
-        criterions.add(Restrictions.ilike("mc.name", "%" + filter + "%"));
-        criterions.add(Restrictions.ilike("cc.name", "%" + filter + "%"));
-        criterions.add(Restrictions.ilike("co.name", "%" + filter + "%"));
-        criterions.add(Restrictions.ilike("fp.identification", "%" + filter + "%"));
-
-        // se conseguir castar para bigdecimal trata como um filtro
-        try {
-            criterions.add(Restrictions.eq("value", new BigDecimal(filter)));
-        } catch (NumberFormatException ex) { }
+            // se conseguir castar para bigdecimal trata como um filtro
+            try {
+                criterions.add(Restrictions.eq("value", new BigDecimal(filter)));
+            } catch (NumberFormatException ex) { }
+        }
 
         criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));
 
         // projetamos para pegar o total de paginas possiveis
         criteria.setProjection(Projections.count("id"));
-        
+
         final Long totalPages = (Long) criteria.uniqueResult();
-        
+
         // limpamos a projection para que a criteria seja reusada
         criteria.setProjection(null);
         criteria.setResultTransformer(Criteria.ROOT_ENTITY);
-        
+
         // paginamos
         criteria.setFirstResult(pageRequest.getFirstResult());
         criteria.setMaxResults(pageRequest.getPageSize());
-        
+
         if (pageRequest.getSortDirection() == SortDirection.ASC) {
             criteria.addOrder(Order.asc(pageRequest.getSortField()));
         } else if (pageRequest.getSortDirection() == SortDirection.DESC) {

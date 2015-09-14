@@ -31,6 +31,7 @@ import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.Page;
 import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.ContactService;
@@ -88,8 +89,6 @@ public class MovementBean extends AbstractBean {
     @Getter
     private List<Contact> contacts;
     @Getter
-    private List<Movement> movements;
-    @Getter
     private List<CostCenter> costCenters;
     @Getter
     private List<MovementClass> movementClasses;
@@ -99,7 +98,7 @@ public class MovementBean extends AbstractBean {
     private List<FinancialPeriod> openFinancialPeriods;
 
     @Getter
-    private AbstractLazyModel<Movement> movementsModel;
+    private final AbstractLazyModel<Movement> movementsModel;
 
     @Inject
     private CardService cardService;
@@ -127,9 +126,15 @@ public class MovementBean extends AbstractBean {
                 pageRequest
                         .setFirstResult(first)
                         .withPageSize(pageSize)
+                        .sortingBy(sortField, "inclusion")
                         .withDirection(sortOrder.name());
                 
-                return movementService.listMovementsByFilter(filter, filterPaid, pageRequest);
+                final Page<Movement> page = movementService
+                        .listMovementsByFilter(filter, filterPaid, pageRequest);
+                
+                this.setRowCount(page.getTotalPagesInt());
+                
+                return page.getContent();
             }
         };
     }
@@ -413,10 +418,10 @@ public class MovementBean extends AbstractBean {
             } else if (movementType == MovementType.CARD_INVOICE) {
                 this.movementService.deleteCardInvoiceMovement(this.movement);
             }
-
-            this.movements = this.movementService.listMovementsByActiveFinancialPeriod();
-
             this.info("movement.action.deleted", true);
+        } catch (WbDomainException ex) {
+            this.logger.error("MovementBean#doDelete found erros", ex);
+            this.fixedError(ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("MovementBean#doDelete found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());

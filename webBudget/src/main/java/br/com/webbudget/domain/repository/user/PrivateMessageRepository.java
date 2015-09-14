@@ -40,7 +40,7 @@ public class PrivateMessageRepository extends GenericRepository<PrivateMessage, 
     @Override
     public List<PrivateMessage> listSent(String userId) {
 
-        final Criteria criteria = this.getHbmCriteria();
+        final Criteria criteria = this.createCriteria();
 
         criteria.add(Restrictions.eq("sender", userId));
 
