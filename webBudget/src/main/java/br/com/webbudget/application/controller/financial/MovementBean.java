@@ -29,6 +29,7 @@ import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
+import br.com.webbudget.domain.misc.dto.MovementFilter;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.misc.model.AbstractLazyModel;
 import br.com.webbudget.domain.misc.model.Page;
@@ -64,10 +65,10 @@ public class MovementBean extends AbstractBean {
 
     @Getter
     @Setter
-    private String filter;
+    private String contactFilter;
     @Getter
     @Setter
-    private boolean filterPaid;
+    private MovementFilter movementFilter;
 
     @Getter
     @Setter
@@ -130,7 +131,7 @@ public class MovementBean extends AbstractBean {
                         .withDirection(sortOrder.name());
                 
                 final Page<Movement> page = movementService
-                        .listMovementsByFilter(filter, filterPaid, pageRequest);
+                        .listMovementsByFilter(movementFilter, pageRequest);
                 
                 this.setRowCount(page.getTotalPagesInt());
                 
@@ -145,6 +146,9 @@ public class MovementBean extends AbstractBean {
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
 
+        // inicializa o DTO de filtro
+        this.movementFilter = new MovementFilter();
+        
         // preenche os campos de filtro
         this.costCenters = this.movementService.listCostCenters(false);
         this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
@@ -205,12 +209,19 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
+     * 
+     */
+    public void filterMovementsList() {
+       this.update("movementsList");
+    }
+    
+    /**
      * Pesquisa os contatos pelo filtro
      */
     public void filterContactsList() {
 
         try {
-            this.contacts = this.contactService.listContactsByFilter(this.filter, false);
+            this.contacts = this.contactService.listContactsByFilter(this.contactFilter, false);
         } catch (Exception ex) {
             this.logger.error("MovementBean#filterContactsList found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
@@ -462,7 +473,7 @@ public class MovementBean extends AbstractBean {
      */
     public void showContactDialog() {
 
-        this.filter = null;
+        this.contactFilter = null;
         this.contacts = new ArrayList<>();
 
         this.openDialog("contactDialog", "dialogContact");

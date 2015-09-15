@@ -27,6 +27,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
+import br.com.webbudget.domain.misc.dto.MovementFilter;
 import br.com.webbudget.domain.misc.model.Page;
 import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.misc.model.PageRequest.SortDirection;
@@ -123,42 +124,52 @@ public class MovementRepository extends GenericRepository<Movement, Long>
     }
 
     /**
-     *
+     * 
      * @param filter
-     * @param paid
      * @param pageRequest
-     * @return
+     * @return 
      */
     @Override
-    public Page<Movement> listLazilyByFilter(String filter, Boolean paid, PageRequest pageRequest) {
+    public Page<Movement> listLazilyByFilter(MovementFilter filter, PageRequest pageRequest) {
 
         final Criteria criteria = this.createCriteria();
 
         final List<Criterion> criterions = new ArrayList<>();
         
-        if (paid != null && paid.equals(Boolean.TRUE)) {
-            criterions.add(Restrictions.isNotNull("payment"));
-        }
-
         criteria.createAlias("contact", "co", JoinType.LEFT_OUTER_JOIN);
         criteria.createAlias("apportionments", "ap");
         criteria.createAlias("ap.movementClass", "mc");
         criteria.createAlias("ap.costCenter", "cc");
         criteria.createAlias("financialPeriod", "fp");
         
-        if (filter != null) {
+        // montramos os criterios de filtragem geral
+        if (filter.hasCriteria()) {
 
-            criterions.add(Restrictions.eq("code", filter));
-            criterions.add(Restrictions.ilike("description", "%" + filter + "%"));
-            criterions.add(Restrictions.ilike("mc.name", "%" + filter + "%"));
-            criterions.add(Restrictions.ilike("cc.name", "%" + filter + "%"));
-            criterions.add(Restrictions.ilike("co.name", "%" + filter + "%"));
-            criterions.add(Restrictions.ilike("fp.identification", "%" + filter + "%"));
+            criterions.add(Restrictions.eq("code", filter.getCriteria()));
+            criterions.add(Restrictions.ilike("description", "%" + filter.getCriteria() + "%"));
+            criterions.add(Restrictions.ilike("mc.name", "%" + filter.getCriteria() + "%"));
+            criterions.add(Restrictions.ilike("cc.name", "%" + filter.getCriteria() + "%"));
+            criterions.add(Restrictions.ilike("co.name", "%" + filter.getCriteria() + "%"));
+            criterions.add(Restrictions.ilike("fp.identification", "%" + filter.getCriteria() + "%"));
 
             // se conseguir castar para bigdecimal trata como um filtro
             try {
-                criterions.add(Restrictions.eq("value", new BigDecimal(filter)));
+                criterions.add(Restrictions.eq("value", new BigDecimal(filter.getCriteria())));
             } catch (NumberFormatException ex) { }
+        }
+        
+        // outras condicoes
+        if (filter.isOnlyPaidsByOpenPeriods()) {
+            criteria.add(Restrictions.and(
+                    Restrictions.isNotNull("payment"),
+                    Restrictions.eq("fp.closed", false),
+                    Restrictions.isNull("fp.closing")));
+        } else if (filter.isOnlyPaidMovements()) {
+            criterions.add(Restrictions.isNotNull("payment"));
+        } else if (filter.isOnlyByOpenPeriods()) {
+            criteria.add(Restrictions.and(
+                    Restrictions.eq("fp.closed", false),
+                    Restrictions.isNull("fp.closing")));
         }
 
         criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));
@@ -166,7 +177,7 @@ public class MovementRepository extends GenericRepository<Movement, Long>
         // projetamos para pegar o total de paginas possiveis
         criteria.setProjection(Projections.count("id"));
 
-        final Long totalPages = (Long) criteria.uniqueResult();
+        final Long totalRows = (Long) criteria.uniqueResult();
 
         // limpamos a projection para que a criteria seja reusada
         criteria.setProjection(null);
@@ -182,10 +193,8 @@ public class MovementRepository extends GenericRepository<Movement, Long>
             criteria.addOrder(Order.desc(pageRequest.getSortField()));
         }
 
-        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-
         // montamos o resultado paginado
-        return new Page<>(criteria.list(), totalPages);
+        return new Page<>(criteria.list(), totalRows);
     }
 
     /**

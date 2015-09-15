@@ -29,6 +29,7 @@ import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
+import br.com.webbudget.domain.misc.dto.MovementFilter;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.misc.model.Page;
@@ -507,12 +508,11 @@ public class MovementService {
     /**
      * 
      * @param filter
-     * @param paid
      * @param pageRequest
      * @return 
      */
-    public Page<Movement> listMovementsByFilter(String filter, Boolean paid, PageRequest pageRequest) {
-        return this.movementRepository.listLazilyByFilter(filter, paid, pageRequest);
+    public Page<Movement> listMovementsByFilter(MovementFilter filter, PageRequest pageRequest) {
+        return this.movementRepository.listLazilyByFilter(filter, pageRequest);
     }
 
     /**
