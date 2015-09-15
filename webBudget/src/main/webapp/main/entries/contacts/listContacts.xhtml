@@ -17,6 +17,7 @@
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -49,7 +50,10 @@
                                  placeholder="#{messages['contact.filter.types']}"/>
                 </div>
                 <div class="ui-grid-col-4 div-align-right">
-                    <p:commandButton value="#{menu['filter']}"
+                    <p:commandButton process="controlsForm"
+                                     value="#{menu['filter']}"
+                                     onstart="PF('listBlock').show()"
+                                     oncomplete="PF('listBlock').hide()"
                                      action="#{contactBean.filterList()}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
@@ -61,15 +65,18 @@
             </div>
         </h:form>
 
-        <div class="ui-grid-row flat-box">
+        <div jsf:id="listPanel" 
+             class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
                 <p:dataTable id="contactsList" 
                              rows="15"
+                             lazy="true"
                              var="contact"
                              paginator="true"
-                             value="#{contactBean.contacts}"
+                             sortMode="ascending"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
+                             value="#{contactBean.contactsModel}"
                              emptyMessage="#{messages['contact.list.empty']}">
 
                     <p:column width="10%" 
@@ -108,6 +115,20 @@
                 </p:dataTable>
             </div>
         </div>
+
+        <p:blockUI block="listPanel"
+                   widgetVar="listBlock"
+                   trigger="contactsList">
+            <div class="div-align-center">
+                <p:graphicImage width="32" 
+                                height="32"
+                                library="images" 
+                                name="ui-loading.gif" />
+            </div>
+            <div style="margin-top: 5px">
+                #{menu['loading']}
+            </div>        
+        </p:blockUI>
     </ui:define>
 
     <ui:define name="popups">

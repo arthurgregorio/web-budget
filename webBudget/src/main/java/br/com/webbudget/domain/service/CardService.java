@@ -25,6 +25,8 @@ import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.entity.system.Configuration;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
@@ -196,6 +198,16 @@ public class CardService {
         return this.cardRepository.findById(cardId, false);
     }
 
+    /**
+     * 
+     * @param isBlocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Card> listCardsLazily(Boolean isBlocked, PageRequest pageRequest) {
+        return this.cardRepository.listLazilyByStatus(isBlocked, pageRequest);
+    }
+    
     /**
      *
      * @param isBlocked

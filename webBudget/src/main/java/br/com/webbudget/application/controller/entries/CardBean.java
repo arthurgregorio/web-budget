@@ -21,13 +21,18 @@ import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.WalletService;
 import java.util.List;
+import java.util.Map;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller para a view do manutencao dos cartoes de credito
@@ -44,21 +49,48 @@ public class CardBean extends AbstractBean {
     @Getter
     private Card card;
     @Getter
-    private List<Card> cards;
-    @Getter
     private List<Wallet> wallets;
 
     @Inject
     private CardService cardService;
     @Inject
     private WalletService walletService;
+    
+    @Getter
+    private final AbstractLazyModel<Card> cardsModel;
 
+    /**
+     * 
+     */
+    public CardBean() {
+        
+        this.cardsModel = new AbstractLazyModel<Card>() {
+            @Override
+            public List<Card> load(int first, int pageSize, String sortField, 
+                    SortOrder sortOrder, Map<String, Object> filters) {
+                
+                final PageRequest pageRequest = new PageRequest();
+                
+                pageRequest
+                        .setFirstResult(first)
+                        .withPageSize(pageSize)
+                        .sortingBy(sortField, "inclusion")
+                        .withDirection(sortOrder.name());
+                
+                final Page<Card> page = cardService.listCardsLazily(null, pageRequest);
+                
+                this.setRowCount(page.getTotalPagesInt());
+                
+                return page.getContent();
+            }
+        };
+    }
+    
     /**
      * 
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.cards = this.cardService.listCards(null);
     }
 
     /**
@@ -159,8 +191,6 @@ public class CardBean extends AbstractBean {
 
         try {
             this.cardService.deleteCard(this.card);
-            this.cards = this.cardService.listCards(false);
-
             this.info("card.action.deleted", true);
         } catch (WbDomainException ex) {
             this.logger.error("CardBean#doDelete found erros", ex);

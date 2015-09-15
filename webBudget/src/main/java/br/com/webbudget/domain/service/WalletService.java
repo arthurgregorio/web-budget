@@ -31,6 +31,8 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 
 /**
  * Serice para manutencao dos processos relacionados a carteiras e saldos 
@@ -228,15 +230,6 @@ public class WalletService {
 
     /**
      *
-     * @param isBlocked
-     * @return
-     */
-    public List<Wallet> listWallets(Boolean isBlocked) {
-        return this.walletRepository.listByStatus(isBlocked);
-    }
-
-    /**
-     *
      * @param name
      * @param bank
      * @param walletType
@@ -246,6 +239,25 @@ public class WalletService {
         return this.walletRepository.findByNameAndBankAndType(name, bank, walletType);
     }
 
+    /**
+     * 
+     * @param isBlocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Wallet> listWalletsLazily(Boolean isBlocked, PageRequest pageRequest) {
+        return this.walletRepository.listLazilyByStatus(isBlocked, pageRequest);
+    }
+    
+    /**
+     *
+     * @param isBlocked
+     * @return
+     */
+    public List<Wallet> listWallets(Boolean isBlocked) {
+        return this.walletRepository.listByStatus(isBlocked);
+    }
+    
     /**
      *
      * @return

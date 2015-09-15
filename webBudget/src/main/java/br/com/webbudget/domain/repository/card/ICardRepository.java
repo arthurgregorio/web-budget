@@ -18,6 +18,8 @@ package br.com.webbudget.domain.repository.card;
 
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardType;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 
@@ -50,7 +52,7 @@ public interface ICardRepository extends IGenericRepository<Card, Long> {
      * @return
      */
     public List<Card> listByStatus(Boolean isBlocked);
-
+    
     /**
      *
      * @param number
@@ -58,4 +60,12 @@ public interface ICardRepository extends IGenericRepository<Card, Long> {
      * @return
      */
     public Card findByNumberAndType(String number, CardType cardType);
+    
+    /**
+     * 
+     * @param isBlocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Card> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
 }

@@ -20,6 +20,8 @@ import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.contact.IContactRepository;
 import br.com.webbudget.domain.repository.contact.ITelephoneRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
@@ -116,6 +118,17 @@ public class ContactService {
         this.contactRepository.delete(contact);
     }
 
+    /**
+     * 
+     * @param filter
+     * @param blocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Contact> listContactsLazilyByFilter(String filter, Boolean blocked, PageRequest pageRequest) {
+        return this.contactRepository.listLazilyByFilter(filter, blocked, pageRequest);
+    }
+    
     /**
      *
      * @param blocked

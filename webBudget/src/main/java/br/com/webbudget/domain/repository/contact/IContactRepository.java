@@ -17,6 +17,8 @@
 package br.com.webbudget.domain.repository.contact;
 
 import br.com.webbudget.domain.entity.contact.Contact;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 
@@ -42,4 +44,13 @@ public interface IContactRepository extends IGenericRepository<Contact, Long> {
      * @return 
      */
     public List<Contact> listByFilter(String filter, Boolean blocked);
+    
+    /**
+     * 
+     * @param filter
+     * @param blocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Contact> listLazilyByFilter(String filter, Boolean blocked, PageRequest pageRequest);
 }

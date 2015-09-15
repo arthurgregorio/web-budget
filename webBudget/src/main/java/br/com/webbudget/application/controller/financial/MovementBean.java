@@ -98,9 +98,6 @@ public class MovementBean extends AbstractBean {
     @Getter
     private List<FinancialPeriod> openFinancialPeriods;
 
-    @Getter
-    private final AbstractLazyModel<Movement> movementsModel;
-
     @Inject
     private CardService cardService;
     @Inject
@@ -111,6 +108,9 @@ public class MovementBean extends AbstractBean {
     private MovementService movementService;
     @Inject
     private FinancialPeriodService financialPeriodService;
+    
+    @Getter
+    private final AbstractLazyModel<Movement> movementsModel;
 
     /**
      * Inicializamos os objetos necessarios
@@ -211,7 +211,7 @@ public class MovementBean extends AbstractBean {
     /**
      * 
      */
-    public void filterMovementsList() {
+    public void filterList() {
        this.update("movementsList");
     }
     

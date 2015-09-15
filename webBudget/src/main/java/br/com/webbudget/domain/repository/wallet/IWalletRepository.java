@@ -18,6 +18,8 @@ package br.com.webbudget.domain.repository.wallet;
 
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletType;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 
@@ -37,6 +39,14 @@ public interface IWalletRepository extends IGenericRepository<Wallet, Long> {
      */
     public List<Wallet> listByStatus(Boolean isBlocked);
 
+    /**
+     * 
+     * @param isBlocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Wallet> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
+    
     /**
      *
      * @param name

@@ -17,9 +17,13 @@
 package br.com.webbudget.domain.repository.contact;
 
 import br.com.webbudget.domain.entity.contact.Contact;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -47,16 +51,16 @@ public class ContactRepository extends GenericRepository<Contact, Long> implemen
 
         return criteria.list();
     }
-    
+
     /**
-     * 
+     *
      * @param filter
      * @param blocked
-     * @return 
+     * @return
      */
     @Override
     public List<Contact> listByFilter(String filter, Boolean blocked) {
-        
+
         final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 
         if (filter != null) {
@@ -71,7 +75,55 @@ public class ContactRepository extends GenericRepository<Contact, Long> implemen
         if (blocked != null) {
             criteria.add(Restrictions.eq("blocked", blocked));
         }
-        
+
         return criteria.list();
+    }
+
+    /**
+     *
+     * @param filter
+     * @param blocked
+     * @param pageRequest
+     * @return
+     */
+    @Override
+    public Page<Contact> listLazilyByFilter(String filter, Boolean blocked, PageRequest pageRequest) {
+
+        final Criteria criteria = this.createCriteria();
+
+        if (filter != null) {
+            criteria.add(Restrictions.or(
+                    Restrictions.ilike("name", "%" + filter + "%"),
+                    Restrictions.ilike("email", "%" + filter + "%"),
+                    Restrictions.eq("document", filter),
+                    Restrictions.ilike("city", "%" + filter + "%")
+            ));
+        }
+
+        if (blocked != null) {
+            criteria.add(Restrictions.eq("blocked", blocked));
+        }
+
+        // projetamos para pegar o total de paginas possiveis
+        criteria.setProjection(Projections.count("id"));
+
+        final Long totalRows = (Long) criteria.uniqueResult();
+
+        // limpamos a projection para que a criteria seja reusada
+        criteria.setProjection(null);
+        criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+
+        // paginamos
+        criteria.setFirstResult(pageRequest.getFirstResult());
+        criteria.setMaxResults(pageRequest.getPageSize());
+
+        if (pageRequest.getSortDirection() == PageRequest.SortDirection.ASC) {
+            criteria.addOrder(Order.asc(pageRequest.getSortField()));
+        } else if (pageRequest.getSortDirection() == PageRequest.SortDirection.DESC) {
+            criteria.addOrder(Order.desc(pageRequest.getSortField()));
+        }
+
+        // montamos o resultado paginado
+        return new Page<>(criteria.list(), totalRows);
     }
 }

@@ -21,14 +21,19 @@ import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletType;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.service.WalletService;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller para a view do manutencao de carteiras
@@ -50,19 +55,46 @@ public class WalletBean extends AbstractBean {
     private Wallet wallet;
 
     @Getter
-    private List<Wallet> wallets;
-    @Getter
     private List<WalletBalance> walletBalances;
 
     @Inject
     private WalletService walletService;
 
+    @Getter
+    private final AbstractLazyModel<Wallet> walletsModel;
+
+    /**
+     * 
+     */
+    public WalletBean() {
+        
+        this.walletsModel = new AbstractLazyModel<Wallet>() {
+            @Override
+            public List<Wallet> load(int first, int pageSize, String sortField, 
+                    SortOrder sortOrder, Map<String, Object> filters) {
+                
+                final PageRequest pageRequest = new PageRequest();
+                
+                pageRequest
+                        .setFirstResult(first)
+                        .withPageSize(pageSize)
+                        .sortingBy(sortField, "inclusion")
+                        .withDirection(sortOrder.name());
+                
+                final Page<Wallet> page = walletService.listWalletsLazily(null, pageRequest);
+                
+                this.setRowCount(page.getTotalPagesInt());
+                
+                return page.getContent();
+            }
+        };
+    }
+    
     /**
      *
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.wallets = this.walletService.listWallets(null);
     }
 
     /**
@@ -162,9 +194,6 @@ public class WalletBean extends AbstractBean {
 
         try {
             this.walletService.adjustBalance(this.wallet);
-
-            this.wallets = this.walletService.listWallets(null);
-
             this.openDialog("adjustmentDialog", "dialogAdjustment");
         } catch (WbDomainException ex) {
             this.logger.error("WalletBean#doAdjustment found erros", ex);
@@ -202,8 +231,6 @@ public class WalletBean extends AbstractBean {
 
         try {
             this.walletService.deleteWallet(this.wallet);
-            this.wallets = this.walletService.listWallets(false);
-
             this.info("wallet.action.deleted", true);
         } catch (WbDomainException ex) {
             this.logger.error("WalletBean#doDelete found erros", ex);

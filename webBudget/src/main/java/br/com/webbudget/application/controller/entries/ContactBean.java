@@ -25,13 +25,18 @@ import br.com.webbudget.domain.entity.contact.NumberType;
 import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.misc.AddressFinder;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.service.ContactService;
 import java.util.List;
+import java.util.Map;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller para a view de contatos
@@ -54,20 +59,47 @@ public class ContactBean extends AbstractBean {
     @Getter
     private Telephone telephone;
     
-    @Getter
-    private List<Contact> contacts;
-
     @Inject
     private ContactService contactService;
     @Inject
     private AddressFinder addressFinderService;
 
+    @Getter
+    private final AbstractLazyModel<Contact> contactsModel;
+    
+    /**
+     * 
+     */
+    public ContactBean() {
+
+        this.contactsModel = new AbstractLazyModel<Contact>() {
+            @Override
+            public List<Contact> load(int first, int pageSize, String sortField, 
+                    SortOrder sortOrder, Map<String, Object> filters) {
+                
+                final PageRequest pageRequest = new PageRequest();
+                
+                pageRequest
+                        .setFirstResult(first)
+                        .withPageSize(pageSize)
+                        .sortingBy(sortField, "inclusion")
+                        .withDirection(sortOrder.name());
+                
+                final Page<Contact> page = contactService
+                        .listContactsLazilyByFilter(filter, null, pageRequest);
+                
+                this.setRowCount(page.getTotalPagesInt());
+                
+                return page.getContent();
+            }
+        };
+    }
+    
     /**
      *
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.contacts = this.contactService.listContacts(null);
     }
 
     /**
@@ -88,7 +120,6 @@ public class ContactBean extends AbstractBean {
      * Pesquisa com filtro
      */
     public void filterList() {
-        this.contacts = this.contactService.listContactsByFilter(this.filter, null);
         this.update("contactsList");
     }
     
@@ -181,8 +212,6 @@ public class ContactBean extends AbstractBean {
 
         try {
             this.contactService.deleteContact(this.contact);
-            this.contacts = this.contactService.listContacts(false);
-
             this.info("contact.action.deleted", true);
         } catch (WbDomainException ex) {
             this.logger.error("ContactBean#doDelete found erros", ex);
