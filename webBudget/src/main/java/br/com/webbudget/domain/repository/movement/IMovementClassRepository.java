@@ -19,6 +19,8 @@ package br.com.webbudget.domain.repository.movement;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 
@@ -45,6 +47,14 @@ public interface IMovementClassRepository extends IGenericRepository<MovementCla
      * @return
      */
     public List<MovementClass> listByTypeAndStatus(MovementClassType type, Boolean blocked);
+
+    /**
+     * 
+     * @param isBlocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<MovementClass> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
 
     /**
      *

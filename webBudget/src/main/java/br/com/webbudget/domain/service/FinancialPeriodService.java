@@ -24,6 +24,8 @@ import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
@@ -196,6 +198,16 @@ public class FinancialPeriodService {
      */
     public List<FinancialPeriod> listFinancialPeriods(Boolean isClosed) {
         return this.financialPeriodRepository.listAll();
+    }
+    
+    /**
+     * 
+     * @param isClosed
+     * @param pageRequest
+     * @return 
+     */
+    public Page<FinancialPeriod> listFinancialPeriodsLazily(Boolean isClosed, PageRequest pageRequest) {
+        return this.financialPeriodRepository.listByStatusLazily(isClosed, pageRequest);
     }
 
     /**

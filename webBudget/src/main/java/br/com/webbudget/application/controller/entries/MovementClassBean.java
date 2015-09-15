@@ -21,14 +21,18 @@ import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.service.MovementService;
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller da view de classes de movimento
@@ -47,18 +51,45 @@ public class MovementClassBean extends AbstractBean {
 
     @Getter
     private List<CostCenter> costCenters;
-    @Getter
-    private List<MovementClass> movementClasses;
 
     @Inject
-    private transient MovementService movementService;
+    private MovementService movementService;
+    
+    @Getter
+    private final AbstractLazyModel<MovementClass> MovementClassesModel;
 
+    /**
+     * 
+     */
+    public MovementClassBean() {
+
+        this.MovementClassesModel = new AbstractLazyModel<MovementClass>() {
+            @Override
+            public List<MovementClass> load(int first, int pageSize, String sortField, 
+                    SortOrder sortOrder, Map<String, Object> filters) {
+                
+                final PageRequest pageRequest = new PageRequest();
+                
+                pageRequest
+                        .setFirstResult(first)
+                        .withPageSize(pageSize)
+                        .sortingBy(sortField, "inclusion")
+                        .withDirection(sortOrder.name());
+                
+                final Page<MovementClass> page = movementService.listMovementClassesLazily(null, pageRequest);
+                
+                this.setRowCount(page.getTotalPagesInt());
+                
+                return page.getContent();
+            }
+        };
+    }
+    
     /**
      *
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.movementClasses = this.movementService.listMovementClasses(null);
     }
 
     /**
@@ -158,8 +189,6 @@ public class MovementClassBean extends AbstractBean {
 
         try {
             this.movementService.deleteMovementClass(this.movementClass);
-            this.movementClasses = this.movementService.listMovementClasses(false);
-
             this.info("movement-class.action.deleted", true);
         } catch (WbDomainException ex) {
             this.logger.error("MovementClassBean#doDelete found erros", ex);

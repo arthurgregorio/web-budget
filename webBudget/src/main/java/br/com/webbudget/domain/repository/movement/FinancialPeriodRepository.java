@@ -17,10 +17,13 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -65,7 +68,7 @@ public class FinancialPeriodRepository extends GenericRepository<FinancialPeriod
 
         return criteria.list();
     }
-
+    
     /**
      *
      * @param identification
@@ -79,5 +82,43 @@ public class FinancialPeriodRepository extends GenericRepository<FinancialPeriod
         criteria.add(Restrictions.eq("identification", identification));
 
         return (FinancialPeriod) criteria.uniqueResult();
+    }
+
+    /**
+     * 
+     * @param isClosed
+     * @param pageRequest
+     * @return 
+     */
+    @Override
+    public Page<FinancialPeriod> listByStatusLazily(Boolean isClosed, PageRequest pageRequest) {
+        
+        final Criteria criteria = this.createCriteria();
+
+        if (isClosed != null) {
+            criteria.add(Restrictions.eq("closed", isClosed));
+        }
+
+        // projetamos para pegar o total de paginas possiveis
+        criteria.setProjection(Projections.count("id"));
+
+        final Long totalRows = (Long) criteria.uniqueResult();
+
+        // limpamos a projection para que a criteria seja reusada
+        criteria.setProjection(null);
+        criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+
+        // paginamos
+        criteria.setFirstResult(pageRequest.getFirstResult());
+        criteria.setMaxResults(pageRequest.getPageSize());
+
+        if (pageRequest.getSortDirection() == PageRequest.SortDirection.ASC) {
+            criteria.addOrder(Order.asc(pageRequest.getSortField()));
+        } else if (pageRequest.getSortDirection() == PageRequest.SortDirection.DESC) {
+            criteria.addOrder(Order.desc(pageRequest.getSortField()));
+        }
+
+        // montamos o resultado paginado
+        return new Page<>(criteria.list(), totalRows);
     }
 }

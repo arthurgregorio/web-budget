@@ -458,6 +458,16 @@ public class MovementService {
     public List<MovementClass> listMovementClasses(Boolean isBlocked) {
         return this.movementClassRepository.listByStatus(isBlocked);
     }
+    
+    /**
+     * 
+     * @param isBlocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<MovementClass> listMovementClassesLazily(Boolean isBlocked, PageRequest pageRequest) {
+        return this.movementClassRepository.listLazilyByStatus(isBlocked, pageRequest);
+    }
 
     /**
      *
@@ -476,6 +486,16 @@ public class MovementService {
      */
     public List<CostCenter> listCostCenters(Boolean isBlocked) {
         return this.costCenterRepository.listByStatus(isBlocked);
+    }
+    
+    /**
+     * 
+     * @param isBlocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<CostCenter> listCostCentersLazily(Boolean isBlocked, PageRequest pageRequest) {
+        return this.costCenterRepository.listLazilyByStatus(isBlocked, pageRequest);
     }
 
     /**

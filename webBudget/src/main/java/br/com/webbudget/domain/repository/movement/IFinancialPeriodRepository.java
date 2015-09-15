@@ -17,6 +17,8 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 
@@ -48,4 +50,12 @@ public interface IFinancialPeriodRepository extends IGenericRepository<Financial
      * @return
      */
     public FinancialPeriod findByIdentification(String identification);
+    
+    /**
+     * 
+     * @param isClosed
+     * @param pageRequest
+     * @return 
+     */
+    public Page<FinancialPeriod> listByStatusLazily(Boolean isClosed, PageRequest pageRequest);
 }

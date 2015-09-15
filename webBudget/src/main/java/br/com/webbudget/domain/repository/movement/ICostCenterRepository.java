@@ -17,6 +17,8 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.CostCenter;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 
@@ -43,4 +45,12 @@ public interface ICostCenterRepository extends IGenericRepository<CostCenter, Lo
      * @return
      */
     public CostCenter findByNameAndParent(String name, CostCenter parent);
+    
+    /**
+     * 
+     * @param isBlocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<CostCenter> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
 }

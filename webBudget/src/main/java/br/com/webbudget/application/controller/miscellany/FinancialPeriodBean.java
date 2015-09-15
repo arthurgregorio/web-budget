@@ -20,12 +20,17 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import java.util.List;
+import java.util.Map;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller da view de periodos financeiros
@@ -47,25 +52,52 @@ public class FinancialPeriodBean extends AbstractBean {
     @Getter
     private FinancialPeriod financialPeriod;
 
-    @Getter
-    private List<FinancialPeriod> financialPeriods;
-
     @Inject
-    private transient FinancialPeriodService financialPeriodService;
+    private FinancialPeriodService financialPeriodService;
+
+    @Getter
+    private final AbstractLazyModel<FinancialPeriod> financialPeriodsModel;
+
+    /**
+     * 
+     */
+    public FinancialPeriodBean() {
+
+        this.financialPeriodsModel = new AbstractLazyModel<FinancialPeriod>() {
+            @Override
+            public List<FinancialPeriod> load(int first, int pageSize, String sortField,
+                    SortOrder sortOrder, Map<String, Object> filters) {
+
+                final PageRequest pageRequest = new PageRequest();
+
+                pageRequest
+                        .setFirstResult(first)
+                        .withPageSize(pageSize)
+                        .sortingBy(sortField, "inclusion")
+                        .withDirection(sortOrder.name());
+
+                final Page<FinancialPeriod> page = financialPeriodService
+                        .listFinancialPeriodsLazily(null, pageRequest);
+
+                this.setRowCount(page.getTotalPagesInt());
+
+                return page.getContent();
+            }
+        };
+    }
 
     /**
      *
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
     }
 
     /**
      *
      */
     public void initializeForm() {
-        
+
         // diz que pode abrir um periodo
         this.hasOpenPeriod = false;
 
@@ -98,10 +130,10 @@ public class FinancialPeriodBean extends AbstractBean {
     public String changeToClosing(long financialPeriodId) {
         return "../closing/closeFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId=" + financialPeriodId;
     }
-    
+
     /**
-     * 
-     * @param periodId 
+     *
+     * @param periodId
      */
     public void changeToDelete(long periodId) {
         this.financialPeriod = this.financialPeriodService
@@ -131,7 +163,7 @@ public class FinancialPeriodBean extends AbstractBean {
             this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
-    
+
     /**
      * Deleta um periodo
      */
@@ -139,11 +171,6 @@ public class FinancialPeriodBean extends AbstractBean {
 
         try {
             this.financialPeriodService.deletePeriod(this.financialPeriod);
-            
-            // listamos novamente os periodos
-            this.financialPeriods = 
-                    this.financialPeriodService.listFinancialPeriods(null);
-            
             this.info("financial-period.action.deleted", true);
         } catch (WbDomainException ex) {
             this.logger.error("FinancialPeriodBean#doDelete found erros", ex);

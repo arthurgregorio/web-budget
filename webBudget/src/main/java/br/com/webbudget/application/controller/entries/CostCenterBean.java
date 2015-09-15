@@ -19,13 +19,18 @@ package br.com.webbudget.application.controller.entries;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.List;
+import java.util.Map;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller da view de centros de custo
@@ -46,13 +51,39 @@ public class CostCenterBean extends AbstractBean {
 
     @Inject
     private MovementService movementService;
+    
+    @Getter
+    private final AbstractLazyModel<CostCenter> costCentersModel;
 
+    public CostCenterBean() {
+        
+        this.costCentersModel = new AbstractLazyModel<CostCenter>() {
+            @Override
+            public List<CostCenter> load(int first, int pageSize, String sortField, 
+                    SortOrder sortOrder, Map<String, Object> filters) {
+                
+                final PageRequest pageRequest = new PageRequest();
+                
+                pageRequest
+                        .setFirstResult(first)
+                        .withPageSize(pageSize)
+                        .sortingBy(sortField, "inclusion")
+                        .withDirection(sortOrder.name());
+                
+                final Page<CostCenter> page = movementService.listCostCentersLazily(null, pageRequest);
+                
+                this.setRowCount(page.getTotalPagesInt());
+                
+                return page.getContent();
+            }
+        };
+    }
+    
     /**
      *
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.costCenters = this.movementService.listCostCenters(null);
     }
 
     /**
@@ -137,7 +168,10 @@ public class CostCenterBean extends AbstractBean {
 
         try {
             this.costCenter = this.movementService.updateCostCenter(this.costCenter);
-
+            
+            // busca novamente os centros de custo para atualizar a lista de parentes
+            this.costCenters = this.movementService.listCostCenters(false);
+            
             this.info("cost-center.action.updated", true);
         } catch (WbDomainException ex) {
             this.logger.error("CostCenterBean#doSave found erros", ex);
@@ -155,8 +189,6 @@ public class CostCenterBean extends AbstractBean {
 
         try {
             this.movementService.deleteCostCenter(this.costCenter);
-            this.costCenters = this.movementService.listCostCenters(false);
-
             this.info("cost-center.action.deleted", true);
         } catch (WbDomainException ex) {
             this.logger.error("CostCenterBean#doDelete found erros", ex);

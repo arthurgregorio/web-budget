@@ -17,6 +17,7 @@
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -56,15 +57,19 @@
             </div>
         </h:form>
 
-        <div class="ui-grid-row flat-box">
+        <div jsf:id="listPanel" 
+             class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
                 <p:dataTable id="costCentersList" 
                              rows="15"
+                             lazy="true"
                              paginator="true"
                              var="costCenter"
+                             sortField="name"
+                             sortOrder="ascending"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
-                             value="#{costCenterBean.costCenters}"
+                             value="#{costCenterBean.costCentersModel}"
                              emptyMessage="#{messages['cost-center.list.empty']}">
                     <p:column width="10%" 
                               style="text-align: center"
@@ -104,6 +109,20 @@
                 </p:dataTable>
             </div>
         </div>
+        
+        <p:blockUI block="listPanel"
+                   widgetVar="listBlock"
+                   trigger="costCentersList">
+            <div class="div-align-center">
+                <p:graphicImage width="32" 
+                                height="32"
+                                library="images" 
+                                name="ui-loading.gif" />
+            </div>
+            <div style="margin-top: 5px">
+                #{menu['loading']}
+            </div>        
+        </p:blockUI>
     </ui:define>
 
     <ui:define name="popups">
