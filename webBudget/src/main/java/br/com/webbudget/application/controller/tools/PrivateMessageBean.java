@@ -21,16 +21,21 @@ import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
 import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.AbstractLazyModel;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.PrivateMessageService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controle da view de mensagens privadas
@@ -58,21 +63,48 @@ public class PrivateMessageBean extends AbstractBean {
 
     @Getter
     private List<User> users;
-    @Getter
-    private List<PrivateMessage> privateMessages;
 
     @Inject
     private transient AccountService accountService;
     @Inject
     private transient PrivateMessageService privateMessageService;
 
+    @Getter
+    private final AbstractLazyModel<PrivateMessage> privateMessagesModel;
+
+    /**
+     * 
+     */
+    public PrivateMessageBean() {
+        
+        this.privateMessagesModel = new AbstractLazyModel<PrivateMessage>() {
+            @Override
+            public List<PrivateMessage> load(int first, int pageSize, String sortField, 
+                    SortOrder sortOrder, Map<String, Object> filters) {
+                
+                final PageRequest pageRequest = new PageRequest();
+                
+                pageRequest
+                        .setFirstResult(first)
+                        .withPageSize(pageSize)
+                        .sortingBy(sortField, "inclusion")
+                        .withDirection(sortOrder.name());
+                
+                final Page<PrivateMessage> page = privateMessageService
+                        .listPrivateMessagesSentLazily(authenticatedUser.getId(), pageRequest);
+                
+                this.setRowCount(page.getTotalPagesInt());
+                
+                return page.getContent();
+            }
+        };
+    }
+    
     /**
      *
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.privateMessages = this.privateMessageService
-                .listPrivateMessagesSent(this.authenticatedUser.getId());
     }
 
     /**
@@ -98,7 +130,7 @@ public class PrivateMessageBean extends AbstractBean {
                     .listPrivateMessageReceipts(this.privateMessage);
 
             // marcamos para mostrar na tabela
-            this.users.stream().forEach(user -> {
+            this.users.forEach(user -> {
                 for (UserPrivateMessage associative : associatives) {
                     
                     final User receipt = this.accountService
@@ -178,9 +210,6 @@ public class PrivateMessageBean extends AbstractBean {
 
         try {
             this.privateMessageService.deletePrivateMessage(this.privateMessage);
-            this.privateMessages = this.privateMessageService
-                    .listPrivateMessagesSent(this.authenticatedUser.getId());
-
             this.info("private-message.action.deleted", true);
         } catch (WbDomainException ex) {
             this.logger.error("PrivateMessageBean#doDelete found erros", ex);
@@ -202,9 +231,9 @@ public class PrivateMessageBean extends AbstractBean {
      * Atualiza a selecao dos usuarios para envio quando visualiza a mensagem
      */
     public void onUserSelectionChange() {
-        for (User user : this.users) {
+        this.users.forEach((user) -> {
             user.setSelected(this.selectAll);
-        }
+        });
         this.update("usersList");
     }
 }

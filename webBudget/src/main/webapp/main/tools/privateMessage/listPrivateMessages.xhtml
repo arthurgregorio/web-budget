@@ -17,6 +17,7 @@
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -54,15 +55,18 @@
             </div>
         </h:form>
 
-        <div class="ui-grid-row flat-box">
+        <div jsf:id="listPanel" 
+             class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
                 <p:dataTable id="privateMessagesList" 
                              rows="15"
+                             lazy="true"
                              paginator="true"
+                             sortMode="ascending"
                              var="privateMessage"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
-                             value="#{privateMessageBean.privateMessages}"
+                             value="#{privateMessageBean.privateMessagesModel}"
                              emptyMessage="#{messages['private-message.list.empty']}">
 
                     <p:column width="10%"
@@ -95,6 +99,20 @@
                 </p:dataTable>
             </div>
         </div>
+        
+        <p:blockUI block="listPanel"
+                   widgetVar="listBlock"
+                   trigger="privateMessagesList">
+            <div class="div-align-center">
+                <p:graphicImage width="32" 
+                                height="32"
+                                library="images" 
+                                name="ui-loading.gif" />
+            </div>
+            <div style="margin-top: 5px">
+                #{menu['loading']}
+            </div>        
+        </p:blockUI>
     </ui:define>
 
     <ui:define name="popups">

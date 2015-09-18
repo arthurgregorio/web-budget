@@ -17,6 +17,8 @@
 package br.com.webbudget.domain.repository.user;
 
 import br.com.webbudget.domain.entity.message.PrivateMessage;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 
@@ -35,4 +37,12 @@ public interface IPrivateMessageRepository extends IGenericRepository<PrivateMes
      * @return 
      */
     public List<PrivateMessage> listSent(String userId);
+    
+    /**
+     * 
+     * @param userId
+     * @param pageRequest
+     * @return 
+     */
+    public Page<PrivateMessage> listSentLazily(String userId, PageRequest pageRequest);
 }

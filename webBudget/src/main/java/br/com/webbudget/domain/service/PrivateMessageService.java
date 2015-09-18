@@ -21,6 +21,8 @@ import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.entity.security.UserTypeEntity;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.user.IPrivateMessageRepository;
 import br.com.webbudget.domain.repository.user.IUserPrivateMessageRepository;
 import java.util.ArrayList;
@@ -147,6 +149,16 @@ public class PrivateMessageService {
      */
     public List<PrivateMessage> listPrivateMessagesSent(String userId) {
         return this.privateMessageRepository.listSent(userId);
+    }
+    
+    /**
+     * 
+     * @param userId
+     * @param pageRequest
+     * @return 
+     */
+    public Page<PrivateMessage> listPrivateMessagesSentLazily(String userId, PageRequest pageRequest) {
+        return this.privateMessageRepository.listSentLazily(userId, pageRequest);
     }
 
     /**
