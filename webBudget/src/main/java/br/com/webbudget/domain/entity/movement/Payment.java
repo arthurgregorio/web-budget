@@ -19,6 +19,8 @@ package br.com.webbudget.domain.entity.movement;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.card.Card;
+import br.com.webbudget.domain.misc.ex.WbDomainException;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -84,7 +86,6 @@ public class Payment extends PersistentEntity {
     }
 
     /**
-     *
      * @return
      */
     private String createPaymentCode() {
@@ -108,5 +109,28 @@ public class Payment extends PersistentEntity {
             }
         }
         return generated;
+    }
+
+    /**
+     * Com este metodo construimos a data de vencimendo do cartao caso seja um
+     * pagamento via cartao de credito para entao setar no movimento a fim de
+     * que ele esteja no vencimento do cartao
+     *
+     * @param period o periodo que esperamos que a data compreenda
+     * @return a data de vencimento do cartao
+     */
+    public LocalDate getCreditCardInvoiceDueDate(FinancialPeriod period) {
+
+        if (this.card == null) {
+            throw new WbDomainException("movement.validate.payment-not-credit-card");
+        }
+        
+        final int expiration = this.card.getExpirationDay();
+
+        if (expiration != 0) {
+            return period.getEnd().withDayOfMonth(expiration).plusMonths(1);
+        } else {
+            return period.getEnd();
+        }
     }
 }

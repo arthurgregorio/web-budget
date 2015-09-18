@@ -41,6 +41,7 @@ import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IPaymentRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +76,7 @@ public class MovementService {
     private IApportionmentRepository apportionmentRepository;
     @Inject
     private IMovementClassRepository movementClassRepository;
-    
+
     /**
      *
      * @param movementClass
@@ -92,7 +93,7 @@ public class MovementService {
 
         // valida o orcamento, se estiver ok, salva!
         this.hasValidBudget(movementClass);
-           
+
         this.movementClassRepository.save(movementClass);
     }
 
@@ -119,18 +120,18 @@ public class MovementService {
 
     /**
      * Aqui realizamos a regra de validacao do orcamento pelo centro de custo
-     * 
+     *
      * @param movementClass a classe a ser validada
      */
     private boolean hasValidBudget(MovementClass movementClass) {
-        
+
         final CostCenter costCenter = movementClass.getCostCenter();
         final MovementClassType classType = movementClass.getMovementClassType();
 
         if (costCenter.controlBudget(classType)) {
-            
-            final List<MovementClass> classes = 
-                    this.listMovementClassesByCostCenterAndType(costCenter, classType);
+
+            final List<MovementClass> classes
+                    = this.listMovementClassesByCostCenterAndType(costCenter, classType);
 
             BigDecimal consumedBudget = classes.stream()
                     .filter(mc -> !mc.equals(movementClass))
@@ -144,12 +145,12 @@ public class MovementService {
             } else {
                 availableBudget = costCenter.getExpensesBudget().subtract(consumedBudget);
             }
-     
+
             // caso o valor disponivel seja menor que o desejado, exception!
             if (availableBudget.compareTo(movementClass.getBudget()) < 0) {
-                
+
                 final String value = "R$ " + String.format("%10.2f", availableBudget);
-                
+
                 throw new WbDomainException("movement-class.validate.no-budget", value);
             }
         }
@@ -196,6 +197,12 @@ public class MovementService {
             }
         }
 
+        // checamos se o movimento esta com a data de vencimento setada, caso
+        // nao, setamos a data de hoje e salvamos
+        if (!movement.hasDueDate()) {
+            movement.setDueDate(LocalDate.now());
+        }
+
         // pega os rateios antes de salvar o movimento para nao perder a lista
         final List<Apportionment> apportionments = movement.getApportionments();
 
@@ -230,6 +237,13 @@ public class MovementService {
         movement.setPayment(payment);
         movement.setMovementStateType(MovementStateType.PAID);
 
+        // se pagamos no cartao de credito, coloca o vencimento do movimento 
+        // para a data de vencimento da fatura do cartao
+        if (payment.getPaymentMethodType() == PaymentMethodType.CREDIT_CARD) {
+            movement.setDueDate(payment.getCreditCardInvoiceDueDate(
+                    movement.getFinancialPeriod()));
+        }
+        
         this.movementRepository.save(movement);
 
         // atualizamos os saldos das carteiras quando pagamento em dinheiro
@@ -458,12 +472,12 @@ public class MovementService {
     public List<MovementClass> listMovementClasses(Boolean isBlocked) {
         return this.movementClassRepository.listByStatus(isBlocked);
     }
-    
+
     /**
-     * 
+     *
      * @param isBlocked
      * @param pageRequest
-     * @return 
+     * @return
      */
     public Page<MovementClass> listMovementClassesLazily(Boolean isBlocked, PageRequest pageRequest) {
         return this.movementClassRepository.listLazilyByStatus(isBlocked, pageRequest);
@@ -487,12 +501,12 @@ public class MovementService {
     public List<CostCenter> listCostCenters(Boolean isBlocked) {
         return this.costCenterRepository.listByStatus(isBlocked);
     }
-    
+
     /**
-     * 
+     *
      * @param isBlocked
      * @param pageRequest
-     * @return 
+     * @return
      */
     public Page<CostCenter> listCostCentersLazily(Boolean isBlocked, PageRequest pageRequest) {
         return this.costCenterRepository.listLazilyByStatus(isBlocked, pageRequest);
@@ -526,10 +540,10 @@ public class MovementService {
     }
 
     /**
-     * 
+     *
      * @param filter
      * @param pageRequest
-     * @return 
+     * @return
      */
     public Page<Movement> listMovementsByFilter(MovementFilter filter, PageRequest pageRequest) {
         return this.movementRepository.listLazilyByFilter(filter, pageRequest);

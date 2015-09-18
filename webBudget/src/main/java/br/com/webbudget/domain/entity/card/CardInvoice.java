@@ -20,6 +20,7 @@ import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -145,5 +146,21 @@ public class CardInvoice extends PersistentEntity {
         }
 
         return total;
+    }
+
+    /**
+     * @return a data para vencimento da fatura do cartao
+     */
+    public LocalDate getInvoiceDueDate() {
+        
+        int dueDate = this.card.getExpirationDay();
+
+        if (dueDate != 0) {
+            return this.financialPeriod.getEnd()
+                    .withDayOfMonth(dueDate)
+                    .plusMonths(1);
+        } else {
+            return this.financialPeriod.getEnd();
+        }
     }
 }

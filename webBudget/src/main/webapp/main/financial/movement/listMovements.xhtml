@@ -144,7 +144,7 @@
                                   style="text-align: center" 
                                   headerText="#{messages['movement.list.due-date']}">
                             <h:outputText value="#{movement.dueDate}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                <f:converter converterId="localDateConverter"/>
                             </h:outputText> 
                         </p:column>
                         <p:column width="18%" 

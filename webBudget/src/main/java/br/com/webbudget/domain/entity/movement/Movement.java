@@ -16,17 +16,20 @@
  */
 package br.com.webbudget.domain.entity.movement;
 
+import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import static javax.persistence.FetchType.EAGER;
@@ -35,8 +38,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -75,10 +76,9 @@ public class Movement extends PersistentEntity {
     private String description;
     @Getter
     @Setter
-    @NotNull(message = "{movement.due-date}")
-    @Temporal(TemporalType.DATE)
+    @Convert(converter = JPALocalDateConverter.class)
     @Column(name = "due_date", nullable = false)
-    private Date dueDate;
+    private LocalDate dueDate;
     @Getter
     @Setter
     @Enumerated
@@ -346,21 +346,17 @@ public class Movement extends PersistentEntity {
     }
 
     /**
-     *
-     * @return
+     * @return se o movimento esta vencido ou nao
      */
     public boolean isOverdue() {
-
-        final Calendar calendar = Calendar.getInstance();
-
-        calendar.setTime(new Date());
-
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        return this.dueDate.compareTo(calendar.getTime()) < 0;
+        return this.dueDate.isBefore(LocalDate.now());
+    }
+    
+    /**
+     * @return se temos ou nao nao movimento a data de pagamento setada
+     */
+    public boolean hasDueDate() {
+        return this.dueDate != null;
     }
 
     /**

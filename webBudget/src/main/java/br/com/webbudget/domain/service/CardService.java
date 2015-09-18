@@ -32,7 +32,6 @@ import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.system.IConfigurationRepository;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -153,19 +152,7 @@ public class CardService {
                 + " ref: " + cardInvoice.getCard().getReadableName());
 
         // pegamos o dia de vencimento do cartao e setamos a conta para a data
-        int dueDate = cardInvoice.getCard().getExpirationDay();
-
-        if (dueDate != 0) {
-            LocalDate endDate = cardInvoice.getFinancialPeriod().getEnd();
-            endDate = endDate.withDayOfMonth(dueDate).plusMonths(1);
-            
-            movement.setDueDate(Date.from(endDate.atStartOfDay()
-                    .atZone(ZoneId.systemDefault()).toInstant()));
-        } else {
-            final LocalDate endDate = cardInvoice.getFinancialPeriod().getEnd();
-            movement.setDueDate(Date.from(endDate.atStartOfDay()
-                    .atZone(ZoneId.systemDefault()).toInstant()));
-        }
+        movement.setDueDate(cardInvoice.getInvoiceDueDate());
 
         movement.setFinancialPeriod(cardInvoice.getFinancialPeriod());
         movement.setMovementStateType(MovementStateType.OPEN);
