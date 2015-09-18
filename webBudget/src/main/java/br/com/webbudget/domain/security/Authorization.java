@@ -126,6 +126,19 @@ public class Authorization {
     @Getter
     @AuthorizationGroup("authority.movement")
     public final String MOVEMENT_DELETE = "authority.movement.delete";
+    
+    @Getter
+    @AuthorizationGroup("authority.fixed-movement")
+    public final String FIXED_MOVEMENT_VIEW = "authority.fixed-movement.access";
+    @Getter
+    @AuthorizationGroup("authority.fixed-movement")
+    public final String FIXED_MOVEMENT_INSERT = "authority.fixed-movement.add";
+    @Getter
+    @AuthorizationGroup("authority.fixed-movement")
+    public final String FIXED_MOVEMENT_UPDATE = "authority.fixed-movement.edit";
+    @Getter
+    @AuthorizationGroup("authority.fixed-movement")
+    public final String FIXED_MOVEMENT_DELETE = "authority.fixed-movement.delete";
 
     @Getter
     @AuthorizationGroup("authority.card-invoice")

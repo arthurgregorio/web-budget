@@ -84,6 +84,9 @@
                                     <p:menuitem value="#{menu['financial.transfers']}"    
                                                 url="/main/financial/transfer/listTransfers.xhtml"
                                                 rendered="#{authorizationBean.hasRole(authorization.BALANCE_TRANSFER_VIEW)}"/>
+                                    <p:menuitem value="#{menu['financial.fixed-movements']}"    
+                                                url="/main/financial/fixedMovements/listFixedMovements.xhtml"
+                                                rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_VIEW)}"/>
                                 </p:submenu>
                                 <p:submenu styleClass="main-menu-item"
                                            label="#{menu['miscellany']}" >

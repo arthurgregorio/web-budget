@@ -44,16 +44,9 @@
 
         <h:form id="controlsForm" prependId="false">
             <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-7 filter-group form-group-l">
-                    <p:inputText id="inFilter" 
-                                 value="#{fixedMovementBean.filter}" 
-                                 placeholder="#{messages['movement.filter.types']}"/>
-                </div>
-                <div class="ui-grid-col-1">
-                    <p:selectBooleanCheckbox id="inIsPaid" 
-                                             styleClass="check-paid"
-                                             value="#{fixedMovementBean.filterPaid}"
-                                             itemLabel="#{messages['movement.filter.set-paid']}"/>
+                <div class="ui-grid-col-8 filter-group form-group-l">
+                    <p:inputText value="#{fixedMovementBean.filter}" 
+                                 placeholder="#{messages['fixed-movement.filter.types']}"/>
                 </div>
                 <div class="ui-grid-col-4 div-align-right">
                     <p:commandButton value="#{menu['filter']}"
@@ -71,99 +64,21 @@
         <div class="ui-grid-row flat-box">
             <div class="ui-grid-col-12">
                 <h:form prependId="false">
-                    <p:dataTable id="movementsList" 
+                    <p:dataTable id="fixedMovementsList" 
                                  rows="15"
-                                 var="movement"
+                                 lazy="true"
                                  paginator="true"
-                                 selectionMode="single"
-                                 rowKey="#{movement.id}"
+                                 var="fixedMovement"
+                                 sortMode="ascending"
                                  paginatorPosition="bottom"
                                  paginatorAlwaysVisible="false"
-                                 value="#{fixedMovementBean.movements}"
-                                 selection="#{fixedMovementBean.movement}"
-                                 emptyMessage="#{messages['movement.list.empty']}">
+                                 value="#{fixedMovementBean.fixedMovementsModel}"
+                                 emptyMessage="#{messages['fixed-movement.list.empty']}">
 
-                        <p:ajax event="rowSelect" 
-                                listener="#{fixedMovementBean.changeToDetails()}" />
-
-                        <p:column width="6%" 
-                                  style="text-align: center"
-                                  headerText="#{messages['movement.list.direction']}">
-                            <p:graphicImage width="18"
-                                            height="18"
-                                            library="images" 
-                                            name="ui-green-circle.png" 
-                                            title="#{messages['movement.list.income']}"
-                                            rendered="#{movement.direction eq 'IN'}"/>
-                            <p:graphicImage  width="18"
-                                             height="18"
-                                             library="images" 
-                                             name="ui-red-circle.png" 
-                                             title="#{messages['movement.list.outcome']}"
-                                             rendered="#{movement.direction eq 'OUT'}"/>
-                        </p:column>
-                        <p:column width="8%" 
-                                  style="text-align: center"
-                                  headerText="#{messages['movement.list.code']}">
-                            #{movement.code}
-                        </p:column>
-                        <p:column headerText="#{messages['movement.list.description']}">
-                            #{of:abbreviate(movement.description,50)}
-                        </p:column>
-                        <p:column width="10%"
-                                  style="text-align: center" 
-                                  headerText="#{messages['movement.list.movement-state-type']}">
-                            <h:outputText style="color: green; font-weight: bold;"
-                                          value="#{messages[movement.movementStateType]}"
-                                          rendered="#{movement.movementStateType eq 'PAID'}" />
-                            <h:outputText style="color: red; font-weight: bold;"
-                                          value="#{messages[movement.movementStateType]}"
-                                          rendered="#{movement.movementStateType eq 'OPEN'}" />
-                            <h:outputText style="color: #0081c2; font-weight: bold;"
-                                          value="#{messages[movement.movementStateType]}"
-                                          rendered="#{movement.movementStateType eq 'CALCULATED'}" />
-                            <h:outputText style="color: #ed9c28; font-weight: bold;"
-                                          value="#{messages[movement.movementStateType]}"
-                                          rendered="#{movement.movementStateType eq 'CANCELED'}" />
-                        </p:column>
-                        <p:column width="12%"
-                                  style="text-align: center" 
-                                  headerText="#{messages['movement.list.value']}">
-                            <h:outputText value="#{movement.value}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </p:column>
-                        <p:column width="12%"
-                                  style="text-align: center" 
-                                  headerText="#{messages['movement.list.due-date']}">
-                            <h:outputText value="#{movement.dueDate}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText> 
-                        </p:column>
                         <p:column width="18%" 
-                                  style="text-align: center"
+                                  style="div-align-center"
                                   headerText="#{menu['actions']}">
-                            <p:commandButton icon="fa fa-money"
-                                             title="#{menu['pay']}"
-                                             rendered="#{movement.payable eq true 
-                                                         and authorizationBean.hasRole(authorization.MOVEMENT_PAY)}"
-                                             action="#{fixedMovementBean.changeToPay(movement.id)}" />
-                            <p:spacer width="10" 
-                                      rendered="#{movement.payable eq true}"/>
-                            <p:commandButton icon="fa fa-edit"
-                                             title="#{menu['edit']}"
-                                             rendered="#{movement.editable eq true 
-                                                         and authorizationBean.hasRole(authorization.MOVEMENT_UPDATE)}"
-                                             action="#{fixedMovementBean.changeToEdit(movement.id)}"/>
-                            <p:spacer width="10" 
-                                      rendered="#{movement.editable eq true}"/>
-                            <p:commandButton icon="fa fa-remove"
-                                             title="#{menu['delete']}"
-                                             rendered="#{movement.deletable eq true 
-                                                         and authorizationBean.hasRole(authorization.MOVEMENT_DELETE)}"
-                                             actionListener="#{fixedMovementBean.changeToDelete(movement.id)}" />
-                            <h:outputText value="-" 
-                                          rendered="#{movement.movementStateType eq 'CALCULATED'}" />
+                            
                         </p:column>
                     </p:dataTable>
                 </h:form>
