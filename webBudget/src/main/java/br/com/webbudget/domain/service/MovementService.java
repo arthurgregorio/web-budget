@@ -535,7 +535,7 @@ public class MovementService {
      * @param showOverdue
      * @return
      */
-    public List<Movement> listMovementsByDueDate(Date dueDate, boolean showOverdue) {
+    public List<Movement> listMovementsByDueDate(LocalDate dueDate, boolean showOverdue) {
         return this.movementRepository.listByDueDate(dueDate, showOverdue);
     }
 

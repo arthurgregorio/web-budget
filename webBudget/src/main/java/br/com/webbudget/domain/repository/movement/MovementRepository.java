@@ -33,6 +33,7 @@ import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.misc.model.PageRequest.SortDirection;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -204,9 +205,9 @@ public class MovementRepository extends GenericRepository<Movement, Long>
      * @return
      */
     @Override
-    public List<Movement> listByDueDate(Date dueDate, boolean showOverdue) {
+    public List<Movement> listByDueDate(LocalDate dueDate, boolean showOverdue) {
 
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+        final Criteria criteria = this.createCriteria();
 
         if (showOverdue) {
             criteria.add(Restrictions.le("dueDate", dueDate));

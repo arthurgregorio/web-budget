@@ -26,7 +26,7 @@ import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.service.GraphModelService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.PrivateMessageService;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.faces.view.ViewScoped;
@@ -71,13 +71,13 @@ public class DashboardBean extends AbstractBean {
     private User authenticatedUser;
 
     @Inject
-    private transient AccountService accountService;
+    private AccountService accountService;
     @Inject
-    private transient MovementService movementService;
+    private MovementService movementService;
     @Inject
-    private transient GraphModelService graphModelService;
+    private GraphModelService graphModelService;
     @Inject
-    private transient PrivateMessageService privateMessageService;
+    private PrivateMessageService privateMessageService;
 
     /**
      * Inicializa os graficos e tambem carrega as mensagens privadas no box de
@@ -94,7 +94,8 @@ public class DashboardBean extends AbstractBean {
                 .listMessagesByUser(this.authenticatedUser, null);
 
         // carregamos os movimentos para pagamento
-        this.movements = this.movementService.listMovementsByDueDate(new Date(), true);
+        this.movements = this.movementService
+                .listMovementsByDueDate(LocalDate.now(), true);
     }
 
     /**

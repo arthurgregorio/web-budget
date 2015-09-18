@@ -32,6 +32,7 @@ import br.com.webbudget.domain.misc.model.Page;
 import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      * @param showOverdue
      * @return
      */
-    public List<Movement> listByDueDate(Date dueDate, boolean showOverdue);
+    public List<Movement> listByDueDate(LocalDate dueDate, boolean showOverdue);
 
     /**
      *
