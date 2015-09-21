@@ -24,8 +24,6 @@ import br.com.webbudget.domain.misc.ex.WbDomainException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
