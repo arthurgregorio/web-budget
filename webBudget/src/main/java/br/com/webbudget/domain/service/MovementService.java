@@ -20,6 +20,7 @@ import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.entity.movement.FixedMovement;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
@@ -37,6 +38,7 @@ import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
+import br.com.webbudget.domain.repository.movement.IFixedMovementRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IPaymentRepository;
@@ -72,6 +74,8 @@ public class MovementService {
     private ICostCenterRepository costCenterRepository;
     @Inject
     private ICardInvoiceRepository cardInvoiceRepository;
+    @Inject
+    private IFixedMovementRepository fixedMovementRepository;
     @Inject
     private IApportionmentRepository apportionmentRepository;
     @Inject
@@ -427,7 +431,7 @@ public class MovementService {
 
         return this.costCenterRepository.save(costCenter);
     }
-
+    
     /**
      *
      * @param costCenter
@@ -435,6 +439,34 @@ public class MovementService {
     @Transactional
     public void deleteCostCenter(CostCenter costCenter) {
         this.costCenterRepository.delete(costCenter);
+    }
+    
+    /**
+     * 
+     * @param fixedMovement 
+     */
+    @Transactional
+    public void saveFixedMovement(FixedMovement fixedMovement) {
+        this.fixedMovementRepository.save(fixedMovement);
+    }
+
+    /**
+     * 
+     * @param fixedMovement
+     * @return 
+     */
+    @Transactional
+    public FixedMovement updateFixedMovement(FixedMovement fixedMovement) {
+        return this.fixedMovementRepository.save(fixedMovement);
+    }
+    
+    /**
+     * 
+     * @param fixedMovement 
+     */
+    @Transactional
+    public void deleteFixedMovement(FixedMovement fixedMovement) {
+        this.fixedMovementRepository.delete(fixedMovement);
     }
 
     /**
@@ -462,6 +494,15 @@ public class MovementService {
      */
     public Movement findMovementById(long movementId) {
         return this.movementRepository.findById(movementId, false);
+    }
+    
+    /**
+     * 
+     * @param fixedMovementId
+     * @return 
+     */
+    public FixedMovement findFixedMovementById(long fixedMovementId) {
+        return this.fixedMovementRepository.findById(fixedMovementId, false);
     }
 
     /**
