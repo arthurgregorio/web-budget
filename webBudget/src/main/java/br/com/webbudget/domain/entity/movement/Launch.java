@@ -17,83 +17,63 @@
 package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
-import java.math.BigDecimal;
-import java.util.List;
-import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import static javax.persistence.FetchType.EAGER;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * A entidade que representa nosso movimento fixo
- * 
- * @author Arthur Gregorio  
+ * Representacao do lancamento de um determinado movimento fixo na lista de 
+ * movimentos de um periodo, esta entidade serve como ligacao entre o estado
+ * onde o movimento fixo vira um movimento efetivamente
+ *
+ * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.1.0, 18/09/2015
+ * @since 2.1.0, 21/09/2015
  */
 @Entity
-@Table(name = "fixed_movements")
+@Table(name = "launches")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")
-public class FixedMovement extends PersistentEntity {
-
+public class Launch extends PersistentEntity {
+    
     @Getter
     @Column(name = "code", nullable = false, length = 8, unique = true)
     private String code;
+
     @Getter
     @Setter
-    @NotEmpty(message = "{fixed-movement.identification}")
-    @Column(name = "description", nullable = false, length = 45)
-    private String identification;
+    @ManyToOne
+    @JoinColumn(name = "id_financial_period", nullable = false)
+    private FinancialPeriod financialPeriod;
     @Getter
     @Setter
-    @NotNull(message = "{fixed-movement.value}")
-    @Column(name = "value", nullable = false)
-    private BigDecimal value;
+    @ManyToOne
+    @JoinColumn(name = "id_fixed_movement", nullable = false)
+    private FixedMovement fixedMovement;
     @Getter
     @Setter
-    @Column(name = "quotes")
-    private int quotes;
-        
-    @Getter
-    @Setter
-    @Enumerated
-    @Column(name = "fixed_movement_type", nullable = false)
-    private FixedMovementType fixedMovementType;
-    
-    /**
-     * Fetch eager pois sempre que precisarmos pesquisar um movimento, vamos
-     * precisar saber como ele foi distribuido, ou seja, precisaremos do rateio
-     */
-    @Getter
-    @Setter
-    @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "fixedMovement", fetch = EAGER, cascade = REMOVE)
-    private List<Apportionment> apportionments;
+    @ManyToOne
+    @JoinColumn(name = "id_movement", nullable = false)
+    private Movement movement;
     
     /**
      * Inicializamos o que for necessario
      */
-    public FixedMovement() {
-        this.code = this.createFixedMovementCode();
+    public Launch() {
+        this.code = this.createLaunchCode();
     }
 
     /**
      * @return o codigo unico gerado por marca de tempo para esta entidade
      */
-    private String createFixedMovementCode() {
+    private String createLaunchCode() {
 
         long decimalNumber = System.nanoTime();
 

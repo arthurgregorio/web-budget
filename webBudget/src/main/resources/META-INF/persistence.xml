@@ -29,6 +29,7 @@
         <class>br.com.webbudget.domain.entity.movement.Movement</class>
         <class>br.com.webbudget.domain.entity.movement.MovementClass</class>
         <class>br.com.webbudget.domain.entity.movement.Payment</class>
+        <class>br.com.webbudget.domain.entity.movement.FixedMovement</class>
         
         <!-- configuracoes -->
         <class>br.com.webbudget.domain.entity.system.Configuration</class>

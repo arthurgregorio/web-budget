@@ -75,6 +75,14 @@
                                  value="#{fixedMovementBean.fixedMovementsModel}"
                                  emptyMessage="#{messages['fixed-movement.list.empty']}">
 
+                        <p:column headerText="#{messages['fixed-movement.list.identification']}">
+                            #{fixedMovement.identification}
+                        </p:column>
+                        <p:column width="25%"
+                                  style="div-align-center"
+                                  headerText="#{messages['fixed-movement.list.type']}">
+                            #{messages[fixedMovement.fixedMovementType]}
+                        </p:column>
                         <p:column width="18%" 
                                   style="div-align-center"
                                   headerText="#{menu['actions']}">
