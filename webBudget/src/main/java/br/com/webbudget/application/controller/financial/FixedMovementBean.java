@@ -17,7 +17,11 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.domain.entity.movement.Apportionment;
+import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FixedMovement;
+import br.com.webbudget.domain.entity.movement.FixedMovementType;
+import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.misc.model.AbstractLazyModel;
 import br.com.webbudget.domain.service.MovementService;
@@ -27,6 +31,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -44,7 +49,15 @@ public class FixedMovementBean extends AbstractBean {
     private String filter;
     
     @Getter
+    @Setter
+    private Apportionment apportionment;
+    @Getter
     private FixedMovement fixedMovement;
+    
+    @Getter
+    private List<CostCenter> costCenters;
+    @Getter
+    private List<MovementClass> movementClasses;
     
     @Inject
     private MovementService movementService;
@@ -78,6 +91,8 @@ public class FixedMovementBean extends AbstractBean {
      * @param fixedMovementId 
      */
     public void initializeForm(long fixedMovementId) {
+        
+        this.costCenters = this.movementService.listCostCenters(false);
 
         if (fixedMovementId == 0) {
             this.viewState = ViewState.ADDING;
@@ -185,5 +200,64 @@ public class FixedMovementBean extends AbstractBean {
             this.update("fixedMovementsList");
             this.closeDialog("dialogDeleteFixedMovement");
         }
+    }
+    
+    /**
+     *
+     */
+    public void showApportionmentDialog() {
+
+        // se o valor do rateio for igual ao total do movimento nem deixa exibir
+        // a tela de rateios para que nao seja feito cagada
+        if (this.fixedMovement.isApportionmentsValid()) {
+            this.error("fixed-movement.validate.no-value-divide", true);
+            return;
+        }
+
+        this.apportionment = new Apportionment();
+        this.apportionment.setValue(this.fixedMovement.getValueToDivide());
+
+        this.openDialog("apportionmentDialog", "dialogApportionment");
+    }
+    
+    /**
+     *
+     */
+    public void addApportionment() {
+        try {
+            this.fixedMovement.addApportionment(this.apportionment);
+            this.update("valuePanel");
+            this.update("apportionmentList");
+            this.closeDialog("dialogApportionment");
+        } catch (Exception ex) {
+            this.logger.error("FixedMovementBean#addApportionment found erros", ex);
+            this.fixedError("generic.operation-error", true, ex.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param id
+     */
+    public void deleteApportionment(String id) {
+        this.fixedMovement.removeApportionment(id);
+        this.update("valuePanel");
+        this.update("apportionmentList");
+    }
+    
+    /**
+     * Atualiza o combo de classes quando o usuário selecionar o centro de custo
+     */
+    public void loadMovementClasses() {
+        this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
+                this.apportionment.getCostCenter(), null);
+        this.update("inMovementClass");
+    }
+    
+    /**
+     * @return os tipos de movimento fixo que podem ser cadastrados
+     */
+    public FixedMovementType[] getAvailableFixedMovementTypes() {
+        return FixedMovementType.values();
     }
 }
