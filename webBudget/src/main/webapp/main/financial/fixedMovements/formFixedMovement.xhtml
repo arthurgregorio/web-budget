@@ -52,6 +52,12 @@
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-6"> 
                     <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group">
+                            <p:selectBooleanCheckbox value="#{fixedMovementBean.fixedMovement.autoLaunch}"
+                                                     itemLabel="#{messages['fixed-movement.form.auto-launch']}"/>
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inIdentification" 
                                            value="#{messages['fixed-movement.form.identification']}: "/>
@@ -95,18 +101,7 @@
                         </div>
                     </div>
                     <div jsf:id="strategyPanel">
-                        <div class="ui-grid-row"
-                             jsf:rendered="#{fixedMovementBean.fixedMovement.fixedMovementType eq 'FIXED'}">
-                            <div class="ui-grid-col-12">
-                                fixo
-                            </div>
-                        </div>                        
-                        <div class="ui-grid-row"
-                             jsf:rendered="#{fixedMovementBean.fixedMovement.fixedMovementType eq 'INSTALLMENT'}">
-                            <div class="ui-grid-col-12">
-                                parcelado
-                            </div>
-                        </div>                        
+                        <ui:include src="formLaunchStrategy.xhtml" />
                     </div>                    
                 </div>
                 <div class="ui-grid-col-6 apportionment-box">
