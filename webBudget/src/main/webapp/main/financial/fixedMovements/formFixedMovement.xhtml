@@ -84,24 +84,20 @@
                         </div>                        
                     </div>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
-                            <p:outputLabel for="inFixedMovementType" 
-                                           value="#{messages['fixed-movement.form.type']}: "/>
-                            <p:selectOneMenu id="inFixedMovementType" 
-                                             converter="omnifaces.GenericEnumConverter"
-                                             disabled="#{fixedMovementBean.viewState eq 'EDITING'}"
-                                             value="#{fixedMovementBean.fixedMovement.fixedMovementType}">
-                                <p:ajax event="change" 
-                                        update="strategyPanel" />
-                                <f:selectItems var="fixedMovementType"
-                                               itemValue="#{fixedMovementType}"
-                                               itemLabel="#{messages[fixedMovementType]}"
-                                               value="#{fixedMovementBean.availableFixedMovementTypes}"/> 
-                            </p:selectOneMenu>
-                        </div>
-                    </div>
-                    <div jsf:id="strategyPanel">
-                        <ui:include src="formLaunchStrategy.xhtml" />
+                        <div class="ui-grid-col-12 form-group form-group-s">
+                            <p:outputLabel for="inQuotes" 
+                                           value="#{messages['fixed-movement.form.quotes']}: "/>
+                            <div class="input-and-button-box">
+                                <p:inputText id="inQuotes" 
+                                             maxlength="3"
+                                             value="#{fixedMovementBean.fixedMovement.quotes}">
+                                    <pe:keyFilter mask="num"/>
+                                </p:inputText>
+                                <p:selectBooleanCheckbox id="inUndetermined"
+                                                         value="#{fixedMovementBean.fixedMovement.undetermined}"
+                                                         itemLabel="#{messages['fixed-movement.form.undetermined']}"/>
+                            </div>
+                        </div>                        
                     </div>                    
                 </div>
                 <div class="ui-grid-col-6 apportionment-box">

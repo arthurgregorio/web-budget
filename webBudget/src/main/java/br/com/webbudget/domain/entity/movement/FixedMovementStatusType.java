@@ -25,7 +25,7 @@ package br.com.webbudget.domain.entity.movement;
  */
 public enum FixedMovementStatusType {
 
-    CURRENT("beans.fixed-movement-status-type.current"),
+    ACTIVE("beans.fixed-movement-status-type.active"),
     FINALIZED("beans.fixed-movement-status-type.finalized");
 
     private final String i18nKey;

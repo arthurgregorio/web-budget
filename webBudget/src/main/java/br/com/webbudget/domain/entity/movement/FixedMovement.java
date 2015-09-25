@@ -68,17 +68,16 @@ public class FixedMovement extends PersistentEntity {
     @Getter
     @Setter
     @Column(name = "quotes")
-    private int quotes;
+    private Integer quotes;
     @Getter
     @Setter
     @Column(name = "auto_launch", nullable = false)
     private boolean autoLaunch;
-
     @Getter
     @Setter
-    @Enumerated
-    @Column(name = "fixed_movement_type", nullable = false)
-    private FixedMovementType fixedMovementType;
+    @Column(name = "undetermined", nullable = false)
+    private boolean undetermined;
+
     @Getter
     @Setter
     @Enumerated
@@ -107,7 +106,7 @@ public class FixedMovement extends PersistentEntity {
         this.code = this.createFixedMovementCode();
         
         this.autoLaunch = false;
-        this.fixedMovementType = FixedMovementType.FIXED;
+        this.undetermined = true;
         
         this.apportionments = new ArrayList<>();
         this.deletedApportionments = new ArrayList<>();

@@ -573,7 +573,7 @@ td {
     width: 95%;
 }
 
-/* formulario de ajust de saldo -------------- */
+/* formulario de ajuste de saldo -------------- */
 .balance-text {
     display: block;
     font-size: 14pt;
@@ -589,4 +589,11 @@ td {
 .balance-detail-label {
     display: block;
     font-weight: 700;
+}
+
+/* form de movimentos fixos ------------------ */
+#inUndetermined {
+    position: relative;
+    top: 7px;
+    margin-left: 15px;
 }

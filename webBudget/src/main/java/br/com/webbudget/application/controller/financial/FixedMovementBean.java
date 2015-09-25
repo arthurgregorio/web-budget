@@ -20,7 +20,6 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FixedMovement;
-import br.com.webbudget.domain.entity.movement.FixedMovementType;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.misc.model.AbstractLazyModel;
@@ -252,12 +251,5 @@ public class FixedMovementBean extends AbstractBean {
         this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
                 this.apportionment.getCostCenter(), null);
         this.update("inMovementClass");
-    }
-    
-    /**
-     * @return os tipos de movimento fixo que podem ser cadastrados
-     */
-    public FixedMovementType[] getAvailableFixedMovementTypes() {
-        return FixedMovementType.values();
     }
 }
