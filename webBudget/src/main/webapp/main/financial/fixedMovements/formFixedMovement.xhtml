@@ -77,8 +77,7 @@
                                             decimalSeparator="," 
                                             thousandSeparator="." 
                                             value="#{fixedMovementBean.fixedMovement.value}"
-                                            disabled="#{fixedMovementBean.viewState eq 'EDITING' or 
-                                                        not empty fixedMovementBean.fixedMovement.apportionments}">
+                                            disabled="#{not empty fixedMovementBean.fixedMovement.apportionments}">
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </pe:inputNumber>  
                         </div>                        
@@ -90,12 +89,17 @@
                             <div class="input-and-button-box">
                                 <p:inputText id="inQuotes" 
                                              maxlength="3"
-                                             value="#{fixedMovementBean.fixedMovement.quotes}">
+                                             value="#{fixedMovementBean.fixedMovement.quotes}"
+                                             disabled="#{fixedMovementBean.fixedMovement.undetermined}">
                                     <pe:keyFilter mask="num"/>
                                 </p:inputText>
                                 <p:selectBooleanCheckbox id="inUndetermined"
                                                          value="#{fixedMovementBean.fixedMovement.undetermined}"
-                                                         itemLabel="#{messages['fixed-movement.form.undetermined']}"/>
+                                                         itemLabel="#{messages['fixed-movement.form.undetermined']}">
+                                    <p:ajax event="change" 
+                                            process="@this"
+                                            listener="#{fixedMovementBean.onInstallmentChange()}"/>
+                                </p:selectBooleanCheckbox>
                             </div>
                         </div>                        
                     </div>                    

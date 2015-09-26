@@ -245,6 +245,16 @@ public class FixedMovementBean extends AbstractBean {
     }
     
     /**
+     * Trata a mudanca do tipo de parcelamento
+     */
+    public void onInstallmentChange() {
+        if (this.fixedMovement.isUndetermined()) {
+            this.fixedMovement.setQuotes(null);
+        }
+        this.update("inQuotes");
+    }
+    
+    /**
      * Atualiza o combo de classes quando o usuário selecionar o centro de custo
      */
     public void loadMovementClasses() {

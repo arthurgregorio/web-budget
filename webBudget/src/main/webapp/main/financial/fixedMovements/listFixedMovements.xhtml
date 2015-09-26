@@ -80,8 +80,8 @@
                         </p:column>
                         <p:column width="25%"
                                   style="div-align-center"
-                                  headerText="#{messages['fixed-movement.list.type']}">
-                            #{messages[fixedMovement.fixedMovementType]}
+                                  headerText="#{messages['fixed-movement.list.status']}">
+                            #{messages[fixedMovement.fixedMovementStatusType]}
                         </p:column>
                         <p:column width="18%" 
                                   style="div-align-center"
@@ -89,7 +89,7 @@
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              action="#{fixedMovementBean.changeToEdit(fixedMovement.id)}" 
-                                             rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_UDPATE)}"/>
+                                             rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_UPDATE)}"/>
                             <p:spacer width="10"/>
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
