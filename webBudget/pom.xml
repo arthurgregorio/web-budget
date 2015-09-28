@@ -262,7 +262,7 @@
             <artifactId>hibernate-validator-annotation-processor</artifactId>
             <version>5.1.3.Final</version> 
         </dependency>
-        
+
         <!-- caelum stella -->
         <dependency>
             <groupId>br.com.caelum.stella</groupId>

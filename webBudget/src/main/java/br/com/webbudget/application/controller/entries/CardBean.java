@@ -77,7 +77,7 @@ public class CardBean extends AbstractBean {
                         .sortingBy(sortField, "inclusion")
                         .withDirection(sortOrder.name());
                 
-                final Page<Card> page = cardService.listCardsLazily(null, pageRequest);
+                final Page<Card> page = cardService.listCards(null, pageRequest);
                 
                 this.setRowCount(page.getTotalPagesInt());
                 

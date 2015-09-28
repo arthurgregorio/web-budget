@@ -17,9 +17,9 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.FixedMovement;
-import br.com.webbudget.domain.misc.model.Page;
-import br.com.webbudget.domain.misc.model.PageRequest;
+import br.com.webbudget.domain.entity.movement.Launch;
 import br.com.webbudget.domain.repository.IGenericRepository;
+import java.util.List;
 
 /**
  *
@@ -28,13 +28,19 @@ import br.com.webbudget.domain.repository.IGenericRepository;
  * @version 1.0.0
  * @since 2.1.0, 20/09/2015
  */
-public interface IFixedMovementRepository extends IGenericRepository<FixedMovement, Long> {
+public interface ILaunchRepository extends IGenericRepository<Launch, Long> {
 
     /**
      * 
-     * @param filter
-     * @param pageRequest
+     * @param fixedMovement
      * @return 
      */
-    public Page<FixedMovement> listByFilter(String filter, PageRequest pageRequest);
+    public Long countByFixedMovement(FixedMovement fixedMovement);
+    
+    /**
+     * 
+     * @param fixedMovement
+     * @return 
+     */
+    public List<Launch> listByFixedMovement(FixedMovement fixedMovement);
 }

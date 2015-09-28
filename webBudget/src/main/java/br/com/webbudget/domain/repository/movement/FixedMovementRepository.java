@@ -17,7 +17,17 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.FixedMovement;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.GenericRepository;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -28,4 +38,53 @@ import br.com.webbudget.domain.repository.GenericRepository;
  */
 public class FixedMovementRepository extends GenericRepository<FixedMovement, Long> implements IFixedMovementRepository {
 
+    /**
+     *
+     * @param filter
+     * @param pageRequest
+     * @return
+     */
+    @Override
+    public Page<FixedMovement> listByFilter(String filter, PageRequest pageRequest) {
+
+        final Criteria criteria = this.createCriteria();
+
+        final List<Criterion> criterions = new ArrayList<>();
+
+        // filtramos
+        if (filter != null && !filter.isEmpty()) {
+            
+            criterions.add(Restrictions.ilike("description", "%" + filter + "%"));
+            criterions.add(Restrictions.ilike("identification", "%" + filter + "%"));
+
+            // se conseguir castar para bigdecimal trata como um filtro
+            try {
+                criterions.add(Restrictions.eq("value", new BigDecimal(filter)));
+            } catch (NumberFormatException ex) { }
+        }
+
+        criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));
+
+        // projetamos para pegar o total de paginas possiveis
+        criteria.setProjection(Projections.count("id"));
+
+        final Long totalRows = (Long) criteria.uniqueResult();
+
+        // limpamos a projection para que a criteria seja reusada
+        criteria.setProjection(null);
+        criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+
+        // paginamos
+        criteria.setFirstResult(pageRequest.getFirstResult());
+        criteria.setMaxResults(pageRequest.getPageSize());
+
+        if (pageRequest.getSortDirection() == PageRequest.SortDirection.ASC) {
+            criteria.addOrder(Order.asc(pageRequest.getSortField()));
+        } else if (pageRequest.getSortDirection() == PageRequest.SortDirection.DESC) {
+            criteria.addOrder(Order.desc(pageRequest.getSortField()));
+        }
+
+        // montamos o resultado paginado
+        return new Page<>(criteria.list(), totalRows);
+    }
 }

@@ -186,22 +186,22 @@ public class CardService {
     }
 
     /**
-     * 
-     * @param isBlocked
-     * @param pageRequest
-     * @return 
-     */
-    public Page<Card> listCardsLazily(Boolean isBlocked, PageRequest pageRequest) {
-        return this.cardRepository.listLazilyByStatus(isBlocked, pageRequest);
-    }
-    
-    /**
      *
      * @param isBlocked
      * @return
      */
     public List<Card> listCards(Boolean isBlocked) {
         return this.cardRepository.listByStatus(isBlocked);
+    }
+    
+    /**
+     * 
+     * @param isBlocked
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Card> listCards(Boolean isBlocked, PageRequest pageRequest) {
+        return this.cardRepository.listByStatus(isBlocked, pageRequest);
     }
 
     /**

@@ -1,0 +1,59 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:o="http://omnifaces.org/ui"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:f="http://xmlns.jcp.org/jsf/core"
+          id="confirmLaunchDialog"
+          modal="true" 
+          closable="false"
+          resizable="false" 
+          closeOnEscape="true"
+          widgetVar="dialogConfirmLaunch" 
+          header="#{messages['fixed-movement.confirm-launch']}"
+          xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <h:form prependId="false">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12 form-group form-group-l">
+                <p:outputLabel for="inLaunchPeriod" 
+                               value="#{messages['fixed-movement.confirm-message']}"/>
+                <p:spacer width="10"/>
+                <p:selectOneMenu id="inLaunchPeriod" 
+                                 converter="omnifaces.SelectItemsConverter"
+                                 value="#{fixedMovementBean.financialPeriod}">
+                    <f:selectItems var="financialPeriod" 
+                                   itemValue="#{financialPeriod}"
+                                   itemLabel="#{financialPeriod.identification}"
+                                   value="#{fixedMovementBean.openFinancialPeriods}" /> 
+                </p:selectOneMenu>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12 div-align-center">
+                <p:commandButton immediate="true"
+                                 value="#{menu['back']}" 
+                                 onclick="PF('dialogConfirmLaunch').hide()"/>
+                <p:spacer width="10"/>
+                <p:commandButton value="#{menu['launch']}"
+                                 styleClass="ui-button-danger" 
+                                 actionListener="#{fixedMovementBean.doLaunch()}"/>
+            </div>
+        </div>
+    </h:form>
+</p:dialog>

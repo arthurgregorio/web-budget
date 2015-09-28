@@ -17,6 +17,7 @@
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:of="http://omnifaces.org/functions"
@@ -61,9 +62,9 @@
             </div>
         </h:form>
 
-        <div class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
-                <h:form prependId="false">
+        <h:form prependId="false">
+            <div class="ui-grid-row flat-box">
+                <div class="ui-grid-col-12">
                     <p:dataTable id="fixedMovementsList" 
                                  rows="15"
                                  lazy="true"
@@ -73,18 +74,22 @@
                                  paginatorPosition="bottom"
                                  paginatorAlwaysVisible="false"
                                  value="#{fixedMovementBean.fixedMovementsModel}"
+                                 selection="#{fixedMovementBean.selectedFixedMovements}"
                                  emptyMessage="#{messages['fixed-movement.list.empty']}">
+
+                        <p:column selectionMode="multiple" 
+                                  style="width:16px;text-align:center"/>
 
                         <p:column headerText="#{messages['fixed-movement.list.identification']}">
                             #{fixedMovement.identification}
                         </p:column>
                         <p:column width="25%"
-                                  style="div-align-center"
+                                  styleClass="div-align-center"
                                   headerText="#{messages['fixed-movement.list.status']}">
                             #{messages[fixedMovement.fixedMovementStatusType]}
                         </p:column>
                         <p:column width="18%" 
-                                  style="div-align-center"
+                                  styleClass="div-align-center"
                                   headerText="#{menu['actions']}">
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
@@ -97,13 +102,29 @@
                                              rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_DELETE)}"/>
                         </p:column>
                     </p:dataTable>
-                </h:form>
+                </div>
             </div>
-        </div>
+            <div class="ui-grid-row flat-box">
+                <div class="ui-grid-col-6">
+                    <p:commandButton value="#{menu['launch']}"
+                                     styleClass="ui-button-warning" 
+                                     action="#{fixedMovementBean.showLaunchConfirmDialog()}"
+                                     rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCH)}"/>
+                </div>
+                <div class="ui-grid-col-6 div-align-right">
+                    <p:commandButton style="width: 130px;"
+                                     value="#{menu['launches']}"
+                                     styleClass="ui-button-info"
+                                     action="#{fixedMovementBean.showLaunchesDialog()}"
+                                     rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
+                </div>
+            </div>
+        </h:form>
     </ui:define>
 
     <ui:define name="popups">
-
+        <ui:include src="dialogConfirmLaunch.xhtml"/>
+        <ui:include src="dialogDeleteFixedMovement.xhtml"/>
     </ui:define>
 </ui:composition>
 

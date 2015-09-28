@@ -448,13 +448,15 @@ public class MovementBean extends AbstractBean {
     public void addApportionment() {
         try {
             this.movement.addApportionment(this.apportionment);
-
-            this.update("valuePanel");
+            this.update("inValue");
             this.update("apportionmentList");
             this.closeDialog("dialogApportionment");
+        } catch (WbDomainException ex) {
+            this.logger.error("MovementBean#addApportionment found erros", ex);
+            this.fixedError(ex.getMessage(), false, ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("MovementBean#addApportionment found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+            this.fixedError("generic.operation-error", false, ex.getMessage());
         }
     }
 
@@ -464,7 +466,7 @@ public class MovementBean extends AbstractBean {
      */
     public void deleteApportionment(String id) {
         this.movement.removeApportionment(id);
-        this.update("valuePanel");
+        this.update("inValue");
         this.update("apportionmentList");
     }
 

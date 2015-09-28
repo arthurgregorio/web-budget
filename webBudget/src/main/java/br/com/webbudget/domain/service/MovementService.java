@@ -21,6 +21,8 @@ import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.FixedMovement;
+import br.com.webbudget.domain.entity.movement.FixedMovementStatusType;
+import br.com.webbudget.domain.entity.movement.Launch;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
@@ -30,6 +32,7 @@ import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
+import br.com.webbudget.domain.misc.MovementBuilder;
 import br.com.webbudget.domain.misc.dto.MovementFilter;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
@@ -39,13 +42,13 @@ import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
 import br.com.webbudget.domain.repository.movement.IFixedMovementRepository;
+import br.com.webbudget.domain.repository.movement.ILaunchRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IPaymentRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -66,6 +69,8 @@ public class MovementService {
     @UpdateBalance
     private Event<BalanceBuilder> updateBalanceEvent;
 
+    @Inject
+    private ILaunchRepository launchRepository;
     @Inject
     private IPaymentRepository paymentRepository;
     @Inject
@@ -137,7 +142,7 @@ public class MovementService {
             final List<MovementClass> classes
                     = this.listMovementClassesByCostCenterAndType(costCenter, classType);
 
-            BigDecimal consumedBudget = classes.stream()
+            final BigDecimal consumedBudget = classes.stream()
                     .filter(mc -> !mc.equals(movementClass))
                     .map(MovementClass::getBudget)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -152,9 +157,7 @@ public class MovementService {
 
             // caso o valor disponivel seja menor que o desejado, exception!
             if (availableBudget.compareTo(movementClass.getBudget()) < 0) {
-
                 final String value = "R$ " + String.format("%10.2f", availableBudget);
-
                 throw new WbDomainException("movement-class.validate.no-budget", value);
             }
         }
@@ -181,8 +184,12 @@ public class MovementService {
         // validamos se os rateios estao corretos
         if (!movement.getApportionments().isEmpty()) {
             if (!movement.isApportionmentsValid()) {
-                throw new WbDomainException("movement.validate.apportionment-value",
+
+                final String value = "R$ " + String.format("%10.2f",
                         movement.getApportionmentsDifference());
+
+                throw new WbDomainException(
+                        "movement.validate.apportionment-value", value);
             }
         } else {
             throw new WbDomainException("movement.validate.empty-apportionment");
@@ -247,7 +254,7 @@ public class MovementService {
             movement.setDueDate(payment.getCreditCardInvoiceDueDate(
                     movement.getFinancialPeriod()));
         }
-        
+
         this.movementRepository.save(movement);
 
         // atualizamos os saldos das carteiras quando pagamento em dinheiro
@@ -431,7 +438,7 @@ public class MovementService {
 
         return this.costCenterRepository.save(costCenter);
     }
-    
+
     /**
      *
      * @param costCenter
@@ -440,33 +447,141 @@ public class MovementService {
     public void deleteCostCenter(CostCenter costCenter) {
         this.costCenterRepository.delete(costCenter);
     }
-    
+
     /**
-     * 
-     * @param fixedMovement 
+     *
+     * @param fixedMovement
+     * @return
      */
     @Transactional
-    public void saveFixedMovement(FixedMovement fixedMovement) {
-        this.fixedMovementRepository.save(fixedMovement);
+    public FixedMovement saveFixedMovement(FixedMovement fixedMovement) {
+
+        // validamos se os rateios estao corretos
+        if (!fixedMovement.getApportionments().isEmpty()) {
+            if (!fixedMovement.isApportionmentsValid()) {
+
+                final String value = "R$ " + String.format("%10.2f",
+                        fixedMovement.getApportionmentsDifference());
+
+                throw new WbDomainException(
+                        "fixed-movement.validate.apportionment-value", value);
+            }
+        } else {
+            throw new WbDomainException("fixed-movement.validate.empty-apportionment");
+        }
+
+        // se for uma edicao, checa se existe alguma inconsistencia
+        if (fixedMovement.isSaved()) {
+
+            // remove algum rateio editado
+            fixedMovement.getDeletedApportionments()
+                    .stream()
+                    .forEach(apportionment -> {
+                        this.apportionmentRepository.delete(apportionment);
+                    });
+        }
+
+        // pega os rateios antes de salvar o movimento para nao perder a lista
+        final List<Apportionment> apportionments = fixedMovement.getApportionments();
+
+        // salva o movimento
+        fixedMovement = this.fixedMovementRepository.save(fixedMovement);
+
+        // salva os rateios
+        for (Apportionment apportionment : apportionments) {
+            apportionment.setFixedMovement(fixedMovement);
+            this.apportionmentRepository.save(apportionment);
+        }
+
+        // busca novamente as classes
+        fixedMovement.getApportionments().clear();
+        fixedMovement.setApportionments(new ArrayList<>(
+                this.apportionmentRepository.listByFixedMovement(fixedMovement)));
+
+        return fixedMovement;
     }
 
     /**
-     * 
+     *
      * @param fixedMovement
-     * @return 
-     */
-    @Transactional
-    public FixedMovement updateFixedMovement(FixedMovement fixedMovement) {
-        return this.fixedMovementRepository.save(fixedMovement);
-    }
-    
-    /**
-     * 
-     * @param fixedMovement 
      */
     @Transactional
     public void deleteFixedMovement(FixedMovement fixedMovement) {
+
+        final List<Launch> launches
+                = this.launchRepository.listByFixedMovement(fixedMovement);
+
+        if (launches != null && !launches.isEmpty()) {
+            throw new WbDomainException("fixed-movement.validate.has-launches");
+        }
+
         this.fixedMovementRepository.delete(fixedMovement);
+    }
+
+    /**
+     *
+     * @param fixedMovements
+     * @param period
+     */
+    @Transactional
+    public void launchFixedMovements(List<FixedMovement> fixedMovements, FinancialPeriod period) {
+
+        fixedMovements
+                .stream()
+                .forEach(fixedMovement -> {
+                    
+                    // constroi o movimento 
+                    final MovementBuilder movementBuilder = new MovementBuilder();
+
+                    movementBuilder
+                            .withValue(fixedMovement.getValue())
+                            .withDueDate(period.getEnd())
+                            .withDescription(fixedMovement.getDescription())
+                            .inTheFinancialPeriod(period)
+                            .andDividedAmong(fixedMovement.getApportionments());
+
+                    final Movement movement = this.saveMovement(movementBuilder.build());
+                    
+                    // criamos o lancamento 
+                    final Launch launch = new Launch();
+                    
+                    // setamos em que parcela estamos se for um parcelamento
+                    if (!fixedMovement.isUndetermined()) {
+                        
+                        final Integer totalQuotes = this.launchRepository
+                                .countByFixedMovement(fixedMovement).intValue();
+                        
+                        launch.setQuote(totalQuotes + 1);
+                        
+                        // se chegamos na ultima parcela, encerramos
+                        if (launch.getQuote().equals(fixedMovement.getQuotes())) {
+                            fixedMovement.setFixedMovementStatusType(
+                                    FixedMovementStatusType.FINALIZED);
+                            this.fixedMovementRepository.save(fixedMovement);
+                        }
+                        
+                        // atualizamos a descricao do movimento
+                        final StringBuilder stringBuilder = new StringBuilder();
+                        
+                        stringBuilder
+                                .append(movement.getDescription())
+                                .append(" ")
+                                .append(launch.getQuote())
+                                .append("/")
+                                .append(fixedMovement.getQuotes());
+                        
+                        movement.setDescription(stringBuilder.toString());
+                        
+                        launch.setMovement(this.saveMovement(movement));
+                    } else {
+                        launch.setMovement(movement);
+                    }
+                    
+                    launch.setFinancialPeriod(period);
+                    launch.setFixedMovement(fixedMovement);
+                    
+                    this.launchRepository.save(launch);
+                });
     }
 
     /**
@@ -495,11 +610,11 @@ public class MovementService {
     public Movement findMovementById(long movementId) {
         return this.movementRepository.findById(movementId, false);
     }
-    
+
     /**
-     * 
+     *
      * @param fixedMovementId
-     * @return 
+     * @return
      */
     public FixedMovement findFixedMovementById(long fixedMovementId) {
         return this.fixedMovementRepository.findById(fixedMovementId, false);
@@ -587,7 +702,7 @@ public class MovementService {
      * @return
      */
     public Page<Movement> listMovementsByFilter(MovementFilter filter, PageRequest pageRequest) {
-        return this.movementRepository.listLazilyByFilter(filter, pageRequest);
+        return this.movementRepository.listByFilter(filter, pageRequest);
     }
 
     /**
@@ -618,5 +733,30 @@ public class MovementService {
      */
     public List<Movement> listMovementsByCardInvoice(CardInvoice cardInvoice) {
         return this.movementRepository.listByCardInvoice(cardInvoice);
+    }
+
+    /**
+     *
+     * @param filter
+     * @param pageRequest
+     * @return
+     */
+    public Page<FixedMovement> listFixedMovementsByFilter(String filter, PageRequest pageRequest) {
+        return this.fixedMovementRepository.listByFilter(filter, pageRequest);
+    }
+
+    /**
+     *
+     * @param fixedMovement
+     * @return
+     */
+    public FixedMovement fetchLaunchesForFixedMovement(FixedMovement fixedMovement) {
+
+        final List<Launch> launches
+                = this.launchRepository.listByFixedMovement(fixedMovement);
+
+        fixedMovement.setLaunches(launches);
+
+        return fixedMovement;
     }
 }

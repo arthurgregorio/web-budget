@@ -58,8 +58,13 @@ public class FixedMovement extends PersistentEntity {
     @Getter
     @Setter
     @NotEmpty(message = "{fixed-movement.identification}")
-    @Column(name = "description", nullable = false, length = 45)
+    @Column(name = "identification", nullable = false, length = 45)
     private String identification;
+    @Getter
+    @Setter
+    @NotEmpty(message = "{fixed-movement.description}")
+    @Column(name = "description", nullable = false, length = 255)
+    private String description;
     @Getter
     @Setter
     @NotNull(message = "{fixed-movement.value}")
@@ -93,6 +98,11 @@ public class FixedMovement extends PersistentEntity {
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "fixedMovement", fetch = EAGER, cascade = REMOVE)
     private List<Apportionment> apportionments;
+    
+    @Getter
+    @Setter
+    @Transient
+    private List<Launch> launches;
 
     @Getter
     @Transient
@@ -107,6 +117,7 @@ public class FixedMovement extends PersistentEntity {
         
         this.autoLaunch = false;
         this.undetermined = true;
+        this.fixedMovementStatusType = FixedMovementStatusType.ACTIVE;
         
         this.apportionments = new ArrayList<>();
         this.deletedApportionments = new ArrayList<>();

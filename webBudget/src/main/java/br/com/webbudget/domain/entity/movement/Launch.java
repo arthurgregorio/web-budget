@@ -17,10 +17,12 @@
 package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
+import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -46,6 +48,10 @@ public class Launch extends PersistentEntity {
     @Getter
     @Column(name = "code", nullable = false, length = 8, unique = true)
     private String code;
+    @Getter
+    @Setter
+    @Column(name = "quote")
+    private Integer quote;
 
     @Getter
     @Setter
@@ -59,7 +65,7 @@ public class Launch extends PersistentEntity {
     private FixedMovement fixedMovement;
     @Getter
     @Setter
-    @ManyToOne
+    @OneToOne(cascade = REMOVE)
     @JoinColumn(name = "id_movement", nullable = false)
     private Movement movement;
     

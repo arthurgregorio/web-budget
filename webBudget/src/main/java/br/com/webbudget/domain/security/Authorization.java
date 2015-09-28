@@ -139,6 +139,12 @@ public class Authorization {
     @Getter
     @AuthorizationGroup("authority.fixed-movement")
     public final String FIXED_MOVEMENT_DELETE = "authority.fixed-movement.delete";
+    @Getter
+    @AuthorizationGroup("authority.fixed-movement")
+    public final String FIXED_MOVEMENT_LAUNCH = "authority.fixed-movement.launch";
+    @Getter
+    @AuthorizationGroup("authority.fixed-movement")
+    public final String FIXED_MOVEMENT_LAUNCHES = "authority.fixed-movement.launches";
 
     @Getter
     @AuthorizationGroup("authority.card-invoice")

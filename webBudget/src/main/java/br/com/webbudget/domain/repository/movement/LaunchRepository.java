@@ -16,37 +16,40 @@
  */
 package br.com.webbudget.domain.repository.movement;
 
-import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.FixedMovement;
-import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.entity.movement.Launch;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
- * @since 1.0.0, 22/04/2014
+ * @version 1.0.0
+ * @since 2.1.0, 20/09/2015
  */
-public class ApportionmentRepository extends GenericRepository<Apportionment, Long> implements IApportionmentRepository {
+public class LaunchRepository extends GenericRepository<Launch, Long> implements ILaunchRepository {
 
     /**
-     *
-     * @param movement
-     * @return
+     * 
+     * @param fixedMovement
+     * @return 
      */
     @Override
-    public List<Apportionment> listByMovement(Movement movement) {
+    public Long countByFixedMovement(FixedMovement fixedMovement) {
+        
+        final Criteria criteria = this.createCriteria();
+        
+        criteria.createAlias("fixedMovement", "fm");
+        criteria.add(Restrictions.eq("fm.id", fixedMovement.getId()));
+        
+        // projetamos para pegar o total de paginas possiveis
+        criteria.setProjection(Projections.count("id"));
 
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-
-        criteria.createAlias("movement", "mv");
-        criteria.add(Restrictions.eq("mv.id", movement.getId()));
-
-        return criteria.list();
+        return (Long) criteria.uniqueResult();
     }
 
     /**
@@ -55,13 +58,13 @@ public class ApportionmentRepository extends GenericRepository<Apportionment, Lo
      * @return 
      */
     @Override
-    public List<Apportionment> listByFixedMovement(FixedMovement fixedMovement) {
-        
+    public List<Launch> listByFixedMovement(FixedMovement fixedMovement) {
+       
         final Criteria criteria = this.createCriteria();
-
+        
         criteria.createAlias("fixedMovement", "fm");
         criteria.add(Restrictions.eq("fm.id", fixedMovement.getId()));
-
+        
         return criteria.list();
     }
 }

@@ -81,6 +81,14 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
     public List<Movement> listByDueDate(LocalDate dueDate, boolean showOverdue);
 
     /**
+     * 
+     * @param filter
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Movement> listByFilter(MovementFilter filter, PageRequest pageRequest);
+    
+    /**
      *
      * @param period
      * @param type
@@ -96,14 +104,6 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      */
     public List<Movement> listByPeriodAndState(FinancialPeriod period, MovementStateType state);
 
-    /**
-     * 
-     * @param filter
-     * @param pageRequest
-     * @return 
-     */
-    public Page<Movement> listLazilyByFilter(MovementFilter filter, PageRequest pageRequest);
-    
     /**
      *
      * @param period

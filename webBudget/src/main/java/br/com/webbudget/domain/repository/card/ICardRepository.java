@@ -67,5 +67,5 @@ public interface ICardRepository extends IGenericRepository<Card, Long> {
      * @param pageRequest
      * @return 
      */
-    public Page<Card> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
+    public Page<Card> listByStatus(Boolean isBlocked, PageRequest pageRequest);
 }

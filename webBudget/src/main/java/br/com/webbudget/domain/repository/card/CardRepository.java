@@ -121,7 +121,7 @@ public class CardRepository extends GenericRepository<Card, Long> implements ICa
      * @return 
      */
     @Override
-    public Page<Card> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest) {
+    public Page<Card> listByStatus(Boolean isBlocked, PageRequest pageRequest) {
         
         final Criteria criteria = this.createCriteria();
 

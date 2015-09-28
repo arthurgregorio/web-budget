@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.Apportionment;
+import br.com.webbudget.domain.entity.movement.FixedMovement;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 22/04/2014
  */
 public interface IApportionmentRepository extends IGenericRepository<Apportionment, Long> {
@@ -36,4 +37,11 @@ public interface IApportionmentRepository extends IGenericRepository<Apportionme
      * @return
      */
     public List<Apportionment> listByMovement(Movement movement);
+    
+    /**
+     * 
+     * @param fixedMovement
+     * @return 
+     */
+    public List<Apportionment> listByFixedMovement(FixedMovement fixedMovement);
 }

@@ -57,6 +57,24 @@
                                                      itemLabel="#{messages['fixed-movement.form.auto-launch']}"/>
                         </div>                        
                     </div>
+                    <div class="ui-grid-row"
+                         jsf:rendered="#{fixedMovementBean.viewState eq 'EDITING'}">
+                        <div class="ui-grid-col-12 form-group form-group-m">
+                            <p:outputLabel for="inStatus" 
+                                           value="#{messages['fixed-movement.form.status-type']}: "/>
+                            <p:selectOneMenu id="inStatus" 
+                                             converter="omnifaces.GenericEnumConverter"
+                                             value="#{fixedMovementBean.fixedMovement.fixedMovementStatusType}">
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{messages['fixed-movement.form.select-one']}" />
+                                <f:selectItems var="statusType"
+                                               itemValue="#{statusType}"
+                                               itemLabel="#{messages[statusType]}"
+                                               value="#{fixedMovementBean.availableFixedMovementStatusTypes}"/> 
+                            </p:selectOneMenu>
+                        </div>                         
+                    </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-l">
                             <p:outputLabel for="inIdentification" 
@@ -66,8 +84,7 @@
                                          value="#{fixedMovementBean.fixedMovement.identification}" />
                         </div>                        
                     </div>
-                    <div jsf:id="valuePanel"
-                         class="ui-grid-row">
+                    <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-m">
                             <p:outputLabel for="inValue" 
                                            value="#{messages['fixed-movement.form.value']}: "/>
@@ -101,8 +118,18 @@
                                             listener="#{fixedMovementBean.onInstallmentChange()}"/>
                                 </p:selectBooleanCheckbox>
                             </div>
+                        </div>
+                    </div>    
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-xl">
+                            <p:outputLabel for="inDescription" 
+                                           value="#{messages['fixed-movement.form.description']}: "/>
+                            <p:inputTextarea id="inDescription" 
+                                             maxlength="255"
+                                             autoResize="false"
+                                             value="#{fixedMovementBean.fixedMovement.description}" />
                         </div>                        
-                    </div>                    
+                    </div>
                 </div>
                 <div class="ui-grid-col-6 apportionment-box">
                     <div class="ui-grid-row">
@@ -179,7 +206,8 @@
                                      process="fixedMovementForm"
                                      styleClass="ui-button-success"
                                      action="#{fixedMovementBean.doUpdate()}"
-                                     rendered="#{fixedMovementBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{fixedMovementBean.viewState eq 'EDITING' and 
+                                                 empty fixedMovementBean.fixedMovement.launches}"/>
                 </div>
             </div>
         </h:form>

@@ -35,7 +35,6 @@ import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
@@ -131,7 +130,7 @@ public class MovementRepository extends GenericRepository<Movement, Long>
      * @return 
      */
     @Override
-    public Page<Movement> listLazilyByFilter(MovementFilter filter, PageRequest pageRequest) {
+    public Page<Movement> listByFilter(MovementFilter filter, PageRequest pageRequest) {
 
         final Criteria criteria = this.createCriteria();
 
