@@ -1,0 +1,76 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:h="http://xmlns.jcp.org/jsf/html"
+          xmlns:f="http://xmlns.jcp.org/jsf/core"
+          id="launchesDialog"
+          width="750"
+          modal="true" 
+          closable="false"
+          resizable="false" 
+          closeOnEscape="true"
+          widgetVar="dialogLaunches" 
+          header="#{messages['launch.dialog.title']}">
+
+    <h:form prependId="false">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:dataTable id="lauchesList" 
+                             rows="15"
+                             lazy="true"
+                             var="launch"
+                             paginator="true"
+                             sortMode="ascending"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{fixedMovementBean.launchesModel}"
+                             emptyMessage="#{messages['launch.list.empty']}">
+
+                    <p:column styleClass="div-align-center"
+                              headerText="#{messages['launch.list.inclusion']}">
+                        <h:outputText value="#{launch.inclusion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column styleClass="div-align-center"
+                              headerText="#{messages['launch.list.quote']}">
+                        #{launch.quote eq null ? '-' : launch.quote}  
+                    </p:column>
+                    <p:column styleClass="div-align-center"
+                              headerText="#{messages['launch.list.movement']}">
+                        <p:link value="#{launch.movement.code}" 
+                                href="#{fixedMovementBean.changeToViewMovement(launch)}"/>
+                    </p:column>
+                    <p:column width="30%"
+                              styleClass="div-align-center"
+                              headerText="#{messages['launch.list.period']}">
+                        #{launch.financialPeriod.identification}                        
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </div>
+        <div class="ui-grid-row div-mg-t-15">
+            <div class="ui-grid-col-12 div-align-center">
+                <p:commandButton immediate="true"
+                                 value="#{menu['back']}" 
+                                 onclick="PF('dialogLaunches').hide()"/>
+            </div>
+        </div>
+    </h:form>
+</p:dialog>

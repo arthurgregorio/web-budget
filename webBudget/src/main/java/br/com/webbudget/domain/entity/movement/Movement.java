@@ -94,9 +94,14 @@ public class Movement extends PersistentEntity {
 
     @Getter
     @Setter
+    @OneToOne(mappedBy = "movement", cascade = REMOVE)
+    private Launch launch;
+    @Getter
+    @Setter
     @OneToOne(cascade = REMOVE)
     @JoinColumn(name = "id_payment")
     private Payment payment;
+    
     @Getter
     @Setter
     @ManyToOne

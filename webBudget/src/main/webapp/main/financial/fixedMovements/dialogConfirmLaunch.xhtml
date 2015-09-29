@@ -16,8 +16,8 @@
 -->
 
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
-          xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
+          xmlns:h="http://xmlns.jcp.org/jsf/html"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           id="confirmLaunchDialog"
           modal="true" 
@@ -25,8 +25,7 @@
           resizable="false" 
           closeOnEscape="true"
           widgetVar="dialogConfirmLaunch" 
-          header="#{messages['fixed-movement.confirm-launch']}"
-          xmlns:h="http://xmlns.jcp.org/jsf/html">
+          header="#{messages['fixed-movement.confirm-launch']}">
 
     <h:form prependId="false">
         <div class="ui-grid-row">

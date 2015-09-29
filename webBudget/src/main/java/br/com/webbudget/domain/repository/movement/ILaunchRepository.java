@@ -18,6 +18,8 @@ package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.FixedMovement;
 import br.com.webbudget.domain.entity.movement.Launch;
+import br.com.webbudget.domain.misc.model.Page;
+import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 
@@ -43,4 +45,12 @@ public interface ILaunchRepository extends IGenericRepository<Launch, Long> {
      * @return 
      */
     public List<Launch> listByFixedMovement(FixedMovement fixedMovement);
+    
+    /**
+     * 
+     * @param fixedMovement
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Launch> listByFixedMovement(FixedMovement fixedMovement, PageRequest pageRequest);
 }

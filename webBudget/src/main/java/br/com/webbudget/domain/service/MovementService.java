@@ -759,4 +759,14 @@ public class MovementService {
 
         return fixedMovement;
     }
+    
+    /**
+     * 
+     * @param fixedMovement
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Launch> listLaunchesByFixedMovement(FixedMovement fixedMovement, PageRequest pageRequest) {
+        return this.launchRepository.listByFixedMovement(fixedMovement, pageRequest);
+    }
 }

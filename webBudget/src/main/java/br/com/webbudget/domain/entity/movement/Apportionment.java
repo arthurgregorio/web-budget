@@ -107,4 +107,18 @@ public class Apportionment extends PersistentEntity {
         }
         return generated;
     }
+    
+    /**
+     * @return uma copia deste reateio com um novo codigo
+     */
+    public Apportionment copy() {
+        
+        final Apportionment apportionment = new Apportionment();
+        
+        apportionment.setValue(this.value);
+        apportionment.setCostCenter(this.costCenter);
+        apportionment.setMovementClass(this.movementClass);
+        
+        return apportionment;
+    }
 }

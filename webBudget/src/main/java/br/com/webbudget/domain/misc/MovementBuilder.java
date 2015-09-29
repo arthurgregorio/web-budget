@@ -24,6 +24,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
+ * Builder padrao para construcao de movimentos dentro do sistema, utilize ele
+ * para acessar as funcionalidades de criacao de movimentos atraves dos metodos
+ * desta classe
  *
  * @author Arthur Gregorio
  *
@@ -35,16 +38,15 @@ public class MovementBuilder {
     private final Movement movement;
 
     /**
-     * 
+     * Inicializa o movimento a ser construido
      */
     public MovementBuilder() {
         this.movement = new Movement();
     }
 
     /**
-     * 
-     * @param value
-     * @return 
+     * @param value seu valor
+     * @return este builder
      */
     public MovementBuilder withValue(BigDecimal value) {
         this.movement.setValue(value);
@@ -52,9 +54,8 @@ public class MovementBuilder {
     }
     
     /**
-     * 
-     * @param description
-     * @return 
+     * @param description a sua descricao
+     * @return este builder
      */
     public MovementBuilder withDescription(String description) {
         this.movement.setDescription(description);
@@ -62,9 +63,8 @@ public class MovementBuilder {
     }
     
     /**
-     * 
-     * @param dueDate
-     * @return 
+     * @param dueDate a sua data de vencimento
+     * @return este builder
      */
     public MovementBuilder withDueDate(LocalDate dueDate) {
         this.movement.setDueDate(dueDate);
@@ -72,9 +72,8 @@ public class MovementBuilder {
     }
     
     /**
-     * 
-     * @param financialPeriod
-     * @return 
+     * @param financialPeriod o periodo que vamos usar no moviemento
+     * @return este builder
      */
     public MovementBuilder inTheFinancialPeriod(FinancialPeriod financialPeriod) {
         this.movement.setFinancialPeriod(financialPeriod);
@@ -82,18 +81,20 @@ public class MovementBuilder {
     }
     
     /**
-     * 
-     * @param apportionments
-     * @return 
+     * @param apportionments os rateios 
+     * @return este builder
      */
     public MovementBuilder andDividedAmong(List<Apportionment> apportionments) {
-        this.movement.setApportionments(apportionments);
+        apportionments
+                .stream()
+                .forEach(apportionment -> {
+            this.movement.addApportionment(apportionment.copy());
+        });
         return this;
     }
     
     /**
-     * 
-     * @return 
+     * @return uma instancia de movimento com os itens preenchidos
      */
     public Movement build() {
         return this.movement;

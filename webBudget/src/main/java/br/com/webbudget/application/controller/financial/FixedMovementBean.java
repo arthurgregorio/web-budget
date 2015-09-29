@@ -22,6 +22,7 @@ import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.FixedMovement;
 import br.com.webbudget.domain.entity.movement.FixedMovementStatusType;
+import br.com.webbudget.domain.entity.movement.Launch;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.misc.model.AbstractLazyModel;
@@ -51,6 +52,7 @@ import org.primefaces.model.SortOrder;
 public class FixedMovementBean extends AbstractBean {
 
     @Getter
+    @Setter
     private String filter;
     
     @Getter
@@ -80,6 +82,8 @@ public class FixedMovementBean extends AbstractBean {
     private FinancialPeriodService financialPeriodService;
     
     @Getter
+    private AbstractLazyModel<Launch> launchesModel;
+    @Getter
     private final AbstractLazyModel<FixedMovement> fixedMovementsModel;
     
     /**
@@ -87,6 +91,7 @@ public class FixedMovementBean extends AbstractBean {
      */
     public FixedMovementBean(){
 
+        // model dos movimentos fixos
         this.fixedMovementsModel = new AbstractLazyModel<FixedMovement>() {
             @Override
             public List<FixedMovement> load(int first, int pageSize, String sortField, 
@@ -177,6 +182,17 @@ public class FixedMovementBean extends AbstractBean {
     public void changeToDelete(long fixedMovementId) {
         this.fixedMovement = this.movementService.findFixedMovementById(fixedMovementId);
         this.openDialog("deleteFixedMovementDialog", "dialogDeleteFixedMovement");
+    }
+    
+    /**
+     * Redireciona o usuario para ver o movimento referente a fatura
+     * 
+     * @param launch o lancamento que queremos ver o movimento
+     * @return a URL para visualizar o movimento
+     */
+    public String changeToViewMovement(Launch launch) {
+        return "../movement/formMovement.xhtml?faces-redirect=true"
+                + "&movementId=" + launch.getMovement().getId() + "&detailing=true";
     }
     
     /**
@@ -283,12 +299,10 @@ public class FixedMovementBean extends AbstractBean {
      * 
      */
     public void showLaunchConfirmDialog() {
-        
         if (this.selectedFixedMovements.size() < 1) {
             this.error("fixed-movement.validate.no-selection", true);
             return;
         }
-        
         this.openDialog("confirmLaunchDialog","dialogConfirmLaunch");
     }
     
@@ -296,11 +310,35 @@ public class FixedMovementBean extends AbstractBean {
      * 
      */
     public void showLaunchesDialog() {
-        
         if (this.selectedFixedMovements.size() != 1) {
             this.error("fixed-movement.validate.more-than-one", true);
             return;
         }
+        
+        // model dos lancamentos
+        this.launchesModel = new AbstractLazyModel<Launch>() {
+            @Override
+            public List<Launch> load(int first, int pageSize, String sortField, 
+                    SortOrder sortOrder, Map<String, Object> filters) {
+                
+                final PageRequest pageRequest = new PageRequest();
+                
+                pageRequest
+                        .setFirstResult(first)
+                        .withPageSize(pageSize)
+                        .sortingBy(sortField, "inclusion")
+                        .withDirection(sortOrder.name());
+                
+                final Page<Launch> page = movementService.listLaunchesByFixedMovement(
+                        selectedFixedMovements.get(0), pageRequest);
+                
+                this.setRowCount(page.getTotalPagesInt());
+                
+                return page.getContent();
+            }
+        };
+        
+        this.openDialog("launchesDialog","dialogLaunches");
     }
     
     /**
