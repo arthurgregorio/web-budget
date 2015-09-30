@@ -130,20 +130,25 @@ public class FixedMovementBean extends AbstractBean {
     /**
      * 
      * @param fixedMovementId 
+     * @param detailing 
      */
-    public void initializeForm(long fixedMovementId) {
+    public void initializeForm(long fixedMovementId, boolean detailing) {
         
         this.costCenters = this.movementService.listCostCenters(false);
-
-        if (fixedMovementId == 0) {
+        
+        if (fixedMovementId == 0 && !detailing) {
             this.viewState = ViewState.ADDING;
             this.fixedMovement = new FixedMovement();
-        } else {
+        } else if (fixedMovementId != 0 && !detailing) {
             this.viewState = ViewState.EDITING;
             this.fixedMovement = this.movementService
                     .findFixedMovementById(fixedMovementId);
             this.fixedMovement = this.movementService
                     .fetchLaunchesForFixedMovement(this.fixedMovement);
+        } else {
+            this.viewState = ViewState.DETAILING;
+            this.fixedMovement = this.movementService
+                    .findFixedMovementById(fixedMovementId);            
         }
     }
     
@@ -319,10 +324,18 @@ public class FixedMovementBean extends AbstractBean {
      * 
      */
     public void showLaunchesDialog() {
-        if (this.selectedFixedMovements.size() != 1) {
+       
+        // valida se a selecao tem mais de um item
+        if (this.viewState == ViewState.LISTING && this.selectedFixedMovements.size() != 1) {
             this.error("fixed-movement.validate.more-than-one", true);
             return;
-        }
+        } 
+        
+        // se a origem da visualizacao vem da tela de listem, pegamos da lista 
+        // de itens da table
+        if (this.viewState == ViewState.LISTING) {
+            this.fixedMovement = this.selectedFixedMovements.get(0);
+        } 
         
         // model dos lancamentos
         this.launchesModel = new AbstractLazyModel<Launch>() {
@@ -339,7 +352,7 @@ public class FixedMovementBean extends AbstractBean {
                         .withDirection(sortOrder.name());
                 
                 final Page<Launch> page = movementService.listLaunchesByFixedMovement(
-                        selectedFixedMovements.get(0), pageRequest);
+                        fixedMovement, pageRequest);
                 
                 this.setRowCount(page.getTotalPagesInt());
                 

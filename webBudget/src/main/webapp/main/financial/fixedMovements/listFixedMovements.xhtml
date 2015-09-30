@@ -108,7 +108,7 @@
                             <p:commandButton icon="fa fa-info-circle"
                                              title="#{menu['detail']}"
                                              rendered="#{fixedMovement.fixedMovementStatusType eq 'FINALIZED'}"
-                                             actionListener="#{fixedMovementBean.changeToDetail(fixedMovement.id)}"/>
+                                             action="#{fixedMovementBean.changeToDetail(fixedMovement.id)}"/>
                         </p:column>
                     </p:dataTable>
                 </div>

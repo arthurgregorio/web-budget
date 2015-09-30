@@ -34,6 +34,7 @@ import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
 import br.com.webbudget.domain.misc.MovementBuilder;
 import br.com.webbudget.domain.misc.dto.MovementFilter;
+import br.com.webbudget.domain.misc.events.PeriodOpen;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.misc.model.Page;
@@ -52,6 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -584,6 +586,18 @@ public class MovementService {
                 });
     }
 
+    /**
+     * 
+     * @param period 
+     */
+    public void autoLaunchFixedMovements(@Observes @PeriodOpen FinancialPeriod period) {
+       
+        final List<FixedMovement> fixedMovements = 
+                this.fixedMovementRepository.listAutoLaunch();
+        
+        this.launchFixedMovements(fixedMovements, period);
+    }
+    
     /**
      *
      * @param movementClassId

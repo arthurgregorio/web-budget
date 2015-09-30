@@ -25,7 +25,7 @@
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
-        <f:viewAction action="#{fixedMovementBean.initializeForm(param.fixedMovementId)}"/>
+        <f:viewAction action="#{fixedMovementBean.initializeForm(param.fixedMovementId, param.detailing)}"/>
     </f:metadata>
 
     <ui:define name="breadcrumb">
@@ -65,9 +65,6 @@
                             <p:selectOneMenu id="inStatus" 
                                              converter="omnifaces.GenericEnumConverter"
                                              value="#{fixedMovementBean.fixedMovement.fixedMovementStatusType}">
-                                <f:selectItem itemValue="#{null}"
-                                              noSelectionOption="true"
-                                              itemLabel="#{messages['fixed-movement.form.select-one']}" />
                                 <f:selectItems var="statusType"
                                                itemValue="#{statusType}"
                                                itemLabel="#{messages[statusType]}"
@@ -188,19 +185,27 @@
             </div>
             <div class="ui-grid-row flat-box">
                 <div class="ui-grid-col-6">
-
+                    <p:commandButton style="width: 130px;"
+                                     value="#{menu['launches']}"
+                                     styleClass="ui-button-info"
+                                     action="#{fixedMovementBean.showLaunchesDialog()}"
+                                     rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
                 </div>
                 <div class="ui-grid-col-6 form-controls-box">
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
                                      action="#{fixedMovementBean.doCancel()}"/>
-                    <p:spacer width="10"/>
+                    <p:spacer width="10"
+                              rendered="#{fixedMovementBean.viewState eq 'ADDING'}"/>
                     <p:commandButton value="#{menu['save']}"
                                      update="fixedMovementForm"
                                      process="fixedMovementForm"
                                      styleClass="ui-button-success"
                                      action="#{fixedMovementBean.doSave()}"
                                      rendered="#{fixedMovementBean.viewState eq 'ADDING'}"/>
+                    <p:spacer width="10"
+                              rendered="#{fixedMovementBean.viewState eq 'EDITING' and 
+                                          empty fixedMovementBean.fixedMovement.launches}"/>
                     <p:commandButton value="#{menu['update']}"
                                      update="fixedMovementForm"
                                      process="fixedMovementForm"
@@ -214,6 +219,7 @@
     </ui:define>
 
     <ui:define name="popups">
+        <ui:include src="dialogLaunches.xhtml"/>
         <ui:include src="dialogApportionment.xhtml" />
     </ui:define>
 </ui:composition>

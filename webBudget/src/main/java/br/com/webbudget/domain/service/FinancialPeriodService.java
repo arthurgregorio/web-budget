@@ -23,6 +23,8 @@ import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.misc.events.PeriodClosed;
+import br.com.webbudget.domain.misc.events.PeriodOpen;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import br.com.webbudget.domain.misc.model.Page;
 import br.com.webbudget.domain.misc.model.PageRequest;
@@ -32,6 +34,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -52,7 +55,11 @@ public class FinancialPeriodService {
     private IMovementRepository movementRepository;
     @Inject
     private IFinancialPeriodRepository financialPeriodRepository;
-
+    
+    @Inject
+    @PeriodOpen
+    private Event<FinancialPeriod> periodOpenEvent;
+    
     /**
      *
      * @param financialPeriod
@@ -82,7 +89,11 @@ public class FinancialPeriodService {
             throw new WbDomainException("financial-period.validate.invalid-end");
         }
 
-        this.financialPeriodRepository.save(financialPeriod);
+        final FinancialPeriod opened = 
+                this.financialPeriodRepository.save(financialPeriod);
+        
+        // disparamos o evento para notificar os interessados
+        this.periodOpenEvent.fire(opened);
     }
     
     /**
@@ -102,28 +113,6 @@ public class FinancialPeriodService {
         
         // nao tem movimentos entao deleta
         this.financialPeriodRepository.delete(financialPeriod);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public FinancialPeriod findActiveFinancialPeriod() {
-
-        final List<FinancialPeriod> financialPeriods = this.financialPeriodRepository.listOpen();
-
-        FinancialPeriod activePeriod = null;
-
-        for (FinancialPeriod financialPeriod : financialPeriods) {
-            if (!financialPeriod.isExpired()) {
-                activePeriod = financialPeriod;
-                break;
-            } else {
-                activePeriod = financialPeriod;
-            }
-        }
-
-        return activePeriod;
     }
 
     /**
@@ -171,6 +160,28 @@ public class FinancialPeriodService {
         periodDetailsDTO.sortMovementClasses();
 
         return periodDetailsDTO;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public FinancialPeriod findActiveFinancialPeriod() {
+
+        final List<FinancialPeriod> financialPeriods = this.financialPeriodRepository.listOpen();
+
+        FinancialPeriod activePeriod = null;
+
+        for (FinancialPeriod financialPeriod : financialPeriods) {
+            if (!financialPeriod.isExpired()) {
+                activePeriod = financialPeriod;
+                break;
+            } else {
+                activePeriod = financialPeriod;
+            }
+        }
+
+        return activePeriod;
     }
 
     /**

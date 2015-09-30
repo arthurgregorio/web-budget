@@ -117,10 +117,14 @@ public class MovementBean extends AbstractBean {
      */
     public MovementBean() {
         
+        // inicializa o DTO de filtro
+        this.movementFilter = new MovementFilter();
+        
         // montamos o datamodel de movimentos
         this.movementsModel = new AbstractLazyModel<Movement>() {
             @Override
-            public List<Movement> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+            public List<Movement> load(int first, int pageSize, String sortField, 
+                    SortOrder sortOrder, Map<String, Object> filters) {
                 
                 final PageRequest pageRequest = new PageRequest();
                 
@@ -272,7 +276,7 @@ public class MovementBean extends AbstractBean {
      * @return 
      */
     public String changeToDetail(long movementId) {
-        return "formMovement.xhtml?movementId=" + movementId + "&detailing=true";
+        return "formMovement.xhtml?faces-redirect=true&movementId=" + movementId + "&detailing=true";
     }
 
     /**

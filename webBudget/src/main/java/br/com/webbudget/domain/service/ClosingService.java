@@ -24,6 +24,7 @@ import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
+import br.com.webbudget.domain.misc.events.PeriodClosed;
 import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IClosingRepository;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
@@ -32,6 +33,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -57,6 +59,10 @@ public class ClosingService {
     private IMovementRepository movementRepository;
     @Inject
     private IFinancialPeriodRepository financialPeriodRepository;
+    
+    @Inject
+    @PeriodClosed
+    private Event<FinancialPeriod> periodClosedEvent;
 
     /**
      * Processa o fechamento do mes, verificando por incosistencias de
@@ -148,6 +154,10 @@ public class ClosingService {
         financialPeriod.setClosed(true);
         financialPeriod.setClosing(closing);
 
-        this.financialPeriodRepository.save(financialPeriod);
+        final FinancialPeriod closed = 
+                this.financialPeriodRepository.save(financialPeriod);
+        
+        // dispara o evento notificando quem precisar
+        this.periodClosedEvent.fire(closed);
     }
 }

@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.FixedMovement;
+import br.com.webbudget.domain.entity.movement.FixedMovementStatusType;
 import br.com.webbudget.domain.misc.model.Page;
 import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.GenericRepository;
@@ -40,6 +41,22 @@ public class FixedMovementRepository extends GenericRepository<FixedMovement, Lo
 
     /**
      *
+     * @return
+     */
+    @Override
+    public List<FixedMovement> listAutoLaunch() {
+
+        final Criteria criteria = this.createCriteria();
+
+        criteria.add(
+                Restrictions.and(Restrictions.eq("autoLaunch", true), 
+                Restrictions.eq("fixedMovementStatusType", FixedMovementStatusType.ACTIVE)));
+
+        return criteria.list();
+    }
+
+    /**
+     *
      * @param filter
      * @param pageRequest
      * @return
@@ -53,14 +70,15 @@ public class FixedMovementRepository extends GenericRepository<FixedMovement, Lo
 
         // filtramos
         if (filter != null && !filter.isEmpty()) {
-            
+
             criterions.add(Restrictions.ilike("description", "%" + filter + "%"));
             criterions.add(Restrictions.ilike("identification", "%" + filter + "%"));
 
             // se conseguir castar para bigdecimal trata como um filtro
             try {
                 criterions.add(Restrictions.eq("value", new BigDecimal(filter)));
-            } catch (NumberFormatException ex) { }
+            } catch (NumberFormatException ex) {
+            }
         }
 
         criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));

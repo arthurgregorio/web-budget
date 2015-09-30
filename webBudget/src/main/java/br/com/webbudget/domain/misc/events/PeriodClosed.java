@@ -14,34 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repository.movement;
+package br.com.webbudget.domain.misc.events;
 
-import br.com.webbudget.domain.entity.movement.FixedMovement;
-import br.com.webbudget.domain.misc.model.Page;
-import br.com.webbudget.domain.misc.model.PageRequest;
-import br.com.webbudget.domain.repository.IGenericRepository;
-import java.util.List;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.PARAMETER;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
 /**
+ * Evento de notificacao de periodos encerrados
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.1.0, 20/09/2015
+ * @since 2.1.0, 30/09/2015
  */
-public interface IFixedMovementRepository extends IGenericRepository<FixedMovement, Long> {
-
-    /**
-     * 
-     * @return 
-     */
-    public List<FixedMovement> listAutoLaunch();
-    
-    /**
-     * 
-     * @param filter
-     * @param pageRequest
-     * @return 
-     */
-    public Page<FixedMovement> listByFilter(String filter, PageRequest pageRequest);
-}
+@Qualifier
+@Retention(RUNTIME)
+@Target({TYPE, FIELD, METHOD, PARAMETER})
+public @interface PeriodClosed { }
