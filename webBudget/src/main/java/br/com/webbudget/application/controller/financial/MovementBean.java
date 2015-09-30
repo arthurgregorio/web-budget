@@ -266,11 +266,19 @@ public class MovementBean extends AbstractBean {
     public String changeToPay(long movementId) {
         return "formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
     }
+    
+    /**
+     * @param movementId
+     * @return 
+     */
+    public String changeToDetail(long movementId) {
+        return "formMovement.xhtml?movementId=" + movementId + "&detailing=true";
+    }
 
     /**
      * Da um redirect para os detalhes do movimento
      */
-    public void changeToDetails() {
+    public void changeToDetail() {
         try {
             String url = FacesContext.getCurrentInstance()
                     .getExternalContext().getRequestContextPath();

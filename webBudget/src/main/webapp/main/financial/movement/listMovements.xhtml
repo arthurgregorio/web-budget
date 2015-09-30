@@ -86,12 +86,13 @@
                                  rowKey="#{movement.id}"
                                  paginatorPosition="bottom"
                                  paginatorAlwaysVisible="false"
+                                 rowStyleClass="full-height-row"
                                  selection="#{movementBean.movement}"
                                  value="#{movementBean.movementsModel}"
                                  emptyMessage="#{messages['movement.list.empty']}">
 
                         <p:ajax event="rowSelect" 
-                                listener="#{movementBean.changeToDetails()}" />
+                                listener="#{movementBean.changeToDetail()}" />
 
                         <p:column width="6%" 
                                   style="text-align: center"
@@ -169,8 +170,10 @@
                                              rendered="#{movement.deletable eq true 
                                                          and authorizationBean.hasRole(authorization.MOVEMENT_DELETE)}"
                                              actionListener="#{movementBean.changeToDelete(movement.id)}" />
-                            <h:outputText value="-" 
-                                          rendered="#{movement.movementStateType eq 'CALCULATED'}" />
+                            <p:commandButton icon="fa fa-info-circle"
+                                             title="#{menu['detail']}"
+                                             action="#{movementBean.changeToDetail(movement.id)}" 
+                                             rendered="#{movement.movementStateType eq 'CALCULATED'}"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>

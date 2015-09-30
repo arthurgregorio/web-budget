@@ -132,7 +132,9 @@ td {
     overflow: hidden;
     padding: 15px;
 }
-
+.full-height-row tr {
+    height: 44px;
+}
 .green-heavy-test {
     font-weight: 700;
     color: green;

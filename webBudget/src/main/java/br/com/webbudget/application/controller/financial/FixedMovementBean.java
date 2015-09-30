@@ -196,6 +196,15 @@ public class FixedMovementBean extends AbstractBean {
     }
     
     /**
+     * @param fixedMovementId
+     * @return 
+     */
+    public String changeToDetail(long fixedMovementId) {
+        return "formFixedMovement.xhtml?faces-redirect=true&fixedMovementId=" 
+                + fixedMovementId + "&detailing=true";
+    }
+
+    /**
      * @return 
      */
     public String doCancel() {

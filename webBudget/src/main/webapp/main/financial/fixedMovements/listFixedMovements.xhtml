@@ -65,18 +65,20 @@
 
         <h:form prependId="false">
             <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-12">
+                <div class="ui-grid-col-12 full-height-row">
                     <p:dataTable id="fixedMovementsList" 
                                  rows="15"
                                  lazy="true"
                                  paginator="true"
-                                 var="fixedMovement"
+                                 var="fixedMovement" 
                                  sortMode="ascending"
-                                 paginatorPosition="bottom"
+                                 paginatorPosition="bottom" 
                                  paginatorAlwaysVisible="false"
+                                 rowStyleClass="full-height-row"
                                  value="#{fixedMovementBean.fixedMovementsModel}"
                                  selection="#{fixedMovementBean.selectedFixedMovements}"
-                                 emptyMessage="#{messages['fixed-movement.list.empty']}">
+                                 emptyMessage="#{messages['fixed-movement.list.empty']}"
+                                 disabledSelection="#{fixedMovement.fixedMovementStatusType eq 'FINALIZED'}">
 
                         <p:column selectionMode="multiple" 
                                   style="width:16px;text-align:center"/>
@@ -92,15 +94,21 @@
                         <p:column width="18%" 
                                   styleClass="div-align-center"
                                   headerText="#{menu['actions']}">
-                            <p:commandButton icon="fa fa-edit"
-                                             title="#{menu['edit']}"
-                                             action="#{fixedMovementBean.changeToEdit(fixedMovement.id)}" 
-                                             rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_UPDATE)}"/>
-                            <p:spacer width="10"/>
-                            <p:commandButton icon="fa fa-remove"
-                                             title="#{menu['delete']}"
-                                             actionListener="#{fixedMovementBean.changeToDelete(fixedMovement.id)}" 
-                                             rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_DELETE)}"/>
+                            <div jsf:rendered="#{fixedMovement.fixedMovementStatusType eq 'ACTIVE'}">
+                                <p:commandButton icon="fa fa-edit"
+                                                 title="#{menu['edit']}"
+                                                 action="#{fixedMovementBean.changeToEdit(fixedMovement.id)}" 
+                                                 rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_UPDATE)}"/>
+                                <p:spacer width="10"/>
+                                <p:commandButton icon="fa fa-remove"
+                                                 title="#{menu['delete']}"
+                                                 actionListener="#{fixedMovementBean.changeToDelete(fixedMovement.id)}" 
+                                                 rendered="#{authorizationBean.hasRole(authorization.FIXED_MOVEMENT_DELETE)}"/>
+                            </div>
+                            <p:commandButton icon="fa fa-info-circle"
+                                             title="#{menu['detail']}"
+                                             rendered="#{fixedMovement.fixedMovementStatusType eq 'FINALIZED'}"
+                                             actionListener="#{fixedMovementBean.changeToDetail(fixedMovement.id)}"/>
                         </p:column>
                     </p:dataTable>
                 </div>
