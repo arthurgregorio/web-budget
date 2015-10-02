@@ -114,40 +114,6 @@
                 <email.password>mail-pass</email.password>
             </properties>
         </profile>
-        <profile>
-            <id>openshift</id>
-            <activation>
-                <property>
-                    <name>env</name>
-                    <value>openshift</value>
-                </property>
-            </activation>
-            <properties>
-                <application.version>${project.version}</application.version>
-                <orm.show-sql>false</orm.show-sql>
-                <email.host>mail.somehost.com.br</email.host>
-                <email.port>587</email.port>
-                <email.user>someuser@somehost.com</email.user>
-                <email.password>mail-pass</email.password>
-            </properties>
-        </profile>
-        <profile>
-            <id>jelastic</id>
-            <activation>
-                <property>
-                    <name>env</name>
-                    <value>jelastic</value>
-                </property>
-            </activation>
-            <properties>
-                <application.version>${project.version}</application.version>
-                <orm.show-sql>false</orm.show-sql>
-                <email.host>${wb_mail_host}</email.host>
-                <email.port>587</email.port>
-                <email.user>${wb_mail_user}</email.user>
-                <email.password>${wb_mail_password}</email.password>
-            </properties>
-        </profile>
     </profiles>
     
     <repositories>
