@@ -370,6 +370,8 @@ td {
 }
 
 .dialog-highlighted-text {
+    position: relative;
+    top: -2px;
     font-weight: 700;
     margin: 0 5px;
 }
@@ -576,21 +578,9 @@ td {
 }
 
 /* formulario de ajuste de saldo -------------- */
-.balance-text {
+.balance-detail-box label {
     display: block;
-    font-size: 14pt;
-    font-weight: 700;
-}
-.balance-value {
-    display: block;
-    font-size: 18pt;
-}
-.balance-detail-row {
-    margin: 15px 0;
-}
-.balance-detail-label {
-    display: block;
-    font-weight: 700;
+    font-weight: 700 !important;
 }
 
 /* form de movimentos fixos ------------------ */

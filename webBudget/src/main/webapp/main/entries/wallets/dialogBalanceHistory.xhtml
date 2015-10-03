@@ -18,6 +18,7 @@
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
           xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
+          xmlns:jsf="http://xmlns.jcp.org/jsf"
           xmlns:h="http://xmlns.jcp.org/jsf/html"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           id="balanceHistoryDialog" 
@@ -28,35 +29,30 @@
           widgetVar="dialogBalanceHistory" 
           header="#{messages['balance-history.dialog']}">
 
-    <div class="ui-grid ui-grid-responsive">
-        <div class="ui-grid-row">
-            <div class="ui-grid-row div-mg-b-15">
-                <o:outputFormat escape="false" 
-                                value="#{messages['balance-history.dialog.wallet-identification']} ">
-                    <f:param value="#{walletBean.wallet.friendlyName}" />
-                </o:outputFormat>
-            </div>
-        </div>
-        <div class="ui-grid-row div-mg-b-15">
-            <div class="ui-grid-col-5">
-                <h:form prependId="false">
-                    <p:dataTable id="balanceList" 
-                                 rows="10"
-                                 var="balance"
-                                 paginator="true"
-                                 selectionMode="single"
-                                 rowKey="#{balance.id}"
-                                 paginatorPosition="bottom"
-                                 paginatorAlwaysVisible="false"
-                                 value="#{walletBean.walletBalances}"
-                                 selection="#{walletBean.selectedBalance}"
-                                 emptyMessage="#{messages['balance-history.list.empty']}">
+    <div class="ui-grid-row div-mg-b-15">
+        <div class="ui-grid-col-12">
+            <h:form prependId="false">
+                <p:dataScroller id="balanceList"
+                                var="balance"
+                                mode="inline" 
+                                chunkSize="10"
+                                scrollHeight="250"
+                                value="#{walletBean.walletBalances}">
+                    <f:facet name="header">
+                        <o:outputFormat escape="false" 
+                                        value="#{messages['balance-history.dialog.wallet-identification']} ">
+                            <f:param value="#{walletBean.wallet.friendlyName}" />
+                        </o:outputFormat>
+                    </f:facet>
 
-                        <p:ajax event="rowSelect"
-                                listener="#{walletBean.updateBalanceDetails()}"/>
+                    <f:facet name="loader">
+                        <p:commandButton type="button" 
+                                         icon="fa fa-plus"
+                                         value="#{menu['more']}" />
+                    </f:facet>
 
-                        <p:column style="text-align: center"
-                                  headerText="#{messages['balance-history.list.type']}">
+                    <div class="ui-grid-row div-pd-tb-10 balance-detail-box">
+                        <div class="ui-grid-col-2">
                             <h:outputText styleClass="fa fa-plus"
                                           title="#{messages[balance.walletBalanceType]}"
                                           rendered="#{balance.walletBalanceType eq 'REVENUE'}"/>
@@ -75,78 +71,63 @@
                             <h:outputText styleClass="fa fa-mail-reply-all"
                                           title="#{messages[balance.walletBalanceType]}"
                                           rendered="#{balance.walletBalanceType eq 'TRANSFER_ADJUSTMENT'}"/>
-                        </p:column>
-                        <p:column style="text-align: center"
-                                  headerText="#{messages['balance-history.list.movemented-value']}">
-                            <h:outputText value="#{balance.movementedValue}">
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </p:column>
-                    </p:dataTable>
-                </h:form>
-            </div>
-            <h:panelGroup id="detailsPanel" 
-                          layout="block"
-                          styleClass="ui-grid-col-7 div-mg-l-15 div-align-center">
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12">
-                        <h:outputText styleClass="balance-text"
-                                      value="#{messages['balance-history.old-balance']}"/>
-                        <p:spacer height="10"/>
-                        <h:outputText styleClass="balance-value"
-                                      value="#{walletBean.selectedBalance.oldBalance}"
-                                      style="#{walletBean.selectedBalance.oldBalance.signum() lt 0 ? 'color: red;' : 
-                                               walletBean.selectedBalance.oldBalance.signum() gt 0 ? 'color: green': ''}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                        </h:outputText>
+                        </div>
+                        <div class="ui-grid-col-10">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-4">
+                                    <p:outputLabel value="#{messages['balance-history.movemented-value']}"/>
+                                    <h:outputText value="#{balance.movementedValue}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
+                                </div>
+                                <div class="ui-grid-col-4">
+                                    <p:outputLabel value="#{messages['balance-history.old-balance']}"/>
+                                    <h:outputText styleClass="balance-value"
+                                                  value="#{walletBean.selectedBalance.oldBalance}"
+                                                  style="#{walletBean.selectedBalance.oldBalance.signum() lt 0 ? 'color: red;' : 
+                                                           walletBean.selectedBalance.oldBalance.signum() gt 0 ? 'color: green': ''}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
+                                </div>
+                                <div class="ui-grid-col-4">
+                                    <p:outputLabel value="#{messages['balance-history.actual-balance']}"/>
+                                    <h:outputText value="#{walletBean.selectedBalance.actualBalance}"
+                                                  style="#{walletBean.selectedBalance.actualBalance.signum() lt 0 ? 'color: red;' : 
+                                                           walletBean.selectedBalance.actualBalance.signum() gt 0 ? 'color: green': ''}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
+                                </div>
+                            </div>
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-6">
+                                    <p:outputLabel value="#{messages['balance-history.type']}:"/>
+                                    #{messages[walletBean.selectedBalance.walletBalanceType]}
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <p:outputLabel value="#{messages['balance-history.inclusion']}:"/>
+                                    <h:outputText value="#{walletBean.selectedBalance.inclusion}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                </div>
+                            </div>
+                            <div class="ui-grid-row"
+                                 jsf:rendered="#{walletBean.selectedBalance.reason ne null}">
+                                <div class="ui-grid-col-12">
+                                    <h:outputText styleClass="balance-detail-label"
+                                                  value="#{messages['balance-history.reason']}:"/>
+                                    <h:outputText value="#{walletBean.selectedBalance.reason}" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12">
-                        <p:graphicImage library="images" name="ui-arrow-down.png"/>
-                    </div>
-                </div>
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12">
-                        <h:outputText styleClass="balance-value"
-                                      value="#{walletBean.selectedBalance.actualBalance}"
-                                      style="#{walletBean.selectedBalance.actualBalance.signum() lt 0 ? 'color: red;' : 
-                                               walletBean.selectedBalance.actualBalance.signum() gt 0 ? 'color: green': ''}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                        </h:outputText>
-                        <p:spacer height="10"/>
-                        <h:outputText styleClass="balance-text"
-                                      value="#{messages['balance-history.actual-balance']}"/>
-                    </div>
-                </div>
-                <div class="ui-grid-row balance-detail-row">
-                    <div class="ui-grid-col-6">
-                        <h:outputText styleClass="balance-detail-label"
-                                      value="#{messages['balance-history.type']}:"/>
-                        <h:outputText value="#{messages[walletBean.selectedBalance.walletBalanceType]}" />
-                    </div>
-                    <div class="ui-grid-col-6">
-                        <h:outputText styleClass="balance-detail-label"
-                                      value="#{messages['balance-history.inclusion']}:"/>
-                        <h:outputText value="#{walletBean.selectedBalance.inclusion}">
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                        </h:outputText>
-                    </div>
-                </div>
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12">
-                        <h:outputText styleClass="balance-detail-label"
-                                      value="#{messages['balance-history.reason']}:"/>
-                        <h:outputText value="#{walletBean.selectedBalance.reason}" />
-                    </div>
-                </div>
-            </h:panelGroup>
+                </p:dataScroller>
+            </h:form>
         </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center">
-                <p:commandButton value="#{menu['back']}"
-                                 onclick="PF('dialogBalanceHistory').hide()"/>
-            </div>
+    </div>
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-12 div-align-center">
+            <p:commandButton value="#{menu['back']}"
+                             onclick="PF('dialogBalanceHistory').hide()"/>
         </div>
     </div>
 </p:dialog>
