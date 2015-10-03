@@ -18,6 +18,7 @@ package br.com.webbudget.domain.entity.wallet;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -80,4 +81,11 @@ public class WalletBalance extends PersistentEntity {
     @NotNull(message = "{wallet-balance.null-source}")
     @JoinColumn(name = "id_source_wallet")
     private Wallet sourceWallet;
+    
+    /**
+     * @return 
+     */
+    public String getInclusionFormatted() {
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(this.getInclusion());
+    }
 }

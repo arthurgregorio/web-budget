@@ -162,6 +162,9 @@ td {
 .div-pd-lr-10 {
     padding: 0 10px;
 }
+.div-pd-b-10 {
+    padding-bottom: 10px;
+}
 .div-mg-b-15 {
     margin-bottom: 15px;
 }
@@ -173,6 +176,9 @@ td {
 }
 .div-mg-t-10 {
     margin-top: 10px;
+}
+.div-mg-b-10 {
+    margin-bottom: 10px;
 }
 .div-mg-t-25 {
     margin-top: 25px;
@@ -572,15 +578,9 @@ td {
     height: 34px;
 }
 
-/* formulario de ajust de saldo -------------- */
+/* formulario de ajuste de saldo -------------- */
 .adjustment-reason-input {
     width: 95%;
-}
-
-/* formulario de ajuste de saldo -------------- */
-.balance-detail-box label {
-    display: block;
-    font-weight: 700 !important;
 }
 
 /* form de movimentos fixos ------------------ */
@@ -588,4 +588,14 @@ td {
     position: relative;
     top: 7px;
     margin-left: 15px;
+}
+
+/* consulta de saldos da carteira ------------ */
+.balance-detail-box {
+    padding: 5px 0 0 5px;
+    margin-bottom: 10px;
+}
+.balance-detail-box label {
+    display: block;
+    font-weight: 700 !important;
 }

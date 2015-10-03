@@ -263,13 +263,6 @@ public class WalletBean extends AbstractBean {
         
         this.openDialog("balanceHistoryDialog", "dialogBalanceHistory");
     }
-
-    /**
-     * Atualiza os dados do saldo na tela
-     */
-    public void updateBalanceDetails() {
-        this.update("detailsPanel");
-    }
     
     /**
      * Carrega os dados referentes a conta bancaria quando o tipo a ser cadast-
