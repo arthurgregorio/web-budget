@@ -83,6 +83,12 @@
                         <p:column selectionMode="multiple" 
                                   style="width:16px;text-align:center"/>
 
+                        <p:column width="10%"
+                                  styleClass="div-align-center"
+                                  headerText="#{messages['fixed-movement.list.is-autolaunch']}">
+                            <p:selectBooleanCheckbox disabled="true" 
+                                                     value="#{fixedMovement.autoLaunch}" />
+                        </p:column>
                         <p:column headerText="#{messages['fixed-movement.list.identification']}">
                             #{fixedMovement.identification}
                         </p:column>
