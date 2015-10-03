@@ -101,4 +101,12 @@ public class Launch extends PersistentEntity {
         }
         return generated;
     }
+    
+    /**
+     * @param period o periodo que devemos checar
+     * @return se pertence ou nao ao periodo
+     */
+    public boolean belongsToPeriod(FinancialPeriod period) {
+        return this.financialPeriod.equals(period);
+    }
 }

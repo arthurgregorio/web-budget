@@ -102,6 +102,11 @@ public class FixedMovement extends PersistentEntity {
     @Getter
     @Setter
     @Transient
+    private boolean alreadyLaunched;
+    
+    @Getter
+    @Setter
+    @Transient
     private List<Launch> launches;
 
     @Getter

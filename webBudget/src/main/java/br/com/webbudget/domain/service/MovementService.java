@@ -87,6 +87,9 @@ public class MovementService {
     private IApportionmentRepository apportionmentRepository;
     @Inject
     private IMovementClassRepository movementClassRepository;
+    
+    @Inject
+    private FinancialPeriodService financialPeriodService;
 
     /**
      *
@@ -756,7 +759,28 @@ public class MovementService {
      * @return
      */
     public Page<FixedMovement> listFixedMovementsByFilter(String filter, PageRequest pageRequest) {
-        return this.fixedMovementRepository.listByFilter(filter, pageRequest);
+        
+        final Page<FixedMovement> page = 
+                this.fixedMovementRepository.listByFilter(filter, pageRequest);
+        
+        final FinancialPeriod period = 
+                this.financialPeriodService.findActiveFinancialPeriod();
+        
+        page.getContent()
+                .forEach(fixedMovement -> {
+                    
+                    final List<Launch> launches = this.launchRepository
+                            .listByFixedMovement(fixedMovement);
+                    
+                    for (Launch launch : launches) {
+                        if (launch.belongsToPeriod(period)){
+                            fixedMovement.setAlreadyLaunched(true);
+                            break;
+                        }
+                    }
+        });
+        
+        return page;
     }
 
     /**

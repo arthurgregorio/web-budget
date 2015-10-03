@@ -83,11 +83,21 @@
                         <p:column selectionMode="multiple" 
                                   style="width:16px;text-align:center"/>
 
-                        <p:column width="10%"
+                        <p:column width="6%" 
                                   styleClass="div-align-center"
-                                  headerText="#{messages['fixed-movement.list.is-autolaunch']}">
-                            <p:selectBooleanCheckbox disabled="true" 
-                                                     value="#{fixedMovement.autoLaunch}" />
+                                  headerText="#{messages['fixed-movement.list.launched']}">
+                            <p:graphicImage width="18"
+                                            height="18"
+                                            library="images" 
+                                            name="ui-green-circle.png" 
+                                            rendered="#{fixedMovement.alreadyLaunched}"
+                                            title="#{messages['fixed-movement.list.is-launched']}"/>
+                            <p:graphicImage  width="18"
+                                             height="18"
+                                             library="images" 
+                                             name="ui-red-circle.png" 
+                                             rendered="#{not fixedMovement.alreadyLaunched}"
+                                             title="#{messages['fixed-movement.list.not-launched']}"/>
                         </p:column>
                         <p:column headerText="#{messages['fixed-movement.list.identification']}">
                             #{fixedMovement.identification}
@@ -96,6 +106,12 @@
                                   styleClass="div-align-center"
                                   headerText="#{messages['fixed-movement.list.status']}">
                             #{messages[fixedMovement.fixedMovementStatusType]}
+                        </p:column>
+                        <p:column width="10%"
+                                  styleClass="div-align-center"
+                                  headerText="#{messages['fixed-movement.list.is-autolaunch']}">
+                            <p:selectBooleanCheckbox disabled="true" 
+                                                     value="#{fixedMovement.autoLaunch}" />
                         </p:column>
                         <p:column width="18%" 
                                   styleClass="div-align-center"
@@ -113,8 +129,8 @@
                             </div>
                             <p:commandButton icon="fa fa-info-circle"
                                              title="#{menu['detail']}"
-                                             rendered="#{fixedMovement.fixedMovementStatusType eq 'FINALIZED'}"
-                                             action="#{fixedMovementBean.changeToDetail(fixedMovement.id)}"/>
+                                             action="#{fixedMovementBean.changeToDetail(fixedMovement.id)}"
+                                             rendered="#{fixedMovement.fixedMovementStatusType eq 'FINALIZED'}"/>
                         </p:column>
                     </p:dataTable>
                 </div>
