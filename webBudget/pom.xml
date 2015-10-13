@@ -91,10 +91,10 @@
             <properties>
                 <application.version>${project.version}</application.version>
                 <orm.show-sql>true</orm.show-sql>
-                <email.host>mail.somehost.com.br</email.host>
-                <email.port>587</email.port>
-                <email.user>someuser@somehost.com</email.user>
-                <email.password>mail-pass</email.password>
+                <email.host>${wb.email-host}</email.host>
+                <email.port>${wb.email-port}</email.port>
+                <email.user>${wb.email-user}</email.user>
+                <email.password>${wb.email-password}</email.password>
             </properties>
         </profile>
         <profile>
@@ -108,10 +108,10 @@
             <properties>
                 <application.version>${project.version}</application.version>
                 <orm.show-sql>false</orm.show-sql>
-                <email.host>mail.somehost.com.br</email.host>
-                <email.port>587</email.port>
-                <email.user>someuser@somehost.com</email.user>
-                <email.password>mail-pass</email.password>
+                <email.host>${wb.email-host}</email.host>
+                <email.port>${wb.email-port}</email.port>
+                <email.user>${wb.email-user}</email.user>
+                <email.password>${wb.email-password}</email.password>
             </properties>
         </profile>
     </profiles>
