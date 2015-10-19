@@ -26,7 +26,24 @@
     <version>2.1.1</version>
     <packaging>war</packaging>
 
-    <name>webBudget</name>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <url>http://c3faces.martinlinha.com/</url>
+    <description>Sistema web para controle financeiro pessoal ou de pequenas empresas</description>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v3</name>
+            <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <developers>
+        <developer>
+            <name>Arthur Gregorio</name>
+            <email>contato@arthurgregorio.eti.br</email> 
+        </developer>
+    </developers>
 
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
