@@ -20,6 +20,7 @@ O sistema em sua versão atual possui várias funcionalidades baseadas na necess
 - Períodos de lançamentos no estilo competência, com data de início e fim e acompanhamento gráfico dos movimentos 
 - Controle de usuários através de permissões de acesso por grupos (visualização, inclusão, edição e deleção)
 - Transferências entre carteiras e controle iterativo de saldos
+- Movimentos fixos, com simulação de parcelamento ou apenas lançamento automático a cada período
 
 Entre outras...
 
