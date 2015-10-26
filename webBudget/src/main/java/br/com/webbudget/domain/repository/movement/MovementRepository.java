@@ -181,7 +181,7 @@ public class MovementRepository extends GenericRepository<Movement, Long>
 
         // limpamos a projection para que a criteria seja reusada
         criteria.setProjection(null);
-        criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
         // paginamos
         criteria.setFirstResult(pageRequest.getFirstResult());
