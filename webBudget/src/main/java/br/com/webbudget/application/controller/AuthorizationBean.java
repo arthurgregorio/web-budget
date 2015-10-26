@@ -23,6 +23,7 @@ import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.service.AccountService;
 import java.io.Serializable;
 import java.util.List;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
@@ -139,6 +140,7 @@ public class AuthorizationBean implements Serializable {
      * @return o usuario autenticado
      */
     @Produces
+    @RequestScoped
     @AuthenticatedUser
     private User getAuthenticatedUser() {
         return (User) this.identity.getAccount();
