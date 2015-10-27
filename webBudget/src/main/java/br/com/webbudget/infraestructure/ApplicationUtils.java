@@ -17,6 +17,7 @@
 package br.com.webbudget.infraestructure;
 
 import java.util.ResourceBundle;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -66,5 +67,15 @@ public class ApplicationUtils {
         builder.append(request.getContextPath());
 
         return builder.toString();
+    }
+    
+    /**
+     * 
+     * @param projectStage
+     * @return 
+     */
+    public static boolean isStageRunning(ProjectStage projectStage) {
+        return FacesContext.getCurrentInstance()
+                .isProjectStage(projectStage);
     }
 }

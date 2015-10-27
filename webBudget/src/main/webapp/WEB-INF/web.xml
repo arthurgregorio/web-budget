@@ -84,7 +84,7 @@
     </context-param>
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Production</param-value>
+        <param-value>${wb.environment}</param-value>
     </context-param>   
     <context-param>
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>

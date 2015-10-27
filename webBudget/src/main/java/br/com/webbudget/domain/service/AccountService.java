@@ -24,10 +24,12 @@ import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.security.GroupMembership;
 import br.com.webbudget.domain.security.Role;
 import br.com.webbudget.domain.security.User;
+import br.com.webbudget.infraestructure.ApplicationUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.faces.application.ProjectStage;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import org.picketlink.idm.IdentityManagementException;
@@ -128,6 +130,15 @@ public class AccountService {
     @Transactional
     public void update(User user) {
 
+        // checagem para saber se estao tentando alterar o admin em ambiente de
+        // testes no openshift ou onde for preciso
+        // 
+        // para mais, veja a issue #127 no git
+        if (!ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
+                && user.getUsername().equals("admin")) {
+            return;
+        }
+        
         // pegamos o grupo
         final GroupMembership groupMembership = user.getGroupMembership();
         
