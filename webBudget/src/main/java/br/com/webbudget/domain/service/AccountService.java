@@ -134,7 +134,7 @@ public class AccountService {
         // testes no openshift ou onde for preciso
         // 
         // para mais, veja a issue #127 no git
-        if (!ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
+        if (ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
                 && user.getUsername().equals("admin")) {
             return;
         }

@@ -70,9 +70,11 @@ public class ApplicationUtils {
     }
     
     /**
+     * Checa em que estagio do projeto estamos, as opcoes sao as definidas no
+     * enum {@link ProjectStage}
      * 
-     * @param projectStage
-     * @return 
+     * @param projectStage o estagio do projeto
+     * @return se estamos usando ele ou nao
      */
     public static boolean isStageRunning(ProjectStage projectStage) {
         return FacesContext.getCurrentInstance()
