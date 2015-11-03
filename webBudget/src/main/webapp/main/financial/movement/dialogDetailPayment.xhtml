@@ -40,7 +40,7 @@
                 <p:outputLabel value="#{messages['movement.dialog.payment-date']}: "/>
                 <p:inputText readonly="true" 
                              value="#{movementBean.movement.payment.paymentDate}">
-                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                    <f:converter converterId="localDateConverter"/>
                 </p:inputText>
             </div>
             <div class="ui-grid-col-6 form-group details-col-2">

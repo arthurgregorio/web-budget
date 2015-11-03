@@ -636,6 +636,18 @@ public class MovementService {
     public FixedMovement findFixedMovementById(long fixedMovementId) {
         return this.fixedMovementRepository.findById(fixedMovementId, false);
     }
+    
+    /**
+     * 
+     * @param movement
+     * @return 
+     */
+    public LocalDate findStartDateByMovement(Movement movement) {
+        
+        final Launch launch = this.launchRepository.findByMovement(movement);
+        
+        return launch.getStartDateForFixedMovement();
+    }
 
     /**
      *

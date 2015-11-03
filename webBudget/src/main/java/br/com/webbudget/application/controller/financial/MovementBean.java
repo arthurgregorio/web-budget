@@ -39,7 +39,9 @@ import br.com.webbudget.domain.service.ContactService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
@@ -194,6 +196,15 @@ public class MovementBean extends AbstractBean {
         this.movement = this.movementService.findMovementById(movementId);
 
         this.payment = new Payment();
+        
+        // se ele for parte de um lancamento de movimento fixo, entao pegamos
+        // a data de inicio para compor a data de pagamento
+        final LocalDate startDate = 
+                this.movementService.findStartDateByMovement(this.movement);
+
+        if (startDate != null) {
+            this.payment.setPaymentDate(startDate);
+        }
 
         // tipos entrada, pagamento somente em carteira
         if (this.movement.getDirection() == MovementClassType.IN) {
