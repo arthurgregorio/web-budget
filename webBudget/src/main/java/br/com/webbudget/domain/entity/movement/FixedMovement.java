@@ -16,13 +16,16 @@
  */
 package br.com.webbudget.domain.entity.movement;
 
+import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import static javax.persistence.FetchType.EAGER;
@@ -82,6 +85,11 @@ public class FixedMovement extends PersistentEntity {
     @Setter
     @Column(name = "undetermined", nullable = false)
     private boolean undetermined;
+    @Getter
+    @Setter
+    @Column(name = "start_date")
+    @Convert(converter = JPALocalDateConverter.class)
+    private LocalDate startDate;
 
     @Getter
     @Setter

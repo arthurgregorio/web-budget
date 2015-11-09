@@ -496,11 +496,6 @@ td {
     margin-top: 25px;
 }
 
-/* form de cadastro de periodos -------------- */
-.warn-financial-period {
-    margin: 5px 0 !important;
-}
-
 /* form contas de usuario -------------------- */
 .permission-tree {
     margin-top: 15px;
@@ -510,6 +505,9 @@ td {
 }
 
 /* form periodos financeiros ----------------- */
+.warn-financial-period {
+    margin: 5px 0 !important;
+}
 #inStart {
     display: flex;
 }
@@ -588,6 +586,12 @@ td {
     position: relative;
     top: 7px;
     margin-left: 15px;
+}
+#inStartDate {
+    display: flex;
+}
+#inStartDate button {
+    height: 34px;
 }
 
 /* consulta de saldos da carteira ------------ */

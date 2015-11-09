@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
+import java.time.LocalDate;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -108,5 +109,12 @@ public class Launch extends PersistentEntity {
      */
     public boolean belongsToPeriod(FinancialPeriod period) {
         return this.financialPeriod.equals(period);
+    }
+    
+    /**
+     * @return a data de incio do movimento fixo
+     */
+    public LocalDate getStartDateForFixedMovement() {
+        return this.fixedMovement.getStartDate();
     }
 }

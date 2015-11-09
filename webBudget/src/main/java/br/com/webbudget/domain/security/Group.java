@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.security;
 
 import br.com.webbudget.domain.service.AccountService;
+import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +36,7 @@ import static org.picketlink.idm.model.annotation.StereotypeProperty.Property.ID
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 2.0.0, 26/05/2015
  */
 @IdentityStereotype(GROUP)
@@ -58,7 +59,6 @@ public class Group extends AbstractIdentityType {
      * Cache dos grants deste grupo preenchido pelo metodo 
      * {@link AccountService#listUserGroupsAndGrants(User user)}
      */
-    @Getter
     @Setter
     private List<Grant> grants;
     
@@ -89,7 +89,6 @@ public class Group extends AbstractIdentityType {
     }
     
     /**
-     * 
      * @return 
      */
     public boolean isBlocked() {
@@ -97,10 +96,16 @@ public class Group extends AbstractIdentityType {
     }
     
     /**
-     * 
      * @param blocked 
      */
     public void setBlocked(boolean blocked) {
         this.setEnabled(!blocked);
+    }
+
+    /**
+     * @return uma lista nao modificavel dos grants
+     */
+    public List<Grant> getGrants() {
+        return Collections.unmodifiableList(this.grants);
     }
 }

@@ -18,6 +18,7 @@ package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.FixedMovement;
 import br.com.webbudget.domain.entity.movement.Launch;
+import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.misc.model.Page;
 import br.com.webbudget.domain.misc.model.PageRequest;
 import br.com.webbudget.domain.repository.GenericRepository;
@@ -36,6 +37,22 @@ import org.hibernate.criterion.Restrictions;
  */
 public class LaunchRepository extends GenericRepository<Launch, Long> implements ILaunchRepository {
 
+    /**
+     * 
+     * @param movement
+     * @return 
+     */
+    @Override
+    public Launch findByMovement(Movement movement) {
+        
+        final Criteria criteria = this.createCriteria();
+        
+        criteria.createAlias("movement", "m");
+        criteria.add(Restrictions.eq("m.id", movement.getId()));
+        
+        return (Launch) criteria.uniqueResult();
+    }
+    
     /**
      * 
      * @param fixedMovement

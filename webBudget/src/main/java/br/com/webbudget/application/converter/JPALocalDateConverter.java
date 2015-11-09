@@ -40,7 +40,7 @@ public class JPALocalDateConverter implements AttributeConverter<LocalDate, Date
      */
     @Override
     public Date convertToDatabaseColumn(LocalDate attribute) {
-        return Date.valueOf(attribute);
+        return attribute != null ? Date.valueOf(attribute) : null;
     }
 
     /**
@@ -51,6 +51,6 @@ public class JPALocalDateConverter implements AttributeConverter<LocalDate, Date
      */
     @Override
     public LocalDate convertToEntityAttribute(Date dbData) {
-        return dbData.toLocalDate();
+        return dbData != null ? dbData.toLocalDate() : null;
     }
 }

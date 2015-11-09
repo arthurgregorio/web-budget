@@ -17,6 +17,7 @@
 package br.com.webbudget.infraestructure;
 
 import java.util.ResourceBundle;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -66,5 +67,17 @@ public class ApplicationUtils {
         builder.append(request.getContextPath());
 
         return builder.toString();
+    }
+    
+    /**
+     * Checa em que estagio do projeto estamos, as opcoes sao as definidas no
+     * enum {@link ProjectStage}
+     * 
+     * @param projectStage o estagio do projeto
+     * @return se estamos usando ele ou nao
+     */
+    public static boolean isStageRunning(ProjectStage projectStage) {
+        return FacesContext.getCurrentInstance()
+                .isProjectStage(projectStage);
     }
 }

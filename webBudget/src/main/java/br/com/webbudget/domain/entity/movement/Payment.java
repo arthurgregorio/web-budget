@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.entity.movement;
 
+import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.card.Card;
@@ -23,6 +24,7 @@ import br.com.webbudget.domain.misc.ex.WbDomainException;
 import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
@@ -56,9 +58,9 @@ public class Payment extends PersistentEntity {
     @Getter
     @Setter
     @NotNull(message = "{payment.payment-date}")
-    @Temporal(TemporalType.DATE)
     @Column(name = "payment_date", nullable = false)
-    private Date paymentDate;
+    @Convert(converter = JPALocalDateConverter.class)
+    private LocalDate paymentDate;
     @Getter
     @Setter
     @Enumerated
@@ -81,7 +83,7 @@ public class Payment extends PersistentEntity {
      *
      */
     public Payment() {
-        this.paymentDate = new Date();
+        this.paymentDate = LocalDate.now();
         this.code = this.createPaymentCode();
     }
 

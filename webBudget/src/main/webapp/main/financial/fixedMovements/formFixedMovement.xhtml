@@ -98,6 +98,19 @@
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12 form-group form-group-s">
+                            <p:outputLabel for="inStartDate" 
+                                           value="#{messages['fixed-movement.form.start-date']}: "/>
+                            <p:calendar id="inStartDate" 
+                                        size="10"
+                                        mask="true"
+                                        showOn="button"
+                                        pattern="dd/MM/yyyy"
+                                        converter="localDateConverter"
+                                        value="#{fixedMovementBean.fixedMovement.startDate}" />
+                        </div>                        
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12 form-group form-group-s">
                             <p:outputLabel for="inQuotes" 
                                            value="#{messages['fixed-movement.form.quotes']}: "/>
                             <div class="input-and-button-box">

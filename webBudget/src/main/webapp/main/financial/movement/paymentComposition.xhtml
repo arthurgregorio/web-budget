@@ -27,9 +27,10 @@
                            value="#{messages['movement.dialog.payment.payment-date']}: "/>
             <p:calendar id="inPaymentDate" 
                         size="10"
-                        showOn="button"
                         mask="true"
+                        showOn="button"
                         pattern="dd/MM/yyyy"
+                        converter="localDateConverter"
                         value="#{movementBean.payment.paymentDate}"/>
         </div>
     </div>
