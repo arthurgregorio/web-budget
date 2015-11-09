@@ -90,22 +90,14 @@
                                             height="18"
                                             library="images" 
                                             name="ui-green-circle.png" 
-                                            title="#{messages['fixed-movement.list.is-launched']}"
-                                            rendered="#{fixedMovement.alreadyLaunched 
-                                                        and fixedMovement.fixedMovementStatusType eq 'ACTIVE'}"/>
+                                            rendered="#{fixedMovement.alreadyLaunched}"
+                                            title="#{messages['fixed-movement.list.is-launched']}"/>
                             <p:graphicImage  width="18"
                                              height="18"
                                              library="images" 
                                              name="ui-red-circle.png" 
-                                             title="#{messages['fixed-movement.list.not-launched']}"
-                                             rendered="#{not fixedMovement.alreadyLaunched 
-                                                         and fixedMovement.fixedMovementStatusType eq 'ACTIVE'}"/>
-                            <p:graphicImage width="18"
-                                            height="18"
-                                            library="images" 
-                                            name="ui-undefined-circle.png" 
-                                            title="#{messages[fixedMovement.fixedMovementStatusType]}"
-                                            rendered="#{fixedMovement.fixedMovementStatusType eq 'FINALIZED'}"/>
+                                             rendered="#{not fixedMovement.alreadyLaunched}"
+                                             title="#{messages['fixed-movement.list.not-launched']}"/>
                         </p:column>
                         <p:column headerText="#{messages['fixed-movement.list.identification']}">
                             #{fixedMovement.identification}
