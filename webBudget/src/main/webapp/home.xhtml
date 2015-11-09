@@ -49,7 +49,7 @@
                 </div>            
 
                 <div class="messages-row">
-                    <p:messages id="messages" closable="true" globalOnly="true" />
+                    <p:messages id="messages" closable="true" />
                 </div>
 
                 <p:inputText autocomplete="false"
@@ -64,11 +64,10 @@
                 <div class="control-box">
                     <p:ajaxStatus>
                         <f:facet name="default">
-                            <p:commandButton global="true"
-                                             update="authenticationForm"
-                                     process="authenticationForm"
-                                     action="#{authenticationBean.doLogin()}"
-                                     value="#{messages['authentication.authenticate']}" />
+                            <p:commandButton update="authenticationForm"
+                                             process="authenticationForm"
+                                             action="#{authenticationBean.doLogin()}"
+                                             value="#{messages['authentication.authenticate']}" />
                         </f:facet>
                         <f:facet name="start">
                             <p:graphicImage width="34" 
@@ -80,8 +79,7 @@
                             <h:outputText styleClass="redirecting-text"
                                           value="#{messages['authentication.redirecting']}" 
                                           rendered="#{authenticationBean.authenticationError eq false}"/>
-                            <p:commandButton global="true"
-                                             update="authenticationForm"
+                            <p:commandButton update="authenticationForm"
                                              process="authenticationForm"
                                              action="#{authenticationBean.doLogin()}"
                                              value="#{messages['authentication.authenticate']}" 
