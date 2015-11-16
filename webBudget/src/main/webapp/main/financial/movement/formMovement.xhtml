@@ -215,18 +215,15 @@
                                      process="movementForm"
                                      value="#{menu['pay']}"
                                      styleClass="ui-button-warning"
-                                     actionListener="#{movementBean.doSaveAndPay()}"
-                                     rendered="#{movementBean.viewState eq 'ADDING' 
-                                                 and movementBean.haveOpenPeriod() eq true}"/>
-                    <p:spacer width="10" rendered="#{movementBean.viewState eq 'ADDING' 
-                                                     and movementBean.haveOpenPeriod() eq true}"/>
+                                     rendered="#{movementBean.canSaveAndPay()}"
+                                     actionListener="#{movementBean.doSaveAndPay()}"/>
+                    <p:spacer width="10" rendered="#{movementBean.canSaveAndPay()}"/>
                     <p:commandButton update="movementForm"
                                      process="movementForm"
                                      value="#{menu['save']}"
                                      styleClass="ui-button-success"
-                                     actionListener="#{movementBean.doSave()}"
-                                     rendered="#{movementBean.viewState eq 'ADDING' 
-                                                 and movementBean.haveOpenPeriod() eq true}"/>
+                                     rendered="#{movementBean.canSave()}"
+                                     actionListener="#{movementBean.doSave()}"/>
                     <p:commandButton update="movementForm"
                                      process="movementForm"
                                      value="#{menu['update']}"

@@ -646,7 +646,11 @@ public class MovementService {
         
         final Launch launch = this.launchRepository.findByMovement(movement);
         
-        return launch.getStartDateForFixedMovement();
+        if (launch != null) {
+            return launch.getStartDateForFixedMovement();
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application;
+package br.com.webbudget.application.security;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -22,7 +22,6 @@ import javax.inject.Named;
 import org.picketlink.annotations.PicketLink;
 import org.picketlink.authentication.Authenticator.AuthenticationStatus;
 import org.picketlink.authentication.BaseAuthenticator;
-import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.Credentials.Status;
 import static org.picketlink.idm.credential.Credentials.Status.ACCOUNT_DISABLED;
@@ -50,9 +49,10 @@ public class Authenticator extends BaseAuthenticator {
     private Logger logger;
     
     @Inject
-    private IdentityManager identityManager;
+    private WbCredentials wbCredentials;
+    
     @Inject
-    private DefaultLoginCredentials credentials;
+    private IdentityManager identityManager;
     
     /**
      * Autentica o usuario no banco de dados pelo modelo de seguranca
@@ -61,8 +61,8 @@ public class Authenticator extends BaseAuthenticator {
     public void authenticate() {
 
         final UsernamePasswordCredentials userCredentials = 
-                new UsernamePasswordCredentials(this.credentials.getUserId(),
-                        new Password(this.credentials.getPassword()));
+                new UsernamePasswordCredentials(this.wbCredentials.getUsername(),
+                        new Password(this.wbCredentials.getPassword()));
 
         try {
             this.identityManager.validateCredentials(userCredentials);
@@ -74,7 +74,8 @@ public class Authenticator extends BaseAuthenticator {
             } 
         } catch (Exception ex) {
             this.setStatus(AuthenticationStatus.FAILURE);
-            logger.error("Error in an attempt to authenticate {}", this.credentials.getUserId(), ex);
+            logger.error("Error in an attempt to authenticate {}", 
+                    this.wbCredentials.getUsername(), ex);
         }
     }
     

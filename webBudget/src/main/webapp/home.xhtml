@@ -18,6 +18,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
@@ -54,15 +55,15 @@
 
                 <p:inputText autocomplete="false"
                              styleClass="username-input" 
-                             value="#{loginCredentials.userId}" 
+                             value="#{wbCredentials.username}" 
                              placeholder="#{messages['authentication.user']}" />
                 <p:password autocomplete="false"
                             styleClass="password-input" 
-                            value="#{loginCredentials.password}" 
+                            value="#{wbCredentials.password}" 
                             placeholder="#{messages['authentication.password']}"/>
 
                 <div class="control-box">
-                    <p:ajaxStatus>
+                    <p:ajaxStatus id="ajaxStatus">
                         <f:facet name="default">
                             <p:commandButton update="authenticationForm"
                                              process="authenticationForm"
@@ -77,8 +78,8 @@
                         </f:facet>
                         <f:facet name="complete">
                             <h:outputText styleClass="redirecting-text"
-                                          value="#{messages['authentication.redirecting']}" 
-                                          rendered="#{authenticationBean.authenticationError eq false}"/>
+                                          value="#{messages['authentication.redirecting']}"
+                                          rendered="#{not authenticationBean.authenticationError}"/>
                             <p:commandButton update="authenticationForm"
                                              process="authenticationForm"
                                              action="#{authenticationBean.doLogin()}"
@@ -91,4 +92,3 @@
         </div>  
     </h:body>
 </html>
-
