@@ -110,7 +110,7 @@ public class MovementBean extends AbstractBean {
     private MovementService movementService;
     @Inject
     private FinancialPeriodService financialPeriodService;
-    
+
     @Getter
     private final AbstractLazyModel<Movement> movementsModel;
 
@@ -118,34 +118,34 @@ public class MovementBean extends AbstractBean {
      * Inicializamos os objetos necessarios
      */
     public MovementBean() {
-        
+
         // inicializa o DTO de filtro
         this.movementFilter = new MovementFilter();
-        
+
         // montamos o datamodel de movimentos
         this.movementsModel = new AbstractLazyModel<Movement>() {
             @Override
-            public List<Movement> load(int first, int pageSize, String sortField, 
+            public List<Movement> load(int first, int pageSize, String sortField,
                     SortOrder sortOrder, Map<String, Object> filters) {
-                
+
                 final PageRequest pageRequest = new PageRequest();
-                
+
                 pageRequest
                         .setFirstResult(first)
                         .withPageSize(pageSize)
                         .sortingBy(sortField, "inclusion")
                         .withDirection(sortOrder.name());
-                
+
                 final Page<Movement> page = movementService
                         .listMovementsByFilter(movementFilter, pageRequest);
-                
+
                 this.setRowCount(page.getTotalPagesInt());
-                
+
                 return page.getContent();
             }
         };
     }
-    
+
     /**
      *
      */
@@ -154,7 +154,7 @@ public class MovementBean extends AbstractBean {
 
         // inicializa o DTO de filtro
         this.movementFilter = new MovementFilter();
-        
+
         // preenche os campos de filtro
         this.costCenters = this.movementService.listCostCenters(false);
         this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
@@ -196,11 +196,11 @@ public class MovementBean extends AbstractBean {
         this.movement = this.movementService.findMovementById(movementId);
 
         this.payment = new Payment();
-        
+
         // se ele for parte de um lancamento de movimento fixo, entao pegamos
         // a data de inicio para compor a data de pagamento
-        final LocalDate startDate = 
-                this.movementService.findStartDateByMovement(this.movement);
+        final LocalDate startDate
+                = this.movementService.findStartDateByMovement(this.movement);
 
         if (startDate != null) {
             this.payment.setPaymentDate(startDate);
@@ -209,14 +209,12 @@ public class MovementBean extends AbstractBean {
         // tipos entrada, pagamento somente em carteira
         if (this.movement.getDirection() == MovementClassType.IN) {
             this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
+        } else // se for fatura de cartao, so permite pagar em carteira
+        if (this.movement.getMovementType() == MovementType.CARD_INVOICE) {
+            this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
         } else {
-            // se for fatura de cartao, so permite pagar em carteira
-            if (this.movement.getMovementType() == MovementType.CARD_INVOICE) {
-                this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
-            } else {
-                this.debitCards = this.cardService.listDebitCards(false);
-                this.creditCards = this.cardService.listCreditCards(false);
-            }
+            this.debitCards = this.cardService.listDebitCards(false);
+            this.creditCards = this.cardService.listCreditCards(false);
         }
 
         // lista as fontes para preencher os combos
@@ -224,12 +222,12 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     * 
+     *
      */
     public void filterList() {
-       this.update("movementsList");
+        this.update("movementsList");
     }
-    
+
     /**
      * Pesquisa os contatos pelo filtro
      */
@@ -281,10 +279,10 @@ public class MovementBean extends AbstractBean {
     public String changeToPay(long movementId) {
         return "formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
     }
-    
+
     /**
      * @param movementId
-     * @return 
+     * @return
      */
     public String changeToDetail(long movementId) {
         return "formMovement.xhtml?faces-redirect=true&movementId=" + movementId + "&detailing=true";
@@ -351,7 +349,6 @@ public class MovementBean extends AbstractBean {
 
         try {
             this.movement = this.movementService.saveMovement(this.movement);
-
             // invoca os metodos para mostrar a popup de pagamento
             this.displayPaymentPopup();
         } catch (WbDomainException ex) {
@@ -394,9 +391,12 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     *
+     * Pagamos o movimento depois de salvar, caso seja uma edicao com pagamento
+     * entao devolvemos a pagina de listagem
+     * 
+     * @return a pagina de listagem caso seja uma pagamento apos edicao
      */
-    public void doPaymentAfterSave() {
+    public String doPaymentAfterSave() {
 
         // setamos o pagamento
         this.movement.setPayment(this.payment);
@@ -419,6 +419,14 @@ public class MovementBean extends AbstractBean {
         } finally {
             this.update("movementForm");
         }
+
+        // se estamos editando, voltamos para a listagem
+        if (this.viewState == ViewState.EDITING) {
+            return this.doCancel();
+        }
+
+        // se nao permanecemos aqui
+        return null;
     }
 
     /**
@@ -609,6 +617,21 @@ public class MovementBean extends AbstractBean {
     public boolean isPayableWithCard() {
         return this.movement.getMovementType() != MovementType.CARD_INVOICE
                 && this.movement.getDirection() != MovementClassType.IN;
+    }
+
+    /**
+     * @return
+     */
+    public boolean canSaveAndPay() {
+        return this.haveOpenPeriod() && (this.viewState == ViewState.ADDING
+                || this.viewState == ViewState.EDITING);
+    }
+
+    /**
+     * @return
+     */
+    public boolean canSave() {
+        return this.haveOpenPeriod() && this.viewState == ViewState.ADDING;
     }
 
     /**
