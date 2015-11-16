@@ -18,6 +18,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
@@ -62,7 +63,7 @@
                             placeholder="#{messages['authentication.password']}"/>
 
                 <div class="control-box">
-                    <p:ajaxStatus>
+                    <p:ajaxStatus id="ajaxStatus">
                         <f:facet name="default">
                             <p:commandButton update="authenticationForm"
                                              process="authenticationForm"
@@ -77,13 +78,7 @@
                         </f:facet>
                         <f:facet name="complete">
                             <h:outputText styleClass="redirecting-text"
-                                          value="#{messages['authentication.redirecting']}" 
-                                          rendered="#{authenticationBean.authenticationError eq false}"/>
-                            <p:commandButton update="authenticationForm"
-                                             process="authenticationForm"
-                                             action="#{authenticationBean.doLogin()}"
-                                             value="#{messages['authentication.authenticate']}" 
-                                             rendered="#{authenticationBean.authenticationError}"/>
+                                          value="#{messages['authentication.redirecting']}" />
                         </f:facet>
                     </p:ajaxStatus>
                 </div>
@@ -91,4 +86,3 @@
         </div>  
     </h:body>
 </html>
-

@@ -36,31 +36,28 @@ import org.picketlink.Identity.AuthenticationResult;
 @ViewScoped
 public class AuthenticationBean extends AbstractBean {
 
-    @Getter
-    private boolean authenticationError;
-    
     @Inject
-    private transient Identity identity;
+    private Identity identity;
 
     /**
-     * Inicializa a pagina, verificamos se ja nao existe alguem logado, se nao
-     * existir, inicializa o usuario e boa. Se nao, manda para a dashboard
+     * Iniciliazacao da pagina da login onde checamos pela existencia de uma 
+     * sessao valida
      * 
-     * @return pagina para redirecionar
+     * @return a dashboard do sistema
      */
     public String initialize() {
-       
-        this.logger.debug("Starting {}", this.getClass().getSimpleName());
         
+        // validamos se nao existe uma sessao ativa
         if (this.identity.isLoggedIn()) {
             return "/main/dashboard.xhtml?faces-redirect=true";
-        } else {
-            return null;
-        }
+        } 
+
+        // permanecemos na pagina
+        return null;
     }
 
     /**
-     * Realiza o login, se houver erro redireciona para a home novamente e <br/>
+     * Realiza o login, se houver erro redireciona para a home novamente e 
      * impede que prossiga
      *
      * @return a home autenticada ou a home de login caso acesso negado
@@ -70,7 +67,6 @@ public class AuthenticationBean extends AbstractBean {
         final AuthenticationResult result = this.identity.login();
         
         if (result == AuthenticationResult.FAILED) {
-            this.authenticationError = true;
             this.error("authentication.error", true);
             return null;
         } else {
