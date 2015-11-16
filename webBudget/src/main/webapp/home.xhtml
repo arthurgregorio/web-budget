@@ -78,7 +78,13 @@
                         </f:facet>
                         <f:facet name="complete">
                             <h:outputText styleClass="redirecting-text"
-                                          value="#{messages['authentication.redirecting']}" />
+                                          value="#{messages['authentication.redirecting']}"
+                                          rendered="#{not authenticationBean.authenticationError}"/>
+                            <p:commandButton update="authenticationForm"
+                                             process="authenticationForm"
+                                             action="#{authenticationBean.doLogin()}"
+                                             value="#{messages['authentication.authenticate']}" 
+                                             rendered="#{authenticationBean.authenticationError}"/>
                         </f:facet>
                     </p:ajaxStatus>
                 </div>

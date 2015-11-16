@@ -38,6 +38,9 @@ public class AuthenticationBean extends AbstractBean {
 
     @Inject
     private Identity identity;
+    
+    @Getter
+    private boolean authenticationError;
 
     /**
      * Iniciliazacao da pagina da login onde checamos pela existencia de uma 
@@ -67,9 +70,11 @@ public class AuthenticationBean extends AbstractBean {
         final AuthenticationResult result = this.identity.login();
         
         if (result == AuthenticationResult.FAILED) {
+            this.authenticationError = true;
             this.error("authentication.error", true);
             return null;
         } else {
+            this.authenticationError = false;
             return "/main/dashboard.xhtml?faces-redirect=true";
         }
     }
