@@ -28,6 +28,16 @@ th.ui-selection-column div.ui-chkbox-box {
     top: -3px;
 }
 
+/* corrige o arredondadomento na datascroller */
+.ui-corner-top {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+.ui-corner-bottom {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
 /* corrige o texto dentro do inputswitch e o backgroud*/
 .ui-inputswitch-on {
     background: none !important;
