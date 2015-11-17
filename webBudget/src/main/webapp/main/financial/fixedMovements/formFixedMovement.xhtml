@@ -117,10 +117,12 @@
                                 <p:inputText id="inQuotes" 
                                              maxlength="3"
                                              value="#{fixedMovementBean.fixedMovement.quotes}"
-                                             disabled="#{fixedMovementBean.fixedMovement.undetermined}">
+                                             disabled="#{fixedMovementBean.viewState ne 'ADDING' 
+                                                         or fixedMovementBean.fixedMovement.undetermined}">
                                     <pe:keyFilter mask="num"/>
                                 </p:inputText>
                                 <p:selectBooleanCheckbox id="inUndetermined"
+                                                         disabled="#{fixedMovementBean.viewState ne 'ADDING'}"
                                                          value="#{fixedMovementBean.fixedMovement.undetermined}"
                                                          itemLabel="#{messages['fixed-movement.form.undetermined']}">
                                     <p:ajax event="change" 
@@ -152,7 +154,7 @@
                                              value="#{menu['add']}"
                                              process="@this,inValue"
                                              styleClass="ui-button-info"
-                                             disabled="#{fixedMovementBean.viewState eq 'DETAILING'}"
+                                             disabled="#{fixedMovementBean.viewState ne 'ADDING'}"
                                              actionListener="#{fixedMovementBean.showApportionmentDialog()}"/>
                         </div>
                     </div>
@@ -188,7 +190,7 @@
                                     <p:commandButton immediate="true"
                                                      icon="fa fa-remove"
                                                      title="#{menu['delete']}"
-                                                     disabled="#{fixedMovementBean.viewState eq 'DETAILING'}"
+                                                     disabled="#{fixedMovementBean.viewState ne 'ADDING'}"
                                                      actionListener="#{fixedMovementBean.deleteApportionment(apportionment.code)}" />
                                 </p:column>
                             </p:dataTable>
@@ -218,15 +220,13 @@
                                      action="#{fixedMovementBean.doSave()}"
                                      rendered="#{fixedMovementBean.viewState eq 'ADDING'}"/>
                     <p:spacer width="10"
-                              rendered="#{fixedMovementBean.viewState eq 'EDITING' and 
-                                          empty fixedMovementBean.fixedMovement.launches}"/>
+                              rendered="#{fixedMovementBean.viewState eq 'EDITING'}"/>
                     <p:commandButton value="#{menu['update']}"
                                      update="fixedMovementForm"
                                      process="fixedMovementForm"
                                      styleClass="ui-button-success"
                                      action="#{fixedMovementBean.doUpdate()}"
-                                     rendered="#{fixedMovementBean.viewState eq 'EDITING' and 
-                                                 empty fixedMovementBean.fixedMovement.launches}"/>
+                                     rendered="#{fixedMovementBean.viewState eq 'EDITING'}"/>
                 </div>
             </div>
         </h:form>
