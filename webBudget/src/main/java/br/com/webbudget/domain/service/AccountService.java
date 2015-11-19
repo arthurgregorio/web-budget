@@ -169,6 +169,15 @@ public class AccountService {
     @Transactional
     public void updateProfile(User user) {
 
+        // checagem para saber se estao tentando alterar o admin em ambiente de
+        // testes no openshift ou onde for preciso
+        // 
+        // para mais, veja a issue #127 no git
+        if (ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
+                && user.getUsername().equals("admin")) {
+            return;
+        }
+        
         // pegamos a senha antes de salvar o usuario
         final String unsecurePassword = user.getPassword();
         
