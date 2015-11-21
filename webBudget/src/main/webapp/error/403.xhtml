@@ -22,11 +22,14 @@
                 template="/template/mainTemplate.xhtml">
 
     <ui:define name="content">
-        <div class="ui-grid-row denied-box">
-            <div class="ui-grid-col-12 div-align-center denied-text">
-                <p:graphicImage library="images" name="ui-icon-denied.png" />
+        <div class="ui-grid-row error-box">
+            <div class="ui-grid-col-12 div-align-center error-text">
+                <p:graphicImage width="256"
+                                height="256"
+                                library="images" 
+                                name="ui-http-403.svg" />
                 <p:spacer width="50"/>
-                <h:outputText value="#{messages['application.access-denied']}" />
+                <h:outputText value="#{messages['application.error.http-403']}" />
             </div>
         </div>
     </ui:define>
