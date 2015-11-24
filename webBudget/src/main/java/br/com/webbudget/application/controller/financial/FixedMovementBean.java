@@ -287,6 +287,7 @@ public class FixedMovementBean extends AbstractBean {
             this.logger.error("FixedMovementBean#doSave found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
+            this.update("fixedMovementsList");
             this.closeDialog("dialogConfirmLaunch");
         }
     }
