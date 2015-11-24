@@ -24,7 +24,6 @@
     
     <classpath>
         <dir name="${webbudget.root}/target/classes"/>
-        <dir name="${webbudget.root}/src/main/resources"/>
     </classpath>
     <web>
         <link target="/">
