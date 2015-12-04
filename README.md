@@ -3,13 +3,13 @@ webBudget
 
 #### Apresentação:
 
-O webBudget é um sistema simples para controle financeiro para pequenas empresas ou até mesmo para uso pessoal. 
+O webBudget é um sistema simples de controle financeiro para pequenas empresas ou uso pessoal. 
 
-Através dele é possível realizar controle de receitas e despesas por centro de custo e classes de consumo, acompanhar por períodos as suas movimentações e visualizar através de gráficos como andam as finanças.
+Através dele é possível realizar o controle de receitas e despesas por centro de custo e classes de movimentação, acompanhar por períodos as suas movimentações e visualizar através de gráficos como andam as finanças.
 
 #### Principais Funcionalidades:
 
-O sistema em sua versão atual possui várias funcionalidades baseadas na necessidade de um controle financeiro simples e eficaz. Dentre todas, destacam-se:
+O sistema em sua versão atual possui várias funcionalidades baseadas na necessidade de um controle financeiro simples e eficaz. Sendo elas:
 
 - Controle de entradas e saídas atavés de movimentos classificados por centro de custo e classe
 - Controle de carteiras, contas bancárias ou carteira física
@@ -22,19 +22,21 @@ O sistema em sua versão atual possui várias funcionalidades baseadas na necess
 - Transferências entre carteiras e controle iterativo de saldos
 - Movimentos fixos, com simulação de parcelamento ou apenas lançamento automático a cada período
 
-Entre outras...
+Novas funcionálidades estão sempre em desenvolvimento, consulte a [lista de atividades do projeto](https://github.com/arthurgregorio/web-budget/issues) para propor uma ou acompanhar o que esta sendo feito!
 
 #### Informações Técnicas:
 
-O sistema foi desenvolvido utilizando uma plataforma baseada na tecnologia Java versão 8 e seus frameworks para WEB, possui um ambiente de execução simples de ser estruturado e de fácil manutenção. Dentre as tecnologias adotadas, as principais são:
+O sistema foi desenvolvido utilizando uma plataforma baseada na tecnologia Java e seus frameworks. Possui um ambiente de execução simples de ser estruturado e de fácil manutenção. 
+
+Dentre as tecnologias adotadas, as principais são:
 
 - JSF 2.2 
-- Primefaces 5.2
+- Primefaces 5
 - JPA 2.1
-- Hibernate 4.3
-- Weld 2.2
+- Hibernate 5
+- Weld 2
 - Picketlink 2.7
-- Wildfly 8
+- Wildfly 9
 
 Devido ao suporte a JPA, o banco de dados torna-se independente da aplicação, porém os SGBD's homologados para uso, 100% testados são *MySQL 5* ou *MariaDB 10*.
 
