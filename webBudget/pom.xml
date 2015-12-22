@@ -198,8 +198,23 @@
         <!-- picketlink -->
         <dependency>
             <groupId>org.picketlink</groupId>
-            <artifactId>picketlink</artifactId>
-            <version>2.7.0.Final</version>
+            <artifactId>picketlink-api</artifactId>
+            <version>2.7.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-impl</artifactId>
+            <version>2.7.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-idm-api</artifactId>
+            <version>2.7.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-idm-impl</artifactId>
+            <version>2.7.1.Final</version>
         </dependency>
         
         <!-- retrofit --> 
