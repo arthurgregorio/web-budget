@@ -205,7 +205,7 @@
                                      styleClass="ui-button-info"
                                      action="#{fixedMovementBean.showLaunchesDialog()}"
                                      rendered="#{fixedMovementBean.viewState eq 'DETAILING' 
-                                                 and authorizationBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
+                                                 and userSessionBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
                 </div>
                 <div class="ui-grid-col-6 form-controls-box">
                     <p:commandButton immediate="true"

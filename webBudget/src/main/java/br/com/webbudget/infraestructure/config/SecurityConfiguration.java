@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.infraestructure.config;
 
+import br.com.webbudget.application.security.CustomPartitionManager;
 import br.com.webbudget.domain.entity.security.GrantTypeEntity;
 import br.com.webbudget.domain.entity.security.GroupMembershipTypeEntity;
 import br.com.webbudget.domain.entity.security.GroupTypeEntity;
@@ -33,10 +34,14 @@ import br.com.webbudget.domain.security.Partition;
 import br.com.webbudget.domain.security.Role;
 import br.com.webbudget.domain.security.User;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import org.picketlink.annotations.PicketLink;
 import org.picketlink.config.SecurityConfigurationBuilder;
 import org.picketlink.event.SecurityConfigurationEvent;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.PartitionManager;
+import org.picketlink.idm.config.IdentityConfigurationBuilder;
 import org.picketlink.idm.credential.encoder.BCryptPasswordEncoder;
 import org.picketlink.idm.credential.handler.PasswordCredentialHandler;
 import org.picketlink.internal.EntityManagerContextInitializer;
@@ -57,17 +62,18 @@ public class SecurityConfiguration {
     private EntityManagerContextInitializer contextInitializer;
     
     /**
-     * Configura o contexto de seguranca do picketlink atraves do evento de 
+     * * Configura o contexto de seguranca do picketlink atraves do evento de 
      * inicializacao do {@link IdentityManager}
      * 
-     * @param event o evento de configuracao
+     * @return o gerenciador de particoes do sistema
      */
-    public void configureInternal(@Observes SecurityConfigurationEvent event) {
+    @Produces
+    @PicketLink
+    public PartitionManager configureInternal() {
 
-        final SecurityConfigurationBuilder builder = event.getBuilder();
+        final IdentityConfigurationBuilder builder = new IdentityConfigurationBuilder();
         
-        builder.idmConfig()
-                .named("jpa.config")
+        builder.named("jpa.config")
                 .stores()
                 .jpa()
                 .supportType(
@@ -93,6 +99,8 @@ public class SecurityConfiguration {
                 .setCredentialHandlerProperty(
                         PasswordCredentialHandler.PASSWORD_ENCODER, 
                         new BCryptPasswordEncoder(10));
+        
+        return new CustomPartitionManager(builder.build());
     }
     
     /**
@@ -125,7 +133,7 @@ public class SecurityConfiguration {
                 .forPath("/main/entries/costCenter/*")
                     .authorizeWith().role(this.authorization.COST_CENTER_VIEW)
                 .forPath("/main/financial/movement/*")
-                    .authorizeWith().role("authority.movement.access")
+                    .authorizeWith().role(this.authorization.MOVEMENT_VIEW)
                 .forPath("/main/entries/wallets/*")
                     .authorizeWith().role(this.authorization.WALLET_VIEW)
                 .forPath("/main/financial/cardInvoice/*")

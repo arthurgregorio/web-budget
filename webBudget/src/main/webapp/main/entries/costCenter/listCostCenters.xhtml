@@ -52,7 +52,7 @@
                                      value="#{menu['add']}"
                                      styleClass="ui-button-info" 
                                      action="#{costCenterBean.changeToAdd()}"
-                                     rendered="#{authorizationBean.hasRole(authorization.COST_CENTER_INSERT)}"/>
+                                     rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_INSERT)}"/>
                 </div>
             </div>
         </h:form>
@@ -99,12 +99,12 @@
                         <p:commandButton icon="fa fa-edit"
                                          title="#{menu['edit']}"
                                          action="#{costCenterBean.changeToEdit(costCenter.id)}" 
-                                         rendered="#{authorizationBean.hasRole(authorization.COST_CENTER_UPDATE)}"/>
+                                         rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_UPDATE)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton icon="fa fa-remove"
                                          title="#{menu['delete']}"
                                          actionListener="#{costCenterBean.changeToDelete(costCenter.id)}" 
-                                         rendered="#{authorizationBean.hasRole(authorization.COST_CENTER_DELETE)}"/>
+                                         rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_DELETE)}"/>
                     </p:column>
                 </p:dataTable>
             </div>

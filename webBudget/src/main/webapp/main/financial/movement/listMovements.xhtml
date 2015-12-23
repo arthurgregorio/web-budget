@@ -67,7 +67,7 @@
                                      value="#{menu['add']}"
                                      styleClass="ui-button-info" 
                                      action="#{movementBean.changeToAdd()}"
-                                     rendered="#{authorizationBean.hasRole(authorization.MOVEMENT_INSERT)}"/>
+                                     rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_INSERT)}"/>
                 </div>
             </div>
         </h:form>
@@ -166,21 +166,21 @@
                             <p:commandButton icon="fa fa-money"
                                              title="#{menu['pay']}"
                                              rendered="#{movement.payable eq true 
-                                                         and authorizationBean.hasRole(authorization.MOVEMENT_PAY)}"
+                                                         and userSessionBean.hasRole(authorization.MOVEMENT_PAY)}"
                                              action="#{movementBean.changeToPay(movement.id)}" />
                             <p:spacer width="10" 
                                       rendered="#{movement.payable eq true}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              rendered="#{movement.editable eq true 
-                                                         and authorizationBean.hasRole(authorization.MOVEMENT_UPDATE)}"
+                                                         and userSessionBean.hasRole(authorization.MOVEMENT_UPDATE)}"
                                              action="#{movementBean.changeToEdit(movement.id)}"/>
                             <p:spacer width="10" 
                                       rendered="#{movement.editable eq true}"/>
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              rendered="#{movement.deletable eq true 
-                                                         and authorizationBean.hasRole(authorization.MOVEMENT_DELETE)}"
+                                                         and userSessionBean.hasRole(authorization.MOVEMENT_DELETE)}"
                                              actionListener="#{movementBean.changeToDelete(movement.id)}" />
                             <p:commandButton icon="fa fa-info-circle"
                                              title="#{menu['detail']}"

@@ -84,22 +84,22 @@
                                      value="#{messages['card-invoice.move']}" 
                                      actionListener="#{cardInvoiceBean.createInvoiceMovement()}"
                                      rendered="#{cardInvoiceBean.canPay() eq true 
-                                                 and authorizationBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
+                                                 and userSessionBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
                     <p:spacer width="10"
-                              rendered="#{authorizationBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
+                              rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
                     <p:commandButton update="controlsForm"
                                      process="controlsForm"
                                      styleClass="ui-button-info"
                                      value="#{messages['card-invoice.generate-invoice']}"
                                      actionListener="#{cardInvoiceBean.generateInvoice()}" 
-                                     rendered="#{authorizationBean.hasRole(authorization.CARD_INVOICE_PROCESS)}"/>
+                                     rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_PROCESS)}"/>
                     <p:spacer width="10"
-                              rendered="#{authorizationBean.hasRole(authorization.CARD_INVOICE_HISTORY)}"/>
+                              rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_HISTORY)}"/>
                     <p:commandButton immediate="true"
                                      styleClass="ui-button-info"
                                      value="#{messages['card-invoice.history']}"
                                      action="#{cardInvoiceBean.changeToHistory()}"
-                                     rendered="#{authorizationBean.hasRole(authorization.CARD_INVOICE_HISTORY)}"/>
+                                     rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_HISTORY)}"/>
                 </div>
             </div>
         </h:form>

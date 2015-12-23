@@ -52,7 +52,7 @@
                                      value="#{menu['add']}"
                                      styleClass="ui-button-info" 
                                      action="#{financialPeriodBean.changeToAdd()}"
-                                     rendered="#{authorizationBean.hasRole(authorization.FINANCIAL_PERIOD_INSERT)}"/>
+                                     rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_INSERT)}"/>
                 </div>
             </div>
         </h:form>
@@ -118,23 +118,23 @@
                                          icon="fa fa-search"
                                          title="#{menu['detail']}"
                                          action="#{financialPeriodBean.changeToDetails(financialPeriod.id)}"
-                                         rendered="#{authorizationBean.hasRole(authorization.FINANCIAL_PERIOD_DETAILS)}" />
+                                         rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_DETAILS)}" />
                         <p:spacer width="10"
                                   rendered="#{financialPeriod.closed eq false 
-                                              and authorizationBean.hasRole(authorization.CLOSING_CLOSE)}"/>
+                                              and userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
                         <p:button icon="fa fa-calculator"
                                   title="#{menu['calculate']}"
                                   href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"
                                   rendered="#{financialPeriod.closed eq false 
-                                              and authorizationBean.hasRole(authorization.CLOSING_CLOSE)}"/>
+                                              and userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
                         <p:spacer width="10" 
                                   rendered="#{financialPeriod.closed eq false 
-                                              and authorizationBean.hasRole(authorization.FINANCIAL_PERIOD_DELETE)}"/>
+                                              and userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_DELETE)}"/>
                         <p:commandButton icon="fa fa-remove"
                                          title="#{menu['delete']}"
                                          actionListener="#{financialPeriodBean.changeToDelete(financialPeriod.id)}" 
                                          rendered="#{financialPeriod.closed eq false 
-                                                     and authorizationBean.hasRole(authorization.FINANCIAL_PERIOD_DELETE)}" />
+                                                     and userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_DELETE)}" />
                     </p:column>
                 </p:dataTable>
             </div>

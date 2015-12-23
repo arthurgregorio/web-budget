@@ -45,7 +45,7 @@ import org.picketlink.authentication.event.PostLoggedOutEvent;
  */
 @Named
 @SessionScoped
-public class AuthorizationBean implements Serializable {
+public class UserSessionBean implements Serializable {
 
     private List<Group> userGroups;
     

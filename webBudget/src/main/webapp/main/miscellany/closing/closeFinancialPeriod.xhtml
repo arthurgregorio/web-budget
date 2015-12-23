@@ -109,12 +109,12 @@
                                          value="#{messages['closing.close']}"
                                          actionListener="#{closingBean.changeToClose()}"
                                          rendered="#{closingBean.canClosePeriod() 
-                                                     and authorizationBean.hasRole(authorization.CLOSING_CLOSE)}"/>
+                                                     and userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton styleClass="ui-button-info"
                                          value="#{messages['closing.process']}"
                                          actionListener="#{closingBean.process()}"
-                                         rendered="#{authorizationBean.hasRole(authorization.CLOSING_PROCESS)}"/>
+                                         rendered="#{userSessionBean.hasRole(authorization.CLOSING_PROCESS)}"/>
                     </div>
                 </div>
             </h:form>
