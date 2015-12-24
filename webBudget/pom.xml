@@ -140,12 +140,6 @@
             <name>primefaces-repo</name>
             <url>http://repository.primefaces.org/</url>
         </repository>
-        <repository>
-            <id>picketlink-snapshot</id>
-            <name>picketlink-snapshot</name>
-            <layout>default</layout>
-            <url>http://repository-picketlink.forge.cloudbees.com/snapshot/</url>
-        </repository>
     </repositories>
 
     <dependencies>
