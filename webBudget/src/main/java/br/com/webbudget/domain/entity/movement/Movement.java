@@ -374,4 +374,11 @@ public class Movement extends PersistentEntity {
         }
         return null;
     }
+    
+    /**
+     * @return a data de pagamento deste movimento
+     */
+    public LocalDate getPaymentDate() {
+        return this.payment.getPaymentDate();
+    }
 }

@@ -158,8 +158,8 @@
                             <p:column width="15%"
                                       styleClass="div-align-center" 
                                       headerText="#{messages['card-invoice.list.pay-date']}">
-                                <h:outputText value="#{movement.inclusion}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                <h:outputText value="#{movement.paymentDate}">
+                                    <f:converter converterId="localDateConverter"/>
                                 </h:outputText> 
                             </p:column>
                             <p:column width="15%"
