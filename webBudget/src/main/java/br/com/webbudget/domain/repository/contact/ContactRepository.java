@@ -17,8 +17,8 @@
 package br.com.webbudget.domain.repository.contact;
 
 import br.com.webbudget.domain.entity.contact.Contact;
-import br.com.webbudget.domain.misc.model.Page;
-import br.com.webbudget.domain.misc.model.PageRequest;
+import br.com.webbudget.domain.misc.table.Page;
+import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
 import org.hibernate.Criteria;

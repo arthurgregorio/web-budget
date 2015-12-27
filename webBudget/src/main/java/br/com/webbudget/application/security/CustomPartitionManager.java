@@ -14,34 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repository.movement;
+package br.com.webbudget.application.security;
 
-import br.com.webbudget.domain.entity.movement.FixedMovement;
-import br.com.webbudget.domain.misc.table.Page;
-import br.com.webbudget.domain.misc.table.PageRequest;
-import br.com.webbudget.domain.repository.IGenericRepository;
-import java.util.List;
+import org.picketlink.idm.RelationshipManager;
+import org.picketlink.idm.config.IdentityConfiguration;
+import org.picketlink.idm.internal.DefaultPartitionManager;
 
 /**
- *
+ * Uma implementacao customizada do partition manager para que o sistema possa
+ * produzir uma versao customizada do gerenciador de relacionamentos
+ * 
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.1.0, 20/09/2015
+ * @since 2.1.2, 23/12/2015
  */
-public interface IFixedMovementRepository extends IGenericRepository<FixedMovement, Long> {
+public class CustomPartitionManager extends DefaultPartitionManager {
+    
+    /**
+     * 
+     * @param configuration 
+     */
+    public CustomPartitionManager(IdentityConfiguration configuration) {
+        super(configuration);
+    }
 
     /**
      * 
      * @return 
      */
-    public List<FixedMovement> listAutoLaunch();
-    
-    /**
-     * 
-     * @param filter
-     * @param pageRequest
-     * @return 
-     */
-    public Page<FixedMovement> listByFilter(String filter, PageRequest pageRequest);
+    @Override
+    public RelationshipManager createRelationshipManager() {
+        return new CustomRelationshipManager(this);
+    }
 }

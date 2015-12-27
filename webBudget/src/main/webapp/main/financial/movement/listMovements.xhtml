@@ -67,7 +67,7 @@
                                      value="#{menu['add']}"
                                      styleClass="ui-button-info" 
                                      action="#{movementBean.changeToAdd()}"
-                                     rendered="#{authorizationBean.hasRole(authorization.MOVEMENT_INSERT)}"/>
+                                     rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_INSERT)}"/>
                 </div>
             </div>
         </h:form>
@@ -81,6 +81,7 @@
                                  lazy="true"
                                  var="movement"
                                  paginator="true"
+                                 sortMode="multiple"
                                  sortOrder="descending"
                                  selectionMode="single"
                                  rowKey="#{movement.id}"
@@ -96,6 +97,7 @@
 
                         <p:column width="6%" 
                                   styleClass="div-align-center"
+                                  sortBy="#{movement.direction}"
                                   headerText="#{messages['movement.list.direction']}">
                             <p:graphicImage width="24"
                                             height="24"
@@ -112,6 +114,7 @@
                         </p:column>
                         <p:column width="6%"
                                   styleClass="div-align-center" 
+                                  sortBy="#{movement.movementStateType}"
                                   headerText="#{messages['movement.list.movement-state-type']}">
                             <p:graphicImage width="18"
                                             height="18"
@@ -139,6 +142,7 @@
                                             rendered="#{movement.movementStateType eq 'CALCULATED'}"/>
                         </p:column>
                         <p:column width="8%" 
+                                  sortBy="#{movement.code}"
                                   styleClass="div-align-center"
                                   headerText="#{messages['movement.list.code']}">
                             #{movement.code}
@@ -147,6 +151,7 @@
                             #{of:abbreviate(movement.description,50)}
                         </p:column>
                         <p:column width="12%"
+                                  sortBy="#{movement.value}"
                                   styleClass="div-align-center" 
                                   headerText="#{messages['movement.list.value']}">
                             <h:outputText value="#{movement.value}" >
@@ -154,6 +159,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column width="12%"
+                                  sortBy="#{movement.dueDate}"
                                   styleClass="div-align-center" 
                                   headerText="#{messages['movement.list.due-date']}">
                             <h:outputText value="#{movement.dueDate}">
@@ -166,21 +172,21 @@
                             <p:commandButton icon="fa fa-money"
                                              title="#{menu['pay']}"
                                              rendered="#{movement.payable eq true 
-                                                         and authorizationBean.hasRole(authorization.MOVEMENT_PAY)}"
+                                                         and userSessionBean.hasRole(authorization.MOVEMENT_PAY)}"
                                              action="#{movementBean.changeToPay(movement.id)}" />
                             <p:spacer width="10" 
                                       rendered="#{movement.payable eq true}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              rendered="#{movement.editable eq true 
-                                                         and authorizationBean.hasRole(authorization.MOVEMENT_UPDATE)}"
+                                                         and userSessionBean.hasRole(authorization.MOVEMENT_UPDATE)}"
                                              action="#{movementBean.changeToEdit(movement.id)}"/>
                             <p:spacer width="10" 
                                       rendered="#{movement.editable eq true}"/>
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              rendered="#{movement.deletable eq true 
-                                                         and authorizationBean.hasRole(authorization.MOVEMENT_DELETE)}"
+                                                         and userSessionBean.hasRole(authorization.MOVEMENT_DELETE)}"
                                              actionListener="#{movementBean.changeToDelete(movement.id)}" />
                             <p:commandButton icon="fa fa-info-circle"
                                              title="#{menu['detail']}"

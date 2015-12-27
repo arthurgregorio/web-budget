@@ -52,7 +52,7 @@
                                      value="#{menu['add']}"
                                      styleClass="ui-button-info" 
                                      action="#{movementClassBean.changeToAdd()}"
-                                     rendered="#{authorizationBean.hasRole(authorization.MOVEMENT_CLASS_INSERT)}"/>
+                                     rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_INSERT)}"/>
                 </div>
             </div>
         </h:form>
@@ -98,12 +98,12 @@
                         <p:commandButton icon="fa fa-edit"
                                          title="#{menu['edit']}"
                                          action="#{movementClassBean.changeToEdit(movementClass.id)}" 
-                                         rendered="#{authorizationBean.hasRole(authorization.MOVEMENT_CLASS_UPDATE)}"/>
+                                         rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_UPDATE)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton icon="fa fa-remove"
                                          title="#{menu['delete']}"
                                          actionListener="#{movementClassBean.changeToDelete(movementClass.id)}"
-                                         rendered="#{authorizationBean.hasRole(authorization.MOVEMENT_CLASS_DELETE)}"/>
+                                         rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_DELETE)}"/>
                     </p:column>
                 </p:dataTable>
             </div>

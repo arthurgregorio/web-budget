@@ -173,7 +173,6 @@ public class UserBean extends AbstractBean {
         
         try {
             this.accountService.updateProfile(this.user);
-
             this.info("user.action.profile-updated", true);
         } catch (WbDomainException ex) {
             this.logger.error("UserBean#doProfileUpdate has found erros", ex);

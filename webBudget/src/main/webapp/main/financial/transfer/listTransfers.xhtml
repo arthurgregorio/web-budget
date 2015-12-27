@@ -87,7 +87,7 @@
                                      value="#{menu['add']}"
                                      styleClass="ui-button-info" 
                                      action="#{transferenceBean.changeToAdd()}"
-                                     rendered="#{authorizationBean.hasRole(authorization.BALANCE_TRANSFER_MAKE)}"/>
+                                     rendered="#{userSessionBean.hasRole(authorization.BALANCE_TRANSFER_MAKE)}"/>
                 </div>
             </div>
         </h:form>

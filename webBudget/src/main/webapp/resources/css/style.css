@@ -559,12 +559,12 @@ td {
     margin-top: 10px;
 }
 
-/* detalhes do periodo ----------------------- */
-.denied-box {
+/* paginas de error -------------------------- */
+.error-box {
     position: relative;
     top: 50px;
 }
-.denied-text {
+.error-text {
     font-size: 15pt;
 }
 

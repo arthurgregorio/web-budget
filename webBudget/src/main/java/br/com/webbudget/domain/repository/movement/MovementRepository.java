@@ -28,9 +28,9 @@ import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.misc.dto.MovementFilter;
-import br.com.webbudget.domain.misc.model.Page;
-import br.com.webbudget.domain.misc.model.PageRequest;
-import br.com.webbudget.domain.misc.model.PageRequest.SortDirection;
+import br.com.webbudget.domain.misc.table.Page;
+import br.com.webbudget.domain.misc.table.PageRequest;
+import br.com.webbudget.domain.misc.table.PageRequest.SortDirection;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -124,10 +124,10 @@ public class MovementRepository extends GenericRepository<Movement, Long>
     }
 
     /**
-     * 
+     *
      * @param filter
      * @param pageRequest
-     * @return 
+     * @return
      */
     @Override
     public Page<Movement> listByFilter(MovementFilter filter, PageRequest pageRequest) {
@@ -135,13 +135,13 @@ public class MovementRepository extends GenericRepository<Movement, Long>
         final Criteria criteria = this.createCriteria();
 
         final List<Criterion> criterions = new ArrayList<>();
-        
+
         criteria.createAlias("contact", "co", JoinType.LEFT_OUTER_JOIN);
         criteria.createAlias("apportionments", "ap");
         criteria.createAlias("ap.movementClass", "mc");
         criteria.createAlias("ap.costCenter", "cc");
         criteria.createAlias("financialPeriod", "fp");
-        
+
         // montramos os criterios de filtragem geral
         if (filter.hasCriteria()) {
 
@@ -155,9 +155,10 @@ public class MovementRepository extends GenericRepository<Movement, Long>
             // se conseguir castar para bigdecimal trata como um filtro
             try {
                 criterions.add(Restrictions.eq("value", new BigDecimal(filter.getCriteria())));
-            } catch (NumberFormatException ex) { }
+            } catch (NumberFormatException ex) {
+            }
         }
-        
+
         // outras condicoes
         if (filter.isOnlyPaidsByOpenPeriods()) {
             criteria.add(Restrictions.and(
@@ -187,7 +188,21 @@ public class MovementRepository extends GenericRepository<Movement, Long>
         criteria.setFirstResult(pageRequest.getFirstResult());
         criteria.setMaxResults(pageRequest.getPageSize());
 
-        if (pageRequest.getSortDirection() == SortDirection.ASC) {
+        if (pageRequest.isMultiSort()) {
+
+            pageRequest
+                    .getMultiSortFields()
+                    .stream()
+                    .forEach(field -> {
+
+                        if (field.getDirection() == SortDirection.ASC) {
+                            criteria.addOrder(Order.asc(field.getSortField()));
+                        } else if (field.getDirection() == SortDirection.DESC) {
+                            criteria.addOrder(Order.desc(field.getSortField()));
+                        }
+
+                    });
+        } else if (pageRequest.getSortDirection() == SortDirection.ASC) {
             criteria.addOrder(Order.asc(pageRequest.getSortField()));
         } else if (pageRequest.getSortDirection() == SortDirection.DESC) {
             criteria.addOrder(Order.desc(pageRequest.getSortField()));

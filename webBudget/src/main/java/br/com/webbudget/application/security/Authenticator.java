@@ -49,7 +49,7 @@ public class Authenticator extends BaseAuthenticator {
     private Logger logger;
     
     @Inject
-    private WbCredentials wbCredentials;
+    private CustomCredentials wbCredentials;
     
     @Inject
     private IdentityManager identityManager;

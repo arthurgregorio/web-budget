@@ -25,9 +25,9 @@ import br.com.webbudget.domain.entity.movement.FixedMovementStatusType;
 import br.com.webbudget.domain.entity.movement.Launch;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
-import br.com.webbudget.domain.misc.model.AbstractLazyModel;
-import br.com.webbudget.domain.misc.model.Page;
-import br.com.webbudget.domain.misc.model.PageRequest;
+import br.com.webbudget.domain.misc.table.AbstractLazyModel;
+import br.com.webbudget.domain.misc.table.Page;
+import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.ArrayList;
@@ -287,6 +287,7 @@ public class FixedMovementBean extends AbstractBean {
             this.logger.error("FixedMovementBean#doSave found erros", ex);
             this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
+            this.update("fixedMovementsList");
             this.closeDialog("dialogConfirmLaunch");
         }
     }

@@ -35,7 +35,7 @@ import org.picketlink.idm.credential.Password;
  */
 @Named
 @RequestScoped
-public class WbCredentials extends AbstractBaseCredentials {
+public class CustomCredentials extends AbstractBaseCredentials {
 
     @Getter
     @Setter

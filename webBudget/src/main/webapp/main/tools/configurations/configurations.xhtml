@@ -111,7 +111,7 @@
                                      process="configurationForm"
                                      styleClass="ui-button-success"
                                      action="#{configurationBean.doSave()}" 
-                                     rendered="#{authorizationBean.hasRole(authorization.CONFIGURATION_INSERT)}"/>
+                                     rendered="#{userSessionBean.hasRole(authorization.CONFIGURATION_INSERT)}"/>
                 </div>
             </div>
         </h:form>
