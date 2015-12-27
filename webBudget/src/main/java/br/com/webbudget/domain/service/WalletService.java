@@ -31,8 +31,8 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
-import br.com.webbudget.domain.misc.model.Page;
-import br.com.webbudget.domain.misc.model.PageRequest;
+import br.com.webbudget.domain.misc.table.Page;
+import br.com.webbudget.domain.misc.table.PageRequest;
 
 /**
  * Serice para manutencao dos processos relacionados a carteiras e saldos 

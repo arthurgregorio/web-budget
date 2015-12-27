@@ -14,35 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repository.user;
-
-import br.com.webbudget.domain.entity.message.PrivateMessage;
-import br.com.webbudget.domain.misc.table.Page;
-import br.com.webbudget.domain.misc.table.PageRequest;
-import br.com.webbudget.domain.repository.IGenericRepository;
-import java.util.List;
+package br.com.webbudget.domain.misc.table;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
- * @since 1.0.0, 04/03/2013
+ * @version 1.0.0
+ * @since 2.1.2, 26/12/2015
  */
-public interface IPrivateMessageRepository extends IGenericRepository<PrivateMessage, Long> {
-
-    /**
-     * 
-     * @param userId
-     * @return 
-     */
-    public List<PrivateMessage> listSent(String userId);
+@FunctionalInterface
+public interface CustomFilterAdapter<T> {
     
     /**
      * 
-     * @param userId
-     * @param pageRequest
      * @return 
      */
-    public Page<PrivateMessage> listSentLazily(String userId, PageRequest pageRequest);
+    T getFilter();
 }

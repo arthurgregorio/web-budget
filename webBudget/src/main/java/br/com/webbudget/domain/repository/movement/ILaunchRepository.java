@@ -19,8 +19,8 @@ package br.com.webbudget.domain.repository.movement;
 import br.com.webbudget.domain.entity.movement.FixedMovement;
 import br.com.webbudget.domain.entity.movement.Launch;
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.misc.model.Page;
-import br.com.webbudget.domain.misc.model.PageRequest;
+import br.com.webbudget.domain.misc.table.Page;
+import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.util.List;
 

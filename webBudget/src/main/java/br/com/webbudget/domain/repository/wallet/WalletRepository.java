@@ -18,8 +18,8 @@ package br.com.webbudget.domain.repository.wallet;
 
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletType;
-import br.com.webbudget.domain.misc.model.Page;
-import br.com.webbudget.domain.misc.model.PageRequest;
+import br.com.webbudget.domain.misc.table.Page;
+import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
 import org.hibernate.Criteria;

@@ -31,9 +31,8 @@ import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.dto.MovementFilter;
 import br.com.webbudget.domain.misc.ex.WbDomainException;
-import br.com.webbudget.domain.misc.model.AbstractLazyModel;
-import br.com.webbudget.domain.misc.model.Page;
-import br.com.webbudget.domain.misc.model.PageRequest;
+import br.com.webbudget.domain.misc.table.AbstractLazyModel;
+import br.com.webbudget.domain.misc.table.MovementsListModel;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.ContactService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
@@ -41,9 +40,8 @@ import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -51,7 +49,6 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import org.omnifaces.util.Faces;
-import org.primefaces.model.SortOrder;
 
 /**
  * Controle da tela de movimentos do sistema
@@ -112,38 +109,20 @@ public class MovementBean extends AbstractBean {
     private FinancialPeriodService financialPeriodService;
 
     @Getter
-    private final AbstractLazyModel<Movement> movementsModel;
+    private AbstractLazyModel<Movement> movementsModel;
 
     /**
      * Inicializamos os objetos necessarios
      */
-    public MovementBean() {
-
+    @PostConstruct
+    public void initialize() {
+        
+        // inicializa o model customizado
+        this.movementsModel = new MovementsListModel(
+                this.movementService, () -> this.getMovementFilter());
+        
         // inicializa o DTO de filtro
         this.movementFilter = new MovementFilter();
-
-        // montamos o datamodel de movimentos
-        this.movementsModel = new AbstractLazyModel<Movement>() {
-            @Override
-            public List<Movement> load(int first, int pageSize, String sortField,
-                    SortOrder sortOrder, Map<String, Object> filters) {
-
-                final PageRequest pageRequest = new PageRequest();
-
-                pageRequest
-                        .setFirstResult(first)
-                        .withPageSize(pageSize)
-                        .sortingBy(sortField, "inclusion")
-                        .withDirection(sortOrder.name());
-
-                final Page<Movement> page = movementService
-                        .listMovementsByFilter(movementFilter, pageRequest);
-
-                this.setRowCount(page.getTotalPagesInt());
-
-                return page.getContent();
-            }
-        };
     }
 
     /**
