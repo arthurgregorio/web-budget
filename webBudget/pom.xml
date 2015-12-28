@@ -131,6 +131,31 @@
                 <email.password>${wb.email-password}</email.password>
             </properties>
         </profile>
+        <profile>
+            <id>openshift</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.3</version>
+                        <configuration>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <outputDirectory>deployments</outputDirectory>
+                            <warName>ROOT</warName>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <application.version>${project.version}</application.version>
+                <orm.show-sql>false</orm.show-sql>
+                <email.host>${wb.email-host}</email.host>
+                <email.port>${wb.email-port}</email.port>
+                <email.user>${wb.email-user}</email.user>
+                <email.password>${wb.email-password}</email.password>
+            </properties>
+        </profile>
     </profiles>
     
     <repositories>

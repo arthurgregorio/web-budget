@@ -34,7 +34,7 @@
     </servlet-mapping>
     
     <!-- Descomente estas linhas se voce quiser que o sistema rode apenas com
-         HTTPS, nao esqueca do redirect no wildfly
+         HTTPS, nao esqueca do redirect no wildfly 
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>App</web-resource-name>
