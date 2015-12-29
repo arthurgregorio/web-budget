@@ -18,6 +18,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
@@ -86,6 +87,11 @@
                                              rendered="#{authenticationBean.authenticationError}"/>
                         </f:facet>
                     </p:ajaxStatus>
+                </div>
+                <div class="system-test-box" 
+                     jsf:rendered="#{authenticationBean.systemTest}">
+                    <p:graphicImage library="images" name="ui-icon-info.svg"/>
+                    <span>#{messages['authentication.system-test-tip']}</span>
                 </div>
             </h:form>
         </div>  

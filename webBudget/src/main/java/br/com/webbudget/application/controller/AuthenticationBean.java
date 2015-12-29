@@ -16,6 +16,8 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.infraestructure.ApplicationUtils;
+import javax.faces.application.ProjectStage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -87,5 +89,13 @@ public class AuthenticationBean extends AbstractBean {
     public String doLogout() {
         this.identity.logout();
         return "/home.xhtml?faces-redirect=true";
+    }
+    
+    /**
+     * @return verifica se a aplicacao esta em teste ou se estamos em outro 
+     * ambiente
+     */
+    public boolean isSystemTest() {
+        return ApplicationUtils.isStageRunning(ProjectStage.SystemTest);
     }
 }

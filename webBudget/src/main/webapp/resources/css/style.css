@@ -425,6 +425,10 @@ td {
     position: relative;
     top: 4px;
 }
+.system-test-box {
+    padding-top: 20px;
+    text-align: center;
+}
 
 /* dashboard --------------------------------- */
 .dashboard-graphs div.ui-tabs-panels {
