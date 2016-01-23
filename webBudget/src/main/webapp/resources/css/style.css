@@ -253,9 +253,6 @@ td {
     width: 15%;
 }
 
-.form-group-l div.ui-selectonemenu {
-    width: 99% !important;
-}
 .form-group-m div.ui-selectonemenu {
     width: 52% !important;
 }

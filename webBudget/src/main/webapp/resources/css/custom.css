@@ -17,7 +17,7 @@
 
 /* 
     Created on : 25/02/2014, 19:43:50
-    Author     : Arthur Greg?rio
+    Author     : Arthur Gregorio
 */
 
 @charset "utf-8";
@@ -103,9 +103,9 @@ ul.ui-tabs-nav > li.ui-tabs-selected {
     font: 1.1em 'Ubuntu', sans-serif !important;
 }
 
-/* arruma automaticamente o tamanho do label nos combos */
-.ui-selectonemenu-label {
-    width: auto !important;
+/* arruma o tamanho dos comboboxes em relacao ao label */
+.ui-selectonemenu {
+    padding-right: 1em !important;
 }
 
 /* arruma o toggler da tree */

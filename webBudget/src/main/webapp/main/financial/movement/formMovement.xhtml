@@ -58,12 +58,11 @@
                                            ? messages['movement.form.financial-period.not-active'] 
                                            : movementBean.financialPeriod.identification}" />
                 </div>
-                <div class="ui-grid-col-7 div-align-right">
+                <div class="ui-grid-col-7 div-align-right form-group-s">
                     <p:outputLabel for="inLaunchPeriod" 
                                    value="#{messages['movement.form.launch-period']}: "/>
                     <p:spacer width="10"/>
                     <p:selectOneMenu id="inLaunchPeriod" 
-                                     styleClass="period-combo"
                                      converter="omnifaces.SelectItemsConverter"
                                      value="#{movementBean.movement.financialPeriod}">
                         <f:selectItems var="financialPeriod" 
