@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>webBudget</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+        <h:outputStylesheet library="bootstrap" name="css/bootstrap.css"/>
+        <h:outputStylesheet library="app" name="css/adminlte.css"/>
+        <h:outputStylesheet library="primefaces-bootstrap" name="custom.css"/>
+    </h:head>
+
+    <h:body styleClass="hold-transition login-page">
+
+        <div class="login-box">
+            <div class="login-logo">
+                <a href="index.xhtml"><b>web</b>Budget</a>
+            </div>
+            <div class="login-box-body">
+                <p class="login-box-msg">#{messages['login.welcome-message']}</p>
+                <h:form id="loginForm" prependId="false">
+                    <p:messages id="messages" closable="true"/>
+                    <div class="form-group has-feedback">
+                        <p:inputText pt:autocorrect="off"
+                                     pt:spellcheck="false"
+                                     pt:autocomplete="off"
+                                     pt:autocapitalize="off"
+                                     styleClass="form-control" 
+                                     value="#{customCredentials.username}" 
+                                     placeholder="#{messages['login.username']}"/>
+                        <span class="fa fa-user form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <p:password pt:autocorrect="off"
+                                    pt:spellcheck="false"
+                                    styleClass="form-control" 
+                                    value="#{customCredentials.password}" 
+                                    placeholder="#{messages['login.password']}"/>
+                        <span class="fa fa-lock form-control-feedback"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8" style="padding-top: 10px;">
+                            <a href="#">#{messages['login.forgot-password']}</a>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="submit" 
+                                    jsf:update="@form"
+                                    jsf:process="@form"
+                                    class="btn btn-primary btn-block btn-flat"
+                                    jsf:action="#{authenticationBean.doLogin()}" >
+                                #{menu['login']}
+                            </button>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+
+        <h:outputScript library="primefaces" name="jquery/jquery.min.js" target="head" />
+        <h:outputScript library="bootstrap" name="js/bootstrap.min.js"/>
+        <h:outputScript library="app" name="js/app.min.js"/>        
+    </h:body>
+</html>

@@ -59,12 +59,12 @@
 
     <!-- o nome do arquivo de welcome do server -->
     <welcome-file-list>
-        <welcome-file>home.xhtml</welcome-file>
+        <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     
     <!-- tempo de sessao -->
     <session-config>
-        <session-timeout>40</session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
     
     <!-- paginas de erro -->
@@ -85,15 +85,17 @@
         <location>/error/500.xhtml</location>  
     </error-page>
     
-    <!-- tema do primefaces -->
+    <!-- configuracoes do primefaces -->
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>bootstrap</param-value>
     </context-param>
-    
-    <!-- habilita o font awesome no primefaces -->
     <context-param>
         <param-name>primefaces.FONT_AWESOME</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.TRANSFORM_METADATA</param-name>
         <param-value>true</param-value>
     </context-param>
 
@@ -106,9 +108,9 @@
 
     <!-- parametros do contexto --> 
     <context-param>
-        <param-name>defaultHtmlEscape</param-name>
-        <param-value>true</param-value>
-    </context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+    </context-param>   
     <context-param>
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>true</param-value>
@@ -121,13 +123,15 @@
         <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>
-    
-    <!-- faz o primefaces processar as annotation do bean validation -->
     <context-param>
-        <param-name>primefaces.TRANSFORM_METADATA</param-name>
-        <param-value>true</param-value>
+        <param-name>javax.faces.SERIALIZE_SERVER_STATE</param-name>
+        <param-value>false</param-value>
     </context-param>
-
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
+    
     <!-- tipos mime -->
     <mime-mapping>
         <extension>ico</extension>

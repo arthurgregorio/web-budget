@@ -1,0 +1,58 @@
+@charset "utf-8";
+
+/* 
+    Todas as customizacoes do primefaces vao estar neste arquivo
+
+    Author     : Arthur Gregorio
+    Created on : 26/10/2015
+*/
+
+/* customizacao das mensagens de erro */ 
+.ui-messages > div {
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+}
+.ui-messages-error {
+    border-color: #d73925 !important;
+    background-color: #dd4b39 !important;
+}
+.ui-messages-warn {
+    border-color: #d73925 !important;
+    background-color: #f39c12 !important;
+}
+.ui-messages-info {
+    border-color: #e08e0b !important;
+    background-color: #00c0ef !important;
+}
+.ui-messages ul {
+    margin: 0 !important;
+}
+.ui-messages span.ui-messages-info-icon {
+    display: none;
+}
+.ui-messages span.ui-messages-warn-icon { 
+    display: none;
+}
+.ui-messages span.ui-messages-error-icon { 
+    display: none;
+}
+
+/* corrige a opacidade dos checkboxes das grids */
+.ui-chkbox .ui-state-disabled {
+    opacity: initial !important;
+}
+
+/* remove uma linha preta escrota da header das tabelas */
+th[role="columnheader"].ui-state-default {
+    border-color: #ccc !important;
+}
+
+/* corrige a borda do paginador das datatables */
+div.ui-paginator {
+    border: 1px solid #dddddd !important; 
+    border-top: 0px !important;
+}

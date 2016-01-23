@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   Copyright (C) 2015 Arthur Gregorio, AG.Software
  
@@ -18,163 +20,262 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta http-equiv="refresh" content="${request.session.maxInactiveInterval};url=/logout"/>
 
-        <title>#{messages['application.title']}</title>
+        <title>webBudget</title>
 
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['images:favicon.ico']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
-        <script type="text/javascript" src="#{resource['js:locale.js']}" />
-        <script type="text/javascript" src="#{resource['js:timeout.js']}" />
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['app/img:favicon.ico']}"/>
 
-        <h:outputStylesheet library="css" name="custom.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-
-        <h:outputScript library="omnifaces" name="fixviewstate.js"/>
+        <h:outputStylesheet library="bootstrap" name="css/bootstrap.css"/>
+        <h:outputStylesheet library="app" name="css/adminlte.css"/>
+        <h:outputStylesheet library="app" name="css/skin-black.min.css"/>
+        <h:outputStylesheet library="app" name="css/common.css"/>
+        <h:outputStylesheet library="primefaces-bootstrap" name="custom.css"/>
 
         <ui:insert name="head" />
     </h:head>
 
-    <h:body>
-        <div class="container">
-            <div class="header header-background">
-                <div class="header-content">
-                    <div class="logo">
-                        <h:link outcome="/main/dashboard.xhtml">
-                            <p:graphicImage library="images" name="ui-wb-logo-1.png" />
-                        </h:link>
-                    </div>
-                    <div class="menu">
-                        <h:form id="menuForm" prependId="false">
-                            <p:menubar styleClass="main-menu header-background" >
-                                <p:submenu label="#{menu['entries']}" 
-                                           styleClass="main-menu-item">
-                                    <p:menuitem value="#{menu['entries.cards']}"    
-                                                url="/main/entries/cards/listCards.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.CARD_VIEW)}"/>
-                                    <p:menuitem value="#{menu['entries.wallets']}"
-                                                url="/main/entries/wallets/listWallets.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.WALLET_VIEW)}"/>
-                                    <p:menuitem value="#{menu['entries.contacts']}"    
-                                                url="/main/entries/contacts/listContacts.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.CONTACT_VIEW)}"/>
-                                    <p:menuitem value="#{menu['entries.cost-center']}"    
-                                                url="/main/entries/costCenter/listCostCenters.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_VIEW)}"/>
-                                    <p:menuitem value="#{menu['entries.movement-classes']}"
-                                                url="/main/entries/movementClass/listMovementClasses.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_VIEW)}"/>
-                                </p:submenu>
-                                <p:submenu styleClass="main-menu-item"
-                                           label="#{menu['financial']}" >
-                                    <p:menuitem value="#{menu['financial.movements']}"    
-                                                url="/main/financial/movement/listMovements.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_VIEW)}"/>
-                                    <p:menuitem value="#{menu['financial.card-invoice']}"    
-                                                url="/main/financial/cardInvoice/generateCardInvoice.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_VIEW)}"/>
-                                    <p:menuitem value="#{menu['financial.transfers']}"    
-                                                url="/main/financial/transfer/listTransfers.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.BALANCE_TRANSFER_VIEW)}"/>
-                                    <p:menuitem value="#{menu['financial.fixed-movements']}"    
-                                                url="/main/financial/fixedMovements/listFixedMovements.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_VIEW)}"/>
-                                </p:submenu>
-                                <p:submenu styleClass="main-menu-item"
-                                           label="#{menu['miscellany']}" >
-                                    <p:menuitem value="#{menu['miscellany.closing']}"    
-                                                url="/main/miscellany/closing/closeFinancialPeriod.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.CLOSING_VIEW)}"/>
-                                    <p:menuitem value="#{menu['miscellany.financial-periods']}"    
-                                                url="/main/miscellany/financialPeriod/listFinancialPeriods.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_VIEW)}"/>
-                                </p:submenu>
-                                <p:submenu label="#{menu['tools']}" 
-                                           styleClass="main-menu-item">
-                                    <p:menuitem value="#{menu['tools.groups']}"    
-                                                url="/main/tools/group/listGroups.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.GROUP_VIEW)}"/>
-                                    <p:menuitem value="#{menu['tools.users']}"    
-                                                url="/main/tools/user/listUsers.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.USER_VIEW)}"/>
-                                    <p:menuitem value="#{menu['tools.configuration']}"    
-                                                url="/main/tools/configurations/configurations.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.CONFIGURATION_VIEW)}"/>
-                                    <p:menuitem value="#{menu['tools.private-messages']}"    
-                                                url="/main/tools/privateMessage/listPrivateMessages.xhtml"
-                                                rendered="#{userSessionBean.hasRole(authorization.PRIVATE_MESSAGE_VIEW)}"/>
-                                </p:submenu>
+    <h:body styleClass="hold-transition skin-black sidebar-mini">
+        <div class="wrapper">
 
-                                <f:facet name="options">
-                                    <p:menuButton id="btSession"
-                                                  iconPos="left"
-                                                  styleClass="session-button"
-                                                  value="#{userSessionBean.authenticatedUserName}">
-                                        <p:menuitem value="#{menu['dashboard.logout']}" 
-                                                    action="#{authenticationBean.doLogout()}"/>
-                                        <p:menuitem value="#{menu['dashboard.profile']}" 
-                                                    action="/main/tools/user/formUserProfile.xhtml?faces-redirect=true"/>
-                                    </p:menuButton>
-                                </f:facet>
-                            </p:menubar>
-                        </h:form>
+            <header class="main-header">
+
+                <!-- Logo -->
+                <a href="/main/dashboard.xhtml" class="logo">
+                    <span class="logo-mini"><b>w</b>B</span>
+                    <span class="logo-lg"><b>web</b>Budget</span>
+                </a>
+
+                <!-- Header Navbar -->
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                        <span class="sr-only"></span>
+                    </a>
+                    <!-- Navbar Right Menu -->
+                    <div class="navbar-custom-menu">
+
+                        <ul class="nav navbar-nav">
+                            <!-- User Account Menu -->
+                            <li class="dropdown user user-menu">
+                                <!-- Menu Toggle Button -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <p:graphicImage library="app" name="img/user2-160x160.svg" styleClass="user-image"/>
+                                    <span class="hidden-xs">#{userSessionBean.authenticatedUserName}</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="user-header">
+                                        <p:graphicImage library="app" name="img/user2-160x160.svg" styleClass="img-circle"/>
+                                        <p>
+                                            #{userSessionBean.authenticatedUserName}
+                                            <small>#{userSessionBean.authenticatedUserGroup}</small>
+                                        </p>
+                                    </li>
+                                    <!-- Menu Footer-->
+                                    <li class="user-footer">
+                                        <h:form>
+                                            <div class="pull-left">
+                                                <a href="#" class="btn btn-default btn-flat">#{menu['profile']}</a>
+                                            </div>
+                                            <div class="pull-right">
+                                                <p:commandLink value="#{menu['logout']}"
+                                                               styleClass="btn btn-default btn-flat" 
+                                                               action="#{authenticationBean.doLogout()}"/>
+                                            </div>
+                                        </h:form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
-                </div>	
-            </div>
-            <div class="breadcrumb">
-                <div class="breadcrumb-content">
-                    <p:breadCrumb homeDisplay="text">
-                        <p:menuitem url="/main/dashboard.xhtml" 
-                                    value="#{breadcrumb['home']}"/>
+                </nav>
+            </header>
+
+            <aside class="main-sidebar">
+
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+
+                    <!-- Sidebar Menu -->
+                    <ul class="sidebar-menu">
+                        <li class="header">#{menu['entries']}</li>
+                        <li class="#{activeMenu eq 'cards' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_VIEW)}">
+                            <a href="../main/entries/cards/listCards.xhtml">
+                                <i class="fa fa-credit-card"></i> 
+                                <span>#{menu['entries.cards']}</span>
+                            </a>
+                        </li>
+                        <li class="#{activeMenu eq 'wallets' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.WALLET_VIEW)}">
+                            <a href="../main/entries/wallets/listWallets.xhtml.xhtml">
+                                <i class="fa fa-bank"></i> 
+                                <span>#{menu['entries.wallets']}</span>
+                            </a>
+                        </li>
+                        <li class="#{activeMenu eq 'contacts' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.CONTACT_VIEW)}">
+                            <a href="../main/entries/contacts/listContacts.xhtml">
+                                <i class="fa fa-fax"></i> 
+                                <span>#{menu['entries.contacts']}</span>
+                            </a>
+                        </li>
+                        <li class="#{activeMenu eq 'costCenters' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_VIEW)}">
+                            <a href="../main/entries/costCenter/listCostCenters.xhtml">
+                                <i class="fa fa-line-chart"></i> 
+                                <span>#{menu['entries.cost-center']}</span>
+                            </a>
+                        </li>
+                        <li class="#{activeMenu eq 'costCenters' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_VIEW)}">
+                            <a href="../main/entries/movementClass/listMovementClasses.xhtml">
+                                <i class="fa fa-reorder"></i> 
+                                <span>#{menu['entries.movement-classes']}</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="sidebar-menu">
+                        <li class="header">#{menu['financial']}</li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-money"></i> 
+                                <span>#{menu['financial.movements']}</span> 
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li jsf:rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_VIEW)}">
+                                    <a href="../main/financial/fixedMovements/listFixedMovements.xhtml">
+                                        <i class="fa fa-circle-o"></i> 
+                                        #{menu['financial.movements.fixed']}
+                                    </a>
+                                </li>
+                                <li jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_VIEW)}">
+                                    <a href="../main/financial/movement/listMovements.xhtml">
+                                        <i class="fa fa-circle-o"></i> 
+                                        #{menu['financial.movements.monthly']}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="#{activeMenu eq 'cardInvoice' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_VIEW)}">
+                            <a href="../main/financial/cardInvoice/generateCardInvoice.xhtml">
+                                <i class="fa fa-file-text-o"></i> 
+                                <span>#{menu['financial.card-invoice']}</span>
+                            </a>
+                        </li>
+                        <li class="#{activeMenu eq 'transference' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.BALANCE_TRANSFER_VIEW)}">
+                            <a href="../main/financial/transfer/listTransfers.xhtml">
+                                <i class="fa fa-exchange"></i> 
+                                <span>#{menu['financial.transfers']}</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="sidebar-menu">
+                        <li class="header">#{menu['miscellany']}</li>
+                        <li class="#{activeMenu eq 'closing' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.CLOSING_VIEW)}">
+                            <a href="../main/miscellany/closing/closeFinancialPeriod.xhtml">
+                                <i class="fa fa-calculator"></i> 
+                                <span>#{menu['miscellany.closing']}</span>
+                            </a>
+                        </li>
+                        <li class="#{activeMenu eq 'privateMessages' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.PRIVATE_MESSAGE_VIEW)}">
+                            <a href="../main/miscellany/privateMessage/listPrivateMessages.xhtml">
+                                <i class="fa fa-envelope-o"></i> 
+                                <span>#{menu['miscellany.private-messages']}</span>
+                            </a>
+                        </li>
+                        <li class="#{activeMenu eq 'financialPeriods' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_VIEW)}">
+                            <a href="../main/miscellany/financialPeriod/listFinancialPeriods.xhtml">
+                                <i class="fa fa-calendar-o"></i> 
+                                <span>#{menu['miscellany.financial-periods']}</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="sidebar-menu">
+                        <li class="header">#{menu['tools']}</li>
+                        <li class="#{activeMenu eq 'groups' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.GROUP_VIEW)}">
+                            <a href="../main/tools/group/listGroups.xhtml">
+                                <i class="fa fa-users"></i> 
+                                <span>#{menu['tools.groups']}</span>
+                            </a>
+                        </li>
+                        <li class="#{activeMenu eq 'users' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.USER_VIEW)}">
+                            <a href="../main/tools/user/listUsers.xhtml">
+                                <i class="fa fa-user"></i> 
+                                <span>#{menu['tools.users']}</span>
+                            </a>
+                        </li>
+                        <li class="#{activeMenu eq 'configurations' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.CONFIGURATION_VIEW)}">
+                            <a href="../main/tools/configurations/configurations.xhtml">
+                                <i class="fa fa-gears"></i> 
+                                <span>#{menu['tools.configurations']}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            </aside>
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        <ui:insert name="pageTitle" />
+                        <small><ui:insert name="pageDescription" /></small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="dashboard.xhtml">
+                                <i class="fa fa-home"></i>
+                                Home
+                            </a>
+                        </li>
                         <ui:insert name="breadcrumb" />
-                    </p:breadCrumb>
-                </div>
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <ui:insert name="content" />
+                </section>
             </div>
-            <div class="content">
-                <div class="content-content">
-                    <div class="ui-grid ui-grid-responsive">
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-12 div-tb-10">
-                                <ui:insert name="content" />
-                            </div> 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="footer">
-            <div class="footer-content">
-                <div class="footer-text">
-                    webBudget #{messages['application.version']}: #{dashboardBean.version}, 
+
+            <!-- Main Footer -->
+            <footer class="main-footer">
+                <a href="http://arthurgregorio.github.io/web-budget/">
                     Copyright (C) 2015 Arthur Gregorio, AG.Software
+                </a>
+                <div class="pull-right hidden-xs">
+                    <strong>#{dashboardBean.version}</strong>
                 </div>
-            </div>
+            </footer>
         </div>
 
         <ui:insert name="popups" />
 
-        <!--
-            Coloca todos os componentes que nao possuem por padrao acesso para 
-            propriedade icon para que possamos usar o font awesome
-        
-            referente #76
-        -->
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('.ui-datepicker-trigger').children()
-                        .removeClass('ui-icon-calendar').addClass('fa fa-calendar');
-            });
-        </script>
-
-        <div style="clear: both"/>
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+        <h:outputScript library="bootstrap" name="js/bootstrap.min.js"/>
+        <h:outputScript library="app" name="js/app.min.js"/>
     </h:body>
 </html>
-

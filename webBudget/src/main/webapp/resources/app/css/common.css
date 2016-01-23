@@ -1,0 +1,20 @@
+@charset "utf-8";
+
+/* 
+    Todos os CSS's comun entre todas as areas do sistem e que nao estao na 
+    template base
+
+    Author     : Arthur Gregorio
+    Created on : 19/01/2016
+*/
+
+.align-right {
+    text-align: right;
+}
+.align-center {
+    text-align: center;
+}
+
+.margin-t-15 {
+    margin-top: 15px;
+}

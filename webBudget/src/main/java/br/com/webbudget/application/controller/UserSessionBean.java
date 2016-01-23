@@ -137,6 +137,13 @@ public class UserSessionBean implements Serializable {
     }
     
     /**
+     * @return o grupo ao qual este usuario esta vinculado
+     */
+    public String getAuthenticatedUserGroup() {
+        return this.userGroups.stream().findAny().get().getName();
+    }
+    
+    /**
      * @return o usuario autenticado
      */
     @Produces
