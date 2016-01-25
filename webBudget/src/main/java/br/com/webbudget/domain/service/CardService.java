@@ -32,8 +32,6 @@ import br.com.webbudget.domain.repository.card.ICardRepository;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import br.com.webbudget.domain.repository.system.IConfigurationRepository;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

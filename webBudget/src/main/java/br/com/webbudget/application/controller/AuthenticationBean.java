@@ -71,14 +71,10 @@ public class AuthenticationBean extends AbstractBean {
         
         final AuthenticationResult result = this.identity.login();
         
-        if (result == AuthenticationResult.FAILED) {
-            this.authenticationError = true;
-            this.error("authentication.error", true);
-            return null;
-        } else {
-            this.authenticationError = false;
+        if (result == AuthenticationResult.SUCCESS) {
             return "/main/dashboard.xhtml?faces-redirect=true";
-        }
+        } 
+        return null;
     }
     
     /**
@@ -88,7 +84,7 @@ public class AuthenticationBean extends AbstractBean {
      */
     public String doLogout() {
         this.identity.logout();
-        return "/home.xhtml?faces-redirect=true";
+        return "/index.xhtml?faces-redirect=true";
     }
     
     /**

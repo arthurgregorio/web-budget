@@ -33,7 +33,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['app/img:favicon.ico']}"/>
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['app:img/favicon.ico']}"/>
 
         <h:outputStylesheet library="bootstrap" name="css/bootstrap.css"/>
         <h:outputStylesheet library="app" name="css/adminlte.css"/>
@@ -69,12 +69,12 @@
                             <li class="dropdown user user-menu">
                                 <!-- Menu Toggle Button -->
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <p:graphicImage library="app" name="img/user2-160x160.svg" styleClass="user-image"/>
+                                    <p:graphicImage library="app" name="img/user-avatar.svg" styleClass="user-image"/>
                                     <span class="hidden-xs">#{userSessionBean.authenticatedUserName}</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="user-header">
-                                        <p:graphicImage library="app" name="img/user2-160x160.svg" styleClass="img-circle"/>
+                                        <p:graphicImage library="app" name="img/user-avatar.svg" styleClass="img-circle"/>
                                         <p>
                                             #{userSessionBean.authenticatedUserName}
                                             <small>#{userSessionBean.authenticatedUserGroup}</small>

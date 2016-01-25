@@ -30,6 +30,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.omnifaces.util.Faces;
 import org.picketlink.Identity;
 import org.picketlink.authentication.event.LoggedInEvent;
 import org.picketlink.authentication.event.PostLoggedOutEvent;
@@ -40,7 +41,7 @@ import org.picketlink.authentication.event.PostLoggedOutEvent;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 2.0.0, 27/06/2015
  */
 @Named
@@ -48,54 +49,54 @@ import org.picketlink.authentication.event.PostLoggedOutEvent;
 public class UserSessionBean implements Serializable {
 
     private List<Group> userGroups;
-    
+
     @Getter
     @Inject
     private transient Authorization authorization;
-    
+
     @Inject
     private transient Identity identity;
-    
+
     @Inject
     private transient AccountService accountService;
 
     /**
      * Inicializamos a sessao do usuario carregando os grupos dele e suas roles
-     * 
+     *
      * @param event o evento de login
      */
     protected void initialize(@Observes LoggedInEvent event) {
         this.userGroups = this.accountService
                 .listUserGroupsAndGrants(this.getAuthenticatedUser());
     }
-    
+
     /**
-     * Destruimos a sessao, forcando que em um proximo login os grupos sejam 
+     * Destruimos a sessao, forcando que em um proximo login os grupos sejam
      * carregados novamente
-     * 
+     *
      * @param event o evento de logout
      */
     protected void destroy(@Observes PostLoggedOutEvent event) {
         this.userGroups = null;
     }
-    
+
     /**
      * Checa pela role de um respectivo usuario
-     * 
+     *
      * @param roleName a role que espera-se que este usuario tenha
      * @return se existe ou nao uma instancia desta role atribuida a ele
      */
     public boolean hasRole(String roleName) {
-        
+
         boolean hasRole = false;
-        
+
         for (Group group : this.userGroups) {
             hasRole = this.hasGrantTo(roleName, group);
         }
-        
+
         return hasRole;
     }
-    
+
     /**
      * Buscamos nos grupos do usuario que fez login se em algum deles existe um
      * grant para a role desejada
@@ -105,12 +106,12 @@ public class UserSessionBean implements Serializable {
      * @return se ha ou nao a o grant para aquela role em algum dos grupos
      */
     private boolean hasGrantTo(String role, Group group) {
-        
+
         // se for um grupo parente, os grants vem vazio, entao preenchemos
         if (group.getGrants() == null) {
             group.setGrants(this.accountService.listGrantsByGroup(group));
         }
-        
+
         // agora iteramos nos grupos
         if (!group.getGrants().isEmpty()) {
 
@@ -119,7 +120,7 @@ public class UserSessionBean implements Serializable {
                 return true;
             }
         }
-        
+
         // se nao tem acesso em primeira instancia, checamos pelos outros grupos
         // aninhados dentro daquele grupo
         if (group.getParent() != null) {
@@ -128,21 +129,61 @@ public class UserSessionBean implements Serializable {
             return false;
         }
     }
-    
+
     /**
      * @return o nome do usuario logado atualmente no sistema
      */
     public String getAuthenticatedUserName() {
         return this.getAuthenticatedUser().getName();
     }
-    
+
     /**
      * @return o grupo ao qual este usuario esta vinculado
      */
     public String getAuthenticatedUserGroup() {
         return this.userGroups.stream().findAny().get().getName();
     }
-    
+
+    /**
+     * Armazena um valor na sessao para o usuario logado
+     *
+     * @param key a chave para o valor
+     * @param value o valor
+     */
+    public void setOnUserSession(String key, Object value) {
+        Faces.setSessionAttribute(this.generateKeyForUser(key), value);
+    }
+
+    /**
+     * Captura um valor da sessao do usuario logado
+     *
+     * @param <T> o tipo do objeto
+     * @param key a chave para busca
+     * @return o valor previamente setado para este usuario
+     */
+    public <T> T getFromUserSession(String key) {
+        return Faces.getSessionAttribute(this.generateKeyForUser(key));
+    }
+
+    /**
+     * Remove um valor da sessao do usuario logado
+     *
+     * @param key a chave do valor
+     */
+    public void removeFromUserSession(String key) {
+        Faces.removeSessionAttribute(this.generateKeyForUser(key));
+    }
+
+    /**
+     * Gera uma chave para este atributo na sessao
+     *
+     * @param valueKey a chave para apendar e formar uma chave unica
+     * @return a chave para este usuario
+     */
+    private String generateKeyForUser(String valueKey) {
+        return this.getAuthenticatedUserName() + ":" + valueKey;
+    }
+
     /**
      * @return o usuario autenticado
      */
