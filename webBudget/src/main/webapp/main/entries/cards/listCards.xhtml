@@ -23,43 +23,46 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="cards"/>
+
     <f:metadata>
         <f:viewAction action="#{cardBean.initializeListing()}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['card.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['card.page-description']}
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['entries']}" />
-        <p:menuitem url="listCards.xhtml"
-                    value="#{breadcrumb['entries.card']}" />
+        <li class="active"><a href="#">#{breadcrumb['entries']}</a></li>
+        <li class="active"><a href="listCards.xhtml">#{breadcrumb['entries.card']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <p:messages id="messages" closable="true" globalOnly="true"/>
             </div>
         </div>
 
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-10">
-
-                </div>
-                <div class="ui-grid-col-2 div-align-right">
-                    <p:commandButton immediate="true"
-                                     value="#{menu['add']}"
-                                     styleClass="ui-button-info" 
-                                     action="#{cardBean.changeToAdd()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.CARD_INSERT)}"/>
-                </div>
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h:form id="controlsForm" prependId="false">
+                    <div class="box-tools pull-right">
+                        <p:commandButton immediate="true"
+                                         value="#{menu['new']}"
+                                         action="#{cardBean.changeToAdd()}"
+                                         styleClass="btn btn-block btn-success btn-flat"
+                                         rendered="#{userSessionBean.hasRole(authorization.CARD_INSERT)}"/>
+                    </div>
+                </h:form>
             </div>
-        </h:form>
-
-        <div jsf:id="listPanel" 
-             class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
+            <div jsf:id="boxBody" class="box-body">
                 <p:dataTable id="cardsList" 
                              rows="15"
                              var="card"
@@ -106,8 +109,8 @@
                 </p:dataTable>
             </div>
         </div>
-        
-        <p:blockUI block="listPanel"
+
+        <p:blockUI block="boxBody"
                    trigger="cardsList"
                    widgetVar="listBlock">
             <div class="div-align-center">
