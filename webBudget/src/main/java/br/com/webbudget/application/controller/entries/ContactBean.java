@@ -120,7 +120,7 @@ public class ContactBean extends AbstractBean {
      * Pesquisa com filtro
      */
     public void filterList() {
-        this.update("contactsList");
+//        this.update("contactsList");
     }
     
     /**
@@ -150,7 +150,7 @@ public class ContactBean extends AbstractBean {
      */
     public void changeToDelete(long contactId) {
         this.contact = this.contactService.findContactById(contactId);
-        this.openDialog("deleteContactDialog", "dialogDeleteContact");
+//        this.openDialog("deleteContactDialog", "dialogDeleteContact");
     }
 
     /**
@@ -165,22 +165,22 @@ public class ContactBean extends AbstractBean {
      */
     public void doSave() {
 
-        if (!this.validateDocument()) {
-            this.error("contact.validate.document", true);
-            return;
-        }
-        
-        try {
-            this.contactService.saveContact(this.contact);
-            this.contact = new Contact();
-            this.info("contact.action.saved", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("ContactBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("ContactBean#doSave found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        if (!this.validateDocument()) {
+//            this.error("contact.validate.document", true);
+//            return;
+//        }
+//        
+//        try {
+//            this.contactService.saveContact(this.contact);
+//            this.contact = new Contact();
+//            this.info("contact.action.saved", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("ContactBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("ContactBean#doSave found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -188,21 +188,21 @@ public class ContactBean extends AbstractBean {
      */
     public void doUpdate() {
 
-        if (!this.validateDocument()) {
-            this.error("contact.validate.document", true);
-            return;
-        }
-        
-        try {
-            this.contact = this.contactService.updateContact(this.contact);
-            this.info("contact.action.updated", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("ContactBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("ContactBean#doUpdate found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        if (!this.validateDocument()) {
+//            this.error("contact.validate.document", true);
+//            return;
+//        }
+//        
+//        try {
+//            this.contact = this.contactService.updateContact(this.contact);
+//            this.info("contact.action.updated", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("ContactBean#doUpdate found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("ContactBean#doUpdate found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -210,19 +210,19 @@ public class ContactBean extends AbstractBean {
      */
     public void doDelete() {
 
-        try {
-            this.contactService.deleteContact(this.contact);
-            this.info("contact.action.deleted", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("ContactBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("ContactBean#doDelete found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("contactsList");
-            this.closeDialog("dialogDeleteContact");
-        }
+//        try {
+//            this.contactService.deleteContact(this.contact);
+//            this.info("contact.action.deleted", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("ContactBean#doDelete found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("ContactBean#doDelete found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("contactsList");
+//            this.closeDialog("dialogDeleteContact");
+//        }
     }
 
     /**
@@ -230,21 +230,21 @@ public class ContactBean extends AbstractBean {
      */
     public void doAddressFind() {
 
-        try {
-            final AddressFinder.Address address = this.addressFinderService
-                    .findAddressByZipcode(this.contact.getZipcode());
-
-            this.contact.setStreet(address.getLogradouro());
-            this.contact.setComplement(address.getComplemento());
-            this.contact.setProvince(address.getFullUfName());
-            this.contact.setCity(address.getLocalidade());
-            this.contact.setNeighborhood(address.getBairro());
-
-            this.update("addressPanel");
-        } catch (Exception ex) {
-            this.logger.error("ContactBean#completeAddress found erros", ex);
-            this.error("contact.action.find-address-error", true);
-        }
+//        try {
+//            final AddressFinder.Address address = this.addressFinderService
+//                    .findAddressByZipcode(this.contact.getZipcode());
+//
+//            this.contact.setStreet(address.getLogradouro());
+//            this.contact.setComplement(address.getComplemento());
+//            this.contact.setProvince(address.getFullUfName());
+//            this.contact.setCity(address.getLocalidade());
+//            this.contact.setNeighborhood(address.getBairro());
+//
+//            this.update("addressPanel");
+//        } catch (Exception ex) {
+//            this.logger.error("ContactBean#completeAddress found erros", ex);
+//            this.error("contact.action.find-address-error", true);
+//        }
     }
     
     /**
@@ -252,7 +252,7 @@ public class ContactBean extends AbstractBean {
      */
     public void showTelephoneDialog() {
         this.telephone = new Telephone();
-        this.openDialog("telephoneDialog", "dialogTelephone");
+//        this.openDialog("telephoneDialog", "dialogTelephone");
     }
     
     /**
@@ -260,7 +260,7 @@ public class ContactBean extends AbstractBean {
      */
     public void addTelephone() {
         this.contact.addTelephone(this.telephone);
-        this.update("telephonesList");
+//        this.update("telephonesList");
         this.closeDialog("dialogTelephone");
     }
     
@@ -271,7 +271,7 @@ public class ContactBean extends AbstractBean {
      */
     public void deleteTelephone(Telephone telephone) {
         this.contact.removeTelephone(telephone);
-        this.update("telephonesList");
+//        this.update("telephonesList");
     }
 
     /**

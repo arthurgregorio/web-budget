@@ -129,7 +129,7 @@ public class CostCenterBean extends AbstractBean {
      */
     public void changeToDelete(long costCenterId) {
         this.costCenter = this.movementService.findCostCenterById(costCenterId);
-        this.openDialog("deleteCostCenterDialog", "dialogDeleteCostCenter");
+//        this.openDialog("deleteCostCenterDialog", "dialogDeleteCostCenter");
     }
 
     /**
@@ -143,43 +143,43 @@ public class CostCenterBean extends AbstractBean {
      *
      */
     public void doSave() {
-
-        try {
-            this.movementService.saveCostCenter(this.costCenter);
-            this.costCenter = new CostCenter();
-
-            // busca novamente os centros de custo para atualizar a lista de parentes
-            this.costCenters = this.movementService.listCostCenters(false);
-
-            this.info("cost-center.action.saved", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("CostCenterBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("CostCenterBean#doSave found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//
+//        try {
+//            this.movementService.saveCostCenter(this.costCenter);
+//            this.costCenter = new CostCenter();
+//
+//            // busca novamente os centros de custo para atualizar a lista de parentes
+//            this.costCenters = this.movementService.listCostCenters(false);
+//
+//            this.info("cost-center.action.saved", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("CostCenterBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("CostCenterBean#doSave found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
      *
      */
     public void doUpdate() {
-
-        try {
-            this.costCenter = this.movementService.updateCostCenter(this.costCenter);
-            
-            // busca novamente os centros de custo para atualizar a lista de parentes
-            this.costCenters = this.movementService.listCostCenters(false);
-            
-            this.info("cost-center.action.updated", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("CostCenterBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("CostCenterBean#doUpdate found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//
+//        try {
+//            this.costCenter = this.movementService.updateCostCenter(this.costCenter);
+//            
+//            // busca novamente os centros de custo para atualizar a lista de parentes
+//            this.costCenters = this.movementService.listCostCenters(false);
+//            
+//            this.info("cost-center.action.updated", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("CostCenterBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("CostCenterBean#doUpdate found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -187,23 +187,23 @@ public class CostCenterBean extends AbstractBean {
      */
     public void doDelete() {
 
-        try {
-            this.movementService.deleteCostCenter(this.costCenter);
-            this.info("cost-center.action.deleted", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("CostCenterBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            if (this.containsException(ConstraintViolationException.class, ex)) {
-                this.logger.error("CostCenterBean#doDelete found erros", ex);
-                this.fixedError("cost-center.action.delete-used", true);
-            } else {
-                this.logger.error("CostCenterBean#doDelete found erros", ex);
-                this.fixedError("generic.operation-error", true, ex.getMessage());
-            }
-        } finally {
-            this.closeDialog("dialogDeleteCostCenter");
-            this.update("costCentersList");
-        }
+//        try {
+//            this.movementService.deleteCostCenter(this.costCenter);
+//            this.info("cost-center.action.deleted", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("CostCenterBean#doDelete found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            if (this.containsException(ConstraintViolationException.class, ex)) {
+//                this.logger.error("CostCenterBean#doDelete found erros", ex);
+//                this.fixedError("cost-center.action.delete-used", true);
+//            } else {
+//                this.logger.error("CostCenterBean#doDelete found erros", ex);
+//                this.fixedError("generic.operation-error", true, ex.getMessage());
+//            }
+//        } finally {
+//            this.closeDialog("dialogDeleteCostCenter");
+//            this.update("costCentersList");
+//        }
     }
 }

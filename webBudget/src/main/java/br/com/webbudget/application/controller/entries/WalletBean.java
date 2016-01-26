@@ -153,7 +153,7 @@ public class WalletBean extends AbstractBean {
      */
     public void changeToDelete(long walletId) {
         this.wallet = this.walletService.findWalletById(walletId);
-        this.openDialog("deleteWalletDialog", "dialogDeleteWallet");
+//        this.openDialog("deleteWalletDialog", "dialogDeleteWallet");
     }
 
     /**
@@ -173,18 +173,18 @@ public class WalletBean extends AbstractBean {
             this.wallet.setBalance(BigDecimal.ZERO);
         }
 
-        try {
-            this.walletService.saveWallet(this.wallet);
-            this.wallet = new Wallet();
-
-            this.info("wallet.action.saved", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("WalletBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("WalletBean#doSave found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        try {
+//            this.walletService.saveWallet(this.wallet);
+//            this.wallet = new Wallet();
+//
+//            this.info("wallet.action.saved", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("WalletBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("WalletBean#doSave found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -192,18 +192,18 @@ public class WalletBean extends AbstractBean {
      */
     public void doAdjustment() {
 
-        try {
-            this.walletService.adjustBalance(this.wallet);
-            this.openDialog("adjustmentDialog", "dialogAdjustment");
-        } catch (WbDomainException ex) {
-            this.logger.error("WalletBean#doAdjustment found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("WalletBean#doAdjustment found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("walletsList");
-        }
+//        try {
+//            this.walletService.adjustBalance(this.wallet);
+//            this.openDialog("adjustmentDialog", "dialogAdjustment");
+//        } catch (WbDomainException ex) {
+//            this.logger.error("WalletBean#doAdjustment found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("WalletBean#doAdjustment found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("walletsList");
+//        }
     }
 
     /**
@@ -211,17 +211,17 @@ public class WalletBean extends AbstractBean {
      */
     public void doUpdate() {
 
-        try {
-            this.wallet = this.walletService.updateWallet(this.wallet);
-
-            this.info("wallet.action.updated", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("WalletBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("WalletBean#doUpdate found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        try {
+//            this.wallet = this.walletService.updateWallet(this.wallet);
+//
+//            this.info("wallet.action.updated", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("WalletBean#doUpdate found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("WalletBean#doUpdate found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -229,19 +229,19 @@ public class WalletBean extends AbstractBean {
      */
     public void doDelete() {
 
-        try {
-            this.walletService.deleteWallet(this.wallet);
-            this.info("wallet.action.deleted", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("WalletBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("WalletBean#doDelete found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("walletsList");
-            this.closeDialog("dialogDeleteWallet");
-        }
+//        try {
+//            this.walletService.deleteWallet(this.wallet);
+//            this.info("wallet.action.deleted", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("WalletBean#doDelete found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("WalletBean#doDelete found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("walletsList");
+//            this.closeDialog("dialogDeleteWallet");
+//        }
     }
     
     /**
@@ -254,14 +254,14 @@ public class WalletBean extends AbstractBean {
         
         // se nao tem saldo, nao mostra a popup
         if (this.walletBalances.isEmpty()) {
-            this.warn("wallet.action.no-balances", true);
+//            this.warn("wallet.action.no-balances", true);
             return;
         }
 
         // se tem saldos, ja pega o primeiro e sai mostrando
         this.selectedBalance = this.getWalletBalances().get(0);
         
-        this.openDialog("balanceHistoryDialog", "dialogBalanceHistory");
+//        this.openDialog("balanceHistoryDialog", "dialogBalanceHistory");
     }
     
     /**
@@ -269,10 +269,10 @@ public class WalletBean extends AbstractBean {
      * rado e uma conta bancaria
      */
     public void loadBankData() {
-        this.update("inBank");
-        this.update("inDigit");
-        this.update("inAgency");
-        this.update("inAccount");
+//        this.update("inBank");
+//        this.update("inDigit");
+//        this.update("inAgency");
+//        this.update("inAccount");
     }
 
     /**

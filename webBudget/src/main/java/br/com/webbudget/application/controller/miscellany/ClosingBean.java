@@ -86,19 +86,19 @@ public class ClosingBean extends AbstractBean {
      */
     public void process() {
 
-        if (this.financialPeriod == null) {
-            this.error("closing.validate.null-period", true);
-            return;
-        }
-
-        try {
-            this.closing = this.closingService.process(this.financialPeriod);
-        } catch (Exception ex) {
-            this.logger.error("ClosingBean#process found errors", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("closingPanel");
-        }
+//        if (this.financialPeriod == null) {
+//            this.error("closing.validate.null-period", true);
+//            return;
+//        }
+//
+//        try {
+//            this.closing = this.closingService.process(this.financialPeriod);
+//        } catch (Exception ex) {
+//            this.logger.error("ClosingBean#process found errors", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("closingPanel");
+//        }
     }
 
     /**
@@ -106,18 +106,18 @@ public class ClosingBean extends AbstractBean {
      */
     public void close() {
 
-        try {
-            this.closeDialog("dialogConfirmClosing");
-
-            this.closingService.close(this.financialPeriod);
-
-            this.openDialog("closingConfirmationDialog", "dialogClosingConfirmation");
-        } catch (Exception ex) {
-            this.logger.error("ClosingBean#close found errors", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("closingPanel");
-        }
+//        try {
+//            this.closeDialog("dialogConfirmClosing");
+//
+//            this.closingService.close(this.financialPeriod);
+//
+//            this.openDialog("closingConfirmationDialog", "dialogClosingConfirmation");
+//        } catch (Exception ex) {
+//            this.logger.error("ClosingBean#close found errors", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("closingPanel");
+//        }
     }
 
     /**
@@ -125,7 +125,7 @@ public class ClosingBean extends AbstractBean {
      * processado o periodo
      */
     public void changeToClose() {
-        this.openDialog("confirmClosingDialog", "dialogConfirmClosing");
+//        this.openDialog("confirmClosingDialog", "dialogConfirmClosing");
     }
 
     /**

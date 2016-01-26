@@ -104,26 +104,26 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void generateInvoice() {
 
-        if (this.cardInvoice.getCard() == null || this.cardInvoice.getFinancialPeriod() == null) {
-            this.error("card-invoice.validate.null-period-card", true);
-            return;
-        }
-
-        try {
-            this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
-
-            if (this.cardInvoice.getMovements().isEmpty()) {
-                this.info("card-invoice.action.no-movements-to-pay", true);
-                this.cardInvoice = new CardInvoice();
-            } else {
-                this.info("card-invoice.action.generated", true);
-            }
-        } catch (Exception ex) {
-            this.logger.error("CardInvoiceBean#generateInvoice found errors", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("detailsPanel");
-        }
+//        if (this.cardInvoice.getCard() == null || this.cardInvoice.getFinancialPeriod() == null) {
+//            this.error("card-invoice.validate.null-period-card", true);
+//            return;
+//        }
+//
+//        try {
+//            this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
+//
+//            if (this.cardInvoice.getMovements().isEmpty()) {
+//                this.info("card-invoice.action.no-movements-to-pay", true);
+//                this.cardInvoice = new CardInvoice();
+//            } else {
+//                this.info("card-invoice.action.generated", true);
+//            }
+//        } catch (Exception ex) {
+//            this.logger.error("CardInvoiceBean#generateInvoice found errors", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("detailsPanel");
+//        }
     }
 
     /**
@@ -131,19 +131,19 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void loadHistory() {
 
-        if (this.selectedCard == null) {
-            this.error("card-invoice.validate.null-card", true);
-            return;
-        }
-
-        try {
-            this.cardInvoices = this.cardService.listInvoicesByCard(this.selectedCard);
-        } catch (Exception ex) {
-            this.logger.error("CardInvoiceBean#loadHistory found errors", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("invoicesList");
-        }
+//        if (this.selectedCard == null) {
+//            this.error("card-invoice.validate.null-card", true);
+//            return;
+//        }
+//
+//        try {
+//            this.cardInvoices = this.cardService.listInvoicesByCard(this.selectedCard);
+//        } catch (Exception ex) {
+//            this.logger.error("CardInvoiceBean#loadHistory found errors", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("invoicesList");
+//        }
     }
 
     /**
@@ -153,14 +153,14 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void detailInvoice(CardInvoice cardInvoice) {
 
-        this.cardInvoice = cardInvoice;
-        
-        // listamos os movimentos da fatura e carregamos no objeto selecionado
-        this.cardInvoice.setMovements(this.movementService
-                .listMovementsByCardInvoice(cardInvoice));
-        
-        // atualizamos a dialog e mostramos na tela
-        this.openDialog("invoiceDetailsDialog", "dialogInvoiceDetails");
+//        this.cardInvoice = cardInvoice;
+//        
+//        // listamos os movimentos da fatura e carregamos no objeto selecionado
+//        this.cardInvoice.setMovements(this.movementService
+//                .listMovementsByCardInvoice(cardInvoice));
+//        
+//        // atualizamos a dialog e mostramos na tela
+//        this.openDialog("invoiceDetailsDialog", "dialogInvoiceDetails");
     }
 
     /**
@@ -168,15 +168,15 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void createInvoiceMovement() {
 
-        try {
-            this.cardService.createMovement(this.cardInvoice,
-                    this.translate("card-invoice.identification"));
-
-            this.openDialog("moveInvoiceDialog", "dialogMoveInvoice");
-        } catch (Exception ex) {
-            this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        try {
+//            this.cardService.createMovement(this.cardInvoice,
+//                    this.translate("card-invoice.identification"));
+//
+//            this.openDialog("moveInvoiceDialog", "dialogMoveInvoice");
+//        } catch (Exception ex) {
+//            this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**

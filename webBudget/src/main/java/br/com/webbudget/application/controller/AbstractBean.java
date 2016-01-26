@@ -39,175 +39,119 @@ import org.slf4j.Logger;
  */
 public abstract class AbstractBean implements Serializable {
 
-    @Getter
     protected ViewState viewState;
+    
+    @Inject
+    protected Logger logger;
 
     @Inject
     private Translator translator;
-
+    
     @Inject
-    protected transient Logger logger;
+    private FacesContext facesContext;
     @Inject
-    protected transient FacesContext facesContext;
-    @Inject
-    protected transient RequestContext requestContext;
-
+    private RequestContext requestContext;
+    
     /**
-     * Traduz uma chave para a sua versao internacionalizada
-     *
-     * @param message a chave a ser internacionalizada
-     * @return a internacionalizacao da chae em questao
+     * @return o nome do componente default de mensagens da view
      */
-    protected String translate(String message) {
-        return this.translator.translate(message);
+    public String getDefaultMessagesComponentId() {
+        return "messages";
+    }
+    
+    /**
+     * Caso o nome do componente default de mensagens tenha sido setado, este
+     * metodo invocado apos adicionar mensagens faz com que ele seja atualizado
+     * automaticamente
+     */
+    private void updateDefaultMessages() {
+        if (this.getDefaultMessagesComponentId() != null 
+                && !this.getDefaultMessagesComponentId().isEmpty()) {
+            this.temporizeHiding(this.getDefaultMessagesComponentId());
+        }
     }
 
     /**
-     *
-     * @param componentId
+     * Traduz uma mensagem pelo bundle da aplicacao
+     * 
+     * @param message a chave da mensagem original
+     * @return o texto
      */
-    protected void update(String componentId) {
+    public String translate(String message) {
+        return this.translator.translate(message);
+    }
+    
+    /**
+     * Atualiza um componente pelo seu id no contexto atual
+     *
+     * @param componentId o id do componente
+     */
+    protected void updateComponent(String componentId) {
         this.requestContext.update(componentId);
     }
 
     /**
+     * Executa um JavaScript na pagina pelo FacesContext atual
      *
-     * @param script
+     * @param script o script a ser executado
      */
-    protected void execute(String script) {
+    protected void executeScript(String script) {
         this.requestContext.execute(script);
     }
 
     /**
-     *
-     * @param widgetVar
+     * Apenas abre uma dialog pelo seu widgetvar
+     * 
+     * @param widgetVar o widgetvar para abri-la
      */
     protected void openDialog(String widgetVar) {
-        this.requestContext.execute("PF('" + widgetVar + "').show()");
+        this.executeScript("PF('" + widgetVar + "').show()");
     }
-
+    
     /**
-     *
-     * @param id
-     * @param widgetVar
+     * Dado o id de um dialog, atualiza a mesma e depois abre pelo widgetvar
+     * 
+     * @param id o id da dialog para atualiza-la
+     * @param widgetVar o widgetvar para abri-la
      */
-    protected void openDialog(String id, String widgetVar) {
-        this.requestContext.update(id);
-        this.requestContext.execute("PF('" + widgetVar + "').show()");
+    protected void updateAndOpenDialog(String id, String widgetVar) {
+        this.updateComponent(id);
+        this.executeScript("PF('" + widgetVar + "').show()");
     }
 
     /**
+     * Fecha uma dialog aberta previamente
      *
-     * @param widgetVar
+     * @param widgetVar o widgetvar da dialog
      */
     protected void closeDialog(String widgetVar) {
-        this.requestContext.execute("PF('" + widgetVar + "').hide()");
+        this.executeScript("PF('" + widgetVar + "').hide()");
     }
 
     /**
-     * Atualiza o componente de mensagens na view, usa o ID default 'messages'
-     *
-     * @param useTimer se deve ou nao setar o timer
+     * Dado um componente, atualiza o mesmo e depois temporiza o seu fechamento
+     * 
+     * @param componentId o id do componente
      */
-    protected void updateMessages(boolean useTimer) {
-        this.updateMessages("messages", useTimer);
+    protected void temporizeHiding(String componentId) {
+        this.updateComponent(componentId);
+        this.executeScript("setTimeout(\"$(\'#" + componentId + "\').slideUp(300)\", 8000)");
     }
 
     /**
-     * Atualiza o componente de mensagens na view
-     *
-     * @param componentId o ID do componente de mensagens
-     * @param useTimer se deve ou nao setar o timer
+     * Redireciona o usuario para um determinada URL, caso haja um erro, loga 
+     * 
+     * @param url a url para o cara ser redirecionado
      */
-    protected void updateMessages(String componentId, boolean useTimer) {
-
-        this.requestContext.update(componentId);
-
-        if (useTimer) {
-            this.requestContext.execute("putTimeout()");
+    protected void redirectTo(String url) {
+        try {
+            this.facesContext.getExternalContext().redirect(url);
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                    String.format("Can't redirect to url [%s]", url));
         }
     }
-
-    /**
-     * Joga uma mensagem de aviso na tela
-     *
-     * @param message mensagem
-     * @param useTimer se deve ou nao setar o timer para fechar a mensagem apos
-     * um tempo de exibicao
-     * @param parameters parametros para montar a mensagem
-     */
-    protected void warn(String message, boolean useTimer, Object... parameters) {
-        Messages.addWarn(null, this.translator.translate(message), parameters);
-        this.updateMessages(useTimer);
-    }
-
-    /**
-     * Joga uma mensagem de informacao na tela
-     *
-     * @param message mensagem
-     * @param useTimer se deve ou nao setar o timer para fechar a mensagem apos
-     * um tempo de exibicao
-     * @param parameters parametros para montar a mensagem
-     */
-    protected void info(String message, boolean useTimer, Object... parameters) {
-        Messages.addInfo(null, this.translator.translate(message), parameters);
-        this.updateMessages(useTimer);
-    }
-
-    /**
-     * Joga uma mensagem de erro na tela porem esta mensamge ficara visivel ate
-     * ser fechada ou a tela ser atualizada
-     *
-     * @param message mensagem
-     * @param updateMessages se deve ou nao atualizar o componente de mensagens
-     * default da view
-     * @param parameters parametros para montar a mensagem
-     */
-    protected void fixedError(String message, boolean updateMessages, Object... parameters) {
-        
-        message = this.translator.translate(message);
-        
-        if (parameters != null && parameters.length != 0) {
-            Messages.addError(null, message + ": {0}", parameters);
-        } else {
-            Messages.addError(null, message, parameters);
-        }
-        
-        if (updateMessages) {
-            this.updateMessages(false);
-        }
-    }
-
-    /**
-     * Joga uma mensagem de erro na tela
-     *
-     * @param message mensagem
-     * @param useTimer se deve ou nao setar o timer para fechar a mensagem apos
-     * um tempo de exibicao
-     * @param parameters parametros para montar a mensagem
-     */
-    protected void error(String message, boolean useTimer, Object... parameters) {
-        Messages.addError(null, this.translator.translate(message), parameters);
-        this.updateMessages(useTimer);
-    }
-
-    /**
-     * Pega todas as mensagens de erro para um componente informado pelo ID
-     *
-     * @param componentId o id do componente para buscar as mensagens
-     * @return as mensagens de erro internacionalizadas do componente
-     */
-    public String getErrorMessage(String componentId) {
-
-        final Iterator<FacesMessage> iterator
-                = this.facesContext.getMessages(componentId);
-
-        if (iterator.hasNext()) {
-            return this.translator.translate(iterator.next().getDetail());
-        }
-        return "";
-    }
-
+    
     /**
      * Metodo para desempacotar a pilha de excessoes a fim de que possamos
      * tratar de forma mais elegante exceptions do tipo constraints violadas
@@ -228,12 +172,52 @@ public abstract class AbstractBean implements Serializable {
             return this.containsException(exception, stack.getCause());
         }
     }
+    
+    /**
+     * Adiciona uma mensagem de informacao na tela
+     * 
+     * @param message a mensagem
+     * @param parameters os parametros da mensagem
+     * @param updateDefault se devemos ou nao atualizar o componente default
+     */
+    public void addInfo(boolean updateDefault, String message, Object... parameters) {
+        Messages.addInfo(null, this.translate(message), parameters);
+        if (updateDefault) this.updateDefaultMessages();
+    }
+    
+    /**
+     * Adiciona uma mensagem de erro na tela
+     * 
+     * @param message a mensagem
+     * @param parameters os parametros da mensagem
+     * @param updateDefault se devemos ou nao atualizar o componente default
+     */
+    public void addError(boolean updateDefault, String message, Object... parameters) {
+        Messages.addError(null, this.translate(message), parameters);
+        if (updateDefault) this.updateDefaultMessages();
+    }
+    
+    /**
+     * Adiciona uma mensagem de aviso na tela
+     * 
+     * @param message a mensagem
+     * @param parameters os parametros da mensagem
+     * @param updateDefault se devemos ou nao atualizar o componente default
+     */
+    public void addWarning(boolean updateDefault, String message, Object... parameters) {
+        Messages.addWarn(null, this.translate(message), parameters);
+        if (updateDefault) this.updateDefaultMessages();
+    }
 
     /**
-     * Enum que guarda os possiveis estados da tela
+     * Enum para controle do estado de execucao da tela
      */
-    public enum ViewState {
-
-        ADDING, LISTING, EDITING, DELETING, DETAILING;
+    protected enum ViewState {
+        ADDING,
+        LISTING,
+        INSERTING,
+        EDITING,
+        DELETING,
+        DETAILING;
     }
 }

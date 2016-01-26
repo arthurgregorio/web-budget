@@ -111,7 +111,7 @@ public class GroupBean extends AbstractBean {
      */
     public void changeToDelete(String groupId) {
         this.group = this.accountService.findGroupById(groupId);
-        this.openDialog("deleteGroupDialog", "dialogDeleteGroup");
+//        this.openDialog("deleteGroupDialog", "dialogDeleteGroup");
     }
 
     /**
@@ -123,13 +123,13 @@ public class GroupBean extends AbstractBean {
             this.accountService.save(this.group, this.nodesToAuthorizations());
             this.group = new Group();
             this.unselectAuthorizations();
-            this.info("group.action.saved", true);
+//            this.info("group.action.saved", true);
         } catch (WbDomainException ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+//            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -140,13 +140,13 @@ public class GroupBean extends AbstractBean {
 
         try {
             this.accountService.update(this.group, this.nodesToAuthorizations());
-            this.info("group.action.updated", true);
+//            this.info("group.action.updated", true);
         } catch (WbDomainException ex) {
             this.logger.error("GroupBean#doUpdate has found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+//            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -158,12 +158,12 @@ public class GroupBean extends AbstractBean {
         try {
             this.accountService.delete(this.group);
             this.groups = this.accountService.listGroups(null);
-            this.info("group.action.deleted", true);
+//            this.info("group.action.deleted", true);
         } catch (Exception ex) {
             this.logger.error("GroupBean#doDelete found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
-            this.update("groupsList");
+//            this.update("groupsList");
             this.closeDialog("dialogDeleteGroup");
         }
     }

@@ -100,20 +100,20 @@ public class TransferenceBean extends AbstractBean {
      */
     public void doTransference() {
 
-        try {
-            this.walletService.transfer(this.walletBalance);
-
-            this.walletBalance = new WalletBalance();
-            this.wallets = this.walletService.listWallets(false);
-
-            this.info("transfer.action.transfered", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("TransferenceBean#doTransference found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("TransferenceBean#doTransference found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        try {
+//            this.walletService.transfer(this.walletBalance);
+//
+//            this.walletBalance = new WalletBalance();
+//            this.wallets = this.walletService.listWallets(false);
+//
+//            this.info("transfer.action.transfered", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("TransferenceBean#doTransference found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("TransferenceBean#doTransference found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -121,31 +121,31 @@ public class TransferenceBean extends AbstractBean {
      */
     public void filterTransfers() {
 
-        if (this.sourceWallet == null && this.targetWallet == null) {
-            this.transferences = this.walletService.listTransferences();
-        } else {
-            this.transferences = this.walletService
-                    .listTransfersByWallet(this.sourceWallet, this.targetWallet);
-        }
-
-        if (this.transferences.isEmpty()) {
-            this.error("transfer.no-trasfers", true);
-        } else {
-            this.update("transferencesList");
-        }
+//        if (this.sourceWallet == null && this.targetWallet == null) {
+//            this.transferences = this.walletService.listTransferences();
+//        } else {
+//            this.transferences = this.walletService
+//                    .listTransfersByWallet(this.sourceWallet, this.targetWallet);
+//        }
+//
+//        if (this.transferences.isEmpty()) {
+//            this.error("transfer.no-trasfers", true);
+//        } else {
+//            this.update("transferencesList");
+//        }
     }
     
     /**
      * Exibe a dialog com o motivo da transferencia
      */
     public void showTransferReasonDialog() {
-        this.openDialog("transferReasonDialog", "dialogTransferReason");
+//        this.openDialog("transferReasonDialog", "dialogTransferReason");
     }
     
     /**
      * Atualiza o fragment que tem os saldos
      */
     public void updateBalances() {
-        this.update("balancesPanel");
+//        this.update("balancesPanel");
     }
 }

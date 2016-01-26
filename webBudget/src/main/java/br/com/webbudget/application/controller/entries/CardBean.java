@@ -137,7 +137,7 @@ public class CardBean extends AbstractBean {
      */
     public void changeToDelete(long cardId) {
         this.card = this.cardService.findCardById(cardId);
-        this.openDialog("deleteCardDialog", "dialogDeleteCard");
+//        this.openDialog("deleteCardDialog", "dialogDeleteCard");
     }
 
     /**
@@ -152,18 +152,18 @@ public class CardBean extends AbstractBean {
      */
     public void doSave() {
 
-        try {
-            this.cardService.saveCard(this.card);
-            this.card = new Card();
-
-            this.info("card.action.saved", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("CardBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("CardBean#doSave found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        try {
+//            this.cardService.saveCard(this.card);
+//            this.card = new Card();
+//
+//            this.info("card.action.saved", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("CardBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("CardBean#doSave found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -171,17 +171,17 @@ public class CardBean extends AbstractBean {
      */
     public void doUpdate() {
 
-        try {
-            this.card = this.cardService.updateCard(this.card);
-
-            this.info("card.action.updated", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("CardBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("CardBean#doUpdate found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        try {
+//            this.card = this.cardService.updateCard(this.card);
+//
+//            this.info("card.action.updated", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("CardBean#doUpdate found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("CardBean#doUpdate found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -189,19 +189,19 @@ public class CardBean extends AbstractBean {
      */
     public void doDelete() {
 
-        try {
-            this.cardService.deleteCard(this.card);
-            this.info("card.action.deleted", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("CardBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("CardBean#doDelete found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("cardsList");
-            this.closeDialog("dialogDeleteCard");
-        }
+//        try {
+//            this.cardService.deleteCard(this.card);
+//            this.info("card.action.deleted", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("CardBean#doDelete found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("CardBean#doDelete found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("cardsList");
+//            this.closeDialog("dialogDeleteCard");
+//        }
     }
 
     /**

@@ -136,6 +136,13 @@ public class UserSessionBean implements Serializable {
     public String getAuthenticatedUserName() {
         return this.getAuthenticatedUser().getName();
     }
+    
+    /**
+     * @return o email do usuario logado
+     */
+    public String getAuthenticatedUserEmail() {
+        return this.getAuthenticatedUser().getEmail();
+    }
 
     /**
      * @return o grupo ao qual este usuario esta vinculado

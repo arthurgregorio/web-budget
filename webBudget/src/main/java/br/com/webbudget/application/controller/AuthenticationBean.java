@@ -17,6 +17,7 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.infraestructure.ApplicationUtils;
+import javax.enterprise.event.Observes;
 import javax.faces.application.ProjectStage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import org.picketlink.Identity;
 import org.picketlink.Identity.AuthenticationResult;
+import org.picketlink.authentication.event.LoginFailedEvent;
 
 /**
  * Bean que controla a autenticacao no sistema, por ele invocamos o gerenciador
@@ -85,6 +87,15 @@ public class AuthenticationBean extends AbstractBean {
     public String doLogout() {
         this.identity.logout();
         return "/index.xhtml?faces-redirect=true";
+    }
+    
+    /**
+     * Trata erros de autenticacao
+     * 
+     * @param event o evento de autenticacao
+     */
+    protected void handleUnsuccesfulLogin(@Observes LoginFailedEvent event) {
+        this.addError(true, "error.invalid-credentials");
     }
     
     /**

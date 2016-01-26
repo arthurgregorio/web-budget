@@ -169,7 +169,7 @@ public class PrivateMessageBean extends AbstractBean {
      */
     public void changeToDelete(long privateMessageId) {
         this.privateMessage = this.privateMessageService.findPrivateMessageById(privateMessageId);
-        this.openDialog("deletePrivateMessageDialog", "dialogDeletePrivateMessage");
+//        this.openDialog("deletePrivateMessageDialog", "dialogDeletePrivateMessage");
     }
 
     /**
@@ -196,10 +196,10 @@ public class PrivateMessageBean extends AbstractBean {
 
             this.users = this.accountService.listUsers(false);
 
-            this.info("private-message.action.sent", true);
+//            this.info("private-message.action.sent", true);
         } catch (WbDomainException ex) {
             this.logger.error("PrivateMessageBean#doSave found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -210,12 +210,12 @@ public class PrivateMessageBean extends AbstractBean {
 
         try {
             this.privateMessageService.deletePrivateMessage(this.privateMessage);
-            this.info("private-message.action.deleted", true);
+//            this.info("private-message.action.deleted", true);
         } catch (WbDomainException ex) {
             this.logger.error("PrivateMessageBean#doDelete found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
-            this.update("privateMessagesList");
+//            this.update("privateMessagesList");
             this.closeDialog("dialogDeletePrivateMessage");
         }
     }
@@ -234,6 +234,6 @@ public class PrivateMessageBean extends AbstractBean {
         this.users.forEach((user) -> {
             user.setSelected(this.selectAll);
         });
-        this.update("usersList");
+//        this.update("usersList");
     }
 }

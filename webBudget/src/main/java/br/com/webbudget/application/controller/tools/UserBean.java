@@ -106,7 +106,7 @@ public class UserBean extends AbstractBean {
      */
     public void changeToDelete(String userId) {
         this.user = this.accountService.findUserById(userId);
-        this.openDialog("deleteUserDialog", "dialogDeleteUser");
+//        this.openDialog("deleteUserDialog", "dialogDeleteUser");
     }
 
     /**
@@ -119,13 +119,13 @@ public class UserBean extends AbstractBean {
 
             this.user = new User();
 
-            this.info("user.action.saved", true);
+//            this.info("user.action.saved", true);
         } catch (WbDomainException ex) {
             this.logger.error("UserBean#doSave has found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+//            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
             this.logger.error("UserBean#doSave has found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -137,13 +137,13 @@ public class UserBean extends AbstractBean {
         try {
             this.accountService.update(this.user);
 
-            this.info("user.action.updated", true);
+//            this.info("user.action.updated", true);
         } catch (WbDomainException ex) {
             this.logger.error("UserBean#doUpdate has found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+//            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
             this.logger.error("UserBean#doUpdate has found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 
@@ -156,12 +156,12 @@ public class UserBean extends AbstractBean {
             this.accountService.delete(this.user);
             this.users = this.accountService.listUsers(null);
 
-            this.info("user.action.deleted", true);
+//            this.info("user.action.deleted", true);
         } catch (Exception ex) {
             this.logger.error("UserBean#doDelete found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {
-            this.update("usersList");
+//            this.update("usersList");
             this.closeDialog("dialogDeleteUser");
         }
     }
@@ -173,13 +173,13 @@ public class UserBean extends AbstractBean {
         
         try {
             this.accountService.updateProfile(this.user);
-            this.info("user.action.profile-updated", true);
+//            this.info("user.action.profile-updated", true);
         } catch (WbDomainException ex) {
             this.logger.error("UserBean#doProfileUpdate has found erros", ex);
-            this.fixedError(ex.getMessage(), true);
+//            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
             this.logger.error("UserBean#doProfileUpdate has found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
     }
 

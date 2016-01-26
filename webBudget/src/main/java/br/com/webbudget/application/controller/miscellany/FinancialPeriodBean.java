@@ -138,7 +138,7 @@ public class FinancialPeriodBean extends AbstractBean {
     public void changeToDelete(long periodId) {
         this.financialPeriod = this.financialPeriodService
                 .findFinancialPeriodById(periodId);
-        this.openDialog("deletePeriodDialog", "dialogDeletePeriod");
+//        this.openDialog("deletePeriodDialog", "dialogDeletePeriod");
     }
 
     /**
@@ -146,22 +146,22 @@ public class FinancialPeriodBean extends AbstractBean {
      */
     public void doSave() {
 
-        try {
-            this.financialPeriodService.openPeriod(this.financialPeriod);
-
-            this.financialPeriod = new FinancialPeriod();
-
-            // validamos se tem periodo em aberto
-            this.validateOpenPeriods();
-
-            this.info("financial-period.action.saved", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("FinancialPeriodBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("FinancialPeriodBean#doSave found errors", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        try {
+//            this.financialPeriodService.openPeriod(this.financialPeriod);
+//
+//            this.financialPeriod = new FinancialPeriod();
+//
+//            // validamos se tem periodo em aberto
+//            this.validateOpenPeriods();
+//
+//            this.info("financial-period.action.saved", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("FinancialPeriodBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("FinancialPeriodBean#doSave found errors", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -169,19 +169,19 @@ public class FinancialPeriodBean extends AbstractBean {
      */
     public void doDelete() {
 
-        try {
-            this.financialPeriodService.deletePeriod(this.financialPeriod);
-            this.info("financial-period.action.deleted", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("FinancialPeriodBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("FinancialPeriodBean#doDelete found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("financialPeriodsList");
-            this.closeDialog("dialogDeletePeriod");
-        }
+//        try {
+//            this.financialPeriodService.deletePeriod(this.financialPeriod);
+//            this.info("financial-period.action.deleted", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("FinancialPeriodBean#doDelete found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("FinancialPeriodBean#doDelete found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("financialPeriodsList");
+//            this.closeDialog("dialogDeletePeriod");
+//        }
     }
 
     /**

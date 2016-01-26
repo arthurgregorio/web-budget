@@ -113,7 +113,7 @@ public class DashboardBean extends AbstractBean {
         
         message.setSenderName(sender.getName());
         
-        this.openDialog("displayPrivateMessageDialog", "dialogDisplayPrivateMessage");
+//        this.openDialog("displayPrivateMessageDialog", "dialogDisplayPrivateMessage");
     }
 
     /**
@@ -124,7 +124,7 @@ public class DashboardBean extends AbstractBean {
         this.userPrivateMessages = this.privateMessageService
                 .listMessagesByUser(this.authenticatedUser, null);
 
-        this.update("messagesList");
+//        this.update("messagesList");
         this.closeDialog("dialogDisplayPrivateMessage");
     }
 
@@ -138,7 +138,7 @@ public class DashboardBean extends AbstractBean {
         this.userPrivateMessages = this.privateMessageService
                 .listMessagesByUser(this.authenticatedUser, null);
 
-        this.update("messagesList");
+//        this.update("messagesList");
         this.closeDialog("dialogDisplayPrivateMessage");
     }
 

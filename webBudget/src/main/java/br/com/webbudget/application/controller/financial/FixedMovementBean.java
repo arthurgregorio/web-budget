@@ -156,7 +156,7 @@ public class FixedMovementBean extends AbstractBean {
      * 
      */
     public void filterList() {
-        this.update("fixedMovementsList");
+//        this.update("fixedMovementsList");
     }
 
     /**
@@ -186,7 +186,7 @@ public class FixedMovementBean extends AbstractBean {
      */
     public void changeToDelete(long fixedMovementId) {
         this.fixedMovement = this.movementService.findFixedMovementById(fixedMovementId);
-        this.openDialog("deleteFixedMovementDialog", "dialogDeleteFixedMovement");
+//        this.openDialog("deleteFixedMovementDialog", "dialogDeleteFixedMovement");
     }
     
     /**
@@ -221,17 +221,17 @@ public class FixedMovementBean extends AbstractBean {
      */
     public void doSave() {
 
-        try {
-            this.movementService.saveFixedMovement(this.fixedMovement);
-            this.fixedMovement = new FixedMovement();
-            this.info("fixed-movement.action.saved", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("FixedMovementBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("FixedMovementBean#doSave found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        try {
+//            this.movementService.saveFixedMovement(this.fixedMovement);
+//            this.fixedMovement = new FixedMovement();
+//            this.info("fixed-movement.action.saved", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("FixedMovementBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("FixedMovementBean#doSave found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -239,16 +239,16 @@ public class FixedMovementBean extends AbstractBean {
      */
     public void doUpdate() {
 
-        try {
-            this.fixedMovement = this.movementService.saveFixedMovement(this.fixedMovement);
-            this.info("fixed-movement.action.updated", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("FixedMovementBean#doUpdate found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("FixedMovementBean#doUpdate found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        }
+//        try {
+//            this.fixedMovement = this.movementService.saveFixedMovement(this.fixedMovement);
+//            this.info("fixed-movement.action.updated", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("FixedMovementBean#doUpdate found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("FixedMovementBean#doUpdate found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        }
     }
 
     /**
@@ -256,19 +256,19 @@ public class FixedMovementBean extends AbstractBean {
      */
     public void doDelete() {
 
-        try {
-            this.movementService.deleteFixedMovement(this.fixedMovement);
-            this.info("fixed-movement.action.deleted", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("FixedMovementBean#doDelete found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("FixedMovementBean#doDelete found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("fixedMovementsList");
-            this.closeDialog("dialogDeleteFixedMovement");
-        }
+//        try {
+//            this.movementService.deleteFixedMovement(this.fixedMovement);
+//            this.info("fixed-movement.action.deleted", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("FixedMovementBean#doDelete found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("FixedMovementBean#doDelete found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("fixedMovementsList");
+//            this.closeDialog("dialogDeleteFixedMovement");
+//        }
     }
     
     /**
@@ -276,20 +276,20 @@ public class FixedMovementBean extends AbstractBean {
      */
     public void doLaunch() {
         
-        try {
-            this.movementService.launchFixedMovements(
-                    this.selectedFixedMovements, this.financialPeriod);
-            this.info("fixed-movement.action.launched", true);
-        } catch (WbDomainException ex) {
-            this.logger.error("FixedMovementBean#doSave found erros", ex);
-            this.fixedError(ex.getMessage(), true, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("FixedMovementBean#doSave found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-            this.update("fixedMovementsList");
-            this.closeDialog("dialogConfirmLaunch");
-        }
+//        try {
+//            this.movementService.launchFixedMovements(
+//                    this.selectedFixedMovements, this.financialPeriod);
+//            this.info("fixed-movement.action.launched", true);
+//        } catch (WbDomainException ex) {
+//            this.logger.error("FixedMovementBean#doSave found erros", ex);
+//            this.fixedError(ex.getMessage(), true, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("FixedMovementBean#doSave found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } finally {
+//            this.update("fixedMovementsList");
+//            this.closeDialog("dialogConfirmLaunch");
+//        }
     }
     
     /**
@@ -297,28 +297,28 @@ public class FixedMovementBean extends AbstractBean {
      */
     public void showApportionmentDialog() {
 
-        // se o valor do rateio for igual ao total do movimento nem deixa exibir
-        // a tela de rateios para que nao seja feito cagada
-        if (this.fixedMovement.isApportionmentsValid()) {
-            this.error("fixed-movement.validate.no-value-divide", true);
-            return;
-        }
-
-        this.apportionment = new Apportionment();
-        this.apportionment.setValue(this.fixedMovement.getValueToDivide());
-
-        this.openDialog("apportionmentDialog", "dialogApportionment");
+//        // se o valor do rateio for igual ao total do movimento nem deixa exibir
+//        // a tela de rateios para que nao seja feito cagada
+//        if (this.fixedMovement.isApportionmentsValid()) {
+//            this.error("fixed-movement.validate.no-value-divide", true);
+//            return;
+//        }
+//
+//        this.apportionment = new Apportionment();
+//        this.apportionment.setValue(this.fixedMovement.getValueToDivide());
+//
+//        this.openDialog("apportionmentDialog", "dialogApportionment");
     }
     
     /**
      * 
      */
     public void showLaunchConfirmDialog() {
-        if (this.selectedFixedMovements.size() < 1) {
-            this.error("fixed-movement.validate.no-selection", true);
-            return;
-        }
-        this.openDialog("confirmLaunchDialog","dialogConfirmLaunch");
+//        if (this.selectedFixedMovements.size() < 1) {
+//            this.error("fixed-movement.validate.no-selection", true);
+//            return;
+//        }
+//        this.openDialog("confirmLaunchDialog","dialogConfirmLaunch");
     }
     
     /**
@@ -326,11 +326,11 @@ public class FixedMovementBean extends AbstractBean {
      */
     public void showLaunchesDialog() {
        
-        // valida se a selecao tem mais de um item
-        if (this.viewState == ViewState.LISTING && this.selectedFixedMovements.size() != 1) {
-            this.error("fixed-movement.validate.more-than-one", true);
-            return;
-        } 
+//        // valida se a selecao tem mais de um item
+//        if (this.viewState == ViewState.LISTING && this.selectedFixedMovements.size() != 1) {
+//            this.error("fixed-movement.validate.more-than-one", true);
+//            return;
+//        } 
         
         // se a origem da visualizacao vem da tela de listem, pegamos da lista 
         // de itens da table
@@ -361,25 +361,25 @@ public class FixedMovementBean extends AbstractBean {
             }
         };
         
-        this.openDialog("launchesDialog","dialogLaunches");
+//        this.openDialog("launchesDialog","dialogLaunches");
     }
     
     /**
      *
      */
     public void addApportionment() {
-        try {
-            this.fixedMovement.addApportionment(this.apportionment);
-            this.update("inValue");
-            this.update("apportionmentList");
-            this.closeDialog("dialogApportionment");
-        } catch (WbDomainException ex) {
-            this.logger.error("FixedMovementBean#addApportionment found erros", ex);
-            this.fixedError(ex.getMessage(), false, ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("FixedMovementBean#addApportionment found erros", ex);
-            this.fixedError("generic.operation-error", false, ex.getMessage());
-        }
+//        try {
+//            this.fixedMovement.addApportionment(this.apportionment);
+//            this.update("inValue");
+//            this.update("apportionmentList");
+//            this.closeDialog("dialogApportionment");
+//        } catch (WbDomainException ex) {
+//            this.logger.error("FixedMovementBean#addApportionment found erros", ex);
+//            this.fixedError(ex.getMessage(), false, ex.getParameters());
+//        } catch (Exception ex) {
+//            this.logger.error("FixedMovementBean#addApportionment found erros", ex);
+//            this.fixedError("generic.operation-error", false, ex.getMessage());
+//        }
     }
 
     /**
@@ -387,9 +387,9 @@ public class FixedMovementBean extends AbstractBean {
      * @param id
      */
     public void deleteApportionment(String id) {
-        this.fixedMovement.removeApportionment(id);
-        this.update("inValue");
-        this.update("apportionmentList");
+//        this.fixedMovement.removeApportionment(id);
+//        this.update("inValue");
+//        this.update("apportionmentList");
     }
     
     /**
@@ -399,7 +399,7 @@ public class FixedMovementBean extends AbstractBean {
         if (this.fixedMovement.isUndetermined()) {
             this.fixedMovement.setQuotes(null);
         }
-        this.update("inQuotes");
+//        this.update("inQuotes");
     }
     
     /**
@@ -408,7 +408,7 @@ public class FixedMovementBean extends AbstractBean {
     public void loadMovementClasses() {
         this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
                 this.apportionment.getCostCenter(), null);
-        this.update("inMovementClass");
+//        this.update("inMovementClass");
     }
     
     /**

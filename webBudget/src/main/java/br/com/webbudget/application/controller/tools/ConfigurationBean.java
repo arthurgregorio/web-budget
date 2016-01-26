@@ -76,15 +76,15 @@ public class ConfigurationBean extends AbstractBean {
      */
     public void doSave() {
         
-        try {
-            this.configuration = this.configurationService
-                    .saveConfiguration(this.configuration);
-
-            this.info("configuration.action.saved", true);
-        } catch (Exception ex) {
-            this.logger.error("ConfigurationBean#doSave found erros", ex);
-            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } 
+//        try {
+//            this.configuration = this.configurationService
+//                    .saveConfiguration(this.configuration);
+//
+//            this.info("configuration.action.saved", true);
+//        } catch (Exception ex) {
+//            this.logger.error("ConfigurationBean#doSave found erros", ex);
+//            this.fixedError("generic.operation-error", true, ex.getMessage());
+//        } 
     }
     
     /**
@@ -93,6 +93,6 @@ public class ConfigurationBean extends AbstractBean {
     public void loadMovementClasses() {
         this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
                 this.configuration.getInvoiceDefaultCostCenter(), null);
-        this.update("inMovementClass");
+//        this.update("inMovementClass");
     }
 }
