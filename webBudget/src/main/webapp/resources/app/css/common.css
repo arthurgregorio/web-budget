@@ -18,3 +18,21 @@
 .margin-t-15 {
     margin-top: 15px;
 }
+
+/* imagem do usuario */
+#userImage {
+    float: left;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-top: -2px;
+}
+@media (max-width: 767px) {
+    #userImage {
+        float: none;
+        margin-right: 0;
+        margin-top: -8px;
+        line-height: 10px;
+    }
+}
