@@ -22,7 +22,8 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions">
 
     <h:head>
         <meta charset="utf-8"/>
@@ -69,12 +70,14 @@
                             <li class="dropdown user user-menu">
                                 <!-- Menu Toggle Button -->
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <p:graphicImage library="app" name="img/user-avatar.svg" styleClass="user-image"/>
+                                    <pe:gravatar id="userImage"
+                                                 value="#{userSessionBean.authenticatedUserEmail}"/>
                                     <span class="hidden-xs">#{userSessionBean.authenticatedUserName}</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="user-header">
-                                        <p:graphicImage library="app" name="img/user-avatar.svg" styleClass="img-circle"/>
+                                        <pe:gravatar style="border-radius: 50%"
+                                                     value="#{userSessionBean.authenticatedUserEmail}"/>
                                         <p>
                                             #{userSessionBean.authenticatedUserName}
                                             <small>#{userSessionBean.authenticatedUserGroup}</small>
