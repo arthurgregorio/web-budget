@@ -38,7 +38,7 @@
     </ui:define>
 
     <ui:define name="breadcrumb">
-        <li class="active"><a href="#">#{breadcrumb['entries']}</a></li>
+        <li><a href="#">#{breadcrumb['entries']}</a></li>
         <li class="active"><a href="listCards.xhtml">#{breadcrumb['entries.card']}</a></li>
     </ui:define>
 
@@ -56,8 +56,8 @@
                     <div class="box-tools pull-right">
                         <p:commandButton immediate="true"
                                          value="#{menu['new']}"
+                                         styleClass="btn btn-primary"
                                          action="#{cardBean.changeToAdd()}"
-                                         styleClass="btn btn-block btn-success btn-flat"
                                          rendered="#{userSessionBean.hasRole(authorization.CARD_INSERT)}"/>
                     </div>
                 </h:form>
@@ -75,7 +75,7 @@
                              emptyMessage="#{messages['card.list.empty']}">
 
                     <p:column width="10%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['card.list.blocked']}">
                         <p:selectBooleanCheckbox disabled="true" 
                                                  value="#{card.blocked}" />
@@ -84,17 +84,17 @@
                         #{card.readableName}
                     </p:column>
                     <p:column width="20%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['card.list.owner']}">
                         #{card.owner}
                     </p:column>
                     <p:column width="10%"
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['card.list.type']}">
-                        #{messages[card.cardType]}
+                        #{enums[card.cardType]}
                     </p:column>
                     <p:column width="15%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{menu['actions']}">
                         <p:commandButton icon="fa fa-edit"
                                          title="#{menu['edit']}"
@@ -116,8 +116,8 @@
             <div class="div-align-center">
                 <p:graphicImage width="32" 
                                 height="32"
-                                library="images" 
-                                name="ui-loading.gif" />
+                                library="app" 
+                                name="img/loading.gif" />
             </div>
             <div style="margin-top: 5px">
                 #{menu['loading']}

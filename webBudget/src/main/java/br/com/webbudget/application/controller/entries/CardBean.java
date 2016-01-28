@@ -137,7 +137,7 @@ public class CardBean extends AbstractBean {
      */
     public void changeToDelete(long cardId) {
         this.card = this.cardService.findCardById(cardId);
-//        this.openDialog("deleteCardDialog", "dialogDeleteCard");
+        this.updateAndOpenDialog("deleteCardDialog", "dialogDeleteCard");
     }
 
     /**

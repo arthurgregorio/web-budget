@@ -18,8 +18,6 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.infraestructure.Translator;
 import java.io.Serializable;
-import java.util.Iterator;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import lombok.Getter;
@@ -39,6 +37,7 @@ import org.slf4j.Logger;
  */
 public abstract class AbstractBean implements Serializable {
 
+    @Getter
     protected ViewState viewState;
     
     @Inject

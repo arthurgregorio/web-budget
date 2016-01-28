@@ -19,6 +19,12 @@
     margin-top: 15px;
 }
 
+/* linha onde ficam os comandos delecao das dialogs */
+.delete-box {
+    margin-top: 10px; 
+    text-align: right;
+}
+
 /* imagem do usuario */
 #userImage {
     float: left;

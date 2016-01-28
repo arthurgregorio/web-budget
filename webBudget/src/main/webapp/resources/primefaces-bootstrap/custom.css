@@ -7,6 +7,24 @@
     Created on : 26/10/2015
 */
 
+/* tira a sembra para que os botoes fiquem certos quando em widgets */
+.ui-widget-content button.ui-state-default {
+    box-shadow: none !important;
+}
+
+/* posicionamento do check nos checkboxes de datatable */ 
+span.ui-icon-check {
+    position: relative;
+    right: 1px;
+    bottom: 1px;
+}
+
+/* posicionamento da caixa do checkbox */
+.ui-chkbox-box {
+    position: relative;
+    top: 4px;
+}
+
 /* customizacao das mensagens de erro */ 
 .ui-messages > div {
     padding: 15px;
@@ -55,4 +73,9 @@ th[role="columnheader"].ui-state-default {
 div.ui-paginator {
     border: 1px solid #dddddd !important; 
     border-top: 0px !important;
+}
+
+/* remove aquele asterisco porco dos forms */
+.ui-outputlabel-rfi {
+    display: none;
 }

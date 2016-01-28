@@ -17,30 +17,34 @@
 
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
           xmlns:p="http://primefaces.org/ui"
-          xmlns:h="http://xmlns.jcp.org/jsf/html"
+          xmlns:of="http://omnifaces.org/ui"
+          xmlns:f="http://xmlns.jcp.org/jsf/core"
           id="deleteCardDialog"
           modal="true"
           resizable="false" 
           closeOnEscape="true"
           widgetVar="dialogDeleteCard" 
-          header="#{messages['card.dialog.delete']}">
+          header="#{messages['card.delete-dialog.title']}">
 
-    <div class="ui-grid ui-grid-responsive">
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center div-mg-b-15">
-                <h:outputText value="#{messages['card.dialog.delete-confirm']} #{cardBean.card.name} ?" />
-            </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <h4>
+                <of:outputFormat escape="false" 
+                                 value="#{messages['card.delete-dialog.advise']}">
+                    <f:param value="#{cardBean.card.name}" />
+                </of:outputFormat>
+            </h4>
         </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center">
-                <p:commandButton value="#{menu['no']}"
-                                 onclick="PF('dialogDeleteCard').hide()"/>
-                <p:spacer width="10"/>
-                <p:commandButton value="#{menu['yes']}"
-                                 styleClass="ui-button-danger" 
-                                 action="#{cardBean.doDelete()}"/>
-
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 delete-box">
+            <p:commandButton value="#{menu['yes']}"
+                             styleClass="btn btn-danger" 
+                             action="#{cardBean.doDelete()}"/>
+            <p:spacer width="10"/>
+            <p:commandButton styleClass="btn"
+                             value="#{menu['no']}"
+                             onclick="closeDialog('dialogDeleteCard')" />
         </div>
     </div>
 </p:dialog>

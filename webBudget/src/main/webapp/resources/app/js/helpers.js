@@ -14,36 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entity.card;
 
 /**
- *
- * @author Arthur Gregorio
- *
- * @version 1.0.0
- * @since 1.0.0, 03/04/2014
+ * Fecha dialogs do primefaces
+ * 
+ * @param {type} widget
+ * @returns {undefined}
  */
-public enum CardType {
+function closeDialog(widget) {
+    PF(widget).hide();
+};
 
-    DEBIT("card-type.debit"),
-    CREDIT("card-type.credit");
-
-    private final String description;
-
-    /**
-     *
-     * @param i18nKey
-     */
-    private CardType(String i18nKey) {
-        this.description = i18nKey;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String toString() {
-        return this.description;
-    }
-}
