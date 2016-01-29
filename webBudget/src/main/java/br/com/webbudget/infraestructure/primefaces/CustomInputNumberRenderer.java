@@ -39,7 +39,7 @@ public class CustomInputNumberRenderer extends InputNumberRenderer {
     
     /**
      * GAMBIARRA NECESSARIA! Zeus tenha piedade de mim e do programador que fez
-     * a merda do inputnumber, o classe deve ser escrito no input de saida e nao
+     * a merda do inputnumber, o class deve ser escrito no input de saida e nao
      * na span que envolve o componente. Alias, pq tem um span la? :P
      * 
      * @param context
@@ -55,8 +55,8 @@ public class CustomInputNumberRenderer extends InputNumberRenderer {
         final String inputId = clientId + "_input";
 
         // como o PF-extensions nao sabe colocar a class na input, coloca apenas 
-        // na span que envolve o elemento, fiz esse by-pass para que quando
-        // renderizar o elemento a classe do form-control senha adiciona
+        // na span que envolve o elemento, fiz esse bypass para que quando
+        // renderizar o elemento a classe do form-control seja adicionada
         String defaultClass = InputText.STYLE_CLASS + " pe-inputNumber " + CUSTOM_CLASSES;
         
         defaultClass = inputNumber.isValid() ? defaultClass : defaultClass + " ui-state-error";

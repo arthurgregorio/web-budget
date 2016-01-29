@@ -114,38 +114,38 @@
                         <li class="header">#{menu['entries']}</li>
                         <li class="#{activeMenu eq 'cards' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_VIEW)}">
-                            <a href="../main/entries/cards/listCards.xhtml">
+                            <p:link href="/main/entries/cards/listCards.xhtml">
                                 <i class="fa fa-credit-card"></i> 
                                 <span>#{menu['entries.cards']}</span>
-                            </a>
+                            </p:link>
                         </li>
                         <li class="#{activeMenu eq 'wallets' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.WALLET_VIEW)}">
-                            <a href="../main/entries/wallets/listWallets.xhtml.xhtml">
+                            <p:link href="/main/entries/wallets/listWallets.xhtml">
                                 <i class="fa fa-bank"></i> 
                                 <span>#{menu['entries.wallets']}</span>
-                            </a>
+                            </p:link>
                         </li>
                         <li class="#{activeMenu eq 'contacts' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.CONTACT_VIEW)}">
-                            <a href="../main/entries/contacts/listContacts.xhtml">
+                            <p:link href="/main/entries/contacts/listContacts.xhtml">
                                 <i class="fa fa-fax"></i> 
                                 <span>#{menu['entries.contacts']}</span>
-                            </a>
+                            </p:link>
                         </li>
                         <li class="#{activeMenu eq 'costCenters' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_VIEW)}">
-                            <a href="../main/entries/costCenter/listCostCenters.xhtml">
+                            <p:link href="/main/entries/costCenter/listCostCenters.xhtml">
                                 <i class="fa fa-line-chart"></i> 
                                 <span>#{menu['entries.cost-center']}</span>
-                            </a>
+                            </p:link>
                         </li>
                         <li class="#{activeMenu eq 'costCenters' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_VIEW)}">
-                            <a href="../main/entries/movementClass/listMovementClasses.xhtml">
+                            <p:link href="/main/entries/movementClass/listMovementClasses.xhtml">
                                 <i class="fa fa-reorder"></i> 
                                 <span>#{menu['entries.movement-classes']}</span>
-                            </a>
+                            </p:link>
                         </li>
                     </ul>
 
@@ -159,32 +159,32 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li jsf:rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_VIEW)}">
-                                    <a href="../main/financial/fixedMovements/listFixedMovements.xhtml">
+                                    <p:link href="/main/financial/fixedMovements/listFixedMovements.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         #{menu['financial.movements.fixed']}
-                                    </a>
+                                    </p:link>
                                 </li>
                                 <li jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_VIEW)}">
-                                    <a href="../main/financial/movement/listMovements.xhtml">
+                                    <p:link href="/main/financial/movement/listMovements.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         #{menu['financial.movements.monthly']}
-                                    </a>
+                                    </p:link>
                                 </li>
                             </ul>
                         </li>
                         <li class="#{activeMenu eq 'cardInvoice' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_VIEW)}">
-                            <a href="../main/financial/cardInvoice/generateCardInvoice.xhtml">
+                            <p:link href="/main/financial/cardInvoice/generateCardInvoice.xhtml">
                                 <i class="fa fa-file-text-o"></i> 
                                 <span>#{menu['financial.card-invoice']}</span>
-                            </a>
+                            </p:link>
                         </li>
                         <li class="#{activeMenu eq 'transference' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.BALANCE_TRANSFER_VIEW)}">
-                            <a href="../main/financial/transfer/listTransfers.xhtml">
+                            <p:link href="/main/financial/transfer/listTransfers.xhtml">
                                 <i class="fa fa-exchange"></i> 
                                 <span>#{menu['financial.transfers']}</span>
-                            </a>
+                            </p:link>
                         </li>
                     </ul>
 
@@ -192,24 +192,24 @@
                         <li class="header">#{menu['miscellany']}</li>
                         <li class="#{activeMenu eq 'closing' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.CLOSING_VIEW)}">
-                            <a href="../main/miscellany/closing/closeFinancialPeriod.xhtml">
+                            <p:link href="/main/miscellany/closing/closeFinancialPeriod.xhtml">
                                 <i class="fa fa-calculator"></i> 
                                 <span>#{menu['miscellany.closing']}</span>
-                            </a>
+                            </p:link>
                         </li>
                         <li class="#{activeMenu eq 'privateMessages' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.PRIVATE_MESSAGE_VIEW)}">
-                            <a href="../main/miscellany/privateMessage/listPrivateMessages.xhtml">
+                            <p:link href="/main/miscellany/privateMessage/listPrivateMessages.xhtml">
                                 <i class="fa fa-envelope-o"></i> 
                                 <span>#{menu['miscellany.private-messages']}</span>
-                            </a>
+                            </p:link>
                         </li>
                         <li class="#{activeMenu eq 'financialPeriods' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_VIEW)}">
-                            <a href="../main/miscellany/financialPeriod/listFinancialPeriods.xhtml">
+                            <p:link href="/main/miscellany/financialPeriod/listFinancialPeriods.xhtml">
                                 <i class="fa fa-calendar-o"></i> 
                                 <span>#{menu['miscellany.financial-periods']}</span>
-                            </a>
+                            </p:link>
                         </li>
                     </ul>
 
@@ -217,24 +217,24 @@
                         <li class="header">#{menu['tools']}</li>
                         <li class="#{activeMenu eq 'groups' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.GROUP_VIEW)}">
-                            <a href="../main/tools/group/listGroups.xhtml">
+                            <p:link href="listGroups.xhtml">
                                 <i class="fa fa-users"></i> 
                                 <span>#{menu['tools.groups']}</span>
-                            </a>
+                            </p:link>
                         </li>
                         <li class="#{activeMenu eq 'users' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.USER_VIEW)}">
-                            <a href="../main/tools/user/listUsers.xhtml">
+                            <p:link href="/main/tools/group/listUsers.xhtml">
                                 <i class="fa fa-user"></i> 
                                 <span>#{menu['tools.users']}</span>
-                            </a>
+                            </p:link>
                         </li>
                         <li class="#{activeMenu eq 'configurations' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.CONFIGURATION_VIEW)}">
-                            <a href="../main/tools/configurations/configurations.xhtml">
+                            <p:link href="/main/tools/configurations/configurations.xhtml">
                                 <i class="fa fa-gears"></i> 
                                 <span>#{menu['tools.configurations']}</span>
-                            </a>
+                            </p:link>
                         </li>
                     </ul>
                 </section>

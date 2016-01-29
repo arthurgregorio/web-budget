@@ -170,20 +170,20 @@
                     <p:commandButton update="cardForm"
                                      process="cardForm"
                                      value="#{menu['save']}"
-                                     styleClass="btn btn-success"
                                      action="#{cardBean.doSave()}"
+                                     styleClass="btn btn-flat btn-success"
                                      rendered="#{cardBean.viewState eq 'ADDING'}"/>
                     <p:commandButton update="cardForm"
                                      process="cardForm"
                                      value="#{menu['update']}"
-                                     styleClass="btn btn-success"
                                      action="#{cardBean.doUpdate()}"
+                                     styleClass="btn btn-flat btn-success"
                                      rendered="#{cardBean.viewState eq 'EDITING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
-                                     styleClass="btn btn-primary"
-                                     action="#{cardBean.doCancel()}"/>
+                                     action="#{cardBean.doCancel()}"
+                                     styleClass="btn btn-flat btn-primary"/>
                 </div>
             </div>
         </h:form>

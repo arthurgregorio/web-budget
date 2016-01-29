@@ -86,7 +86,7 @@ div.ui-paginator {
     display: block !important;
 }
 .ui-selectonemenu-trigger {
-    right: 15px !important;
+    width: 30px !important;
     padding: 3px 6px !important;
 }
 .ui-selectonemenu-label {
