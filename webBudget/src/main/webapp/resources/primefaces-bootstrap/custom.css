@@ -79,3 +79,16 @@ div.ui-paginator {
 .ui-outputlabel-rfi {
     display: none;
 }
+
+/* corrige a exibicao do selectonemenu */
+.ui-selectonemenu {
+    height: 34px;
+    display: block !important;
+}
+.ui-selectonemenu-trigger {
+    right: 15px !important;
+    padding: 3px 6px !important;
+}
+.ui-selectonemenu-label {
+    padding: 6px !important;
+}

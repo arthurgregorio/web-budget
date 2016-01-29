@@ -22,6 +22,14 @@
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
               version="2.2">
 
+    <render-kit>
+        <renderer>
+            <component-family>org.primefaces.extensions.component</component-family>
+            <renderer-type>org.primefaces.extensions.component.InputNumberRenderer</renderer-type>
+            <renderer-class>br.com.webbudget.infraestructure.primefaces.CustomInputNumberRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+    
     <application>
         <!-- configuracao da locale -->
         <locale-config>  
