@@ -20,7 +20,7 @@ import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.card.CardInvoice;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -192,14 +192,14 @@ public class Movement extends PersistentEntity {
 
         // checa se nao esta sendo inserido outro exatamente igual
         if (this.apportionments.contains(apportionment)) {
-            throw new WbDomainException("movement.validate.apportionment-duplicated");
+            throw new InternalServiceError("movement.validate.apportionment-duplicated");
         }
 
         // checa se nao esta inserindo outro para o mesmo CC e MC
         for (Apportionment a : this.apportionments) {
             if (a.getCostCenter().equals(apportionment.getCostCenter())
                     && a.getMovementClass().equals(apportionment.getMovementClass())) {
-                throw new WbDomainException("movement.validate.apportionment-duplicated");
+                throw new InternalServiceError("movement.validate.apportionment-duplicated");
             }
         }
 
@@ -213,18 +213,18 @@ public class Movement extends PersistentEntity {
 
             if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT)
                     || (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN)) {
-                throw new WbDomainException("movement.validate.apportionment-debit-credit");
+                throw new InternalServiceError("movement.validate.apportionment-debit-credit");
             }
         }
 
         // impossivel ter um rateio com valor igual a zero
         if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0) {
-            throw new WbDomainException("movement.validate.apportionment-invalid-value");
+            throw new InternalServiceError("movement.validate.apportionment-invalid-value");
         }
         
         // impossivel ter um rateio com valor maior que o do movimento
         if (apportionment.getValue().compareTo(this.value) > 0) {
-            throw new WbDomainException("movement.validate.apportionment-invalid-value");
+            throw new InternalServiceError("movement.validate.apportionment-invalid-value");
         }
         
         this.apportionments.add(apportionment);

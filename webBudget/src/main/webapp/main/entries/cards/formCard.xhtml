@@ -38,7 +38,8 @@
     <ui:define name="pageDescription">
         <h:outputText rendered="#{cardBean.viewState eq 'ADDING'}"
                       value="#{messages['card.page-description-including']}"/>
-        <o:outputFormat rendered="#{cardBean.viewState eq 'EDITING'}" 
+        <o:outputFormat id="pageDescription" 
+                        rendered="#{cardBean.viewState eq 'EDITING'}" 
                         value="#{messages['card.page-description-editing']}">
             <f:param value="#{cardBean.card.name}"/>
         </o:outputFormat>
@@ -173,10 +174,10 @@
                                      action="#{cardBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
                                      rendered="#{cardBean.viewState eq 'ADDING'}"/>
-                    <p:commandButton update="cardForm"
-                                     process="cardForm"
+                    <p:commandButton process="cardForm"
                                      value="#{menu['update']}"
                                      action="#{cardBean.doUpdate()}"
+                                     update="cardForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
                                      rendered="#{cardBean.viewState eq 'EDITING'}"/>
                     <p:spacer width="10"/>

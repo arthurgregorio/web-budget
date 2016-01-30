@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.movement.CostCenter;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.AbstractLazyModel;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;

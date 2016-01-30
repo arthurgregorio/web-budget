@@ -24,7 +24,7 @@ import br.com.webbudget.domain.entity.contact.ContactType;
 import br.com.webbudget.domain.entity.contact.NumberType;
 import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.misc.AddressFinder;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.AbstractLazyModel;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;

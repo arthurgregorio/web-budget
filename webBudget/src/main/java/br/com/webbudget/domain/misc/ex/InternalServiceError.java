@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2016 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,16 +19,14 @@ package br.com.webbudget.domain.misc.ex;
 import lombok.Getter;
 
 /**
- * Exception customizada utilizada para encapsular todos os erros da aplicacao
- * a fim de que as mensagens de erro cheguem para o usuario da forma mais clara
- * possivel
+ * Classe para encapsular as exceptions da aplicacao
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.0.0, 14/07/2015
+ * @since 2.2.0, 30/01/2016
  */
-public class WbDomainException extends RuntimeException {
+public class InternalServiceError extends RuntimeException {
 
     @Getter
     private Object[] parameters;
@@ -38,7 +36,7 @@ public class WbDomainException extends RuntimeException {
      * 
      * @param message a mensagem de erro
      */
-    public WbDomainException(String message) {
+    public InternalServiceError(String message) {
         super(message);
     }
 
@@ -49,7 +47,7 @@ public class WbDomainException extends RuntimeException {
      * @param message a mensagem de erro
      * @param parameters os parametros do erro
      */
-    public WbDomainException(String message, Object... parameters) {
+    public InternalServiceError(String message, Object... parameters) {
         super(message);
         this.parameters = parameters;
     }
@@ -62,7 +60,7 @@ public class WbDomainException extends RuntimeException {
      * @param throwable o detalhamento do erro
      * @param parameters os parametros do erro
      */
-    public WbDomainException(String message, Throwable throwable, Object... parameters) {
+    public InternalServiceError(String message, Throwable throwable, Object... parameters) {
         super(message, throwable);
         this.parameters = parameters;
     }

@@ -36,7 +36,7 @@ import br.com.webbudget.domain.misc.MovementBuilder;
 import br.com.webbudget.domain.misc.dto.MovementFilter;
 import br.com.webbudget.domain.misc.events.PeriodOpen;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
@@ -102,7 +102,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null) {
-            throw new WbDomainException("movement-class.validate.duplicated");
+            throw new InternalServiceError("movement-class.validate.duplicated");
         }
 
         // valida o orcamento, se estiver ok, salva!
@@ -123,7 +123,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null && !found.equals(movementClass)) {
-            throw new WbDomainException("movement-class.validate.duplicated");
+            throw new InternalServiceError("movement-class.validate.duplicated");
         }
 
         // valida o orcamento, se estiver ok, salva!
@@ -163,7 +163,7 @@ public class MovementService {
             // caso o valor disponivel seja menor que o desejado, exception!
             if (availableBudget.compareTo(movementClass.getBudget()) < 0) {
                 final String value = "R$ " + String.format("%10.2f", availableBudget);
-                throw new WbDomainException("movement-class.validate.no-budget", value);
+                throw new InternalServiceError("movement-class.validate.no-budget", value);
             }
         }
         return true;
@@ -193,18 +193,18 @@ public class MovementService {
                 final String value = "R$ " + String.format("%10.2f",
                         movement.getApportionmentsDifference());
 
-                throw new WbDomainException(
+                throw new InternalServiceError(
                         "movement.validate.apportionment-value", value);
             }
         } else {
-            throw new WbDomainException("movement.validate.empty-apportionment");
+            throw new InternalServiceError("movement.validate.empty-apportionment");
         }
 
         // se for uma edicao, checa se existe alguma inconsistencia
         if (movement.isSaved()) {
 
             if (movement.getFinancialPeriod().isClosed()) {
-                throw new WbDomainException("movement.validate.closed-financial-period");
+                throw new InternalServiceError("movement.validate.closed-financial-period");
             }
 
             // remove algum rateio editado
@@ -304,12 +304,12 @@ public class MovementService {
     public void deleteMovement(Movement movement) {
 
         if (movement.getFinancialPeriod().isClosed()) {
-            throw new WbDomainException("movement.validate.closed-financial-period");
+            throw new InternalServiceError("movement.validate.closed-financial-period");
         }
 
         // se tem vinculo com fatura, nao pode ser excluido
         if (movement.isCardInvoicePaid()) {
-            throw new WbDomainException("movement.validate.has-card-invoice");
+            throw new InternalServiceError("movement.validate.has-card-invoice");
         }
 
         // devolve o saldo na carteira se for o caso
@@ -365,7 +365,7 @@ public class MovementService {
 
         // se a invoice for de um periodo fechado, bloqueia o processo
         if (cardInvoice.getFinancialPeriod().isClosed()) {
-            throw new WbDomainException("movement.validate.closed-financial-period");
+            throw new InternalServiceError("movement.validate.closed-financial-period");
         }
 
         // listamos os movimentos da invoice
@@ -420,7 +420,7 @@ public class MovementService {
                 costCenter.getParentCostCenter());
 
         if (found != null) {
-            throw new WbDomainException("cost-center.validate.duplicated");
+            throw new InternalServiceError("cost-center.validate.duplicated");
         }
 
         this.costCenterRepository.save(costCenter);
@@ -438,7 +438,7 @@ public class MovementService {
                 costCenter.getParentCostCenter());
 
         if (found != null && !found.equals(costCenter)) {
-            throw new WbDomainException("cost-center.validate.duplicated");
+            throw new InternalServiceError("cost-center.validate.duplicated");
         }
 
         return this.costCenterRepository.save(costCenter);
@@ -468,11 +468,11 @@ public class MovementService {
                 final String value = "R$ " + String.format("%10.2f",
                         fixedMovement.getApportionmentsDifference());
 
-                throw new WbDomainException(
+                throw new InternalServiceError(
                         "fixed-movement.validate.apportionment-value", value);
             }
         } else {
-            throw new WbDomainException("fixed-movement.validate.empty-apportionment");
+            throw new InternalServiceError("fixed-movement.validate.empty-apportionment");
         }
 
         // se for uma edicao, checa se existe alguma inconsistencia
@@ -517,7 +517,7 @@ public class MovementService {
                 = this.launchRepository.listByFixedMovement(fixedMovement);
 
         if (launches != null && !launches.isEmpty()) {
-            throw new WbDomainException("fixed-movement.validate.has-launches");
+            throw new InternalServiceError("fixed-movement.validate.has-launches");
         }
 
         this.fixedMovementRepository.delete(fixedMovement);

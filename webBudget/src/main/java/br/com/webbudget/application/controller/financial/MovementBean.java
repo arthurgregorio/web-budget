@@ -30,7 +30,7 @@ import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.dto.MovementFilter;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.AbstractLazyModel;
 import br.com.webbudget.domain.misc.table.MovementsListModel;
 import br.com.webbudget.domain.service.CardService;

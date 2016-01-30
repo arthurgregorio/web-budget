@@ -20,6 +20,7 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.AbstractLazyModel;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
@@ -31,6 +32,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -38,7 +40,7 @@ import org.primefaces.model.SortOrder;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.0.0, 06/04/2014
  */
 @Named
@@ -151,18 +153,16 @@ public class CardBean extends AbstractBean {
      */
     public void doSave() {
 
-//        try {
-//            this.cardService.saveCard(this.card);
-//            this.card = new Card();
-//
-//            this.info("card.action.saved", true);
-//        } catch (WbDomainException ex) {
-//            this.logger.error("CardBean#doSave found erros", ex);
-//            this.fixedError(ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("CardBean#doSave found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        }
+        try {
+            this.cardService.saveCard(this.card);
+            this.card = new Card();
+
+            this.addInfo(true, "card.saved");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
 
     /**
@@ -170,17 +170,14 @@ public class CardBean extends AbstractBean {
      */
     public void doUpdate() {
 
-//        try {
-//            this.card = this.cardService.updateCard(this.card);
-//
-//            this.info("card.action.updated", true);
-//        } catch (WbDomainException ex) {
-//            this.logger.error("CardBean#doUpdate found erros", ex);
-//            this.fixedError(ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("CardBean#doUpdate found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        }
+        try {
+            this.card = this.cardService.updateCard(this.card);
+            this.addInfo(true, "card.updated");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
 
     /**
@@ -188,19 +185,21 @@ public class CardBean extends AbstractBean {
      */
     public void doDelete() {
 
-//        try {
-//            this.cardService.deleteCard(this.card);
-//            this.info("card.action.deleted", true);
-//        } catch (WbDomainException ex) {
-//            this.logger.error("CardBean#doDelete found erros", ex);
-//            this.fixedError(ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("CardBean#doDelete found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        } finally {
-//            this.update("cardsList");
-//            this.closeDialog("dialogDeleteCard");
-//        }
+        try {
+            this.cardService.deleteCard(this.card);
+            this.addInfo(true, "card.deleted");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            if (this.containsException(ConstraintViolationException.class, ex)) {
+                this.addError(true, "error.card.integrity-violation");
+            } else {
+                this.addError(true, "error.undefined-error", ex.getMessage());
+            }
+        } finally {
+            this.updateComponent("cardsList");
+            this.closeDialog("dialogDeleteCard");
+        }
     }
 
     /**

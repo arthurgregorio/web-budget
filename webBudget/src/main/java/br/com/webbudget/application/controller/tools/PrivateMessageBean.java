@@ -20,7 +20,7 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
 import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.AbstractLazyModel;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
@@ -197,7 +197,7 @@ public class PrivateMessageBean extends AbstractBean {
             this.users = this.accountService.listUsers(false);
 
 //            this.info("private-message.action.sent", true);
-        } catch (WbDomainException ex) {
+        } catch (InternalServiceError ex) {
             this.logger.error("PrivateMessageBean#doSave found erros", ex);
 //            this.fixedError("generic.operation-error", true, ex.getMessage());
         }
@@ -211,7 +211,7 @@ public class PrivateMessageBean extends AbstractBean {
         try {
             this.privateMessageService.deletePrivateMessage(this.privateMessage);
 //            this.info("private-message.action.deleted", true);
-        } catch (WbDomainException ex) {
+        } catch (InternalServiceError ex) {
             this.logger.error("PrivateMessageBean#doDelete found erros", ex);
 //            this.fixedError("generic.operation-error", true, ex.getMessage());
         } finally {

@@ -49,14 +49,15 @@ span.ui-icon-check {
 .ui-messages ul {
     margin: 0 !important;
 }
-.ui-messages span.ui-messages-info-icon {
-    display: none;
-}
-.ui-messages span.ui-messages-warn-icon { 
-    display: none;
-}
+.ui-messages span.ui-messages-info-icon, 
+.ui-messages span.ui-messages-warn-icon, 
 .ui-messages span.ui-messages-error-icon { 
     display: none;
+}
+.ui-messages-warn-summary, 
+.ui-messages-error-summary, 
+.ui-messages-info-summary {
+    font-weight: 600 !important;
 }
 
 /* corrige a opacidade dos checkboxes das grids */

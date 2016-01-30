@@ -21,7 +21,7 @@ import br.com.webbudget.domain.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.entity.wallet.WalletType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.repository.wallet.IWalletBalanceRepository;
 import br.com.webbudget.domain.repository.wallet.IWalletRepository;
 import java.math.BigDecimal;
@@ -61,7 +61,7 @@ public class WalletService {
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null) {
-            throw new WbDomainException("wallet.validate.duplicated");
+            throw new InternalServiceError("wallet.validate.duplicated");
         }
 
         wallet = this.walletRepository.save(wallet);
@@ -94,7 +94,7 @@ public class WalletService {
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null && !found.equals(wallet)) {
-            throw new WbDomainException("wallet.validate.duplicated");
+            throw new InternalServiceError("wallet.validate.duplicated");
         }
 
         return this.walletRepository.save(wallet);
@@ -110,7 +110,7 @@ public class WalletService {
         // checa se a carteira nao tem saldo menor ou maior que zero
         // se houve, dispara o erro, comente carteiras zeradas sao deletaveis
         if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-            throw new WbDomainException("wallet.validate.has-balance");
+            throw new InternalServiceError("wallet.validate.has-balance");
         }
 
         final List<WalletBalance> balaces = this.listBalancesByWallet(wallet);
@@ -130,7 +130,7 @@ public class WalletService {
     public void transfer(WalletBalance walletBalance) {
 
         if (walletBalance.getSourceWallet().equals(walletBalance.getTargetWallet())) {
-            throw new WbDomainException("transfer.validate.same-wallet");
+            throw new InternalServiceError("transfer.validate.same-wallet");
         }
 
         // atualizamos o destino

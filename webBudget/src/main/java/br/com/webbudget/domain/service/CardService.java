@@ -24,7 +24,7 @@ import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.entity.system.Configuration;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.card.ICardInvoiceRepository;
@@ -36,6 +36,7 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  * Service responsavel por todas as operacoes que envolvem cartoes no sistema
@@ -71,11 +72,11 @@ public class CardService {
                 card.getCardType());
 
         if (found != null) {
-            throw new WbDomainException("card.validate.duplicated");
+            throw new InternalServiceError("card.validate.duplicated");
         }
 
         if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-            throw new WbDomainException("card.validate.no-debit-wallet");
+            throw new InternalServiceError("card.validate.no-debit-wallet");
         }
 
         this.cardRepository.save(card);
@@ -93,11 +94,11 @@ public class CardService {
                 card.getCardType());
 
         if (found != null && !found.equals(card)) {
-            throw new WbDomainException("card.validate.duplicated");
+            throw new InternalServiceError("card.validate.duplicated");
         }
 
         if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-            throw new WbDomainException("card.validate.no-debit-wallet");
+            throw new InternalServiceError("card.validate.no-debit-wallet");
         }
 
         return this.cardRepository.save(card);
@@ -191,12 +192,12 @@ public class CardService {
     public List<Card> listCards(Boolean isBlocked) {
         return this.cardRepository.listByStatus(isBlocked);
     }
-    
+
     /**
-     * 
+     *
      * @param isBlocked
      * @param pageRequest
-     * @return 
+     * @return
      */
     public Page<Card> listCards(Boolean isBlocked, PageRequest pageRequest) {
         return this.cardRepository.listByStatus(isBlocked, pageRequest);
@@ -244,10 +245,10 @@ public class CardService {
 
         return cardInvoice;
     }
-    
+
     /**
      * Lista todas as faturas de um determinado cartao recebido como parametro
-     * 
+     *
      * @param card o cartao da qual se deseja ver as faturas
      * @return a lista de faturas
      */

@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.domain.entity.security.UserTypeEntity;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.repository.user.IUserRepository;
 import br.com.webbudget.domain.security.Grant;
 import br.com.webbudget.domain.security.Group;
@@ -72,7 +72,7 @@ public class AccountService {
         final User found = this.findUserByUsername(user.getUsername());
         
         if (found != null) {
-            throw new WbDomainException("user.error.duplicated-username");
+            throw new InternalServiceError("user.error.duplicated-username");
         }
 
         // pegamos o grupo e setamos o user no membership dele
@@ -103,12 +103,12 @@ public class AccountService {
         final Group found = this.findGroupByName(group.getName());
         
         if (found != null) {
-            throw new WbDomainException("group.error.duplicated-group");
+            throw new InternalServiceError("group.error.duplicated-group");
         }
         
         // checamos se existem permissoes para este grupo
         if (authorizations == null || authorizations.isEmpty()) {
-            throw new WbDomainException("group.error.empty-authorizations");
+            throw new InternalServiceError("group.error.empty-authorizations");
         }
         
         // cria o grupo
@@ -200,7 +200,7 @@ public class AccountService {
         
         // checamos se existem permissoes para este grupo
         if (authorizations == null || authorizations.isEmpty()) {
-            throw new WbDomainException("group.error.empty-authorizations");
+            throw new InternalServiceError("group.error.empty-authorizations");
         }
         
         // removemos todos os grants atuais

@@ -17,7 +17,7 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.security.Group;
 import br.com.webbudget.domain.service.AccountService;
 import br.com.webbudget.domain.security.User;
@@ -120,7 +120,7 @@ public class UserBean extends AbstractBean {
             this.user = new User();
 
 //            this.info("user.action.saved", true);
-        } catch (WbDomainException ex) {
+        } catch (InternalServiceError ex) {
             this.logger.error("UserBean#doSave has found erros", ex);
 //            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
@@ -138,7 +138,7 @@ public class UserBean extends AbstractBean {
             this.accountService.update(this.user);
 
 //            this.info("user.action.updated", true);
-        } catch (WbDomainException ex) {
+        } catch (InternalServiceError ex) {
             this.logger.error("UserBean#doUpdate has found erros", ex);
 //            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {
@@ -174,7 +174,7 @@ public class UserBean extends AbstractBean {
         try {
             this.accountService.updateProfile(this.user);
 //            this.info("user.action.profile-updated", true);
-        } catch (WbDomainException ex) {
+        } catch (InternalServiceError ex) {
             this.logger.error("UserBean#doProfileUpdate has found erros", ex);
 //            this.fixedError(ex.getMessage(), true);
         } catch (Exception ex) {

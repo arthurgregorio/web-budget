@@ -20,7 +20,7 @@ import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.card.Card;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
@@ -124,7 +124,7 @@ public class Payment extends PersistentEntity {
     public LocalDate getCreditCardInvoiceDueDate(FinancialPeriod period) {
 
         if (this.card == null) {
-            throw new WbDomainException("movement.validate.payment-not-credit-card");
+            throw new InternalServiceError("movement.validate.payment-not-credit-card");
         }
         
         final int expiration = this.card.getExpirationDay();

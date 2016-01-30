@@ -20,7 +20,7 @@ import br.com.webbudget.domain.entity.message.PrivateMessage;
 import br.com.webbudget.domain.security.User;
 import br.com.webbudget.domain.entity.message.UserPrivateMessage;
 import br.com.webbudget.domain.entity.security.UserTypeEntity;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.user.IPrivateMessageRepository;
@@ -59,7 +59,7 @@ public class PrivateMessageService {
     public void savePrivateMessage(PrivateMessage privateMessage) {
 
         if (privateMessage.getRecipients() == null || privateMessage.getRecipients().isEmpty()) {
-            throw new WbDomainException("private-message.validate.no-receipts");
+            throw new InternalServiceError("private-message.validate.no-receipts");
         }
 
         // pegamos os destinatarios

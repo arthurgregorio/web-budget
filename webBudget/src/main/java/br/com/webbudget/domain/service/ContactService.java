@@ -19,7 +19,7 @@ package br.com.webbudget.domain.service;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.contact.IContactRepository;
@@ -112,7 +112,7 @@ public class ContactService {
         
         // se tem vinculos, nao deleta
         if (!movements.isEmpty()) {
-            throw new WbDomainException("contact.validate.has-movements");
+            throw new InternalServiceError("contact.validate.has-movements");
         }
         
         this.contactRepository.delete(contact);

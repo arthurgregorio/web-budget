@@ -25,7 +25,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.misc.events.PeriodClosed;
 import br.com.webbudget.domain.misc.events.PeriodOpen;
-import br.com.webbudget.domain.misc.ex.WbDomainException;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
@@ -71,7 +71,7 @@ public class FinancialPeriodService {
                 financialPeriod.getIdentification());
 
         if (found != null && !found.equals(financialPeriod)) {
-            throw new WbDomainException("financial-period.validate.duplicated");
+            throw new InternalServiceError("financial-period.validate.duplicated");
         }
 
         // validamos se o periodo informado já foi contemplado em outro 
@@ -80,13 +80,13 @@ public class FinancialPeriodService {
 
         for (FinancialPeriod fp : periods) {
             if (financialPeriod.getStart().compareTo(fp.getEnd()) <= 0) {
-                throw new WbDomainException("financial-period.validate.truncated-dates");
+                throw new InternalServiceError("financial-period.validate.truncated-dates");
             }
         }
         
         // se o fim for o mesmo dia ou anterior a data atual, erro!
         if (financialPeriod.getEnd().compareTo(LocalDate.now()) < 1) {
-            throw new WbDomainException("financial-period.validate.invalid-end");
+            throw new InternalServiceError("financial-period.validate.invalid-end");
         }
 
         final FinancialPeriod opened = 
@@ -108,7 +108,7 @@ public class FinancialPeriodService {
         
         // se houver movimentos, lanca o erro
         if (movements != null && !movements.isEmpty()) {
-            throw new WbDomainException("financial-period.validate.has-movements");
+            throw new InternalServiceError("financial-period.validate.has-movements");
         } 
         
         // nao tem movimentos entao deleta
