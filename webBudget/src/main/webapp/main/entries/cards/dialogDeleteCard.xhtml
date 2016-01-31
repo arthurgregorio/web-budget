@@ -17,7 +17,7 @@
 
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
           xmlns:p="http://primefaces.org/ui"
-          xmlns:of="http://omnifaces.org/ui"
+          xmlns:o="http://omnifaces.org/ui"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           id="deleteCardDialog"
           modal="true"
@@ -29,21 +29,21 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <h4>
-                <of:outputFormat escape="false" 
+                <o:outputFormat escape="false" 
                                  value="#{messages['card.delete-dialog.advise']}">
                     <f:param value="#{cardBean.card.name}" />
-                </of:outputFormat>
+                </o:outputFormat>
             </h4>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 delete-box">
             <p:commandButton value="#{menu['yes']}"
-                             styleClass="btn btn-danger" 
+                             styleClass="btn btn-flat btn-danger" 
                              action="#{cardBean.doDelete()}"/>
             <p:spacer width="10"/>
-            <p:commandButton styleClass="btn"
-                             value="#{menu['no']}"
+            <p:commandButton value="#{menu['no']}"
+                             styleClass="btn btn-flat"
                              onclick="closeDialog('dialogDeleteCard')" />
         </div>
     </div>
