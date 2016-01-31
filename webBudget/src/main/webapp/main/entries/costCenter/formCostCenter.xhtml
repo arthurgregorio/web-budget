@@ -16,138 +16,141 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="costCenters"/>
+
     <f:metadata>
         <f:viewAction action="#{costCenterBean.initializeForm(param.costCenterId)}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['cost-center.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        <h:outputText rendered="#{costCenterBean.viewState eq 'ADDING'}"
+                      value="#{messages['cost-center.page-description-including']}"/>
+        <o:outputFormat id="pageDescription" 
+                        rendered="#{costCenterBean.viewState eq 'EDITING'}" 
+                        value="#{messages['cost-center.page-description-editing']}">
+            <f:param value="#{costCenterBean.costCenter.name}"/>
+        </o:outputFormat>
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['entries']}" />
-        <p:menuitem url="listCostCenters.xhtml"
-                    value="#{breadcrumb['entries.cost-center']}" />
-        <p:menuitem url="formCostCenter.xhtml"
-                    value="#{breadcrumb['inclusion']}" 
-                    rendered="#{costCenterBean.viewState eq 'ADDING'}"/>
-        <p:menuitem url="#"
-                    value="#{breadcrumb['edition']}" 
-                    rendered="#{costCenterBean.viewState eq 'EDITING'}"/>
+        <li><a href="#">#{breadcrumb['entries']}</a></li>
+        <li><a href="listCards.xhtml">#{breadcrumb['entries.card']}</a></li>
+        <li jsf:rendered="#{costCenterBean.viewState eq 'ADDING'}" 
+            class="active"><a href="#">#{breadcrumb['including']}</a></li>
+        <li jsf:rendered="#{costCenterBean.viewState eq 'EDITING'}" 
+            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
         <h:form id="costCenterForm" prependId="false">
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">
-                    <p:messages id="messages" closable="true" />
-                </div> 
-            </div> 
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6"> 
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:selectBooleanCheckbox id="inBlocked" 
-                                                     value="#{costCenterBean.costCenter.blocked}"
-                                                     itemLabel="#{messages['cost-center.form.blocked']}"/>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inName" 
-                                           value="#{messages['cost-center.form.name']}: "/>
-                            <p:inputText id="inName" 
-                                         maxlength="45"
-                                         value="#{costCenterBean.costCenter.name}" 
-                                         disabled="#{costCenterBean.viewState eq 'EDITING'}"/>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
-                            <p:outputLabel for="inCostCenter" 
-                                           value="#{messages['cost-center.form.cost-center']}: "/>
-                            <p:selectOneMenu id="inCostCenter" 
-                                             converter="omnifaces.SelectItemsConverter"
-                                             value="#{costCenterBean.costCenter.parentCostCenter}" >
-                                <f:selectItem itemValue="#{null}"
-                                              noSelectionOption="true"
-                                              itemLabel="#{messages['cost-center.form.select-one']}" />
-                                <f:selectItems var="costCenter" 
-                                               itemValue="#{costCenter}"
-                                               itemLabel="#{costCenter.name}"
-                                               value="#{costCenterBean.costCenters}" /> 
-                            </p:selectOneMenu>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-s">
-                            <p:outputLabel for="inRevenuesBudget" 
-                                           value="#{messages['cost-center.form.revenue-budget']}: "/>
-                            <pe:inputNumber id="inRevenuesBudget" 
-                                            symbol="R$ "
-                                            decimalPlaces="2" 
-                                            decimalSeparator="," 
-                                            thousandSeparator="." 
-                                            value="#{costCenterBean.costCenter.revenuesBudget}">
-                                <f:converter converterId="javax.faces.BigDecimal" />
-                            </pe:inputNumber>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-s">
-                            <p:outputLabel for="inExpensesBudget" 
-                                           value="#{messages['cost-center.form.expense-budget']}: "/>
-                            <pe:inputNumber id="inExpensesBudget" 
-                                            symbol="R$ "
-                                            decimalPlaces="2" 
-                                            decimalSeparator="," 
-                                            thousandSeparator="." 
-                                            value="#{costCenterBean.costCenter.expensesBudget}">
-                                <f:converter converterId="javax.faces.BigDecimal" />
-                            </pe:inputNumber>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inDescription" 
-                                           value="#{messages['cost-center.form.description']}: "/>
-                            <p:inputTextarea id="inDescription" 
-                                             maxlength="255"
-                                             autoResize="true"
-                                             value="#{costCenterBean.costCenter.description}" />
-                        </div>                        
-                    </div>
-                </div>
-                <div class="ui-grid-col-6"> 
 
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p:messages id="messages" closable="true" globalOnly="true"/>
                 </div>
             </div>
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6">
 
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <p:selectBooleanCheckbox id="inBlocked" 
+                                                 value="#{costCenterBean.costCenter.blocked}"
+                                                 itemLabel="#{messages['cost-center.form.blocked']}"/>
+                    </h3>
                 </div>
-                <div class="ui-grid-col-6 form-controls-box">
-                    <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
-                                     action="#{costCenterBean.doCancel()}"/>
-                    <p:spacer width="10"/>
+
+                <div class="box-body">
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inName" 
+                                       value="#{messages['cost-center.form.name']}: "/>
+                        <p:inputText id="inName" 
+                                     maxlength="45"
+                                     styleClass="form-control"
+                                     value="#{costCenterBean.costCenter.name}" 
+                                     disabled="#{costCenterBean.viewState eq 'EDITING'}"/>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inCostCenter" 
+                                       value="#{messages['cost-center.form.cost-center']}: "/>
+                        <p:selectOneMenu id="inCostCenter" 
+                                         converter="omnifaces.SelectItemsConverter"
+                                         value="#{costCenterBean.costCenter.parentCostCenter}" >
+                            <f:selectItem itemValue="#{null}"
+                                          noSelectionOption="true"
+                                          itemLabel="#{messages['cost-center.form.select-one']}" />
+                            <f:selectItems var="costCenter" 
+                                           itemValue="#{costCenter}"
+                                           itemLabel="#{costCenter.name}"
+                                           value="#{costCenterBean.costCenters}" /> 
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inRevenuesBudget" 
+                                       value="#{messages['cost-center.form.revenue-budget']}: "/>
+                        <pe:inputNumber id="inRevenuesBudget" 
+                                        symbol="R$ "
+                                        decimalPlaces="2" 
+                                        decimalSeparator="," 
+                                        thousandSeparator="." 
+                                        value="#{costCenterBean.costCenter.revenuesBudget}">
+                            <f:converter converterId="javax.faces.BigDecimal" />
+                        </pe:inputNumber>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inExpensesBudget" 
+                                       value="#{messages['cost-center.form.expense-budget']}: "/>
+                        <pe:inputNumber id="inExpensesBudget" 
+                                        symbol="R$ "
+                                        decimalPlaces="2" 
+                                        decimalSeparator="," 
+                                        thousandSeparator="." 
+                                        value="#{costCenterBean.costCenter.expensesBudget}">
+                            <f:converter converterId="javax.faces.BigDecimal" />
+                        </pe:inputNumber>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <p:outputLabel for="inDescription" 
+                                       value="#{messages['cost-center.form.description']}: "/>
+                        <p:inputTextarea id="inDescription" 
+                                         maxlength="255"
+                                         autoResize="true"
+                                         styleClass="form-control"
+                                         value="#{costCenterBean.costCenter.description}" />
+                    </div>
+                </div>
+
+                <div class="box-footer align-right">
                     <p:commandButton update="costCenterForm"
                                      process="costCenterForm"
                                      value="#{menu['save']}"
-                                     styleClass="ui-button-success"
                                      action="#{costCenterBean.doSave()}"
+                                     styleClass="btn btn-flat btn-success"
                                      rendered="#{costCenterBean.viewState eq 'ADDING'}"/>
-                    <p:commandButton update="costCenterForm"
-                                     process="costCenterForm"
+                    <p:commandButton process="costCenterForm"
                                      value="#{menu['update']}"
-                                     styleClass="ui-button-success"
                                      action="#{costCenterBean.doUpdate()}"
+                                     styleClass="btn btn-flat btn-success"
+                                     update="costCenterForm pageDescription"
                                      rendered="#{costCenterBean.viewState eq 'EDITING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{costCenterBean.doCancel()}"
+                                     styleClass="btn btn-flat btn-primary"/>
                 </div>
             </div>
         </h:form>

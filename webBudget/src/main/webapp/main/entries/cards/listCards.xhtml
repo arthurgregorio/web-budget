@@ -56,8 +56,8 @@
                     <div class="box-tools pull-right">
                         <p:commandButton immediate="true"
                                          value="#{menu['new']}"
-                                         styleClass="btn btn-flat btn-primary"
                                          action="#{cardBean.changeToAdd()}"
+                                         styleClass="btn btn-flat btn-primary"
                                          rendered="#{userSessionBean.hasRole(authorization.CARD_INSERT)}"/>
                     </div>
                 </h:form>

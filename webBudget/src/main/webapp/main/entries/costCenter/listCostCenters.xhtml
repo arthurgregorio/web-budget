@@ -23,50 +23,53 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="costCenters"/>
+
     <f:metadata>
         <f:viewAction action="#{costCenterBean.initializeListing()}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['cost-center.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['cost-center.page-description']}
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['entries']}" />
-        <p:menuitem url="listCostCenters.xhtml"
-                    value="#{breadcrumb['entries.cost-center']}" />
+        <li><a href="#">#{breadcrumb['entries']}</a></li>
+        <li class="active"><a href="listCostCenters.xhtml">#{breadcrumb['entries.cost-centers']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <p:messages id="messages" closable="true" globalOnly="true"/>
             </div>
         </div>
 
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-10">
-
-                </div>
-                <div class="ui-grid-col-2 div-align-right">
-                    <p:commandButton immediate="true"
-                                     value="#{menu['add']}"
-                                     styleClass="ui-button-info" 
-                                     action="#{costCenterBean.changeToAdd()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_INSERT)}"/>
-                </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h:form id="controlsForm" prependId="false">
+                    <div class="box-tools pull-right">
+                        <p:commandButton immediate="true"
+                                         value="#{menu['new']}"
+                                         styleClass="btn btn-flat btn-primary"
+                                         action="#{costCenterBean.changeToAdd()}"
+                                         rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_INSERT)}"/>
+                    </div>
+                </h:form>
             </div>
-        </h:form>
-
-        <div jsf:id="listPanel" 
-             class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
+            <div jsf:id="boxBody" class="box-body">
                 <p:dataTable id="costCentersList" 
                              rows="15"
                              lazy="true"
                              paginator="true"
                              var="costCenter"
                              sortField="name"
-                             sortOrder="ascending"
+                             sortOrder="descending"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
                              value="#{costCenterBean.costCentersModel}"
@@ -109,15 +112,15 @@
                 </p:dataTable>
             </div>
         </div>
-        
-        <p:blockUI block="listPanel"
+
+        <p:blockUI block="boxBody"
                    widgetVar="listBlock"
                    trigger="costCentersList">
             <div class="div-align-center">
                 <p:graphicImage width="32" 
                                 height="32"
-                                library="images" 
-                                name="ui-loading.gif" />
+                                library="app" 
+                                name="img/loading.gif" />
             </div>
             <div style="margin-top: 5px">
                 #{menu['loading']}
