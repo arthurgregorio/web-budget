@@ -16,6 +16,7 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -23,122 +24,127 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="/template/mainTemplate.xhtml">
-    
+
+    <ui:param name="activeMenu" value="movementClasses"/>
+
     <f:metadata>
         <f:viewAction action="#{movementClassBean.initializeForm(param.movementClassId)}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['movement-class.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        <h:outputText rendered="#{movementClassBean.viewState eq 'ADDING'}"
+                      value="#{messages['movement-class.page-description-including']}"/>
+        <o:outputFormat id="pageDescription" 
+                        rendered="#{movementClassBean.viewState eq 'EDITING'}" 
+                        value="#{messages['movement-class.page-description-editing']}">
+            <f:param value="#{movementClassBean.movementClass.name}"/>
+        </o:outputFormat>
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['entries']}" />
-        <p:menuitem url="listMovementClasses.xhtml"
-                    value="#{breadcrumb['entries.movement-class']}" />
-        <p:menuitem url="formMovementClass.xhtml"
-                    value="#{breadcrumb['inclusion']}" 
-                    rendered="#{movementClassBean.viewState eq 'ADDING'}"/>
-        <p:menuitem url="#"
-                    value="#{breadcrumb['edition']}" 
-                    rendered="#{movementClassBean.viewState eq 'EDITING'}"/>
+        <li><a href="#">#{breadcrumb['entries']}</a></li>
+        <li><a href="formMovementClass.xhtml">#{breadcrumb['entries.movement-class']}</a></li>
+        <li jsf:rendered="#{movementClassBean.viewState eq 'ADDING'}" 
+            class="active"><a href="#">#{breadcrumb['including']}</a></li>
+        <li jsf:rendered="#{movementClassBean.viewState eq 'EDITING'}" 
+            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
-        <h:form id="movementClassForm" prependId="false">
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">
-                    <p:messages id="messages" closable="true" />
-                </div> 
-            </div> 
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6"> 
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
-                            <p:selectBooleanCheckbox id="inBlocked" 
-                                                     value="#{movementClassBean.movementClass.blocked}"
-                                                     itemLabel="#{messages['movement-class.form.blocked']}"/>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inName" 
-                                           value="#{messages['movement-class.form.name']}: "/>
-                            <p:inputText id="inName" 
-                                         value="#{movementClassBean.movementClass.name}"
-                                         disabled="#{movementClassBean.viewState eq 'EDITING'}"/>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
-                            <p:outputLabel for="inMovementClassType" 
-                                           value="#{messages['movement-class.form.movement-class-type']}: "/>
-                            <p:selectOneRadio id="inMovementClassType" 
-                                              columns="1"
-                                              layout="grid" 
-                                              converter="omnifaces.GenericEnumConverter"
-                                              value="#{movementClassBean.movementClass.movementClassType}">
-                                <f:selectItems var="movementClassType"
-                                               itemValue="#{movementClassType}"
-                                               itemLabel="#{messages[movementClassType]}"
-                                               value="#{movementClassBean.availableMovementsTypes}"/>
-                            </p:selectOneRadio>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
-                            <p:outputLabel for="inCostCenter" 
-                                           value="#{messages['movement-class.form.cost-center']}: "/>
-                            <p:selectOneMenu id="inCostCenter" 
-                                             converter="omnifaces.SelectItemsConverter"
-                                             value="#{movementClassBean.movementClass.costCenter}" >
-                                <f:selectItem itemValue="#{null}"
-                                              noSelectionOption="true"
-                                              itemLabel="#{messages['movement-class.form.select-one']}" />
-                                <f:selectItems var="costCenter" 
-                                               itemValue="#{costCenter}"
-                                               itemLabel="#{costCenter.name}"
-                                               value="#{movementClassBean.costCenters}" /> 
-                            </p:selectOneMenu>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-s">
-                            <p:outputLabel for="inBudget" 
-                                           value="#{messages['movement-class.form.budget']}: "/>
-                            <pe:inputNumber id="inBudget" 
-                                            symbol="R$ "
-                                            decimalPlaces="2" 
-                                            decimalSeparator="," 
-                                            thousandSeparator="." 
-                                            value="#{movementClassBean.movementClass.budget}">
-                                <f:converter converterId="javax.faces.BigDecimal" />
-                            </pe:inputNumber>
-                        </div>                        
-                    </div>
-                </div>
-                <div class="ui-grid-col-6"> 
 
+        <h:form id="movementClassForm" prependId="false">
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p:messages id="messages" closable="true" globalOnly="true"/>
                 </div>
             </div>
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6">
 
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <p:selectBooleanCheckbox id="inBlocked" 
+                                                 value="#{movementClassBean.movementClass.blocked}"
+                                                 itemLabel="#{messages['movement-class.form.blocked']}"/>
+                    </h3>
                 </div>
-                <div class="ui-grid-col-6 form-controls-box">
-                    <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
-                                     action="#{movementClassBean.doCancel()}"/>
-                    <p:spacer width="10"/>
+
+                <div class="box-body">
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inName" 
+                                       value="#{messages['movement-class.form.name']}: "/>
+                        <p:inputText id="inName" 
+                                     styleClass="form-control"
+                                     value="#{movementClassBean.movementClass.name}"
+                                     disabled="#{movementClassBean.viewState eq 'EDITING'}"/>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inMovementClassType" 
+                                       value="#{messages['movement-class.form.movement-class-type']}: "/>
+                        <p:selectOneMenu id="inMovementClassType" 
+                                         value="#{movementClassBean.movementClass.movementClassType}"
+                                         converter="omnifaces.GenericEnumConverter"
+                                         disabled="#{cardBean.viewState eq 'EDITING'}">
+                            <f:selectItem itemValue="#{null}"
+                                          noSelectionOption="true"
+                                          itemLabel="#{messages['movement-class.form.select-one']}" />
+                            <f:selectItems var="movementClassType"
+                                           itemValue="#{movementClassType}"
+                                           itemLabel="#{enums[movementClassType]}"
+                                           value="#{movementClassBean.availableMovementsTypes}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inCostCenter" 
+                                       value="#{messages['movement-class.form.cost-center']}: "/>
+                        <p:selectOneMenu id="inCostCenter" 
+                                         converter="omnifaces.SelectItemsConverter"
+                                         value="#{movementClassBean.movementClass.costCenter}" >
+                            <f:selectItem itemValue="#{null}"
+                                          noSelectionOption="true"
+                                          itemLabel="#{messages['movement-class.form.select-one']}" />
+                            <f:selectItems var="costCenter" 
+                                           itemValue="#{costCenter}"
+                                           itemLabel="#{costCenter.name}"
+                                           value="#{movementClassBean.costCenters}" /> 
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inBudget" 
+                                       value="#{messages['movement-class.form.budget']}: "/>
+                        <pe:inputNumber id="inBudget" 
+                                        symbol="R$ "
+                                        decimalPlaces="2" 
+                                        decimalSeparator="," 
+                                        thousandSeparator="." 
+                                        value="#{movementClassBean.movementClass.budget}">
+                            <f:converter converterId="javax.faces.BigDecimal" />
+                        </pe:inputNumber>
+                    </div>
+                </div>
+
+                <div class="box-footer align-right">
                     <p:commandButton value="#{menu['save']}"
                                      update="movementClassForm"
                                      process="movementClassForm"
-                                     styleClass="ui-button-success"
+                                     styleClass="btn btn-flat btn-success"
                                      action="#{movementClassBean.doSave()}"
                                      rendered="#{movementClassBean.viewState eq 'ADDING'}"/>
                     <p:commandButton value="#{menu['update']}"
-                                     update="movementClassForm"
                                      process="movementClassForm"
-                                     styleClass="ui-button-success"
+                                     styleClass="btn btn-flat btn-success"
                                      action="#{movementClassBean.doUpdate()}"
+                                     update="movementClassForm pageDescription"
                                      rendered="#{movementClassBean.viewState eq 'EDITING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     styleClass="btn btn-flat btn-primary"
+                                     action="#{movementClassBean.doCancel()}"/>
                 </div>
             </div>
         </h:form>

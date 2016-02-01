@@ -75,7 +75,7 @@
                              value="#{costCenterBean.costCentersModel}"
                              emptyMessage="#{messages['cost-center.list.empty']}">
                     <p:column width="10%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['cost-center.list.blocked']}">
                         <p:selectBooleanCheckbox disabled="true" value="#{costCenter.blocked}" />
                     </p:column>
@@ -83,21 +83,21 @@
                         #{costCenter.name}
                     </p:column>
                     <p:column width="20%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['cost-center.list.revenues-budget']}">
                         <h:outputText value="#{costCenter.revenuesBudget}">
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </p:column>
                     <p:column width="20%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['cost-center.list.expenses-budget']}">
                         <h:outputText value="#{costCenter.expensesBudget}">
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </p:column>
                     <p:column width="15%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{menu['actions']}">
                         <p:commandButton icon="fa fa-edit"
                                          title="#{menu['edit']}"

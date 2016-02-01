@@ -23,43 +23,46 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="movementClasses"/>
+
     <f:metadata>
         <f:viewAction action="#{movementClassBean.initializeListing()}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['movement-class.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['movement-class.page-description']}
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['entries']}" />
-        <p:menuitem url="listMovementClasses.xhtml"
-                    value="#{breadcrumb['entries.movement-class']}" />
+        <li><a href="#">#{breadcrumb['entries']}</a></li>
+        <li class="active"><a href="listMovementClasses.xhtml">#{breadcrumb['entries.movement-class']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <p:messages id="messages" closable="true" globalOnly="true"/>
             </div>
         </div>
 
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-10">
-
-                </div>
-                <div class="ui-grid-col-2 div-align-right">
-                    <p:commandButton immediate="true"
-                                     value="#{menu['add']}"
-                                     styleClass="ui-button-info" 
-                                     action="#{movementClassBean.changeToAdd()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_INSERT)}"/>
-                </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h:form id="controlsForm" prependId="false">
+                    <div class="box-tools pull-right">
+                        <p:commandButton immediate="true"
+                                         value="#{menu['new']}"
+                                         styleClass="btn btn-flat btn-primary"
+                                         action="#{movementClassBean.changeToAdd()}"
+                                         rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_INSERT)}"/>
+                    </div>
+                </h:form>
             </div>
-        </h:form>
-
-        <div jsf:id="listPanel"
-             class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
+            <div jsf:id="boxBody" class="box-body">
                 <p:dataTable id="movementClassesList" 
                              rows="15"
                              lazy="true"
@@ -73,7 +76,7 @@
                              emptyMessage="#{messages['movement-class.list.empty']}">
 
                     <p:column width="10%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['movement-class.list.blocked']}">
                         <p:selectBooleanCheckbox disabled="true" value="#{movementClass.blocked}" />
                     </p:column>
@@ -81,19 +84,19 @@
                         #{movementClass.name}
                     </p:column>
                     <p:column width="20%"
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['movement-class.list.cost-center']}">
                         #{movementClass.costCenter.name}
                     </p:column>
                     <p:column width="15%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['movement-class.list.budget']}">
                         <h:outputText value="#{movementClass.budget}">
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </p:column>
                     <p:column width="15%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{menu['actions']}">
                         <p:commandButton icon="fa fa-edit"
                                          title="#{menu['edit']}"
@@ -108,15 +111,15 @@
                 </p:dataTable>
             </div>
         </div>
-        
-        <p:blockUI block="listPanel"
+
+        <p:blockUI block="boxBody"
                    widgetVar="listBlock"
                    trigger="movementClassesList">
             <div class="div-align-center">
                 <p:graphicImage width="32" 
                                 height="32"
-                                library="images" 
-                                name="ui-loading.gif" />
+                                library="app" 
+                                name="img/loading.gif" />
             </div>
             <div style="margin-top: 5px">
                 #{menu['loading']}

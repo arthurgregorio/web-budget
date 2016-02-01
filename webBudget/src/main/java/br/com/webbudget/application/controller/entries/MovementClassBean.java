@@ -135,7 +135,7 @@ public class MovementClassBean extends AbstractBean {
      */
     public void changeToDelete(long movementClassId) {
         this.movementClass = this.movementService.findMovementClassById(movementClassId);
-//        this.openDialog("deleteMovementClassDialog", "dialogDeleteMovementClass");
+        this.updateAndOpenDialog("deleteMovementClassDialog", "dialogDeleteMovementClass");
     }
 
     /**
@@ -150,18 +150,15 @@ public class MovementClassBean extends AbstractBean {
      */
     public void doSave() {
 
-//        try {
-//            this.movementService.saveMovementClass(this.movementClass);
-//            this.movementClass = new MovementClass();
-//
-//            this.info("movement-class.action.saved", true);
-//        } catch (WbDomainException ex) {
-//            this.logger.error("MovementClassBean#doSave found erros", ex);
-//            this.fixedError(ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("MovementClassBean#doSave found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        }
+        try {
+            this.movementService.saveMovementClass(this.movementClass);
+            this.movementClass = new MovementClass();
+            this.addInfo(true, "movement-class.saved");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
 
     /**
@@ -169,17 +166,15 @@ public class MovementClassBean extends AbstractBean {
      */
     public void doUpdate() {
 
-//        try {
-//            this.movementClass = this.movementService.updateMovementClass(this.movementClass);
-//
-//            this.info("movement-class.action.updated", true);
-//        } catch (WbDomainException ex) {
-//            this.logger.error("MovementClassBean#doUpdate found erros", ex);
-//            this.fixedError(ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("MovementClassBean#doUpdate found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        }
+        try {
+            this.movementClass = this.movementService.updateMovementClass(this.movementClass);
+
+            this.addInfo(true, "movement-class.updated");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
 
     /**
@@ -187,24 +182,21 @@ public class MovementClassBean extends AbstractBean {
      */
     public void doDelete() {
 
-//        try {
-//            this.movementService.deleteMovementClass(this.movementClass);
-//            this.info("movement-class.action.deleted", true);
-//        } catch (WbDomainException ex) {
-//            this.logger.error("MovementClassBean#doDelete found erros", ex);
-//            this.fixedError(ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            if (this.containsException(ConstraintViolationException.class, ex)) {
-//                this.logger.error("MovementClassBean#doDelete found erros", ex);
-//                this.fixedError("movement-class.action.delete-used", true);
-//            } else {
-//                this.logger.error("MovementClassBean#doDelete found erros", ex);
-//                this.fixedError("generic.operation-error", true, ex.getMessage());
-//            }
-//        } finally {
-//            this.update("movementClassesList");
-//            this.closeDialog("dialogDeleteMovementClass");
-//        }
+        try {
+            this.movementService.deleteMovementClass(this.movementClass);
+            this.addInfo(true, "movement-class.deleted");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            if (this.containsException(ConstraintViolationException.class, ex)) {
+                this.addError(true, "error.movement-class.integrity-violation");
+            } else {
+                this.addError(true, "error.undefined-error", ex.getMessage());
+            }
+        } finally {
+            this.updateComponent("movementClassesList");
+            this.closeDialog("dialogDeleteMovementClass");
+        }
     }
 
     /**
