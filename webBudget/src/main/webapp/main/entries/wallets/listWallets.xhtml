@@ -23,56 +23,59 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="wallets"/>
+
     <f:metadata>
         <f:viewAction action="#{walletBean.initializeListing()}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['wallets.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['wallets.page-description']}
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['entries']}" />
-        <p:menuitem url="listWallets.xhtml"
-                    value="#{breadcrumb['entries.wallet']}" />
+        <li><a href="#">#{breadcrumb['entries']}</a></li>
+        <li class="active"><a href="listWallets.xhtml">#{breadcrumb['entries.wallets']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <p:messages id="messages" closable="true" globalOnly="true"/>
             </div>
         </div>
 
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-10">
-
-                </div>
-                <div class="ui-grid-col-2 div-align-right">
-                    <p:commandButton immediate="true"
-                                     value="#{menu['add']}"
-                                     styleClass="ui-button-info" 
-                                     action="#{walletBean.changeToAdd()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.WALLET_INSERT)}"/>
-                </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h:form id="controlsForm" prependId="false">
+                    <div class="box-tools pull-right">
+                        <p:commandButton immediate="true"
+                                         value="#{menu['new']}"
+                                         action="#{walletBean.changeToAdd()}"
+                                         styleClass="btn btn-flat btn-primary"
+                                         rendered="#{userSessionBean.hasRole(authorization.WALLET_INSERT)}"/>
+                    </div>
+                </h:form>
             </div>
-        </h:form>
-
-        <div jsf:id="listPanel" 
-             class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
+            <div jsf:id="boxBody" class="box-body">
                 <p:dataTable id="walletsList" 
                              rows="15"
                              lazy="true"
                              var="wallet"
                              paginator="true"
-                             sortMode="ascending"
+                             sortMode="descending"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
                              value="#{walletBean.walletsModel}"
                              emptyMessage="#{messages['wallet.list.empty']}">
 
                     <p:column width="10%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['wallet.list.blocked']}">
                         <p:selectBooleanCheckbox disabled="true" 
                                                  value="#{wallet.blocked}" />
@@ -81,17 +84,17 @@
                         <h:outputText value="#{wallet.friendlyName}"/>
                     </p:column>
                     <p:column width="12%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['wallet.list.balance']}">
                         <ui:include src="balancePanel.xhtml"/>
                     </p:column>
                     <p:column width="15%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{messages['wallet.list.type']}">
-                        #{messages[wallet.walletType]}
+                        #{enums[wallet.walletType]}
                     </p:column>
                     <p:column width="18%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{menu['actions']}">
                         <p:commandButton icon="fa fa-wrench"
                                          title="#{menu['balance-adjust']}"
@@ -111,15 +114,15 @@
                 </p:dataTable>
             </div>
         </div>
-        
-        <p:blockUI block="listPanel"
-                   trigger="walletsList"
-                   widgetVar="listBlock">
+
+        <p:blockUI block="boxBody"
+                   widgetVar="listBlock"
+                   trigger="walletsList">
             <div class="div-align-center">
                 <p:graphicImage width="32" 
                                 height="32"
-                                library="images" 
-                                name="ui-loading.gif" />
+                                library="app" 
+                                name="img/loading.gif" />
             </div>
             <div style="margin-top: 5px">
                 #{menu['loading']}

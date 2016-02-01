@@ -20,22 +20,22 @@ package br.com.webbudget.domain.entity.wallet;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 03/04/2014
  */
 public enum WalletType {
 
-    PERSONAL("beans.wallet.personal"),
-    BANK_ACCOUNT("beans.wallet.bank-account");
+    PERSONAL("wallet.personal"),
+    BANK_ACCOUNT("wallet.bank-account");
 
-    private final String i18nKey;
+    private final String description;
 
     /**
      *
-     * @param i18nKey
+     * @param description
      */
-    private WalletType(String i18nKey) {
-        this.i18nKey = i18nKey;
+    private WalletType(String description) {
+        this.description = description;
     }
 
     /**
@@ -44,6 +44,6 @@ public enum WalletType {
      */
     @Override
     public String toString() {
-        return this.i18nKey;
+        return this.description;
     }
 }
