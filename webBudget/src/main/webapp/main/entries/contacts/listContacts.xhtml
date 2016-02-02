@@ -23,51 +23,66 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="contacts"/>
+
     <f:metadata>
         <f:viewAction action="#{contactBean.initializeListing()}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['contact.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['contact.page-description']}
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['entries']}" />
-        <p:menuitem url="listContacts.xhtml"
-                    value="#{breadcrumb['entries.contacts']}" />
+        <li><a href="#">#{breadcrumb['entries']}</a></li>
+        <li class="active"><a href="listContacts.xhtml">#{breadcrumb['entries.contact']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <p:messages id="messages" closable="true" globalOnly="true"/>
             </div>
         </div>
 
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-8 filter-group form-group-l">
-                    <p:inputText id="inFilter" 
-                                 value="#{contactBean.filter}" 
-                                 placeholder="#{messages['contact.filter.types']}"/>
-                </div>
-                <div class="ui-grid-col-4 div-align-right">
-                    <p:commandButton process="controlsForm"
-                                     value="#{menu['filter']}"
-                                     onstart="PF('listBlock').show()"
-                                     oncomplete="PF('listBlock').hide()"
-                                     action="#{contactBean.filterList()}"/>
-                    <p:spacer width="10"/>
-                    <p:commandButton immediate="true"
-                                     value="#{menu['add']}"
-                                     styleClass="ui-button-info" 
-                                     action="#{contactBean.changeToAdd()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.CONTACT_INSERT)}"/>
-                </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h:form id="controlsForm" prependId="false">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="input-group">
+                                <p:inputText id="inFilter" 
+                                             styleClass="form-control"
+                                             value="#{contactBean.filter}"
+                                             placeholder="#{messages['filter.contact']}"/>
+                                <div class="input-group-btn">
+                                    <p:commandLink process="controlsForm"
+                                                   value="#{menu['search']}"
+                                                   onstart="PF('listBlock').show()"
+                                                   oncomplete="PF('listBlock').hide()"
+                                                   action="#{contactBean.filterList()}"
+                                                   styleClass="btn btn-flat btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="box-tools pull-right">
+                                <p:commandButton immediate="true"
+                                                 value="#{menu['new']}"
+                                                 action="#{contactBean.changeToAdd()}"
+                                                 styleClass="btn btn-flat btn-primary" 
+                                                 rendered="#{userSessionBean.hasRole(authorization.CONTACT_INSERT)}"/>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
             </div>
-        </h:form>
-
-        <div jsf:id="listPanel" 
-             class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
+            <div jsf:id="boxBody" class="box-body">
                 <p:dataTable id="contactsList" 
                              rows="15"
                              lazy="true"
@@ -77,7 +92,7 @@
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
                              value="#{contactBean.contactsModel}"
-                             emptyMessage="#{messages['contact.list.empty']}">
+                             emptyMessage="#{messages['list.empty']}">
 
                     <p:column width="10%" 
                               styleClass="div-align-center"
@@ -116,14 +131,14 @@
             </div>
         </div>
 
-        <p:blockUI block="listPanel"
+        <p:blockUI block="boxBody"
                    widgetVar="listBlock"
                    trigger="contactsList">
             <div class="div-align-center">
                 <p:graphicImage width="32" 
                                 height="32"
-                                library="images" 
-                                name="ui-loading.gif" />
+                                library="app" 
+                                name="img/loading.gif" />
             </div>
             <div style="margin-top: 5px">
                 #{menu['loading']}

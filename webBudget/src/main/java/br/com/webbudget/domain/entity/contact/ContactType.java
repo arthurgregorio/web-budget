@@ -26,17 +26,17 @@ package br.com.webbudget.domain.entity.contact;
  */
 public enum ContactType {
 
-    LEGAL("beans.contact-type.legal"),
-    PERSONAL("beans.contact-type.personal");
+    LEGAL("contact-type.legal"),
+    PERSONAL("contact-type.personal");
 
-    private final String i18nKey;
+    private final String description;
 
     /**
      *
-     * @param i18nKey
+     * @param description
      */
-    private ContactType(String i18nKey) {
-        this.i18nKey = i18nKey;
+    private ContactType(String description) {
+        this.description = description;
     }
 
     /**
@@ -45,6 +45,6 @@ public enum ContactType {
      */
     @Override
     public String toString() {
-        return this.i18nKey;
+        return this.description;
     }
 }
