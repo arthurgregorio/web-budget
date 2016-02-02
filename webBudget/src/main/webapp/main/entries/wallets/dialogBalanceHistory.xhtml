@@ -52,7 +52,8 @@
                                      value="#{menu['more']}" />
                 </f:facet>
 
-                <div class="row" style="#{balance.walletBalanceType.styleForType}">
+                <div class="row" style="margin-right: -5px; margin-left: -5px; 
+                                        #{balance.walletBalanceType.styleForType}">
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <o:outputFormat escape="false" 
                                         value="#{messages['balance-history.in']}">
@@ -92,6 +93,7 @@
                         #{balance.reason}
                     </div>
                 </div>
+                <p:spacer height="2"/>
             </p:dataScroller>
         </div>
     </div>

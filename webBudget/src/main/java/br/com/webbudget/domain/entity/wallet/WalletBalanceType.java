@@ -57,6 +57,6 @@ public enum WalletBalanceType {
      * @return a cor para este balanco
      */
     public String getStyleForType() {
-        return "border-left: 15px solid #" + this.color;
+        return "border-left: 10px solid #" + this.color;
     }
 }
