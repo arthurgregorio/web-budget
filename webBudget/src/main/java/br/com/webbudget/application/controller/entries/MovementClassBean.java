@@ -39,7 +39,7 @@ import org.primefaces.model.SortOrder;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.0.0, 04/03/2014
  */
 @Named
@@ -189,7 +189,8 @@ public class MovementClassBean extends AbstractBean {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             if (this.containsException(ConstraintViolationException.class, ex)) {
-                this.addError(true, "error.movement-class.integrity-violation");
+                this.addError(true, "error.movement-class.integrity-violation", 
+                        this.movementClass.getName());
             } else {
                 this.addError(true, "error.undefined-error", ex.getMessage());
             }

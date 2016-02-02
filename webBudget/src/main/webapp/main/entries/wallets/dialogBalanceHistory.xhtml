@@ -22,24 +22,25 @@
           xmlns:h="http://xmlns.jcp.org/jsf/html"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           id="balanceHistoryDialog" 
-          width="700"
+          width="800"
           modal="true"
           resizable="false" 
           closeOnEscape="true"
           widgetVar="dialogBalanceHistory" 
-          header="#{messages['balance-history.dialog']}">
+          header="#{messages['balance-history.dialog.title']}">
 
-    <div class="ui-grid-row div-mg-b-15">
-        <div class="ui-grid-col-12">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
             <p:dataScroller id="balanceList"
                             var="balance"
                             mode="inline" 
                             chunkSize="20"
                             scrollHeight="250"
                             value="#{walletBean.walletBalances}">
+
                 <f:facet name="header">
                     <o:outputFormat escape="false" 
-                                    value="#{messages['balance-history.dialog.wallet-identification']} ">
+                                    value="#{messages['balance-history.dialog.wallet']} ">
                         <f:param value="#{walletBean.wallet.friendlyName}" />
                         <f:param value="R$ #{walletBean.wallet.balance}" />
                     </o:outputFormat>
@@ -51,57 +52,56 @@
                                      value="#{menu['more']}" />
                 </f:facet>
 
-                <div class="balance-detail-box" 
-                     style="#{balance.walletBalanceType.styleForType}">
-                    <div class="ui-grid-row div-mg-b-10">
-                        <div class="ui-grid-col-12">
-                            <o:outputFormat escape="false" 
-                                            value="#{messages['balance-history.in']}">
-                                <f:param value="#{messages[balance.walletBalanceType]}" />
-                                <f:param value="#{balance.inclusionFormatted}" />
-                            </o:outputFormat>
-                        </div>
+                <div class="row" style="#{balance.walletBalanceType.styleForType}">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <o:outputFormat escape="false" 
+                                        value="#{messages['balance-history.in']}">
+                            <f:param value="#{enums[balance.walletBalanceType]}" />
+                            <f:param value="#{balance.inclusionFormatted}" />
+                        </o:outputFormat>
                     </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-4">
-                            <p:outputLabel value="#{messages['balance-history.movemented-value']}"/>
-                            <h:outputText value="#{balance.movementedValue}">
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </div>
-                        <div class="ui-grid-col-4">
-                            <p:outputLabel value="#{messages['balance-history.old-balance']}"/>
-                            <h:outputText styleClass="balance-value"
-                                          value="#{balance.oldBalance}"
-                                          style="#{balance.oldBalance.signum() lt 0 ? 'color: red;' : 
-                                                   balance.oldBalance.signum() gt 0 ? 'color: green': ''}">
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </div>
-                        <div class="ui-grid-col-4">
-                            <p:outputLabel value="#{messages['balance-history.actual-balance']}"/>
-                            <h:outputText value="#{balance.actualBalance}"
-                                          style="#{balance.actualBalance.signum() lt 0 ? 'color: red;' : 
-                                                   balance.actualBalance.signum() gt 0 ? 'color: green': ''}">
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <p:outputLabel value="#{messages['balance-history.movemented-value']}: "/>
+                        <p:spacer width="5"/>
+                        <h:outputText value="#{balance.movementedValue}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
                     </div>
-                    <div class="ui-grid-row div-mg-t-10"
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <p:outputLabel value="#{messages['balance-history.old-balance']}: "/>
+                        <p:spacer width="5"/>
+                        <h:outputText styleClass="balance-value"
+                                      value="#{balance.oldBalance}"
+                                      style="#{balance.oldBalance.signum() lt 0 ? 'color: red;' : 
+                                               balance.oldBalance.signum() gt 0 ? 'color: green': ''}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <p:outputLabel value="#{messages['balance-history.actual-balance']}: "/>
+                        <p:spacer width="5"/>
+                        <h:outputText value="#{balance.actualBalance}"
+                                      style="#{balance.actualBalance.signum() lt 0 ? 'color: red;' : 
+                                               balance.actualBalance.signum() gt 0 ? 'color: green': ''}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12"
                          jsf:rendered="#{balance.reason ne null}">
-                        <div class="ui-grid-col-12">
-                            <p:outputLabel value="#{messages['balance-history.reason']}"/>
-                            #{balance.reason}
-                        </div>
+                        <p:outputLabel value="#{messages['balance-history.reason']}"/>
+                        #{balance.reason}
                     </div>
                 </div>
             </p:dataScroller>
         </div>
     </div>
-    <div class="ui-grid-row">
-        <div class="ui-grid-col-12 div-align-center">
+
+    <div class="row">
+        <div style="margin-top: 10px;" 
+             class="col-md-12 col-sm-12 col-xs-12 align-center">
             <p:commandButton value="#{menu['back']}"
-                             onclick="PF('dialogBalanceHistory').hide()"/>
+                             styleClass="btn btn-flat btn-primary"
+                             onclick="closeDialog('dialogBalanceHistory')"/>
         </div>
     </div>
 </p:dialog>

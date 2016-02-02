@@ -193,7 +193,8 @@ public class CostCenterBean extends AbstractBean {
             this.addError(true, ex.getMessage(), true, ex.getParameters());
         } catch (Exception ex) {
             if (this.containsException(ConstraintViolationException.class, ex)) {
-                this.addError(true, "error.cost-center.integrity-violation", true);
+                this.addError(true, "error.cost-center.integrity-violation", 
+                        this.costCenter.getName());
             } else {
                 this.addError(true, "error.undefined-error", ex.getMessage());
             }

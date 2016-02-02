@@ -7,6 +7,11 @@
     Created on : 26/10/2015
 */
 
+.ui-button.ui-button-text-only {
+    color: white !important;
+    text-shadow: none !important;
+}
+
 /* remove todos os efeitos arredondadinhos dos elementos */
 .ui-corner-all, .ui-state-default {
     border-radius: 0 !important;

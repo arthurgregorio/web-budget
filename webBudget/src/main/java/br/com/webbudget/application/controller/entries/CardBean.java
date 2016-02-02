@@ -192,7 +192,8 @@ public class CardBean extends AbstractBean {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             if (this.containsException(ConstraintViolationException.class, ex)) {
-                this.addError(true, "error.card.integrity-violation");
+                this.addError(true, "error.card.integrity-violation",
+                        this.card.getName());
             } else {
                 this.addError(true, "error.undefined-error", ex.getMessage());
             }

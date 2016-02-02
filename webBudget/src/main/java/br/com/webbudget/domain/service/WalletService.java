@@ -110,7 +110,7 @@ public class WalletService {
         // checa se a carteira nao tem saldo menor ou maior que zero
         // se houve, dispara o erro, comente carteiras zeradas sao deletaveis
         if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-            throw new InternalServiceError("wallet.validate.has-balance");
+            throw new InternalServiceError("error.wallet.has-balance");
         }
 
         final List<WalletBalance> balaces = this.listBalancesByWallet(wallet);

@@ -25,23 +25,23 @@ package br.com.webbudget.domain.entity.wallet;
  */
 public enum WalletBalanceType {
 
-    PAYMENT("e1410a","beans.wallet-balance.payment"),
-    REVENUE("66cdaa","beans.wallet-balance.revenue"), // 2aa668
-    ADJUSTMENT("d8ae60","beans.wallet-balance.adjustment"),
-    TRANSFERENCE("59484f","beans.wallet-balance.transference"),
-    BALANCE_RETURN("66cccc","beans.wallet-balance.balance-return"),
-    TRANSFER_ADJUSTMENT("ffa535","beans.wallet-balance.transfer-adjustment");
+    PAYMENT("e1410a","wallet-balance.payment"),
+    REVENUE("66cdaa","wallet-balance.revenue"), 
+    ADJUSTMENT("d8ae60","wallet-balance.adjustment"),
+    TRANSFERENCE("59484f","wallet-balance.transference"),
+    BALANCE_RETURN("66cccc","wallet-balance.balance-return"),
+    TRANSFER_ADJUSTMENT("ffa535","wallet-balance.transfer-adjustment");
 
     private final String color;
-    private final String i18nKey;
+    private final String description;
 
     /**
      *
-     * @param i18nKey
+     * @param description
      */
-    private WalletBalanceType(String color, String i18nKey) {
+    private WalletBalanceType(String color, String description) {
         this.color = color;
-        this.i18nKey = i18nKey;
+        this.description = description;
     }
 
     /**
@@ -50,13 +50,13 @@ public enum WalletBalanceType {
      */
     @Override
     public String toString() {
-        return this.i18nKey;
+        return this.description;
     }
     
     /**
      * @return a cor para este balanco
      */
     public String getStyleForType() {
-        return "border-left: 10px solid #" + this.color;
+        return "border-left: 15px solid #" + this.color;
     }
 }

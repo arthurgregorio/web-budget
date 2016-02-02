@@ -16,178 +16,179 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="wallets"/>
+
     <f:metadata>
         <f:viewAction action="#{walletBean.initializeForm(param.walletId)}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['wallet.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        <h:outputText rendered="#{walletBean.viewState eq 'ADDING'}"
+                      value="#{messages['wallet.page-description-including']}"/>
+        <o:outputFormat id="pageDescription" 
+                        rendered="#{walletBean.viewState eq 'EDITING'}" 
+                        value="#{messages['wallet.page-description-editing']}">
+            <f:param value="#{walletBean.wallet.name}"/>
+        </o:outputFormat>
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['entries']}" />
-        <p:menuitem url="listWallets.xhtml"
-                    value="#{breadcrumb['entries.wallet']}" />
-        <p:menuitem url="formWallet.xhtml"
-                    rendered="#{walletBean.viewState eq 'ADDING'}"
-                    value="#{breadcrumb['inclusion']}" />
-        <p:menuitem url="#"
-                    value="#{breadcrumb['edition']}" 
-                    rendered="#{walletBean.viewState eq 'EDITING'}"/>
+        <li><a href="#">#{breadcrumb['entries']}</a></li>
+        <li><a href="listWallets.xhtml">#{breadcrumb['entries.wallets']}</a></li>
+        <li jsf:rendered="#{walletBean.viewState eq 'ADDING'}" 
+            class="active"><a href="#">#{breadcrumb['including']}</a></li>
+        <li jsf:rendered="#{walletBean.viewState eq 'EDITING'}" 
+            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
         <h:form id="walletForm" prependId="false">
 
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">
-                    <p:messages id="messages" closable="true" />
-                </div> 
-            </div> 
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group">
-                            <p:selectBooleanCheckbox id="inBlocked" 
-                                                     value="#{walletBean.wallet.blocked}"
-                                                     itemLabel="#{messages['wallet.form.blocked']}"/>
-                        </div>                        
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p:messages id="messages" closable="true" globalOnly="true"/>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <p:selectBooleanCheckbox id="inBlocked" 
+                                                 value="#{walletBean.wallet.blocked}"
+                                                 itemLabel="#{messages['wallet.form.blocked']}"/>
+                    </h3>
+                </div>
+
+                <div class="box-body">
+                    <div class="form-group col-md-6">
+                        <p:outputLabel for="inWalletType" 
+                                       value="#{messages['wallet.form.wallet-type']}: "/>
+                        <p:selectOneMenu id="inWalletType" 
+                                         value="#{walletBean.wallet.walletType}"
+                                         converter="omnifaces.GenericEnumConverter"
+                                         disabled="#{walletBean.viewState eq 'EDITING'}">
+                            <p:ajax event="change" update="bankAccountBox" />
+                            <f:selectItem itemValue="#{null}"
+                                          noSelectionOption="true"
+                                          itemLabel="#{messages['wallet.form.select-one']}" />
+                            <f:selectItems var="walletType"
+                                           itemValue="#{walletType}"
+                                           itemLabel="#{enums[walletType]}"
+                                           value="#{walletBean.availableWalletTypes}"/> 
+                        </p:selectOneMenu>
                     </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inName" 
-                                           value="#{messages['wallet.form.name']}: "/>
-                            <p:inputText id="inName" 
-                                         maxlength="45"
-                                         value="#{walletBean.wallet.name}" 
-                                         disabled="#{walletBean.viewState eq 'EDITING'}"/>
-                        </div>                        
+                    <div class="form-group col-md-6">
+                        <p:outputLabel for="inName" 
+                                       value="#{messages['wallet.form.name']}: "/>
+                        <p:inputText id="inName" 
+                                     maxlength="45"
+                                     styleClass="form-control"
+                                     value="#{walletBean.wallet.name}" 
+                                     disabled="#{walletBean.viewState eq 'EDITING'}"/>
                     </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
-                            <p:outputLabel for="inWalletType" 
-                                           value="#{messages['wallet.form.wallet-type']}: "/>
-                            <p:selectOneMenu id="inWalletType" 
-                                             value="#{walletBean.wallet.walletType}"
-                                             converter="omnifaces.GenericEnumConverter"
-                                             disabled="#{walletBean.viewState eq 'EDITING'}">
-                                <p:ajax event="change" 
-                                        listener="#{walletBean.loadBankData}" />
-                                <f:selectItem itemValue="#{null}"
-                                              noSelectionOption="true"
-                                              itemLabel="#{messages['wallet.form.select-one']}" />
-                                <f:selectItems var="walletType"
-                                               itemValue="#{walletType}"
-                                               itemLabel="#{messages[walletType]}"
-                                               value="#{walletBean.availableWalletTypes}"/> 
-                            </p:selectOneMenu>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
+                    
+                    <div jsf:id="bankAccountBox">
+                        <div class="form-group col-md-4">
                             <p:outputLabel for="inBank" 
                                            value="#{messages['wallet.form.bank']}: "/>
                             <p:inputText id="inBank" 
                                          maxlength="45"
+                                         styleClass="form-control"
                                          value="#{walletBean.wallet.bank}" 
                                          disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}"/>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-s">
+                        </div>
+                        <div class="form-group col-xs-2">
                             <p:outputLabel for="inAgency" 
                                            value="#{messages['wallet.form.agency']}: "/>
                             <p:inputText id="inAgency"
                                          maxlength="20"
+                                         styleClass="form-control"
                                          value="#{walletBean.wallet.agency}"
                                          disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
                                 <pe:keyFilter regEx="/[\d\-]/"/>  
                             </p:inputText>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-s">
+                        </div>
+                        <div class="form-group col-xs-2">
                             <p:outputLabel for="inAccount" 
                                            value="#{messages['wallet.form.account']}: "/>
                             <p:inputText id="inAccount"
                                          maxlength="45"
+                                         styleClass="form-control"
                                          value="#{walletBean.wallet.account}"
                                          disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
                                 <pe:keyFilter regEx="/[\d\-.]/"/>  
                             </p:inputText>
                         </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-s">
+                        <div class="form-group col-xs-2">
                             <p:outputLabel for="inDigit" 
                                            value="#{messages['wallet.form.digit']}: "/>
                             <p:inputText id="inDigit"
                                          maxlength="4"
+                                         styleClass="form-control"
                                          value="#{walletBean.wallet.digit}"
                                          disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
                                 <pe:keyFilter regEx="/[a-z0-9_]/i"/>
                             </p:inputText>
                         </div>
                     </div>
-                    <h:panelGroup style="block" 
-                                  styleClass="ui-grid-row"
-                                  rendered="#{walletBean.wallet.saved eq false}">
-                        <div class="ui-grid-col-12 form-group form-group-s">
-                            <p:outputLabel for="inBalance" 
-                                           value="#{messages['wallet.form.balance']}: "/>
-                            <pe:inputNumber id="inBalance" 
-                                            symbol="R$ "
-                                            decimalPlaces="2" 
-                                            decimalSeparator="," 
-                                            thousandSeparator="." 
-                                            value="#{walletBean.wallet.balance}"
-                                            disabled="#{walletBean.wallet.saved}">
-                                <pe:keyFilter regEx="/[0-9_,]/i"/>
-                                <f:converter converterId="javax.faces.BigDecimal" />
-                            </pe:inputNumber>
-                        </div>                        
-                    </h:panelGroup>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inDescription" 
-                                           value="#{messages['wallet.form.description']}: " />
-                            <p:inputTextarea id="inDescription" 
-                                             maxlength="255"
-                                             autoResize="true"
-                                             value="#{walletBean.wallet.description}" />
-                        </div>                        
+                    
+                    <div class="form-group col-xs-2">
+                        <p:outputLabel for="inBalance" 
+                                       value="#{messages['wallet.form.balance']}: "/>
+                        <pe:inputNumber id="inBalance" 
+                                        symbol="R$ "
+                                        decimalPlaces="2" 
+                                        decimalSeparator="," 
+                                        thousandSeparator="." 
+                                        value="#{walletBean.wallet.balance}"
+                                        disabled="#{walletBean.wallet.saved}">
+                            <pe:keyFilter regEx="/[0-9_,]/i"/>
+                            <f:converter converterId="javax.faces.BigDecimal" />
+                        </pe:inputNumber>
                     </div>
-                </div> 
-                <div class="ui-grid-col-6">
-
-                </div>                        
-            </div>
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6">
-
+                    <div class="form-group col-md-12">
+                        <p:outputLabel for="inDescription" 
+                                       value="#{messages['wallet.form.description']}: " />
+                        <p:inputTextarea id="inDescription" 
+                                         maxlength="255"
+                                         autoResize="true"
+                                         styleClass="form-control"
+                                         value="#{walletBean.wallet.description}" />
+                    </div>
                 </div>
-                <div class="ui-grid-col-6 form-controls-box">
-                    <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
-                                     action="#{walletBean.doCancel()}"/>
-                    <p:spacer width="10"/>
+
+                <div class="box-footer align-right">
                     <p:commandButton update="walletForm"
                                      process="walletForm"
-                                     styleClass="ui-button-success"
-                                     action="#{walletBean.doSave()}"
                                      value="#{menu['save']}"
+                                     action="#{walletBean.doSave()}"
+                                     styleClass="btn btn-flat btn-success"
                                      rendered="#{walletBean.viewState eq 'ADDING'}"/>
-                    <p:commandButton update="walletForm"
-                                     process="walletForm"
-                                     styleClass="ui-button-success"
+                    <p:commandButton process="walletForm"
                                      value="#{menu['update']}"
                                      action="#{walletBean.doUpdate()}"
+                                     update="walletForm pageDescription"
+                                     styleClass="btn btn-flat btn-success"
                                      rendered="#{walletBean.viewState eq 'EDITING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{walletBean.doCancel()}"
+                                     styleClass="btn btn-flat btn-primary"/>
                 </div>
             </div>
         </h:form>
