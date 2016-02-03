@@ -24,7 +24,7 @@ import br.com.webbudget.domain.entity.contact.ContactType;
 import br.com.webbudget.domain.entity.contact.NumberType;
 import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.misc.AddressFinder;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.AddressFinder.Address;
 import br.com.webbudget.domain.misc.table.AbstractLazyModel;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
@@ -230,21 +230,20 @@ public class ContactBean extends AbstractBean {
      */
     public void doAddressFind() {
 
-//        try {
-//            final AddressFinder.Address address = this.addressFinderService
-//                    .findAddressByZipcode(this.contact.getZipcode());
-//
-//            this.contact.setStreet(address.getLogradouro());
-//            this.contact.setComplement(address.getComplemento());
-//            this.contact.setProvince(address.getFullUfName());
-//            this.contact.setCity(address.getLocalidade());
-//            this.contact.setNeighborhood(address.getBairro());
-//
-//            this.update("addressPanel");
-//        } catch (Exception ex) {
-//            this.logger.error("ContactBean#completeAddress found erros", ex);
-//            this.error("contact.action.find-address-error", true);
-//        }
+        try {
+            final Address address = this.addressFinderService
+                    .findAddressByZipcode(this.contact.getZipcode());
+
+            this.contact.setStreet(address.getLogradouro());
+            this.contact.setComplement(address.getComplemento());
+            this.contact.setProvince(address.getFullUfName());
+            this.contact.setCity(address.getLocalidade());
+            this.contact.setNeighborhood(address.getBairro());
+
+            this.updateComponent("addressBox");
+        } catch (Exception ex) {
+            this.addError(true, "error.contact.find-address-error");
+        }
     }
     
     /**

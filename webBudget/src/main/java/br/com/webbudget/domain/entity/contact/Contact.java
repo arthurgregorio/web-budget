@@ -72,6 +72,10 @@ public class Contact extends PersistentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "birth_date")
     private Date birthDate;
+    @Setter
+    @Getter
+    @Column(name = "other_informations", length = 255)
+    private String otherInformations;
 
     @Setter
     @Getter

@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="box-body row">
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-sm-6 col-xs-6 no-padding">
                         <div class="form-group col-md-12">
                             <p:outputLabel for="inName" 
                                            value="#{messages['contact.form.name']}: "/>
@@ -87,7 +87,6 @@
                                            value="#{messages['contact.form.birth-date']}: "/>
                             <p:calendar id="inBirthDate" 
                                         mask="true"
-                                        showOn="button"
                                         pattern="dd/MM/yyyy"
                                         value="#{contactBean.contact.birthDate}" />
                         </div>
@@ -122,9 +121,18 @@
                                          styleClass="form-control"
                                          value="#{contactBean.contact.email}" />
                         </div>
+                        <div class="col-md-12">
+                            <p:outputLabel for="inOtherInformations" 
+                                           value="#{messages['contact.form.other-informations']}: "/>
+                            <p:inputTextarea id="inOtherInformations" 
+                                             maxlength="255"
+                                             autoResize="true"
+                                             styleClass="form-control"
+                                             value="#{contactBean.contact.otherInformations}" />
+                        </div>
                     </div>
-                    <div jsf:id="addressPanel" 
-                         class="col-md-6 col-sm-6 col-xs-6">
+                    <div jsf:id="addressBox" 
+                         class="col-md-6 col-sm-6 col-xs-6 no-padding">
                         <div class="form-group col-md-3">
                             <p:outputLabel for="inZipcode" 
                                            value="#{messages['contact.form.zipcode']}: "/>
@@ -134,8 +142,8 @@
                                              styleClass="form-control"
                                              value="#{contactBean.contact.zipcode}" />
                                 <div class="input-group-btn">
-                                    <p:commandButton process="@this inZipcode"
-                                                     icon="fa fa-search" 
+                                    <p:commandButton icon="fa fa-search"
+                                                     process="@this inZipcode"
                                                      styleClass="btn btn-flat btn-info"
                                                      onstart="PF('searchAddressBlock').block()"
                                                      oncomplete="PF('searchAddressBlock').unblock()"
@@ -193,40 +201,40 @@
                                          styleClass="form-control"
                                          value="#{contactBean.contact.province}" />
                         </div>
-                    </div>
-                    <div jsf:id="telephonesPanel"
-                         class="col-md-12 col-sm-12 col-xs-12">
-                        <p:commandButton immediate="true"
-                                         value="#{menu['new']}"
-                                         styleClass="btn btn-flat btn-primary"
-                                         action="#{contactBean.showTelephoneDialog()}"/>
-
-                        <p:dataTable id="telephonesList" 
-                                     rows="5"
-                                     var="telephone"
-                                     paginator="true"
-                                     paginatorPosition="bottom"
-                                     paginatorAlwaysVisible="false"
-                                     value="#{contactBean.contact.telephones}"
-                                     emptyMessage="#{messages['list.empty']}">
-
-                            <p:column styleClass="div-align-center"
-                                      headerText="#{messages['telephone.number']}">
-                                #{telephone.number}
-                            </p:column>
-                            <p:column styleClass="div-align-center"
-                                      headerText="#{messages['telephone.type']}">
-                                #{messages[telephone.numberType]}
-                            </p:column>
-                            <p:column width="10%" 
-                                      styleClass="div-align-center"
-                                      headerText="#{menu['actions']}">
+                        <div jsf:id="telephonesPanel"
+                             class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="align-right" style="margin-bottom: 10px">
                                 <p:commandButton immediate="true"
-                                                 icon="fa fa-trash-o"
-                                                 title="#{menu['delete']}"
-                                                 actionListener="#{contactBean.deleteTelephone(telephone)}" />
-                            </p:column>
-                        </p:dataTable>
+                                                 value="#{menu['add']}"
+                                                 styleClass="btn btn-flat btn-primary"
+                                                 action="#{contactBean.showTelephoneDialog()}"/>
+                            </div>
+                            <p:dataTable id="telephonesList" 
+                                         rows="5"
+                                         var="telephone"
+                                         paginator="true"
+                                         paginatorPosition="bottom"
+                                         paginatorAlwaysVisible="false"
+                                         value="#{contactBean.contact.telephones}"
+                                         emptyMessage="#{messages['list.empty']}">
+                                <p:column styleClass="align-center"
+                                          headerText="#{messages['telephone.number']}">
+                                    #{telephone.number}
+                                </p:column>
+                                <p:column styleClass="align-center"
+                                          headerText="#{messages['telephone.type']}">
+                                    #{messages[telephone.numberType]}
+                                </p:column>
+                                <p:column width="10%" 
+                                          styleClass="align-center"
+                                          headerText="#{menu['actions']}">
+                                    <p:commandButton immediate="true"
+                                                     icon="fa fa-trash-o"
+                                                     title="#{menu['delete']}"
+                                                     actionListener="#{contactBean.deleteTelephone(telephone)}" />
+                                </p:column>
+                            </p:dataTable>
+                        </div>
                     </div>
                 </div>
 
@@ -251,16 +259,16 @@
                 </div>
             </div>
 
-            <pe:blockUI target="addressPanel" 
+            <pe:blockUI target="addressBox" 
                         widgetVar="searchAddressBlock">
-                <div class="div-align-center">
+                <div class="align-center">
                     <p:graphicImage width="32" 
                                     height="32"
-                                    library="images" 
-                                    name="ui-loading.gif" />
+                                    library="app" 
+                                    name="img/loading.gif" />
                 </div>
                 <div style="margin-top: 5px">
-                    #{messages['contact.looking-address']}
+                    #{menu['searching']}
                 </div>        
             </pe:blockUI> 
         </h:form>
