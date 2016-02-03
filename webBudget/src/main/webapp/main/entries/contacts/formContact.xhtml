@@ -73,51 +73,160 @@
                 </div>
 
                 <div class="box-body row">
-                    <div class="form-group col-md-3">
-                        <p:outputLabel for="inContactType" 
-                                       value="#{messages['contact.form.contact-type']}: "/>
-                        <p:selectOneMenu id="inContactType" 
-                                         value="#{contactBean.contact.contactType}"
-                                         converter="omnifaces.GenericEnumConverter">
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{messages['contact.form.select-one']}" />
-                            <f:selectItems var="contactType"
-                                           itemValue="#{contactType}"
-                                           itemLabel="#{enums[contactType]}"
-                                           value="#{contactBean.availableContactTypes}"/> 
-                        </p:selectOneMenu>
-                    </div>                        
-                    <div class="form-group col-md-6">
-                        <p:outputLabel for="inName" 
-                                       value="#{messages['contact.form.name']}: "/>
-                        <p:inputText id="inName" 
-                                     maxlength="90"
-                                     styleClass="form-control"
-                                     value="#{contactBean.contact.name}" />
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group col-md-12">
+                            <p:outputLabel for="inName" 
+                                           value="#{messages['contact.form.name']}: "/>
+                            <p:inputText id="inName" 
+                                         maxlength="90"
+                                         styleClass="form-control"
+                                         value="#{contactBean.contact.name}" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <p:outputLabel for="inBirthDate" 
+                                           value="#{messages['contact.form.birth-date']}: "/>
+                            <p:calendar id="inBirthDate" 
+                                        mask="true"
+                                        showOn="button"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{contactBean.contact.birthDate}" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <p:outputLabel for="inContactType" 
+                                           value="#{messages['contact.form.contact-type']}: "/>
+                            <p:selectOneMenu id="inContactType" 
+                                             value="#{contactBean.contact.contactType}"
+                                             converter="omnifaces.GenericEnumConverter">
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{messages['contact.form.select-one']}" />
+                                <f:selectItems var="contactType"
+                                               itemValue="#{contactType}"
+                                               itemLabel="#{enums[contactType]}"
+                                               value="#{contactBean.availableContactTypes}"/> 
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <p:outputLabel for="inDocument" 
+                                           value="#{messages['contact.form.document']}: "/>
+                            <p:inputText id="inDocument" 
+                                         maxlength="45"
+                                         styleClass="form-control"
+                                         value="#{contactBean.contact.document}" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <p:outputLabel for="inEmail" 
+                                           value="#{messages['contact.form.email']}: "/>
+                            <p:inputText id="inEmail" 
+                                         maxlength="90"
+                                         styleClass="form-control"
+                                         value="#{contactBean.contact.email}" />
+                        </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <p:outputLabel for="inBirthDate" 
-                                       value="#{messages['contact.form.birth-date']}: "/>
-                        <p:calendar id="inBirthDate" 
-                                    mask="true"
-                                    showOn="button"
-                                    pattern="dd/MM/yyyy"
-                                    value="#{contactBean.contact.birthDate}" />
+                    <div jsf:id="addressPanel" 
+                         class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group col-md-3">
+                            <p:outputLabel for="inZipcode" 
+                                           value="#{messages['contact.form.zipcode']}: "/>
+                            <div class="input-group">
+                                <p:inputMask id="inZipcode" 
+                                             mask="99999-999"
+                                             styleClass="form-control"
+                                             value="#{contactBean.contact.zipcode}" />
+                                <div class="input-group-btn">
+                                    <p:commandButton process="@this inZipcode"
+                                                     icon="fa fa-search" 
+                                                     styleClass="btn btn-flat btn-info"
+                                                     onstart="PF('searchAddressBlock').block()"
+                                                     oncomplete="PF('searchAddressBlock').unblock()"
+                                                     actionListener="#{contactBean.doAddressFind()}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-9">
+                            <p:outputLabel for="inStreet" 
+                                           value="#{messages['contact.form.street']}: "/>
+                            <p:inputText id="inStreet" 
+                                         maxlength="120"
+                                         styleClass="form-control"
+                                         value="#{contactBean.contact.street}" />
+                        </div>                        
+                        <div class="form-group col-md-2">
+                            <p:outputLabel for="inNumber" 
+                                           value="#{messages['contact.form.number']}: "/>
+                            <p:inputText id="inNumber" 
+                                         maxlength="6"
+                                         styleClass="form-control"
+                                         value="#{contactBean.contact.number}">
+                                <pe:keyFilter mask="num"/>
+                            </p:inputText>
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            <p:outputLabel for="inComplement" 
+                                           value="#{messages['contact.form.complement']}: "/>
+                            <p:inputText id="inComplement" 
+                                         maxlength="120"
+                                         styleClass="form-control"
+                                         value="#{contactBean.contact.complement}" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <p:outputLabel for="inNeighborhood" 
+                                           value="#{messages['contact.form.neighborhood']}: "/>
+                            <p:inputText id="inNeighborhood" 
+                                         maxlength="45"
+                                         styleClass="form-control"
+                                         value="#{contactBean.contact.neighborhood}" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <p:outputLabel for="inCity" 
+                                           value="#{messages['contact.form.city']}: "/>
+                            <p:inputText id="inCity" 
+                                         maxlength="120"
+                                         styleClass="form-control"
+                                         value="#{contactBean.contact.city}" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <p:outputLabel for="inProvince" 
+                                           value="#{messages['contact.form.province']}: "/>
+                            <p:inputText id="inProvince" 
+                                         maxlength="45"
+                                         styleClass="form-control"
+                                         value="#{contactBean.contact.province}" />
+                        </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <p:outputLabel for="inDocument" 
-                                       value="#{messages['contact.form.document']}: "/>
-                        <p:inputText id="inDocument" 
-                                     maxlength="45"
-                                     value="#{contactBean.contact.document}" />
-                    </div>
-                    <div class="form-group col-md-6">
-                        <p:outputLabel for="inEmail" 
-                                       value="#{messages['contact.form.email']}: "/>
-                        <p:inputText id="inEmail" 
-                                     maxlength="90"
-                                     value="#{contactBean.contact.email}" />
+                    <div jsf:id="telephonesPanel"
+                         class="col-md-12 col-sm-12 col-xs-12">
+                        <p:commandButton immediate="true"
+                                         value="#{menu['new']}"
+                                         styleClass="btn btn-flat btn-primary"
+                                         action="#{contactBean.showTelephoneDialog()}"/>
+
+                        <p:dataTable id="telephonesList" 
+                                     rows="5"
+                                     var="telephone"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     paginatorAlwaysVisible="false"
+                                     value="#{contactBean.contact.telephones}"
+                                     emptyMessage="#{messages['list.empty']}">
+
+                            <p:column styleClass="div-align-center"
+                                      headerText="#{messages['telephone.number']}">
+                                #{telephone.number}
+                            </p:column>
+                            <p:column styleClass="div-align-center"
+                                      headerText="#{messages['telephone.type']}">
+                                #{messages[telephone.numberType]}
+                            </p:column>
+                            <p:column width="10%" 
+                                      styleClass="div-align-center"
+                                      headerText="#{menu['actions']}">
+                                <p:commandButton immediate="true"
+                                                 icon="fa fa-trash-o"
+                                                 title="#{menu['delete']}"
+                                                 actionListener="#{contactBean.deleteTelephone(telephone)}" />
+                            </p:column>
+                        </p:dataTable>
                     </div>
                 </div>
 
@@ -141,129 +250,8 @@
                                      styleClass="btn btn-flat btn-primary"/>
                 </div>
             </div>
-            
-            <h:panelGroup id="telephonesPanel" 
-                          layout="block"
-                          styleClass="ui-grid-row"> 
-                <div class="ui-grid-col-12">
-                    <div class="ui-grid-row div-pd-tb-10">
-                        <div class="ui-grid-col-11">
-                        <p:dataTable id="telephonesList" 
-                                     rows="5"
-                                     var="telephone"
-                                     paginator="true"
-                                     paginatorPosition="bottom"
-                                     paginatorAlwaysVisible="false"
-                                     value="#{contactBean.contact.telephones}"
-                                     emptyMessage="#{messages['telephone.empty']}">
 
-                            <p:column styleClass="div-align-center"
-                                      headerText="#{messages['telephone.number']}">
-                                #{telephone.number}
-                            </p:column>
-                            <p:column styleClass="div-align-center"
-                                      headerText="#{messages['telephone.type']}">
-                                #{messages[telephone.numberType]}
-                            </p:column>
-                            <p:column width="10%" 
-                                      styleClass="div-align-center"
-                                      headerText="#{menu['actions']}">
-                                <p:commandButton immediate="true"
-                                                 icon="ui-icon-trash"
-                                                 title="#{menu['delete']}"
-                                                 actionListener="#{contactBean.deleteTelephone(telephone)}" />
-                            </p:column>
-                        </p:dataTable>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row div-pd-tb-10">
-                        <div class="ui-grid-col-11 div-align-right">
-                            <p:commandButton immediate="true"
-                                             value="#{menu['add']}"
-                                             styleClass="ui-button-info"
-                                             action="#{contactBean.showTelephoneDialog()}"/>
-                        </div>
-                    </div>
-                </div>
-            </h:panelGroup>
-            
-            <h:panelGroup id="addressPanel" 
-                          layout="block"
-                          styleClass="ui-grid-col-6"> 
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12 form-group form-group-s">
-                        <p:outputLabel for="inZipcode" 
-                                       value="#{messages['contact.form.zipcode']}: "/>
-                        <div class="input-and-button-box">
-                            <p:inputMask id="inZipcode" 
-                                         mask="99999-999"
-                                         styleClass="div-align-center"
-                                         value="#{contactBean.contact.zipcode}" />
-                            <p:commandButton process="@this inZipcode"
-                                             icon="fa fa-search" 
-                                             onstart="PF('searchAddressBlock').block()"
-                                             oncomplete="PF('searchAddressBlock').unblock()"
-                                             actionListener="#{contactBean.doAddressFind()}"/>
-                        </div>
-                    </div>                        
-                </div>
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-9 form-group form-group-xl">
-                        <p:outputLabel for="inStreet" 
-                                       value="#{messages['contact.form.street']}: "/>
-                        <p:inputText id="inStreet" 
-                                     maxlength="120"
-                                     value="#{contactBean.contact.street}" />
-                    </div>                        
-                    <div class="ui-grid-col-3 form-group form-group-l">
-                        <p:outputLabel for="inNumber" 
-                                       value="#{messages['contact.form.number']}: "/>
-                        <p:inputText id="inNumber" 
-                                     maxlength="6"
-                                     value="#{contactBean.contact.number}">
-                            <pe:keyFilter mask="num"/>
-                        </p:inputText>
-                    </div>                        
-                </div>
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12 form-group form-group-xl">
-                        <p:outputLabel for="inComplement" 
-                                       value="#{messages['contact.form.complement']}: "/>
-                        <p:inputText id="inComplement" 
-                                     maxlength="120"
-                                     value="#{contactBean.contact.complement}" />
-                    </div>                        
-                </div>
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12 form-group form-group-m">
-                        <p:outputLabel for="inNeighborhood" 
-                                       value="#{messages['contact.form.neighborhood']}: "/>
-                        <p:inputText id="inNeighborhood" 
-                                     maxlength="45"
-                                     value="#{contactBean.contact.neighborhood}" />
-                    </div>                        
-                </div>
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12 form-group form-group-m">
-                        <p:outputLabel for="inCity" 
-                                       value="#{messages['contact.form.city']}: "/>
-                        <p:inputText id="inCity" 
-                                     maxlength="120"
-                                     value="#{contactBean.contact.city}" />
-                    </div>                        
-                </div>
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12 form-group form-group-m">
-                        <p:outputLabel for="inProvince" 
-                                       value="#{messages['contact.form.province']}: "/>
-                        <p:inputText id="inProvince" 
-                                     maxlength="45"
-                                     value="#{contactBean.contact.province}" />
-                    </div>                        
-                </div>
-            </h:panelGroup>
-
-<pe:blockUI target="addressPanel" 
+            <pe:blockUI target="addressPanel" 
                         widgetVar="searchAddressBlock">
                 <div class="div-align-center">
                     <p:graphicImage width="32" 
