@@ -18,20 +18,32 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:of="http://omnifaces.org/functions"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions"
-                template="/template/mainTemplate.xhtml">
+                template="/template/mainTemplate.xhtml"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+    <ui:define name="pageTitle">
+        #{messages['dashboard.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['dashboard.page-description']}
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li class="active"><a href="#">#{breadcrumb['dashboard']}</a></li>
+    </ui:define>
+    
     <ui:define name="content">
         <pe:blockUI target="loadingFragment" 
                     widgetVar="loadingBlock">
-            <div class="div-align-center">
+            <div class="align-center">
                 <p:graphicImage width="32" 
                                 height="32"
-                                library="images" 
-                                name="loading.gif" />
+                                library="app" 
+                                name="img/loading.gif" />
             </div>
             <div style="margin-top: 5px">
                 #{menu['loading']}
@@ -39,127 +51,126 @@
         </pe:blockUI> 
 
         <p:fragment id="loadingFragment">
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-7 flat-box graph-box">
-                    <p:tabView cache="true"
-                               dynamic="true" 
-                               styleClass="dashboard-graphs">
-                        <p:tab title="#{messages['dashboard.graphs.expenses']}"
-                               rendered="#{empty dashboardBean.expensesModel.data}"> 
-                            <div class="empty-graph-text">
-                                #{messages['dashboard.graphs.no-data-expenses']}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">#{messages['dashboard.movimentation-summary']}</h3>
+                            <div class="box-tools pull-right">
+                                
                             </div>
-                        </p:tab>
-                        <p:tab title="#{messages['dashboard.graphs.revenue']}"
-                               rendered="#{empty dashboardBean.revenueModel.data}"> 
-                            <div class="empty-graph-text">
-                                #{messages['dashboard.graphs.no-data-revenue']}
+                        </div>
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p class="text-center">
+                                        <strong>
+                                            <o:outputFormat value="#{messages['dashboard.summary-of']}">
+                                                <f:param value="#{dashboardBean.openPeriods}"/>
+                                            </o:outputFormat>
+                                        </strong>
+                                    </p>
+
+                                    <div class="chart">
+                                        <!-- Sales Chart Canvas -->
+                                        <canvas id="salesChart" style="height: 180px;"></canvas>
+                                    </div>
+                                    <!-- /.chart-responsive -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-md-4">
+                                    <p class="text-center">
+                                        <strong>Goal Completion</strong>
+                                    </p>
+
+                                    <div class="progress-group">
+                                        <span class="progress-text">Add Products to Cart</span>
+                                        <span class="progress-number"><b>160</b>/200</span>
+
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">Complete Purchase</span>
+                                        <span class="progress-number"><b>310</b>/400</span>
+
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">Visit Premium Page</span>
+                                        <span class="progress-number"><b>480</b>/800</span>
+
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">Send Inquiries</span>
+                                        <span class="progress-number"><b>250</b>/500</span>
+
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                </div>
+                                <!-- /.col -->
                             </div>
-                        </p:tab>
-                        <p:tab title="#{messages['dashboard.graphs.expenses']}"
-                               rendered="#{not empty dashboardBean.expensesModel.data}"> 
-                            <p:chart type="pie" 
-                                     model="#{dashboardBean.expensesModel}"/>
-                        </p:tab>
-                        <p:tab title="#{messages['dashboard.graphs.revenue']}"
-                               rendered="#{not empty dashboardBean.revenueModel.data}"> 
-                            <p:chart type="pie" 
-                                     model="#{dashboardBean.revenueModel}"/>
-                        </p:tab>
-                    </p:tabView>
-                </div>
-                <div class="ui-grid-col-5 flat-box">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-header">
-                            #{messages['dashboard.private-messages']}
+                            <!-- /.row -->
                         </div>
-                    </div> 
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
-                            <h:form prependId="false">
-                                <p:dataTable id="messagesList" 
-                                             rows="10"
-                                             paginator="true" 
-                                             var="userMessage"
-                                             selectionMode="single"
-                                             rowKey="#{userMessage.id}"
-                                             paginatorPosition="bottom" 
-                                             paginatorAlwaysVisible="false"
-                                             value="#{dashboardBean.userPrivateMessages}"
-                                             selection="#{dashboardBean.selectedPrivateMessage}"
-                                             emptyMessage="#{messages['dashboard.messages.no-messages']}"
-                                             rowStyleClass="#{userMessage.wasRead eq false ? 'unread-message' : ''}">
-
-                                    <p:ajax event="rowSelect" 
-                                            listener="#{dashboardBean.displayMessage()}" />
-
-                                    <p:column headerText="#{messages['dashboard.messages.title']}">
-                                        #{userMessage.privateMessage.title}
-                                    </p:column>
-                                    <p:column width="40%" 
-                                              style="text-align: center" 
-                                              headerText="#{messages['dashboard.messages.received']}">
-                                        <h:outputText value="#{userMessage.privateMessage.inclusion}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                        </h:outputText>
-                                    </p:column>
-                                </p:dataTable>
-                            </h:form>
+                        <!-- ./box-body -->
+                        <div class="box-footer">
+                            <div class="row">
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block border-right">
+                                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
+                                        <h5 class="description-header">$35,210.43</h5>
+                                        <span class="description-text">TOTAL REVENUE</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block border-right">
+                                        <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
+                                        <h5 class="description-header">$10,390.90</h5>
+                                        <span class="description-text">TOTAL COST</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block border-right">
+                                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
+                                        <h5 class="description-header">$24,813.53</h5>
+                                        <span class="description-text">TOTAL PROFIT</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block">
+                                        <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
+                                        <h5 class="description-header">1200</h5>
+                                        <span class="description-text">GOAL COMPLETIONS</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                            </div>
+                            <!-- /.row -->
                         </div>
-                    </div> 
-                </div>
-            </div>
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-12">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-header">
-                            #{messages['dashboard.movements.to-pay']}
-                        </div>
-                    </div> 
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
-                            <p:dataTable id="movementsList" 
-                                         rows="6"
-                                         var="movement"
-                                         paginator="true" 
-                                         paginatorPosition="bottom"
-                                         value="#{dashboardBean.movements}"
-                                         paginatorAlwaysVisible="false"
-                                         emptyMessage="#{messages['dashboard.movements.list.no-movements']}"
-                                         rowStyleClass="#{movement.overdue eq true ? 'overdue-movement' : ''}">
-
-                                <p:column width="10%" 
-                                          style="text-align: center" 
-                                          headerText="#{messages['dashboard.movements.list.code']}">
-                                    #{movement.code}
-                                </p:column>
-                                <p:column headerText="#{messages['dashboard.movements.list.description']}">
-                                    #{of:abbreviate(movement.description,50)}
-                                </p:column>
-                                <p:column width="15%"
-                                          style="text-align: center" 
-                                          headerText="#{messages['dashboard.movements.list.value']}">
-                                    <h:outputText value="R$ #{movement.value}" />
-                                </p:column>
-                                <p:column width="15%"
-                                          style="text-align: center" 
-                                          headerText="#{messages['dashboard.movements.list.due-date']}">
-                                    <h:outputText value="#{movement.dueDate}">
-                                        <f:converter converterId="localDateConverter" />
-                                    </h:outputText> 
-                                </p:column>
-                                <p:column width="10%" 
-                                          style="text-align: center"
-                                          headerText="#{menu['actions']}">
-                                    <p:commandButton icon="ui-icon-check"
-                                                     title="#{menu['pay']}"
-                                                     rendered="#{movement.payable eq true}"
-                                                     action="#{dashboardBean.changeToPay(movement.id)}" />
-                                </p:column>
-                            </p:dataTable>
-                        </div>
+                        <!-- /.box-footer -->
                     </div>
+                    <!-- /.box -->
                 </div>
+                <!-- /.col -->
             </div>
         </p:fragment>
 
@@ -167,13 +178,9 @@
             <p:remoteCommand autoRun="true"
                              name="doAfterPageLoad"
                              update=":loadingFragment"
-                             onstart="PF('loadingBlock').block()"
-                             oncomplete="PF('loadingBlock').unblock()"
+                             onstart="block('loadingBlock')"
+                             oncomplete="unblock('loadingBlock')"
                              actionListener="#{dashboardBean.initialize()}"/>
         </h:form>
-    </ui:define>
-
-    <ui:define name="popups">
-        <ui:include src="dialogDisplayPrivateMessage.xhtml"/>
     </ui:define>
 </ui:composition>
