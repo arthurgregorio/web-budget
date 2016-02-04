@@ -36,7 +36,6 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import org.hibernate.exception.ConstraintViolationException;
 
 /**
  * Service responsavel por todas as operacoes que envolvem cartoes no sistema

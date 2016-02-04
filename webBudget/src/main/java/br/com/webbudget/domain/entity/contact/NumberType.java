@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur
+  * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,24 +20,24 @@ package br.com.webbudget.domain.entity.contact;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0
- * @since 1.0, 19/04/2015
+ * @version 1.1.0
+ * @since 1.0.0, 19/04/2015
  */
 public enum NumberType {
 
-    OTHER("beans.number-type.other"),
-    FIXED("beans.number-type.fixed"),
-    MOBILE("beans.number-type.mobile"),
-    COMMERCIAL("beans.number-type.commercial");
+    OTHER("number-type.other"),
+    FIXED("number-type.fixed"),
+    MOBILE("number-type.mobile"),
+    COMMERCIAL("number-type.commercial");
 
-    private final String i18nKey;
+    private final String description;
 
     /**
      *
-     * @param i18nKey
+     * @param description
      */
-    private NumberType(String i18nKey) {
-        this.i18nKey = i18nKey;
+    private NumberType(String description) {
+        this.description = description;
     }
 
     /**
@@ -46,6 +46,6 @@ public enum NumberType {
      */
     @Override
     public String toString() {
-        return this.i18nKey;
+        return this.description;
     }
 }

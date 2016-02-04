@@ -53,6 +53,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <h:form id="controlsForm" prependId="false">
+                    <p:defaultCommand target="btSearch"/>
                     <div class="row">
                         <div class="col-xs-4">
                             <div class="input-group">
@@ -61,12 +62,13 @@
                                              value="#{contactBean.filter}"
                                              placeholder="#{messages['filter.contact']}"/>
                                 <div class="input-group-btn">
-                                    <p:commandLink process="controlsForm"
+                                    <p:commandLink id="btSearch"
+                                                   process="controlsForm"
                                                    value="#{menu['search']}"
                                                    onstart="PF('listBlock').show()"
                                                    oncomplete="PF('listBlock').hide()"
-                                                   action="#{contactBean.filterList()}"
-                                                   styleClass="btn btn-flat btn-primary" />
+                                                   action="#{contactBean.filterList()}" 
+                                                   styleClass="btn btn-flat btn-warning"/>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +97,7 @@
                              emptyMessage="#{messages['list.empty']}">
 
                     <p:column width="10%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{messages['contact.list.blocked']}">
                         <p:selectBooleanCheckbox disabled="true" 
                                                  value="#{contact.blocked}" />
@@ -104,14 +106,14 @@
                         #{contact.name}
                     </p:column>
                     <p:column width="20%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{messages['contact.list.type']}">
-                        #{messages[contact.contactType]}
+                        #{enums[contact.contactType]}
                     </p:column>
                     <p:column width="20%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{messages['contact.list.document']}">
-                        #{contact.document}
+                        #{contact.documentFormated}
                     </p:column>
 
                     <p:column width="15%" 

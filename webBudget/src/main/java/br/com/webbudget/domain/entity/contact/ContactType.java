@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur
+  * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,68 @@
  */
 package br.com.webbudget.domain.entity.contact;
 
+import br.com.caelum.stella.format.CNPJFormatter;
+import br.com.caelum.stella.format.CPFFormatter;
+import br.com.caelum.stella.format.Formatter;
+import br.com.caelum.stella.validation.CNPJValidator;
+import br.com.caelum.stella.validation.CPFValidator;
+import br.com.caelum.stella.validation.Validator;
+
 /**
  * Definicao dos tipos de contato
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.2.0, 11/04/2015
  */
 public enum ContactType {
 
-    LEGAL("contact-type.legal"),
-    PERSONAL("contact-type.personal");
+    LEGAL("contact-type.legal", 
+            new CNPJValidator(false), 
+            new CNPJFormatter()),
+    PERSONAL("contact-type.personal", 
+            new CPFValidator(false), 
+            new CPFFormatter());
 
     private final String description;
+    private final Formatter formatter;
+    private final Validator<String> validator;
 
     /**
-     *
+     * 
      * @param description
+     * @param validator
+     * @param formatter 
      */
-    private ContactType(String description) {
+    private ContactType(String description, Validator<String> validator, Formatter formatter) {
+        this.formatter = formatter;
+        this.validator = validator;
         this.description = description;
     }
 
     /**
+     * Valida o documento do contato, se nao for valido lancara uma exception
      *
-     * @return
+     * @param document o documento a ser validado, sem a pontuacao
+     */
+    public void validadeDocument(String document) {
+        this.validator.assertValid(document);
+    }
+    
+    /**
+     * Formata um documento de acordo com o tipo utilizado
+     * 
+     * @param document o documento
+     * @return o documento formatado
+     */
+    public String formatDocument(String document) {
+        return document != null && !document.isEmpty() 
+                ? this.formatter.format(document) : document;
+    }
+
+    /**
+     * @return a string representando este tipo
      */
     @Override
     public String toString() {

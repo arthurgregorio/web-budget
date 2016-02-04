@@ -32,25 +32,16 @@
     <h:form id="telephoneForm" prependId="false">
         
         <p:focus context="inTelephone" />
+        <p:defaultCommand target="btAdd"/>
         
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-md-12">
                 <p:messages closable="true" />
             </div> 
         </div> 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-6 form-group form-group-l">
-                <p:outputLabel for="inTelephone" 
-                               value="#{messages['telephone.dialog.number']}: "/>
-                <p:inputMask id="inTelephone"
-                             mask="(999) 9999-9999"
-                             value="#{contactBean.telephone.number}">
-                    <pe:keyFilter mask="num"/>
-                </p:inputMask>
-            </div>
-        </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 form-group form-group-l">
+        
+        <div class="row">
+            <div class="col-md-12 form-group">
                 <p:outputLabel for="inNumberType" 
                                value="#{messages['telephone.dialog.type']}: "/>
                 <p:selectOneMenu id="inNumberType" 
@@ -61,22 +52,33 @@
                                   itemLabel="#{messages['telephone.dialog.select-one']}" />
                     <f:selectItems var="numberType" 
                                    itemValue="#{numberType}"
-                                   itemLabel="#{messages[numberType]}"
+                                   itemLabel="#{enums[numberType]}"
                                    value="#{contactBean.availableNumberTypes}" /> 
                 </p:selectOneMenu>
-            </div>                        
-        </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center">
-                <p:commandButton immediate="true"
-                                 value="#{menu['cancel']}"
-                                 onclick="PF('dialogTelephone').hide()"/>
-                <p:spacer width="10"/>
-                <p:commandButton value="#{menu['add']}"
+            </div>
+            <div class="col-md-12 form-group">
+                <p:outputLabel for="inTelephone" 
+                               value="#{messages['telephone.dialog.number']}: "/>
+                <p:inputMask id="inTelephone"
+                             mask="(999) 9999-9999?9"
+                             styleClass="form-control"
+                             value="#{contactBean.telephone.number}"/>
+            </div> 
+        </div> 
+        
+        <div class="row">
+            <div class="col-md-12 align-right delete-box">
+                <p:commandButton id="btAdd"
+                                 value="#{menu['add']}"
                                  update="telephoneForm"
                                  process="telephoneForm"
-                                 styleClass="ui-button-success"
+                                 styleClass="btn btn-flat btn-success"
                                  actionListener="#{contactBean.addTelephone()}"/>
+                <p:spacer width="10"/>
+                <p:commandButton immediate="true"
+                                 value="#{menu['cancel']}"
+                                 styleClass="btn btn-flat btn-danger"
+                                 onclick="closeDialog('dialogTelephone')"/>
 
             </div>
         </div>

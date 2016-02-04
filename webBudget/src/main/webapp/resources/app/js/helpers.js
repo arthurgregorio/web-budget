@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2016 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,5 +23,25 @@
  */
 function closeDialog(widget) {
     PF(widget).hide();
+};
+
+/**
+ * Invoca o blockUI pelo seu widget var
+ * 
+ * @param {type} widget
+ * @returns {undefined}
+ */
+function block(widget) {
+    PF(widget).block();
+};
+
+/**
+ * Finaliza o blockUI pelo seu widget var
+ * 
+ * @param {type} widget
+ * @returns {undefined}
+ */
+function unblock(widget) {
+    PF(widget).unblock();
 };
 

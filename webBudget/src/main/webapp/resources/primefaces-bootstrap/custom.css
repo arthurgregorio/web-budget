@@ -22,7 +22,7 @@
 
 /* tira aquele fundo vermelho do label na hr da validacao */
 label.ui-state-error {
-    background: none;
+    background: none !important;
 }
 
 /* tira a sembra para que os botoes fiquem certos quando em widgets */

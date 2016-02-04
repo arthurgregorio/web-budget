@@ -172,6 +172,22 @@ public class Contact extends PersistentEntity {
         }
         return generated;
     }
+
+    /**
+     * Valida o documento do contato de acordo com seu tipo
+     */
+    public void validateDocument() {
+        if (this.document != null && !this.document.isEmpty()) {
+            this.contactType.validadeDocument(this.document.replace("\\w", ""));
+        }
+    }
+    
+    /**
+     * @return o documento do contato formatado
+     */
+    public String getDocumentFormated() {
+        return this.contactType.formatDocument(this.document);
+    }
     
     /**
      * 

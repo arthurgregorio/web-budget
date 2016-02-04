@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import javax.transaction.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.2.0, 12/04/2015
  */
 @ApplicationScoped
@@ -56,6 +56,14 @@ public class ContactService {
     @Transactional
     public void saveContact(Contact contact) {
 
+        // valida o documento do contato
+        try {
+            contact.validateDocument();
+        } catch (Exception ex) {
+            throw new InternalServiceError("error.contact.invalid-document");
+        }
+        
+        // salva o contato
         final List<Telephone> telephones = contact.getTelephones();
 
         contact = this.contactRepository.save(contact);
@@ -75,6 +83,13 @@ public class ContactService {
     @Transactional
     public Contact updateContact(Contact contact) {
 
+        // valida o documento do contato
+        try {
+            contact.validateDocument();
+        } catch (Exception ex) {
+            throw new InternalServiceError("error.contact.invalid-document");
+        }
+        
         // deleta os telefone deletados na grid
         if (!contact.getDeletedTelephones().isEmpty()) {
             for (Telephone telephone : contact.getDeletedTelephones()) {
@@ -112,7 +127,7 @@ public class ContactService {
         
         // se tem vinculos, nao deleta
         if (!movements.isEmpty()) {
-            throw new InternalServiceError("contact.validate.has-movements");
+            throw new InternalServiceError("error.contact.has-movements");
         }
         
         this.contactRepository.delete(contact);

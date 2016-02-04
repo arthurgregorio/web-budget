@@ -144,9 +144,9 @@
                                 <div class="input-group-btn">
                                     <p:commandButton icon="fa fa-search"
                                                      process="@this inZipcode"
-                                                     styleClass="btn btn-flat btn-info"
-                                                     onstart="PF('searchAddressBlock').block()"
-                                                     oncomplete="PF('searchAddressBlock').unblock()"
+                                                     onstart="block('searchAddressBlock')"
+                                                     styleClass="btn btn-flat btn-warning"
+                                                     oncomplete="unblock('searchAddressBlock')"
                                                      actionListener="#{contactBean.doAddressFind()}"/>
                                 </div>
                             </div>
@@ -223,7 +223,7 @@
                                 </p:column>
                                 <p:column styleClass="align-center"
                                           headerText="#{messages['telephone.type']}">
-                                    #{messages[telephone.numberType]}
+                                    #{enums[telephone.numberType]}
                                 </p:column>
                                 <p:column width="10%" 
                                           styleClass="align-center"

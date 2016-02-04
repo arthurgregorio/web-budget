@@ -25,6 +25,7 @@ import br.com.webbudget.domain.entity.contact.NumberType;
 import br.com.webbudget.domain.entity.contact.Telephone;
 import br.com.webbudget.domain.misc.AddressFinder;
 import br.com.webbudget.domain.misc.AddressFinder.Address;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.AbstractLazyModel;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
@@ -120,7 +121,7 @@ public class ContactBean extends AbstractBean {
      * Pesquisa com filtro
      */
     public void filterList() {
-//        this.update("contactsList");
+        this.updateComponent("contactsList");
     }
     
     /**
@@ -150,7 +151,7 @@ public class ContactBean extends AbstractBean {
      */
     public void changeToDelete(long contactId) {
         this.contact = this.contactService.findContactById(contactId);
-//        this.openDialog("deleteContactDialog", "dialogDeleteContact");
+        this.updateAndOpenDialog("deleteContactDialog", "dialogDeleteContact");
     }
 
     /**
@@ -165,22 +166,15 @@ public class ContactBean extends AbstractBean {
      */
     public void doSave() {
 
-//        if (!this.validateDocument()) {
-//            this.error("contact.validate.document", true);
-//            return;
-//        }
-//        
-//        try {
-//            this.contactService.saveContact(this.contact);
-//            this.contact = new Contact();
-//            this.info("contact.action.saved", true);
-//        } catch (WbDomainException ex) {
-//            this.logger.error("ContactBean#doSave found erros", ex);
-//            this.fixedError(ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("ContactBean#doSave found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        }
+        try {
+            this.contactService.saveContact(this.contact);
+            this.contact = new Contact();
+            this.addInfo(true, "contact.saved");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
 
     /**
@@ -188,21 +182,14 @@ public class ContactBean extends AbstractBean {
      */
     public void doUpdate() {
 
-//        if (!this.validateDocument()) {
-//            this.error("contact.validate.document", true);
-//            return;
-//        }
-//        
-//        try {
-//            this.contact = this.contactService.updateContact(this.contact);
-//            this.info("contact.action.updated", true);
-//        } catch (WbDomainException ex) {
-//            this.logger.error("ContactBean#doUpdate found erros", ex);
-//            this.fixedError(ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("ContactBean#doUpdate found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        }
+        try {
+            this.contact = this.contactService.updateContact(this.contact);
+            this.addInfo(true, "contact.updated");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
 
     /**
@@ -210,19 +197,17 @@ public class ContactBean extends AbstractBean {
      */
     public void doDelete() {
 
-//        try {
-//            this.contactService.deleteContact(this.contact);
-//            this.info("contact.action.deleted", true);
-//        } catch (WbDomainException ex) {
-//            this.logger.error("ContactBean#doDelete found erros", ex);
-//            this.fixedError(ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("ContactBean#doDelete found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        } finally {
-//            this.update("contactsList");
-//            this.closeDialog("dialogDeleteContact");
-//        }
+        try {
+            this.contactService.deleteContact(this.contact);
+            this.addInfo(true, "contact.deleted");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        } finally {
+            this.updateComponent("contactsList");
+            this.closeDialog("dialogDeleteContact");
+        }
     }
 
     /**
@@ -251,7 +236,7 @@ public class ContactBean extends AbstractBean {
      */
     public void showTelephoneDialog() {
         this.telephone = new Telephone();
-//        this.openDialog("telephoneDialog", "dialogTelephone");
+        this.updateAndOpenDialog("telephoneDialog", "dialogTelephone");
     }
     
     /**
@@ -259,7 +244,7 @@ public class ContactBean extends AbstractBean {
      */
     public void addTelephone() {
         this.contact.addTelephone(this.telephone);
-//        this.update("telephonesList");
+        this.updateComponent("telephonesList");
         this.closeDialog("dialogTelephone");
     }
     
@@ -270,33 +255,7 @@ public class ContactBean extends AbstractBean {
      */
     public void deleteTelephone(Telephone telephone) {
         this.contact.removeTelephone(telephone);
-//        this.update("telephonesList");
-    }
-
-    /**
-     * Valida o documento do contato, se informado
-     * 
-     * @return true se valido, false se nao
-     */
-    private boolean validateDocument() {
-
-        try {
-            String document = this.contact.getDocument();
-
-            if (document != null && !document.isEmpty()) {
-                
-                document = document.replace("\\w", "");
-
-                if (this.contact.getContactType() == ContactType.LEGAL) {
-                    new CNPJValidator().assertValid(document);
-                } else {
-                    new CPFValidator().assertValid(document);
-                }
-            }
-        } catch (Exception ex) {
-            return false;
-        }
-        return true;
+        this.updateComponent("telephonesList");
     }
 
     /**
