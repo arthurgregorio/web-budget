@@ -42,11 +42,7 @@ import lombok.Getter;
 public class DashboardBean extends AbstractBean {
 
     @Getter
-    private List<FinancialPeriod> financialPeriods;
-
-    @Inject
-    @AuthenticatedUser
-    private User authenticatedUser;
+    private FinancialPeriod activePeriod;
 
     @Inject
     private FinancialPeriodService financialPeriodService;
@@ -57,35 +53,8 @@ public class DashboardBean extends AbstractBean {
      */
     public void initialize() {
 
-        this.financialPeriods = this.financialPeriodService
-                .listFinancialPeriods(Boolean.FALSE);
-    }
-
-    /**
-     * @return um texto identificando os periodos financeiros em aberto
-     */
-    public String getOpenPeriods() {
-
-        if (this.financialPeriods == null || this.financialPeriods.isEmpty()) {
-            return "";
-        }
-
-        final StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < this.financialPeriods.size(); i++) {
-
-            final FinancialPeriod period = this.financialPeriods.get(i);
-
-            builder.append(period.getIdentification());
-
-            if ((i + 1) == (this.financialPeriods.size() - 1)) {
-                builder.append(" e ");
-            } else if (i != (this.financialPeriods.size() - 1)) {
-                builder.append(", ");
-            }
-        }
-
-        return builder.toString();
+        this.activePeriod = this.financialPeriodService
+                .findActiveFinancialPeriod();
     }
 
     /**

@@ -16,13 +16,13 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions"
-                template="/template/mainTemplate.xhtml"
-                xmlns:o="http://omnifaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                template="/template/mainTemplate.xhtml">
 
     <ui:define name="pageTitle">
         #{messages['dashboard.page-title']}
@@ -35,7 +35,7 @@
     <ui:define name="breadcrumb">
         <li class="active"><a href="#">#{breadcrumb['dashboard']}</a></li>
     </ui:define>
-    
+
     <ui:define name="content">
         <pe:blockUI target="loadingFragment" 
                     widgetVar="loadingBlock">
@@ -57,7 +57,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">#{messages['dashboard.movimentation-summary']}</h3>
                             <div class="box-tools pull-right">
-                                
+
                             </div>
                         </div>
 
@@ -67,110 +67,119 @@
                                     <p class="text-center">
                                         <strong>
                                             <o:outputFormat value="#{messages['dashboard.summary-of']}">
-                                                <f:param value="#{dashboardBean.openPeriods}"/>
+                                                <f:param value="#{dashboardBean.activePeriod.identification}"/>
                                             </o:outputFormat>
                                         </strong>
                                     </p>
 
                                     <div class="chart">
-                                        <!-- Sales Chart Canvas -->
                                         <canvas id="salesChart" style="height: 180px;"></canvas>
                                     </div>
-                                    <!-- /.chart-responsive -->
                                 </div>
-                                <!-- /.col -->
                                 <div class="col-md-4">
                                     <p class="text-center">
-                                        <strong>Goal Completion</strong>
+                                        <strong>#{messages['dahsboard.goals-and-limits']}</strong>
                                     </p>
 
                                     <div class="progress-group">
-                                        <span class="progress-text">Add Products to Cart</span>
+                                        <span class="progress-text">#{messages['dashboard.limit.credit-card']}</span>
                                         <span class="progress-number"><b>160</b>/200</span>
 
                                         <div class="progress sm">
                                             <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
                                         </div>
                                     </div>
-                                    <!-- /.progress-group -->
                                     <div class="progress-group">
-                                        <span class="progress-text">Complete Purchase</span>
-                                        <span class="progress-number"><b>310</b>/400</span>
+                                        <span class="progress-text">#{messages['dashboard.limit.debit-card']}</span>
+                                        <span class="progress-number"><b>250</b>/500</span>
 
                                         <div class="progress sm">
-                                            <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                                            <div class="progress-bar progress-bar-light-blue" style="width: 80%"></div>
                                         </div>
                                     </div>
-                                    <!-- /.progress-group -->
                                     <div class="progress-group">
-                                        <span class="progress-text">Visit Premium Page</span>
-                                        <span class="progress-number"><b>480</b>/800</span>
-
-                                        <div class="progress sm">
-                                            <div class="progress-bar progress-bar-green" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-                                    <!-- /.progress-group -->
-                                    <div class="progress-group">
-                                        <span class="progress-text">Send Inquiries</span>
+                                        <span class="progress-text">#{messages['dashboard.limit.money']}</span>
                                         <span class="progress-number"><b>250</b>/500</span>
 
                                         <div class="progress sm">
                                             <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
                                         </div>
                                     </div>
-                                    <!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">
+                                            <o:outputFormat value="#{messages['dashboard.goal.cost-center-1']}">
+                                                <f:param value="#{dashboardBean.activePeriod.identification}"/>
+                                            </o:outputFormat>
+                                        </span>
+                                        <span class="progress-number"><b>310</b>/400</span>
+
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-group">
+                                        <span class="progress-text">
+                                            <o:outputFormat value="#{messages['dashboard.goal.cost-center-2']}">
+                                                <f:param value="#{dashboardBean.activePeriod.identification}"/>
+                                            </o:outputFormat>
+                                        </span>
+                                        <span class="progress-number"><b>480</b>/800</span>
+
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <!-- /.col -->
                             </div>
-                            <!-- /.row -->
                         </div>
-                        <!-- ./box-body -->
                         <div class="box-footer">
                             <div class="row">
                                 <div class="col-sm-3 col-xs-6">
                                     <div class="description-block border-right">
-                                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
-                                        <h5 class="description-header">$35,210.43</h5>
-                                        <span class="description-text">TOTAL REVENUE</span>
+                                        <h5 class="description-header text-green">
+                                            <h:outputText value="#{movement.value}" >
+                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                            </h:outputText>
+                                        </h5>
+                                        <span class="description-text">#{messages['dashboard.total-revenue']}</span>
                                     </div>
-                                    <!-- /.description-block -->
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-xs-6">
                                     <div class="description-block border-right">
-                                        <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
-                                        <h5 class="description-header">$10,390.90</h5>
-                                        <span class="description-text">TOTAL COST</span>
+                                        <h5 class="description-header text-red">
+                                            <h:outputText value="#{movement.value}" >
+                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                            </h:outputText>
+                                        </h5>
+                                        <span class="description-text">#{messages['dashboard.total-expenses']}</span>
                                     </div>
-                                    <!-- /.description-block -->
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-xs-6">
                                     <div class="description-block border-right">
-                                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-                                        <h5 class="description-header">$24,813.53</h5>
-                                        <span class="description-text">TOTAL PROFIT</span>
+                                        <h5 class="description-header">
+                                            <h:outputText value="#{movement.value}" >
+                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                            </h:outputText>
+                                        </h5>
+                                        <span class="description-text">#{messages['dashboard.balance']}</span>
                                     </div>
-                                    <!-- /.description-block -->
                                 </div>
-                                <!-- /.col -->
                                 <div class="col-sm-3 col-xs-6">
                                     <div class="description-block">
-                                        <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
-                                        <h5 class="description-header">1200</h5>
-                                        <span class="description-text">GOAL COMPLETIONS</span>
+                                        <h5 class="description-header">
+                                            <h:outputText value="#{movement.value}" >
+                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                            </h:outputText>
+                                        </h5>
+                                        <span class="description-text">#{messages['dashboard.acumulated']}</span>
                                     </div>
-                                    <!-- /.description-block -->
                                 </div>
                             </div>
-                            <!-- /.row -->
                         </div>
-                        <!-- /.box-footer -->
                     </div>
-                    <!-- /.box -->
                 </div>
-                <!-- /.col -->
             </div>
         </p:fragment>
 
