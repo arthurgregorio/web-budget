@@ -96,24 +96,23 @@
                                 listener="#{movementBean.changeToDetail()}" />
 
                         <p:column width="6%" 
-                                  styleClass="div-align-center"
-                                  sortBy="#{movement.direction}"
+                                  styleClass="align-center"
                                   headerText="#{messages['movement.list.direction']}">
                             <p:graphicImage width="24"
                                             height="24"
                                             library="images" 
                                             name="ui-icon-plus.png" 
-                                            title="#{messages['movement.list.income']}"
-                                            rendered="#{movement.direction eq 'IN'}"/>
+                                            rendered="#{movement.revenue}"
+                                            title="#{messages['movement.list.income']}"/>
                             <p:graphicImage  width="24"
                                              height="24"
                                              library="images" 
                                              name="ui-icon-minus.png" 
-                                             title="#{messages['movement.list.outcome']}"
-                                             rendered="#{movement.direction eq 'OUT'}"/>
+                                             rendered="#{movement.expense}"
+                                             title="#{messages['movement.list.outcome']}"/>
                         </p:column>
                         <p:column width="6%"
-                                  styleClass="div-align-center" 
+                                  styleClass="align-center" 
                                   sortBy="#{movement.movementStateType}"
                                   headerText="#{messages['movement.list.movement-state-type']}">
                             <p:graphicImage width="18"
@@ -143,7 +142,7 @@
                         </p:column>
                         <p:column width="8%" 
                                   sortBy="#{movement.code}"
-                                  styleClass="div-align-center"
+                                  styleClass="align-center"
                                   headerText="#{messages['movement.list.code']}">
                             #{movement.code}
                         </p:column>
@@ -152,7 +151,7 @@
                         </p:column>
                         <p:column width="12%"
                                   sortBy="#{movement.value}"
-                                  styleClass="div-align-center" 
+                                  styleClass="align-center" 
                                   headerText="#{messages['movement.list.value']}">
                             <h:outputText value="#{movement.value}" >
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
@@ -160,14 +159,14 @@
                         </p:column>
                         <p:column width="12%"
                                   sortBy="#{movement.dueDate}"
-                                  styleClass="div-align-center" 
+                                  styleClass="align-center" 
                                   headerText="#{messages['movement.list.due-date']}">
                             <h:outputText value="#{movement.dueDate}">
                                 <f:converter converterId="localDateConverter"/>
                             </h:outputText> 
                         </p:column>
                         <p:column width="18%" 
-                                  styleClass="div-align-center"
+                                  styleClass="align-center"
                                   headerText="#{menu['actions']}">
                             <p:commandButton icon="fa fa-money"
                                              title="#{menu['pay']}"

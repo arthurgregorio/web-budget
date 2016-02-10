@@ -32,11 +32,22 @@ import java.util.List;
 public interface IFinancialPeriodRepository extends IGenericRepository<FinancialPeriod, Long> {
 
     /**
+     * @return 
+     */
+    public FinancialPeriod findLatestClosed();
+    
+    /**
      *
      * @return
      */
     public List<FinancialPeriod> listOpen();
+    
 
+    /**
+     * @return 
+     */
+    public List<FinancialPeriod> listLastSixClosed();
+    
     /**
      *
      * @param isClosed

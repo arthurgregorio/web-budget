@@ -16,14 +16,17 @@
  */
 package br.com.webbudget.domain.repository.movement;
 
+import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -120,5 +123,40 @@ public class FinancialPeriodRepository extends GenericRepository<FinancialPeriod
 
         // montamos o resultado paginado
         return new Page<>(criteria.list(), totalRows);
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public FinancialPeriod findLatestClosed() {
+        
+        final Criteria criteria = this.createCriteria();
+        
+        DetachedCriteria maxId = DetachedCriteria
+                .forClass(FinancialPeriod.class)
+                .add(Restrictions.eq("closed", true))
+                .setProjection(Projections.max("id"));
+        
+        criteria.add(Property.forName("id").eq(maxId));
+        
+        return (FinancialPeriod) criteria.uniqueResult();
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public List<FinancialPeriod> listLastSixClosed() {
+     
+        final Criteria criteria = this.createCriteria();
+        
+        criteria.add(Restrictions.eq("closed", true));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(6);        
+        
+        return criteria.list();
     }
 }

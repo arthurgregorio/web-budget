@@ -265,6 +265,13 @@
             <version>2.1.2</version>
         </dependency>
         
+        <!--google gson-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.5</version>
+        </dependency>
+        
         <!-- logger -->
         <dependency>
             <groupId>org.slf4j</groupId>

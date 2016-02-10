@@ -109,6 +109,20 @@ public class Apportionment extends PersistentEntity {
     }
     
     /**
+     * @return se este e um rateio de receita
+     */
+    public boolean isForRevenues() {
+        return this.movementClass.getMovementClassType() == MovementClassType.IN;
+    }
+    
+    /**
+     * @return se este e um rateio de despesa
+     */
+    public boolean isForExpenses() {
+        return this.movementClass.getMovementClassType() == MovementClassType.OUT;
+    }
+    
+    /**
      * @return uma copia deste reateio com um novo codigo
      */
     public Apportionment copy() {

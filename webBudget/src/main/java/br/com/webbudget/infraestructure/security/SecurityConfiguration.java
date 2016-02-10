@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.config;
+package br.com.webbudget.infraestructure.security;
 
-import br.com.webbudget.application.security.CustomPartitionManager;
 import br.com.webbudget.domain.entity.security.GrantTypeEntity;
 import br.com.webbudget.domain.entity.security.GroupMembershipTypeEntity;
 import br.com.webbudget.domain.entity.security.GroupTypeEntity;

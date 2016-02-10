@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.security;
+package br.com.webbudget.infraestructure.security;
 
 import br.com.webbudget.application.controller.UserSessionBean;
 import br.com.webbudget.domain.security.Role;

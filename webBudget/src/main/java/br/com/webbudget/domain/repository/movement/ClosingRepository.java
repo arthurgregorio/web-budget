@@ -23,7 +23,7 @@ import br.com.webbudget.domain.repository.GenericRepository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 22/04/2014
  */
 public class ClosingRepository extends GenericRepository<Closing, Long> implements IClosingRepository {

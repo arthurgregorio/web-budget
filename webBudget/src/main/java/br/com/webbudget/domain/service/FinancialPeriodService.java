@@ -17,13 +17,12 @@
 package br.com.webbudget.domain.service;
 
 import br.com.webbudget.application.controller.miscellany.PeriodDetailsDTO;
-import br.com.webbudget.domain.misc.MovementsCalculator;
+import br.com.webbudget.domain.misc.MovementsCalculator1;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
-import br.com.webbudget.domain.misc.events.PeriodClosed;
 import br.com.webbudget.domain.misc.events.PeriodOpen;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.Page;
@@ -49,7 +48,7 @@ import javax.transaction.Transactional;
 public class FinancialPeriodService {
 
     @Inject
-    private MovementsCalculator movementsCalculator;
+    private MovementsCalculator1 movementsCalculator;
 
     @Inject
     private IMovementRepository movementRepository;
@@ -168,20 +167,21 @@ public class FinancialPeriodService {
      */
     public FinancialPeriod findActiveFinancialPeriod() {
 
-        final List<FinancialPeriod> financialPeriods = this.financialPeriodRepository.listOpen();
+        final List<FinancialPeriod> periods = 
+                this.financialPeriodRepository.listOpen();
 
-        FinancialPeriod activePeriod = null;
-
-        for (FinancialPeriod financialPeriod : financialPeriods) {
-            if (!financialPeriod.isExpired()) {
-                activePeriod = financialPeriod;
-                break;
-            } else {
-                activePeriod = financialPeriod;
-            }
-        }
-
-        return activePeriod;
+        return periods.stream()
+                .filter(period -> !period.isExpired())
+                .findFirst()
+                .orElseThrow(() -> new InternalServiceError(
+                        "error.financial-period.no-active-period"));
+    }
+    
+    /**
+     * @return o ultimo fechamento realizado
+     */
+    public FinancialPeriod findLatestClosedPeriod() {
+        return this.financialPeriodRepository.findLatestClosed();
     }
 
     /**
@@ -227,5 +227,12 @@ public class FinancialPeriodService {
      */
     public List<FinancialPeriod> listOpenFinancialPeriods() {
         return this.financialPeriodRepository.listOpen();
+    }
+    
+    /**
+     * @return lista os ultimos seis meses de fechamento
+     */
+    public List<FinancialPeriod> listLastSixClosedPeriods() {
+        return this.financialPeriodRepository.listLastSixClosed();
     }
 }

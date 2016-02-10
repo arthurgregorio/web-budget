@@ -18,6 +18,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -37,43 +38,39 @@
     </ui:define>
 
     <ui:define name="content">
-        <pe:blockUI target="loadingFragment" 
-                    widgetVar="loadingBlock">
-            <div class="align-center">
-                <p:graphicImage width="32" 
-                                height="32"
-                                library="app" 
-                                name="img/loading.gif" />
-            </div>
-            <div style="margin-top: 5px">
-                #{menu['loading']}
-            </div>        
+        
+        <pe:blockUI widgetVar="loadingBlock"
+                    target="movimentationSummary" >
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
         </pe:blockUI> 
 
-        <p:fragment id="loadingFragment">
+        <div jsf:id="movimentationSummary">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p:messages id="messages" closable="true" globalOnly="true"/>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="box">
                         <div class="box-header with-border">
                             <h3 class="box-title">#{messages['dashboard.movimentation-summary']}</h3>
-                            <div class="box-tools pull-right">
-
-                            </div>
                         </div>
 
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-md-8">
                                     <p class="text-center">
-                                        <strong>
-                                            <o:outputFormat value="#{messages['dashboard.summary-of']}">
-                                                <f:param value="#{dashboardBean.activePeriod.identification}"/>
-                                            </o:outputFormat>
-                                        </strong>
+                                        <strong>#{messages['dashboard.periods-summary']}</strong>
                                     </p>
 
                                     <div class="chart">
-                                        <canvas id="salesChart" style="height: 180px;"></canvas>
+                                        <div id="closingsChartLegend" class="chart-legend"></div>
+                                        <canvas id="closingsChart" style="height: 245px;"></canvas>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -108,7 +105,7 @@
                                     <div class="progress-group">
                                         <span class="progress-text">
                                             <o:outputFormat value="#{messages['dashboard.goal.cost-center-1']}">
-                                                <f:param value="#{dashboardBean.activePeriod.identification}"/>
+                                                <f:param value=""/>
                                             </o:outputFormat>
                                         </span>
                                         <span class="progress-number"><b>310</b>/400</span>
@@ -120,7 +117,7 @@
                                     <div class="progress-group">
                                         <span class="progress-text">
                                             <o:outputFormat value="#{messages['dashboard.goal.cost-center-2']}">
-                                                <f:param value="#{dashboardBean.activePeriod.identification}"/>
+                                                <f:param value=""/>
                                             </o:outputFormat>
                                         </span>
                                         <span class="progress-number"><b>480</b>/800</span>
@@ -137,39 +134,40 @@
                                 <div class="col-sm-3 col-xs-6">
                                     <div class="description-block border-right">
                                         <h5 class="description-header text-green">
-                                            <h:outputText value="#{movement.value}" >
+                                            <h:outputText value="#{dashboardBean.calculator.revenuesTotal}" >
                                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                             </h:outputText>
                                         </h5>
                                         <span class="description-text">#{messages['dashboard.total-revenue']}</span>
                                     </div>
                                 </div>
-                                <!-- /.col -->
                                 <div class="col-sm-3 col-xs-6">
                                     <div class="description-block border-right">
-                                        <h5 class="description-header text-red">
-                                            <h:outputText value="#{movement.value}" >
+                                        <h5 class="description-header text-yellow">
+                                            <h:outputText value="#{dashboardBean.calculator.expensesTotal}" >
                                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                             </h:outputText>
                                         </h5>
                                         <span class="description-text">#{messages['dashboard.total-expenses']}</span>
                                     </div>
                                 </div>
-                                <!-- /.col -->
                                 <div class="col-sm-3 col-xs-6">
                                     <div class="description-block border-right">
-                                        <h5 class="description-header">
-                                            <h:outputText value="#{movement.value}" >
+                                        <h5 class="description-header #{dashboardBean.calculator.balance.signum() 
+                                                                        lt 0 ? 'text-red' : 'text-aqua'}">
+                                            <h:outputText value="#{dashboardBean.calculator.balance}" >
                                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                             </h:outputText>
                                         </h5>
                                         <span class="description-text">#{messages['dashboard.balance']}</span>
                                     </div>
                                 </div>
+
                                 <div class="col-sm-3 col-xs-6">
                                     <div class="description-block">
-                                        <h5 class="description-header">
-                                            <h:outputText value="#{movement.value}" >
+                                        <h5 class="description-header #{dashboardBean.accumulated.signum() 
+                                                                        lt 0 ? 'text-red' : 'text-aqua'}">
+                                            <h:outputText value="#{dashboardBean.accumulated}" >
                                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                             </h:outputText>
                                         </h5>
@@ -181,15 +179,17 @@
                     </div>
                 </div>
             </div>
-        </p:fragment>
+        </div>
 
         <h:form prependId="false">
             <p:remoteCommand autoRun="true"
-                             name="doAfterPageLoad"
-                             update=":loadingFragment"
+                             name="initializer"
+                             update=":movimentationSummary"
                              onstart="block('loadingBlock')"
                              oncomplete="unblock('loadingBlock')"
                              actionListener="#{dashboardBean.initialize()}"/>
         </h:form>
+    
+        <h:outputScript library="webbudget" name="js/dashboard.js"/>
     </ui:define>
 </ui:composition>

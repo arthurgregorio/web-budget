@@ -29,7 +29,7 @@ import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
-import br.com.webbudget.domain.misc.dto.MovementFilter;
+import br.com.webbudget.domain.misc.filter.MovementFilter;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.AbstractLazyModel;
 import br.com.webbudget.domain.misc.table.MovementsListModel;
@@ -186,7 +186,7 @@ public class MovementBean extends AbstractBean {
         }
 
         // tipos entrada, pagamento somente em carteira
-        if (this.movement.getDirection() == MovementClassType.IN) {
+        if (this.movement.isRevenue()) {
             this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
         } else // se for fatura de cartao, so permite pagar em carteira
         if (this.movement.getMovementType() == MovementType.CARD_INVOICE) {
@@ -543,7 +543,7 @@ public class MovementBean extends AbstractBean {
         this.payment = new Payment();
 
         // tipos entrada, pagamento somente em carteira
-        if (this.movement.getDirection() == MovementClassType.IN) {
+        if (this.movement.isRevenue()) {
             this.payment.setPaymentMethodType(PaymentMethodType.IN_CASH);
         }
 
@@ -594,8 +594,8 @@ public class MovementBean extends AbstractBean {
      * @return se este movimento pode ou nao ser pago com cartao
      */
     public boolean isPayableWithCard() {
-        return this.movement.getMovementType() != MovementType.CARD_INVOICE
-                && this.movement.getDirection() != MovementClassType.IN;
+        return this.movement.getMovementType() 
+                != MovementType.CARD_INVOICE && !this.movement.isRevenue();
     }
 
     /**

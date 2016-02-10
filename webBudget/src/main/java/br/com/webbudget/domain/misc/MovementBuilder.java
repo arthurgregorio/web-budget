@@ -33,7 +33,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 2.1.0, 27/09/2015
  */
-public class MovementBuilder {
+public final class MovementBuilder {
 
     private final Movement movement;
 

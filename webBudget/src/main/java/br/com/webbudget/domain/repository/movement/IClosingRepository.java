@@ -23,7 +23,7 @@ import br.com.webbudget.domain.repository.IGenericRepository;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 22/04/2014
  */
 public interface IClosingRepository extends IGenericRepository<Closing, Long> {

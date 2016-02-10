@@ -33,7 +33,7 @@ import java.math.BigDecimal;
  * @version 1.0.0
  * @since 2.1.0, 27/08/2015
  */
-public class BalanceBuilder {
+public final class BalanceBuilder {
 
     private final WalletBalance walletBalance;
 

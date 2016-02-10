@@ -72,6 +72,10 @@ public class Closing extends PersistentEntity {
     private BigDecimal balance;
     @Getter
     @Setter
+    @Column(name = "accumulated", nullable = false)
+    private BigDecimal accumulated;
+    @Getter
+    @Setter
     @Temporal(TemporalType.DATE)
     @Column(name = "closing_date", nullable = false)
     private Date closingDate;
@@ -90,6 +94,16 @@ public class Closing extends PersistentEntity {
      * 
      */
     public Closing() {
+        
+        this.expenses = BigDecimal.ZERO;
+        this.revenues = BigDecimal.ZERO;
+        
+        this.creditCardExpenses = BigDecimal.ZERO;
+        this.debitCardExpenses = BigDecimal.ZERO;
+        
+        this.balance = BigDecimal.ZERO;
+        this.accumulated = BigDecimal.ZERO;
+        
         this.code = this.createClosingCode();
     }
     

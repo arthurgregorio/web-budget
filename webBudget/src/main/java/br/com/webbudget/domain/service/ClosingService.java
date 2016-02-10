@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.domain.misc.MovementsCalculator;
+import br.com.webbudget.domain.misc.MovementsCalculator1;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.closing.Closing;
@@ -30,6 +30,7 @@ import br.com.webbudget.domain.repository.movement.IClosingRepository;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -49,7 +50,7 @@ import javax.transaction.Transactional;
 public class ClosingService {
 
     @Inject
-    private MovementsCalculator movementsCalculator;
+    private MovementsCalculator1 movementsCalculator;
 
     @Inject
     private ICardRepository cardRepository;
@@ -159,5 +160,12 @@ public class ClosingService {
         
         // dispara o evento notificando quem precisar
         this.periodClosedEvent.fire(closed);
+    }
+    
+    /**
+     * @return todos os fechamentos ja realizados
+     */
+    public List<Closing> listAll() {
+        return this.closingRepository.listAll();
     }
 }

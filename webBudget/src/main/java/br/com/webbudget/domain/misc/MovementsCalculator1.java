@@ -44,7 +44,7 @@ import javax.transaction.Transactional;
  * @since 1.0.0, 22/02/2015
  */
 @RequestScoped
-public class MovementsCalculator {
+public class MovementsCalculator1 {
 
     @Inject
     private IMovementRepository movementRepository;

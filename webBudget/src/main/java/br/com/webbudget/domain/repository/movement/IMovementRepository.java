@@ -27,7 +27,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
-import br.com.webbudget.domain.misc.dto.MovementFilter;
+import br.com.webbudget.domain.misc.filter.MovementFilter;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;

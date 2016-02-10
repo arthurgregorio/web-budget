@@ -207,12 +207,8 @@ public class Movement extends PersistentEntity {
         // haja rateios com debitos e creditos juntos
         if (!this.apportionments.isEmpty()) {
 
-            final MovementClassType direction = this.getDirection();
-            final MovementClassType apportionmentDirection
-                    = apportionment.getMovementClass().getMovementClassType();
-
-            if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT)
-                    || (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN)) {
+            if ((this.isRevenue() && apportionment.isForExpenses())
+                    || (this.isExpense() && apportionment.isForRevenues())) {
                 throw new InternalServiceError("movement.validate.apportionment-debit-credit");
             }
         }
@@ -274,25 +270,16 @@ public class Movement extends PersistentEntity {
      * @return o nome do contato vinculado ao movimento
      */
     public String getContactName() {
-        if (this.contact != null) {
-            return this.contact.getName();
-        } else {
-            return null;
-        }
+        return this.contact != null ? this.contact.getName() : "";
     }
 
     /**
      * @return o valor da somatoria dos rateios
      */
     public BigDecimal getApportionmentsTotal() {
-
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (Apportionment apportionment : this.apportionments) {
-            total = total.add(apportionment.getValue());
-        }
-
-        return total;
+        return this.apportionments.stream()
+                .map(Apportionment::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
     
     /**
@@ -307,10 +294,7 @@ public class Movement extends PersistentEntity {
      * movimento
      */
     public boolean isApportionmentsValid() {
-
-        final BigDecimal total = this.getApportionmentsTotal();
-
-        return total.compareTo(this.value) == 0;
+        return this.getApportionmentsTotal().compareTo(this.value) == 0;
     }
 
     /**
@@ -361,18 +345,27 @@ public class Movement extends PersistentEntity {
     public boolean hasDueDate() {
         return this.dueDate != null;
     }
-
+    
     /**
-     * De acordo com a primeira classe do rateio, diz se o movimento e de
-     * entrada ou saida
-     *
-     * @return a direcao do movimento de acordo com as classes usadas
+     * @return se este movimento e uma despesa
      */
-    public MovementClassType getDirection() {
-        for (Apportionment apportionment : this.apportionments) {
-            return apportionment.getMovementClass().getMovementClassType();
-        }
-        return null;
+    public boolean isExpense() {
+        return this.apportionments
+                .stream()
+                .findFirst()
+                .get()
+                .isForExpenses();
+    }
+    
+    /**
+     * @return se este movimento e uma receita
+     */
+    public boolean isRevenue() {
+        return this.apportionments
+                .stream()
+                .findFirst()
+                .get()
+                .isForRevenues();
     }
     
     /**

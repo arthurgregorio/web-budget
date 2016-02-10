@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.misc.table;
 
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.misc.dto.MovementFilter;
+import br.com.webbudget.domain.misc.filter.MovementFilter;
 import br.com.webbudget.domain.service.MovementService;
 import java.util.ArrayList;
 import java.util.List;

@@ -33,7 +33,7 @@ import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalanceType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
 import br.com.webbudget.domain.misc.MovementBuilder;
-import br.com.webbudget.domain.misc.dto.MovementFilter;
+import br.com.webbudget.domain.misc.filter.MovementFilter;
 import br.com.webbudget.domain.misc.events.PeriodOpen;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
@@ -284,7 +284,7 @@ public class MovementService {
                     .withMovementedValue(movement.getValue())
                     .referencingMovement(movement.getCode());
 
-            if (movement.getDirection() == MovementClassType.OUT) {
+            if (movement.isExpense()) {
                 builder.withActualBalance(oldBalance.subtract(movement.getValue()))
                         .andType(WalletBalanceType.PAYMENT);
             } else {
@@ -329,7 +329,7 @@ public class MovementService {
             final BigDecimal movimentedValue;
 
             // se entrada, valor negativo, se saida valor positivo
-            if (movement.getDirection() == MovementClassType.OUT) {
+            if (movement.isExpense()) {
                 movimentedValue = movement.getValue();
             } else {
                 movimentedValue = movement.getValue().negate();
@@ -714,7 +714,7 @@ public class MovementService {
      *
      * @return
      */
-    public List<Movement> listMovementsByActiveFinancialPeriod() {
+    public List<Movement> listMovementsByOpenFinancialPeriod() {
         return this.movementRepository.listByActiveFinancialPeriod();
     }
 

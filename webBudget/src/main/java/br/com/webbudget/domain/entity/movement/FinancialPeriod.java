@@ -19,8 +19,10 @@ package br.com.webbudget.domain.entity.movement;
 import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.entity.closing.Closing;
-import java.text.SimpleDateFormat;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -85,21 +87,53 @@ public class FinancialPeriod extends PersistentEntity {
     }
 
     /**
-     *
-     * @return
+     * 
+     * @return 
      */
-    public String getStartFormatted() {
-        return new SimpleDateFormat("dd/MM/yyyy").format(this.start);
+    public BigDecimal getAccumulated() {
+        if (this.closed) {
+            return this.closing.getAccumulated();
+        }
+        throw new InternalServiceError(
+                "error.financial-period.not-closed", this.identification);
     }
-
+    
     /**
-     *
-     * @return
+     * 
+     * @return 
      */
-    public String getEndFormatted() {
-        return new SimpleDateFormat("dd/MM/yyyy").format(this.end);
+    public BigDecimal getBalance() {
+        if (this.closed) {
+            return this.closing.getBalance();
+        }
+        throw new InternalServiceError(
+                "error.financial-period.not-closed", this.identification);
     }
-
+    
+    /**
+     * 
+     * @return 
+     */
+    public BigDecimal getExpensesTotal() {
+        if (this.closed) {
+            return this.closing.getExpenses();
+        }
+        throw new InternalServiceError(
+                "error.financial-period.not-closed", this.identification);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public BigDecimal getRevenuesTotal() {
+        if (this.closed) {
+            return this.closing.getRevenues();
+        }
+        throw new InternalServiceError(
+                "error.financial-period.not-closed", this.identification);
+    }
+    
     /**
      *
      * @return
@@ -108,11 +142,14 @@ public class FinancialPeriod extends PersistentEntity {
 
         final StringBuilder builder = new StringBuilder();
 
+        final DateTimeFormatter formatter = 
+                DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
         builder.append(this.identification);
         builder.append(" | ");
-        builder.append(this.getStartFormatted());
+        builder.append(this.start.format(formatter));
         builder.append(" - ");
-        builder.append(this.getEndFormatted());
+        builder.append(this.end.format(formatter));
 
         return builder.toString();
     }

@@ -16,10 +16,19 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
+import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.security.User;
+import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.misc.MovementCalculator;
+import br.com.webbudget.domain.misc.chart.ChartDataset;
+import br.com.webbudget.domain.misc.chart.ChartDatasetBuilder;
+import br.com.webbudget.domain.misc.chart.ClosingChartModel;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.service.ClosingService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
+import br.com.webbudget.domain.service.MovementService;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.faces.view.ViewScoped;
@@ -42,24 +51,120 @@ import lombok.Getter;
 public class DashboardBean extends AbstractBean {
 
     @Getter
-    private FinancialPeriod activePeriod;
-
+    private BigDecimal accumulated;
+    
+    @Getter
+    private List<FinancialPeriod> closedPeriods;
+    
+    @Getter
+    private ClosingChartModel closingChartModel;
+    
+    @Getter
+    private MovementCalculator calculator;
+    
+    @Inject
+    private MovementService movementService;
     @Inject
     private FinancialPeriodService financialPeriodService;
 
     /**
-     * Inicializa os graficos e tambem carrega as mensagens privadas no box de
-     * mensagens
+     * Inicializa a dashboard do sistema
      */
     public void initialize() {
+        
+        this.accumulated = BigDecimal.ZERO;
+        
+        this.closedPeriods = new ArrayList<>();
 
-        this.activePeriod = this.financialPeriodService
-                .findActiveFinancialPeriod();
+        this.initializePeriodSummary();
+        this.initializeBalanceHistory();
+        this.initializeClosingsGraph();
     }
-
+    
     /**
-     * Pega do bundle da aplicacao o numero da versao setado no maven
-     *
+     * Inicializa o bloco com as informacoes sobre os periodos ativos
+     */
+    private void initializePeriodSummary() {
+        
+        List<Movement> movements = new ArrayList<>();
+        
+        try {
+            movements = this.movementService.listMovementsByOpenFinancialPeriod();
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage());
+        } catch (Exception ex) {
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
+            
+        // cria a calculadora coma lista gerada
+        this.calculator = new MovementCalculator(movements);
+    }
+    
+    /**
+     * Inicializa o historico de saldos
+     */
+    public void initializeBalanceHistory() {
+        
+        try {
+            this.closedPeriods = 
+                    this.financialPeriodService.listLastSixClosedPeriods();
+            
+            final FinancialPeriod latestClosedPeriod = 
+                    this.financialPeriodService.findLatestClosedPeriod();
+            
+            this.accumulated = latestClosedPeriod.getAccumulated()
+                    .add(this.calculator.getBalance());
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage());
+        } catch (Exception ex) {
+            this.logger.error("Internal error", ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
+    }
+    
+    /**
+     * Monta o grafico
+     */
+    public void initializeClosingsGraph() {
+        
+        final ChartDatasetBuilder<BigDecimal> revenueDatasetBuilder = 
+                new ChartDatasetBuilder<>()
+                .withLabel(this.translate("dashboard.revenue-serie"))
+                .filledByColor("rgba(220,220,220,0.2)")
+                .withStrokeColor("rgba(220,220,220,1)")
+                .withPointColor("rgba(220,220,220,1)")
+                .withPointStrokeColor("#fff")
+                .withPointHighlightFillColor("#fff")
+                .withPointHighlightStroke("rgba(220,220,220,1)");
+        
+        final ChartDatasetBuilder<BigDecimal> expenseDatasetBuilder = 
+                new ChartDatasetBuilder<>()
+                .withLabel(this.translate("dashboard.expenses-serie"))
+                .filledByColor("rgba(151,187,205,0.2)")
+                .withStrokeColor("rgba(151,187,205,1)")
+                .withPointColor("rgba(151,187,205,1)")
+                .withPointStrokeColor("#fff")
+                .withPointHighlightFillColor("#fff")
+                .withPointHighlightStroke("rgba(151,187,205,1)");;
+
+        this.closingChartModel = new ClosingChartModel();
+        
+        // coloca o nome das series e os dados
+        this.closedPeriods.stream().forEach(period -> {
+                      
+            this.closingChartModel.addLabel(period.getIdentification());
+            
+            revenueDatasetBuilder.andData(period.getRevenuesTotal());
+            expenseDatasetBuilder.andData(period.getExpensesTotal());
+        });
+        
+        this.closingChartModel.addDataset(revenueDatasetBuilder.build());
+        this.closingChartModel.addDataset(expenseDatasetBuilder.build());
+        
+        this.executeScript("createClosingChart(" + this.closingChartModel.toJson() + ")");
+    }
+    
+    /**
      * @return a versao da aplicacao
      */
     public String getVersion() {
