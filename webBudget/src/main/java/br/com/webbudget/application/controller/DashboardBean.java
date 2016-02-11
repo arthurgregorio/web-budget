@@ -16,15 +16,12 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.domain.entity.closing.Closing;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.misc.MovementCalculator;
-import br.com.webbudget.domain.misc.chart.ChartDataset;
 import br.com.webbudget.domain.misc.chart.ChartDatasetBuilder;
 import br.com.webbudget.domain.misc.chart.ClosingChartModel;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.service.ClosingService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import java.math.BigDecimal;
@@ -112,8 +109,12 @@ public class DashboardBean extends AbstractBean {
             final FinancialPeriod latestClosedPeriod = 
                     this.financialPeriodService.findLatestClosedPeriod();
             
-            this.accumulated = latestClosedPeriod.getAccumulated()
-                    .add(this.calculator.getBalance());
+            if (latestClosedPeriod != null) {
+                this.accumulated = latestClosedPeriod.getAccumulated()
+                        .add(this.calculator.getBalance());
+            } else {
+                this.accumulated = this.calculator.getBalance();
+            }
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage());
         } catch (Exception ex) {
@@ -130,22 +131,22 @@ public class DashboardBean extends AbstractBean {
         final ChartDatasetBuilder<BigDecimal> revenueDatasetBuilder = 
                 new ChartDatasetBuilder<>()
                 .withLabel(this.translate("dashboard.revenue-serie"))
-                .filledByColor("rgba(220,220,220,0.2)")
-                .withStrokeColor("rgba(220,220,220,1)")
-                .withPointColor("rgba(220,220,220,1)")
+                .filledByColor("rgba(140,217,140,0.2)")
+                .withStrokeColor("rgba(51,153,51,1)")
+                .withPointColor("rgba(45,134,45,1)")
                 .withPointStrokeColor("#fff")
                 .withPointHighlightFillColor("#fff")
-                .withPointHighlightStroke("rgba(220,220,220,1)");
+                .withPointHighlightStroke("rgba(45,134,45,1)");
         
         final ChartDatasetBuilder<BigDecimal> expenseDatasetBuilder = 
                 new ChartDatasetBuilder<>()
                 .withLabel(this.translate("dashboard.expenses-serie"))
-                .filledByColor("rgba(151,187,205,0.2)")
-                .withStrokeColor("rgba(151,187,205,1)")
-                .withPointColor("rgba(151,187,205,1)")
+                .filledByColor("rgba(255,153,153,0.2)")
+                .withStrokeColor("rgba(255,77,77,1)")
+                .withPointColor("rgba(204,0,0,1)")
                 .withPointStrokeColor("#fff")
                 .withPointHighlightFillColor("#fff")
-                .withPointHighlightStroke("rgba(151,187,205,1)");;
+                .withPointHighlightStroke("rgba(204,0,0,1)");
 
         this.closingChartModel = new ClosingChartModel();
         
