@@ -32,7 +32,7 @@ import org.picketlink.Identity;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 2.0.0
  * @since 1.0.0, 02/03/2014
  */
 @Named
@@ -48,10 +48,10 @@ public class UserBean extends AbstractBean {
     private List<Group> groups;
 
     @Inject
-    private transient Identity identity;
+    private Identity identity;
     
     @Inject
-    private transient AccountService accountService;
+    private AccountService accountService;
 
     /**
      *
@@ -106,7 +106,7 @@ public class UserBean extends AbstractBean {
      */
     public void changeToDelete(String userId) {
         this.user = this.accountService.findUserById(userId);
-//        this.openDialog("deleteUserDialog", "dialogDeleteUser");
+        this.updateAndOpenDialog("deleteUserDialog", "dialogDeleteUser");
     }
 
     /**
@@ -119,13 +119,11 @@ public class UserBean extends AbstractBean {
 
             this.user = new User();
 
-//            this.info("user.action.saved", true);
+            this.addInfo(true, "user.saved");
         } catch (InternalServiceError ex) {
-            this.logger.error("UserBean#doSave has found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
+            this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error("UserBean#doSave has found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
+            this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
 
@@ -137,13 +135,11 @@ public class UserBean extends AbstractBean {
         try {
             this.accountService.update(this.user);
 
-//            this.info("user.action.updated", true);
+            this.addInfo(true, "user.updated");
         } catch (InternalServiceError ex) {
-            this.logger.error("UserBean#doUpdate has found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
+            this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error("UserBean#doUpdate has found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
+            this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
 
@@ -156,12 +152,13 @@ public class UserBean extends AbstractBean {
             this.accountService.delete(this.user);
             this.users = this.accountService.listUsers(null);
 
-//            this.info("user.action.deleted", true);
+            this.addInfo(true, "user.deleted");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error("UserBean#doDelete found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-        } finally {
-//            this.update("usersList");
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }finally {
+            this.updateComponent("usersList");
             this.closeDialog("dialogDeleteUser");
         }
     }

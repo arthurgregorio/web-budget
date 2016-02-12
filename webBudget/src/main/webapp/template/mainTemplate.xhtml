@@ -217,14 +217,14 @@
                         <li class="header">#{menu['tools']}</li>
                         <li class="#{activeMenu eq 'groups' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.GROUP_VIEW)}">
-                            <p:link href="listGroups.xhtml">
+                            <p:link href="/main/tools/group/listGroups.xhtml">
                                 <i class="fa fa-users"></i> 
                                 <span>#{menu['tools.groups']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'users' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.USER_VIEW)}">
-                            <p:link href="/main/tools/group/listUsers.xhtml">
+                            <p:link href="/main/tools/user/listUsers.xhtml">
                                 <i class="fa fa-user"></i> 
                                 <span>#{menu['tools.users']}</span>
                             </p:link>
