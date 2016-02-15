@@ -46,3 +46,11 @@ no-padding {
         line-height: 10px;
     }
 }
+
+/* arvore de permissoes do grupo */
+.permission-tree {
+    margin-top: 15px;
+    overflow: auto;
+    height: 300px !important;
+    width: auto !important;
+}

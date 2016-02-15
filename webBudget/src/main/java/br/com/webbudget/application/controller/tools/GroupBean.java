@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.picketlink.idm.IdentityManagementException;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -39,7 +40,7 @@ import org.primefaces.model.TreeNode;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 2.0.0, 22/07/2015
  */
 @Named
@@ -59,9 +60,9 @@ public class GroupBean extends AbstractBean {
     private List<Group> groups;
 
     @Inject
-    private transient Authorization authorization;
+    private Authorization authorization;
     @Inject
-    private transient AccountService accountService;
+    private AccountService accountService;
 
     /**
      *
@@ -111,7 +112,7 @@ public class GroupBean extends AbstractBean {
      */
     public void changeToDelete(String groupId) {
         this.group = this.accountService.findGroupById(groupId);
-//        this.openDialog("deleteGroupDialog", "dialogDeleteGroup");
+        this.updateAndOpenDialog("deleteGroupDialog", "dialogDeleteGroup");
     }
 
     /**
@@ -123,13 +124,13 @@ public class GroupBean extends AbstractBean {
             this.accountService.save(this.group, this.nodesToAuthorizations());
             this.group = new Group();
             this.unselectAuthorizations();
-//            this.info("group.action.saved", true);
+            this.addInfo(true, "group.saved");
         } catch (InternalServiceError ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
+            this.addError(true, ex.getMessage());
         } catch (Exception ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
+            this.addError(true, "generic.operation-error", ex.getMessage());
         }
     }
 
@@ -140,13 +141,13 @@ public class GroupBean extends AbstractBean {
 
         try {
             this.accountService.update(this.group, this.nodesToAuthorizations());
-//            this.info("group.action.updated", true);
+            this.addInfo(true, "group.updated");
         } catch (InternalServiceError ex) {
             this.logger.error("GroupBean#doUpdate has found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
+            this.addError(true, ex.getMessage());
         } catch (Exception ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
+            this.addError(true, "generic.operation-error", ex.getMessage());
         }
     }
 
@@ -158,12 +159,17 @@ public class GroupBean extends AbstractBean {
         try {
             this.accountService.delete(this.group);
             this.groups = this.accountService.listGroups(null);
-//            this.info("group.action.deleted", true);
+            this.addInfo(true, "group.deleted");
         } catch (Exception ex) {
-            this.logger.error("GroupBean#doDelete found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
+            if (this.containsException(IdentityManagementException.class, ex)) {
+                this.addError(true, "error.group.integrity-violation",
+                        this.group.getName());
+            } else {
+                this.logger.error("GroupBean#doDelete found erros", ex);
+                this.addError(true, "generic.operation-error", ex.getMessage());
+            }
         } finally {
-//            this.update("groupsList");
+            this.updateComponent("groupsList");
             this.closeDialog("dialogDeleteGroup");
         }
     }
@@ -213,9 +219,9 @@ public class GroupBean extends AbstractBean {
             final TreeNode rootNode = new DefaultTreeNode(key, this.treeRoot);
 
             // pegamos todas as permissoes vinculadas a key e setamos no root dela
-            for (String authority : roles.get(key)) {
+            roles.get(key).stream().forEach((authority) -> {
                 rootNode.getChildren().add(new DefaultTreeNode(authority, rootNode));
-            }
+            });
 
             // setamos tudo no root de todos
             this.treeRoot.getChildren().add(rootNode);
@@ -231,9 +237,9 @@ public class GroupBean extends AbstractBean {
         for (TreeNode node : this.treeRoot.getChildren()) {
 
             if (!node.getChildren().isEmpty()) {
-                for (TreeNode childNode : node.getChildren()) {
+                node.getChildren().stream().forEach((childNode) -> {
                     childNode.setSelected(false);
-                }
+                });
             }
             node.setSelected(false);
         }
@@ -274,12 +280,5 @@ public class GroupBean extends AbstractBean {
      */
     public String doCancel() {
         return "listGroups.xhtml?faces-redirect=true";
-    }
-
-    /**
-     * @return
-     */
-    public String toDashboard() {
-        return "/main/dashboard.xhtml?faces-redirect=true";
     }
 }

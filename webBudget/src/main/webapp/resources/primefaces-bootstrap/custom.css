@@ -114,3 +114,22 @@ div.ui-paginator {
 .ui-selectonemenu-label {
     padding: 6px !important;
 }
+
+/* corrige o label dos treenodes da arvore de permissoes */
+.ui-treenode-label {
+    position: relative;
+    left: 3px;
+}
+.ui-tree-toggler {
+    position: relative !important;
+}
+.ui-icon-triangle-1-e {
+    top: 4px;
+    background-position: initial !important;
+    background-image: url("#{resource['webbudget:img/ui-icon-arrow-right.png']}") !important;
+}
+.ui-icon-triangle-1-s {
+    top: 4px;
+    background-position: initial !important;
+    background-image: url("#{resource['webbudget:img/ui-icon-arrow-down.png']}") !important;
+}

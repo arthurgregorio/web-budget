@@ -47,7 +47,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['tools']}</a></li>
-        <li><a href="listusers.xhtml">#{breadcrumb['tools.user']}</a></li>
+        <li><a href="listUsers.xhtml">#{breadcrumb['tools.user']}</a></li>
         <li jsf:rendered="#{userBean.viewState eq 'ADDING'}" 
             class="active"><a href="#">#{breadcrumb['including']}</a></li>
         <li jsf:rendered="#{userBean.viewState eq 'EDITING'}" 
