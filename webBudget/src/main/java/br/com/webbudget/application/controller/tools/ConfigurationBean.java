@@ -33,7 +33,7 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.1.0, 23/03/2015
  */
 @Named
@@ -49,9 +49,9 @@ public class ConfigurationBean extends AbstractBean {
     private List<MovementClass> movementClasses;
     
     @Inject
-    private transient MovementService movementService;
+    private MovementService movementService;
     @Inject
-    private transient ConfigurationService configurationService;
+    private ConfigurationService configurationService;
     
     /**
      * Inicializa a configuracao default
@@ -76,15 +76,15 @@ public class ConfigurationBean extends AbstractBean {
      */
     public void doSave() {
         
-//        try {
-//            this.configuration = this.configurationService
-//                    .saveConfiguration(this.configuration);
-//
-//            this.info("configuration.action.saved", true);
-//        } catch (Exception ex) {
-//            this.logger.error("ConfigurationBean#doSave found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        } 
+        try {
+            this.configuration = this.configurationService
+                    .saveConfiguration(this.configuration);
+
+            this.addInfo(true, "configuration.saved", true);
+        } catch (Exception ex) {
+            this.logger.error("ConfigurationBean#doSave found erros", ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        } 
     }
     
     /**
@@ -93,6 +93,6 @@ public class ConfigurationBean extends AbstractBean {
     public void loadMovementClasses() {
         this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
                 this.configuration.getInvoiceDefaultCostCenter(), null);
-//        this.update("inMovementClass");
+        this.updateComponent("inMovementClass");
     }
 }

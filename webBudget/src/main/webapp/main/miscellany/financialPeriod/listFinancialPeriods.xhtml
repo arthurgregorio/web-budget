@@ -23,43 +23,46 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="financialPeriods"/>
+
     <f:metadata>
         <f:viewAction action="#{financialPeriodBean.initializeListing()}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['financial-period.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['financial-period.page-description']}
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['miscellany']}" />
-        <p:menuitem url="listFinancialPeriods.xhtml"
-                    value="#{breadcrumb['miscellany.financial-period']}" />
+        <li><a href="#">#{breadcrumb['miscellany']}</a></li>
+        <li class="active"><a href="listFinancialPeriods.xhtml">#{breadcrumb['miscellany.financial-period']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <p:messages id="messages" closable="true" globalOnly="true"/>
             </div>
         </div>
 
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-10">
-
-                </div>
-                <div class="ui-grid-col-2 div-align-right">
-                    <p:commandButton immediate="true"
-                                     value="#{menu['add']}"
-                                     styleClass="ui-button-info" 
-                                     action="#{financialPeriodBean.changeToAdd()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_INSERT)}"/>
-                </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h:form id="controlsForm" prependId="false">
+                    <div class="box-tools pull-right">
+                        <p:commandButton immediate="true"
+                                         value="#{menu['new']}"
+                                         styleClass="btn btn-flat btn-primary"
+                                         action="#{financialPeriodBean.changeToAdd()}"
+                                         rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_INSERT)}"/>
+                    </div>
+                </h:form>
             </div>
-        </h:form>
-
-        <div jsf:id="listPanel"
-             class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
+            <div jsf:id="boxBody" class="box-body">
                 <p:dataTable id="financialPeriodsList" 
                              rows="15"
                              lazy="true"
@@ -72,7 +75,7 @@
                              emptyMessage="#{messages['financial-period.list.empty']}">
 
                     <p:column width="10%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{messages['financial-period.list.closed']}">
                         <p:selectBooleanCheckbox disabled="true" 
                                                  value="#{financialPeriod.closed}" />
@@ -81,38 +84,40 @@
                         #{financialPeriod.identification}
                     </p:column>
                     <p:column width="12%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{messages['financial-period.list.start']}">
                         <h:outputText value="#{financialPeriod.start}" >
                             <f:converter converterId="localDateConverter" />
                         </h:outputText>
                     </p:column>
                     <p:column width="12%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{messages['financial-period.list.end']}">
                         <h:outputText value="#{financialPeriod.end}" >
                             <f:converter converterId="localDateConverter" />
                         </h:outputText>
                     </p:column>
                     <p:column width="12%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{messages['financial-period.list.closing-date']}">
                         <h:outputText rendered="#{financialPeriod.closed eq true}"
                                       value="#{financialPeriod.closing.closingDate}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
-                        <h:outputText styleClass="green-heavy-test"
-                                      rendered="#{financialPeriod.expired eq false 
-                                                  and financialPeriod.closed eq false}"
-                                      value="#{messages['financial-period.list.open']}" />    
-                        <h:outputText styleClass="red-heavy-test"
-                                      rendered="#{financialPeriod.expired eq true 
-                                                  and financialPeriod.closed eq false}"
-                                      value="#{messages['financial-period.list.expired']}" />    
+                        <strong class="text-success"
+                                jsf:rendered="#{financialPeriod.expired eq false 
+                                                and financialPeriod.closed eq false}">
+                                #{messages['financial-period.list.open']}
+                        </strong>
+                        <strong class="text-red"
+                                jsf:rendered="#{financialPeriod.expired eq true 
+                                                and financialPeriod.closed eq false}">
+                            #{messages['financial-period.list.expired']}
+                        </strong>
                     </p:column>
 
                     <p:column width="15%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{menu['actions']}">
                         <p:commandButton immediate="true"
                                          icon="fa fa-search"
@@ -139,8 +144,8 @@
                 </p:dataTable>
             </div>
         </div>
-        
-        <p:blockUI block="listPanel"
+
+        <p:blockUI block="boxBody"
                    widgetVar="listBlock"
                    trigger="financialPeriodsList">
             <div class="div-align-center">

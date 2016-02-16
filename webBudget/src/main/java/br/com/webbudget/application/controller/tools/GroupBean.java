@@ -60,9 +60,9 @@ public class GroupBean extends AbstractBean {
     private List<Group> groups;
 
     @Inject
-    private Authorization authorization;
+    private transient Authorization authorization;
     @Inject
-    private AccountService accountService;
+    private transient AccountService accountService;
 
     /**
      *
@@ -130,7 +130,7 @@ public class GroupBean extends AbstractBean {
             this.addError(true, ex.getMessage());
         } catch (Exception ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
-            this.addError(true, "generic.operation-error", ex.getMessage());
+            this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
 
@@ -147,7 +147,7 @@ public class GroupBean extends AbstractBean {
             this.addError(true, ex.getMessage());
         } catch (Exception ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
-            this.addError(true, "generic.operation-error", ex.getMessage());
+            this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
 
@@ -166,7 +166,7 @@ public class GroupBean extends AbstractBean {
                         this.group.getName());
             } else {
                 this.logger.error("GroupBean#doDelete found erros", ex);
-                this.addError(true, "generic.operation-error", ex.getMessage());
+                this.addError(true, "error.undefined-error", ex.getMessage());
             }
         } finally {
             this.updateComponent("groupsList");
