@@ -61,7 +61,7 @@ public class WalletService {
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null) {
-            throw new InternalServiceError("wallet.validate.duplicated");
+            throw new InternalServiceError("error.wallet.duplicated");
         }
 
         wallet = this.walletRepository.save(wallet);
@@ -94,7 +94,7 @@ public class WalletService {
                 wallet.getBank(), wallet.getWalletType());
 
         if (found != null && !found.equals(wallet)) {
-            throw new InternalServiceError("wallet.validate.duplicated");
+            throw new InternalServiceError("error.wallet.duplicated");
         }
 
         return this.walletRepository.save(wallet);

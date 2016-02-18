@@ -72,7 +72,7 @@
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
                              value="#{walletBean.walletsModel}"
-                             emptyMessage="#{messages['wallet.list.empty']}">
+                             emptyMessage="#{messages['list.empty']}">
 
                     <p:column width="10%" 
                               styleClass="align-center"
@@ -98,16 +98,19 @@
                               headerText="#{menu['actions']}">
                         <p:commandButton icon="fa fa-wrench"
                                          title="#{menu['balance-adjust']}"
+                                         styleClass="btn btn-flat btn-default"
                                          action="#{walletBean.changeToAdjustment(wallet.id)}" 
                                          rendered="#{userSessionBean.hasRole(authorization.WALLET_ADJUST_BALANCE)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton icon="fa fa-edit"
                                          title="#{menu['edit']}"
+                                         styleClass="btn btn-flat btn-default"
                                          action="#{walletBean.changeToEdit(wallet.id)}"
                                          rendered="#{userSessionBean.hasRole(authorization.WALLET_UPDATE)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton icon="fa fa-remove"
                                          title="#{menu['delete']}"
+                                         styleClass="btn btn-flat btn-default"
                                          actionListener="#{walletBean.changeToDelete(wallet.id)}" 
                                          rendered="#{userSessionBean.hasRole(authorization.WALLET_DELETE)}"/>
                     </p:column>

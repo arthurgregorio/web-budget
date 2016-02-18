@@ -101,11 +101,13 @@
                               headerText="#{menu['actions']}">
                         <p:commandButton icon="fa fa-edit"
                                          title="#{menu['edit']}"
+                                         styleClass="btn btn-flat btn-default"
                                          action="#{costCenterBean.changeToEdit(costCenter.id)}" 
                                          rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_UPDATE)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton icon="fa fa-remove"
                                          title="#{menu['delete']}"
+                                         styleClass="btn btn-flat btn-default"
                                          actionListener="#{costCenterBean.changeToDelete(costCenter.id)}" 
                                          rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_DELETE)}"/>
                     </p:column>

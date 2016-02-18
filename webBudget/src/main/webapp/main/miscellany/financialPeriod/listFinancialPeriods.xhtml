@@ -122,13 +122,15 @@
                         <p:commandButton immediate="true"
                                          icon="fa fa-search"
                                          title="#{menu['detail']}"
+                                         styleClass="btn btn-flat btn-default"
                                          action="#{financialPeriodBean.changeToDetails(financialPeriod.id)}"
                                          rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_DETAILS)}" />
                         <p:spacer width="10"
                                   rendered="#{financialPeriod.closed eq false 
                                               and userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
                         <p:button icon="fa fa-calculator"
-                                  title="#{menu['calculate']}"
+                                  title="#{menu['finalize']}"
+                                  styleClass="btn btn-flat btn-default"
                                   href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"
                                   rendered="#{financialPeriod.closed eq false 
                                               and userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
@@ -137,6 +139,7 @@
                                               and userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_DELETE)}"/>
                         <p:commandButton icon="fa fa-remove"
                                          title="#{menu['delete']}"
+                                         styleClass="btn btn-flat btn-default"
                                          actionListener="#{financialPeriodBean.changeToDelete(financialPeriod.id)}" 
                                          rendered="#{financialPeriod.closed eq false 
                                                      and userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_DELETE)}" />

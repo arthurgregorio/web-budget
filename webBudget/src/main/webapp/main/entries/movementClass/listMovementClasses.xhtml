@@ -100,11 +100,13 @@
                               headerText="#{menu['actions']}">
                         <p:commandButton icon="fa fa-edit"
                                          title="#{menu['edit']}"
+                                         styleClass="btn btn-flat btn-default"
                                          action="#{movementClassBean.changeToEdit(movementClass.id)}" 
                                          rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_UPDATE)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton icon="fa fa-remove"
                                          title="#{menu['delete']}"
+                                         styleClass="btn btn-flat btn-default"
                                          actionListener="#{movementClassBean.changeToDelete(movementClass.id)}"
                                          rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_DELETE)}"/>
                     </p:column>

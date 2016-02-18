@@ -16,8 +16,6 @@
  */
 package br.com.webbudget.application.controller.entries;
 
-import br.com.caelum.stella.validation.CNPJValidator;
-import br.com.caelum.stella.validation.CPFValidator;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.contact.Contact;
 import br.com.webbudget.domain.entity.contact.ContactType;

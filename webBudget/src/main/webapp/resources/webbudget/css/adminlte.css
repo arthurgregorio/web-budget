@@ -2218,14 +2218,14 @@ a:focus {
     display: block;
 }
 .btn-default {
-    background-color: #f4f4f4;
-    color: #444;
-    border-color: #ddd;
+    background-color: #f4f4f4 !important;
+    color: #444 !important;
+    border-color: #ddd !important;
 }
 .btn-default:hover,
 .btn-default:active,
 .btn-default.hover {
-    background-color: #e7e7e7;
+    background-color: #e7e7e7 !important;
 }
 .btn-primary {
     background-color: #3c8dbc !important;

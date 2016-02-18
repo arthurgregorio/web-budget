@@ -102,7 +102,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null) {
-            throw new InternalServiceError("movement-class.validate.duplicated");
+            throw new InternalServiceError("error.movement-class.duplicated");
         }
 
         // valida o orcamento, se estiver ok, salva!
@@ -123,7 +123,7 @@ public class MovementService {
                 movementClass.getMovementClassType(), movementClass.getCostCenter());
 
         if (found != null && !found.equals(movementClass)) {
-            throw new InternalServiceError("movement-class.validate.duplicated");
+            throw new InternalServiceError("error.movement-class.duplicated");
         }
 
         // valida o orcamento, se estiver ok, salva!
@@ -420,7 +420,7 @@ public class MovementService {
                 costCenter.getParentCostCenter());
 
         if (found != null) {
-            throw new InternalServiceError("cost-center.validate.duplicated");
+            throw new InternalServiceError("error.cost-center.duplicated");
         }
 
         this.costCenterRepository.save(costCenter);
@@ -438,7 +438,7 @@ public class MovementService {
                 costCenter.getParentCostCenter());
 
         if (found != null && !found.equals(costCenter)) {
-            throw new InternalServiceError("cost-center.validate.duplicated");
+            throw new InternalServiceError("error.cost-center.duplicated");
         }
 
         return this.costCenterRepository.save(costCenter);

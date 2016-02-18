@@ -71,11 +71,11 @@ public class CardService {
                 card.getCardType());
 
         if (found != null) {
-            throw new InternalServiceError("card.validate.duplicated");
+            throw new InternalServiceError("error.card.duplicated");
         }
 
         if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-            throw new InternalServiceError("card.validate.no-debit-wallet");
+            throw new InternalServiceError("error.card.no-debit-wallet");
         }
 
         this.cardRepository.save(card);
@@ -93,11 +93,11 @@ public class CardService {
                 card.getCardType());
 
         if (found != null && !found.equals(card)) {
-            throw new InternalServiceError("card.validate.duplicated");
+            throw new InternalServiceError("error.card.duplicated");
         }
 
         if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-            throw new InternalServiceError("card.validate.no-debit-wallet");
+            throw new InternalServiceError("error.card.no-debit-wallet");
         }
 
         return this.cardRepository.save(card);

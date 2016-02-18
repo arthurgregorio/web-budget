@@ -92,11 +92,13 @@
                               headerText="#{menu['actions']}">
                         <p:commandButton icon="fa fa-edit"
                                          title="#{menu['edit']}"
+                                         styleClass="btn btn-flat btn-default"
                                          action="#{userBean.changeToEdit(user.id)}"
                                          rendered="#{userSessionBean.hasRole(authorization.USER_UPDATE)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton icon="fa fa-remove"
                                          title="#{menu['delete']}"
+                                         styleClass="btn btn-flat btn-default"
                                          actionListener="#{userBean.changeToDelete(user.id)}"
                                          rendered="#{userSessionBean.hasRole(authorization.USER_DELETE)}"/>
                     </p:column>
