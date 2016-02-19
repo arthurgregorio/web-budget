@@ -161,6 +161,7 @@ public class CardBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
+            this.logger.error(ex.getMessage());
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -176,6 +177,7 @@ public class CardBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
+            this.logger.error(ex.getMessage());
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -195,6 +197,7 @@ public class CardBean extends AbstractBean {
                 this.addError(true, "error.card.integrity-violation",
                         this.card.getName());
             } else {
+                this.logger.error(ex.getMessage());
                 this.addError(true, "error.undefined-error", ex.getMessage());
             }
         } finally {

@@ -69,7 +69,7 @@ public class ClosingBean extends AbstractBean {
 
         if (financialPeriodId > 0) {
             this.financialPeriod = this.financialPeriodService
-                    .findFinancialPeriodById(financialPeriodId);
+                    .findPeriodById(financialPeriodId);
         }
     }
 

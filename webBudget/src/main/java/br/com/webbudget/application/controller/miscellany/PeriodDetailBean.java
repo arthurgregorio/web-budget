@@ -17,20 +17,23 @@
 package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.service.GraphModelService;
+import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.misc.MovementCalculator;
 import br.com.webbudget.domain.service.FinancialPeriodService;
+import br.com.webbudget.domain.service.MovementService;
+import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import org.primefaces.model.chart.CartesianChartModel;
 
 /**
  * Bean responsavel pelo controle da view de detalhes do periodo
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 2.0.0
  * @since 1.0.0, 11/04/2014
  */
 @Named
@@ -38,46 +41,41 @@ import org.primefaces.model.chart.CartesianChartModel;
 public class PeriodDetailBean extends AbstractBean {
 
     @Getter
-    private PeriodDetailsDTO periodDetailsDTO;
-
+    private FinancialPeriod period;
     @Getter
-    private CartesianChartModel expensesModel;
-    @Getter
-    private CartesianChartModel revenuesModel;
-
+    private MovementCalculator calculator;
+    
     @Inject
-    private transient GraphModelService graphModelService;
+    private MovementService movementService;
     @Inject
-    private transient FinancialPeriodService financialPeriodService;
+    private FinancialPeriodService financialPeriodService;
 
     /**
-     * @param financialPeriodId
+     * @param periodId
      */
-    public void initializeDetails(long financialPeriodId) {
-
-        // busca o preview do periodo
-        this.periodDetailsDTO = this.financialPeriodService
-                .previewPeriod(financialPeriodId);
-
-        // monta o grafico
-        this.revenuesModel = this.graphModelService.buildClassesChartModel(
-                this.periodDetailsDTO.getRevenueClasses());
-        this.expensesModel = this.graphModelService.buildClassesChartModel(
-                this.periodDetailsDTO.getExpenseClasses());
+    public void initialize(long periodId) {
+        
+        // pega o periodo e os movimentos
+        try {
+            this.period = this.financialPeriodService
+                    .findPeriodById(periodId);
+            
+            final List<Movement> movements = this.movementService
+                    .listMovementsByPeriod(this.period);
+            
+            this.calculator = new MovementCalculator(movements);
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage());
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
 
+    
+    
     /**
-     * @return
+     * @return volta para a listagem de periodos
      */
     public String doCancel() {
         return "listFinancialPeriods.xhtml?faces-redirect=true";
-    }
-
-    /**
-     * @return
-     */
-    public String doRefresh() {
-        return "detailFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId="
-                + this.periodDetailsDTO.getFinancialPeriod().getId();
     }
 }

@@ -16,20 +16,15 @@
  */
 package br.com.webbudget.domain.service;
 
-import br.com.webbudget.application.controller.miscellany.PeriodDetailsDTO;
 import br.com.webbudget.domain.misc.MovementsCalculator1;
-import br.com.webbudget.domain.entity.card.CardType;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.movement.MovementClass;
-import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.misc.events.PeriodOpen;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.movement.IFinancialPeriodRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -66,7 +61,7 @@ public class FinancialPeriodService {
     @Transactional
     public void openPeriod(FinancialPeriod financialPeriod) {
 
-        final FinancialPeriod found = this.findFinancialPeriodByIdentification(
+        final FinancialPeriod found = this.findPeriodByIdentification(
                 financialPeriod.getIdentification());
 
         if (found != null && !found.equals(financialPeriod)) {
@@ -116,53 +111,6 @@ public class FinancialPeriodService {
 
     /**
      *
-     * @param periodId
-     * @return
-     */
-    public PeriodDetailsDTO previewPeriod(long periodId) {
-
-        final PeriodDetailsDTO periodDetailsDTO = new PeriodDetailsDTO();
-
-        // buscamos o periodo
-        final FinancialPeriod financialPeriod
-                = this.financialPeriodRepository.findById(periodId, false);
-
-        // calculamos os saldos
-        final BigDecimal revenuesTotal = this.movementsCalculator.
-                calculateTotalByDirection(financialPeriod, MovementClassType.IN);
-        final BigDecimal expensesTotal = this.movementsCalculator.
-                calculateTotalByDirection(financialPeriod, MovementClassType.OUT);
-
-        // pegamos os totais de consumo por tipo de cartao
-        final BigDecimal debitCardExpenses = this.movementsCalculator.
-                calculateCardExpenses(financialPeriod, CardType.DEBIT);
-        final BigDecimal creditCardExpenses = this.movementsCalculator.
-                calculateCardExpenses(financialPeriod, CardType.CREDIT);
-
-        final List<MovementClass> revenueClasses = this.movementsCalculator
-                .calculateTotalByMovementClass(financialPeriod, MovementClassType.IN);
-        final List<MovementClass> expensesClasses = this.movementsCalculator
-                .calculateTotalByMovementClass(financialPeriod, MovementClassType.OUT);
-
-        // preenchemos os detalhes
-        periodDetailsDTO.setFinancialPeriod(financialPeriod);
-
-        periodDetailsDTO.setExpenses(expensesTotal);
-        periodDetailsDTO.setRevenues(revenuesTotal);
-
-        periodDetailsDTO.setDebitCardExpenses(debitCardExpenses);
-        periodDetailsDTO.setCreditCardExpenses(creditCardExpenses);
-
-        periodDetailsDTO.setRevenueClasses(revenueClasses);
-        periodDetailsDTO.setExpenseClasses(expensesClasses);
-
-        periodDetailsDTO.sortMovementClasses();
-
-        return periodDetailsDTO;
-    }
-    
-    /**
-     *
      * @return
      */
     public FinancialPeriod findActiveFinancialPeriod() {
@@ -189,7 +137,7 @@ public class FinancialPeriodService {
      * @param financialPeriodId
      * @return
      */
-    public FinancialPeriod findFinancialPeriodById(long financialPeriodId) {
+    public FinancialPeriod findPeriodById(long financialPeriodId) {
         return this.financialPeriodRepository.findById(financialPeriodId, false);
     }
 
@@ -198,7 +146,7 @@ public class FinancialPeriodService {
      * @param identification
      * @return
      */
-    public FinancialPeriod findFinancialPeriodByIdentification(String identification) {
+    public FinancialPeriod findPeriodByIdentification(String identification) {
         return this.financialPeriodRepository.findByIdentification(identification);
     }
 

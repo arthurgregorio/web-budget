@@ -120,7 +120,7 @@ public class FinancialPeriodBean extends AbstractBean {
      * @return
      */
     public String changeToDetails(long financialPeriodId) {
-        return "detailFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId=" + financialPeriodId;
+        return "detailFinancialPeriod.xhtml?faces-redirect=true&periodId=" + financialPeriodId;
     }
 
     /**
@@ -137,7 +137,7 @@ public class FinancialPeriodBean extends AbstractBean {
      */
     public void changeToDelete(long periodId) {
         this.financialPeriod = this.financialPeriodService
-                .findFinancialPeriodById(periodId);
+                .findPeriodById(periodId);
         this.updateAndOpenDialog("deletePeriodDialog", "dialogDeletePeriod");
     }
 
