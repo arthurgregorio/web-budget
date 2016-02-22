@@ -43,7 +43,7 @@
     </ui:define>
 
     <ui:define name="content">
-        
+
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <p:messages id="messages" closable="true" globalOnly="true"/>
@@ -51,50 +51,55 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3">
-                <div class="info-box">
-                    <span class="info-box-icon bg-green">
-                        <i class="fa fa-plus"></i>
-                    </span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">#{messages['period-detail.revenues']}</span>
-                        <span class="info-box-number">
-                            <h:outputText value="#{periodDetailBean.calculator.revenuesTotal}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
+            <div class="col-md-9">
+                <div class="col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green">
+                            <i class="fa fa-plus"></i>
                         </span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">#{messages['period-detail.revenues']}</span>
+                            <span class="info-box-number">
+                                <h:outputText value="#{periodDetailBean.calculator.revenuesTotal}" >
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                </h:outputText>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-red">
+                            <i class="fa fa-minus"></i>
+                        </span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">#{messages['period-detail.expenses']}</span>
+                            <span class="info-box-number">
+                                <h:outputText value="#{periodDetailBean.calculator.expensesTotal}" >
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                </h:outputText>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-orange">
+                            <i class="fa fa-money"></i>
+                        </span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">#{messages['period-detail.balance']}</span>
+                            <span class="info-box-number">
+                                <h:outputText value="#{periodDetailBean.calculator.balance}" >
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                </h:outputText>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="info-box">
-                    <span class="info-box-icon bg-red">
-                        <i class="fa fa-minus"></i>
-                    </span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">#{messages['period-detail.expenses']}</span>
-                        <span class="info-box-number">
-                            <h:outputText value="#{periodDetailBean.calculator.expensesTotal}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="info-box">
-                    <span class="info-box-icon bg-orange">
-                        <i class="fa fa-money"></i>
-                    </span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">#{messages['period-detail.balance']}</span>
-                        <span class="info-box-number">
-                            <h:outputText value="#{periodDetailBean.calculator.balance}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </span>
-                    </div>
-                </div>
+
             </div>
         </div>
     </ui:define>
