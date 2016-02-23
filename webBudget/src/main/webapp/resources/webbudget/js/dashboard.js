@@ -15,6 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * 
+ * @param {type} closingsChartData
+ * @returns {undefined}
+ */
 function createClosingChart(closingsChartData) {
 
     // pega o canvas do grafico
@@ -36,12 +41,31 @@ function createClosingChart(closingsChartData) {
         datasetStroke: true,
         datasetStrokeWidth: 2,
         datasetFill: true,
-        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%=datasets[i].label%></li><%}%></ul>",
+        multiTooltipTemplate: "<%= addCommas(value) %>",
+        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for \n\(var i=0; i<datasets.length; i++){%><li><span style=\"background-color:\n\<%=datasets[i].lineColor%>\"></span><%=datasets[i].label%></li><%}%></ul>",
         maintainAspectRatio: true,
         responsive: true
     };
 
     //Create the line chart
-    var chart = closingsChart.Line(closingsChartData, closingChartOptions);
-    document.getElementById('closingsChartLegend').innerHTML = chart.generateLegend();
+    closingsChart.Line(closingsChartData, closingChartOptions);
 }
+;
+
+/**
+ * 
+ * @param {type} number
+ * @returns {x1|x|x2|String}
+ */
+function addCommas(number) {
+    number += '';
+    x = number.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? ',' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + '.' + '$2');
+    }
+    return "R$ " + x1 + x2;
+}
+;
