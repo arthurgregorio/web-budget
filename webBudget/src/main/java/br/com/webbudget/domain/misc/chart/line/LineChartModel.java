@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.misc.chart;
+package br.com.webbudget.domain.misc.chart.line;
 
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -28,17 +28,17 @@ import lombok.Setter;
  * @version 1.0.0
  * @since 2.2.0, 09/02/2016
  */
-public class ClosingChartModel {
+public class LineChartModel {
     
     private final List<String> labels;
     
     @Setter
-    private final List<ChartDataset> datasets;
+    private final List<LineChartDataset> datasets;
 
     /**
      * 
      */
-    public ClosingChartModel() {
+    public LineChartModel() {
         this.labels = new ArrayList<>();
         this.datasets = new ArrayList<>();
     }
@@ -53,7 +53,7 @@ public class ClosingChartModel {
     /**
      * @param chartDataset os datasets do nosso model
      */
-    public void addDataset(ChartDataset chartDataset) {
+    public void addDataset(LineChartDataset chartDataset) {
         this.datasets.add(chartDataset);
     }
     

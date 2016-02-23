@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.misc.chart;
+package br.com.webbudget.domain.misc.chart.line;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import lombok.Setter;
  * @version 1.0.0
  * @since 2.2.0, 09/02/2016
  */
-public class ChartDataset<T> {
+public class LineChartDataset<T> {
 
     @Setter
     private String label;
@@ -53,7 +53,7 @@ public class ChartDataset<T> {
     /**
      * 
      */
-    public ChartDataset() {
+    public LineChartDataset() {
         this.data = new ArrayList<>();
     }
     

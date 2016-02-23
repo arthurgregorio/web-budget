@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.misc.chart;
+package br.com.webbudget.domain.misc.chart.line;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +29,15 @@ import java.util.List;
  * @version 1.0.0
  * @since 1.0.0, 09/02/2016
  */
-public class ChartDatasetBuilder<T> {
+public class LineChartDatasetBuilder<T> {
 
-    private final ChartDataset<T> chartDataset;
+    private final LineChartDataset<T> chartDataset;
 
     /**
      * 
      */
-    public ChartDatasetBuilder() {
-        this.chartDataset = new ChartDataset<>();
+    public LineChartDatasetBuilder() {
+        this.chartDataset = new LineChartDataset<>();
     }
     
     /**
@@ -45,7 +45,7 @@ public class ChartDatasetBuilder<T> {
      * @param label
      * @return 
      */
-    public ChartDatasetBuilder withLabel(String label) {
+    public LineChartDatasetBuilder withLabel(String label) {
         this.chartDataset.setLabel(label);
         return this;
     }
@@ -55,7 +55,7 @@ public class ChartDatasetBuilder<T> {
      * @param color
      * @return 
      */
-    public ChartDatasetBuilder filledByColor(String color) {
+    public LineChartDatasetBuilder filledByColor(String color) {
         this.chartDataset.setFillColor(color);
         return this;
     }
@@ -65,7 +65,7 @@ public class ChartDatasetBuilder<T> {
      * @param color
      * @return 
      */
-    public ChartDatasetBuilder withPointColor(String color) {
+    public LineChartDatasetBuilder withPointColor(String color) {
         this.chartDataset.setPointColor(color);
         return this;
     }
@@ -75,7 +75,7 @@ public class ChartDatasetBuilder<T> {
      * @param color
      * @return 
      */
-    public ChartDatasetBuilder withPointHighlightFillColor(String color) {
+    public LineChartDatasetBuilder withPointHighlightFillColor(String color) {
         this.chartDataset.setPointHighlightFill(color);
         return this;
     }
@@ -85,7 +85,7 @@ public class ChartDatasetBuilder<T> {
      * @param color
      * @return 
      */
-    public ChartDatasetBuilder withPointHighlightStroke(String color) {
+    public LineChartDatasetBuilder withPointHighlightStroke(String color) {
         this.chartDataset.setPointHighlightStroke(color);
         return this;
     }
@@ -95,7 +95,7 @@ public class ChartDatasetBuilder<T> {
      * @param color
      * @return 
      */
-    public ChartDatasetBuilder withPointStrokeColor(String color) {
+    public LineChartDatasetBuilder withPointStrokeColor(String color) {
         this.chartDataset.setPointStrokeColor(color);
         return this;
     }
@@ -105,7 +105,7 @@ public class ChartDatasetBuilder<T> {
      * @param color
      * @return 
      */
-    public ChartDatasetBuilder withStrokeColor(String color) {
+    public LineChartDatasetBuilder withStrokeColor(String color) {
         this.chartDataset.setStrokeColor(color);
         return this;
     }
@@ -115,12 +115,12 @@ public class ChartDatasetBuilder<T> {
      * @param data
      * @return 
      */
-    public ChartDatasetBuilder andData(T data) {
+    public LineChartDatasetBuilder andData(T data) {
         this.chartDataset.addData(data);
         return this;
     }
     
-    public ChartDatasetBuilder andData(List<T> data) {
+    public LineChartDatasetBuilder andData(List<T> data) {
         this.chartDataset.setData(new ArrayList<>(data));
         return this;
     }
@@ -128,7 +128,7 @@ public class ChartDatasetBuilder<T> {
     /**
      * @return o dataset construido por este builder
      */
-    public ChartDataset<T> build() {
+    public LineChartDataset<T> build() {
         return this.chartDataset;
     }
 }

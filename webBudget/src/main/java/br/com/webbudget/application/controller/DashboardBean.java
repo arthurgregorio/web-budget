@@ -19,8 +19,8 @@ package br.com.webbudget.application.controller;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.misc.MovementCalculator;
-import br.com.webbudget.domain.misc.chart.ChartDatasetBuilder;
-import br.com.webbudget.domain.misc.chart.ClosingChartModel;
+import br.com.webbudget.domain.misc.chart.line.LineChartDatasetBuilder;
+import br.com.webbudget.domain.misc.chart.line.LineChartModel;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
@@ -54,7 +54,7 @@ public class DashboardBean extends AbstractBean {
     private List<FinancialPeriod> closedPeriods;
     
     @Getter
-    private ClosingChartModel closingChartModel;
+    private LineChartModel closingChartModel;
     
     @Getter
     private MovementCalculator calculator;
@@ -128,8 +128,8 @@ public class DashboardBean extends AbstractBean {
      */
     public void initializeClosingsGraph() {
         
-        final ChartDatasetBuilder<BigDecimal> revenueDatasetBuilder = 
-                new ChartDatasetBuilder<>()
+        final LineChartDatasetBuilder<BigDecimal> revenueDatasetBuilder = 
+                new LineChartDatasetBuilder<>()
                 .withLabel(this.translate("dashboard.revenue-serie"))
                 .filledByColor("rgba(140,217,140,0.2)")
                 .withStrokeColor("rgba(51,153,51,1)")
@@ -138,8 +138,8 @@ public class DashboardBean extends AbstractBean {
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(45,134,45,1)");
         
-        final ChartDatasetBuilder<BigDecimal> expenseDatasetBuilder = 
-                new ChartDatasetBuilder<>()
+        final LineChartDatasetBuilder<BigDecimal> expenseDatasetBuilder = 
+                new LineChartDatasetBuilder<>()
                 .withLabel(this.translate("dashboard.expenses-serie"))
                 .filledByColor("rgba(255,153,153,0.2)")
                 .withStrokeColor("rgba(255,77,77,1)")
@@ -148,7 +148,7 @@ public class DashboardBean extends AbstractBean {
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(204,0,0,1)");
 
-        this.closingChartModel = new ClosingChartModel();
+        this.closingChartModel = new LineChartModel();
         
         // coloca o nome das series e os dados
         this.closedPeriods.stream().forEach(period -> {
