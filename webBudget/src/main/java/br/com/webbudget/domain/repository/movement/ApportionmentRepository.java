@@ -19,9 +19,12 @@ package br.com.webbudget.domain.repository.movement;
 import br.com.webbudget.domain.entity.movement.Apportionment;
 import br.com.webbudget.domain.entity.movement.FixedMovement;
 import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.repository.GenericRepository;
+import java.math.BigDecimal;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -33,6 +36,22 @@ import org.hibernate.criterion.Restrictions;
  */
 public class ApportionmentRepository extends GenericRepository<Apportionment, Long> implements IApportionmentRepository {
 
+    /**
+     * 
+     * @param movementClass
+     * @return 
+     */
+    @Override
+    public BigDecimal totalMovementsPerClass(MovementClass movementClass) {
+       
+        final Criteria criteria = this.createCriteria();
+        
+        criteria.setProjection(Projections.sum("value"));
+        criteria.add(Restrictions.eq("movementClass", movementClass));
+        
+        return (BigDecimal) criteria.uniqueResult();
+    }
+    
     /**
      *
      * @param movement

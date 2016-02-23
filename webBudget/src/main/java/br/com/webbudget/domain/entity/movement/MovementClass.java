@@ -18,6 +18,7 @@ package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
@@ -84,5 +85,30 @@ public class MovementClass extends PersistentEntity {
     public MovementClass() {
         this.budget = BigDecimal.ZERO;
         this.totalMovements = BigDecimal.ZERO;
+    }
+    
+    /**
+     * @return se o orcamento desta classe ja estourou ou nao
+     */
+    public boolean isOverBudget() {
+        return this.totalMovements.compareTo(this.budget) >= 0;
+    }
+    
+    /**
+     * @return a porcentagem que o consumo desta classe representa no total 
+     * do orcamento
+     */
+    public int budgetCompletionPercentage() {
+        
+        BigDecimal percentage = BigDecimal.ZERO;
+        
+        if (this.isOverBudget()) {
+            return 100;
+        } else if (this.budget != BigDecimal.ZERO) {
+            percentage = this.totalMovements.multiply(new BigDecimal(100))
+                            .divide(this.budget, 2, RoundingMode.HALF_UP);
+        }
+        
+        return percentage.intValue() > 100 ? 100 : percentage.intValue();
     }
 }

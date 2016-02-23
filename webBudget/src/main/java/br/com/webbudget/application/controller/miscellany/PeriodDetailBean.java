@@ -19,9 +19,13 @@ package br.com.webbudget.application.controller.miscellany;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.entity.movement.MovementClass;
+import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.misc.MovementCalculator;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
+import br.com.webbudget.domain.service.PeriodDetailService;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -45,8 +49,15 @@ public class PeriodDetailBean extends AbstractBean {
     @Getter
     private MovementCalculator calculator;
     
+    @Getter
+    private List<MovementClass> revenueClasses;
+    @Getter
+    private List<MovementClass> expensesClasses;
+    
     @Inject
     private MovementService movementService;
+    @Inject
+    private PeriodDetailService periodDetailService;
     @Inject
     private FinancialPeriodService financialPeriodService;
 
@@ -54,6 +65,9 @@ public class PeriodDetailBean extends AbstractBean {
      * @param periodId
      */
     public void initialize(long periodId) {
+
+        this.revenueClasses = new ArrayList<>();
+        this.expensesClasses = new ArrayList<>();
         
         // pega o periodo e os movimentos
         try {
@@ -64,13 +78,31 @@ public class PeriodDetailBean extends AbstractBean {
                     .listMovementsByPeriod(this.period);
             
             this.calculator = new MovementCalculator(movements);
+            
+            // carrega as classes
+            this.loadExpensesByClass();
+            this.loadRevenuesByClass();
         } catch (Exception ex) {
             this.logger.error(ex.getMessage());
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
 
+    /**
+     * 
+     */
+    private void loadExpensesByClass() {
+        this.expensesClasses = this.periodDetailService
+                .fetchTopClassesAndValues(this.period, MovementClassType.OUT);
+    }
     
+    /**
+     * 
+     */
+    private void loadRevenuesByClass() {
+        this.revenueClasses = this.periodDetailService
+                .fetchTopClassesAndValues(this.period, MovementClassType.IN);
+    }
     
     /**
      * @return volta para a listagem de periodos
