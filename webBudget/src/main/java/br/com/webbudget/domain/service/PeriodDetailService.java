@@ -20,6 +20,7 @@ import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.misc.chart.line.LineChartDataset;
 import br.com.webbudget.domain.misc.chart.line.LineChartDatasetBuilder;
 import br.com.webbudget.domain.misc.chart.line.LineChartModel;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
@@ -29,9 +30,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import org.apache.commons.collections.ListUtils;
 
 /**
  *
@@ -83,14 +87,21 @@ public class PeriodDetailService {
         return withValues.size() > 10 ? withValues.subList(0, 10) : withValues;
     }
 
-    /**
-     * 
-     * @param period
-     * @return 
-     */
-    public LineChartModel buildDailyExpensesSummary(FinancialPeriod period) {
+    public LineChartModel bulidDailyChart(FinancialPeriod period) {
+        
+        final List<Movement> revenues = this.movementRepository
+                .listByPeriodAndDirection(period, MovementClassType.IN);
+        
+        final List<Movement> expenses = this.movementRepository
+                .listByPeriodAndDirection(period, MovementClassType.OUT);
+        
+        // agrupamos pelas datas das despesas e receitas
+        final List<LocalDate> payments = this.groupPaymentDates(
+                ListUtils.union(revenues, expenses));
 
-        final LineChartDatasetBuilder<BigDecimal> expenseDatasetBuilder
+        final LineChartModel model = new LineChartModel();
+        
+        final LineChartDatasetBuilder<BigDecimal> expensesBuilder
                 = new LineChartDatasetBuilder<>()
                 .filledByColor("rgba(255,153,153,0.2)")
                 .withStrokeColor("rgba(255,77,77,1)")
@@ -98,21 +109,8 @@ public class PeriodDetailService {
                 .withPointStrokeColor("#fff")
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(204,0,0,1)");
-
-        final List<Movement> movements = this.movementRepository
-                .listByPeriodAndDirection(period, MovementClassType.OUT);
-
-        return this.buildChart(movements, expenseDatasetBuilder);
-    }
-    
-    /**
-     * 
-     * @param period
-     * @return 
-     */
-    public LineChartModel buildDailyRevenuesSummary(FinancialPeriod period) {
-
-        final LineChartDatasetBuilder<BigDecimal> revenueDatasetBuilder = 
+        
+        final LineChartDatasetBuilder<BigDecimal> revenuesBuilder = 
                 new LineChartDatasetBuilder<>()
                 .filledByColor("rgba(140,217,140,0.2)")
                 .withStrokeColor("rgba(51,153,51,1)")
@@ -121,42 +119,30 @@ public class PeriodDetailService {
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(45,134,45,1)");
 
-        final List<Movement> movements = this.movementRepository
-                .listByPeriodAndDirection(period, MovementClassType.IN);
-
-        return this.buildChart(movements, revenueDatasetBuilder);
-    }
-
-    /**
-     *
-     * @param period
-     * @param direction
-     * @return
-     */
-    private LineChartModel buildChart(List<Movement> movements,
-            LineChartDatasetBuilder<BigDecimal> builder) {
-
-        final List<LocalDate> payments = this.groupPaymentDates(movements);
-
-        final LineChartModel model = new LineChartModel();
-
         payments.stream().forEach(payDate -> {
 
             model.addLabel(DateTimeFormatter
                     .ofPattern("dd/MM").format(payDate));
 
-            final BigDecimal total = movements.stream()
+            final BigDecimal expensesTotal = expenses.stream()
+                    .filter(movement -> movement.getPaymentDate().equals(payDate))
+                    .map(Movement::getValue)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            
+            final BigDecimal revenuesTotal = revenues.stream()
                     .filter(movement -> movement.getPaymentDate().equals(payDate))
                     .map(Movement::getValue)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            builder.andData(total);
+            expensesBuilder.andData(expensesTotal);
+            revenuesBuilder.andData(revenuesTotal);
         });
 
-        model.addDataset(builder.build());
+        model.addDataset(revenuesBuilder.build());
+        model.addDataset(expensesBuilder.build());
 
         return model;
-    }
+    }   
 
     /**
      * Agrupa todas as datas de pagamento dos movimentos pagos no periodo

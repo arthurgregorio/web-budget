@@ -22,6 +22,7 @@ import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.misc.MovementCalculator;
+import br.com.webbudget.domain.misc.chart.line.LineChartModel;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.PeriodDetailService;
@@ -82,6 +83,12 @@ public class PeriodDetailBean extends AbstractBean {
             // carrega as classes
             this.loadExpensesByClass();
             this.loadRevenuesByClass();
+            
+            // monta o grafico por dias
+            final LineChartModel chartModel = 
+                    this.periodDetailService.bulidDailyChart(this.period);
+            
+            this.executeScript("createDailySummaryChart(" + chartModel.toJson() + ")");
         } catch (Exception ex) {
             this.logger.error(ex.getMessage());
             this.addError(true, "error.undefined-error", ex.getMessage());
