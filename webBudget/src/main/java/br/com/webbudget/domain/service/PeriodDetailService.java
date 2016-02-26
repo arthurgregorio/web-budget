@@ -96,7 +96,7 @@ public class PeriodDetailService {
                 .listByPeriodAndDirection(period, MovementClassType.OUT);
         
         // agrupamos pelas datas das despesas e receitas
-        final List<LocalDate> payments = this.groupPaymentDates(
+        final List<LocalDate> payDates = this.groupPaymentDates(
                 ListUtils.union(revenues, expenses));
 
         final LineChartModel model = new LineChartModel();
@@ -119,7 +119,7 @@ public class PeriodDetailService {
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(45,134,45,1)");
 
-        payments.stream().forEach(payDate -> {
+        payDates.stream().forEach(payDate -> {
 
             model.addLabel(DateTimeFormatter
                     .ofPattern("dd/MM").format(payDate));
@@ -160,6 +160,8 @@ public class PeriodDetailService {
             }
         });
 
+        dates.sort((d1, d2) -> d1.compareTo(d2));
+        
         return dates;
     }
 }
