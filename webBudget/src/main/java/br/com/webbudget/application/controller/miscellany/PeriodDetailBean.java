@@ -26,6 +26,8 @@ import br.com.webbudget.domain.misc.chart.line.LineChartModel;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.PeriodDetailService;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -76,7 +78,7 @@ public class PeriodDetailBean extends AbstractBean {
                     .findPeriodById(periodId);
             
             final List<Movement> movements = this.movementService
-                    .listMovementsByPeriod(this.period);
+                    .listOnlyMovementsByPeriod(this.period);
             
             this.calculator = new MovementCalculator(movements);
             
@@ -93,6 +95,37 @@ public class PeriodDetailBean extends AbstractBean {
             this.logger.error(ex.getMessage());
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
+    }
+    
+    /**
+     * @return volta para a listagem de periodos
+     */
+    public String doCancel() {
+        return "listFinancialPeriods.xhtml?faces-redirect=true";
+    }
+
+    /**
+     * @return procentagem da meta de pagamentos no credito
+     */
+    public int getPaidOnCreditPercentage() {
+        return this.percentageOf(this.calculator.getTotalPaidOnCreditCard(), 
+                this.period.getCreditCardGoal());
+    }
+
+    /**
+     * @return porcentagem da meta de despesas
+     */
+    public int getExpensesGoalPercentage() {
+        return this.percentageOf(this.calculator.getExpensesTotal(), 
+                this.period.getExpensesGoal());
+    }
+    
+    /**
+     * @return porcentagem da meta de receitas
+     */
+    public int getRevenuesGoalPercentage() {
+        return this.percentageOf(this.calculator.getRevenuesTotal(), 
+                this.period.getRevenuesGoal());
     }
 
     /**
@@ -112,9 +145,25 @@ public class PeriodDetailBean extends AbstractBean {
     }
     
     /**
-     * @return volta para a listagem de periodos
+     * Executa uma fucking regra of Three para saber a porcentagem de um valor
+     * sobre o outro
+     * 
+     * @param x o x da parada
+     * @param total o total que seria o 100%
+     * 
+     * @return a porcentagem
      */
-    public String doCancel() {
-        return "listFinancialPeriods.xhtml?faces-redirect=true";
+    private int percentageOf(BigDecimal x, BigDecimal total) {
+        
+        BigDecimal percentage = BigDecimal.ZERO;
+        
+        if (x.compareTo(total) > 0) {
+            return 100;
+        } else {
+            percentage = x.multiply(new BigDecimal(100))
+                            .divide(total, 2, RoundingMode.HALF_UP);
+        }
+        
+        return percentage.intValue() > 100 ? 100 : percentage.intValue();
     }
 }

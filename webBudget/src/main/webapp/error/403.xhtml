@@ -18,18 +18,42 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:of="http://omnifaces.org/functions"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:define name="pageTitle">
+        #{messages['403.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['403.page-description']}
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li><a href="#">#{breadcrumb['error']}</a></li>
+    </ui:define>
+    
     <ui:define name="content">
-        <div class="ui-grid-row error-box">
-            <div class="ui-grid-col-12 div-align-center error-text">
-                <p:graphicImage width="256"
-                                height="256"
-                                library="images" 
-                                name="ui-http-403.svg" />
-                <p:spacer width="50"/>
-                <h:outputText value="#{messages['application.error.http-403']}" />
+        <div class="error-page">
+            <h2 class="headline text-blue">403</h2>
+
+            <div class="error-content">
+                <h3>
+                    <i class="fa fa-lock text-blue"></i>
+                    <p:spacer width="5"/>
+                    #{messages['403.tip']}
+                </h3>
+                <p>
+                    #{messages['403.message']}:
+                </p>
+                <p>
+                    <pre>
+                        <code>
+                            #{of:printStackTrace(requestScope['javax.servlet.error.exception'])}
+                        </code>
+                    </pre>
+                </p>
             </div>
         </div>
     </ui:define>

@@ -56,6 +56,18 @@ public class FinancialPeriod extends PersistentEntity {
     private String identification;
     @Getter
     @Setter
+    @Column(name = "credit_card_goal")
+    private BigDecimal creditCardGoal;
+    @Getter
+    @Setter
+    @Column(name = "expenses_goal")
+    private BigDecimal expensesGoal;
+    @Getter
+    @Setter
+    @Column(name = "revenues_goal")
+    private BigDecimal revenuesGoal;
+    @Getter
+    @Setter
     @NotNull(message = "{financial-period.start}")
     @Convert(converter = JPALocalDateConverter.class)
     @Column(name = "start", nullable = false)

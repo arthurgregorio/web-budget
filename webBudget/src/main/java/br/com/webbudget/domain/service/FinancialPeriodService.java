@@ -102,7 +102,8 @@ public class FinancialPeriodService {
         
         // se houver movimentos, lanca o erro
         if (movements != null && !movements.isEmpty()) {
-            throw new InternalServiceError("financial-period.validate.has-movements");
+            throw new InternalServiceError("error.financial-period.has-movements",
+                    financialPeriod.getIdentification());
         } 
         
         // nao tem movimentos entao deleta

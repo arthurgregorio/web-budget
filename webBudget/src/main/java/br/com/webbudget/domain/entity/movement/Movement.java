@@ -290,6 +290,21 @@ public class Movement extends PersistentEntity {
     }
 
     /**
+     * @return se este movimento foi pago com cartao de credito
+     */
+    public boolean isPaidOnCreditCard() {
+        return this.isExpense() && this.payment.getPaymentMethodType() 
+                == PaymentMethodType.CREDIT_CARD;
+    }
+    
+    /**
+     * @return se este movimento eh uma fatura de cartao ou nao
+     */
+    public boolean isCardInvoice() {
+        return this.movementType == MovementType.CARD_INVOICE;
+    }
+    
+    /**
      * @return false se o valor dos rateios for menor ou maior que o do
      * movimento
      */

@@ -27,6 +27,7 @@ import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
+import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.entity.wallet.Wallet;
@@ -51,6 +52,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
@@ -708,6 +710,21 @@ public class MovementService {
      */
     public List<Movement> listMovementsByPeriod(FinancialPeriod financialPeriod) {
         return this.movementRepository.listByPeriod(financialPeriod);
+    }
+    
+    /**
+     * Diferente do metodo que busca todas os movimentos por periodo, este 
+     * busca apenas os movimentos do tipo movimento, desconsiderando todos que 
+     * sao do tipo card invoice
+     * 
+     * @param financialPeriod o periodo
+     * @return 
+     */
+    public List<Movement> listOnlyMovementsByPeriod(FinancialPeriod financialPeriod) {
+        return this.movementRepository.listByPeriod(financialPeriod)
+                .stream()
+                .filter(movement -> !movement.isCardInvoice())
+                .collect(Collectors.toList());
     }
 
     /**

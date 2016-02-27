@@ -60,6 +60,16 @@ public class MovementCalculator {
                 .map(Movement::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+    
+    /**
+     * @return o total pago no cartao de credito
+     */
+    public BigDecimal getTotalPaidOnCreditCard() {
+        return this.movements.stream()
+                .filter(Movement::isPaidOnCreditCard)
+                .map(Movement::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 
     /**
      * @return o saldo, receitas menos despesas
