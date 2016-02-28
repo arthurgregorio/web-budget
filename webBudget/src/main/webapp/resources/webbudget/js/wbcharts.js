@@ -20,10 +20,10 @@
  * @param {type} data
  * @returns {undefined}
  */
-function createClosingChart(data) {
+function drawLineChart(data, canvas) {
 
     // pega o canvas do grafico
-    var chart = new Chart($("#closingsChart").get(0).getContext("2d"));
+    var chart = new Chart($("#" + canvas).get(0).getContext("2d"));
 
     var chartOptions = {
         showScale: true,
@@ -49,43 +49,35 @@ function createClosingChart(data) {
 
     //Create the line chart
     chart.Line(data, chartOptions);
-};
+}
 
 /**
  * 
  * @param {type} data
  * @returns {undefined}
  */
-function createDailySummaryChart(data) {
+function drawDonutChart(data, canvas) {
 
-    // pega o canvas do grafico
-    var chart = new Chart($("#dailySummaryChart").get(0).getContext("2d"));
+    var chart = new Chart($("#" + canvas).get(0).getContext("2d"));
 
     var chartOptions = {
-        showScale: true,
-        scaleShowGridLines: false,
-        scaleGridLineColor: "rgba(0,0,0,.05)",
-        scaleGridLineWidth: 1,
-        scaleShowHorizontalLines: true,
-        scaleShowVerticalLines: true,
-        bezierCurve: true,
-        bezierCurveTension: 0.3,
-        pointDot: true,
-        pointDotRadius: 4,
-        pointDotStrokeWidth: 1,
-        pointHitDetectionRadius: 20,
-        datasetStroke: true,
-        datasetStrokeWidth: 2,
-        datasetFill: true,
-        multiTooltipTemplate: "<%= addCommas(value) %>",
-        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for \n\(var i=0; i<datasets.length; i++){%><li><span style=\"background-color:\n\<%=datasets[i].lineColor%>\"></span><%=datasets[i].label%></li><%}%></ul>",
+        segmentShowStroke: true,
+        segmentStrokeColor: "#fff",
+        segmentStrokeWidth: 2,
+        percentageInnerCutout: 50, // This is 0 for Pie charts
+        animationSteps: 100,
+        animationEasing: "easeOutBounce",
+        animateRotate: true,
+        animateScale: false,
+        responsive: true,
+        tooltipTemplate: "<%=label%>: <%= addCommas(value) %>",
         maintainAspectRatio: true,
-        responsive: true
+        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
     };
 
-    //Create the line chart
-    chart.Line(data, chartOptions);
-};
+    var donut = chart.Doughnut(data, chartOptions);
+    $("#" + canvas + "Legend").append(donut.generateLegend());
+}
 
 /**
  * 
@@ -102,4 +94,4 @@ function addCommas(number) {
         x1 = x1.replace(rgx, '$1' + '.' + '$2');
     }
     return "R$ " + x1 + x2;
-};
+}

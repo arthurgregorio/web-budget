@@ -33,6 +33,16 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
     
+    <!-- exception filter -->
+    <filter>
+        <filter-name>FacesExceptionFilter</filter-name>
+        <filter-class>org.omnifaces.filter.FacesExceptionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FacesExceptionFilter</filter-name>
+        <servlet-name>FacesServlet</servlet-name>
+    </filter-mapping>
+    
     <!-- Descomente estas linhas se voce quiser que o sistema rode apenas com
          HTTPS, nao esqueca do redirect no wildfly 
     <security-constraint>
@@ -130,6 +140,10 @@
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.FACELETS_BUFFER_SIZE</param-name>
+        <param-value>65535</param-value> 
     </context-param>
     
     <!-- tipos mime -->

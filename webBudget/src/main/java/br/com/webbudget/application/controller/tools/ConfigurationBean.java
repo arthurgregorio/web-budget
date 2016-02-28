@@ -93,6 +93,5 @@ public class ConfigurationBean extends AbstractBean {
     public void loadMovementClasses() {
         this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
                 this.configuration.getInvoiceDefaultCostCenter(), null);
-        this.updateComponent("inMovementClass");
     }
 }

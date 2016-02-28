@@ -40,19 +40,12 @@
 
             <div class="error-content">
                 <h3>
-                    <i class="fa fa-warning text-maroon"></i>
+                    <i class="fa fa-remove text-maroon"></i>
                     <p:spacer width="5"/>
                     #{messages['404.tip']}
                 </h3>
                 <p>
-                    #{messages['404.message']}:
-                </p>
-                <p>
-                    <pre>
-                        <code>
-                            #{of:printStackTrace(requestScope['javax.servlet.error.exception'])}
-                        </code>
-                    </pre>
+                    #{messages['404.message']}
                 </p>
             </div>
         </div>

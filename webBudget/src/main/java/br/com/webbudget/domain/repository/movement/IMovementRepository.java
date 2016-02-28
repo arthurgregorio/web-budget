@@ -33,7 +33,6 @@ import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -65,13 +64,6 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      */
     public List<Movement> listByCardInvoice(CardInvoice cardInvoice);
 
-    /**
-     * 
-     * @param financialPeriod
-     * @return 
-     */
-    public List<Movement> listByPeriod(FinancialPeriod financialPeriod);
-    
     /**
      *
      * @param dueDate

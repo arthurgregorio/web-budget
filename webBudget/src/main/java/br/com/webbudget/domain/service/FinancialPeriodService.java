@@ -97,8 +97,8 @@ public class FinancialPeriodService {
     @Transactional
     public void deletePeriod(FinancialPeriod financialPeriod) {
         
-        final List<Movement> movements = 
-                this.movementRepository.listByPeriod(financialPeriod);
+        final List<Movement> movements = this.movementRepository
+                .listByPeriodAndStateAndType(financialPeriod, null, null);
         
         // se houver movimentos, lanca o erro
         if (movements != null && !movements.isEmpty()) {

@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.misc.chart.line;
 
+import br.com.webbudget.domain.misc.chart.AbstractChartModel;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ import lombok.Setter;
  * @version 1.0.0
  * @since 2.2.0, 09/02/2016
  */
-public class LineChartModel {
+public class LineChartModel extends AbstractChartModel {
     
     private final List<String> labels;
     
@@ -60,6 +61,7 @@ public class LineChartModel {
     /**
      * @return o JSON representando os dados para o grafico
      */
+    @Override
     public String toJson() {
         return new Gson().toJson(this);
     }

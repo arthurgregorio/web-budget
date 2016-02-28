@@ -329,6 +329,14 @@ public class Movement extends PersistentEntity {
     }
 
     /**
+     * @return se o movimento esta pago ou nao
+     */
+    public boolean isPaid() {
+        return this.movementStateType == MovementStateType.PAID || 
+                this.movementStateType == MovementStateType.PAID;
+    }
+    
+    /**
      *
      * @return
      */
@@ -388,5 +396,19 @@ public class Movement extends PersistentEntity {
      */
     public LocalDate getPaymentDate() {
         return this.payment.getPaymentDate();
+    }
+    
+    /**
+     * @return todos os centros de custo que este movimento faz parte
+     */
+    public List<CostCenter> getCostCenters() {
+        
+        final List<CostCenter> costCenters = new ArrayList<>();
+        
+        this.apportionments.stream().forEach((apportionment) -> {
+            costCenters.add(apportionment.getMovementClass().getCostCenter());
+        });
+        
+        return costCenters;
     }
 }

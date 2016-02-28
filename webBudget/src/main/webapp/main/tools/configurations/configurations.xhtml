@@ -69,6 +69,7 @@
                                                  value="#{configurationBean.configuration.invoiceDefaultCostCenter}" >
 
                                     <p:ajax event="change" 
+                                            update="inMovementClass"
                                             listener="#{configurationBean.loadMovementClasses()}" />
 
                                     <f:selectItem itemValue="#{null}"

@@ -23,9 +23,7 @@
               version="2.2">
 
     <factory>
-        <exception-handler-factory>
-            org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory
-        </exception-handler-factory>
+        <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory>
     </factory>
     
     <render-kit>

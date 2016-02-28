@@ -33,7 +33,7 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['error']}</a></li>
     </ui:define>
-    
+
     <ui:define name="content">
         <div class="error-page">
             <h2 class="headline text-red">500</h2>
@@ -48,11 +48,7 @@
                     #{messages['500.message']}:
                 </p>
                 <p>
-                    <pre>
-                        <code>
-                            #{of:printStackTrace(requestScope['javax.servlet.error.exception'])}
-                        </code>
-                    </pre>
+                    <pre>#{of:printStackTrace(requestScope['javax.servlet.error.exception'])}</pre>
                 </p>
             </div>
         </div>

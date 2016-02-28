@@ -162,7 +162,7 @@ public class DashboardBean extends AbstractBean {
         this.closingChartModel.addDataset(revenueDatasetBuilder.build());
         this.closingChartModel.addDataset(expenseDatasetBuilder.build());
         
-        this.executeScript("createClosingChart(" + this.closingChartModel.toJson() + ")");
+        this.drawLineChart("closingsChart", this.closingChartModel);
     }
     
     /**

@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.domain.misc.chart.AbstractChartModel;
 import br.com.webbudget.infraestructure.Translator;
 import java.io.Serializable;
 import javax.faces.context.FacesContext;
@@ -206,6 +207,24 @@ public abstract class AbstractBean implements Serializable {
     public void addWarning(boolean updateDefault, String message, Object... parameters) {
         Messages.addWarn(null, this.translate(message), parameters);
         if (updateDefault) this.updateDefaultMessages();
+    }
+    
+    /**
+     * 
+     * @param canvas
+     * @param model 
+     */
+    public void drawDonutChart(String canvas, AbstractChartModel model) {
+        this.executeScript("drawDonutChart(" + model.toJson() + ", '"+ canvas + "')");
+    }
+    
+    /**
+     * 
+     * @param canvas
+     * @param model 
+     */
+    public void drawLineChart(String canvas, AbstractChartModel model) {
+        this.executeScript("drawLineChart(" + model.toJson() + ", '"+ canvas + "')");
     }
 
     /**

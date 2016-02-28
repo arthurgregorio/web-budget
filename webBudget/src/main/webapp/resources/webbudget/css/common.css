@@ -54,3 +54,11 @@ no-padding {
     height: 300px !important;
     width: auto !important;
 }
+
+/* legenda do grafico */
+.chart-legend li span{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+}

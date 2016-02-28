@@ -52,7 +52,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
@@ -709,7 +708,8 @@ public class MovementService {
      * @return
      */
     public List<Movement> listMovementsByPeriod(FinancialPeriod financialPeriod) {
-        return this.movementRepository.listByPeriod(financialPeriod);
+        return this.movementRepository.listByPeriodAndStateAndType(
+                financialPeriod, null, null);
     }
     
     /**
@@ -717,14 +717,19 @@ public class MovementService {
      * busca apenas os movimentos do tipo movimento, desconsiderando todos que 
      * sao do tipo card invoice
      * 
-     * @param financialPeriod o periodo
-     * @return 
+     * @param period o periodo
+     * @return a lista de movimentos
      */
-    public List<Movement> listOnlyMovementsByPeriod(FinancialPeriod financialPeriod) {
-        return this.movementRepository.listByPeriod(financialPeriod)
-                .stream()
-                .filter(movement -> !movement.isCardInvoice())
-                .collect(Collectors.toList());
+    public List<Movement> listOnlyMovementsByPeriod(FinancialPeriod period) {
+        
+        MovementStateType state = MovementStateType.PAID;
+        
+        if (period.isClosed()) {
+            state = MovementStateType.CALCULATED;
+        }
+        
+        return this.movementRepository.listByPeriodAndStateAndType(
+                period, state, MovementType.MOVEMENT);
     }
 
     /**

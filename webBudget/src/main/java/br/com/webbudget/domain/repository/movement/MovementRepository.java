@@ -27,6 +27,7 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.filter.MovementFilter;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
@@ -103,22 +104,6 @@ public class MovementRepository extends GenericRepository<Movement, Long>
         criteria.add(Restrictions.eq("ci.id", cardInvoice.getId()));
 
         criteria.addOrder(Order.desc("inclusion"));
-
-        return criteria.list();
-    }
-
-    /**
-     *
-     * @param financialPeriod
-     * @return
-     */
-    @Override
-    public List<Movement> listByPeriod(FinancialPeriod financialPeriod) {
-
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-
-        criteria.createAlias("financialPeriod", "fp");
-        criteria.add(Restrictions.eq("fp.id", financialPeriod.getId()));
 
         return criteria.list();
     }
@@ -389,9 +374,14 @@ public class MovementRepository extends GenericRepository<Movement, Long>
      * @return
      */
     @Override
-    public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period, MovementStateType state, MovementType type, MovementClassType direction) {
+    public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period,
+            MovementStateType state, MovementType type, MovementClassType direction) {
 
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+        if (period == null) {
+            throw new NullPointerException("Period can't be null");
+        }
+        
+        final Criteria criteria = this.createCriteria();
 
         if (type != null) {
             criteria.add(Restrictions.eq("movementType", type));
