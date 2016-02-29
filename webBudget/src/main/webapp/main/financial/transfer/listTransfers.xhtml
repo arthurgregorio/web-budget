@@ -17,122 +17,50 @@
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:define name="head">
-        <f:event type="preRenderView" 
-                 listener="#{transferenceBean.initializeListing()}" />
+
+    <ui:param name="activeMenu" value="transference"/>
+
+    <f:metadata>
+        <f:viewAction action="#{transferenceBean.initializeListing()}"/>
+    </f:metadata>
+
+    <ui:define name="pageTitle">
+        #{messages['transference.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['transference.page-description']}
     </ui:define>
 
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['financial']}" />
-        <p:menuitem url="listTransfers.xhtml"
-                    value="#{breadcrumb['financial.transfer']}" />
+        <li><a href="#">#{breadcrumb['financial']}</a></li>
+        <li class="active"><a href="listTransfers.xhtml">#{breadcrumb['financial.transference']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-md-12">
                 <p:messages id="messages" closable="true" globalOnly="true"/>
             </div>
         </div>
 
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-4 form-group-m">
-                    <div class="form-filter-box">
-                        <p:outputLabel for="inSourceWallet" 
-                                       value="#{messages['transfer.filter.source-wallet']}: "/>
-                        <p:selectOneMenu id="inSourceWallet" 
-                                         value="#{transferenceBean.sourceWallet}" 
-                                         converter="omnifaces.SelectItemsConverter">
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{messages['transfer.filter.select-one']}" />
-                            <f:selectItems var="wallet"
-                                           itemValue="#{wallet}"
-                                           itemLabel="#{wallet.friendlyName}"
-                                           value="#{transferenceBean.wallets}"/>
-                        </p:selectOneMenu>
+        <div class="box">
+            <div class="box-body row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <ui:include src="formTransfer.xhtml"/>
                     </div>
                 </div>
-                <div class="ui-grid-col-4 form-group-m font">
-                    <div class="form-filter-box">
-                        <p:spacer width="10"/>
-                        <p:outputLabel for="inTargetWallet" 
-                                       value="#{messages['transfer.filter.target-wallet']}: "/>
-                        <p:selectOneMenu id="inTargetWallet" 
-                                         value="#{transferenceBean.targetWallet}" 
-                                         converter="omnifaces.SelectItemsConverter">
-                            <f:selectItem itemValue="#{null}"
-                                          noSelectionOption="true"
-                                          itemLabel="#{messages['transfer.filter.select-one']}" />
-                            <f:selectItems var="wallet"
-                                           itemValue="#{wallet}"
-                                           itemLabel="#{wallet.friendlyName}"
-                                           value="#{transferenceBean.wallets}"/>
-                        </p:selectOneMenu>
-                    </div>
+                <div class="col-md-6">
+
                 </div>
-                <div class="ui-grid-col-4 div-align-right">
-                    <p:commandButton value="#{menu['filter']}"
-                                     action="#{transferenceBean.filterTransfers()}"/>
-                    <p:spacer width="10"/>
-                    <p:commandButton immediate="true"
-                                     value="#{menu['add']}"
-                                     styleClass="ui-button-info" 
-                                     action="#{transferenceBean.changeToAdd()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.BALANCE_TRANSFER_MAKE)}"/>
-                </div>
-            </div>
-        </h:form>
-
-        <div class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
-                <h:form prependId="false">
-
-                    <p:dataTable id="transferencesList" 
-                                 rows="15"
-                                 paginator="true"
-                                 var="transference"
-                                 selectionMode="single"
-                                 paginatorPosition="bottom"
-                                 rowKey="#{transference.id}"
-                                 paginatorAlwaysVisible="false"
-                                 value="#{transferenceBean.transferences}"
-                                 selection="#{transferenceBean.selectedTransfer}"
-                                 emptyMessage="#{messages['transfer.list.empty']}">
-
-                        <p:ajax event="rowSelect"
-                                listener="#{transferenceBean.showTransferReasonDialog()}"/>
-
-                        <p:column width="15%"
-                                  style="text-align: center"
-                                  headerText="#{messages['transfer.list.transfer-date']}">
-                            <h:outputText value="#{transference.inclusion}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText> 
-                        </p:column>
-                        <p:column width="20%"
-                                  style="text-align: center"
-                                  headerText="#{messages['transfer.list.transfer-value']}">
-                            <h:outputText value="#{transference.movimentedValue}">
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="#{messages['transfer.list.source-wallet']}">
-                            #{transference.sourceWallet.friendlyName}
-                        </p:column>
-                        <p:column headerText="#{messages['transfer.list.destiny-wallet']}">
-                            #{transference.targetWallet.friendlyName}
-                        </p:column>
-                    </p:dataTable>
-                </h:form>
             </div>
         </div>
     </ui:define>
