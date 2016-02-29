@@ -25,6 +25,7 @@ import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -49,16 +50,26 @@ public class DashboardBean extends AbstractBean {
 
     @Getter
     private BigDecimal accumulated;
+    @Getter
+    private BigDecimal totalRevenueGoal;
+    @Getter
+    private BigDecimal totalExpensesGoal;
+    @Getter
+    private BigDecimal totalCreditCardGoal;
     
     @Getter
+    private int percentageExpenses;
+    @Getter
+    private int percentageRevenues;
+    @Getter
+    private int percentageCreditCard;
+
+    private List<FinancialPeriod> openPeriods;
     private List<FinancialPeriod> closedPeriods;
-    
-    @Getter
-    private LineChartModel closingChartModel;
-    
+
     @Getter
     private MovementCalculator calculator;
-    
+
     @Inject
     private MovementService movementService;
     @Inject
@@ -68,68 +79,96 @@ public class DashboardBean extends AbstractBean {
      * Inicializa a dashboard do sistema
      */
     public void initialize() {
-        
+
         this.accumulated = BigDecimal.ZERO;
-        
+        this.totalRevenueGoal = BigDecimal.ZERO;
+        this.totalExpensesGoal = BigDecimal.ZERO;
+        this.totalCreditCardGoal = BigDecimal.ZERO;
+
         this.closedPeriods = new ArrayList<>();
 
-        this.initializePeriodSummary();
-        this.initializeBalanceHistory();
-        this.initializeClosingsGraph();
+        try {
+            this.openPeriods
+                    = this.financialPeriodService.listOpenFinancialPeriods();
+
+            this.initializePeriodSummary();
+            this.initializeBalanceHistory();
+            this.initializeClosingsGraph();
+            
+            this.countGoals();
+            this.calculatePercentages();
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error("Erro when filling dashboard", ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
+    }
+
+    /**
+     * @return a versao da aplicacao
+     */
+    public String getVersion() {
+        return ResourceBundle.getBundle("webbudget").getString("application.version");
+    }
+    
+    /**
+     * Porcentagem da meta de receitas
+     */
+    private void calculatePercentages() {
+        
+        this.percentageCreditCard = this.percentageOf(
+                this.calculator.getTotalPaidOnCreditCard(), this.totalCreditCardGoal);
+        
+        this.percentageExpenses = this.percentageOf(
+                this.calculator.getExpensesTotal(), this.totalExpensesGoal);
+        
+        this.percentageRevenues = this.percentageOf(
+                this.calculator.getRevenuesTotal(), this.totalRevenueGoal);
     }
     
     /**
      * Inicializa o bloco com as informacoes sobre os periodos ativos
      */
     private void initializePeriodSummary() {
-        
-        List<Movement> movements = new ArrayList<>();
-        
-        try {
-            movements = this.movementService.listMovementsByOpenFinancialPeriod();
-        } catch (InternalServiceError ex) {
-            this.addError(true, ex.getMessage());
-        } catch (Exception ex) {
-            this.addError(true, "error.undefined-error", ex.getMessage());
-        }
-            
+
+        final List<Movement> movements = new ArrayList<>();
+
+        this.openPeriods.stream().forEach(period -> {
+            movements.addAll(
+                    this.movementService.listOnlyMovementsByPeriod(period));
+        });
+
         // cria a calculadora coma lista gerada
         this.calculator = new MovementCalculator(movements);
     }
-    
+
     /**
      * Inicializa o historico de saldos
      */
-    public void initializeBalanceHistory() {
-        
-        try {
-            this.closedPeriods = 
-                    this.financialPeriodService.listLastSixClosedPeriods();
-            
-            final FinancialPeriod latestClosedPeriod = 
-                    this.financialPeriodService.findLatestClosedPeriod();
-            
-            if (latestClosedPeriod != null) {
-                this.accumulated = latestClosedPeriod.getAccumulated()
-                        .add(this.calculator.getBalance());
-            } else {
-                this.accumulated = this.calculator.getBalance();
-            }
-        } catch (InternalServiceError ex) {
-            this.addError(true, ex.getMessage());
-        } catch (Exception ex) {
-            this.logger.error("Internal error", ex);
-            this.addError(true, "error.undefined-error", ex.getMessage());
+    private void initializeBalanceHistory() {
+
+        this.closedPeriods
+                = this.financialPeriodService.listLastSixClosedPeriods();
+
+        final FinancialPeriod latestClosedPeriod
+                = this.financialPeriodService.findLatestClosedPeriod();
+
+        if (latestClosedPeriod != null) {
+            this.accumulated = latestClosedPeriod.getAccumulated()
+                    .add(this.calculator.getBalance());
+        } else {
+            this.accumulated = this.calculator.getBalance();
         }
     }
-    
+
     /**
      * Monta o grafico
      */
-    public void initializeClosingsGraph() {
-        
-        final LineChartDatasetBuilder<BigDecimal> revenueDatasetBuilder = 
-                new LineChartDatasetBuilder<>()
+    private void initializeClosingsGraph() {
+
+        final LineChartDatasetBuilder<BigDecimal> revenueDatasetBuilder
+                = new LineChartDatasetBuilder<>()
                 .withLabel(this.translate("dashboard.revenue-serie"))
                 .filledByColor("rgba(140,217,140,0.2)")
                 .withStrokeColor("rgba(51,153,51,1)")
@@ -137,9 +176,9 @@ public class DashboardBean extends AbstractBean {
                 .withPointStrokeColor("#fff")
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(45,134,45,1)");
-        
-        final LineChartDatasetBuilder<BigDecimal> expenseDatasetBuilder = 
-                new LineChartDatasetBuilder<>()
+
+        final LineChartDatasetBuilder<BigDecimal> expenseDatasetBuilder
+                = new LineChartDatasetBuilder<>()
                 .withLabel(this.translate("dashboard.expenses-serie"))
                 .filledByColor("rgba(255,153,153,0.2)")
                 .withStrokeColor("rgba(255,77,77,1)")
@@ -148,27 +187,65 @@ public class DashboardBean extends AbstractBean {
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(204,0,0,1)");
 
-        this.closingChartModel = new LineChartModel();
-        
+        final LineChartModel chartModel = new LineChartModel();
+
         // coloca o nome das series e os dados
         this.closedPeriods.stream().forEach(period -> {
-                      
-            this.closingChartModel.addLabel(period.getIdentification());
-            
+
+            chartModel.addLabel(period.getIdentification());
+
             revenueDatasetBuilder.andData(period.getRevenuesTotal());
             expenseDatasetBuilder.andData(period.getExpensesTotal());
         });
-        
-        this.closingChartModel.addDataset(revenueDatasetBuilder.build());
-        this.closingChartModel.addDataset(expenseDatasetBuilder.build());
-        
-        this.drawLineChart("closingsChart", this.closingChartModel);
+
+        chartModel.addDataset(revenueDatasetBuilder.build());
+        chartModel.addDataset(expenseDatasetBuilder.build());
+
+        this.drawLineChart("closingsChart", chartModel);
     }
-    
+
     /**
-     * @return a versao da aplicacao
+     * A somatoria das metas para os periodos em aberto
      */
-    public String getVersion() {
-        return ResourceBundle.getBundle("webbudget").getString("application.version");
+    private void countGoals() {
+        this.totalCreditCardGoal = this.openPeriods.stream()
+                .map(FinancialPeriod::getCreditCardGoal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        this.totalExpensesGoal = this.openPeriods.stream()
+                .map(FinancialPeriod::getExpensesGoal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        this.totalRevenueGoal = this.openPeriods.stream()
+                .map(FinancialPeriod::getRevenuesGoal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * Executa uma fucking regra of Three para saber a porcentagem de um valor
+     * sobre o outro
+     * 
+     * @param x o x da parada
+     * @param total o total que seria o 100%
+     * 
+     * @return a porcentagem
+     */
+    private int percentageOf(BigDecimal x, BigDecimal total) {
+        
+        // se um dos dois valores for null retorna 0 de cara
+        if (x == null || total == null) {
+            return 0;
+        }
+        
+        BigDecimal percentage = BigDecimal.ZERO;
+        
+        if (x.compareTo(total) > 0) {
+            return 100;
+        } else {
+            percentage = x.multiply(new BigDecimal(100))
+                            .divide(total, 2, RoundingMode.HALF_UP);
+        }
+        
+        return percentage.intValue() > 100 ? 100 : percentage.intValue();
     }
 }

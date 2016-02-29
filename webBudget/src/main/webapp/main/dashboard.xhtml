@@ -38,7 +38,7 @@
     </ui:define>
 
     <ui:define name="content">
-        
+
         <pe:blockUI widgetVar="loadingBlock"
                     target="movimentationSummary" >
             <p:graphicImage width="32" 
@@ -74,55 +74,61 @@
                                 </div>
                                 <div class="col-md-4">
                                     <p class="text-center">
-                                        <strong>#{messages['dahsboard.goals-and-limits']}</strong>
+                                        <strong>#{messages['dahsboard.goals']}</strong>
                                     </p>
 
                                     <div class="progress-group">
-                                        <span class="progress-text">#{messages['dashboard.limit.credit-card']}</span>
-                                        <span class="progress-number"><b>160</b>/200</span>
-
-                                        <div class="progress sm">
-                                            <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-group">
-                                        <span class="progress-text">#{messages['dashboard.limit.debit-card']}</span>
-                                        <span class="progress-number"><b>250</b>/500</span>
-
-                                        <div class="progress sm">
-                                            <div class="progress-bar progress-bar-light-blue" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-group">
-                                        <span class="progress-text">#{messages['dashboard.limit.money']}</span>
-                                        <span class="progress-number"><b>250</b>/500</span>
-
-                                        <div class="progress sm">
-                                            <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-group">
-                                        <span class="progress-text">
-                                            <o:outputFormat value="#{messages['dashboard.goal.cost-center-1']}">
-                                                <f:param value=""/>
-                                            </o:outputFormat>
+                                        <span class="progress-text">#{messages['dashboard.goal.credit-card']}</span>
+                                        <span class="progress-number">
+                                            <b>
+                                                <h:outputText value="#{dashboardBean.calculator.totalPaidOnCreditCard}" >
+                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                                </h:outputText>
+                                            </b>
+                                            /
+                                            <h:outputText value="#{dashboardBean.totalCreditCardGoal}" >
+                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                            </h:outputText>
                                         </span>
-                                        <span class="progress-number"><b>310</b>/400</span>
-
                                         <div class="progress sm">
-                                            <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                                            <div class="progress-bar progress-bar-aqua" 
+                                                 style="width: #{dashboardBean.percentageCreditCard}%"></div>
                                         </div>
                                     </div>
                                     <div class="progress-group">
-                                        <span class="progress-text">
-                                            <o:outputFormat value="#{messages['dashboard.goal.cost-center-2']}">
-                                                <f:param value=""/>
-                                            </o:outputFormat>
+                                        <span class="progress-text">#{messages['dashboard.goal.expenses']}</span>
+                                        <span class="progress-number">
+                                            <b>
+                                                <h:outputText value="#{dashboardBean.calculator.expensesTotal}" >
+                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                                </h:outputText>
+                                            </b>
+                                            /
+                                            <h:outputText value="#{dashboardBean.totalExpensesGoal}" >
+                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                            </h:outputText>
                                         </span>
-                                        <span class="progress-number"><b>480</b>/800</span>
-
                                         <div class="progress sm">
-                                            <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                                            <div class="progress-bar progress-bar-red"
+                                                 style="width: #{dashboardBean.percentageExpenses}%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-group">
+                                        <span class="progress-text">#{messages['dashboard.goal.revenues']}</span>
+                                        <span class="progress-number">
+                                            <b>
+                                                <h:outputText value="#{dashboardBean.calculator.revenuesTotal}" >
+                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                                </h:outputText>
+                                            </b>
+                                            /
+                                            <h:outputText value="#{dashboardBean.totalRevenueGoal}" >
+                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                            </h:outputText>
+                                        </span>
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-green" 
+                                                 style="width: #{dashboardBean.percentageRevenues}%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -142,7 +148,7 @@
                                 </div>
                                 <div class="col-sm-3 col-xs-6">
                                     <div class="description-block border-right">
-                                        <h5 class="description-header text-yellow">
+                                        <h5 class="description-header text-red">
                                             <h:outputText value="#{dashboardBean.calculator.expensesTotal}" >
                                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                             </h:outputText>
@@ -188,7 +194,7 @@
                              oncomplete="unblock('loadingBlock')"
                              actionListener="#{dashboardBean.initialize()}"/>
         </h:form>
-    
+
         <h:outputScript library="webbudget" name="js/wbcharts.js"/>
     </ui:define>
 </ui:composition>

@@ -56,7 +56,8 @@
             <property name="hibernate.show_sql" value="${orm.show-sql}"/>
             <property name="hibernate.connection.autocommit" value="false"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
-            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
+            <property name="hibernate.transaction.jta.platform" 
+                      value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
         
             <!-- desabilita JSR-303 no save/update -->
             <property name="javax.persistence.validation.mode" value="none"/>

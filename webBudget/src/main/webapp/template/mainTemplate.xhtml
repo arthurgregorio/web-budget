@@ -89,11 +89,13 @@
                                     <li class="user-footer">
                                         <h:form>
                                             <div class="pull-left">
-                                                <a href="#" class="btn btn-default btn-flat">#{menu['profile']}</a>
+                                                <p:commandLink value="#{menu['profile']}"
+                                                               styleClass="btn btn-flat btn-default" 
+                                                               action="/main/tools/user/formUserProfile.xhtml?faces-redirect=true"/>
                                             </div>
                                             <div class="pull-right">
                                                 <p:commandLink value="#{menu['logout']}"
-                                                               styleClass="btn btn-default btn-flat" 
+                                                               styleClass="btn btn-flat btn-danger" 
                                                                action="#{authenticationBean.doLogout()}"/>
                                             </div>
                                         </h:form>

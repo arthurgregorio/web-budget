@@ -66,7 +66,7 @@ public class UserBean extends AbstractBean {
      */
     public void initializeProfile() {
         
-        // setamos no usuario o usuario autenticado
+        // setamos no usuario o usuario autenticado e seu perfil
         this.user = (User) this.identity.getAccount();
     }
     
@@ -116,9 +116,7 @@ public class UserBean extends AbstractBean {
 
         try {
             this.accountService.save(this.user);
-
             this.user = new User();
-
             this.addInfo(true, "user.saved");
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
@@ -156,6 +154,7 @@ public class UserBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
+            this.logger.error(ex.getMessage());
             this.addError(true, "error.undefined-error", ex.getMessage());
         }finally {
             this.updateComponent("usersList");
@@ -170,13 +169,12 @@ public class UserBean extends AbstractBean {
         
         try {
             this.accountService.updateProfile(this.user);
-//            this.info("user.action.profile-updated", true);
+            this.addInfo(true, "user.profile-updated");
         } catch (InternalServiceError ex) {
-            this.logger.error("UserBean#doProfileUpdate has found erros", ex);
-//            this.fixedError(ex.getMessage(), true);
+            this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error("UserBean#doProfileUpdate has found erros", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
+            this.logger.error(ex.getMessage());
+            this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
 

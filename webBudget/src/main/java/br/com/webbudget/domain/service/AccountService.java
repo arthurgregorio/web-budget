@@ -93,47 +93,12 @@ public class AccountService {
     
     /**
      * 
-     * @param group
-     * @param authorizations 
-     */
-    @Transactional
-    public void save(Group group, List<String> authorizations) {
-        
-        // validamos os dados do grupo
-        final Group found = this.findGroupByName(group.getName());
-        
-        if (found != null) {
-            throw new InternalServiceError("group.error.duplicated-group");
-        }
-        
-        // checamos se existem permissoes para este grupo
-        if (authorizations == null || authorizations.isEmpty()) {
-            throw new InternalServiceError("group.error.empty-authorizations");
-        }
-        
-        // cria o grupo
-        this.identityManager.add(group);
-        
-        // criamos os grants para aquele grupo
-        for (String authorization : authorizations) {
-            
-            final Role role = this.findRoleByName(authorization);
-            
-            this.relationshipManager.add(new Grant(role, group));
-        }
-    }
-    
-    /**
-     * 
      * @param user 
      */
     @Transactional
     public void update(User user) {
 
-        // checagem para saber se estao tentando alterar o admin em ambiente de
-        // testes no openshift ou onde for preciso
-        // 
-        // para mais, veja a issue #127 no git
+        // inibe alterar a senha do admin em ambiente de testes
         if (ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
                 && user.getUsername().equals("admin")) {
             return;
@@ -169,15 +134,12 @@ public class AccountService {
     @Transactional
     public void updateProfile(User user) {
 
-        // checagem para saber se estao tentando alterar o admin em ambiente de
-        // testes no openshift ou onde for preciso
-        // 
-        // para mais, veja a issue #127 no git
+        // inibe alterar a senha do admin em ambiente de testes
         if (ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
                 && user.getUsername().equals("admin")) {
             return;
         }
-        
+
         // pegamos a senha antes de salvar o usuario
         final String unsecurePassword = user.getPassword();
         
@@ -187,6 +149,54 @@ public class AccountService {
         } else {
             // salvamos
             this.identityManager.update(user);
+        }
+    }
+    
+    /**
+     * 
+     * @param user 
+     */
+    @Transactional
+    public void delete(User user) {
+        
+        // removemos os relacioanamentos
+        for (GroupMembership membership : this.listMembershipsByUser(user)) {
+            this.relationshipManager.remove(membership);
+        }
+        
+        // removemos o usuario do contexto de seguranca
+        this.identityManager.remove(user);
+    }
+    
+    /**
+     * 
+     * @param group
+     * @param authorizations 
+     */
+    @Transactional
+    public void save(Group group, List<String> authorizations) {
+        
+        // validamos os dados do grupo
+        final Group found = this.findGroupByName(group.getName());
+        
+        if (found != null) {
+            throw new InternalServiceError("group.error.duplicated-group");
+        }
+        
+        // checamos se existem permissoes para este grupo
+        if (authorizations == null || authorizations.isEmpty()) {
+            throw new InternalServiceError("group.error.empty-authorizations");
+        }
+        
+        // cria o grupo
+        this.identityManager.add(group);
+        
+        // criamos os grants para aquele grupo
+        for (String authorization : authorizations) {
+            
+            final Role role = this.findRoleByName(authorization);
+            
+            this.relationshipManager.add(new Grant(role, group));
         }
     }
     
@@ -220,22 +230,6 @@ public class AccountService {
             
             this.relationshipManager.add(new Grant(role, group));
         }
-    }
-    
-    /**
-     * 
-     * @param user 
-     */
-    @Transactional
-    public void delete(User user) {
-        
-        // removemos os relacioanamentos
-        for (GroupMembership membership : this.listMembershipsByUser(user)) {
-            this.relationshipManager.remove(membership);
-        }
-        
-        // removemos o usuario do contexto de seguranca
-        this.identityManager.remove(user);
     }
     
     /**
@@ -585,12 +579,8 @@ public class AccountService {
 
         final List<GroupMembership> memberships = query.getResultList();
 
-        if (memberships.stream().anyMatch((membership)
-                -> (membership.getGroup().getId().equals(group.getId())))) {
-            return true;
-        }
-
-        return false;
+        return memberships.stream()
+                .anyMatch(membership -> membership.getGroup().getId().equals(group.getId()));
     }
 
     /**
@@ -655,12 +645,8 @@ public class AccountService {
         query.setParameter(Grant.ASSIGNEE, group);
         query.setParameter(Grant.ROLE, role);
 
-        if (query.getResultList().stream().anyMatch((grant)
-                -> (grant.getAssignee().getId().equals(group.getId())))) {
-            return true;
-        }
-
-        return false;
+        return query.getResultList().stream()
+                .anyMatch(grant -> grant.getAssignee().getId().equals(group.getId()));
     }
 
     /**

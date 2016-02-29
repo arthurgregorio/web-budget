@@ -16,6 +16,7 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -26,83 +27,92 @@
         <f:viewAction action="#{userBean.initializeProfile()}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['user-profile.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        <o:outputFormat value="#{messages['user-profile.page-description']}">
+            <f:param value="#{userBean.user.name}"/>
+        </o:outputFormat>
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['preferences']}" />
+        <li><a href="#">#{breadcrumb['preferences']}</a></li>
+        <li class="active"><a href="#">#{breadcrumb['preferences.user-profile']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
         <h:form id="profileForm" prependId="false">
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">
-                    <p:messages id="messages" closable="true" />
-                </div> 
-            </div> 
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6"> 
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inName" 
-                                           value="#{messages['user.form.name']}: "/>
-                            <p:inputText id="inName" 
-                                         size="50"
-                                         value="#{userBean.user.name}" />
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inEmail" 
-                                           value="#{messages['user.form.email']}: "/>
-                            <p:inputText id="inEmail" 
-                                         size="50"
-                                         value="#{userBean.user.email}"/>  
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row div-pd-tb-10">
-                        <div class="ui-grid-col-12 form-header">
-                            <h:outputText value="#{messages['user.form.change-password']}:"/>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inPassword" 
-                                           value="#{messages['user.form.password']}"/>
-                            <p:password id="inPassword" 
-                                        match="inConfirmPassword"
-                                        value="#{userBean.user.password}"
-                                        validatorMessage="#{validation['user.password-not-match']}"/>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-l">
-                            <p:outputLabel for="inConfirmPassword" 
-                                           value="#{messages['user.form.confirm-password']}"/>
-                            <p:password id="inConfirmPassword"
-                                        value="#{userBean.user.passwordConfirmation}"/>
-                        </div>                        
-                    </div>
-                </div>
-                <div class="ui-grid-col-6"> 
 
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p:messages id="messages" closable="true" globalOnly="true"/>
                 </div>
             </div>
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6">
 
+            <div class="box">
+                <div class="box-body row">
+                    <div class="form-group col-md-6">
+                        <p:outputLabel for="inName" 
+                                       value="#{messages['user.form.name']}: "/>
+                        <p:inputText id="inName" 
+                                     size="50"
+                                     styleClass="form-control"
+                                     value="#{userBean.user.name}" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <p:outputLabel for="inEmail" 
+                                       value="#{messages['user.form.email']}: "/>
+                        <p:inputText id="inEmail" 
+                                     size="50"
+                                     styleClass="form-control"
+                                     value="#{userBean.user.email}"/>  
+                    </div>
+                    <div class="form-group col-md-12">
+                        <h4>#{messages['user-profile.form.update-password']}:</h4>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <p:outputLabel for="inPassword" 
+                                       value="#{messages['user.form.password']}"/>
+                        <p:password id="inPassword" 
+                                    match="inConfirmPassword"
+                                    styleClass="form-control"
+                                    value="#{userBean.user.password}"
+                                    validatorMessage="#{validation['user.password-not-match']}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <p:outputLabel for="inConfirmPassword" 
+                                       value="#{messages['user.form.confirm-password']}"/>
+                        <p:password id="inConfirmPassword"
+                                    styleClass="form-control"
+                                    value="#{userBean.user.passwordConfirmation}"/>
+                    </div>
                 </div>
-                <div class="ui-grid-col-6 form-controls-box">
-                    <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
-                                     action="#{userBean.toDashboard()}"/>
-                    <p:spacer width="10"/>
-                    <p:commandButton update="profileForm"
+                <div class="box-footer align-right">
+                    <p:commandButton id="btUpdateProfile"
+                                     update="profileForm"
                                      process="profileForm"
                                      value="#{menu['save']}"
-                                     styleClass="ui-button-success"
+                                     styleClass="btn btn-flat btn-success"
                                      action="#{userBean.doProfileUpdate()}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{userBean.toDashboard()}"
+                                     styleClass="btn btn-flat btn-primary"/>
                 </div>
             </div>
+
+            <p:blockUI block="profileForm"
+                       widgetVar="blocker"
+                       trigger="btUpdateProfile">
+                <p:graphicImage width="32" 
+                                height="32"
+                                library="webbudget" 
+                                name="img/loading.gif" />
+            </p:blockUI>
         </h:form>
     </ui:define>
 </ui:composition>

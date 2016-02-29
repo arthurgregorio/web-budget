@@ -197,7 +197,7 @@ public class UserSessionBean implements Serializable {
     @Produces
     @RequestScoped
     @AuthenticatedUser
-    private User getAuthenticatedUser() {
+    protected User getAuthenticatedUser() {
         return (User) this.identity.getAccount();
     }
 }
