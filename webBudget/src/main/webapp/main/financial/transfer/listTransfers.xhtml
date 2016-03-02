@@ -27,7 +27,7 @@
     <ui:param name="activeMenu" value="transference"/>
 
     <f:metadata>
-        <f:viewAction action="#{transferenceBean.initializeListing()}"/>
+        <f:viewAction action="#{transferenceBean.initialize()}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -55,7 +55,9 @@
             <div class="box-body row">
                 <div class="col-md-6">
                     <div class="row">
-                        <ui:include src="formTransfer.xhtml"/>
+                        <h:form id="transferenceForm" prependId="false">
+                            <ui:include src="formTransfer.xhtml"/>
+                        </h:form>
                     </div>
                 </div>
                 <div class="col-md-6">

@@ -19,7 +19,6 @@ package br.com.webbudget.application.controller.financial;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.entity.wallet.WalletBalance;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.service.WalletService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -33,7 +32,7 @@ import lombok.Setter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 2.0.0
  * @since 1.0.0, 20/05/2014
  */
 @Named
@@ -42,15 +41,6 @@ public class TransferenceBean extends AbstractBean {
 
     @Getter
     @Setter
-    private Wallet sourceWallet;
-    @Getter
-    @Setter
-    private Wallet targetWallet;
-    @Getter
-    @Setter
-    private WalletBalance selectedTransfer;
-
-    @Getter
     private WalletBalance walletBalance;
 
     @Getter
@@ -64,35 +54,12 @@ public class TransferenceBean extends AbstractBean {
     /**
      * Inicializa a listagem de alimentos
      */
-    public void initializeListing() {
-        this.viewState = ViewState.LISTING;
-        this.wallets = this.walletService.listWallets(false);
-    }
-
-    /**
-     * Inicializa o form de transferencias
-     */
-    public void initializeForm() {
-        this.viewState = ViewState.ADDING;
+    public void initialize() {
         
         this.walletBalance = new WalletBalance();
         
         // lista a carteiras
         this.wallets = this.walletService.listWallets(false);
-    }
-
-    /**
-     * @return envia para o form de adicionar transferencias
-     */
-    public String changeToAdd() {
-        return "formTransfer.xhtml?faces-redirect=true";
-    }
-
-    /**
-     * @return cancela e volta
-     */
-    public String doCancel() {
-        return "listTransfers.xhtml?faces-redirect=true";
     }
 
     /**
@@ -117,35 +84,9 @@ public class TransferenceBean extends AbstractBean {
     }
 
     /**
-     * Filtra as transferencias e lista
-     */
-    public void filterTransfers() {
-
-//        if (this.sourceWallet == null && this.targetWallet == null) {
-//            this.transferences = this.walletService.listTransferences();
-//        } else {
-//            this.transferences = this.walletService
-//                    .listTransfersByWallet(this.sourceWallet, this.targetWallet);
-//        }
-//
-//        if (this.transferences.isEmpty()) {
-//            this.error("transfer.no-trasfers", true);
-//        } else {
-//            this.update("transferencesList");
-//        }
-    }
-    
-    /**
      * Exibe a dialog com o motivo da transferencia
      */
     public void showTransferReasonDialog() {
-//        this.openDialog("transferReasonDialog", "dialogTransferReason");
-    }
-    
-    /**
-     * Atualiza o fragment que tem os saldos
-     */
-    public void updateBalances() {
-//        this.update("balancesPanel");
+        this.updateAndOpenDialog("transferReasonDialog", "dialogTransferReason");
     }
 }

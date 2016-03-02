@@ -88,4 +88,32 @@ public class WalletBalance extends PersistentEntity {
     public String getInclusionFormatted() {
         return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(this.getInclusion());
     }
+    
+    /**
+     * @return se o saldo do destino esta ou nao negativo
+     */
+    public boolean isTargetBalanceNegative() {
+        return this.getTargetBalance().signum() < 0;
+    }
+    
+    /**
+     * @return se o saldo da origem esta ou nao negativo
+     */
+    public boolean isSourceBalanceNegative() {
+        return this.getSourceBalance().signum() < 0;
+    }
+    
+    /**
+     * @return 
+     */
+    public BigDecimal getTargetBalance() {
+        return this.targetWallet != null ? this.targetWallet.getBalance() : BigDecimal.ZERO;
+    }
+    
+    /**
+     * @return 
+     */
+    public BigDecimal getSourceBalance() {
+        return this.sourceWallet != null ? this.sourceWallet.getBalance() : BigDecimal.ZERO;
+    }
 }
