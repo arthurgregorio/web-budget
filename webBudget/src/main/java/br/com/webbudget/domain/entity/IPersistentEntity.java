@@ -19,7 +19,7 @@ package br.com.webbudget.domain.entity;
 import java.io.Serializable;
 
 /**
- * Interface que devines os metodos minimos que uma entidade deve possuir para
+ * Interface que define os metodos minimos que uma entidade deve possuir para
  * ser considerada uma entitdade valida na regra de negocios deste sistema
  *
  * @param <T> qualquer coisa que seja serializavel

@@ -17,18 +17,19 @@
 package br.com.webbudget.domain.entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -37,12 +38,13 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0, 06/10/2013
  */
 @MappedSuperclass
-@ToString(of = {"id","inclusion"})
-@EqualsAndHashCode(of = {"id","inclusion"})
+@ToString(of = "id")
+@EqualsAndHashCode(of = "id")
+@EntityListeners(PersistentEntityListener.class)
 public abstract class PersistentEntity implements IPersistentEntity<Long>, Serializable {
 
     @Id
@@ -52,13 +54,24 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     private Long id;
 
     @Getter
+    @Setter
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "inclusion", nullable = false)
     private Date inclusion;
     @Getter
+    @Setter
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_edition")
     private Date lastEdition;
+    
+    @Getter
+    @Setter
+    @Column(name = "included_by", length = 45)
+    private String includedBy;
+    @Getter
+    @Setter
+    @Column(name = "edited_by", length = 45)
+    private String editedBy;
 
     /**
      * @return {@inheritDoc}
@@ -67,20 +80,11 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     public boolean isSaved() {
         return !(getId() == null || getId() == 0);
     }
-
+    
     /**
-     * Executa operacoes no prePersist da entidade
+     * @return a data de inclusao em formato string
      */
-    @PrePersist
-    protected void prePersist() {
-        this.inclusion = new Date();
-    }
-
-    /**
-     * Executa operacoes no preUpdate da entidade
-     */
-    @PreUpdate
-    protected void preUpdate() {
-        this.lastEdition = new Date();
+    public String getInclusionDateAsString() {
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(this.inclusion);
     }
 }
