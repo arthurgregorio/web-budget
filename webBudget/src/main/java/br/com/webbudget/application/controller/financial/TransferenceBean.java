@@ -60,6 +60,7 @@ public class TransferenceBean extends AbstractBean {
         
         // lista a carteiras
         this.wallets = this.walletService.listWallets(false);
+        this.transferences = this.walletService.listTransfers(null, null);
     }
 
     /**

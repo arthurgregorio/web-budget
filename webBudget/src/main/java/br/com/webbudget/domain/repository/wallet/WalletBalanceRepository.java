@@ -78,40 +78,15 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
 
     /**
      *
-     * @param wallet
-     * @param walletBalanceTypes
-     * @return
-     */
-    @Override
-    public List<WalletBalance> listByWallet(Wallet wallet, WalletBalanceType... walletBalanceTypes) {
-
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-
-        criteria.createAlias("targetWallet", "wl");
-        criteria.add(Restrictions.eq("wl.id", wallet.getId()));
-
-        if (walletBalanceTypes != null) {
-            for (WalletBalanceType type : walletBalanceTypes) {
-                criteria.add(Restrictions.eq("walletBalanceType", type));
-            }
-        }
-
-        criteria.addOrder(Order.desc("inclusion"));
-
-        return criteria.list();
-    }
-
-    /**
-     *
      * @param source
      * @param target
-     * @param walletBalanceTypes
+     * @param types
      * @return
      */
     @Override
-    public List<WalletBalance> listByWallet(Wallet source, Wallet target, WalletBalanceType... walletBalanceTypes) {
+    public List<WalletBalance> listByWallet(Wallet source, Wallet target, WalletBalanceType... types) {
 
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+        final Criteria criteria = this.createCriteria();
 
         if (target != null) {
             criteria.createAlias("targetWallet", "tgt");
@@ -123,8 +98,8 @@ public class WalletBalanceRepository extends GenericRepository<WalletBalance, Lo
             criteria.add(Restrictions.eq("src.id", source.getId()));
         }
 
-        if (walletBalanceTypes != null) {
-            for (WalletBalanceType type : walletBalanceTypes) {
+        if (types != null) {
+            for (WalletBalanceType type : types) {
                 criteria.add(Restrictions.eq("walletBalanceType", type));
             }
         }

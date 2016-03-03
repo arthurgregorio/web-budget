@@ -19,27 +19,28 @@
           xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
-          id="adjustmentDialog" 
+          id="confirmAdjustmentDialog" 
           modal="true"
           resizable="false" 
           closeOnEscape="true"
-          widgetVar="dialogAdjustment" 
-          header="#{messages['wallet.dialog.adjustment']}">
+          widgetVar="dialogConfirmAdjustment" 
+          header="#{messages['adjustment.dialog.title']}">
 
-    <div class="ui-grid ui-grid-responsive">
-        <div class="ui-grid-row div-mg-b-15">
-            <div class="ui-grid-col-12">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4>
                 <o:outputFormat escape="false"
-                                value="#{messages['wallet.dialog.adjustment-confirm']}">
+                                value="#{messages['adjustment.confirmation']}">
                     <f:param value="#{walletBean.wallet.friendlyName}"/>
                 </o:outputFormat>
-            </div>
+            </h4>
         </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center">
-                <p:commandButton value="#{menu['back']}" 
-                                 action="#{walletBean.doCancel()}"/>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 align-center">
+            <p:commandButton value="#{menu['back']}" 
+                             action="#{walletBean.doCancel()}"
+                             styleClass="btn btn-flat btn-default" />
         </div>
     </div>
 </p:dialog>

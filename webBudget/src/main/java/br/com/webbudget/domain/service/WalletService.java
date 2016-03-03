@@ -113,7 +113,7 @@ public class WalletService {
             throw new InternalServiceError("error.wallet.has-balance");
         }
 
-        final List<WalletBalance> balaces = this.listBalancesByWallet(wallet);
+        final List<WalletBalance> balaces = this.listBalances(wallet);
 
         balaces.stream().forEach((balance) -> {
             this.walletBalanceRepository.delete(balance);
@@ -250,7 +250,7 @@ public class WalletService {
     }
     
     /**
-     *
+     *S
      * @param isBlocked
      * @return
      */
@@ -259,38 +259,21 @@ public class WalletService {
     }
     
     /**
-     *
-     * @return
-     */
-    public List<WalletBalance> listTransferences() {
-        return this.walletBalanceRepository.listByType(WalletBalanceType.TRANSFERENCE);
-    }
-
-    /**
-     *
+     * 
      * @param wallet
-     * @return
+     * @return 
      */
-    public List<WalletBalance> listTransfersByWallet(Wallet wallet) {
-        return this.walletBalanceRepository.listByWallet(wallet, WalletBalanceType.TRANSFERENCE);
+    public List<WalletBalance> listBalances(Wallet wallet) {
+        return this.walletBalanceRepository.listByWallet(null, wallet);
     }
-
+    
     /**
      *
      * @param source
      * @param target
      * @return
      */
-    public List<WalletBalance> listTransfersByWallet(Wallet source, Wallet target) {
+    public List<WalletBalance> listTransfers(Wallet source, Wallet target) {
         return this.walletBalanceRepository.listByWallet(source, target, WalletBalanceType.TRANSFERENCE);
-    }
-
-    /**
-     *
-     * @param wallet
-     * @return
-     */
-    public List<WalletBalance> listBalancesByWallet(Wallet wallet) {
-        return this.walletBalanceRepository.listByWallet(wallet);
     }
 }

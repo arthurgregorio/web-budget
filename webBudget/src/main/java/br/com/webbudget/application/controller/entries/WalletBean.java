@@ -167,11 +167,9 @@ public class WalletBean extends AbstractBean {
      *
      */
     public void doSave() {
-
         try {
             this.walletService.saveWallet(this.wallet);
             this.wallet = new Wallet();
-
             this.addInfo(true, "wallet.saved");
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
@@ -185,18 +183,15 @@ public class WalletBean extends AbstractBean {
      *
      */
     public void doAdjustment() {
-
         try {
             this.walletService.adjustBalance(this.wallet);
-            this.updateAndOpenDialog("adjustmentDialog", "dialogAdjustment");
+            this.updateAndOpenDialog("confirmAdjustmentDialog", "dialogConfirmAdjustment");
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             this.logger.error(ex.getMessage());
             this.addError(true, "error.undefined-error", ex.getMessage());
-        } finally {
-            this.updateComponent("walletsList");
-        }
+        } 
     }
 
     /**
@@ -241,16 +236,17 @@ public class WalletBean extends AbstractBean {
     }
     
     /**
-     * @param walletId 
+     * @param wallet
      */
-    public void showBalance(long walletId) {
+    public void showBalance(Wallet wallet) {
 
-        this.wallet = this.walletService.findWalletById(walletId);
-        this.walletBalances = this.walletService.listBalancesByWallet(this.wallet);
+        this.wallet = wallet;
+        
+        this.walletBalances = this.walletService.listBalances(wallet);
         
         // se nao tem saldo, nao mostra a popup
         if (this.walletBalances.isEmpty()) {
-            this.addWarning(true, "wallet.no-balances");
+            this.addWarning(true, "warning.wallet.no-balances");
             return;
         }
 

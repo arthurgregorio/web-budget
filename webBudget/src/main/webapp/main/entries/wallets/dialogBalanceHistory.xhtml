@@ -30,7 +30,7 @@
           header="#{messages['balance-history.dialog.title']}">
 
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-xs-12">
             <p:dataScroller id="balanceList"
                             var="balance"
                             mode="inline" 
@@ -48,46 +48,43 @@
 
                 <f:facet name="loader">
                     <p:commandButton type="button" 
-                                     icon="fa fa-plus"
-                                     value="#{menu['more']}" />
+                                     value="#{menu['more']}" 
+                                     styleClass="btn btn-flat btn-default"/>
                 </f:facet>
 
                 <div class="row" style="margin-right: -5px; margin-left: -5px; 
                                         #{balance.walletBalanceType.styleForType}">
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-xs-6">
                         <o:outputFormat escape="false" 
                                         value="#{messages['balance-history.in']}">
                             <f:param value="#{enums[balance.walletBalanceType]}" />
                             <f:param value="#{balance.inclusionFormatted}" />
                         </o:outputFormat>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-xs-6">
                         <p:outputLabel value="#{messages['balance-history.movemented-value']}: "/>
                         <p:spacer width="5"/>
                         <h:outputText value="#{balance.movementedValue}">
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-xs-6">
                         <p:outputLabel value="#{messages['balance-history.old-balance']}: "/>
                         <p:spacer width="5"/>
-                        <h:outputText styleClass="balance-value"
-                                      value="#{balance.oldBalance}"
-                                      style="#{balance.oldBalance.signum() lt 0 ? 'color: red;' : 
-                                               balance.oldBalance.signum() gt 0 ? 'color: green': ''}">
+                        <h:outputText value="#{balance.oldBalance}"
+                                      styleClass="#{balance.oldBalanceNegative ? 'text-red' : 'text-green'}">
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-xs-6">
                         <p:outputLabel value="#{messages['balance-history.actual-balance']}: "/>
                         <p:spacer width="5"/>
                         <h:outputText value="#{balance.actualBalance}"
-                                      style="#{balance.actualBalance.signum() lt 0 ? 'color: red;' : 
-                                               balance.actualBalance.signum() gt 0 ? 'color: green': ''}">
+                                      styleClass="#{balance.actualBalanceNegative ? 'text-red' : 'text-green'}">
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12"
+                    <div class="col-xs-12"
                          jsf:rendered="#{balance.reason ne null}">
                         <p:outputLabel value="#{messages['balance-history.reason']}"/>
                         #{balance.reason}
@@ -100,8 +97,9 @@
 
     <div class="row">
         <div style="margin-top: 10px;" 
-             class="col-md-12 col-sm-12 col-xs-12 align-center">
+             class="col-xs-12 align-center">
             <p:commandButton value="#{menu['back']}"
+                             style="color: white"
                              styleClass="btn btn-flat btn-primary"
                              onclick="closeDialog('dialogBalanceHistory')"/>
         </div>

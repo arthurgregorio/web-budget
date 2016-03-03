@@ -125,6 +125,13 @@ public class Wallet extends PersistentEntity {
     }
 
     /**
+     * @return se o saldo da carteira esta ou nao negativo
+     */
+    public boolean isBalanceNegative() {
+        return this.balance.signum() < 0;
+    }
+    
+    /**
      *
      * @return
      */

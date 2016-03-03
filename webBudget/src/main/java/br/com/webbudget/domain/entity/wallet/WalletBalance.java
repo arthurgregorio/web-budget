@@ -81,7 +81,7 @@ public class WalletBalance extends PersistentEntity {
     @NotNull(message = "{wallet-balance.null-source}")
     @JoinColumn(name = "id_source_wallet")
     private Wallet sourceWallet;
-    
+
     /**
      * @return 
      */
@@ -101,6 +101,27 @@ public class WalletBalance extends PersistentEntity {
      */
     public boolean isSourceBalanceNegative() {
         return this.getSourceBalance().signum() < 0;
+    }
+    
+    /**
+     * @return se o saldo atual eh negativo
+     */
+    public boolean isActualBalanceNegative() {
+        return this.getActualBalance().signum() < 0;
+    }
+    
+    /**
+     * @return se o saldo anterior era negativo
+     */
+    public boolean isOldBalanceNegative() {
+        return this.oldBalance.signum() < 0;
+    }
+
+    /**
+     * @return se o valor movimento eh negativo ou nao
+     */
+    public boolean isMovementedValueNegative() {
+        return this.movementedValue.signum() < 0;
     }
     
     /**
