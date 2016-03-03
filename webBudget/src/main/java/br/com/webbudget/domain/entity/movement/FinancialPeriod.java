@@ -90,6 +90,16 @@ public class FinancialPeriod extends PersistentEntity {
     private Closing closing;
 
     /**
+     * 
+     */
+    public FinancialPeriod() {
+
+        this.expensesGoal = BigDecimal.ZERO;
+        this.revenuesGoal = BigDecimal.ZERO;
+        this.creditCardGoal = BigDecimal.ZERO;
+    }
+
+    /**
      * Se o periodo ja expirou ou nao
      *
      * @return
