@@ -157,7 +157,7 @@ public class MovementClassBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -174,7 +174,7 @@ public class MovementClassBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -194,7 +194,7 @@ public class MovementClassBean extends AbstractBean {
                 this.addError(true, "error.movement-class.integrity-violation", 
                         this.movementClass.getName());
             } else {
-                this.logger.error(ex.getMessage());
+                this.logger.error(ex.getMessage(), ex);
                 this.addError(true, "error.undefined-error", ex.getMessage());
             }
         } finally {

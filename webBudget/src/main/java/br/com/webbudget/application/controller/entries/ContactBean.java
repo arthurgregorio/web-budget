@@ -171,7 +171,7 @@ public class ContactBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -187,7 +187,7 @@ public class ContactBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -203,7 +203,7 @@ public class ContactBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         } finally {
             this.updateComponent("contactsList");
@@ -228,7 +228,7 @@ public class ContactBean extends AbstractBean {
 
             this.updateComponent("addressBox");
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.contact.find-address-error");
         }
     }

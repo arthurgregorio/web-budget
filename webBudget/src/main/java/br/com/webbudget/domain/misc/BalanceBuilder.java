@@ -55,6 +55,15 @@ public final class BalanceBuilder {
     }
     
     /**
+     * @param wallet a carteira de origem em caso de tranferencia
+     * @return o builder
+     */
+    public BalanceBuilder fromWallet(Wallet wallet) {
+        this.walletBalance.setSourceWallet(wallet);
+        return this;
+    }
+    
+    /**
      * @param value o valor movimentado na carteira
      * @return o builder
      */

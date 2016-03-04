@@ -126,10 +126,9 @@ public class GroupBean extends AbstractBean {
             this.unselectAuthorizations();
             this.addInfo(true, "group.saved");
         } catch (InternalServiceError ex) {
-            this.logger.error("GroupBean#doSave has found erros", ex);
             this.addError(true, ex.getMessage());
         } catch (Exception ex) {
-            this.logger.error("GroupBean#doSave has found erros", ex);
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -146,7 +145,7 @@ public class GroupBean extends AbstractBean {
             this.logger.error("GroupBean#doUpdate has found erros", ex);
             this.addError(true, ex.getMessage());
         } catch (Exception ex) {
-            this.logger.error("GroupBean#doSave has found erros", ex);
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -165,7 +164,7 @@ public class GroupBean extends AbstractBean {
                 this.addError(true, "error.group.integrity-violation",
                         this.group.getName());
             } else {
-                this.logger.error("GroupBean#doDelete found erros", ex);
+                this.logger.error(ex.getMessage(), ex);
                 this.addError(true, "error.undefined-error", ex.getMessage());
             }
         } finally {

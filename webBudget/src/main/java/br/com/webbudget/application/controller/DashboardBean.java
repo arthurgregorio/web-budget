@@ -100,7 +100,7 @@ public class DashboardBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error("Erro when filling dashboard", ex);
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }

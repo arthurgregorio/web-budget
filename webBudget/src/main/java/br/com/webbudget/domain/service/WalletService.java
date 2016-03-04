@@ -130,7 +130,7 @@ public class WalletService {
     public void transfer(WalletBalance walletBalance) {
 
         if (walletBalance.getSourceWallet().equals(walletBalance.getTargetWallet())) {
-            throw new InternalServiceError("transfer.validate.same-wallet");
+            throw new InternalServiceError("error.transfer.same-wallet");
         }
 
         // atualizamos o destino
@@ -143,6 +143,7 @@ public class WalletService {
                 targetOldBalance.add(walletBalance.getMovementedValue());
 
         builderTarget.forWallet(target)
+                .fromWallet(walletBalance.getSourceWallet())
                 .withOldBalance(targetOldBalance)
                 .withActualBalance(targetNewBalance)
                 .withMovementedValue(walletBalance.getMovementedValue())
@@ -273,7 +274,7 @@ public class WalletService {
      * @param target
      * @return
      */
-    public List<WalletBalance> listTransfers(Wallet source, Wallet target) {
+    public List<WalletBalance> listTransferences(Wallet source, Wallet target) {
         return this.walletBalanceRepository.listByWallet(source, target, WalletBalanceType.TRANSFERENCE);
     }
 }

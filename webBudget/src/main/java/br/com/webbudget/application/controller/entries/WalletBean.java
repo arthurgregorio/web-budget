@@ -174,7 +174,7 @@ public class WalletBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -189,7 +189,7 @@ public class WalletBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         } 
     }
@@ -206,7 +206,7 @@ public class WalletBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -226,7 +226,7 @@ public class WalletBean extends AbstractBean {
                 this.addError(true, "error.wallet.integrity-violation", 
                         this.wallet.getFriendlyName());
             } else {
-                this.logger.error(ex.getMessage());
+                this.logger.error(ex.getMessage(), ex);
                 this.addError(true, "error.undefined-error", ex.getMessage());
             }
         } finally {

@@ -60,7 +60,7 @@
         #{messages['transference.form.balance']}
         <h:outputText value="#{transferenceBean.walletBalance.sourceBalance}"
                       styleClass="#{transferenceBean.walletBalance.sourceBalanceNegative
-                                ? 'text-red' : 'text-green'}">
+                                    ? 'text-red' : 'text-green'}">
             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
         </h:outputText>
     </div>
@@ -68,7 +68,7 @@
         #{messages['transference.form.balance']}
         <h:outputText value="#{transferenceBean.walletBalance.targetBalance}"
                       styleClass="#{transferenceBean.walletBalance.targetBalanceNegative 
-                               ? 'text-red' : 'text-green'}">
+                                    ? 'text-red' : 'text-green'}">
             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
         </h:outputText>
     </div>

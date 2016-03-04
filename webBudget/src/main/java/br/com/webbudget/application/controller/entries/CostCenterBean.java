@@ -158,7 +158,7 @@ public class CostCenterBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -178,7 +178,7 @@ public class CostCenterBean extends AbstractBean {
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
@@ -198,7 +198,7 @@ public class CostCenterBean extends AbstractBean {
                 this.addError(true, "error.cost-center.integrity-violation", 
                         this.costCenter.getName());
             } else {
-                this.logger.error(ex.getMessage());
+                this.logger.error(ex.getMessage(), ex);
                 this.addError(true, "error.undefined-error", ex.getMessage());
             }
         } finally {

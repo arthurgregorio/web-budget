@@ -183,10 +183,10 @@
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'transference' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.BALANCE_TRANSFER_VIEW)}">
-                            <p:link href="/main/financial/transfer/listTransfers.xhtml">
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.BALANCE_TRANSFERENCE_VIEW)}">
+                            <p:link href="/main/financial/transference/walletTransference.xhtml">
                                 <i class="fa fa-exchange"></i> 
-                                <span>#{menu['financial.transfers']}</span>
+                                <span>#{menu['financial.transferences']}</span>
                             </p:link>
                         </li>
                     </ul>

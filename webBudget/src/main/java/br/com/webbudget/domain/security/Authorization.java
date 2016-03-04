@@ -160,11 +160,11 @@ public class Authorization {
     public final String CARD_INVOICE_HISTORY = "authority.card-invoice.history";
 
     @Getter
-    @AuthorizationGroup("authority.balance-transfer")
-    public final String BALANCE_TRANSFER_VIEW = "authority.balance-transfer.access";
+    @AuthorizationGroup("authority.balance-transference")
+    public final String BALANCE_TRANSFERENCE_VIEW = "authority.balance-transference.access";
     @Getter
-    @AuthorizationGroup("authority.balance-transfer")
-    public final String BALANCE_TRANSFER_MAKE = "authority.balance-transfer.make";
+    @AuthorizationGroup("authority.balance-transference")
+    public final String BALANCE_TRANSFERENCE_MAKE = "authority.balance-transference.make";
 
     @Getter
     @AuthorizationGroup("authority.financial-period")
