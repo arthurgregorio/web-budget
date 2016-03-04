@@ -68,12 +68,13 @@ public class TransferenceBean extends AbstractBean {
      * Transfere a grana
      */
     public void doTransference() {
-
         try {
             this.walletService.transfer(this.walletBalance);
 
             this.walletBalance = new WalletBalance();
+            
             this.wallets = this.walletService.listWallets(false);
+            this.transferences = this.walletService.listTransferences(null, null);
 
             this.addInfo(true, "transference.transfered");
         } catch (InternalServiceError ex) {
@@ -85,10 +86,19 @@ public class TransferenceBean extends AbstractBean {
     }
 
     /**
-     * 
+     * Atualiza a lista do historico
      */
     public void updateHistoric() {
-        
+        try {
+            this.transferences = this.walletService.listTransferences(null, null);
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        } finally {
+            this.updateComponent("transferencesList");
+        }
     }
     
     /**

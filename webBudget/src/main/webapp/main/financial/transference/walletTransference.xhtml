@@ -18,6 +18,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -50,7 +51,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div jsf:id="transferencePanel" class="row">
             <div class="col-md-6">
                 <h:form id="transferenceForm" prependId="false">
                     <div class="box">
@@ -61,7 +62,8 @@
                             <ui:include src="formTransference.xhtml"/>
                         </div>
                         <div class="box-footer align-right">
-                            <p:commandButton process="transferenceForm"
+                            <p:commandButton update="transferencePanel"
+                                             process="transferenceForm"
                                              value="#{menu['transfer']}"
                                              styleClass="btn btn-flat btn-success"
                                              actionListener="#{transferenceBean.doTransference()}"/>
@@ -75,26 +77,32 @@
                         <h3 class="box-title">#{messages['transference.historic']}</h3>
                     </div>
                     <div class="box-body">
-                        <p:dataScroller chunkSize="10"
+                        <p:dataScroller id="transferencesList"
+                                        chunkSize="5" 
+                                        mode="inline"
+                                        scrollHeight="293"
                                         var="transference"
                                         value="#{transferenceBean.transferences}" >
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    #{messages['transference.list.source']}:
+                            <div class="row" style="margin-right: -5px; margin-left: -15px;">
+                                <div class="col-xs-4 form-group">
+                                    <p:outputLabel value="#{messages['transference.list.source']}:"/>
                                     <br/>
                                     #{transference.sourceWallet.friendlyName}
                                 </div>
-                                <div class="col-xs-4">
-                                    #{messages['transference.list.target']}:
+                                <div class="col-xs-4 form-group">
+                                    <p:outputLabel value="#{messages['transference.list.target']}:"/>
                                     <br/>
                                     #{transference.targetWallet.friendlyName}
                                 </div>
-                                <div class="col-xs-4">
-                                    #{messages['transference.list.movemented-value']}:
+                                <div class="col-xs-4 form-group">
+                                    <p:outputLabel value="#{messages['transference.list.movemented-value']}:"/>
                                     <br/>
-                                    #{transference.movementedValue}
+                                    <h:outputText value="#{transference.movementedValue}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
                                 </div>
                             </div>
+                            <hr style="margin-top: 0px; margin-bottom: 15px;"/>
                         </p:dataScroller>
                     </div>
                     <div class="box-footer align-right">
