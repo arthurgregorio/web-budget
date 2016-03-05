@@ -101,6 +101,12 @@
                                         <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                     </h:outputText>
                                 </div>
+                                <div class="col-xs-12 form-group">
+                                    <p:outputLabel value="#{messages['transference.list.reason']}:"/>
+                                    <br/>
+                                    <h:outputText value="#{empty transference.reason 
+                                                           ? '---' : transference.reason}"/>
+                                </div>
                             </div>
                             <hr style="margin-top: 0px; margin-bottom: 15px;"/>
                         </p:dataScroller>
@@ -114,9 +120,5 @@
                 </div>
             </div>
         </div>
-    </ui:define>
-
-    <ui:define name="popups">
-        <ui:include src="dialogTransferenceReason.xhtml"/>
     </ui:define>
 </ui:composition>
