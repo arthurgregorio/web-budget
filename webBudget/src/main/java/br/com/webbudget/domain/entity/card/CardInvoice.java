@@ -81,8 +81,10 @@ public class CardInvoice extends PersistentEntity {
      *
      */
     public CardInvoice() {
-        this.movements = new ArrayList<>();
+        
         this.identification = this.createInvoiceCode();
+        
+        this.movements = new ArrayList<>();
     }
 
     /**
@@ -133,19 +135,9 @@ public class CardInvoice extends PersistentEntity {
      * @return o valor total da fatura com base nos movimentos pagos nela
      */
     public BigDecimal getTotal() {
-
-        BigDecimal total = null;
-
-        if (!this.movements.isEmpty()) {
-
-            total = BigDecimal.ZERO;
-
-            for (Movement m : this.movements) {
-                total = total.add(m.getValue());
-            }
-        }
-
-        return total;
+        return this.movements.stream()
+                .map(Movement::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     /**
@@ -162,5 +154,12 @@ public class CardInvoice extends PersistentEntity {
         } else {
             return this.financialPeriod.getEnd();
         }
+    }
+    
+    /**
+     * @return se nossa fatura tem ou nao movimentos
+     */
+    public boolean hasMovements() {
+        return !this.movements.isEmpty();
     }
 }

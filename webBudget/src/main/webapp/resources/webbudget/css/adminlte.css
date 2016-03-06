@@ -3297,7 +3297,7 @@ table.text-center th {
     background: #fff;
     border: 1px solid #f4f4f4;
     padding: 20px;
-    margin: 10px 25px;
+    /*margin: 10px 25px;*/
 }
 .invoice-title {
     margin-top: 0;

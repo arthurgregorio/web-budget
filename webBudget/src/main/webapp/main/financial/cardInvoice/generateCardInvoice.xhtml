@@ -81,21 +81,13 @@
                         </p:selectOneMenu>
                     </div>
                     <div class="col-sm-6 align-right">
-                        <p:commandButton immediate="true" 
-                                         styleClass="btn btn-flat btn-success"
-                                         value="#{messages['card-invoice.move']}" 
-                                         actionListener="#{cardInvoiceBean.createInvoiceMovement()}"
-                                         rendered="#{cardInvoiceBean.canPay() 
-                                                     and userSessionBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
                         <div style="display: inline-block"
-                             jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_PAY)}">
-                            <p:spacer width="10"/>
+                             jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_PROCESS)}">
                             <p:commandButton update="controlsForm"
                                              process="controlsForm"
                                              styleClass="btn btn-flat btn-primary"
                                              value="#{messages['card-invoice.view']}"
-                                             actionListener="#{cardInvoiceBean.generateInvoice()}" 
-                                             rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_PROCESS)}"/>
+                                             actionListener="#{cardInvoiceBean.generateInvoice()}" />
                         </div>
                         <div style="display: inline-block"
                              jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_HISTORY)}">
@@ -103,104 +95,153 @@
                             <p:commandButton immediate="true"
                                              styleClass="btn btn-flat btn-primary"
                                              value="#{messages['card-invoice.historic']}"
-                                             action="#{cardInvoiceBean.changeToHistory()}"
-                                             rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_HISTORY)}"/>
+                                             action="#{cardInvoiceBean.changeToHistory()}"/>
                         </div>
                     </div>
                 </h:form>
             </div>
         </div>
 
-
-        <h:panelGroup id="detailsPanel" 
-                      layout="block"
-                      styleClass="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
-                <div class="ui-grid-row card-details-header">
-                    <div class="ui-grid-col-5">
-                        <p:outputLabel styleClass="card-info"
-                                       value="#{messages['card-invoice.card.owner']}: "/>
-                        <p:spacer width="10"/>
-                        <h:outputText styleClass="card-info"
-                                      value="#{cardInvoiceBean.cardInvoice.card.owner}"/>
-                    </div>
-                    <div class="ui-grid-col-3">
-                        <p:outputLabel styleClass="card-info"
-                                       value="#{messages['card-invoice.card.limit']}: "/>
-                        <p:spacer width="10"/>
-                        <h:outputText styleClass="card-info"
-                                      value="#{cardInvoiceBean.cardInvoice.card.creditLimit}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                        </h:outputText>
-                    </div>
-                    <div class="ui-grid-col-4">
-                        <p:outputLabel styleClass="card-info"
-                                       value="#{messages['card-invoice.card.number']}: "/>
-                        <p:spacer width="10"/>
-                        <h:outputText styleClass="card-info"
-                                      value="#{cardInvoiceBean.cardInvoice.card.securedNumber}"/>
-                    </div>
-                </div>
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-12">
-                        <p:dataTable id="movementsList" 
-                                     rows="30"
-                                     var="movement"
-                                     paginator="true"
-                                     paginatorPosition="bottom"
-                                     paginatorAlwaysVisible="false"
-                                     value="#{cardInvoiceBean.cardInvoice.movements}"
-                                     emptyMessage="#{cardInvoiceBean.cardInvoice.movements eq null 
-                                                     ? messages['card-invoice.list.empty-search'] 
-                                                     : messages['card-invoice.list.empty']}">
-
-                            <p:column width="10%" 
-                                      styleClass="div-align-center"
-                                      headerText="#{messages['card-invoice.list.code']}">
-                                <p:link value="#{movement.code}" 
-                                        href="#{cardInvoiceBean.changeToViewMovement(movement.id)}"/>
-                            </p:column>
-                            <p:column headerText="#{messages['card-invoice.list.description']}">
-                                #{of:abbreviate(movement.description,50)}
-                            </p:column>
-                            <p:column width="15%"
-                                      styleClass="div-align-center" 
-                                      headerText="#{messages['card-invoice.list.pay-date']}">
-                                <h:outputText value="#{movement.paymentDate}">
-                                    <f:converter converterId="localDateConverter"/>
-                                </h:outputText> 
-                            </p:column>
-                            <p:column width="15%"
-                                      styleClass="div-align-center" 
-                                      headerText="#{messages['card-invoice.list.value']}">
-                                <h:outputText value="#{movement.value}">
-                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                </h:outputText>
-                            </p:column>
-                            <p:column width="10%" 
-                                      styleClass="div-align-center"
-                                      headerText="#{messages['card-invoice.list.conferred']}">
-                                <p:inputSwitch value="#{movement.checked}" 
-                                               onLabel="#{messages['card-invoice.list.checked']}"
-                                               offLabel="#{messages['card-invoice.list.unchecked']}"/>
-                            </p:column>
-                        </p:dataTable>
-                    </div>
-                </div>
-                <div class="ui-grid-row card-details-footer">
-                    <div class="ui-grid-col-10 div-align-right">
-                        <p:outputLabel styleClass="card-info"
-                                       value="#{messages['card-invoice.card.total']}:"/>
-                    </div>
-                    <div class="ui-grid-col-2 div-align-center">
-                        <h:outputText styleClass="card-info"
-                                      value="#{cardInvoiceBean.cardInvoice.total}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                        </h:outputText>
-                    </div>
-                </div>
+        <div jsf:id="invoiceBox" class="row">
+            <div class="col-xs-12 align-center"
+                 jsf:rendered="#{not cardInvoiceBean.invoicePayable}">
+                <h4>#{messages['card-invoice.tip']}</h4>
             </div>
-        </h:panelGroup>
+            <div class="col-xs-12"
+                 jsf:rendered="#{cardInvoiceBean.invoicePayable}">
+                <section class="invoice">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h2 class="page-header">
+                                <i class="fa fa-credit-card"></i> AdminLTE, Inc.
+                                <small class="pull-right">Date: 2/10/2014</small>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="row invoice-info">
+                        <div class="col-sm-4 invoice-col">
+                            From
+                            <address>
+                                <strong>Admin, Inc.</strong><br/>
+                                795 Folsom Ave, Suite 600<br/>
+                                San Francisco, CA 94107<br/>
+                                Phone: (804) 123-5432<br/>
+                                Email: info@almasaeedstudio.com
+                            </address>
+                        </div>
+                        <div class="col-sm-4 invoice-col">
+                            To
+                            <address>
+                                <strong>John Doe</strong><br/>
+                                795 Folsom Ave, Suite 600<br/>
+                                San Francisco, CA 94107<br/>
+                                Phone: (555) 539-1037<br/>
+                                Email: john.doe@example.com
+                            </address>
+                        </div>
+                        <div class="col-sm-4 invoice-col">
+                            <b>Invoice #007612</b><br/>
+                            <br/>
+                            <b>Order ID:</b> 4F3S8J<br/>
+                            <b>Payment Due:</b> 2/22/2014<br/>
+                            <b>Account:</b> 968-34567
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Qty</th>
+                                        <th>Product</th>
+                                        <th>Serial #</th>
+                                        <th>Description</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Call of Duty</td>
+                                        <td>455-981-221</td>
+                                        <td>El snort testosterone trophy driving gloves handsome</td>
+                                        <td>$64.50</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Need for Speed IV</td>
+                                        <td>247-925-726</td>
+                                        <td>Wes Anderson umami biodiesel</td>
+                                        <td>$50.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Monsters DVD</td>
+                                        <td>735-845-642</td>
+                                        <td>Terry Richardson helvetica tousled street art master</td>
+                                        <td>$10.70</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Grown Ups Blue Ray</td>
+                                        <td>422-568-642</td>
+                                        <td>Tousled lomo letterpress</td>
+                                        <td>$25.99</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <p class="lead">Payment Methods:</p>
+                            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                            </p>
+                        </div>
+                        <div class="col-xs-6">
+                            <p class="lead">Amount Due 2/22/2014</p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tr>
+                                        <th style="width:50%">Subtotal:</th>
+                                        <td>$250.30</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Tax (9.3%)</th>
+                                        <td>$10.34</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Shipping:</th>
+                                        <td>$5.80</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total:</th>
+                                        <td>$265.24</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-print">
+                        <div class="col-xs-12 align-right">
+                            <p:commandButton immediate="true" 
+                                             styleClass="btn btn-flat btn-success"
+                                             value="#{messages['card-invoice.pay']}" 
+                                             actionListener="#{cardInvoiceBean.payInvoice()}"
+                                             rendered="#{cardInvoiceBean.invoicePayable
+                                                         and userSessionBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
+                            <p:commandButton immediate="true"
+                                             icon="fa fa-print"
+                                             value="#{menu['print']}"
+                                             styleClass="btn btn-flat btn-primary"/>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
     </ui:define>
 
     <ui:define name="popups">

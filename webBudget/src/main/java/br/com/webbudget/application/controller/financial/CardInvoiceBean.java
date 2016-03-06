@@ -20,8 +20,7 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.entity.movement.MovementClass;
-import br.com.webbudget.domain.entity.wallet.Wallet;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
@@ -31,14 +30,13 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Controller para a tela de faturas de cartao e historico das faturas
  *
  * @author Arthur Gregorio
  *
- * @version 1.4.0
+ * @version 2.0.0
  * @since 1.0.0, 28/04/2014
  */
 @Named
@@ -49,17 +47,9 @@ public class CardInvoiceBean extends AbstractBean {
     private CardInvoice cardInvoice;
 
     @Getter
-    @Setter
-    private Card selectedCard;
-
-    @Getter
     private List<Card> cards;
     @Getter
-    private List<Wallet> wallets;
-    @Getter
     private List<CardInvoice> cardInvoices;
-    @Getter
-    private List<MovementClass> movementClasses;
     @Getter
     private List<FinancialPeriod> financialPeriods;
 
@@ -71,10 +61,10 @@ public class CardInvoiceBean extends AbstractBean {
     private FinancialPeriodService financialPeriodService;
 
     /**
-     * Inicializa o formulario listando os cartoes de credito e o periodo para
-     * entao o usuario realizar a geracao de uma nova fatura
+     * 
      */
     public void initialize() {
+        
         this.cardInvoice = new CardInvoice();
 
         this.cards = this.cardService.listCreditCards(false);
@@ -104,26 +94,26 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void generateInvoice() {
 
-//        if (this.cardInvoice.getCard() == null || this.cardInvoice.getFinancialPeriod() == null) {
-//            this.error("card-invoice.validate.null-period-card", true);
-//            return;
-//        }
-//
-//        try {
-//            this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
-//
-//            if (this.cardInvoice.getMovements().isEmpty()) {
-//                this.info("card-invoice.action.no-movements-to-pay", true);
-//                this.cardInvoice = new CardInvoice();
-//            } else {
-//                this.info("card-invoice.action.generated", true);
-//            }
-//        } catch (Exception ex) {
-//            this.logger.error("CardInvoiceBean#generateInvoice found errors", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        } finally {
-//            this.update("detailsPanel");
-//        }
+        if (this.cardInvoice.getCard() == null || this.cardInvoice.getFinancialPeriod() == null) {
+            this.addError(true, "error.card-invoice.select-period-card");
+            return;
+        }
+
+        try {
+            this.cardInvoice = this.cardService.fillCardInvoice(this.cardInvoice);
+
+            if (!this.cardInvoice.hasMovements()) {
+                this.addError(true, "error.card-invoice.no-movements");
+                this.cardInvoice = new CardInvoice();
+            } 
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        } finally {
+            this.updateComponent("invoiceBox");
+        }
     }
 
     /**
@@ -166,17 +156,8 @@ public class CardInvoiceBean extends AbstractBean {
     /**
      * Invoca a criacao do movimento para a fatura
      */
-    public void createInvoiceMovement() {
+    public void payInvoice() {
 
-//        try {
-//            this.cardService.createMovement(this.cardInvoice,
-//                    this.translate("card-invoice.identification"));
-//
-//            this.openDialog("moveInvoiceDialog", "dialogMoveInvoice");
-//        } catch (Exception ex) {
-//            this.logger.error("CardInvoiceBean#payInvoice found errors", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        }
     }
 
     /**
@@ -200,8 +181,7 @@ public class CardInvoiceBean extends AbstractBean {
     /**
      * @return se pode ou nao pagar esta fatura
      */
-    public boolean canPay() {
-        return (this.cardInvoice != null && this.cardInvoice.getMovements() != null
-                && !this.cardInvoice.getMovements().isEmpty());
+    public boolean isInvoicePayable() {
+        return this.cardInvoice != null && this.cardInvoice.hasMovements();
     }
 }
