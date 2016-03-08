@@ -24,6 +24,8 @@ import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -94,7 +96,8 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void generateInvoice() {
 
-        if (this.cardInvoice.getCard() == null || this.cardInvoice.getFinancialPeriod() == null) {
+        if (this.cardInvoice.getCard() == null 
+                || this.cardInvoice.getFinancialPeriod() == null) {
             this.addError(true, "error.card-invoice.select-period-card");
             return;
         }
@@ -121,19 +124,6 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void loadHistory() {
 
-//        if (this.selectedCard == null) {
-//            this.error("card-invoice.validate.null-card", true);
-//            return;
-//        }
-//
-//        try {
-//            this.cardInvoices = this.cardService.listInvoicesByCard(this.selectedCard);
-//        } catch (Exception ex) {
-//            this.logger.error("CardInvoiceBean#loadHistory found errors", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        } finally {
-//            this.update("invoicesList");
-//        }
     }
 
     /**
@@ -143,14 +133,6 @@ public class CardInvoiceBean extends AbstractBean {
      */
     public void detailInvoice(CardInvoice cardInvoice) {
 
-//        this.cardInvoice = cardInvoice;
-//        
-//        // listamos os movimentos da fatura e carregamos no objeto selecionado
-//        this.cardInvoice.setMovements(this.movementService
-//                .listMovementsByCardInvoice(cardInvoice));
-//        
-//        // atualizamos a dialog e mostramos na tela
-//        this.openDialog("invoiceDetailsDialog", "dialogInvoiceDetails");
     }
 
     /**
@@ -178,6 +160,14 @@ public class CardInvoiceBean extends AbstractBean {
                 + "&movementId=" + movementId + "&detailing=true";
     }
 
+    /**
+     * @return a data atual em formato string
+     */
+    public String getActualDateAsString() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                .format(LocalDate.now());
+    }
+    
     /**
      * @return se pode ou nao pagar esta fatura
      */

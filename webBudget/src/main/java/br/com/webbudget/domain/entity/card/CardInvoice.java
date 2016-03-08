@@ -21,6 +21,7 @@ import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -44,8 +45,8 @@ import lombok.ToString;
  */
 @Entity
 @Table(name = "card_invoices")
-@ToString(callSuper = true, of = {"identification", "value"})
-@EqualsAndHashCode(callSuper = true, of = {"identification", "value"})
+@ToString(callSuper = true, of = {"identification", "total"})
+@EqualsAndHashCode(callSuper = true, of = {"identification", "total"})
 public class CardInvoice extends PersistentEntity {
 
     @Getter
@@ -53,11 +54,10 @@ public class CardInvoice extends PersistentEntity {
     private String identification;
     @Getter
     @Setter
-    @Column(name = "value", nullable = false)
-    private BigDecimal value;
+    @Column(name = "total", nullable = false)
+    private BigDecimal total;
 
     @Getter
-    @Setter
     @ManyToOne
     @JoinColumn(name = "id_card")
     private Card card;
@@ -73,7 +73,6 @@ public class CardInvoice extends PersistentEntity {
     public FinancialPeriod financialPeriod;
 
     @Getter
-    @Setter
     @Transient
     private List<Movement> movements;
 
@@ -81,15 +80,11 @@ public class CardInvoice extends PersistentEntity {
      *
      */
     public CardInvoice() {
-        
-        this.identification = this.createInvoiceCode();
-        
         this.movements = new ArrayList<>();
     }
 
     /**
-     *
-     * @return
+     * @return um codigo aleatorio para identificar esta fatura
      */
     private String createInvoiceCode() {
 
@@ -115,18 +110,30 @@ public class CardInvoice extends PersistentEntity {
     }
 
     /**
+     * O set do cartao e a criacao da identifacacao da fatura
      *
-     * @param prefix
+     * @param card o cartao
      */
-    public void setIdentificationPefix(String prefix) {
+    public void setCard(Card card) {
+        this.card = card;
 
-        final StringBuilder builder = new StringBuilder();
+        if (card != null) {
+            final StringBuilder builder = new StringBuilder();
 
-        builder.append(prefix);
-        builder.append("-");
-        builder.append(this.identification);
+            builder.append(card.getName());
+            builder.append(" - ");
+            builder.append(this.createInvoiceCode());
 
-        this.identification = builder.toString();
+            this.identification = builder.toString();
+        }
+    }
+
+    /**
+     * @param movements os movimentos da fatura
+     */
+    public void setMovements(List<Movement> movements) {
+        this.movements = movements;
+        this.total = this.calculateTotal();
     }
 
     /**
@@ -134,7 +141,7 @@ public class CardInvoice extends PersistentEntity {
      *
      * @return o valor total da fatura com base nos movimentos pagos nela
      */
-    public BigDecimal getTotal() {
+    public BigDecimal calculateTotal() {
         return this.movements.stream()
                 .map(Movement::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -144,7 +151,7 @@ public class CardInvoice extends PersistentEntity {
      * @return a data para vencimento da fatura do cartao
      */
     public LocalDate getInvoiceDueDate() {
-        
+
         int dueDate = this.card.getExpirationDay();
 
         if (dueDate != 0) {
@@ -155,11 +162,27 @@ public class CardInvoice extends PersistentEntity {
             return this.financialPeriod.getEnd();
         }
     }
-    
+
     /**
      * @return se nossa fatura tem ou nao movimentos
      */
     public boolean hasMovements() {
         return !this.movements.isEmpty();
+    }
+
+    /**
+     * @return a data de inicio do periodo
+     */
+    public String getInvoicePeriodStart() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                .format(this.financialPeriod.getStart());
+    }
+
+    /**
+     * @return a data de fim do periodo
+     */
+    public String getInvoicePeriodEnd() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                .format(this.financialPeriod.getEnd());
     }
 }

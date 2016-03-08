@@ -16,11 +16,11 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:of="http://omnifaces.org/functions"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
@@ -113,38 +113,45 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <h2 class="page-header">
-                                <i class="fa fa-credit-card"></i> AdminLTE, Inc.
-                                <small class="pull-right">Date: 2/10/2014</small>
+                                <i class="fa fa-credit-card"></i> #{cardInvoiceBean.cardInvoice.card.name}
+                                <small class="pull-right">
+                                    #{messages['card-invoice.due-date']}: 
+                                    <h:outputText value="#{cardInvoiceBean.cardInvoice.invoiceDueDate}">
+                                        <f:converter converterId="localDateConverter"/>
+                                    </h:outputText>
+                                </small>
                             </h2>
                         </div>
                     </div>
                     <div class="row invoice-info">
                         <div class="col-sm-4 invoice-col">
-                            From
+                            #{messages['card-invoice.card-data']}
                             <address>
-                                <strong>Admin, Inc.</strong><br/>
-                                795 Folsom Ave, Suite 600<br/>
-                                San Francisco, CA 94107<br/>
-                                Phone: (804) 123-5432<br/>
-                                Email: info@almasaeedstudio.com
+                                <strong>#{cardInvoiceBean.cardInvoice.card.owner}</strong>
+                                <br/>
+                                #{cardInvoiceBean.cardInvoice.card.securedNumber}
+                                <br/>
+                                #{cardInvoiceBean.cardInvoice.card.flag}
                             </address>
                         </div>
                         <div class="col-sm-4 invoice-col">
-                            To
+                            #{messages['card-invoice.period-data']}
                             <address>
-                                <strong>John Doe</strong><br/>
-                                795 Folsom Ave, Suite 600<br/>
-                                San Francisco, CA 94107<br/>
-                                Phone: (555) 539-1037<br/>
-                                Email: john.doe@example.com
+                                <strong>#{cardInvoiceBean.cardInvoice.financialPeriod.identification}</strong>
+                                <br/>
+                                <h:outputText value="#{cardInvoiceBean.cardInvoice.financialPeriod.creditCardGoal}" >
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                </h:outputText> 
+                                <br/>
+                                <o:outputFormat value="#{messages['card-invoice.period']}">
+                                    <f:param value="#{cardInvoiceBean.cardInvoice.invoicePeriodStart}"/>
+                                    <f:param value="#{cardInvoiceBean.cardInvoice.invoicePeriodEnd}"/>
+                                </o:outputFormat>
                             </address>
                         </div>
                         <div class="col-sm-4 invoice-col">
-                            <b>Invoice #007612</b><br/>
-                            <br/>
-                            <b>Order ID:</b> 4F3S8J<br/>
-                            <b>Payment Due:</b> 2/22/2014<br/>
-                            <b>Account:</b> 968-34567
+                            <b>#{messages['card-invoice.identification']}:</b>
+                            #{cardInvoiceBean.cardInvoice.identification}
                         </div>
                     </div>
 
@@ -153,42 +160,37 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Qty</th>
-                                        <th>Product</th>
-                                        <th>Serial #</th>
-                                        <th>Description</th>
-                                        <th>Subtotal</th>
+                                        <th><b>#{messages['card-invoice.checked']}</b></th>
+                                        <th><b>#{messages['card-invoice.movement-code']}</b></th>
+                                        <th><b>#{messages['card-invoice.movement-description']}</b></th>
+                                        <th><b>#{messages['card-invoice.payment-date']}</b></th>
+                                        <th><b>#{messages['card-invoice.value']}</b></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Call of Duty</td>
-                                        <td>455-981-221</td>
-                                        <td>El snort testosterone trophy driving gloves handsome</td>
-                                        <td>$64.50</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Need for Speed IV</td>
-                                        <td>247-925-726</td>
-                                        <td>Wes Anderson umami biodiesel</td>
-                                        <td>$50.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Monsters DVD</td>
-                                        <td>735-845-642</td>
-                                        <td>Terry Richardson helvetica tousled street art master</td>
-                                        <td>$10.70</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Grown Ups Blue Ray</td>
-                                        <td>422-568-642</td>
-                                        <td>Tousled lomo letterpress</td>
-                                        <td>$25.99</td>
-                                    </tr>
+                                    <ui:repeat var="movement" 
+                                               value="#{cardInvoiceBean.cardInvoice.movements}">
+                                        <tr>
+                                            <td>
+                                                <p:selectBooleanCheckbox value="#{movement.checked}"/>
+                                            </td>
+                                            <td>
+                                                <p:link value="#{movement.code}" 
+                                                        href="#{cardInvoiceBean.changeToViewMovement(movement.id)}"/>
+                                            </td>
+                                            <td>#{movement.description}</td>
+                                            <td>
+                                                <h:outputText value="#{movement.paymentDate}">
+                                                    <f:converter converterId="localDateConverter"/>
+                                                </h:outputText>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{movement.value}" >
+                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                                </h:outputText>                                                 
+                                            </td>
+                                        </tr>
+                                    </ui:repeat>
                                 </tbody>
                             </table>
                         </div>
@@ -202,24 +204,20 @@
                             </p>
                         </div>
                         <div class="col-xs-6">
-                            <p class="lead">Amount Due 2/22/2014</p>
+                            <p class="lead">
+                                <o:outputFormat value="#{messages['card-invoice.movements-until']}">
+                                    <f:param value="#{cardInvoiceBean.actualDateAsString}"/>
+                                </o:outputFormat>
+                            </p>
                             <div class="table-responsive">
                                 <table class="table">
                                     <tr>
-                                        <th style="width:50%">Subtotal:</th>
-                                        <td>$250.30</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tax (9.3%)</th>
-                                        <td>$10.34</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Shipping:</th>
-                                        <td>$5.80</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Total:</th>
-                                        <td>$265.24</td>
+                                        <th style="width:50%">#{messages['card-invoice.total']}</th>
+                                        <td>
+                                            <h:outputText value="#{cardInvoiceBean.cardInvoice.total}" >
+                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                            </h:outputText> 
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -233,10 +231,10 @@
                                              actionListener="#{cardInvoiceBean.payInvoice()}"
                                              rendered="#{cardInvoiceBean.invoicePayable
                                                          and userSessionBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
+                            <p:spacer width="10"/>
                             <p:commandButton immediate="true"
-                                             icon="fa fa-print"
                                              value="#{menu['print']}"
-                                             styleClass="btn btn-flat btn-primary"/>
+                                             styleClass="btn btn-flat btn-default"/>
                         </div>
                     </div>
                 </section>

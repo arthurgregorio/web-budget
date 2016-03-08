@@ -116,16 +116,11 @@ public class CardService {
      * Metodo que cria a movimentacao para a fatura referente ao cartao
      *
      * @param cardInvoice a fatura do cartao que sera transformada e movimento
-     * @param identificationPrefix prefixo a ser colocado antes do numerod da
-     * invoice
      */
     @Transactional
-    public void createMovement(CardInvoice cardInvoice, String identificationPrefix) {
+    public void createMovement(CardInvoice cardInvoice) {
 
         final List<Movement> movements = cardInvoice.getMovements();
-
-        cardInvoice.setValue(cardInvoice.getTotal());
-        cardInvoice.setIdentificationPefix(identificationPrefix);
 
         cardInvoice = this.cardInvoiceRepository.save(cardInvoice);
 
@@ -154,7 +149,7 @@ public class CardService {
 
         movement.setFinancialPeriod(cardInvoice.getFinancialPeriod());
         movement.setMovementStateType(MovementStateType.OPEN);
-        movement.setValue(cardInvoice.getValue());
+        movement.setValue(cardInvoice.getTotal());
         movement.setMovementType(MovementType.CARD_INVOICE);
 
         movement = this.movementRepository.save(movement);
@@ -164,7 +159,7 @@ public class CardService {
 
         apportionment.setCostCenter(config.getInvoiceDefaultCostCenter());
         apportionment.setMovementClass(config.getInvoiceDefaultMovementClass());
-        apportionment.setValue(cardInvoice.getValue());
+        apportionment.setValue(cardInvoice.getTotal());
         apportionment.setMovement(movement);
 
         this.apportionmentRepository.save(apportionment);
@@ -237,8 +232,9 @@ public class CardService {
      */
     public CardInvoice fillCardInvoice(CardInvoice cardInvoice) {
 
-        final List<Movement> movements = this.movementRepository.listPaidWithoutInvoiceByPeriodAndCard(
-                cardInvoice.getFinancialPeriod(), cardInvoice.getCard());
+        final List<Movement> movements = this.movementRepository
+                .listPaidWithoutInvoiceByPeriodAndCard(cardInvoice
+                        .getFinancialPeriod(), cardInvoice.getCard());
 
         cardInvoice.setMovements(movements);
 
