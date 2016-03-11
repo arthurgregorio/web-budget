@@ -56,14 +56,17 @@ public class FinancialPeriod extends PersistentEntity {
     private String identification;
     @Getter
     @Setter
+    @NotNull(message = "{financial-period.credit-goal-empty}")
     @Column(name = "credit_card_goal")
     private BigDecimal creditCardGoal;
     @Getter
     @Setter
+    @NotNull(message = "{financial-period.expenses-goal-empty}")
     @Column(name = "expenses_goal")
     private BigDecimal expensesGoal;
     @Getter
     @Setter
+    @NotNull(message = "{financial-period.revenues-goal-empty}")
     @Column(name = "revenues_goal")
     private BigDecimal revenuesGoal;
     @Getter
@@ -93,7 +96,6 @@ public class FinancialPeriod extends PersistentEntity {
      * 
      */
     public FinancialPeriod() {
-
         this.expensesGoal = BigDecimal.ZERO;
         this.revenuesGoal = BigDecimal.ZERO;
         this.creditCardGoal = BigDecimal.ZERO;

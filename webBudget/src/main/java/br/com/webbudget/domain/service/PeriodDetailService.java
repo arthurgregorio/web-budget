@@ -28,7 +28,6 @@ import br.com.webbudget.domain.misc.chart.donut.DonutChartModel;
 import br.com.webbudget.domain.misc.chart.line.LineChartDatasetBuilder;
 import br.com.webbudget.domain.misc.chart.line.LineChartModel;
 import br.com.webbudget.domain.repository.movement.IApportionmentRepository;
-import br.com.webbudget.domain.repository.movement.ICostCenterRepository;
 import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
 import br.com.webbudget.domain.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
@@ -44,6 +43,7 @@ import javax.inject.Inject;
 import org.apache.commons.collections.ListUtils;
 
 /**
+ * Classe que representa a montagem da tela de detalhes do periodo financeiro
  *
  * @author Arthur Gregorio
  *
@@ -56,17 +56,17 @@ public class PeriodDetailService {
     @Inject
     private IMovementRepository movementRepository;
     @Inject
-    private ICostCenterRepository costCenterRepository;
-    @Inject
     private IApportionmentRepository apportionmentRepository;
     @Inject
     private IMovementClassRepository movementClassRepository;
 
     /**
+     * Metodo que busca as classes de movimentacao e seu respectivo valor 
+     * movimento, ou seja, a somatoria de todos os rateios para a aquela classe
      *
-     * @param period
-     * @param direction
-     * @return
+     * @param period o periodo
+     * @param direction qual tipo queremos, entrada ou saida
+     * @return a lista de movimentos
      */
     public List<MovementClass> fetchTopClassesAndValues(
             FinancialPeriod period, MovementClassType direction) {
@@ -77,10 +77,11 @@ public class PeriodDetailService {
         final List<MovementClass> classes = this.movementClassRepository
                 .listByTypeAndStatus(direction, Boolean.FALSE);
 
+        // para cada classe pegamos o seu total em movimentacao
         classes.stream().forEach(clazz -> {
 
-            final BigDecimal total
-                    = this.apportionmentRepository.totalMovementsPerClass(clazz);
+            final BigDecimal total = this.apportionmentRepository
+                    .totalMovementsPerClassAndPeriod(period, clazz);
 
             if (total != null) {
                 clazz.setTotalMovements(total);
@@ -92,30 +93,35 @@ public class PeriodDetailService {
         withValues.sort((c1, c2)
                 -> c2.getTotalMovements().compareTo(c1.getTotalMovements()));
 
+        // retorna somente os 10 primeiros resultados
         return withValues.size() > 10 ? withValues.subList(0, 10) : withValues;
     }
 
     /**
+     * Monta o model do grafico de consumo por centro de custo
      *
-     * @param period
-     * @param direction
-     * @return
+     * @param period o periodo
+     * @param direction a direcao que vamos montar no grafico, entrada ou saida
+     * @return o modelo do grafico para a view
      */
     public DonutChartModel buidCostCenterChart(FinancialPeriod period, MovementClassType direction) {
 
         final List<Movement> movements;
 
+        // pela direcao, decide qual lista de movimentos usar
         if (direction == MovementClassType.OUT) {
             movements = this.getExpensesFor(period);
         } else {
             movements = this.getRevenuesFor(period);
         }
 
+        // mapeia para cada centro de custo, seus movimentos
         final Map<CostCenter, List<Movement>> costCentersAndMovements
                 = this.mapCostCenterAndMovements(movements);
 
         final DonutChartModel donutChartModel = new DonutChartModel();
 
+        // para cada CC adiciona os dados do grafico
         costCentersAndMovements.keySet().stream().forEach(costCenter -> {
 
             final List<Movement> grouped
@@ -127,30 +133,33 @@ public class PeriodDetailService {
 
             final String color = this.createRandomColor();
             
-            donutChartModel.addData(new DonutChartDataset<BigDecimal>(total,
-                    "rgb("+ color +")", "rgba("+ color +",0.8)", costCenter.getName()));
+            donutChartModel.addData(new DonutChartDataset<>(total, "rgb("+ color +")",
+                    "rgba("+ color +",0.8)", costCenter.getName()));
         });
 
         return donutChartModel;
     }
 
     /**
+     * Metodo que monta o modelo do grafico de consumo por dia no periodo
      *
-     * @param period
-     * @return
+     * @param period o periodo
+     * @return o model para a view
      */
     public LineChartModel bulidDailyChart(FinancialPeriod period) {
 
+        // lista receitas e despesas do periodo
         final List<Movement> revenues = this.getRevenuesFor(period);
-
         final List<Movement> expenses = this.getExpensesFor(period);
 
         // agrupamos pelas datas das despesas e receitas
         final List<LocalDate> payDates = this.groupPaymentDates(
                 ListUtils.union(revenues, expenses));
 
+        // monta o grafico de linhas
         final LineChartModel model = new LineChartModel();
 
+        // dados de despesas
         final LineChartDatasetBuilder<BigDecimal> expensesBuilder
                 = new LineChartDatasetBuilder<>()
                 .filledByColor("rgba(255,153,153,0.2)")
@@ -160,6 +169,7 @@ public class PeriodDetailService {
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(204,0,0,1)");
 
+        // dados de receitas
         final LineChartDatasetBuilder<BigDecimal> revenuesBuilder
                 = new LineChartDatasetBuilder<>()
                 .filledByColor("rgba(140,217,140,0.2)")
@@ -169,6 +179,7 @@ public class PeriodDetailService {
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(45,134,45,1)");
 
+        // para cada data de pagamento, printa o valor no dataset
         payDates.stream().forEach(payDate -> {
 
             model.addLabel(DateTimeFormatter
@@ -188,6 +199,7 @@ public class PeriodDetailService {
             revenuesBuilder.andData(revenuesTotal);
         });
 
+        // joga os datasets no model
         model.addDataset(revenuesBuilder.build());
         model.addDataset(expensesBuilder.build());
 
@@ -216,9 +228,11 @@ public class PeriodDetailService {
     }
 
     /**
+     * Pega todas as receitas para um determinado periodo considerando se ele
+     * esta ou nao encerrado
      *
-     * @param period
-     * @return
+     * @param period o periodo
+     * @return a lista de movimentos
      */
     private List<Movement> getRevenuesFor(FinancialPeriod period) {
 
@@ -233,9 +247,11 @@ public class PeriodDetailService {
     }
 
     /**
+     * Pega todas as despesas para um determinado periodo considerando se ele
+     * esta ou nao encerrado
      *
-     * @param period
-     * @return
+     * @param period o periodo
+     * @return a lista de movimentos
      */
     private List<Movement> getExpensesFor(FinancialPeriod period) {
 
@@ -267,9 +283,10 @@ public class PeriodDetailService {
     }
 
     /**
-     *
-     * @param movements
-     * @return
+     * Mapeia os movimentos para dentro de seu respectivo centro de custo
+     * 
+     * @param movements o movimentos
+     * @return o mapa de CC X movimentos
      */
     private Map<CostCenter, List<Movement>> mapCostCenterAndMovements(List<Movement> movements) {
 

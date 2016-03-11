@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.Apportionment;
+import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.FixedMovement;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
@@ -34,13 +35,6 @@ import java.util.List;
 public interface IApportionmentRepository extends IGenericRepository<Apportionment, Long> {
 
     /**
-     * 
-     * @param movementClass
-     * @return 
-     */
-    public BigDecimal totalMovementsPerClass(MovementClass movementClass);
-    
-    /**
      *
      * @param movement
      * @return
@@ -49,8 +43,23 @@ public interface IApportionmentRepository extends IGenericRepository<Apportionme
     
     /**
      * 
+     * @param movementClass
+     * @return 
+     */
+    public BigDecimal totalMovementsPerClass(MovementClass movementClass);
+    
+    /**
+     * 
      * @param fixedMovement
      * @return 
      */
     public List<Apportionment> listByFixedMovement(FixedMovement fixedMovement);
+    
+    /**
+     * 
+     * @param period
+     * @param movementClass
+     * @return 
+     */
+    public BigDecimal totalMovementsPerClassAndPeriod(FinancialPeriod period, MovementClass movementClass);
 }

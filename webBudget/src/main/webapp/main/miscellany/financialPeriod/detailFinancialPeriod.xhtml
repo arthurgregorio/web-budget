@@ -17,6 +17,7 @@
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -57,8 +58,13 @@
                         <h3 class="box-title">#{messages['period-detail.cost-centers-revenues']}</h3>
                     </div>
                     <div class="box-body">
+                        <div class="col-sm-12 align-center"
+                             jsf:rendered="#{empty periodDetailBean.revenueClasses}">
+                            <h4>#{messages['period-detail.no-data']}</h4>
+                        </div>
                         <ui:repeat var="movementClass" 
-                                   value="#{periodDetailBean.revenueClasses}">
+                                   value="#{periodDetailBean.revenueClasses}"
+                                   rendered="#{not empty periodDetailBean.revenueClasses}">
                             <div class="progress-group">
                                 <span class="progress-text">#{movementClass.costCenter.name} / #{movementClass.name}</span>
                                 <span class="progress-number">
@@ -85,8 +91,13 @@
                         <h3 class="box-title">#{messages['period-detail.cost-centers-expenses']}</h3>
                     </div>
                     <div class="box-body">
+                        <div class="col-sm-12 align-center"
+                             jsf:rendered="#{empty periodDetailBean.expensesClasses}">
+                            <h4>#{messages['period-detail.no-data']}</h4>
+                        </div>
                         <ui:repeat var="movementClass" 
-                                   value="#{periodDetailBean.expensesClasses}">
+                                   value="#{periodDetailBean.expensesClasses}"
+                                   rendered="#{not empty periodDetailBean.expensesClasses}">
                             <div class="progress-group">
                                 <span class="progress-text">#{movementClass.costCenter.name} / #{movementClass.name}</span>
                                 <span class="progress-number">
@@ -236,10 +247,16 @@
                                 <h3 class="box-title">#{messages['period-detail.revenues-by-cost-center']}</h3>
                             </div>
                             <div class="box-body">
-                                <div class="col-xs-4">
+                                <div class="col-xs-12 align-center"
+                                     jsf:rendered="#{not periodDetailBean.revenuesCostCenterModel.containsData()}">
+                                    <h4>#{messages['period-detail.no-data']}</h4>
+                                </div>
+                                <div class="col-xs-4"
+                                     jsf:rendered="#{periodDetailBean.revenuesCostCenterModel.containsData()}">
                                     <div id="revenuesByCostCenterLegend" class="chart-legend"></div>
                                 </div>
-                                <div class="col-xs-8">
+                                <div class="col-xs-8"
+                                     jsf:rendered="#{periodDetailBean.revenuesCostCenterModel.containsData()}">
                                     <div class="chart">
                                         <canvas id="revenuesByCostCenter" style="height:300px"></canvas>
                                     </div>
@@ -253,10 +270,16 @@
                                 <h3 class="box-title">#{messages['period-detail.expenses-by-cost-center']}</h3>
                             </div>
                             <div class="box-body">
-                                <div class="col-xs-4">
+                                <div class="col-xs-12 align-center"
+                                     jsf:rendered="#{not periodDetailBean.expensesCostCenterModel.containsData()}">
+                                    <h4>#{messages['period-detail.no-data']}</h4>
+                                </div>
+                                <div class="col-xs-4"
+                                     jsf:rendered="#{periodDetailBean.expensesCostCenterModel.containsData()}">
                                     <div id="expensesByCostCenterLegend" class="chart-legend"></div>
                                 </div>
-                                <div class="col-xs-8">
+                                <div class="col-xs-8"
+                                     jsf:rendered="#{periodDetailBean.expensesCostCenterModel.containsData()}">
                                     <div class="chart">
                                         <canvas id="expensesByCostCenter" style="height:300px"></canvas>
                                     </div>

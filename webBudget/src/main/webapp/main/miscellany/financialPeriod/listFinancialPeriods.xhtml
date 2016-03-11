@@ -104,7 +104,7 @@
                                       value="#{financialPeriod.closing.closingDate}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
-                        <strong class="text-success"
+                        <strong class="text-green"
                                 jsf:rendered="#{financialPeriod.expired eq false 
                                                 and financialPeriod.closed eq false}">
                                 #{messages['financial-period.list.open']}

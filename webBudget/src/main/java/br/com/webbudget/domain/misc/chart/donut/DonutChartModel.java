@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Datamodel para os graficos donut do ChatJS
+ *  
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -44,6 +45,13 @@ public class DonutChartModel extends AbstractChartModel {
      */
     public void addData(DonutChartDataset dataset) {
         this.chartDatasets.add(dataset);
+    }
+    
+    /**
+     * @return se este grafico contem ou nao dados
+     */
+    public boolean containsData() {
+        return !this.chartDatasets.isEmpty();
     }
     
     /**

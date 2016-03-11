@@ -17,9 +17,11 @@
 package br.com.webbudget.domain.repository.movement;
 
 import br.com.webbudget.domain.entity.movement.Apportionment;
+import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.FixedMovement;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
+import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,21 +39,21 @@ import org.hibernate.criterion.Restrictions;
 public class ApportionmentRepository extends GenericRepository<Apportionment, Long> implements IApportionmentRepository {
 
     /**
-     * 
+     *
      * @param movementClass
-     * @return 
+     * @return
      */
     @Override
     public BigDecimal totalMovementsPerClass(MovementClass movementClass) {
-       
+
         final Criteria criteria = this.createCriteria();
-        
+
         criteria.setProjection(Projections.sum("value"));
         criteria.add(Restrictions.eq("movementClass", movementClass));
-        
+
         return (BigDecimal) criteria.uniqueResult();
     }
-    
+
     /**
      *
      * @param movement
@@ -69,18 +71,42 @@ public class ApportionmentRepository extends GenericRepository<Apportionment, Lo
     }
 
     /**
-     * 
+     *
      * @param fixedMovement
-     * @return 
+     * @return
      */
     @Override
     public List<Apportionment> listByFixedMovement(FixedMovement fixedMovement) {
-        
+
         final Criteria criteria = this.createCriteria();
 
         criteria.createAlias("fixedMovement", "fm");
         criteria.add(Restrictions.eq("fm.id", fixedMovement.getId()));
 
         return criteria.list();
+    }
+
+    /**
+     * 
+     * @param period
+     * @param movementClass
+     * @return 
+     */
+    @Override
+    public BigDecimal totalMovementsPerClassAndPeriod(FinancialPeriod period, MovementClass movementClass) {
+
+        final Criteria criteria = this.createCriteria();
+
+        criteria.createAlias("movement", "mv");
+        criteria.createAlias("mv.financialPeriod", "fp");
+        
+        criteria.add(Restrictions.eq("fp.id", period.getId()));
+        criteria.add(Restrictions.in("mv.movementStateType", 
+                new Object[]{MovementStateType.PAID, MovementStateType.CALCULATED}));
+        criteria.add(Restrictions.eq("movementClass", movementClass));
+        
+        criteria.setProjection(Projections.sum("value"));
+
+        return (BigDecimal) criteria.uniqueResult();
     }
 }

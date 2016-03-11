@@ -54,6 +54,11 @@ public class PeriodDetailBean extends AbstractBean {
     private MovementCalculator calculator;
     
     @Getter
+    private DonutChartModel expensesCostCenterModel;
+    @Getter
+    private DonutChartModel revenuesCostCenterModel;
+    
+    @Getter
     private List<MovementClass> revenueClasses;
     @Getter
     private List<MovementClass> expensesClasses;
@@ -93,15 +98,19 @@ public class PeriodDetailBean extends AbstractBean {
             
             this.drawLineChart("dailySummaryChart", lineChartModel);
             
-            final DonutChartModel revenuesCostCenterModel = this.periodDetailService
+            this.revenuesCostCenterModel = this.periodDetailService
                     .buidCostCenterChart(period, MovementClassType.IN);
             
-            this.drawDonutChart("revenuesByCostCenter", revenuesCostCenterModel);
+            if (this.revenuesCostCenterModel.containsData()) {
+                this.drawDonutChart("revenuesByCostCenter", this.revenuesCostCenterModel);
+            }
 
-            final DonutChartModel expensesCostCenterModel = this.periodDetailService
+            this.expensesCostCenterModel = this.periodDetailService
                     .buidCostCenterChart(this.period, MovementClassType.OUT);
                     
-            this.drawDonutChart("expensesByCostCenter", expensesCostCenterModel);
+            if (this.expensesCostCenterModel.containsData()) {
+                this.drawDonutChart("expensesByCostCenter", this.expensesCostCenterModel);
+            }
         } catch (Exception ex) {
             this.logger.error("Cant fill period {} details",
                     this.period.getIdentification(), ex);
@@ -166,14 +175,17 @@ public class PeriodDetailBean extends AbstractBean {
      */
     private int percentageOf(BigDecimal x, BigDecimal total) {
         
+        // escala o X para nao haver erros de comparacao
+        x = x.setScale(2, RoundingMode.HALF_UP);
+        
         // se um dos dois valores for null retorna 0 de cara
         if (x == null || total == null) {
             return 0;
         }
         
-        BigDecimal percentage = BigDecimal.ZERO;
+        BigDecimal percentage;
         
-        if (x.compareTo(total) > 0) {
+        if (x.compareTo(total) >= 0) {
             return 100;
         } else {
             percentage = x.multiply(new BigDecimal(100))
