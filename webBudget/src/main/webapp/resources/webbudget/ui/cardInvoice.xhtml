@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2016 arthur
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">>
+
+    <c:interface>
+        <c:attribute required="true"
+                     name="beanHandler" />
+      
+        <c:attribute required="true"
+                     name="invoiceData" 
+                     type="br.com.webbudget.domain.entity.card.CardInvoice" />
+        
+        <c:attribute name="payInvoiceAction" 
+                     method-signature="java.lang.String  actionListener()"/>
+        <c:attribute name="printInvoiceAction" 
+                     method-signature="java.lang.String  actionListener()"/>
+    </c:interface>
+
+    <c:implementation>
+        <section class="invoice">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <i class="fa fa-credit-card"></i> #{cc.attrs.invoiceData.card.name}
+                        <small class="pull-right">
+                            #{messages['card-invoice.due-date']}: 
+                            <h:outputText value="#{cc.attrs.invoiceData.invoiceDueDate}">
+                                <f:converter converterId="localDateConverter"/>
+                            </h:outputText>
+                        </small>
+                    </h2>
+                </div>
+            </div>
+            <div class="row invoice-info">
+                <div class="col-sm-4 invoice-col">
+                    #{messages['card-invoice.card-data']}
+                    <address>
+                        <strong>#{cc.attrs.invoiceData.card.owner}</strong>
+                        <br/>
+                        #{cc.attrs.invoiceData.card.securedNumber}
+                        <br/>
+                        #{cc.attrs.invoiceData.card.flag}
+                    </address>
+                </div>
+                <div class="col-sm-4 invoice-col">
+                    #{messages['card-invoice.period-data']}
+                    <address>
+                        <strong>#{cc.attrs.invoiceData.financialPeriod.identification}</strong>
+                        <br/>
+                        <h:outputText value="#{cc.attrs.invoiceData.financialPeriod.creditCardGoal}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText> 
+                        <br/>
+                        <o:outputFormat value="#{messages['card-invoice.period']}">
+                            <f:param value="#{cc.attrs.invoiceData.invoicePeriodStart}"/>
+                            <f:param value="#{cc.attrs.invoiceData.invoicePeriodEnd}"/>
+                        </o:outputFormat>
+                    </address>
+                </div>
+                <div class="col-sm-4 invoice-col">
+                    <b>#{messages['card-invoice.identification']}:</b>
+                    #{cc.attrs.invoiceData.identification}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th><b>#{messages['card-invoice.checked']}</b></th>
+                                <th><b>#{messages['card-invoice.movement-code']}</b></th>
+                                <th><b>#{messages['card-invoice.movement-description']}</b></th>
+                                <th><b>#{messages['card-invoice.payment-date']}</b></th>
+                                <th><b>#{messages['card-invoice.value']}</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ui:repeat var="movement" 
+                                       value="#{cc.attrs.invoiceData.movements}">
+                                <tr>
+                                    <td style="width:10%">
+                                        <p:selectBooleanCheckbox value="#{movement.checked}"/>
+                                    </td>
+                                    <td style="width:10%">
+                                        <p:link target="_blank"
+                                                value="#{movement.code}" 
+                                                href="#{cc.attrs.beanHandler.changeToViewMovement(movement.id)}"/>
+                                    </td>
+                                    <td>#{movement.description}</td>
+                                    <td>
+                                        <h:outputText value="#{movement.paymentDate}">
+                                            <f:converter converterId="localDateConverter"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{movement.value}" >
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                        </h:outputText>                                                 
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6">
+                </div>
+                <div class="col-xs-6">
+                    <p class="lead">
+                        <o:outputFormat value="#{messages['card-invoice.movements-until']}">
+                            <f:param value="#{cc.attrs.beanHandler.actualDateAsString}"/>
+                        </o:outputFormat>
+                    </p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <th style="width:50%"><b>#{messages['card-invoice.total']}</b></th>
+                                <td>
+                                    <h:outputText value="#{cc.attrs.invoiceData.total}" >
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText> 
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row no-print">
+                <div class="col-xs-12 align-right">
+                    <p:commandButton immediate="true" 
+                                     styleClass="btn btn-flat btn-success"
+                                     value="#{messages['card-invoice.pay']}" 
+                                     actionListener="#{cc.attrs.payInvoiceAction}"
+                                     rendered="#{cc.attrs.invoiceData.hasMovements()
+                                                 and userSessionBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['print']}"
+                                     styleClass="btn btn-flat btn-default"
+                                     action="#{cc.attrs.printInvoiceAction}"/>
+                </div>
+            </div>
+        </section>
+    </c:implementation>
+</html>

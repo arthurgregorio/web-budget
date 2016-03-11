@@ -23,7 +23,6 @@ import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
-import br.com.webbudget.domain.service.MovementService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -57,8 +56,6 @@ public class CardInvoiceBean extends AbstractBean {
 
     @Inject
     private CardService cardService;
-    @Inject
-    private MovementService movementService;
     @Inject
     private FinancialPeriodService financialPeriodService;
 
@@ -159,6 +156,13 @@ public class CardInvoiceBean extends AbstractBean {
         return "../movement/formMovement.xhtml?faces-redirect=true"
                 + "&movementId=" + movementId + "&detailing=true";
     }
+    
+    /**
+     * @return muda para a impressao da fatura
+     */
+    public String changeToPrintInvoice() {
+        return "cardInvoicePrint.xhtml?faces-redirect=true";
+    }
 
     /**
      * @return a data atual em formato string
@@ -166,12 +170,5 @@ public class CardInvoiceBean extends AbstractBean {
     public String getActualDateAsString() {
         return DateTimeFormatter.ofPattern("dd/MM/yyyy")
                 .format(LocalDate.now());
-    }
-    
-    /**
-     * @return se pode ou nao pagar esta fatura
-     */
-    public boolean isInvoicePayable() {
-        return this.cardInvoice != null && this.cardInvoice.hasMovements();
     }
 }
