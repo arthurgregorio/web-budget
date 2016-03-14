@@ -157,7 +157,7 @@ public class Authorization {
     public final String CARD_INVOICE_PROCESS = "authority.card-invoice.process";
     @Getter
     @AuthorizationGroup("authority.card-invoice")
-    public final String CARD_INVOICE_HISTORY = "authority.card-invoice.history";
+    public final String CARD_INVOICE_HISTORIC = "authority.card-invoice.historic";
 
     @Getter
     @AuthorizationGroup("authority.balance-transference")

@@ -25,7 +25,7 @@
                 xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="cardInvoice"/>
+    <ui:param name="activeMenu" value="currentCardInvoice"/>
 
     <f:metadata>
         <f:viewAction action="#{cardInvoiceBean.initialize()}"/>
@@ -41,8 +41,9 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['financial']}</a></li>
+        <li><a href="#">#{breadcrumb['financial.card-invoice']}</a></li>
         <li class="active">
-            <a href="generateCardInvoice.xhtml">#{breadcrumb['financial.card-invoice']}</a>
+            <a href="cardInvoiceView.xhtml">#{breadcrumb['financial.card-invoice.current']}</a>
         </li>
     </ui:define>
 
@@ -86,17 +87,9 @@
                              jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_PROCESS)}">
                             <p:commandButton update="controlsForm"
                                              process="controlsForm"
+                                             value="#{menu['view']}"
                                              styleClass="btn btn-flat btn-primary"
-                                             value="#{messages['card-invoice.view']}"
-                                             actionListener="#{cardInvoiceBean.generateInvoice()}" />
-                        </div>
-                        <div style="display: inline-block"
-                             jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_HISTORY)}">
-                            <p:spacer width="10"/>
-                            <p:commandButton immediate="true"
-                                             styleClass="btn btn-flat btn-primary"
-                                             value="#{messages['card-invoice.historic']}"
-                                             action="#{cardInvoiceBean.changeToHistory()}"/>
+                                             actionListener="#{cardInvoiceBean.viewInvoice()}" />
                         </div>
                     </div>
                 </h:form>
@@ -110,8 +103,11 @@
             </div>
             <div class="col-xs-12"
                  jsf:rendered="#{cardInvoiceBean.cardInvoice.hasMovements()}">
-                <wb:cardInvoice beanHandler="#{cardInvoiceBean}"
-                                invoiceData="#{cardInvoiceBean.cardInvoice}"/>
+                <wb:cardInvoice printVersion="false"
+                                beanHandler="#{cardInvoiceBean}"
+                                invoiceData="#{cardInvoiceBean.cardInvoice}"
+                                payInvoiceAction="#{cardInvoiceBean.moveInvoice()}"
+                                printInvoiceAction="#{cardInvoiceBean.changeToPrintInvoice()}"/>
             </div>
         </div>
     </ui:define>

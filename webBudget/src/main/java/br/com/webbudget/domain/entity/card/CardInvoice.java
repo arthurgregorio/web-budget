@@ -169,6 +169,14 @@ public class CardInvoice extends PersistentEntity {
     public boolean hasMovements() {
         return !this.movements.isEmpty();
     }
+    
+    /**
+     * @return se esta fatura e ou nao pagavel
+     */
+    public boolean isPayable() {
+        return this.hasMovements() 
+                && this.movement != null && this.movement.isPaid();
+    }
 
     /**
      * @return a data de inicio do periodo

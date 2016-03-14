@@ -19,15 +19,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:o="http://omnifaces.org/ui"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://java.sun.com/jsf/composite"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">>
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <c:interface>
         <c:attribute required="true"
-                     name="beanHandler" />
-      
+                     name="beanHandler"
+                     type="java.lang.Object"/>
+        
+        <c:attribute required="true"
+                     name="printVersion" 
+                     type="java.lang.Boolean"/>
+
         <c:attribute required="true"
                      name="invoiceData" 
                      type="br.com.webbudget.domain.entity.card.CardInvoice" />
@@ -90,7 +96,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th><b>#{messages['card-invoice.checked']}</b></th>
+                                <th jsf:rendered="#{not cc.attrs.printVersion}">
+                                    <b>#{messages['card-invoice.checked']}</b>
+                                </th>
                                 <th><b>#{messages['card-invoice.movement-code']}</b></th>
                                 <th><b>#{messages['card-invoice.movement-description']}</b></th>
                                 <th><b>#{messages['card-invoice.payment-date']}</b></th>
@@ -101,13 +109,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <ui:repeat var="movement" 
                                        value="#{cc.attrs.invoiceData.movements}">
                                 <tr>
-                                    <td style="width:10%">
+                                    <td style="width:10%"
+                                        jsf:rendered="#{not cc.attrs.printVersion}">
                                         <p:selectBooleanCheckbox value="#{movement.checked}"/>
                                     </td>
                                     <td style="width:10%">
                                         <p:link target="_blank"
                                                 value="#{movement.code}" 
+                                                rendered="#{not cc.attrs.printVersion}"
                                                 href="#{cc.attrs.beanHandler.changeToViewMovement(movement.id)}"/>
+                                        <h:outputText value="#{movement.code}"
+                                                      rendered="#{cc.attrs.printVersion}"/>
                                     </td>
                                     <td>#{movement.description}</td>
                                     <td>
@@ -150,19 +162,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </div>
             </div>
-            <div class="row no-print">
+            <div class="row no-print"
+                 jsf:rendered="#{not cc.attrs.printVersion}">
                 <div class="col-xs-12 align-right">
                     <p:commandButton immediate="true" 
+                                     value="#{menu['move']}" 
                                      styleClass="btn btn-flat btn-success"
-                                     value="#{messages['card-invoice.pay']}" 
                                      actionListener="#{cc.attrs.payInvoiceAction}"
-                                     rendered="#{cc.attrs.invoiceData.hasMovements()
+                                     rendered="#{not cc.attrs.printVersion
+                                                 and cc.attrs.invoiceData.hasMovements()
                                                  and userSessionBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['print']}"
-                                     styleClass="btn btn-flat btn-default"
-                                     action="#{cc.attrs.printInvoiceAction}"/>
+                                     styleClass="btn btn-flat btn-primary"
+                                     action="#{cc.attrs.printInvoiceAction}"
+                                     rendered="#{not cc.attrs.printVersion}"/>
                 </div>
             </div>
         </section>

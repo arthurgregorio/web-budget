@@ -157,6 +157,8 @@ public class FinancialPeriodRepository extends GenericRepository<FinancialPeriod
         criteria.addOrder(Order.desc("id"));
         criteria.setMaxResults(6);        
         
+        criteria.addOrder(Order.desc("inclusion"));
+        
         return criteria.list();
     }
 }

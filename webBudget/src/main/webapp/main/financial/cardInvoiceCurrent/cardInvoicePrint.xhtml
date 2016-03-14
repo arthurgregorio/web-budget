@@ -20,8 +20,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    
+      xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui">
+
     <h:head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -37,7 +37,9 @@
 
     <h:body onload="window.print()">
         <div class="wrapper">
-            <ui:include src="cardInvoice.xhtml"/>
+            <wb:cardInvoice printVersion="true"
+                            beanHandler="#{cardInvoiceBean}"
+                            invoiceData="#{flash.cardInvoice}"/>
         </div>
     </h:body>
 </html>

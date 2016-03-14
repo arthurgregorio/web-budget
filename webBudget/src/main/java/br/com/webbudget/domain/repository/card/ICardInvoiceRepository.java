@@ -19,8 +19,9 @@ package br.com.webbudget.domain.repository.card;
 import br.com.webbudget.domain.entity.card.Card;
 import br.com.webbudget.domain.entity.card.CardInvoice;
 import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.misc.table.Page;
+import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.repository.IGenericRepository;
-import java.util.List;
 
 /**
  *
@@ -32,16 +33,17 @@ import java.util.List;
 public interface ICardInvoiceRepository extends IGenericRepository<CardInvoice, Long> {
 
     /**
-     * 
-     * @param card
-     * @return 
-     */
-    public List<CardInvoice> listByCard(Card card);
-    
-    /**
      *
      * @param movement
      * @return
      */
     public CardInvoice findByMovement(Movement movement);
+    
+    /**
+     * 
+     * @param card
+     * @param pageRequest
+     * @return 
+     */
+    public Page<CardInvoice> listByCard(Card card, PageRequest pageRequest);
 }

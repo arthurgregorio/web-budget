@@ -19,6 +19,8 @@ package br.com.webbudget.application.controller;
 import br.com.webbudget.domain.misc.chart.AbstractChartModel;
 import br.com.webbudget.infraestructure.Translator;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import lombok.Getter;
@@ -225,6 +227,37 @@ public abstract class AbstractBean implements Serializable {
      */
     public void drawLineChart(String canvas, AbstractChartModel model) {
         this.executeScript("drawLineChart(" + model.toJson() + ", '"+ canvas + "')");
+    }
+    
+    /**
+     * Executa uma fucking regra of Three para saber a porcentagem de um valor
+     * sobre o outro
+     * 
+     * @param x o x da parada
+     * @param total o total que seria o 100%
+     * 
+     * @return a porcentagem
+     */
+    protected int percentageOf(BigDecimal x, BigDecimal total) {
+        
+        // escala o X para nao haver erros de comparacao
+        x = x.setScale(2, RoundingMode.HALF_UP);
+        
+        // se um dos dois valores for null retorna 0 de cara
+        if (x == null || total == null) {
+            return 0;
+        }
+        
+        BigDecimal percentage;
+        
+        if (x.compareTo(total) >= 0) {
+            return 100;
+        } else {
+            percentage = x.multiply(new BigDecimal(100))
+                            .divide(total, 2, RoundingMode.HALF_UP);
+        }
+        
+        return percentage.intValue() > 100 ? 100 : percentage.intValue();
     }
 
     /**

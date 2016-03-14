@@ -25,12 +25,12 @@ import br.com.webbudget.domain.service.CardService;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.omnifaces.util.Faces;
 
 /**
  * Controller para a tela de faturas de cartao e historico das faturas
@@ -71,27 +71,16 @@ public class CardInvoiceBean extends AbstractBean {
     }
 
     /**
-     * Inicializa a tela de historico das faturas
-     */
-    public void initializeHistory() {
-
-        this.cardInvoices = new ArrayList<>();
-
-        this.cards = this.cardService.listCreditCards(false);
-        this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
-    }
-
-    /**
      * @return cancela e volta para a listagem
      */
     public String doCancel() {
-        return "generateCardInvoice.xhtml?faces-redirect=true";
+        return "cardInvoiceView.xhtml?faces-redirect=true";
     }
 
     /**
      * Gera a fatura para o cartao e periodo selecionado
      */
-    public void generateInvoice() {
+    public void viewInvoice() {
 
         if (this.cardInvoice.getCard() == null 
                 || this.cardInvoice.getFinancialPeriod() == null) {
@@ -115,35 +104,28 @@ public class CardInvoiceBean extends AbstractBean {
             this.updateComponent("invoiceBox");
         }
     }
-
-    /**
-     *
-     */
-    public void loadHistory() {
-
-    }
-
-    /**
-     * Carrega e mostra a dialog de detalhes da fatura para o usuario
-     * 
-     * @param cardInvoice a invoice a ser detalhada
-     */
-    public void detailInvoice(CardInvoice cardInvoice) {
-
-    }
-
+    
     /**
      * Invoca a criacao do movimento para a fatura
      */
-    public void payInvoice() {
-
+    public void moveInvoice() {
+        
+        try {
+            this.cardService.createMovement(this.cardInvoice);
+            this.updateAndOpenDialog("moveInvoiceDialog", "dialogMoveInvoice");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        } 
     }
 
     /**
      * @return a pagina do historico de faturas
      */
-    public String changeToHistory() {
-        return "invoiceHistory.xhtml?faces-redirect=true";
+    public String changeToHistoric() {
+        return "cardInvoiceHistoric.xhtml?faces-redirect=true";
     }
     
     /**
@@ -161,6 +143,7 @@ public class CardInvoiceBean extends AbstractBean {
      * @return muda para a impressao da fatura
      */
     public String changeToPrintInvoice() {
+        Faces.setFlashAttribute("cardInvoice", this.cardInvoice);
         return "cardInvoicePrint.xhtml?faces-redirect=true";
     }
 

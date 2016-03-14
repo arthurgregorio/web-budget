@@ -24,7 +24,7 @@ no-padding {
 }
 
 /* linha onde ficam os comandos delecao das dialogs */
-.delete-box {
+.dialog-controls-box {
     margin-top: 10px; 
     text-align: right;
 }

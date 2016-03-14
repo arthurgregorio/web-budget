@@ -25,7 +25,6 @@ import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -189,6 +188,10 @@ public class DashboardBean extends AbstractBean {
 
         final LineChartModel chartModel = new LineChartModel();
 
+        // ordena pela inclusao, do mais velho para o menos novo
+        this.closedPeriods.sort((v1, v2) 
+                -> v1.getInclusion().compareTo(v2.getInclusion()));
+        
         // coloca o nome das series e os dados
         this.closedPeriods.stream().forEach(period -> {
 
@@ -219,33 +222,5 @@ public class DashboardBean extends AbstractBean {
         this.totalRevenueGoal = this.openPeriods.stream()
                 .map(FinancialPeriod::getRevenuesGoal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    /**
-     * Executa uma fucking regra of Three para saber a porcentagem de um valor
-     * sobre o outro
-     * 
-     * @param x o x da parada
-     * @param total o total que seria o 100%
-     * 
-     * @return a porcentagem
-     */
-    private int percentageOf(BigDecimal x, BigDecimal total) {
-        
-        // se um dos dois valores for null retorna 0 de cara
-        if (x == null || total == null) {
-            return 0;
-        }
-        
-        BigDecimal percentage = BigDecimal.ZERO;
-        
-        if (x.compareTo(total) > 0) {
-            return 100;
-        } else {
-            percentage = x.multiply(new BigDecimal(100))
-                            .divide(total, 2, RoundingMode.HALF_UP);
-        }
-        
-        return percentage.intValue() > 100 ? 100 : percentage.intValue();
     }
 }

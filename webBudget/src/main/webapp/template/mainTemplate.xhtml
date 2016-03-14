@@ -60,17 +60,12 @@
 
                 <!-- Header Navbar -->
                 <nav class="navbar navbar-static-top" role="navigation">
-                    <!-- Sidebar toggle button-->
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                         <span class="sr-only"></span>
                     </a>
-                    <!-- Navbar Right Menu -->
                     <div class="navbar-custom-menu">
-
                         <ul class="nav navbar-nav">
-                            <!-- User Account Menu -->
                             <li class="dropdown user user-menu">
-                                <!-- Menu Toggle Button -->
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <pe:gravatar id="userImage"
                                                  value="#{userSessionBean.authenticatedUserEmail}"/>
@@ -85,7 +80,6 @@
                                             <small>#{userSessionBean.authenticatedUserGroup}</small>
                                         </p>
                                     </li>
-                                    <!-- Menu Footer-->
                                     <li class="user-footer">
                                         <h:form>
                                             <div class="pull-left">
@@ -108,11 +102,7 @@
             </header>
 
             <aside class="main-sidebar">
-
-                <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
-
-                    <!-- Sidebar Menu -->
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['entries']}</li>
                         <li class="#{activeMenu eq 'cards' ? 'active' : ''}"
@@ -175,12 +165,30 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="#{activeMenu eq 'cardInvoice' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_VIEW)}">
-                            <p:link href="/main/financial/cardInvoice/cardInvoiceView.xhtml">
+                        <li class="#{activeMenu eq 'currentCardInvoice' 
+                                     ? 'active' : activeMenu eq 'historicCardInvoice' 
+                                        ? 'active' : ''} treeview">
+                            <a href="#">
                                 <i class="fa fa-file-text-o"></i> 
-                                <span>#{menu['financial.card-invoice']}</span>
-                            </p:link>
+                                <span>#{menu['financial.card-invoice']}</span> 
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="#{activeMenu eq 'currentCardInvoice' ? 'active' : ''}"
+                                    jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_VIEW)}">
+                                    <p:link href="/main/financial/cardInvoiceCurrent/cardInvoiceView.xhtml">
+                                        <i class="fa fa-circle-o"></i> 
+                                        #{menu['financial.card-invoice.current']}
+                                    </p:link>
+                                </li>
+                                <li class="#{activeMenu eq 'historicCardInvoice' ? 'active' : ''}"
+                                    jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_HISTORIC)}">
+                                    <p:link href="/main/financial/cardInvoiceHistoric/cardInvoiceHistoric.xhtml">
+                                        <i class="fa fa-circle-o"></i> 
+                                        #{menu['financial.card-invoice.historic']}
+                                    </p:link>
+                                </li>
+                            </ul>
                         </li>
                         <li class="#{activeMenu eq 'transference' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.BALANCE_TRANSFERENCE_VIEW)}">
@@ -243,9 +251,7 @@
                 </section>
             </aside>
 
-            <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
                         <ui:insert name="pageTitle" />
@@ -261,14 +267,11 @@
                         <ui:insert name="breadcrumb" />
                     </ol>
                 </section>
-
-                <!-- Main content -->
                 <section class="content">
                     <ui:insert name="content" />
                 </section>
             </div>
 
-            <!-- Main Footer -->
             <footer class="main-footer">
                 <a target="_blank"
                    href="http://arthurgregorio.github.io/web-budget/">

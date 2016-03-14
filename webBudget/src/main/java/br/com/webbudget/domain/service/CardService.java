@@ -245,9 +245,10 @@ public class CardService {
      * Lista todas as faturas de um determinado cartao recebido como parametro
      *
      * @param card o cartao da qual se deseja ver as faturas
+     * @param pageRequest a solicitacao da pagina
      * @return a lista de faturas
      */
-    public List<CardInvoice> listInvoicesByCard(Card card) {
-        return this.cardInvoiceRepository.listByCard(card);
+    public Page<CardInvoice> listInvoicesByCard(Card card, PageRequest pageRequest) {
+        return this.cardInvoiceRepository.listByCard(card, pageRequest);
     }
 }

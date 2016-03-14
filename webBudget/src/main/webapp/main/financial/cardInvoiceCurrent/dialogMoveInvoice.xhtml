@@ -24,23 +24,24 @@
           closable="false"
           resizable="false" 
           widgetVar="dialogMoveInvoice" 
-          header="#{messages['card-invoice.dialog.move-invoice']}">
+          header="#{messages['card-invoice.dialog.title']}">
 
-    <div class="ui-grid ui-grid-responsive">
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <h4>
                 <o:outputFormat escape="false" 
-                                value="#{messages['card-invoice.dialog.moviment-generated']}">
+                                value="#{messages['card-invoice.dialog.message']}">
                     <f:param value="#{cardInvoiceBean.cardInvoice.identification}"/>
                 </o:outputFormat>
-            </div>
+            </h4>
         </div>
-        <div class="ui-grid-row div-mg-t-15 div-align-center">
-            <div class="ui-grid-col-12">
-                <p:commandButton immediate="true"
-                                 value="#{menu['back']}" 
-                                 action="#{cardInvoiceBean.doCancel()}"/>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 dialog-controls-box">
+            <p:commandButton immediate="true"
+                             value="#{menu['back']}" 
+                             styleClass="btn btn-flat btn-default"
+                             action="#{cardInvoiceBean.doCancel()}"/>
         </div>
     </div>
 </p:dialog>
