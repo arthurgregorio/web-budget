@@ -24,48 +24,69 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="fixedMovement"/>
+
     <f:metadata>
         <f:viewAction action="#{fixedMovementBean.initializeListing()}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['fixed-movement.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['fixed-movement.page-description']}
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['financial']}" />
-        <p:menuitem url="listFixedMovements.xhtml"
-                    value="#{breadcrumb['financial.fixed-movement']}" />
+        <li><a href="#">#{breadcrumb['financial']}</a></li>
+        <li><a href="#">#{breadcrumb['financial.movement']}</a></li>
+        <li class="active"><a href="listFixedMovements.xhtml">#{breadcrumb['financial.movement.fixed']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <p:messages id="messages" closable="true" globalOnly="true"/>
             </div>
         </div>
 
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-8 filter-group form-group-l">
-                    <p:inputText value="#{fixedMovementBean.filter}" 
-                                 placeholder="#{messages['fixed-movement.filter.types']}"/>
-                </div>
-                <div class="ui-grid-col-4 div-align-right">
-                    <p:commandButton process="controlsForm"
-                                     value="#{menu['filter']}"
-                                     action="#{fixedMovementBean.filterList()}"/>
-                    <p:spacer width="10" />
-                    <p:commandButton immediate="true"
-                                     value="#{menu['add']}"
-                                     styleClass="ui-button-info" 
-                                     action="#{fixedMovementBean.changeToAdd()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_INSERT)}"/>
-                </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h:form id="controlsForm" prependId="false">
+                    <p:defaultCommand target="btSearch"/>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="input-group">
+                                <p:inputText id="inFilter" 
+                                             styleClass="form-control"
+                                             value="#{fixedMovementBean.filter}"
+                                             placeholder="#{messages['filter.fixed-movement']}"/>
+                                <div class="input-group-btn">
+                                    <p:commandLink id="btSearch"
+                                                   value="#{menu['search']}"
+                                                   update="fixedMovementsList"
+                                                   onstart="PF('listBlock').show()"
+                                                   oncomplete="PF('listBlock').hide()"
+                                                   styleClass="btn btn-flat btn-warning"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="box-tools pull-right">
+                                <p:commandButton immediate="true"
+                                                 value="#{menu['new']}"
+                                                 styleClass="btn btn-flat btn-primary" 
+                                                 action="#{fixedMovementBean.changeToAdd()}"
+                                                 rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_INSERT)}"/>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
             </div>
-        </h:form>
-
-        <h:form prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-12 full-height-row">
+            <h:form prependId="false">
+                <div jsf:id="boxBody" class="box-body">
                     <p:dataTable id="fixedMovementsList" 
                                  rows="15"
                                  lazy="true"
@@ -74,91 +95,101 @@
                                  sortOrder="descending"
                                  paginatorPosition="bottom" 
                                  paginatorAlwaysVisible="false"
-                                 rowStyleClass="full-height-row"
+                                 rowStyleClass="row-with-button"
+                                 emptyMessage="#{messages['list.empty']}"
                                  value="#{fixedMovementBean.fixedMovementsModel}"
                                  selection="#{fixedMovementBean.selectedFixedMovements}"
-                                 emptyMessage="#{messages['fixed-movement.list.empty']}"
                                  disabledSelection="#{fixedMovement.fixedMovementStatusType eq 'FINALIZED'}">
 
-                        <p:column selectionMode="multiple" 
-                                  style="width:16px;text-align:center"/>
+                        <p:column width="8%" 
+                                  selectionMode="multiple" 
+                                  styleClass="align-center"/>
 
-                        <p:column width="6%" 
-                                  styleClass="div-align-center"
+                        <p:column width="8%" 
+                                  styleClass="align-center"
                                   headerText="#{messages['fixed-movement.list.launched']}">
                             <p:graphicImage width="18"
                                             height="18"
-                                            library="images" 
-                                            name="ui-green-circle.png" 
+                                            library="webbudget" 
+                                            name="img/ui-green-circle.png" 
                                             title="#{messages['fixed-movement.list.is-launched']}"
                                             rendered="#{fixedMovement.alreadyLaunched 
                                                         and fixedMovement.fixedMovementStatusType eq 'ACTIVE'}"/>
                             <p:graphicImage  width="18"
                                              height="18"
-                                             library="images" 
-                                             name="ui-red-circle.png" 
+                                             library="webbudget" 
+                                             name="img/ui-red-circle.png" 
                                              title="#{messages['fixed-movement.list.not-launched']}"
                                              rendered="#{not fixedMovement.alreadyLaunched 
                                                          and fixedMovement.fixedMovementStatusType eq 'ACTIVE'}"/>
                             <p:graphicImage width="18"
                                             height="18"
-                                            library="images" 
-                                            name="ui-undefined-circle.png" 
-                                            title="#{messages[fixedMovement.fixedMovementStatusType]}"
+                                            library="webbudget" 
+                                            name="img/ui-undefined-circle.png" 
+                                            title="#{enums[fixedMovement.fixedMovementStatusType]}"
                                             rendered="#{fixedMovement.fixedMovementStatusType eq 'FINALIZED'}"/>
+                        </p:column>
+                        <p:column width="10%"
+                                  styleClass="align-center"
+                                  headerText="#{messages['fixed-movement.list.autolaunch']}">
+                            <p:selectBooleanCheckbox disabled="true" 
+                                                     value="#{fixedMovement.autoLaunch}" />
                         </p:column>
                         <p:column headerText="#{messages['fixed-movement.list.identification']}">
                             #{fixedMovement.identification}
                         </p:column>
                         <p:column width="25%"
-                                  styleClass="div-align-center"
+                                  styleClass="align-center"
                                   headerText="#{messages['fixed-movement.list.status']}">
-                            #{messages[fixedMovement.fixedMovementStatusType]}
-                        </p:column>
-                        <p:column width="10%"
-                                  styleClass="div-align-center"
-                                  headerText="#{messages['fixed-movement.list.is-autolaunch']}">
-                            <p:selectBooleanCheckbox disabled="true" 
-                                                     value="#{fixedMovement.autoLaunch}" />
+                            #{enums[fixedMovement.fixedMovementStatusType]}
                         </p:column>
                         <p:column width="18%" 
-                                  styleClass="div-align-center"
+                                  styleClass="align-center"
                                   headerText="#{menu['actions']}">
                             <div jsf:rendered="#{fixedMovement.fixedMovementStatusType eq 'ACTIVE'}">
                                 <p:commandButton icon="fa fa-edit"
                                                  title="#{menu['edit']}"
+                                                 styleClass="btn btn-flat btn-default" 
                                                  action="#{fixedMovementBean.changeToEdit(fixedMovement.id)}" 
                                                  rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_UPDATE)}"/>
                                 <p:spacer width="10"/>
                                 <p:commandButton icon="fa fa-remove"
                                                  title="#{menu['delete']}"
+                                                 styleClass="btn btn-flat btn-default" 
                                                  actionListener="#{fixedMovementBean.changeToDelete(fixedMovement.id)}" 
                                                  rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_DELETE)}"/>
                             </div>
                             <p:commandButton icon="fa fa-info-circle"
                                              title="#{menu['detail']}"
+                                             styleClass="btn btn-flat btn-default" 
                                              action="#{fixedMovementBean.changeToDetail(fixedMovement.id)}"
                                              rendered="#{fixedMovement.fixedMovementStatusType eq 'FINALIZED'}"/>
                         </p:column>
                     </p:dataTable>
                 </div>
-            </div>
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6">
+                <div jsf:id="footerBox" class="box-footer align-right">
+                    <p:commandButton value="#{menu['launches']}"
+                                     styleClass="btn btn-flat btn-warning" 
+                                     action="#{fixedMovementBean.showLaunchesDialog()}"
+                                     rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
+                    <p:spacer width="10"/>
                     <p:commandButton value="#{menu['launch']}"
-                                     styleClass="ui-button-warning" 
+                                     styleClass="btn btn-flat btn-primary" 
                                      action="#{fixedMovementBean.showLaunchConfirmDialog()}"
                                      rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCH)}"/>
                 </div>
-                <div class="ui-grid-col-6 div-align-right">
-                    <p:commandButton style="width: 130px;"
-                                     value="#{menu['launches']}"
-                                     styleClass="ui-button-info"
-                                     action="#{fixedMovementBean.showLaunchesDialog()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
-                </div>
-            </div>
-        </h:form>
+            </h:form>
+        </div>
+
+        <p:blockUI block="boxBody"
+                   widgetVar="listBlock"
+                   trigger="fixedMovementsList">
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
+        </p:blockUI>
+
     </ui:define>
 
     <ui:define name="popups">

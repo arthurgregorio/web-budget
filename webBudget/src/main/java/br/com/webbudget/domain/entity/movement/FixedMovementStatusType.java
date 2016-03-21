@@ -25,16 +25,16 @@ package br.com.webbudget.domain.entity.movement;
  */
 public enum FixedMovementStatusType {
 
-    ACTIVE("beans.fixed-movement-status-type.active"),
-    FINALIZED("beans.fixed-movement-status-type.finalized");
+    ACTIVE("fixed-movement-status-type.active"),
+    FINALIZED("fixed-movement-status-type.finalized");
 
-    private final String i18nKey;
+    private final String description;
 
     /**
-     * @param i18nKey
+     * @param description
      */
-    private FixedMovementStatusType(String i18nKey) {
-        this.i18nKey = i18nKey;
+    private FixedMovementStatusType(String description) {
+        this.description = description;
     }
 
     /**
@@ -42,6 +42,6 @@ public enum FixedMovementStatusType {
      */
     @Override
     public String toString() {
-        return this.i18nKey;
+        return this.description;
     }
 }

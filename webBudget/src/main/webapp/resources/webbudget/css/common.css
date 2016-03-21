@@ -62,3 +62,8 @@ no-padding {
     height: 12px;
     margin-right: 5px;
 }
+
+/* ajuste da altura das linhas */
+.row-with-button tr {
+    height: 45px;
+}

@@ -16,32 +16,36 @@
 -->
 
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
           xmlns:h="http://xmlns.jcp.org/jsf/html"
+          xmlns:f="http://xmlns.jcp.org/jsf/core"
           id="deleteFixedMovementDialog"
           modal="true"
           resizable="false" 
           closeOnEscape="true"
           widgetVar="dialogDeleteFixedMovement" 
-          header="#{messages['fixed-movement.dialog.delete']}">
-
-    <div class="ui-grid ui-grid-responsive">
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center div-mg-b-15">
-                <h:outputText value="#{messages['fixed-movement.dialog.delete-confirm']} 
-                              #{fixedMovementBean.fixedMovement.identification} ?" />
-            </div>
+          header="#{messages['fixed-movement.delete-dialog.title']}">
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <h4>
+                <o:outputFormat escape="false" 
+                                 value="#{messages['fixed-movement.delete-dialog.advice']}">
+                    <f:param value="#{fixedMovementBean.fixedMovement.identification}" />
+                </o:outputFormat>
+            </h4>
         </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center">
-                <p:commandButton value="#{menu['no']}"
-                                 onclick="PF('dialogDeleteFixedMovement').hide()"/>
-                <p:spacer width="10"/>
-                <p:commandButton value="#{menu['yes']}"
-                                 styleClass="ui-button-danger" 
-                                 action="#{fixedMovementBean.doDelete()}"/>
-
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 dialog-controls-box">
+            <p:commandButton value="#{menu['yes']}"
+                             styleClass="btn btn-flat btn-danger"
+                             action="#{fixedMovementBean.doDelete()}"/>
+            <p:spacer width="10"/>
+            <p:commandButton value="#{menu['no']}"
+                             styleClass="btn btn-flat"
+                             onclick="closeDialog('dialogDeleteFixedMovement')" />
         </div>
     </div>
 </p:dialog>

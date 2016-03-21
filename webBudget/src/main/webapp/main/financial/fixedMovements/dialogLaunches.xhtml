@@ -16,6 +16,7 @@
 -->
 
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
           xmlns:h="http://xmlns.jcp.org/jsf/html"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -26,51 +27,54 @@
           resizable="false" 
           closeOnEscape="true"
           widgetVar="dialogLaunches" 
-          header="#{messages['launch.dialog.title']}">
+          header="#{messages['launches.dialog.title']}">
 
-    <h:form prependId="false">
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
-                <p:dataTable id="lauchesList" 
-                             rows="10"
-                             lazy="true"
-                             var="launch"
-                             paginator="true"
-                             sortMode="ascending"
-                             paginatorPosition="bottom"
-                             paginatorAlwaysVisible="false"
-                             value="#{fixedMovementBean.launchesModel}"
-                             emptyMessage="#{messages['launch.list.empty']}">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4>
+                <o:outputFormat escape="false"
+                                value="#{messages['launches.tip']}">
+                    <f:param value="#{fixedMovementBean.fixedMovement.identification}"/>
+                </o:outputFormat>
+            </h4>
+            <p:spacer height="5"/>
+            <p:dataTable rows="10"
+                         lazy="true"
+                         var="launch"
+                         paginator="true"
+                         sortMode="ascending"
+                         paginatorPosition="bottom"
+                         paginatorAlwaysVisible="false"
+                         emptyMessage="#{messages['list.empty']}"
+                         value="#{fixedMovementBean.launchesModel}">
 
-                    <p:column styleClass="div-align-center"
-                              headerText="#{messages['launch.list.inclusion']}">
-                        <h:outputText value="#{launch.inclusion}">
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column styleClass="div-align-center"
-                              headerText="#{messages['launch.list.quote']}">
-                        #{launch.quote eq null ? '-' : launch.quote}  
-                    </p:column>
-                    <p:column styleClass="div-align-center"
-                              headerText="#{messages['launch.list.movement']}">
-                        <p:link value="#{launch.movement.code}" 
-                                href="#{fixedMovementBean.changeToViewMovement(launch)}"/>
-                    </p:column>
-                    <p:column width="30%"
-                              styleClass="div-align-center"
-                              headerText="#{messages['launch.list.period']}">
-                        #{launch.financialPeriod.identification}                        
-                    </p:column>
-                </p:dataTable>
-            </div>
+                <p:column styleClass="align-center"
+                          headerText="#{messages['launches.list.quote']}">
+                    #{launch.quote eq null ? '-' : launch.quote}  
+                </p:column>
+                <p:column styleClass="align-center"
+                          headerText="#{messages['launches.list.launch-date']}">
+                    <h:outputText value="#{launch.inclusion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                    </h:outputText>
+                </p:column>
+                <p:column styleClass="align-center"
+                          headerText="#{messages['launches.list.movement']}">
+                    #{launch.movement.code}
+                </p:column>
+                <p:column styleClass="align-center"
+                          headerText="#{messages['launches.list.period']}">
+                    #{launch.financialPeriod.identification}                        
+                </p:column>
+            </p:dataTable>
         </div>
-        <div class="ui-grid-row div-mg-t-15">
-            <div class="ui-grid-col-12 div-align-center">
-                <p:commandButton immediate="true"
-                                 value="#{menu['back']}" 
-                                 onclick="PF('dialogLaunches').hide()"/>
-            </div>
+    </div>
+    <div class="row align-center" style="margin-top: 20px">
+        <div class="col-sm-12">
+            <p:commandButton immediate="true"
+                             value="#{menu['back']}" 
+                             styleClass="btn btn-flat btn-default"
+                             onclick="PF('dialogLaunches').hide()"/>
         </div>
-    </h:form>
+    </div>
 </p:dialog>
