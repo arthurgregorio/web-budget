@@ -144,20 +144,24 @@
 
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['financial']}</li>
-                        <li class="treeview">
+                        <li class="#{activeMenu eq 'fixedMovement' 
+                                     ? 'active' : activeMenu eq 'movement' 
+                                     ? 'active' : ''} treeview">
                             <a href="#">
                                 <i class="fa fa-money"></i> 
                                 <span>#{menu['financial.movements']}</span> 
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li jsf:rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_VIEW)}">
+                                <li class="#{activeMenu eq 'fixedMovement' ? 'active' : ''}"
+                                    jsf:rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_VIEW)}">
                                     <p:link href="/main/financial/fixedMovements/listFixedMovements.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         #{menu['financial.movements.fixed']}
                                     </p:link>
                                 </li>
-                                <li jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_VIEW)}">
+                                <li class="#{activeMenu eq 'movement' ? 'active' : ''}"
+                                    jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_VIEW)}">
                                     <p:link href="/main/financial/movement/listMovements.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         #{menu['financial.movements.monthly']}
@@ -167,7 +171,7 @@
                         </li>
                         <li class="#{activeMenu eq 'currentCardInvoice' 
                                      ? 'active' : activeMenu eq 'historicCardInvoice' 
-                                        ? 'active' : ''} treeview">
+                                     ? 'active' : ''} treeview">
                             <a href="#">
                                 <i class="fa fa-file-text-o"></i> 
                                 <span>#{menu['financial.card-invoice']}</span> 
