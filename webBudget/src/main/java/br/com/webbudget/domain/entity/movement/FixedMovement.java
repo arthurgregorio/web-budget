@@ -19,6 +19,7 @@ package br.com.webbudget.domain.entity.movement;
 import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.entity.PersistentEntity;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.infraestructure.ApplicationUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -126,40 +127,13 @@ public class FixedMovement extends PersistentEntity {
      */
     public FixedMovement() {
         
-        this.code = this.createFixedMovementCode();
+        this.code = ApplicationUtils.createRamdomCode(6, false);
         
         this.autoLaunch = false;
-        this.undetermined = true;
         this.fixedMovementStatusType = FixedMovementStatusType.ACTIVE;
         
         this.apportionments = new ArrayList<>();
         this.deletedApportionments = new ArrayList<>();
-    }
-
-    /**
-     * @return o codigo unico gerado por marca de tempo para esta entidade
-     */
-    private String createFixedMovementCode() {
-
-        long decimalNumber = System.nanoTime();
-
-        String generated = "";
-        final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        synchronized (this.getClass()) {
-
-            int mod;
-            int authCodeLength = 0;
-
-            while (decimalNumber != 0 && authCodeLength < 5) {
-
-                mod = (int) (decimalNumber % 36);
-                generated = digits.substring(mod, mod + 1) + generated;
-                decimalNumber = decimalNumber / 36;
-                authCodeLength++;
-            }
-        }
-        return generated;
     }
 
     /**

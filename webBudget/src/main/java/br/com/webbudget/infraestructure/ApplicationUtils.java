@@ -49,15 +49,14 @@ public class ApplicationUtils {
 
     /**
      * Constroi a URL base da aplicacao
-     * 
+     *
      * @return a URL base da aplicaco + contexto
      */
     public static String buildBaseURL() {
 
         final FacesContext facesContext = FacesContext.getCurrentInstance();
-        
-        final HttpServletRequest request = (HttpServletRequest) 
-                facesContext.getExternalContext().getRequest();
+
+        final HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
 
         final StringBuilder builder = new StringBuilder();
 
@@ -68,16 +67,50 @@ public class ApplicationUtils {
 
         return builder.toString();
     }
-    
+
     /**
      * Checa em que estagio do projeto estamos, as opcoes sao as definidas no
      * enum {@link ProjectStage}
-     * 
+     *
      * @param projectStage o estagio do projeto
      * @return se estamos usando ele ou nao
      */
     public static boolean isStageRunning(ProjectStage projectStage) {
         return FacesContext.getCurrentInstance()
                 .isProjectStage(projectStage);
+    }
+
+    /**
+     * Gera um codigo aleatorio baseado em marcas do tempo
+     *
+     * @param size o tamanho
+     * @param onlyNumbers se deve ou nao usar somente numeros
+     * @return o codigo
+     */
+    public static String createRamdomCode(int size, boolean onlyNumbers) {
+
+        final String digits;
+        
+        if (onlyNumbers) {
+            digits = "0123456789";
+        } else {
+            digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        }
+        
+        long decimalNumber = System.nanoTime();
+
+        String generated = "";
+
+        int mod;
+        int authCodeLength = 0;
+
+        while (decimalNumber != 0 && authCodeLength < size) {
+            mod = (int) (decimalNumber % digits.length());
+            generated = digits.substring(mod, mod + 1) + generated;
+            decimalNumber = decimalNumber / digits.length();
+            authCodeLength++;
+        }
+        
+        return generated;
     }
 }

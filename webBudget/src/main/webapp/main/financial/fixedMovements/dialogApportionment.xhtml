@@ -18,8 +18,7 @@
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
           xmlns:p="http://primefaces.org/ui"
           xmlns:h="http://xmlns.jcp.org/jsf/html"
-          xmlns:f="http://xmlns.jcp.org/jsf/core"
-          xmlns:pe="http://primefaces.org/ui/extensions"
+          xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
           id="apportionmentDialog"
           width="450"
           modal="true" 
@@ -30,76 +29,33 @@
           header="#{messages['apportionment.dialog.title']}">
 
     <h:form id="apportionmentForm" prependId="false">
-        
+
         <p:defaultCommand target="btAdd"/>
-        
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
-                <p:messages closable="true" />
+
+        <div class="row">
+            <div class="col-sm-12">
+                <p:messages id="apportionmentMessages" closable="true" />
             </div> 
         </div> 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-6 form-group form-group-l">
-                <p:outputLabel for="inApportionment" 
-                               value="#{messages['apportionment.dialog.value']}: "/>
-                <pe:inputNumber id="inApportionment" 
-                                symbol="R$ "
-                                decimalPlaces="2" 
-                                decimalSeparator="," 
-                                thousandSeparator="." 
-                                value="#{fixedMovementBean.apportionment.value}">
-                    <f:converter converterId="javax.faces.BigDecimal" />
-                </pe:inputNumber>  
-            </div>
-        </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 form-group form-group-l">
-                <p:outputLabel for="inCostCenter" 
-                               value="#{messages['apportionment.dialog.cost-center']}: "/>
-                <p:selectOneMenu id="inCostCenter" 
-                                 converter="omnifaces.SelectItemsConverter"
-                                 value="#{fixedMovementBean.apportionment.costCenter}" >
 
-                    <p:ajax event="change" 
-                            listener="#{fixedMovementBean.loadMovementClasses()}" />
-
-                    <f:selectItem itemValue="#{null}"
-                                  noSelectionOption="true"
-                                  itemLabel="#{messages['apportionment.dialog.select-one']}" />
-                    <f:selectItems var="costCenter" 
-                                   itemValue="#{costCenter}"
-                                   itemLabel="#{costCenter.name}"
-                                   value="#{fixedMovementBean.costCenters}" /> 
-                </p:selectOneMenu>
-            </div>                        
-            <div class="ui-grid-col-12 form-group form-group-l">
-                <p:outputLabel for="inMovementClass" 
-                               value="#{messages['apportionment.dialog.movement-class']}: "/>
-                <p:selectOneMenu id="inMovementClass" 
-                                 converter="omnifaces.SelectItemsConverter"
-                                 value="#{fixedMovementBean.apportionment.movementClass}" >
-                    <f:selectItem itemValue="#{null}"
-                                  noSelectionOption="true"
-                                  itemLabel="#{messages['apportionment.dialog.select-one']}" />
-                    <f:selectItems var="movementClass" 
-                                   itemValue="#{movementClass}"
-                                   itemLabel="#{movementClass.name}"
-                                   value="#{fixedMovementBean.movementClasses}" /> 
-                </p:selectOneMenu>
-            </div>                        
-        </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center">
+        <wb:apportionmentForm costCenterList="#{fixedMovementBean.costCenters}"
+                              apportionment="#{fixedMovementBean.apportionment}"
+                              movementClassList="#{fixedMovementBean.movementClasses}"
+                              onCostCenterSelect="#{fixedMovementBean.loadMovementClasses()}"/>
+        
+        <div class="row">
+            <div class="col-sm-12 align-right">
+                <p:commandButton id="btAdd"
+                                 style="color: white"
+                                 value="#{menu['add']}"
+                                 update="apportionmentMessages"
+                                 styleClass="btn btn-flat btn-success"
+                                 actionListener="#{fixedMovementBean.addApportionment()}"/>
+                <p:spacer width="10"/>
                 <p:commandButton immediate="true"
                                  value="#{menu['cancel']}"
+                                 styleClass="btn btn-flat btn-default"
                                  onclick="PF('dialogApportionment').hide()"/>
-                <p:spacer width="10"/>
-                <p:commandButton id="btAdd"
-                                 value="#{menu['add']}"
-                                 update="apportionmentForm"
-                                 process="apportionmentForm"
-                                 styleClass="ui-button-success"
-                                 actionListener="#{fixedMovementBean.addApportionment()}"/>
 
             </div>
         </div>

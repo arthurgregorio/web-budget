@@ -21,17 +21,23 @@
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           id="confirmLaunchDialog"
           modal="true" 
+          width="500"
           closable="false"
           resizable="false" 
           closeOnEscape="true"
           widgetVar="dialogConfirmLaunch" 
-          header="#{messages['fixed-movement.confirm-launch']}">
+          header="#{messages['launch.dialog.title']}">
 
-    <h:form prependId="false">
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 form-group form-group-l">
+    <h:form id="launchForm" prependId="false">
+        <div class="row">
+            <div class="col-sm-12">
+                <p:messages id="launchMessages" closable="true" />
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-sm-12 form-group">
                 <p:outputLabel for="inLaunchPeriod" 
-                               value="#{messages['fixed-movement.confirm-message']}"/>
+                               value="#{messages['launch.form.period']}"/>
                 <p:spacer width="10"/>
                 <p:selectOneMenu id="inLaunchPeriod" 
                                  converter="omnifaces.SelectItemsConverter"
@@ -43,15 +49,17 @@
                 </p:selectOneMenu>
             </div>
         </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center">
+        <div class="row">
+            <div class="col-sm-12 align-right">
+                <p:commandButton update="launchForm"
+                                 value="#{menu['launch']}"
+                                 styleClass="btn btn-flat btn-success"
+                                 actionListener="#{fixedMovementBean.doLaunch()}"/>
+                <p:spacer width="10"/>
                 <p:commandButton immediate="true"
                                  value="#{menu['back']}" 
+                                 styleClass="btn btn-flat btn-default"
                                  onclick="PF('dialogConfirmLaunch').hide()"/>
-                <p:spacer width="10"/>
-                <p:commandButton value="#{menu['launch']}"
-                                 styleClass="ui-button-danger" 
-                                 actionListener="#{fixedMovementBean.doLaunch()}"/>
             </div>
         </div>
     </h:form>

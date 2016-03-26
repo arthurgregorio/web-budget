@@ -23,6 +23,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
     <ui:param name="activeMenu" value="fixedMovement"/>
@@ -60,7 +61,7 @@
         <h:form id="fixedMovementForm" prependId="false">
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" globalOnly="true"/>
+                    <p:messages id="messages" closable="true" />
                 </div>
             </div>
 
@@ -121,6 +122,16 @@
                                 <p:outputLabel for="inQuotes" 
                                                value="#{messages['fixed-movement.form.quotes']}: "/>
                                 <div class="row">
+                                    <div class="col-sm-6">
+                                        <p:inputText id="inQuotes" 
+                                                     maxlength="3"
+                                                     styleClass="form-control"
+                                                     value="#{fixedMovementBean.fixedMovement.quotes}"
+                                                     disabled="#{fixedMovementBean.viewState ne 'ADDING' 
+                                                                 or fixedMovementBean.fixedMovement.undetermined}">
+                                            <pe:keyFilter mask="num"/>
+                                        </p:inputText>
+                                    </div>
                                     <div style="padding-top: 5px;"
                                          class="col-sm-6" >
                                         <p:selectBooleanCheckbox id="inUndetermined"
@@ -131,16 +142,6 @@
                                                     process="@this"
                                                     listener="#{fixedMovementBean.onInstallmentChange()}"/>
                                         </p:selectBooleanCheckbox>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p:inputText id="inQuotes" 
-                                                     maxlength="3"
-                                                     styleClass="form-control"
-                                                     value="#{fixedMovementBean.fixedMovement.quotes}"
-                                                     disabled="#{fixedMovementBean.viewState ne 'ADDING' 
-                                                                 or fixedMovementBean.fixedMovement.undetermined}">
-                                            <pe:keyFilter mask="num"/>
-                                        </p:inputText>
                                     </div>
                                 </div>
                             </div>
@@ -156,7 +157,10 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        
+                        <wb:apportionmentBox id="apportionmentBox"
+                                             baseBean="#{fixedMovementBean}"
+                                             showDialogAction="#{fixedMovementBean.showApportionmentDialog()}"
+                                             apportionmentsList="#{fixedMovementBean.fixedMovement.apportionments}"/>
                     </div>
                 </div>
 

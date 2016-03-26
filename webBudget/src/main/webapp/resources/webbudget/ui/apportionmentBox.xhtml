@@ -17,31 +17,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:o="http://omnifaces.org/ui"
       xmlns:p="http://primefaces.org/ui"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://java.sun.com/jsf/composite"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:c="http://java.sun.com/jsf/composite">
 
     <c:interface>
+        <c:attribute required="true"
+                     name="baseBean" />
 
+        <c:attribute name="valueInput"
+                     default="inValue"/>
+
+        <c:attribute required="true"
+                     type="java.util.List"
+                     name="apportionmentsList"/>
+
+        <c:attribute required="true"
+                     name="showDialogAction" 
+                     method-signature="java.lang.String  actionListener()"/>
     </c:interface>
 
     <c:implementation>
-        <div class="row">
+        <div jsf:id="container" class="row">
             <div class="col-sm-12 form-group">
                 <h4 style="display: inline-flex">
-                    #{messages['fixed-movement.form.apportionment']}:
+                    #{messages['apportionment.form.apportionment']}:
                 </h4>
                 <div class="pull-right">
                     <p:commandButton update="messages"
                                      value="#{menu['add']}"
-                                     process="@this,inValue"
                                      styleClass="btn btn-flat btn-warning"
-                                     disabled="#{fixedMovementBean.viewState ne 'ADDING'}"
-                                     actionListener="#{fixedMovementBean.showApportionmentDialog()}"/>
+                                     process="@this,#{cc.attrs.valueInput}"
+                                     actionListener="#{cc.attrs.showDialogAction}"
+                                     disabled="#{cc.attrs.baseBean.viewState ne 'ADDING'}"/>
                 </div>
             </div>
             <div class="col-sm-12">
@@ -51,32 +61,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                              var="apportionment"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
-                             emptyMessage="#{messages['list.empty']}"
-                             value="#{fixedMovementBean.fixedMovement.apportionments}">
+                             value="#{cc.attrs.apportionmentsList}"
+                             emptyMessage="#{messages['list.empty']}">
 
-                    <p:column styleClass="div-align-center"
-                              headerText="#{messages['fixed-movement.cost-center']}">
+                    <p:column styleClass="align-center"
+                              headerText="#{messages['apportionment.list.cost-center']}">
                         #{apportionment.costCenter.name}
                     </p:column>
-                    <p:column styleClass="div-align-center"
-                              headerText="#{messages['fixed-movement.movement-class']}">
+                    <p:column styleClass="align-center"
+                              headerText="#{messages['apportionment.list.movement-class']}">
                         #{apportionment.movementClass.name}
                     </p:column>
                     <p:column width="20%" 
-                              styleClass="div-align-center"
-                              headerText="#{messages['fixed-movement.apportionment']}">
+                              styleClass="align-center"
+                              headerText="#{messages['apportionment.list.value']}">
                         <h:outputText value="#{apportionment.value}">
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText>
                     </p:column>
                     <p:column width="10%" 
-                              style="text-align: center"
+                              styleClass="align-center"
                               headerText="#{menu['actions']}">
                         <p:commandButton immediate="true"
                                          icon="fa fa-remove"
                                          title="#{menu['delete']}"
-                                         disabled="#{fixedMovementBean.viewState ne 'ADDING'}"
-                                         actionListener="#{fixedMovementBean.deleteApportionment(apportionment.code)}" />
+                                         styleClass="btn btn-flat btn-default"
+                                         disabled="#{cc.attrs.baseBean.viewState ne 'ADDING'}"
+                                         actionListener="#{cc.attrs.baseBean.deleteApportionment(apportionment.code)}" />
                     </p:column>
                 </p:dataTable>
             </div>

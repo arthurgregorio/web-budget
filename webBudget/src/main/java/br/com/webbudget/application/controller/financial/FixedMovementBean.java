@@ -257,12 +257,13 @@ public class FixedMovementBean extends AbstractBean {
         try {
             this.movementService.launchFixedMovements(
                     this.selectedFixedMovements, this.financialPeriod);
-            this.addInfo(true, "fixed-movement.launched");
+            this.addInfo(true, "fixed-movement.launched", 
+                    this.financialPeriod.getIdentification());
         } catch (InternalServiceError ex) {
-            this.addError(true, ex.getMessage(), ex.getParameters());
+            this.addError(false, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             this.logger.error(ex.getMessage(), ex);
-            this.addError(true, "error.undefined-error", ex.getMessage());
+            this.addError(false, "error.undefined-error", ex.getMessage());
         } finally {
             this.updateComponent("fixedMovementsList");
             this.closeDialog("dialogConfirmLaunch");
@@ -349,13 +350,15 @@ public class FixedMovementBean extends AbstractBean {
         try {
             this.fixedMovement.addApportionment(this.apportionment);
             this.updateComponent("inValue");
-            this.updateComponent("apportionmentList");
+            this.updateComponent("apportionmentBox:container");
             this.closeDialog("dialogApportionment");
         } catch (InternalServiceError ex) {
-            this.addError(true, ex.getMessage(), ex.getParameters());
+            this.addError(false, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             this.logger.error(ex.getMessage(), ex);
-            this.addError(true, "error.undefined-error", ex.getMessage());
+            this.addError(false, "error.undefined-error", ex.getMessage());
+        } finally {
+            this.updateComponent("apportionmentMessages");
         }
     }
 
@@ -366,7 +369,7 @@ public class FixedMovementBean extends AbstractBean {
     public void deleteApportionment(String apportionmentId) {
         this.fixedMovement.removeApportionment(apportionmentId);
         this.updateComponent("inValue");
-        this.updateComponent("apportionmentList");
+        this.updateComponent("apportionmentBox:container");
     }
 
     /**
@@ -385,7 +388,6 @@ public class FixedMovementBean extends AbstractBean {
     public void loadMovementClasses() {
         this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
                 this.apportionment.getCostCenter(), null);
-        this.updateComponent("inMovementClass");
     }
 
     /**
