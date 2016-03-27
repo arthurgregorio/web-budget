@@ -75,6 +75,7 @@ span.ui-icon-check {
 .ui-messages-warn-summary, 
 .ui-messages-error-summary, 
 .ui-messages-info-summary {
+    margin-left: 0 !important;
     font-weight: 600 !important;
 }
 

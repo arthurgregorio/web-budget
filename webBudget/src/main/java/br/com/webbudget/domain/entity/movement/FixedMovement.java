@@ -107,12 +107,12 @@ public class FixedMovement extends PersistentEntity {
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "fixedMovement", fetch = EAGER, cascade = REMOVE)
     private List<Apportionment> apportionments;
-    
+
     @Getter
     @Setter
     @Transient
     private boolean alreadyLaunched;
-    
+
     @Getter
     @Setter
     @Transient
@@ -126,12 +126,12 @@ public class FixedMovement extends PersistentEntity {
      * Inicializamos o que for necessario
      */
     public FixedMovement() {
-        
-        this.code = ApplicationUtils.createRamdomCode(6, false);
-        
+
+        this.code = ApplicationUtils.createRamdomCode(5, false);
+
         this.autoLaunch = false;
         this.fixedMovementStatusType = FixedMovementStatusType.ACTIVE;
-        
+
         this.apportionments = new ArrayList<>();
         this.deletedApportionments = new ArrayList<>();
     }
@@ -165,18 +165,14 @@ public class FixedMovement extends PersistentEntity {
 
             if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT)
                     || (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN)) {
-                throw new InternalServiceError("fixed-movement.validate.apportionment-debit-credit");
+                throw new InternalServiceError("error.apportionment.mix-of-classes");
             }
         }
 
         // impossivel ter um rateio com valor igual a zero
-        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0) {
-            throw new InternalServiceError("fixed-movement.validate.apportionment-invalid-value");
-        }
-
-        // impossivel ter um rateio com valor maior que o do movimento
-        if (apportionment.getValue().compareTo(this.value) > 0) {
-            throw new InternalServiceError("fixed-movement.validate.apportionment-invalid-value");
+        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0 || 
+                apportionment.getValue().compareTo(this.value) > 0) {
+            throw new InternalServiceError("error.apportionment.invalid-value");
         }
 
         this.apportionments.add(apportionment);
@@ -243,18 +239,31 @@ public class FixedMovement extends PersistentEntity {
     }
 
     /**
-     * @return false se o valor dos rateios for menor ou maior que o do
-     * movimento
+     * @return se existe ou nao valores para serem rateados
      */
-    public boolean isApportionmentsValid() {
+    public boolean hasValueToDivide() {
         return this.getApportionmentsTotal().compareTo(this.value) == 0;
     }
-
+    
     /**
-     * @return a diferenca entre o valor dos produtos e o valor do movimento
+     * Realiza a validacao dos rateios do movimento fixo
      */
-    public BigDecimal getApportionmentsDifference() {
-        return this.getApportionmentsTotal().subtract(this.value);
+    public void validateApportionments() {
+
+        if (this.getApportionments().isEmpty()) {
+            throw new InternalServiceError(
+                    "error.fixed-movement.empty-apportionment");
+        } else if (this.getApportionmentsTotal().compareTo(this.value) > 0) {
+            final String difference = String.format("%10.2f",
+                    this.getApportionmentsTotal().subtract(this.value));
+            throw new InternalServiceError(
+                    "error.fixed-movement.gt-value", difference);
+        } else if (this.getApportionmentsTotal().compareTo(this.value) < 0) {
+            final String difference = String.format("%10.2f",
+                    this.value.subtract(this.getApportionmentsTotal()));
+            throw new InternalServiceError(
+                    "error.fixed-movement.lt-value", difference);
+        }
     }
 
     /**

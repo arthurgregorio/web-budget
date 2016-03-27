@@ -88,7 +88,7 @@ public class MovementService {
     private IApportionmentRepository apportionmentRepository;
     @Inject
     private IMovementClassRepository movementClassRepository;
-    
+
     @Inject
     private FinancialPeriodService financialPeriodService;
 
@@ -462,31 +462,14 @@ public class MovementService {
     @Transactional
     public FixedMovement saveFixedMovement(FixedMovement fixedMovement) {
 
-        // validamos se os rateios estao corretos
-        if (!fixedMovement.getApportionments().isEmpty()) {
-            if (!fixedMovement.isApportionmentsValid()) {
+        // valida os rateios
+        fixedMovement.validateApportionments();
 
-                final String value = "R$ " + String.format("%10.2f",
-                        fixedMovement.getApportionmentsDifference());
-
-                throw new InternalServiceError(
-                        "fixed-movement.validate.apportionment-value", value);
-            }
-        } else {
-            throw new InternalServiceError("fixed-movement.validate.empty-apportionment");
+        if (!fixedMovement.isUndetermined() && (fixedMovement.getQuotes() == null 
+                || fixedMovement.getQuotes() == 0)) {
+            throw new InternalServiceError("error.fixed-movement.no-quotes");
         }
-
-        // se for uma edicao, checa se existe alguma inconsistencia
-        if (fixedMovement.isSaved()) {
-
-            // remove algum rateio editado
-            fixedMovement.getDeletedApportionments()
-                    .stream()
-                    .forEach(apportionment -> {
-                        this.apportionmentRepository.delete(apportionment);
-                    });
-        }
-
+        
         // pega os rateios antes de salvar o movimento para nao perder a lista
         final List<Apportionment> apportionments = fixedMovement.getApportionments();
 
@@ -499,7 +482,7 @@ public class MovementService {
             this.apportionmentRepository.save(apportionment);
         }
 
-        // busca novamente as classes
+        // busca novamente os movimentos fixos para virem com todos os campos
         fixedMovement.getApportionments().clear();
         fixedMovement.setApportionments(new ArrayList<>(
                 this.apportionmentRepository.listByFixedMovement(fixedMovement)));
@@ -514,11 +497,12 @@ public class MovementService {
     @Transactional
     public void deleteFixedMovement(FixedMovement fixedMovement) {
 
-        final List<Launch> launches
-                = this.launchRepository.listByFixedMovement(fixedMovement);
+        final List<Launch> launches = this.launchRepository
+                .listByFixedMovement(fixedMovement);
 
         if (launches != null && !launches.isEmpty()) {
-            throw new InternalServiceError("fixed-movement.validate.has-launches");
+            throw new InternalServiceError("error.fixed-movement.has-launches", 
+                    fixedMovement.getIdentification());
         }
 
         this.fixedMovementRepository.delete(fixedMovement);
@@ -535,7 +519,7 @@ public class MovementService {
         fixedMovements
                 .stream()
                 .forEach(fixedMovement -> {
-                    
+
                     // constroi o movimento 
                     final MovementBuilder movementBuilder = new MovementBuilder();
 
@@ -547,61 +531,61 @@ public class MovementService {
                             .andDividedAmong(fixedMovement.getApportionments());
 
                     final Movement movement = this.saveMovement(movementBuilder.build());
-                    
+
                     // criamos o lancamento 
                     final Launch launch = new Launch();
-                    
+
                     // setamos em que parcela estamos se for um parcelamento
                     if (!fixedMovement.isUndetermined()) {
-                        
+
                         final Integer totalQuotes = this.launchRepository
                                 .countByFixedMovement(fixedMovement).intValue();
-                        
+
                         launch.setQuote(totalQuotes + 1);
-                        
+
                         // se chegamos na ultima parcela, encerramos
                         if (launch.getQuote().equals(fixedMovement.getQuotes())) {
                             fixedMovement.setFixedMovementStatusType(
                                     FixedMovementStatusType.FINALIZED);
                             this.fixedMovementRepository.save(fixedMovement);
                         }
-                        
+
                         // atualizamos a descricao do movimento
                         final StringBuilder stringBuilder = new StringBuilder();
-                        
+
                         stringBuilder
-                                .append(movement.getDescription())
+                                .append(fixedMovement.getIdentification())
                                 .append(" ")
                                 .append(launch.getQuote())
                                 .append("/")
                                 .append(fixedMovement.getQuotes());
-                        
+
                         movement.setDescription(stringBuilder.toString());
-                        
+
                         launch.setMovement(this.saveMovement(movement));
                     } else {
                         launch.setMovement(movement);
                     }
-                    
+
                     launch.setFinancialPeriod(period);
                     launch.setFixedMovement(fixedMovement);
-                    
+
                     this.launchRepository.save(launch);
                 });
     }
 
     /**
-     * 
-     * @param period 
+     *
+     * @param period
      */
     public void autoLaunchFixedMovements(@Observes @PeriodOpen FinancialPeriod period) {
-       
-        final List<FixedMovement> fixedMovements = 
-                this.fixedMovementRepository.listAutoLaunch();
-        
+
+        final List<FixedMovement> fixedMovements
+                = this.fixedMovementRepository.listAutoLaunch();
+
         this.launchFixedMovements(fixedMovements, period);
     }
-    
+
     /**
      *
      * @param movementClassId
@@ -637,16 +621,16 @@ public class MovementService {
     public FixedMovement findFixedMovementById(long fixedMovementId) {
         return this.fixedMovementRepository.findById(fixedMovementId, false);
     }
-    
+
     /**
-     * 
+     *
      * @param movement
-     * @return 
+     * @return
      */
     public LocalDate findStartDateByMovement(Movement movement) {
-        
+
         final Launch launch = this.launchRepository.findByMovement(movement);
-        
+
         if (launch != null) {
             return launch.getStartDateForFixedMovement();
         } else {
@@ -711,23 +695,23 @@ public class MovementService {
         return this.movementRepository.listByPeriodAndStateAndType(
                 financialPeriod, null, null);
     }
-    
+
     /**
-     * Diferente do metodo que busca todas os movimentos por periodo, este 
-     * busca apenas os movimentos do tipo movimento, desconsiderando todos que 
-     * sao do tipo card invoice
-     * 
+     * Diferente do metodo que busca todas os movimentos por periodo, este busca
+     * apenas os movimentos do tipo movimento, desconsiderando todos que sao do
+     * tipo card invoice
+     *
      * @param period o periodo
      * @return a lista de movimentos
      */
     public List<Movement> listOnlyMovementsByPeriod(FinancialPeriod period) {
-        
+
         MovementStateType state = MovementStateType.PAID;
-        
+
         if (period.isClosed()) {
             state = MovementStateType.CALCULATED;
         }
-        
+
         return this.movementRepository.listByPeriodAndStateAndType(
                 period, state, MovementType.MOVEMENT);
     }
@@ -797,27 +781,27 @@ public class MovementService {
      * @return
      */
     public Page<FixedMovement> listFixedMovementsByFilter(String filter, PageRequest pageRequest) {
-        
-        final Page<FixedMovement> page = 
-                this.fixedMovementRepository.listByFilter(filter, pageRequest);
-        
-        final FinancialPeriod period = 
-                this.financialPeriodService.findActiveFinancialPeriod();
-        
+
+        final Page<FixedMovement> page
+                = this.fixedMovementRepository.listByFilter(filter, pageRequest);
+
+        final FinancialPeriod period
+                = this.financialPeriodService.findActiveFinancialPeriod();
+
         page.getContent()
                 .forEach(fixedMovement -> {
-                    
+
                     final List<Launch> launches = this.launchRepository
                             .listByFixedMovement(fixedMovement);
-                    
+
                     for (Launch launch : launches) {
-                        if (launch.belongsToPeriod(period)){
+                        if (launch.belongsToPeriod(period)) {
                             fixedMovement.setAlreadyLaunched(true);
                             break;
                         }
                     }
-        });
-        
+                });
+
         return page;
     }
 
@@ -835,12 +819,12 @@ public class MovementService {
 
         return fixedMovement;
     }
-    
+
     /**
-     * 
+     *
      * @param fixedMovement
      * @param pageRequest
-     * @return 
+     * @return
      */
     public Page<Launch> listLaunchesByFixedMovement(FixedMovement fixedMovement, PageRequest pageRequest) {
         return this.launchRepository.listByFixedMovement(fixedMovement, pageRequest);

@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.entity.movement;
 
 import br.com.webbudget.domain.entity.PersistentEntity;
+import br.com.webbudget.infraestructure.ApplicationUtils;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -78,36 +79,9 @@ public class Apportionment extends PersistentEntity {
      *
      */
     public Apportionment() {
-        this.code = this.createApportionmentCode();
+        this.code = ApplicationUtils.createRamdomCode(5, false);
     }
 
-    /**
-     *
-     * @return
-     */
-    private String createApportionmentCode() {
-
-        long decimalNumber = System.nanoTime();
-
-        String generated = "";
-        final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        synchronized (this.getClass()) {
-
-            int mod;
-            int authCodeLength = 0;
-
-            while (decimalNumber != 0 && authCodeLength < 5) {
-
-                mod = (int) (decimalNumber % 36);
-                generated = digits.substring(mod, mod + 1) + generated;
-                decimalNumber = decimalNumber / 36;
-                authCodeLength++;
-            }
-        }
-        return generated;
-    }
-    
     /**
      * @return se este e um rateio de receita
      */

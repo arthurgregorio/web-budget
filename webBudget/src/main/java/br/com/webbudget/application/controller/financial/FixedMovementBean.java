@@ -277,7 +277,7 @@ public class FixedMovementBean extends AbstractBean {
 
         // se o valor do rateio for igual ao total do movimento nem deixa exibir
         // a tela de rateios para que nao seja feito cagada
-        if (this.fixedMovement.isApportionmentsValid()) {
+        if (this.fixedMovement.hasValueToDivide()) {
             this.addError(true, "error.fixed-movement.no-value-divide");
             return;
         }
