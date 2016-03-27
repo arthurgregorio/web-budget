@@ -24,6 +24,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.picketlink.idm.model.AbstractIdentityType;
 import org.picketlink.idm.model.Account;
+import org.picketlink.idm.model.annotation.AttributeProperty;
 import org.picketlink.idm.model.annotation.IdentityStereotype;
 import org.picketlink.idm.query.QueryParameter;
 import static org.picketlink.idm.model.annotation.IdentityStereotype.Stereotype.USER;
@@ -59,6 +60,15 @@ public class User extends AbstractIdentityType implements Account {
     @NotEmpty(message = "{user.username}")
     @Column(name = "username", length = 45, nullable = false)
     private String username;
+    
+    @Getter
+    @Setter
+    @AttributeProperty
+    private String theme;
+    @Getter
+    @Setter
+    @AttributeProperty
+    private String menuLayout;
 
     @Getter
     @Setter
@@ -86,7 +96,8 @@ public class User extends AbstractIdentityType implements Account {
      *
      */
     public User() {
-        this(null);
+        this.theme = "skin-black";
+        this.groupMembership = new GroupMembership(null, this);
     }
 
     /**
@@ -94,8 +105,8 @@ public class User extends AbstractIdentityType implements Account {
      * @param username 
      */
     public User(String username) {
+        this();
         this.username = username;
-        this.groupMembership = new GroupMembership(null, this);
     }
     
     /**
@@ -112,5 +123,19 @@ public class User extends AbstractIdentityType implements Account {
      */
     public void setBlocked(boolean blocked) {
         this.setEnabled(!blocked);
+    }
+    
+    /**
+     * @return 
+     */
+    public boolean isSmallMenu() {
+        return this.menuLayout != null && !this.menuLayout.isEmpty();
+    }
+    
+    /**
+     * @param smallMenu 
+     */
+    public void setSmallMenu(boolean smallMenu) {
+        this.menuLayout = smallMenu ? "sidebar-collapse" : "";
     }
 }

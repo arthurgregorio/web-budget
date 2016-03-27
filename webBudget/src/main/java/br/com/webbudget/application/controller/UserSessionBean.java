@@ -131,6 +131,14 @@ public class UserSessionBean implements Serializable {
     }
 
     /**
+     * @return o modelo UI que nosso usuario vai usar
+     */
+    public String getAuthenticatedUserUI() {
+        final User user = this.getAuthenticatedUser();
+        return user.getTheme() + " " + user.getMenuLayout();
+    }
+
+    /**
      * @return o nome do usuario logado atualmente no sistema
      */
     public String getAuthenticatedUserName() {

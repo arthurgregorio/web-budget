@@ -57,6 +57,17 @@ public class UserTypeEntity extends AbstractIdentityTypeEntity implements IPersi
     @AttributeValue
     @Column(name = "email")
     private String email;
+    
+    @Getter
+    @Setter
+    @AttributeValue
+    @Column(name = "theme", nullable = false)
+    private String theme;
+    @Getter
+    @Setter
+    @AttributeValue
+    @Column(name = "menu_layout")
+    private String menuLayout;
   
     @Getter
     @Setter

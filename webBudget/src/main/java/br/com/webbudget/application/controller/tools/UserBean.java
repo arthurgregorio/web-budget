@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import org.picketlink.Identity;
+import org.picketlink.idm.model.Attribute;
 
 /**
  *
@@ -176,6 +177,24 @@ public class UserBean extends AbstractBean {
             this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
+    }
+    
+    /**
+     * Invoca a troca do tema selecionado pelo usuario
+     * 
+     * @param theme o tema que sera usado
+     */
+    public void changeTheme(String theme) {
+
+        // remove o tema atual
+        this.executeScript("$(\"body\").removeClass('"
+                + this.user.getTheme() + "')");
+        
+        // coloca o novo
+        this.executeScript("$(\"body\").addClass('" + theme + "')");
+
+        // seta no usuario para quando for salvo
+        this.user.setTheme(theme);
     }
 
     /**

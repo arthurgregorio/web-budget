@@ -1,0 +1,139 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/mainTemplate.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{userBean.initializeProfile()}"/>
+    </f:metadata>
+
+    <ui:define name="pageTitle">
+        #{messages['user-profile.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        <o:outputFormat value="#{messages['user-profile.page-description']}">
+            <f:param value="#{userBean.user.name}"/>
+        </o:outputFormat>
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li><a href="#">#{breadcrumb['preference']}</a></li>
+        <li class="active"><a href="#">#{breadcrumb['preference.user-profile']}</a></li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="profileForm" prependId="false">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <p:messages id="messages" closable="true" />
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-body row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inName" 
+                                               value="#{messages['user.form.name']}: "/>
+                                <p:inputText id="inName" 
+                                             size="50"
+                                             styleClass="form-control"
+                                             value="#{userBean.user.name}" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inEmail" 
+                                               value="#{messages['user.form.email']}: "/>
+                                <p:inputText id="inEmail" 
+                                             size="50"
+                                             styleClass="form-control"
+                                             value="#{userBean.user.email}"/>  
+                            </div>
+                            <div class="form-group col-md-12">
+                                <h4>#{messages['user-profile.form.update-password']}:</h4>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inPassword" 
+                                               value="#{messages['user.form.password']}"/>
+                                <p:password id="inPassword" 
+                                            match="inConfirmPassword"
+                                            styleClass="form-control"
+                                            value="#{userBean.user.password}"
+                                            validatorMessage="#{validation['user.password-not-match']}"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inConfirmPassword" 
+                                               value="#{messages['user.form.confirm-password']}"/>
+                                <p:password id="inConfirmPassword"
+                                            styleClass="form-control"
+                                            value="#{userBean.user.passwordConfirmation}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4>#{messages['user-profile.form.theme']}:</h4>
+                            </div>
+                            <ui:include src="themes.xhtml"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4>#{messages['user-profile.form.layout']}:</h4>
+                            </div>
+                            <div class="col-sm-12">
+                                <p:selectBooleanCheckbox value="#{userBean.user.smallMenu}"
+                                                         itemLabel="#{messages['user-profile.form.small-menu']}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer align-right">
+                    <p:commandButton id="btUpdateProfile"
+                                     update="profileForm"
+                                     process="profileForm"
+                                     value="#{menu['save']}"
+                                     styleClass="btn btn-flat btn-success"
+                                     action="#{userBean.doProfileUpdate()}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['back']}"
+                                     action="#{userBean.toDashboard()}"
+                                     styleClass="btn btn-flat btn-primary"/>
+                </div>
+            </div>
+
+            <p:blockUI block="profileForm"
+                       widgetVar="blocker"
+                       trigger="btUpdateProfile">
+                <p:graphicImage width="32" 
+                                height="32"
+                                library="webbudget" 
+                                name="img/loading.gif" />
+            </p:blockUI>
+        </h:form>
+    </ui:define>
+</ui:composition>
