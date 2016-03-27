@@ -27,7 +27,7 @@
           header="#{messages['contact.delete-dialog.title']}">
 
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-sm-12">
             <h4>
                 <o:outputFormat escape="false" 
                                  value="#{messages['contact.delete-dialog.advice']}">
@@ -37,13 +37,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 dialog-controls-box">
+        <div class="col-sm-12 dialog-controls-box">
             <p:commandButton value="#{menu['yes']}"
                              action="#{contactBean.doDelete()}"
                              styleClass="btn btn-flat btn-danger"/>
             <p:spacer width="10"/>
             <p:commandButton value="#{menu['no']}"
-                             styleClass="btn btn-flat"
+                             styleClass="btn btn-flat btn-default"
                              onclick="closeDialog('dialogDeleteContact')" />
         </div>
     </div>

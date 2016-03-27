@@ -27,7 +27,7 @@
           header="#{messages['group.delete-dialog.title']}">
 
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-sm-12">
             <h4>
                 <o:outputFormat escape="false" 
                                 value="#{messages['group.delete-dialog.advice']}">
@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 dialog-controls-box">
+        <div class="col-sm-12 dialog-controls-box">
             <p:commandButton value="#{menu['yes']}"
                              action="#{groupBean.doDelete()}"
                              styleClass="btn btn-flat btn-danger" />

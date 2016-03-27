@@ -46,7 +46,7 @@
 
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <p:messages id="messages" closable="true" globalOnly="true"/>
+                <p:messages id="messages" closable="true" />
             </div>
         </div>
 
@@ -115,15 +115,10 @@
         <p:blockUI block="boxBody"
                    trigger="cardsList"
                    widgetVar="listBlock">
-            <div class="div-align-center">
-                <p:graphicImage width="32" 
-                                height="32"
-                                library="webbudget" 
-                                name="img/loading.gif" />
-            </div>
-            <div style="margin-top: 5px">
-                #{menu['loading']}
-            </div>        
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
         </p:blockUI>
     </ui:define>
 

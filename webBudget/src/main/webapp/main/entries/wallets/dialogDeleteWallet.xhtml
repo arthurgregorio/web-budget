@@ -27,23 +27,23 @@
           header="#{messages['wallet.delete-dialog.title']}">
 
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-sm-12">
             <h4>
                 <o:outputFormat escape="false" 
-                                 value="#{messages['wallet.delete-dialog.advise']}">
+                                 value="#{messages['wallet.delete-dialog.advice']}">
                     <f:param value="#{walletBean.wallet.friendlyName}" />
                 </o:outputFormat>
             </h4>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 dialog-controls-box">
+        <div class="col-sm-12 dialog-controls-box">
             <p:commandButton value="#{menu['yes']}"
                              action="#{walletBean.doDelete()}"
                              styleClass="btn btn-flat btn-danger" />
             <p:spacer width="10"/>
             <p:commandButton value="#{menu['no']}"
-                             styleClass="btn btn-flat"
+                             styleClass="btn btn-flat btn-default"
                              onclick="closeDialog('dialogDeleteWallet')" />
         </div>
     </div>

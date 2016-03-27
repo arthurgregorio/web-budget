@@ -40,7 +40,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['miscellany']}</a></li>
-        <li><a href="listCards.xhtml">#{breadcrumb['miscellany.financial-period']}</a></li>
+        <li><a href="listFinancialPeriods.xhtml">#{breadcrumb['miscellany.financial-period']}</a></li>
         <li class="active"><a href="#">#{breadcrumb['including']}</a></li>
     </ui:define>
 
@@ -49,8 +49,8 @@
         <h:form id="financialPeriodForm" prependId="false">
 
             <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <p:messages id="messages" closable="true" globalOnly="true"/>
+                <div class="col-sm-12">
+                    <p:messages id="messages" closable="true" />
                 </div>
             </div>
 

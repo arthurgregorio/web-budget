@@ -47,7 +47,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['entries']}</a></li>
-        <li><a href="formMovementClass.xhtml">#{breadcrumb['entries.movement-class']}</a></li>
+        <li><a href="listMovementClasses.xhtml">#{breadcrumb['entries.movement-class']}</a></li>
         <li jsf:rendered="#{movementClassBean.viewState eq 'ADDING'}" 
             class="active"><a href="#">#{breadcrumb['including']}</a></li>
         <li jsf:rendered="#{movementClassBean.viewState eq 'EDITING'}" 
@@ -59,8 +59,8 @@
         <h:form id="movementClassForm" prependId="false">
 
             <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <p:messages id="messages" closable="true" globalOnly="true"/>
+                <div class="col-sm-12">
+                    <p:messages id="messages" closable="true" />
                 </div>
             </div>
 
