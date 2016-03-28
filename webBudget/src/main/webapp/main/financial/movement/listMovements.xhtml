@@ -24,57 +24,71 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="movement"/>
+
     <f:metadata>
         <f:viewAction action="#{movementBean.initializeListing()}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['movement.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['movement.page-description']}
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['financial']}" />
-        <p:menuitem url="listMovements.xhtml"
-                    value="#{breadcrumb['financial.movement']}" />
+        <li><a href="#">#{breadcrumb['financial']}</a></li>
+        <li><a href="#">#{breadcrumb['financial.movement']}</a></li>
+        <li class="active">
+            <a href="listMovements.xhtml">
+                #{breadcrumb['financial.movement.period']}
+            </a>
+        </li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-sm-12">
                 <p:messages id="messages" closable="true" />
             </div>
         </div>
 
-        <h:form id="controlsForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-9 filter-group form-group-m">
-                    <p:inputText id="inFilter" 
-                                 value="#{movementBean.movementFilter.criteria}" 
-                                 placeholder="#{messages['movement.filter.types']}"/>
-                    <p:spacer width="10"/>
-                    <p:selectBooleanCheckbox value="#{movementBean.movementFilter.onlyPaid}"
-                                             itemLabel="#{messages['movement.filter.set-paid']}"/>
-                    <p:spacer width="10"/>
-                    <p:selectBooleanCheckbox value="#{movementBean.movementFilter.onlyOpenPeriods}"
-                                             itemLabel="#{messages['movement.filter.only-open-periods']}"/>
-                </div>
-                <div class="ui-grid-col-3 div-align-right">
-                    <p:commandButton process="controlsForm"
-                                     value="#{menu['filter']}"
-                                     onstart="PF('listBlock').show()"
-                                     oncomplete="PF('listBlock').hide()"
-                                     action="#{movementBean.filterList()}"/>
-                    <p:spacer width="10" />
-                    <p:commandButton immediate="true"
-                                     value="#{menu['add']}"
-                                     styleClass="ui-button-info" 
-                                     action="#{movementBean.changeToAdd()}"
-                                     rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_INSERT)}"/>
-                </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h:form id="controlsForm" prependId="false">
+                    <p:defaultCommand target="btSearch"/>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="input-group">
+                                <p:inputText styleClass="form-control"
+                                             placeholder="#{messages['filter.movement']}"
+                                             value="#{movementBean.movementFilter.criteria}" />
+                                <div class="input-group-btn">
+                                    <p:commandLink id="btSearch"
+                                                   update="movementsList"
+                                                   value="#{menu['search']}"
+                                                   onstart="PF('listBlock').show()"
+                                                   oncomplete="PF('listBlock').hide()"
+                                                   styleClass="btn btn-flat btn-warning"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="box-tools pull-right">
+                                <p:commandButton immediate="true"
+                                                 value="#{menu['add']}"
+                                                 styleClass="btn btn-flat btn-primary" 
+                                                 action="#{movementBean.changeToAdd()}"
+                                                 rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_INSERT)}"/>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
             </div>
-        </h:form>
-
-        <div jsf:id="listPanel" 
-             class="ui-grid-row flat-box">
-            <div class="ui-grid-col-12">
+            <div jsf:id="boxBody" class="box-body">
                 <h:form prependId="false">
                     <p:dataTable id="movementsList" 
                                  rows="15"
@@ -87,64 +101,57 @@
                                  rowKey="#{movement.id}"
                                  paginatorPosition="bottom"
                                  paginatorAlwaysVisible="false"
-                                 rowStyleClass="full-height-row"
+                                 rowStyleClass="row-with-button"
                                  selection="#{movementBean.movement}"
                                  value="#{movementBean.movementsModel}"
-                                 emptyMessage="#{messages['movement.list.empty']}">
+                                 emptyMessage="#{messages['list.empty']}">
 
                         <p:ajax event="rowSelect" 
                                 listener="#{movementBean.changeToDetail()}" />
 
-                        <p:column width="6%" 
+                        <p:column width="8%" 
                                   styleClass="align-center"
-                                  headerText="#{messages['movement.list.direction']}">
+                                  headerText="#{messages['movement.list.type']}">
                             <p:graphicImage width="24"
                                             height="24"
-                                            library="images" 
-                                            name="ui-icon-plus.png" 
+                                            library="webbudget" 
+                                            name="img/ui-icon-plus.png" 
                                             rendered="#{movement.revenue}"
                                             title="#{messages['movement.list.income']}"/>
                             <p:graphicImage  width="24"
                                              height="24"
-                                             library="images" 
-                                             name="ui-icon-minus.png" 
+                                             library="webbudget" 
+                                             name="img/ui-icon-minus.png" 
                                              rendered="#{movement.expense}"
                                              title="#{messages['movement.list.outcome']}"/>
                         </p:column>
-                        <p:column width="6%"
+                        <p:column width="8%"
                                   styleClass="align-center" 
-                                  sortBy="#{movement.movementStateType}"
-                                  headerText="#{messages['movement.list.movement-state-type']}">
+                                  headerText="#{messages['movement.list.state']}">
                             <p:graphicImage width="18"
                                             height="18"
-                                            library="images" 
-                                            name="ui-undefined-circle.png" 
-                                            title="#{messages[movement.movementStateType]}"
+                                            library="webbudget" 
+                                            name="img/ui-undefined-circle.png" 
+                                            title="#{enums[movement.movementStateType]}"
                                             rendered="#{movement.movementStateType eq 'CANCELED'}"/>
                             <p:graphicImage width="18"
                                             height="18"
-                                            library="images" 
-                                            name="ui-green-circle.png" 
-                                            title="#{messages[movement.movementStateType]}"
+                                            library="webbudget" 
+                                            name="img/ui-green-circle.png" 
+                                            title="#{enums[movement.movementStateType]}"
                                             rendered="#{movement.movementStateType eq 'PAID'}"/>
                             <p:graphicImage width="18"
                                             height="18"
-                                            library="images" 
-                                            name="ui-red-circle.png" 
-                                            title="#{messages[movement.movementStateType]}"
+                                            library="webbudget" 
+                                            name="img/ui-red-circle.png" 
+                                            title="#{enums[movement.movementStateType]}"
                                             rendered="#{movement.movementStateType eq 'OPEN'}"/>
                             <p:graphicImage width="18"
                                             height="18"
-                                            library="images" 
-                                            name="ui-blue-circle.png" 
-                                            title="#{messages[movement.movementStateType]}"
+                                            library="webbudget" 
+                                            name="img/ui-blue-circle.png" 
+                                            title="#{enums[movement.movementStateType]}"
                                             rendered="#{movement.movementStateType eq 'CALCULATED'}"/>
-                        </p:column>
-                        <p:column width="8%" 
-                                  sortBy="#{movement.code}"
-                                  styleClass="align-center"
-                                  headerText="#{messages['movement.list.code']}">
-                            #{movement.code}
                         </p:column>
                         <p:column headerText="#{messages['movement.list.description']}">
                             #{of:abbreviate(movement.description,50)}
@@ -165,11 +172,12 @@
                                 <f:converter converterId="localDateConverter"/>
                             </h:outputText> 
                         </p:column>
-                        <p:column width="18%" 
+                        <p:column width="20%" 
                                   styleClass="align-center"
                                   headerText="#{menu['actions']}">
                             <p:commandButton icon="fa fa-money"
                                              title="#{menu['pay']}"
+                                             styleClass="btn btn-flat btn-default" 
                                              rendered="#{movement.payable eq true 
                                                          and userSessionBean.hasRole(authorization.MOVEMENT_PAY)}"
                                              action="#{movementBean.changeToPay(movement.id)}" />
@@ -177,6 +185,7 @@
                                       rendered="#{movement.payable eq true}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
+                                             styleClass="btn btn-flat btn-default" 
                                              rendered="#{movement.editable eq true 
                                                          and userSessionBean.hasRole(authorization.MOVEMENT_UPDATE)}"
                                              action="#{movementBean.changeToEdit(movement.id)}"/>
@@ -184,11 +193,13 @@
                                       rendered="#{movement.editable eq true}"/>
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
+                                             styleClass="btn btn-flat btn-default" 
                                              rendered="#{movement.deletable eq true 
                                                          and userSessionBean.hasRole(authorization.MOVEMENT_DELETE)}"
                                              actionListener="#{movementBean.changeToDelete(movement.id)}" />
                             <p:commandButton icon="fa fa-info-circle"
                                              title="#{menu['detail']}"
+                                             styleClass="btn btn-flat btn-default" 
                                              action="#{movementBean.changeToDetail(movement.id)}" 
                                              rendered="#{movement.movementStateType eq 'CALCULATED'}"/>
                         </p:column>
@@ -197,19 +208,14 @@
             </div>
         </div>
 
-        <p:blockUI block="listPanel"
+        <p:blockUI block="boxBody"
                    widgetVar="listBlock"
                    trigger="movementsList">
-            <div class="div-align-center">
-                <p:graphicImage width="32" 
-                                height="32"
-                                library="images" 
-                                name="ui-loading.gif" />
-            </div>
-            <div style="margin-top: 5px">
-                #{menu['loading']}
-            </div>        
-        </p:blockUI> 
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
+        </p:blockUI>
     </ui:define>
 
     <ui:define name="popups">

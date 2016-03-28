@@ -25,27 +25,25 @@ package br.com.webbudget.domain.entity.movement;
  */
 public enum MovementStateType {
 
-    PAID("beans.movement-state-type.paid"),
-    OPEN("beans.movement-state-type.open"),
-    CANCELED("beans.movement-state-type.canceled"),
-    CALCULATED("beans.movement-state-type.calculated");
+    PAID("movement-state-type.paid"),
+    OPEN("movement-state-type.open"),
+    CANCELED("movement-state-type.canceled"),
+    CALCULATED("movement-state-type.calculated");
 
-    private final String i18nKey;
+    private final String description;
 
     /**
-     *
-     * @param i18nKey
+     * @param description
      */
-    private MovementStateType(String i18nKey) {
-        this.i18nKey = i18nKey;
+    private MovementStateType(String description) {
+        this.description = description;
     }
 
     /**
-     *
      * @return
      */
     @Override
     public String toString() {
-        return this.i18nKey;
+        return this.description;
     }
 }
