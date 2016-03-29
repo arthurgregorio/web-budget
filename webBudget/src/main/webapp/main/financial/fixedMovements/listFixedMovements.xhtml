@@ -77,7 +77,7 @@
                             <div class="box-tools pull-right">
                                 <p:commandButton immediate="true"
                                                  value="#{menu['new']}"
-                                                 styleClass="btn btn-flat btn-primary" 
+                                                 styleClass="btn btn-flat btn-info"  
                                                  action="#{fixedMovementBean.changeToAdd()}"
                                                  rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_INSERT)}"/>
                             </div>
@@ -174,7 +174,7 @@
                                      rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
                     <p:spacer width="10"/>
                     <p:commandButton value="#{menu['launch']}"
-                                     styleClass="btn btn-flat btn-primary" 
+                                     styleClass="btn btn-flat btn-info"  
                                      action="#{fixedMovementBean.showLaunchConfirmDialog()}"
                                      rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCH)}"/>
                 </div>

@@ -67,12 +67,20 @@
                                              placeholder="#{messages['filter.movement']}"
                                              value="#{movementBean.movementFilter.criteria}" />
                                 <div class="input-group-btn">
-                                    <p:commandLink id="btSearch"
-                                                   update="movementsList"
-                                                   value="#{menu['search']}"
-                                                   onstart="PF('listBlock').show()"
-                                                   oncomplete="PF('listBlock').hide()"
-                                                   styleClass="btn btn-flat btn-warning"/>
+                                    <p:commandButton icon="fa fa-gear"
+                                                     update="movementsList"
+                                                     styleClass="btn btn-flat btn-default"
+                                                     title="#{messages['filter.configure']}"/>
+                                    <p:commandButton icon="fa fa-trash-o"
+                                                     update="movementsList"
+                                                     title="#{messages['filter.clear']}"
+                                                     styleClass="btn btn-flat btn-danger"/>
+                                    <p:commandButton id="btSearch"
+                                                     update="movementsList"
+                                                     value="#{menu['search']}"
+                                                     onstart="PF('listBlock').show()"
+                                                     oncomplete="PF('listBlock').hide()"
+                                                     styleClass="btn btn-flat btn-warning"/>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +88,7 @@
                             <div class="box-tools pull-right">
                                 <p:commandButton immediate="true"
                                                  value="#{menu['add']}"
-                                                 styleClass="btn btn-flat btn-primary" 
+                                                 styleClass="btn btn-flat btn-info"  
                                                  action="#{movementBean.changeToAdd()}"
                                                  rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_INSERT)}"/>
                             </div>
