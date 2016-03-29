@@ -140,6 +140,7 @@ public class PageRequest {
      * @return a lista de campos para sort da pesquisa
      */
     public List<MultiSortField> getMultiSortFields() {
+        this.multiSortFields.add(new MultiSortField("inclusion", "DESCENDING"));
         return Collections.unmodifiableList(this.multiSortFields);
     }
 

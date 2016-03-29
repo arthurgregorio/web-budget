@@ -56,7 +56,8 @@ public class MovementsListModel extends AbstractLazyModel<Movement> {
      * @return 
      */
     @Override
-    public List<Movement> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+    public List<Movement> load(int first, int pageSize, 
+            List<SortMeta> multiSortMeta, Map<String, Object> filters) {
         
         final PageRequest pageRequest = new PageRequest();
 
@@ -83,7 +84,8 @@ public class MovementsListModel extends AbstractLazyModel<Movement> {
      * @return 
      */
     @Override
-    public List<Movement> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<Movement> load(int first, int pageSize, String sortField, 
+            SortOrder sortOrder, Map<String, Object> filters) {
 
         final PageRequest pageRequest = new PageRequest();
 

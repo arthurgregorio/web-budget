@@ -16,95 +16,72 @@
  */
 package br.com.webbudget.domain.misc.filter;
 
+import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.entity.movement.MovementStateType;
+import br.com.webbudget.domain.entity.movement.MovementType;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * DTO simples para transitar os dados do filtro de movimentos entre a view e 
- * a camada de servicos
+ * Classe que constroi o filtro para a nossa pesquisa de movimentos
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0, 14/09/2015
  */
 @ToString
-public class MovementFilter {
+public final class MovementFilter {
 
     @Getter
     @Setter
     private String criteria;
+
     @Getter
     @Setter
-    private Boolean onlyPaid;
+    private MovementType movementType;
     @Getter
     @Setter
-    private Boolean onlyOpenPeriods;
+    private FinancialPeriod financialPeriod;
+    @Getter
+    @Setter
+    private MovementStateType movementStateType;
+    @Getter
+    @Setter
+    private MovementClassType movementClassType;
 
     /**
-     * Inicializamos o que for necessario
-     */
-    public MovementFilter() {
-        this.onlyOpenPeriods = Boolean.TRUE;
-    }
-    
-    /**
-     * @param criteria os filtros possiveis de serem aplicados e castados para 
-     * string
-     * @return este builder
-     */
-    public MovementFilter onlyOpenPeriods(String criteria) {
-        this.criteria = criteria;
-        return this;
-    }
-    
-    /**
-     * @param onlyPaid se deve ou nao filtrar apenas movimentos pagos no sistema
-     * @return este builder
-     */
-    public MovementFilter onlyPaid(Boolean onlyPaid) {
-        this.onlyPaid = onlyPaid;
-        return this;
-    }
-    
-    /**
-     * @param onlyOpenPeriods se devemos ou nao listar apenas pelos periodos em
-     * aberto no sistema
-     * @return este builder
-     */
-    public MovementFilter searchOnOpenPeriods(Boolean onlyOpenPeriods) {
-        this.onlyOpenPeriods = onlyOpenPeriods;
-        return this;
-    }
-    
-    /**
-     * @return se esta busca retorna apenas movimentos pagos
-     */
-    public boolean isOnlyPaidMovements() {
-        return this.onlyPaid != null && this.onlyPaid.equals(Boolean.TRUE);
-    }
-    
-    /**
-     * @return se esta busca tem criterios de busca
+     * @return se existe ou nao uma criteria para este filtro
      */
     public boolean hasCriteria() {
-        return this.criteria != null && !this.criteria.isEmpty();
+        return StringUtils.isNotBlank(this.criteria);
     }
-    
+
     /**
-     * @return indica se estamos filtrando apenas pelos periodos financeiros em 
-     * aberto no sistema
-     */
-    public boolean isOnlyByOpenPeriods() {
-        return this.onlyOpenPeriods != null && this.onlyOpenPeriods.equals(Boolean.TRUE);
-    }
-    
-    /**
+     * Metodo para fazer o parse da nossa criteria em um numero decimal para
+     * satisfazer a busca por valor
      * 
-     * @return 
+     * @return o valor formatador em bigdecimal
+     * 
+     * @throws ParseException se houver algum erro na hora do parse
      */
-    public boolean isOnlyPaidsByOpenPeriods() {
-        return this.isOnlyByOpenPeriods() && this.isOnlyPaidMovements();
+    public BigDecimal criteriaToBigDecimal() throws ParseException {
+
+        final DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+        
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.0#", symbols);
+        decimalFormat.setParseBigDecimal(true);
+
+        return (BigDecimal) decimalFormat.parse(this.criteria);
     }
 }

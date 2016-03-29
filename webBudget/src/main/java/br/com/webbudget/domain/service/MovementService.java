@@ -735,21 +735,11 @@ public class MovementService {
     }
 
     /**
-     *
-     * @param filter
-     * @param pageRequest
-     * @return
-     */
-    public Page<Movement> listMovementsByFilter(MovementFilter filter, PageRequest pageRequest) {
-        return this.movementRepository.listByFilter(filter, pageRequest);
-    }
-
-    /**
-     *
+     * 
      * @param name
      * @param type
      * @param costCenter
-     * @return
+     * @return 
      */
     public MovementClass findMovementClassByNameAndTypeAndCostCenter(String name, MovementClassType type, CostCenter costCenter) {
         return this.movementClassRepository.findByNameAndTypeAndCostCenter(name, type, costCenter);
@@ -772,6 +762,16 @@ public class MovementService {
      */
     public List<Movement> listMovementsByCardInvoice(CardInvoice cardInvoice) {
         return this.movementRepository.listByCardInvoice(cardInvoice);
+    }
+    
+    /**
+     *
+     * @param filter
+     * @param pageRequest
+     * @return
+     */
+    public Page<Movement> listMovementsByFilter(MovementFilter filter, PageRequest pageRequest) {
+        return this.movementRepository.listByFilter(filter, pageRequest);
     }
 
     /**

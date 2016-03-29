@@ -61,20 +61,23 @@
                 <h:form id="controlsForm" prependId="false">
                     <p:defaultCommand target="btSearch"/>
                     <div class="row">
-                        <div class="col-xs-4">
+                        <div class="col-xs-6">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
-                                             placeholder="#{messages['filter.movement']}"
-                                             value="#{movementBean.movementFilter.criteria}" />
+                                             value="#{movementBean.filter.criteria}"
+                                             placeholder="#{messages['filter.movement']}" />
                                 <div class="input-group-btn">
-                                    <p:commandButton icon="fa fa-gear"
+                                    <p:commandButton immediate="true"
+                                                     icon="fa fa-gear"
                                                      update="movementsList"
                                                      styleClass="btn btn-flat btn-default"
-                                                     title="#{messages['filter.configure']}"/>
+                                                     title="#{messages['filter.configure']}"
+                                                     actionListener="#{movementBean.showFilterConfigDialog()}"/>
                                     <p:commandButton icon="fa fa-trash-o"
                                                      update="movementsList"
                                                      title="#{messages['filter.clear']}"
-                                                     styleClass="btn btn-flat btn-danger"/>
+                                                     styleClass="btn btn-flat btn-danger"
+                                                     actionListener="#{movementBean.clearFilters()}"/>
                                     <p:commandButton id="btSearch"
                                                      update="movementsList"
                                                      value="#{menu['search']}"
@@ -84,7 +87,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-xs-6">
                             <div class="box-tools pull-right">
                                 <p:commandButton immediate="true"
                                                  value="#{menu['add']}"
@@ -117,25 +120,7 @@
                         <p:ajax event="rowSelect" 
                                 listener="#{movementBean.changeToDetail()}" />
 
-                        <p:column width="8%" 
-                                  styleClass="align-center"
-                                  headerText="#{messages['movement.list.type']}">
-                            <p:graphicImage width="24"
-                                            height="24"
-                                            library="webbudget" 
-                                            name="img/ui-icon-plus.png" 
-                                            rendered="#{movement.revenue}"
-                                            title="#{messages['movement.list.income']}"/>
-                            <p:graphicImage  width="24"
-                                             height="24"
-                                             library="webbudget" 
-                                             name="img/ui-icon-minus.png" 
-                                             rendered="#{movement.expense}"
-                                             title="#{messages['movement.list.outcome']}"/>
-                        </p:column>
-                        <p:column width="8%"
-                                  styleClass="align-center" 
-                                  headerText="#{messages['movement.list.state']}">
+                        <p:column headerText="#{messages['movement.list.description']}">
                             <p:graphicImage width="18"
                                             height="18"
                                             library="webbudget" 
@@ -160,9 +145,21 @@
                                             name="img/ui-blue-circle.png" 
                                             title="#{enums[movement.movementStateType]}"
                                             rendered="#{movement.movementStateType eq 'CALCULATED'}"/>
-                        </p:column>
-                        <p:column headerText="#{messages['movement.list.description']}">
-                            #{of:abbreviate(movement.description,50)}
+                            <p:spacer width="10"/>
+                            <p:graphicImage width="24"
+                                            height="24"
+                                            library="webbudget" 
+                                            name="img/ui-icon-plus.png" 
+                                            rendered="#{movement.revenue}"
+                                            title="#{messages['movement.list.income']}"/>
+                            <p:graphicImage  width="24"
+                                             height="24"
+                                             library="webbudget" 
+                                             name="img/ui-icon-minus.png" 
+                                             rendered="#{movement.expense}"
+                                             title="#{messages['movement.list.outcome']}"/>
+                            <p:spacer width="10"/>
+                            #{of:abbreviate(movement.description,70)}
                         </p:column>
                         <p:column width="12%"
                                   sortBy="#{movement.value}"

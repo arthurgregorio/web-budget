@@ -27,13 +27,13 @@ import br.com.webbudget.domain.entity.movement.MovementClass;
 import br.com.webbudget.domain.entity.movement.MovementClassType;
 import br.com.webbudget.domain.entity.movement.MovementStateType;
 import br.com.webbudget.domain.entity.movement.MovementType;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.misc.filter.MovementFilter;
 import br.com.webbudget.domain.misc.table.Page;
 import br.com.webbudget.domain.misc.table.PageRequest;
 import br.com.webbudget.domain.misc.table.PageRequest.SortDirection;
 import br.com.webbudget.domain.repository.GenericRepository;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,31 +131,22 @@ public class MovementRepository extends GenericRepository<Movement, Long>
         if (filter.hasCriteria()) {
 
             criterions.add(Restrictions.eq("code", filter.getCriteria()));
-            criterions.add(Restrictions.ilike("description", "%" + filter.getCriteria() + "%"));
-            criterions.add(Restrictions.ilike("mc.name", "%" + filter.getCriteria() + "%"));
-            criterions.add(Restrictions.ilike("cc.name", "%" + filter.getCriteria() + "%"));
-            criterions.add(Restrictions.ilike("co.name", "%" + filter.getCriteria() + "%"));
-            criterions.add(Restrictions.ilike("fp.identification", "%" + filter.getCriteria() + "%"));
+            criterions.add(Restrictions.ilike(
+                    "description", "%" + filter.getCriteria() + "%"));
+            criterions.add(Restrictions.ilike(
+                    "mc.name", "%" + filter.getCriteria() + "%"));
+            criterions.add(Restrictions.ilike(
+                    "cc.name", "%" + filter.getCriteria() + "%"));
+            criterions.add(Restrictions.ilike(
+                    "co.name", "%" + filter.getCriteria() + "%"));
+            criterions.add(Restrictions.ilike(
+                    "fp.identification", "%" + filter.getCriteria() + "%"));
 
             // se conseguir castar para bigdecimal trata como um filtro
             try {
-                criterions.add(Restrictions.eq("value", new BigDecimal(filter.getCriteria())));
-            } catch (NumberFormatException ex) {
-            }
-        }
-
-        // outras condicoes
-        if (filter.isOnlyPaidsByOpenPeriods()) {
-            criteria.add(Restrictions.and(
-                    Restrictions.isNotNull("payment"),
-                    Restrictions.eq("fp.closed", false),
-                    Restrictions.isNull("fp.closing")));
-        } else if (filter.isOnlyPaidMovements()) {
-            criterions.add(Restrictions.isNotNull("payment"));
-        } else if (filter.isOnlyByOpenPeriods()) {
-            criteria.add(Restrictions.and(
-                    Restrictions.eq("fp.closed", false),
-                    Restrictions.isNull("fp.closing")));
+                criterions.add(Restrictions.eq(
+                        "value", filter.criteriaToBigDecimal()));
+            } catch (ParseException ex) { }
         }
 
         criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));
@@ -173,19 +164,17 @@ public class MovementRepository extends GenericRepository<Movement, Long>
         criteria.setFirstResult(pageRequest.getFirstResult());
         criteria.setMaxResults(pageRequest.getPageSize());
 
+        // aplica o multisort dos campos
         if (pageRequest.isMultiSort()) {
-
             pageRequest
                     .getMultiSortFields()
                     .stream()
                     .forEach(field -> {
-
                         if (field.getDirection() == SortDirection.ASC) {
                             criteria.addOrder(Order.asc(field.getSortField()));
                         } else if (field.getDirection() == SortDirection.DESC) {
                             criteria.addOrder(Order.desc(field.getSortField()));
                         }
-
                     });
         } else if (pageRequest.getSortDirection() == SortDirection.ASC) {
             criteria.addOrder(Order.asc(pageRequest.getSortField()));
