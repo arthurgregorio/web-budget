@@ -20,7 +20,7 @@
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           xmlns:h="http://xmlns.jcp.org/jsf/html"
           id="configFilterDialog"
-          width="600"
+          width="450"
           modal="true" 
           closable="false"
           resizable="false" 
@@ -52,7 +52,46 @@
                 </p:selectOneMenu>
             </div>
             <div class="col-sm-12 form-group">
-
+                <p:outputLabel for="inType" 
+                               value="#{messages['config-filter.form.type']}: "/>
+                <p:selectOneMenu id="inType" 
+                                 converter="omnifaces.GenericEnumConverter"
+                                 value="#{movementBean.filter.movementType}">
+                    <f:selectItem itemValue="#{null}"
+                                  itemLabel="#{messages['config-filter.form.any-type']}" />
+                    <f:selectItems var="movementType"
+                                   itemValue="#{movementType}"
+                                   itemLabel="#{enums[movementType]}"
+                                   value="#{movementBean.movementTypes}"/> 
+                </p:selectOneMenu>
+            </div>
+            <div class="col-sm-12 form-group">
+                <p:outputLabel for="inStatus" 
+                               value="#{messages['config-filter.form.status']}: "/>
+                <p:selectOneMenu id="inStatus" 
+                                 converter="omnifaces.GenericEnumConverter"
+                                 value="#{movementBean.filter.movementStateType}">
+                    <f:selectItem itemValue="#{null}"
+                                  itemLabel="#{messages['config-filter.form.any-state']}" />
+                    <f:selectItems var="statusType"
+                                   itemValue="#{statusType}"
+                                   itemLabel="#{enums[statusType]}"
+                                   value="#{movementBean.movementStateTypes}"/> 
+                </p:selectOneMenu>
+            </div>
+            <div class="col-sm-12 form-group">
+                <p:outputLabel for="inDirection" 
+                               value="#{messages['config-filter.form.direction']}: "/>
+                <p:selectOneMenu id="inDirection" 
+                                 converter="omnifaces.GenericEnumConverter"
+                                 value="#{movementBean.filter.movementClassType}">
+                    <f:selectItem itemValue="#{null}"
+                                  itemLabel="#{messages['config-filter.form.any-direction']}" />
+                    <f:selectItems var="directionType"
+                                   itemValue="#{directionType}"
+                                   itemLabel="#{enums[directionType]}"
+                                   value="#{movementBean.movementClassTypes}"/> 
+                </p:selectOneMenu>
             </div>
         </div>
 

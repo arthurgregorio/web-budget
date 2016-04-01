@@ -24,6 +24,9 @@ import br.com.webbudget.domain.entity.movement.CostCenter;
 import br.com.webbudget.domain.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.entity.movement.Movement;
 import br.com.webbudget.domain.entity.movement.MovementClass;
+import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.entity.movement.MovementStateType;
+import br.com.webbudget.domain.entity.movement.MovementType;
 import br.com.webbudget.domain.entity.movement.Payment;
 import br.com.webbudget.domain.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.filter.MovementFilter;
@@ -220,5 +223,26 @@ public class MovementBean extends AbstractBean {
      */
     public void showFilterConfigDialog() {
         this.updateAndOpenDialog("configFilterDialog", "dialogConfigFilter");
+    }
+    
+    /**
+     * @return os estados possiveis dos movimentos
+     */
+    public MovementStateType[] getMovementStateTypes() {
+        return MovementStateType.values();
+    }
+    
+    /**
+     * @return as possiveis direcoes de um movimento
+     */
+    public MovementClassType[] getMovementClassTypes() {
+        return MovementClassType.values();
+    }
+
+    /**
+     * @return os possiveis tipos de um movimento
+     */
+    public MovementType[] getMovementTypes() {
+        return MovementType.values();
     }
 }
