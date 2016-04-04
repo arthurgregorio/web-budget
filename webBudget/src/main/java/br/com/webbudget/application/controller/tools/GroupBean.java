@@ -18,10 +18,10 @@ package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.security.Authorization;
-import br.com.webbudget.domain.security.Grant;
-import br.com.webbudget.domain.security.Group;
-import br.com.webbudget.domain.service.AccountService;
+import br.com.webbudget.domain.model.security.Authorization;
+import br.com.webbudget.domain.model.security.Grant;
+import br.com.webbudget.domain.model.security.Group;
+import br.com.webbudget.domain.model.service.AccountService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.infraestructure.ApplicationUtils;
+import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import javax.enterprise.event.Observes;
 import javax.faces.application.ProjectStage;
 import javax.faces.view.ViewScoped;

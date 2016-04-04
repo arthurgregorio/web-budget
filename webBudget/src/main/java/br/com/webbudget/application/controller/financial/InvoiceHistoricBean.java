@@ -17,14 +17,14 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.card.Card;
-import br.com.webbudget.domain.entity.card.CardInvoice;
-import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.misc.table.AbstractLazyModel;
-import br.com.webbudget.domain.misc.table.Page;
-import br.com.webbudget.domain.misc.table.PageRequest;
-import br.com.webbudget.domain.service.CardService;
-import br.com.webbudget.domain.service.MovementService;
+import br.com.webbudget.domain.model.entity.card.Card;
+import br.com.webbudget.domain.model.entity.card.CardInvoice;
+import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.application.component.table.AbstractLazyModel;
+import br.com.webbudget.application.component.table.Page;
+import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.model.service.CardService;
+import br.com.webbudget.domain.model.service.MovementService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;

@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.misc;
 
-import br.com.webbudget.infraestructure.ApplicationUtils;
+import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import javax.enterprise.context.RequestScoped;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

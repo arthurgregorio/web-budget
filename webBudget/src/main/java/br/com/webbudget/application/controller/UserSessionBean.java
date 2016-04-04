@@ -17,10 +17,10 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
-import br.com.webbudget.domain.security.Authorization;
-import br.com.webbudget.domain.security.Group;
-import br.com.webbudget.domain.security.User;
-import br.com.webbudget.domain.service.AccountService;
+import br.com.webbudget.domain.model.security.Authorization;
+import br.com.webbudget.domain.model.security.Group;
+import br.com.webbudget.domain.model.security.User;
+import br.com.webbudget.domain.model.service.AccountService;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;

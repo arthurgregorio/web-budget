@@ -17,14 +17,14 @@
 package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.movement.CostCenter;
-import br.com.webbudget.domain.entity.movement.MovementClass;
-import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.model.entity.movement.CostCenter;
+import br.com.webbudget.domain.model.entity.movement.MovementClass;
+import br.com.webbudget.domain.model.entity.movement.MovementClassType;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.misc.table.AbstractLazyModel;
-import br.com.webbudget.domain.misc.table.Page;
-import br.com.webbudget.domain.misc.table.PageRequest;
-import br.com.webbudget.domain.service.MovementService;
+import br.com.webbudget.application.component.table.AbstractLazyModel;
+import br.com.webbudget.application.component.table.Page;
+import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.model.service.MovementService;
 import java.util.List;
 import java.util.Map;
 import javax.faces.view.ViewScoped;

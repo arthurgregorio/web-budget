@@ -17,13 +17,13 @@
 package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.closing.Closing;
-import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.closing.Closing;
+import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.misc.table.AbstractLazyModel;
-import br.com.webbudget.domain.misc.table.Page;
-import br.com.webbudget.domain.misc.table.PageRequest;
-import br.com.webbudget.domain.service.FinancialPeriodService;
+import br.com.webbudget.application.component.table.AbstractLazyModel;
+import br.com.webbudget.application.component.table.Page;
+import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.model.service.FinancialPeriodService;
 import java.util.List;
 import java.util.Map;
 import javax.faces.view.ViewScoped;

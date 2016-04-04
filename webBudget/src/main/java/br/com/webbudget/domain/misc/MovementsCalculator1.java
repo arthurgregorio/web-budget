@@ -16,14 +16,14 @@
  */
 package br.com.webbudget.domain.misc;
 
-import br.com.webbudget.domain.entity.card.CardType;
-import br.com.webbudget.domain.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.movement.MovementClass;
-import br.com.webbudget.domain.entity.movement.MovementClassType;
-import br.com.webbudget.domain.entity.movement.MovementType;
-import br.com.webbudget.domain.repository.movement.IMovementClassRepository;
-import br.com.webbudget.domain.repository.movement.IMovementRepository;
+import br.com.webbudget.domain.model.entity.card.CardType;
+import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.movement.MovementClass;
+import br.com.webbudget.domain.model.entity.movement.MovementClassType;
+import br.com.webbudget.domain.model.entity.movement.MovementType;
+import br.com.webbudget.domain.model.repository.movement.IMovementClassRepository;
+import br.com.webbudget.domain.model.repository.movement.IMovementRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

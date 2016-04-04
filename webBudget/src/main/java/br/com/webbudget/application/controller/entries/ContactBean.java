@@ -17,17 +17,17 @@
 package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.contact.Contact;
-import br.com.webbudget.domain.entity.contact.ContactType;
-import br.com.webbudget.domain.entity.contact.NumberType;
-import br.com.webbudget.domain.entity.contact.Telephone;
+import br.com.webbudget.domain.model.entity.contact.Contact;
+import br.com.webbudget.domain.model.entity.contact.ContactType;
+import br.com.webbudget.domain.model.entity.contact.NumberType;
+import br.com.webbudget.domain.model.entity.contact.Telephone;
 import br.com.webbudget.domain.misc.AddressFinder;
 import br.com.webbudget.domain.misc.AddressFinder.Address;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.misc.table.AbstractLazyModel;
-import br.com.webbudget.domain.misc.table.Page;
-import br.com.webbudget.domain.misc.table.PageRequest;
-import br.com.webbudget.domain.service.ContactService;
+import br.com.webbudget.application.component.table.AbstractLazyModel;
+import br.com.webbudget.application.component.table.Page;
+import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.model.service.ContactService;
 import java.util.List;
 import java.util.Map;
 import javax.faces.view.ViewScoped;

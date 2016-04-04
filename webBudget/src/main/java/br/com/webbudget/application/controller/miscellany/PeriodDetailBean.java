@@ -17,16 +17,16 @@
 package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.movement.MovementClass;
-import br.com.webbudget.domain.entity.movement.MovementClassType;
+import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.movement.MovementClass;
+import br.com.webbudget.domain.model.entity.movement.MovementClassType;
 import br.com.webbudget.domain.misc.MovementCalculator;
-import br.com.webbudget.domain.misc.chart.donut.DonutChartModel;
-import br.com.webbudget.domain.misc.chart.line.LineChartModel;
-import br.com.webbudget.domain.service.FinancialPeriodService;
-import br.com.webbudget.domain.service.MovementService;
-import br.com.webbudget.domain.service.PeriodDetailService;
+import br.com.webbudget.application.component.chart.donut.DonutChartModel;
+import br.com.webbudget.application.component.chart.line.LineChartModel;
+import br.com.webbudget.domain.model.service.FinancialPeriodService;
+import br.com.webbudget.domain.model.service.MovementService;
+import br.com.webbudget.domain.model.service.PeriodDetailService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;

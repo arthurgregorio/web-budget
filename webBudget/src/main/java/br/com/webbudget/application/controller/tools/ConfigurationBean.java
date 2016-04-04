@@ -17,11 +17,11 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.movement.CostCenter;
-import br.com.webbudget.domain.entity.movement.MovementClass;
-import br.com.webbudget.domain.entity.system.Configuration;
-import br.com.webbudget.domain.service.ConfigurationService;
-import br.com.webbudget.domain.service.MovementService;
+import br.com.webbudget.domain.model.entity.movement.CostCenter;
+import br.com.webbudget.domain.model.entity.movement.MovementClass;
+import br.com.webbudget.domain.model.entity.system.Configuration;
+import br.com.webbudget.domain.model.service.ConfigurationService;
+import br.com.webbudget.domain.model.service.MovementService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

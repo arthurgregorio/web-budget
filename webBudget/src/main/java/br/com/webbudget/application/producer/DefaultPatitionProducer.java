@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.producer;
 
-import br.com.webbudget.domain.security.Partition;
+import br.com.webbudget.domain.model.security.Partition;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;

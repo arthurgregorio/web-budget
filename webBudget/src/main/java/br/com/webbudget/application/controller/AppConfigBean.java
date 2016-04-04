@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.domain.entity.system.Configuration;
-import br.com.webbudget.domain.service.ConfigurationService;
+import br.com.webbudget.domain.model.entity.system.Configuration;
+import br.com.webbudget.domain.model.service.ConfigurationService;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;

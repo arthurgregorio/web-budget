@@ -17,12 +17,12 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.card.Card;
-import br.com.webbudget.domain.entity.card.CardInvoice;
-import br.com.webbudget.domain.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.card.Card;
+import br.com.webbudget.domain.model.entity.card.CardInvoice;
+import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.service.CardService;
-import br.com.webbudget.domain.service.FinancialPeriodService;
+import br.com.webbudget.domain.model.service.CardService;
+import br.com.webbudget.domain.model.service.FinancialPeriodService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;

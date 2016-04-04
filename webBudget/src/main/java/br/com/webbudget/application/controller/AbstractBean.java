@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.domain.misc.chart.AbstractChartModel;
-import br.com.webbudget.infraestructure.Translator;
+import br.com.webbudget.application.component.chart.AbstractChartModel;
+import br.com.webbudget.application.component.Translator;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;

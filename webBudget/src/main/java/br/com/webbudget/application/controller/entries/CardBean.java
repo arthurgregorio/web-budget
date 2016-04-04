@@ -17,15 +17,15 @@
 package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.card.Card;
-import br.com.webbudget.domain.entity.card.CardType;
-import br.com.webbudget.domain.entity.wallet.Wallet;
+import br.com.webbudget.domain.model.entity.card.Card;
+import br.com.webbudget.domain.model.entity.card.CardType;
+import br.com.webbudget.domain.model.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.misc.table.AbstractLazyModel;
-import br.com.webbudget.domain.misc.table.Page;
-import br.com.webbudget.domain.misc.table.PageRequest;
-import br.com.webbudget.domain.service.CardService;
-import br.com.webbudget.domain.service.WalletService;
+import br.com.webbudget.application.component.table.AbstractLazyModel;
+import br.com.webbudget.application.component.table.Page;
+import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.model.service.CardService;
+import br.com.webbudget.domain.model.service.WalletService;
 import java.util.List;
 import java.util.Map;
 import javax.faces.view.ViewScoped;

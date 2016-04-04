@@ -16,14 +16,14 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.domain.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.movement.Movement;
 import br.com.webbudget.domain.misc.MovementCalculator;
-import br.com.webbudget.domain.misc.chart.line.LineChartDatasetBuilder;
-import br.com.webbudget.domain.misc.chart.line.LineChartModel;
+import br.com.webbudget.application.component.chart.line.LineChartDatasetBuilder;
+import br.com.webbudget.application.component.chart.line.LineChartModel;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.service.FinancialPeriodService;
-import br.com.webbudget.domain.service.MovementService;
+import br.com.webbudget.domain.model.service.FinancialPeriodService;
+import br.com.webbudget.domain.model.service.MovementService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

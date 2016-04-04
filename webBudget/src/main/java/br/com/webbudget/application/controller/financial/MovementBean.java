@@ -17,26 +17,26 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.card.Card;
-import br.com.webbudget.domain.entity.contact.Contact;
-import br.com.webbudget.domain.entity.movement.Apportionment;
-import br.com.webbudget.domain.entity.movement.CostCenter;
-import br.com.webbudget.domain.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.entity.movement.Movement;
-import br.com.webbudget.domain.entity.movement.MovementClass;
-import br.com.webbudget.domain.entity.movement.MovementClassType;
-import br.com.webbudget.domain.entity.movement.MovementStateType;
-import br.com.webbudget.domain.entity.movement.MovementType;
-import br.com.webbudget.domain.entity.movement.Payment;
-import br.com.webbudget.domain.entity.wallet.Wallet;
+import br.com.webbudget.domain.model.entity.card.Card;
+import br.com.webbudget.domain.model.entity.contact.Contact;
+import br.com.webbudget.domain.model.entity.movement.Apportionment;
+import br.com.webbudget.domain.model.entity.movement.CostCenter;
+import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.movement.MovementClass;
+import br.com.webbudget.domain.model.entity.movement.MovementClassType;
+import br.com.webbudget.domain.model.entity.movement.MovementStateType;
+import br.com.webbudget.domain.model.entity.movement.MovementType;
+import br.com.webbudget.domain.model.entity.movement.Payment;
+import br.com.webbudget.domain.model.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.filter.MovementFilter;
-import br.com.webbudget.domain.misc.table.AbstractLazyModel;
-import br.com.webbudget.domain.misc.table.MovementsListModel;
-import br.com.webbudget.domain.service.CardService;
-import br.com.webbudget.domain.service.ContactService;
-import br.com.webbudget.domain.service.FinancialPeriodService;
-import br.com.webbudget.domain.service.MovementService;
-import br.com.webbudget.domain.service.WalletService;
+import br.com.webbudget.application.component.table.AbstractLazyModel;
+import br.com.webbudget.application.component.table.MovementsListModel;
+import br.com.webbudget.domain.model.service.CardService;
+import br.com.webbudget.domain.model.service.ContactService;
+import br.com.webbudget.domain.model.service.FinancialPeriodService;
+import br.com.webbudget.domain.model.service.MovementService;
+import br.com.webbudget.domain.model.service.WalletService;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -139,12 +139,14 @@ public class MovementBean extends AbstractBean {
         final List<FinancialPeriod> periods = this.financialPeriodService
                 .listFinancialPeriods(null);
         
+        // filtra somente os que estao em aberto
         this.openPeriods = periods.stream()
                 .filter(period -> !period.isClosed())
                 .collect(Collectors.toList());
         
         this.periodsModel = new DualListModel<>(periods, this.openPeriods);
         
+        // seta a primeira busca sendo pelos periodos em aberto
         this.filter.setPeriods(this.periodsModel.getTarget());
     }
 

@@ -17,10 +17,10 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entity.wallet.Wallet;
-import br.com.webbudget.domain.entity.wallet.WalletBalance;
+import br.com.webbudget.domain.model.entity.wallet.Wallet;
+import br.com.webbudget.domain.model.entity.wallet.WalletBalance;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.service.WalletService;
+import br.com.webbudget.domain.model.service.WalletService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
