@@ -122,8 +122,7 @@ public class FinancialPeriodService {
         return periods.stream()
                 .filter(period -> !period.isExpired())
                 .findFirst()
-                .orElseThrow(() -> new InternalServiceError(
-                        "error.financial-period.no-active-period"));
+                .orElse(null);
     }
     
     /**

@@ -20,7 +20,7 @@
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           xmlns:h="http://xmlns.jcp.org/jsf/html"
           id="configFilterDialog"
-          width="450"
+          width="700"
           modal="true" 
           closable="false"
           resizable="false" 
@@ -37,61 +37,71 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-12 form-group">
-                <p:outputLabel for="inPeriod" 
-                               value="#{messages['config-filter.form.period']}: "/>
-                <p:selectOneMenu id="inPeriod" 
-                                 converter="omnifaces.SelectItemsConverter"
-                                 value="#{movementBean.filter.financialPeriod}">
-                    <f:selectItem itemValue="#{null}"
-                                  itemLabel="#{messages['config-filter.form.any-period']}" />
-                    <f:selectItems var="financialPeriod" 
-                                   itemValue="#{financialPeriod}"
-                                   value="#{movementBean.financialPeriods}" 
-                                   itemLabel="#{financialPeriod.identification}"/> 
-                </p:selectOneMenu>
+            <div class="col-sm-7">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <p:pickList id="periodsList"
+                                    var="period" 
+                                    responsive="true"
+                                    itemValue="#{period}"
+                                    style="display: block"
+                                    itemLabel="#{period.identification}"
+                                    value="#{movementBean.periodsModel}">
+                            <f:facet name="sourceCaption">
+                                #{messages['config-filter.form.available-periods']}
+                            </f:facet>
+                            <f:facet name="targetCaption">
+                                #{messages['config-filter.form.selected-periods']}
+                            </f:facet>
+                        </p:pickList>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-12 form-group">
-                <p:outputLabel for="inType" 
-                               value="#{messages['config-filter.form.type']}: "/>
-                <p:selectOneMenu id="inType" 
-                                 converter="omnifaces.GenericEnumConverter"
-                                 value="#{movementBean.filter.movementType}">
-                    <f:selectItem itemValue="#{null}"
-                                  itemLabel="#{messages['config-filter.form.any-type']}" />
-                    <f:selectItems var="movementType"
-                                   itemValue="#{movementType}"
-                                   itemLabel="#{enums[movementType]}"
-                                   value="#{movementBean.movementTypes}"/> 
-                </p:selectOneMenu>
-            </div>
-            <div class="col-sm-12 form-group">
-                <p:outputLabel for="inStatus" 
-                               value="#{messages['config-filter.form.status']}: "/>
-                <p:selectOneMenu id="inStatus" 
-                                 converter="omnifaces.GenericEnumConverter"
-                                 value="#{movementBean.filter.movementStateType}">
-                    <f:selectItem itemValue="#{null}"
-                                  itemLabel="#{messages['config-filter.form.any-state']}" />
-                    <f:selectItems var="statusType"
-                                   itemValue="#{statusType}"
-                                   itemLabel="#{enums[statusType]}"
-                                   value="#{movementBean.movementStateTypes}"/> 
-                </p:selectOneMenu>
-            </div>
-            <div class="col-sm-12 form-group">
-                <p:outputLabel for="inDirection" 
-                               value="#{messages['config-filter.form.direction']}: "/>
-                <p:selectOneMenu id="inDirection" 
-                                 converter="omnifaces.GenericEnumConverter"
-                                 value="#{movementBean.filter.movementClassType}">
-                    <f:selectItem itemValue="#{null}"
-                                  itemLabel="#{messages['config-filter.form.any-direction']}" />
-                    <f:selectItems var="directionType"
-                                   itemValue="#{directionType}"
-                                   itemLabel="#{enums[directionType]}"
-                                   value="#{movementBean.movementClassTypes}"/> 
-                </p:selectOneMenu>
+            <div class="col-sm-5">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <p:outputLabel for="inType" 
+                                       value="#{messages['config-filter.form.type']}: "/>
+                        <p:selectOneMenu id="inType" 
+                                         converter="omnifaces.GenericEnumConverter"
+                                         value="#{movementBean.filter.movementType}">
+                            <f:selectItem itemValue="#{null}"
+                                          itemLabel="#{messages['config-filter.form.any-type']}" />
+                            <f:selectItems var="movementType"
+                                           itemValue="#{movementType}"
+                                           itemLabel="#{enums[movementType]}"
+                                           value="#{movementBean.movementTypes}"/> 
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <p:outputLabel for="inStatus" 
+                                       value="#{messages['config-filter.form.status']}: "/>
+                        <p:selectOneMenu id="inStatus" 
+                                         converter="omnifaces.GenericEnumConverter"
+                                         value="#{movementBean.filter.movementStateType}">
+                            <f:selectItem itemValue="#{null}"
+                                          itemLabel="#{messages['config-filter.form.any-state']}" />
+                            <f:selectItems var="statusType"
+                                           itemValue="#{statusType}"
+                                           itemLabel="#{enums[statusType]}"
+                                           value="#{movementBean.movementStateTypes}"/> 
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <p:outputLabel for="inDirection" 
+                                       value="#{messages['config-filter.form.direction']}: "/>
+                        <p:selectOneMenu id="inDirection" 
+                                         converter="omnifaces.GenericEnumConverter"
+                                         value="#{movementBean.filter.movementClassType}">
+                            <f:selectItem itemValue="#{null}"
+                                          itemLabel="#{messages['config-filter.form.any-direction']}" />
+                            <f:selectItems var="directionType"
+                                           itemValue="#{directionType}"
+                                           itemLabel="#{enums[directionType]}"
+                                           value="#{movementBean.movementClassTypes}"/> 
+                        </p:selectOneMenu>
+                    </div>
+                </div>
             </div>
         </div>
 

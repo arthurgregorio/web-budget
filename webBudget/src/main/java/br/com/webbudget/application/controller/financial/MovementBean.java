@@ -38,12 +38,14 @@ import br.com.webbudget.domain.service.FinancialPeriodService;
 import br.com.webbudget.domain.service.MovementService;
 import br.com.webbudget.domain.service.WalletService;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.DualListModel;
 
 /**
  * Controller da tela de movimentos do periodo
@@ -88,11 +90,13 @@ public class MovementBean extends AbstractBean {
     @Getter
     private List<CostCenter> costCenters;
     @Getter
+    private List<FinancialPeriod> openPeriods;
+    @Getter
     private List<MovementClass> movementClasses;
+    
     @Getter
-    private List<FinancialPeriod> financialPeriods;
-    @Getter
-    private List<FinancialPeriod> openFinancialPeriods;
+    @Setter
+    private DualListModel<FinancialPeriod> periodsModel;
 
     @Inject
     private CardService cardService;
@@ -131,8 +135,17 @@ public class MovementBean extends AbstractBean {
         // inicializa o filtro
         this.filter = new MovementFilter();
 
-        // preenche os campos de filtro
-        this.financialPeriods = this.financialPeriodService.listFinancialPeriods(null);
+        // cria o filtro por periodo
+        final List<FinancialPeriod> periods = this.financialPeriodService
+                .listFinancialPeriods(null);
+        
+        this.openPeriods = periods.stream()
+                .filter(period -> !period.isClosed())
+                .collect(Collectors.toList());
+        
+        this.periodsModel = new DualListModel<>(periods, this.openPeriods);
+        
+        this.filter.setPeriods(this.periodsModel.getTarget());
     }
 
     /**
@@ -208,6 +221,10 @@ public class MovementBean extends AbstractBean {
      * Aplica os filtros customizados selecionados na listagem de movimentos
      */
     public void applyCustomFilters() {
+        
+        this.filter.setPeriods(this.periodsModel.getTarget());
+        
+        this.updateComponent("movementsList");
         this.closeDialog("dialogConfigFilter");
     }
     

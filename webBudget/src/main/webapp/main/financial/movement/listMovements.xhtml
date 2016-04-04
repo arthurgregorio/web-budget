@@ -69,7 +69,6 @@
                                 <div class="input-group-btn">
                                     <p:commandButton immediate="true"
                                                      icon="fa fa-gear"
-                                                     update="movementsList"
                                                      styleClass="btn btn-flat btn-default"
                                                      title="#{messages['filter.configure']}"
                                                      actionListener="#{movementBean.showFilterConfigDialog()}"/>
@@ -110,6 +109,7 @@
                                  sortOrder="descending"
                                  selectionMode="single"
                                  rowKey="#{movement.id}"
+                                 widgetVar="movementsDatatable"
                                  paginatorPosition="bottom"
                                  paginatorAlwaysVisible="false"
                                  rowStyleClass="row-with-button"

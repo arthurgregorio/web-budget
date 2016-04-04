@@ -24,10 +24,17 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Classe que constroi o filtro para a nossa pesquisa de movimentos
@@ -43,19 +50,22 @@ public final class MovementFilter {
     @Getter
     @Setter
     private String criteria;
+    
+    @Setter
+    private List<FinancialPeriod> periods;
 
-    @Getter
-    @Setter
-    private MovementType movementType;
-    @Getter
-    @Setter
-    private FinancialPeriod financialPeriod;
-    @Getter
-    @Setter
-    private MovementStateType movementStateType;
-    @Getter
-    @Setter
-    private MovementClassType movementClassType;
+    private Optional<MovementType> movementType;
+    private Optional<MovementStateType> movementStateType;
+    private Optional<MovementClassType> movementClassType;
+
+    /**
+     *
+     */
+    public MovementFilter() {
+        this.movementType = Optional.empty();
+        this.movementStateType = Optional.empty();
+        this.movementClassType = Optional.empty();
+    }
 
     /**
      * @return se existe ou nao uma criteria para este filtro
@@ -65,23 +75,126 @@ public final class MovementFilter {
     }
 
     /**
+     * @return os filtros customizados
+     */
+    public Criterion[] getCustomFilters() {
+
+        final List<Criterion> custom = new ArrayList<>();
+
+        custom.add(this.getMovementTypeCriterion());
+        custom.add(this.getMovementStateTypeCriterion());
+        custom.add(this.getMovementClassTypeCriterion());
+        custom.add(this.getPeriodsCriterion());
+
+        return custom.stream()
+                .filter(criterion -> criterion != null)
+                .collect(Collectors.toList())
+                .stream()
+                .toArray(Criterion[]::new);
+    }
+
+    /**
      * Metodo para fazer o parse da nossa criteria em um numero decimal para
      * satisfazer a busca por valor
-     * 
+     *
      * @return o valor formatador em bigdecimal
-     * 
+     *
      * @throws ParseException se houver algum erro na hora do parse
      */
     public BigDecimal criteriaToBigDecimal() throws ParseException {
 
         final DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        
+
         symbols.setGroupingSeparator('.');
         symbols.setDecimalSeparator(',');
-        
+
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.0#", symbols);
         decimalFormat.setParseBigDecimal(true);
 
         return (BigDecimal) decimalFormat.parse(this.criteria);
+    }
+
+    /**
+     * @return
+     */
+    private Criterion getMovementTypeCriterion() {
+        return this.movementType.isPresent() 
+                ? Restrictions.eq("movementType", this.movementType.get()) 
+                : null;
+    }
+    
+    /**
+     * @return
+     */
+    private Criterion getMovementClassTypeCriterion() {
+        return this.movementClassType.isPresent() 
+                ? Restrictions.eq("mc.movementClassType", this.movementClassType.get()) 
+                : null;
+    }
+    
+    /**
+     * @return
+     */
+    private Criterion getMovementStateTypeCriterion() {
+        return this.movementStateType.isPresent() 
+                ? Restrictions.eq("movementStateType", this.movementStateType.get()) 
+                : null;
+    }
+    
+    /**
+     * @return 
+     */
+    private Criterion getPeriodsCriterion() {
+        
+        final List<Criterion> criterions = new ArrayList<>();
+        
+        if (this.periods != null && !this.periods.isEmpty()) {
+            this.periods.stream().forEach(period -> {
+                criterions.add(Restrictions.eq("fp.id", period.getId()));
+            });
+        }
+        return Restrictions.or(criterions.toArray(new Criterion[]{}));
+    }
+
+    /**
+     * @return 
+     */
+    public MovementType getMovementType() {
+        return this.movementType.orElse(null);
+    }
+
+    /**
+     * @param movementType 
+     */
+    public void setMovementType(MovementType movementType) {
+        this.movementType = Optional.ofNullable(movementType);
+    }
+
+    /**
+     * @return 
+     */
+    public MovementStateType getMovementStateType() {
+        return this.movementStateType.orElse(null);
+    }
+
+    /**
+     * @param movementStateType 
+     */
+    public void setMovementStateType(MovementStateType movementStateType) {
+        this.movementStateType = Optional.ofNullable(movementStateType);
+    }
+
+    /**
+     * @return 
+     */
+    public MovementClassType getMovementClassType() {
+        return this.movementClassType.orElse(null);
+    }
+
+    /**
+     * @param movementClassType 
+     */
+    public void setMovementClassType(MovementClassType movementClassType) {
+        this.movementClassType = Optional.ofNullable(movementClassType);
     }
 }

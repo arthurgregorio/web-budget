@@ -465,11 +465,11 @@ public class MovementService {
         // valida os rateios
         fixedMovement.validateApportionments();
 
-        if (!fixedMovement.isUndetermined() && (fixedMovement.getQuotes() == null 
+        if (!fixedMovement.isUndetermined() && (fixedMovement.getQuotes() == null
                 || fixedMovement.getQuotes() == 0)) {
             throw new InternalServiceError("error.fixed-movement.no-quotes");
         }
-        
+
         // pega os rateios antes de salvar o movimento para nao perder a lista
         final List<Apportionment> apportionments = fixedMovement.getApportionments();
 
@@ -501,7 +501,7 @@ public class MovementService {
                 .listByFixedMovement(fixedMovement);
 
         if (launches != null && !launches.isEmpty()) {
-            throw new InternalServiceError("error.fixed-movement.has-launches", 
+            throw new InternalServiceError("error.fixed-movement.has-launches",
                     fixedMovement.getIdentification());
         }
 
@@ -735,11 +735,11 @@ public class MovementService {
     }
 
     /**
-     * 
+     *
      * @param name
      * @param type
      * @param costCenter
-     * @return 
+     * @return
      */
     public MovementClass findMovementClassByNameAndTypeAndCostCenter(String name, MovementClassType type, CostCenter costCenter) {
         return this.movementClassRepository.findByNameAndTypeAndCostCenter(name, type, costCenter);
@@ -763,7 +763,7 @@ public class MovementService {
     public List<Movement> listMovementsByCardInvoice(CardInvoice cardInvoice) {
         return this.movementRepository.listByCardInvoice(cardInvoice);
     }
-    
+
     /**
      *
      * @param filter

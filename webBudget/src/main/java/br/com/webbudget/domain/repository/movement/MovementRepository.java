@@ -129,7 +129,6 @@ public class MovementRepository extends GenericRepository<Movement, Long>
 
         // montramos os criterios de filtragem geral
         if (filter.hasCriteria()) {
-
             criterions.add(Restrictions.eq("code", filter.getCriteria()));
             criterions.add(Restrictions.ilike(
                     "description", "%" + filter.getCriteria() + "%"));
@@ -139,8 +138,6 @@ public class MovementRepository extends GenericRepository<Movement, Long>
                     "cc.name", "%" + filter.getCriteria() + "%"));
             criterions.add(Restrictions.ilike(
                     "co.name", "%" + filter.getCriteria() + "%"));
-            criterions.add(Restrictions.ilike(
-                    "fp.identification", "%" + filter.getCriteria() + "%"));
 
             // se conseguir castar para bigdecimal trata como um filtro
             try {
@@ -148,8 +145,9 @@ public class MovementRepository extends GenericRepository<Movement, Long>
                         "value", filter.criteriaToBigDecimal()));
             } catch (ParseException ex) { }
         }
-
+        
         criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));
+        criteria.add(Restrictions.and(filter.getCustomFilters()));
 
         // projetamos para pegar o total de paginas possiveis
         criteria.setProjection(Projections.count("id"));
