@@ -74,6 +74,8 @@
                                                      actionListener="#{movementBean.showFilterConfigDialog()}"/>
                                     <p:commandButton icon="fa fa-trash-o"
                                                      update="movementsList"
+                                                     onstart="PF('listBlock').show()"
+                                                     oncomplete="PF('listBlock').hide()"
                                                      title="#{messages['filter.clear']}"
                                                      styleClass="btn btn-flat btn-danger"
                                                      actionListener="#{movementBean.clearFilters()}"/>

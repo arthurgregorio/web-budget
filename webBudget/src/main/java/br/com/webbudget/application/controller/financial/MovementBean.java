@@ -235,7 +235,10 @@ public class MovementBean extends AbstractBean {
      * Limpa todos os filtro ja realizados
      */
     public void clearFilters() {
-        
+        this.filter.setCriteria(null);
+        this.filter.setPeriods(this.openPeriods);
+        this.updateComponent("movementsList");
+        this.updateComponent("controlsForm");
     }
     
     /**
