@@ -42,7 +42,7 @@
         <class>br.com.webbudget.domain.model.entity.security.UserTypeEntity</class>
         <properties>
             <!-- configuracoes do hibernate -->
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.connection.autocommit" value="false"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>

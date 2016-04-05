@@ -25,8 +25,8 @@ package br.com.webbudget.domain.model.entity.movement;
  */
 public enum MovementType {
 
-    MOVEMENT("beans.movement-type.movement"),
-    CARD_INVOICE("beans.movement-type.card-invoice");
+    MOVEMENT("movement-type.movement"),
+    CARD_INVOICE("movement-type.card-invoice");
 
     private final String i18nKey;
 

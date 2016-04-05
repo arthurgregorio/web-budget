@@ -32,7 +32,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -51,6 +50,7 @@ public final class MovementFilter {
     @Setter
     private String criteria;
     
+    @Getter
     @Setter
     private List<FinancialPeriod> periods;
 
@@ -148,12 +148,13 @@ public final class MovementFilter {
         
         final List<Criterion> criterions = new ArrayList<>();
         
-        if (this.periods != null && !this.periods.isEmpty()) {
-            this.periods.stream().forEach(period -> {
-                criterions.add(Restrictions.eq("fp.id", period.getId()));
-            });
-        }
-        return Restrictions.or(criterions.toArray(new Criterion[]{}));
+        final Object[] values = this.periods.stream()
+                .map(FinancialPeriod::getId)
+                .collect(Collectors.toList())
+                .stream()
+                .toArray(Object[]::new);
+        
+        return Restrictions.in("fp.id", values);
     }
 
     /**

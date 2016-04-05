@@ -37,6 +37,7 @@ import br.com.webbudget.domain.model.service.ContactService;
 import br.com.webbudget.domain.model.service.FinancialPeriodService;
 import br.com.webbudget.domain.model.service.MovementService;
 import br.com.webbudget.domain.model.service.WalletService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -90,6 +91,8 @@ public class MovementBean extends AbstractBean {
     @Getter
     private List<CostCenter> costCenters;
     @Getter
+    private List<FinancialPeriod> periods;
+    @Getter
     private List<FinancialPeriod> openPeriods;
     @Getter
     private List<MovementClass> movementClasses;
@@ -136,18 +139,16 @@ public class MovementBean extends AbstractBean {
         this.filter = new MovementFilter();
 
         // cria o filtro por periodo
-        final List<FinancialPeriod> periods = this.financialPeriodService
-                .listFinancialPeriods(null);
+        this.periods = this.financialPeriodService.listFinancialPeriods(null);
+        this.periodsModel = new DualListModel<>(this.periods, new ArrayList<>());
         
         // filtra somente os que estao em aberto
         this.openPeriods = periods.stream()
                 .filter(period -> !period.isClosed())
                 .collect(Collectors.toList());
         
-        this.periodsModel = new DualListModel<>(periods, this.openPeriods);
-        
         // seta a primeira busca sendo pelos periodos em aberto
-        this.filter.setPeriods(this.periodsModel.getTarget());
+        this.filter.setPeriods(this.openPeriods);
     }
 
     /**

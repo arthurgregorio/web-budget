@@ -16,9 +16,11 @@
 -->
 
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           xmlns:h="http://xmlns.jcp.org/jsf/html"
+          xmlns:pe="http://primefaces.org/ui/extensions"
           id="configFilterDialog"
           width="700"
           modal="true" 
@@ -43,7 +45,7 @@
                         <p:pickList id="periodsList"
                                     var="period" 
                                     responsive="true"
-                                    itemValue="#{period}"
+                                    itemValue="#{period}" 
                                     style="display: block"
                                     itemLabel="#{period.identification}"
                                     value="#{movementBean.periodsModel}">
@@ -53,6 +55,8 @@
                             <f:facet name="targetCaption">
                                 #{messages['config-filter.form.selected-periods']}
                             </f:facet>
+                            <o:converter converterId="omnifaces.ListConverter" 
+                                         list="#{movementBean.periods}" />
                         </p:pickList>
                     </div>
                 </div>
@@ -109,7 +113,9 @@
             <div class="col-sm-12 align-right">
                 <p:commandButton value="#{menu['save']}"
                                  update="configFilterForm"
+                                 onstart="PF('searchBlock').block()"
                                  styleClass="btn btn-flat btn-success"
+                                 oncomplete="PF('searchBlock').unblock()"
                                  actionListener="#{movementBean.applyCustomFilters()}"/>
                 <p:spacer width="10"/>
                 <p:commandButton immediate="true"
@@ -118,5 +124,13 @@
                                  onclick="PF('dialogConfigFilter').hide()"/>
             </div>
         </div>
+
+        <pe:blockUI widgetVar="searchBlock"
+                    target="configFilterForm">
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
+        </pe:blockUI>
     </h:form>
 </p:dialog>
