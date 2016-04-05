@@ -59,7 +59,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.5.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -71,14 +71,6 @@
                 <version>2.6</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Implementation-Build>${buildNumber}</Implementation-Build>
-                        </manifestEntries>
-                    </archive>
                 </configuration>
             </plugin>
         </plugins>
@@ -100,14 +92,9 @@
             <id>development</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>env</name>
-                    <value>development</value>
-                </property>
             </activation>
             <properties>
                 <application.version>${project.version}</application.version>
-                <orm.show-sql>true</orm.show-sql>
                 <email.host>${wb.email-host}</email.host>
                 <email.port>${wb.email-port}</email.port>
                 <email.user>${wb.email-user}</email.user>
@@ -116,15 +103,8 @@
         </profile>
         <profile>
             <id>production</id>
-            <activation>
-                <property>
-                    <name>env</name>
-                    <value>production</value>
-                </property>
-            </activation>
             <properties>
                 <application.version>${project.version}</application.version>
-                <orm.show-sql>false</orm.show-sql>
                 <email.host>${wb.email-host}</email.host>
                 <email.port>${wb.email-port}</email.port>
                 <email.user>${wb.email-user}</email.user>
@@ -138,7 +118,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>2.3</version>
+                        <version>2.6</version>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                             <outputDirectory>deployments</outputDirectory>
@@ -193,7 +173,7 @@
         <dependency>
             <groupId>org.omnifaces</groupId>
             <artifactId>omnifaces</artifactId>
-            <version>2.2</version>
+            <version>2.3</version>
         </dependency>
                         
         <!-- lombok -->        
@@ -221,26 +201,26 @@
         <dependency>
             <groupId>com.squareup.okhttp</groupId>
             <artifactId>okhttp</artifactId>
-            <version>2.6.0</version>
+            <version>2.7.5</version>
         </dependency>
         
         <!-- hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.0.5.Final</version>
+            <version>5.1.0.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.0.5.Final</version>
+            <version>5.1.0.Final</version>
         </dependency> 
         
         <!-- hibernate validator -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.2.2.Final</version> 
+            <version>5.2.4.Final</version> 
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -255,7 +235,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator-annotation-processor</artifactId>
-            <version>5.2.2.Final</version> 
+            <version>5.2.4.Final</version> 
         </dependency>
 
         <!-- caelum stella -->
@@ -269,36 +249,36 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
+            <version>3.4</version>
         </dependency>
         
         <!--google gson-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.5</version>
+            <version>2.6.2</version>
         </dependency>
         
         <!-- logger -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.13</version>
+            <version>1.7.20</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.13</version>
+            <version>1.7.20</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.1.3</version>
+            <version>1.1.7</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.3</version>
+            <version>1.1.7</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>

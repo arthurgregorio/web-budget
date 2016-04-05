@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="webBudgetPU" transaction-type="JTA">
-    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-    <jta-data-source>java:/datasources/webBudgetDS</jta-data-source>
-    <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
-    <class>br.com.webbudget.domain.model.entity.wallet.Wallet</class>
-    <class>br.com.webbudget.domain.model.entity.wallet.WalletBalance</class>
-    <class>br.com.webbudget.domain.model.entity.card.Card</class>
-    <class>br.com.webbudget.domain.model.entity.card.CardInvoice</class>
-    <class>br.com.webbudget.domain.model.entity.closing.Closing</class>
-    <class>br.com.webbudget.domain.model.entity.contact.Telephone</class>
-    <class>br.com.webbudget.domain.model.entity.contact.Contact</class>
-    <class>br.com.webbudget.domain.model.entity.movement.Apportionment</class>
-    <class>br.com.webbudget.domain.model.entity.movement.MovementClass</class>
-    <class>br.com.webbudget.domain.model.entity.movement.Movement</class>
-    <class>br.com.webbudget.domain.model.entity.movement.FixedMovement</class>
-    <class>br.com.webbudget.domain.model.entity.movement.FinancialPeriod</class>
-    <class>br.com.webbudget.domain.model.entity.movement.CostCenter</class>
-    <class>br.com.webbudget.domain.model.entity.movement.Payment</class>
-    <class>br.com.webbudget.domain.model.entity.movement.Launch</class>
-    <class>br.com.webbudget.domain.model.entity.message.UserPrivateMessage</class>
-    <class>br.com.webbudget.domain.model.entity.message.PrivateMessage</class>
-    <class>br.com.webbudget.domain.model.entity.security.RelationshipTypeEntity</class>
-    <class>br.com.webbudget.domain.model.entity.security.GroupMembershipTypeEntity</class>
-    <class>br.com.webbudget.domain.model.entity.security.PartitionTypeEntity</class>
-    <class>br.com.webbudget.domain.model.entity.security.GrantTypeEntity</class>
-    <class>br.com.webbudget.domain.model.entity.security.PasswordTypeEntity</class>
-    <class>br.com.webbudget.domain.model.entity.security.RelationshipIdentityTypeEntity</class>
-    <class>br.com.webbudget.domain.model.entity.security.GroupTypeEntity</class>
-    <class>br.com.webbudget.domain.model.entity.security.RoleTypeEntity</class>
-    <class>br.com.webbudget.domain.model.entity.security.UserTypeEntity</class>
-    <class>br.com.webbudget.domain.model.entity.system.Configuration</class>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
-    <!-- cartoes -->
-    <!-- fechamento -->
-    <!-- contatos -->
-    <!-- mensagens -->
-    <!-- movimentos -->
-    <!-- configuracoes -->
-    <!-- carteiras/saldos -->
-    <!-- security -->
-    <properties>
-      <!-- configuracoes do hibernate -->
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
-      <property name="hibernate.show_sql" value="${orm.show-sql}"/>
-      <property name="hibernate.connection.autocommit" value="false"/>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
-      <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
-      <!-- desabilita JSR-303 no save/update -->
-      <property name="javax.persistence.validation.mode" value="none"/>
-    </properties>
-  </persistence-unit>
+    <persistence-unit name="webBudgetPU" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:/datasources/webBudgetDS</jta-data-source>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <!-- cartoes -->
+        <class>br.com.webbudget.domain.model.entity.card.Card</class>
+        <class>br.com.webbudget.domain.model.entity.card.CardInvoice</class>
+        <!-- fechamento -->
+        <class>br.com.webbudget.domain.model.entity.closing.Closing</class>
+        <!-- contatos -->
+        <class>br.com.webbudget.domain.model.entity.contact.Telephone</class>
+        <class>br.com.webbudget.domain.model.entity.contact.Contact</class>
+        <!-- mensagens -->
+        <class>br.com.webbudget.domain.model.entity.message.UserPrivateMessage</class>
+        <class>br.com.webbudget.domain.model.entity.message.PrivateMessage</class>
+        <!-- movimentos -->
+        <class>br.com.webbudget.domain.model.entity.movement.Apportionment</class>
+        <class>br.com.webbudget.domain.model.entity.movement.MovementClass</class>
+        <class>br.com.webbudget.domain.model.entity.movement.Movement</class>
+        <class>br.com.webbudget.domain.model.entity.movement.FixedMovement</class>
+        <class>br.com.webbudget.domain.model.entity.movement.FinancialPeriod</class>
+        <class>br.com.webbudget.domain.model.entity.movement.CostCenter</class>
+        <class>br.com.webbudget.domain.model.entity.movement.Payment</class>
+        <class>br.com.webbudget.domain.model.entity.movement.Launch</class>
+        <!-- configuracoes -->
+        <class>br.com.webbudget.domain.model.entity.system.Configuration</class>
+        <!-- carteiras/saldos -->
+        <class>br.com.webbudget.domain.model.entity.wallet.Wallet</class>
+        <class>br.com.webbudget.domain.model.entity.wallet.WalletBalance</class>
+        <!-- security -->
+        <class>br.com.webbudget.domain.model.entity.security.RelationshipTypeEntity</class>
+        <class>br.com.webbudget.domain.model.entity.security.GroupMembershipTypeEntity</class>
+        <class>br.com.webbudget.domain.model.entity.security.PartitionTypeEntity</class>
+        <class>br.com.webbudget.domain.model.entity.security.GrantTypeEntity</class>
+        <class>br.com.webbudget.domain.model.entity.security.PasswordTypeEntity</class>
+        <class>br.com.webbudget.domain.model.entity.security.RelationshipIdentityTypeEntity</class>
+        <class>br.com.webbudget.domain.model.entity.security.GroupTypeEntity</class>
+        <class>br.com.webbudget.domain.model.entity.security.RoleTypeEntity</class>
+        <class>br.com.webbudget.domain.model.entity.security.UserTypeEntity</class>
+        <properties>
+            <!-- configuracoes do hibernate -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.connection.autocommit" value="false"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
+            <!-- desabilita JSR-303 no save/update -->
+            <property name="javax.persistence.validation.mode" value="none"/>
+        </properties>
+    </persistence-unit>
 </persistence>
