@@ -139,7 +139,8 @@
                                                 decimalSeparator="," 
                                                 thousandSeparator="." 
                                                 value="#{movementBean.movement.value}"
-                                                disabled="#{not empty movementBean.movement.apportionments}">
+                                                disabled="#{movementBean.viewState ne 'ADDING' 
+                                                            or not empty movementBean.movement.apportionments}">
                                     <f:converter converterId="javax.faces.BigDecimal" />
                                 </pe:inputNumber>
                             </div>
@@ -167,7 +168,7 @@
                     <div class="col-sm-6">
                         <wb:apportionmentBox id="apportionmentBox"
                                              baseBean="#{movementBean}"
-                                             disabled="#{movementBean.viewState eq 'DETAILING'}"
+                                             disabled="#{movementBean.viewState ne 'ADDING'}"
                                              showDialogAction="#{movementBean.showApportionmentDialog()}"
                                              apportionmentsList="#{movementBean.movement.apportionments}"/>
                     </div>
