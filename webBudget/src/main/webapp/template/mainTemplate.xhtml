@@ -140,23 +140,21 @@
 
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['financial']}</li>
-                        <li class="#{activeMenu eq 'fixedMovement' 
-                                     ? 'active' : activeMenu eq 'movement' 
-                                     ? 'active' : ''} treeview">
+                        <li class="treeview #{activeMenu eq 'movements' ? 'active' : ''}">
                             <a href="#">
                                 <i class="fa fa-money"></i> 
                                 <span>#{menu['financial.movements']}</span> 
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li class="#{activeMenu eq 'fixedMovement' ? 'active' : ''}"
+                                <li class="#{activeSubmenu eq 'fixed' ? 'active' : ''}"
                                     jsf:rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_VIEW)}">
                                     <p:link href="/main/financial/fixedMovements/listFixedMovements.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         #{menu['financial.movements.fixed']}
                                     </p:link>
                                 </li>
-                                <li class="#{activeMenu eq 'movement' ? 'active' : ''}"
+                                <li class="#{activeSubmenu eq 'period' ? 'active' : ''}"
                                     jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_VIEW)}">
                                     <p:link href="/main/financial/movement/listMovements.xhtml">
                                         <i class="fa fa-circle-o"></i> 

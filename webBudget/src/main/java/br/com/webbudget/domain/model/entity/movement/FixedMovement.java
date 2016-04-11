@@ -144,14 +144,14 @@ public class FixedMovement extends PersistentEntity {
 
         // checa se nao esta sendo inserido outro exatamente igual
         if (this.apportionments.contains(apportionment)) {
-            throw new InternalServiceError("fixed-movement.validate.apportionment-duplicated");
+            throw new InternalServiceError("error.apportionment.duplicated");
         }
 
         // checa se nao esta inserindo outro para o mesmo CC e MC
         for (Apportionment a : this.apportionments) {
             if (a.getCostCenter().equals(apportionment.getCostCenter())
                     && a.getMovementClass().equals(apportionment.getMovementClass())) {
-                throw new InternalServiceError("fixed-movement.validate.apportionment-duplicated");
+                throw new InternalServiceError("error.apportionment.duplicated");
             }
         }
 
@@ -179,56 +179,40 @@ public class FixedMovement extends PersistentEntity {
     }
 
     /**
+     * Remove um rateio pelo seu codigo, caso nao localize o mesmo dispara uma 
+     * exception para informor ao usuario que nao podera fazer nada pois sera
+     * um problema do sistema...
+     * 
+     * LOL WHAT!?
      *
-     * @param id
+     * @param code o codigo
      */
-    public void removeApportionment(String id) {
+    public void removeApportionment(String code) {
 
-        Apportionment toRemove = null;
+        final Apportionment toRemove = this.apportionments.stream()
+                .filter(apportionment -> apportionment.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(() -> new InternalServiceError(
+                        "error.apportionment.not-found", code));
 
-        for (Apportionment apportionment : this.apportionments) {
-            if (id.equals(apportionment.getCode())) {
-                toRemove = apportionment;
-            }
+        // se o rateio ja foi salvo, adicionamos ele em outra lista 
+        // para que quando salvar o movimento ele seja deletado
+        if (toRemove.isSaved()) {
+            this.deletedApportionments.add(toRemove);
         }
 
+        // remove da lista principal
         this.apportionments.remove(toRemove);
-        this.addDeletedApportionment(toRemove);
-    }
-
-    /**
-     *
-     * @param apportionment
-     */
-    public void removeApportionment(Apportionment apportionment) {
-        this.apportionments.remove(apportionment);
-        this.addDeletedApportionment(apportionment);
-    }
-
-    /**
-     * Usado em caso de um rateio jah persistente ser apagado, ele precisara ser
-     * removido do banco tambem
-     *
-     * @param apportionment o rateio removido da lista que sera colocado na
-     * lista de deletados somente se ele ja houve sido persistido
-     */
-    private void addDeletedApportionment(Apportionment apportionment) {
-        if (apportionment.isSaved()) {
-            this.deletedApportionments.add(apportionment);
-        }
     }
 
     /**
      * @return o valor da somatoria dos rateios
      */
     public BigDecimal getApportionmentsTotal() {
-
-        final BigDecimal total = this.apportionments
+        return this.apportionments
                 .stream()
                 .map(Apportionment::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return total;
     }
 
     /**
@@ -252,17 +236,17 @@ public class FixedMovement extends PersistentEntity {
 
         if (this.getApportionments().isEmpty()) {
             throw new InternalServiceError(
-                    "error.fixed-movement.empty-apportionment");
+                    "error.apportionment.empty-apportionment");
         } else if (this.getApportionmentsTotal().compareTo(this.value) > 0) {
             final String difference = String.format("%10.2f",
                     this.getApportionmentsTotal().subtract(this.value));
             throw new InternalServiceError(
-                    "error.fixed-movement.gt-value", difference);
+                    "error.apportionment.gt-value", difference);
         } else if (this.getApportionmentsTotal().compareTo(this.value) < 0) {
             final String difference = String.format("%10.2f",
                     this.value.subtract(this.getApportionmentsTotal()));
             throw new InternalServiceError(
-                    "error.fixed-movement.lt-value", difference);
+                    "error.apportionment.lt-value", difference);
         }
     }
 

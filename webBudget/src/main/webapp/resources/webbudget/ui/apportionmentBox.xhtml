@@ -29,7 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         <c:attribute name="valueInput"
                      default="inValue"/>
-
+        <c:attribute name="disabled" 
+                     type="java.lang.Boolean"/>
+        
         <c:attribute required="true"
                      type="java.util.List"
                      name="apportionmentsList"/>
@@ -48,10 +50,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="pull-right">
                     <p:commandButton update="messages"
                                      value="#{menu['add']}"
+                                     disabled="#{cc.attrs.disabled}"
                                      styleClass="btn btn-flat btn-warning"
                                      process="@this,#{cc.attrs.valueInput}"
-                                     actionListener="#{cc.attrs.showDialogAction}"
-                                     disabled="#{cc.attrs.baseBean.viewState ne 'ADDING'}"/>
+                                     actionListener="#{cc.attrs.showDialogAction}"/>
                 </div>
             </div>
             <div class="col-sm-12">
@@ -85,8 +87,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <p:commandButton immediate="true"
                                          icon="fa fa-remove"
                                          title="#{menu['delete']}"
+                                         disabled="#{cc.attrs.disabled}"
                                          styleClass="btn btn-flat btn-default"
-                                         disabled="#{cc.attrs.baseBean.viewState ne 'ADDING'}"
                                          actionListener="#{cc.attrs.baseBean.deleteApportionment(apportionment.code)}" />
                     </p:column>
                 </p:dataTable>

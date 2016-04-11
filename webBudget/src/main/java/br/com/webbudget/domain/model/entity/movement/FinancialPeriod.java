@@ -22,6 +22,7 @@ import br.com.webbudget.domain.model.entity.closing.Closing;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -162,5 +163,19 @@ public class FinancialPeriod extends PersistentEntity {
      */
     public boolean isActive() {
         return !this.isExpired() && !this.isClosed();
+    }
+    
+    /**
+     * @return a data inicial em formato string
+     */
+    public String getStartAsString() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.start);
+    }
+    
+    /**
+     * @return a data de fim em formato string
+     */
+    public String getEndAsString() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.end);
     }
 }

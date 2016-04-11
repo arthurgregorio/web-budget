@@ -22,31 +22,37 @@
           width="700"
           modal="true" 
           position="top"
-          closable="false"
           resizable="false" 
           closeOnEscape="true"
+          styleClass="margin-t-30"
           widgetVar="dialogContact" 
-          styleClass="dialog-search-contatct"
           header="#{messages['contact.dialog.title']}">
 
-    <h:form prependId="false">
-        
+    <h:form id="contactForm">
+
         <p:focus context="inContactFilter"/>
-        
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-9 form-group form-group-l">
-                <p:inputText id="inContactFilter" 
-                             value="#{movementBean.contactFilter}" 
-                             placeholder="#{messages['contact.filter.types']}"/>
-            </div>
-            <div class="ui-grid-col-3 div-align-right">
-                <p:commandButton value="#{menu['filter']}"
-                                 styleClass="ui-button-info"
-                                 action="#{movementBean.filterContactsList()}"/>
+        <p:defaultCommand target="btSearch"/>
+
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <div class="input-group">
+                    <p:inputText id="inContactFilter" 
+                                 style="z-index: 0"
+                                 styleClass="form-control"
+                                 value="#{movementBean.contactFilter}" 
+                                 placeholder="#{messages['filter.contact']}"/>
+                    <div class="input-group-btn">
+                        <p:commandLink id="btSearch"
+                                       process="contactForm"
+                                       value="#{menu['search']}"
+                                       styleClass="btn btn-flat btn-warning"
+                                       action="#{movementBean.filterContactsList()}"/>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="ui-grid-row div-pd-tb-10">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-sm-12">
                 <p:dataTable id="contactsList" 
                              rows="15"
                              var="contact"
@@ -56,8 +62,8 @@
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
                              value="#{movementBean.contacts}"
-                             selection="#{movementBean.movement.contact}"
-                             emptyMessage="#{messages['contact.list.empty']}">
+                             emptyMessage="#{messages['list.empty']}"
+                             selection="#{movementBean.movement.contact}">
 
                     <p:ajax event="rowSelect" 
                             listener="#{movementBean.onContactSelect()}" />
@@ -66,23 +72,16 @@
                         #{contact.name}
                     </p:column>
                     <p:column width="20%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{messages['contact.list.type']}">
-                        #{messages[contact.contactType]}
+                        #{enums[contact.contactType]}
                     </p:column>
                     <p:column width="20%" 
-                              styleClass="div-align-center"
+                              styleClass="align-center"
                               headerText="#{messages['contact.list.document']}">
-                        #{contact.document}
+                        #{contact.documentFormated}
                     </p:column>
                 </p:dataTable>
-            </div>
-        </div>
-        <div class="ui-grid-row div-mg-t-10">
-            <div class="ui-grid-col-12 div-align-right">
-                <p:commandButton immediate="true"
-                                 value="#{menu['cancel']}"
-                                 onclick="PF('dialogContact').hide()"/>
             </div>
         </div>
     </h:form>

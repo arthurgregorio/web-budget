@@ -24,7 +24,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="movement"/>
+    <ui:param name="activeMenu" value="movements"/>
+    <ui:param name="activeSubmenu" value="period"/>
 
     <f:metadata>
         <f:viewAction action="#{movementBean.initializeListing()}"/>
@@ -63,15 +64,24 @@
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="input-group">
+                                <div class="input-group-btn">
+                                    <p:commandButton immediate="true"
+                                                     icon="fa fa-filter"
+                                                     styleClass="btn btn-flat btn-default"
+                                                     title="#{messages['filter.configure']}"
+                                                     actionListener="#{movementBean.showFilterConfigDialog()}"/>
+                                </div>
                                 <p:inputText styleClass="form-control"
                                              value="#{movementBean.filter.criteria}"
                                              placeholder="#{messages['filter.movement']}" />
                                 <div class="input-group-btn">
-                                    <p:commandButton immediate="true"
-                                                     icon="fa fa-gear"
-                                                     styleClass="btn btn-flat btn-default"
-                                                     title="#{messages['filter.configure']}"
-                                                     actionListener="#{movementBean.showFilterConfigDialog()}"/>
+                                    <p:commandButton id="btSearch"
+                                                     update="movementsList"
+                                                     value="#{menu['search']}"
+                                                     onstart="PF('listBlock').show()"
+                                                     oncomplete="PF('listBlock').hide()"
+                                                     styleClass="btn btn-flat btn-warning"/>
+                                    <p:spacer width="10"/>
                                     <p:commandButton icon="fa fa-trash-o"
                                                      update="movementsList"
                                                      onstart="PF('listBlock').show()"
@@ -79,12 +89,6 @@
                                                      title="#{messages['filter.clear']}"
                                                      styleClass="btn btn-flat btn-danger"
                                                      actionListener="#{movementBean.clearFilters()}"/>
-                                    <p:commandButton id="btSearch"
-                                                     update="movementsList"
-                                                     value="#{menu['search']}"
-                                                     onstart="PF('listBlock').show()"
-                                                     oncomplete="PF('listBlock').hide()"
-                                                     styleClass="btn btn-flat btn-warning"/>
                                 </div>
                             </div>
                         </div>

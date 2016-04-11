@@ -30,8 +30,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                      type="java.util.List"
                      name="movementClassList"/>
         <c:attribute required="true"
+                     name="blockForm"
+                     type="java.lang.String"/>
+        <c:attribute required="true"
                      name="apportionment"
-                     type="br.com.webbudget.domain.entity.movement.Apportionment"/>
+                     type="br.com.webbudget.domain.model.entity.movement.Apportionment"/>
 
         <c:attribute required="true"
                      name="onCostCenterSelect" 
@@ -40,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <c:implementation>
         <div class="row">
-            <div class="col-sm-4 form-group">
+            <div class="col-sm-6 form-group">
                 <p:outputLabel for="inApportionment" 
                                value="#{messages['apportionment.form.value']}: "/>
                 <pe:inputNumber id="inApportionment" 
@@ -88,5 +91,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </p:selectOneMenu>
             </div>                        
         </div>
+        
+        <p:blockUI trigger="inCostCenter"
+                   block="#{cc.attrs.blockForm}"
+                   widgetVar="#{cc.attrs.id}_block" >
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
+        </p:blockUI>
     </c:implementation>
 </html>

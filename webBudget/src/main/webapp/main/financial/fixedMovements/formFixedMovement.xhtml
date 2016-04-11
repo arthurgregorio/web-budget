@@ -26,7 +26,8 @@
                 xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="fixedMovement"/>
+    <ui:param name="activeSubmenu" value="fixed"/>
+    <ui:param name="activeMenu" value="movements"/>
 
     <f:metadata>
         <f:viewAction action="#{fixedMovementBean.initializeForm(param.fixedMovementId, param.detailing)}"/>
@@ -159,6 +160,7 @@
                     <div class="col-sm-6">
                         <wb:apportionmentBox id="apportionmentBox"
                                              baseBean="#{fixedMovementBean}"
+                                             disabled="#{movementBean.viewState ne 'ADDING'}"
                                              showDialogAction="#{fixedMovementBean.showApportionmentDialog()}"
                                              apportionmentsList="#{fixedMovementBean.fixedMovement.apportionments}"/>
                     </div>

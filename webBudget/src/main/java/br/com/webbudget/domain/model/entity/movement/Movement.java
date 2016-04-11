@@ -21,6 +21,7 @@ import br.com.webbudget.domain.model.entity.contact.Contact;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.card.CardInvoice;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -101,7 +102,7 @@ public class Movement extends PersistentEntity {
     @OneToOne(cascade = REMOVE)
     @JoinColumn(name = "id_payment")
     private Payment payment;
-    
+
     @Getter
     @Setter
     @ManyToOne
@@ -147,7 +148,7 @@ public class Movement extends PersistentEntity {
      */
     public Movement() {
 
-        this.code = this.createMovementCode();
+        this.code = ApplicationUtils.createRamdomCode(5, false);
 
         this.apportionments = new ArrayList<>();
         this.deletedApportionments = new ArrayList<>();
@@ -158,48 +159,22 @@ public class Movement extends PersistentEntity {
     }
 
     /**
+     * Metodo para adicao de rateios ao movimento
      *
-     * @return
-     */
-    private String createMovementCode() {
-
-        long decimalNumber = System.nanoTime();
-
-        String generated = "";
-        final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        synchronized (this.getClass()) {
-
-            int mod;
-            int authCodeLength = 0;
-
-            while (decimalNumber != 0 && authCodeLength < 5) {
-
-                mod = (int) (decimalNumber % 36);
-                generated = digits.substring(mod, mod + 1) + generated;
-                decimalNumber = decimalNumber / 36;
-                authCodeLength++;
-            }
-        }
-        return generated;
-    }
-
-    /**
-     *
-     * @param apportionment
+     * @param apportionment o rateio a ser adiocionado
      */
     public void addApportionment(Apportionment apportionment) {
 
         // checa se nao esta sendo inserido outro exatamente igual
         if (this.apportionments.contains(apportionment)) {
-            throw new InternalServiceError("movement.validate.apportionment-duplicated");
+            throw new InternalServiceError("error.apportionment.duplicated");
         }
 
         // checa se nao esta inserindo outro para o mesmo CC e MC
         for (Apportionment a : this.apportionments) {
             if (a.getCostCenter().equals(apportionment.getCostCenter())
                     && a.getMovementClass().equals(apportionment.getMovementClass())) {
-                throw new InternalServiceError("movement.validate.apportionment-duplicated");
+                throw new InternalServiceError("error.apportionment.duplicated");
             }
         }
 
@@ -207,65 +182,52 @@ public class Movement extends PersistentEntity {
         // haja rateios com debitos e creditos juntos
         if (!this.apportionments.isEmpty()) {
 
-            if ((this.isRevenue() && apportionment.isForExpenses())
-                    || (this.isExpense() && apportionment.isForRevenues())) {
-                throw new InternalServiceError("movement.validate.apportionment-debit-credit");
+            final MovementClassType direction = this.getDirection();
+            final MovementClassType apportionmentDirection
+                    = apportionment.getMovementClass().getMovementClassType();
+
+            if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT)
+                    || (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN)) {
+                throw new InternalServiceError("error.apportionment.mix-of-classes");
             }
         }
 
         // impossivel ter um rateio com valor igual a zero
-        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0) {
-            throw new InternalServiceError("movement.validate.apportionment-invalid-value");
+        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0 || 
+                apportionment.getValue().compareTo(this.value) > 0) {
+            throw new InternalServiceError("error.apportionment.invalid-value");
         }
-        
-        // impossivel ter um rateio com valor maior que o do movimento
-        if (apportionment.getValue().compareTo(this.value) > 0) {
-            throw new InternalServiceError("movement.validate.apportionment-invalid-value");
-        }
-        
+
         this.apportionments.add(apportionment);
     }
 
     /**
+     * Remove um rateio pelo seu codigo, caso nao localize o mesmo dispara uma 
+     * exception para informor ao usuario que nao podera fazer nada pois sera
+     * um problema do sistema...
+     * 
+     * LOL WHAT!?
      *
-     * @param id
+     * @param code o codigo
      */
-    public void removeApportionment(String id) {
+    public void removeApportionment(String code) {
 
-        Apportionment toRemove = null;
+        final Apportionment toRemove = this.apportionments.stream()
+                .filter(apportionment -> apportionment.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(() -> new InternalServiceError(
+                        "error.apportionment.not-found", code));
 
-        for (Apportionment apportionment : this.apportionments) {
-            if (id.equals(apportionment.getCode())) {
-                toRemove = apportionment;
-            }
+        // se o rateio ja foi salvo, adicionamos ele em outra lista 
+        // para que quando salvar o movimento ele seja deletado
+        if (toRemove.isSaved()) {
+            this.deletedApportionments.add(toRemove);
         }
 
+        // remove da lista principal
         this.apportionments.remove(toRemove);
-        this.addDeletedApportionment(toRemove);
     }
 
-    /**
-     *
-     * @param apportionment
-     */
-    public void removeApportionment(Apportionment apportionment) {
-        this.apportionments.remove(apportionment);
-        this.addDeletedApportionment(apportionment);
-    }
-
-    /**
-     * Usado em caso de um rateio jah persistente ser apagado, ele precisara ser
-     * removido do banco tambem
-     *
-     * @param apportionment o rateio removido da lista que sera colocado na
-     * lista de deletados somente se ele ja houve sido persistido
-     */
-    private void addDeletedApportionment(Apportionment apportionment) {
-        if (apportionment.isSaved()) {
-            this.deletedApportionments.add(apportionment);
-        }
-    }
-    
     /**
      * @return o nome do contato vinculado ao movimento
      */
@@ -277,11 +239,12 @@ public class Movement extends PersistentEntity {
      * @return o valor da somatoria dos rateios
      */
     public BigDecimal getApportionmentsTotal() {
-        return this.apportionments.stream()
+        return this.apportionments
+                .stream()
                 .map(Apportionment::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-    
+
     /**
      * @return o valor a ser rateado descontando o valor ja rateado
      */
@@ -290,38 +253,29 @@ public class Movement extends PersistentEntity {
     }
 
     /**
+     * @return se existe ou nao valores para serem rateados
+     */
+    public boolean hasValueToDivide() {
+        return this.getApportionmentsTotal().compareTo(this.value) == 0;
+    }
+
+    /**
      * @return se este movimento foi pago com cartao de credito
      */
     public boolean isPaidOnCreditCard() {
-        return this.isExpense() && this.payment.getPaymentMethodType() 
+        return this.isExpense() && this.payment.getPaymentMethodType()
                 == PaymentMethodType.CREDIT_CARD;
     }
-    
+
     /**
      * @return se este movimento eh uma fatura de cartao ou nao
      */
     public boolean isCardInvoice() {
         return this.movementType == MovementType.CARD_INVOICE;
     }
-    
-    /**
-     * @return false se o valor dos rateios for menor ou maior que o do
-     * movimento
-     */
-    public boolean isApportionmentsValid() {
-        return this.getApportionmentsTotal().compareTo(this.value) == 0;
-    }
 
     /**
-     * @return a diferenca entre o valor dos produtos e o valor do movimento
-     */
-    public BigDecimal getApportionmentsDifference() {
-        return this.getApportionmentsTotal().subtract(this.value);
-    }
-
-    /**
-     *
-     * @return
+     * @return se temos um movimento editavel
      */
     public boolean isEditable() {
         return (this.movementStateType == MovementStateType.OPEN
@@ -332,27 +286,24 @@ public class Movement extends PersistentEntity {
      * @return se o movimento esta pago ou nao
      */
     public boolean isPaid() {
-        return this.movementStateType == MovementStateType.PAID || 
-                this.movementStateType == MovementStateType.PAID;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public boolean isPayable() {
-        return (this.movementStateType == MovementStateType.OPEN
-                && !this.financialPeriod.isClosed());
+        return this.movementStateType == MovementStateType.PAID;
     }
 
     /**
-     *
-     * @return
+     * @return se temos um movimento pagavel
+     */
+    public boolean isPayable() {
+        return this.movementStateType == MovementStateType.OPEN
+                && !this.financialPeriod.isClosed();
+    }
+
+    /**
+     * @return se temos um movimento deletavel
      */
     public boolean isDeletable() {
-        return ((this.movementStateType == MovementStateType.OPEN
+        return (this.movementStateType == MovementStateType.OPEN
                 || this.movementStateType == MovementStateType.PAID)
-                && !this.financialPeriod.isClosed());
+                && !this.financialPeriod.isClosed();
     }
 
     /**
@@ -361,14 +312,14 @@ public class Movement extends PersistentEntity {
     public boolean isOverdue() {
         return this.dueDate.isBefore(LocalDate.now());
     }
-    
+
     /**
      * @return se temos ou nao nao movimento a data de pagamento setada
      */
     public boolean hasDueDate() {
         return this.dueDate != null;
     }
-    
+
     /**
      * @return se este movimento e uma despesa
      */
@@ -379,7 +330,7 @@ public class Movement extends PersistentEntity {
                 .get()
                 .isForExpenses();
     }
-    
+
     /**
      * @return se este movimento e uma receita
      */
@@ -390,25 +341,59 @@ public class Movement extends PersistentEntity {
                 .get()
                 .isForRevenues();
     }
-    
+
     /**
      * @return a data de pagamento deste movimento
      */
     public LocalDate getPaymentDate() {
         return this.payment.getPaymentDate();
     }
-    
+
     /**
      * @return todos os centros de custo que este movimento faz parte
      */
     public List<CostCenter> getCostCenters() {
-        
+
         final List<CostCenter> costCenters = new ArrayList<>();
-        
+
         this.apportionments.stream().forEach((apportionment) -> {
             costCenters.add(apportionment.getMovementClass().getCostCenter());
         });
-        
+
         return costCenters;
+    }
+    
+    /**
+     * De acordo com a primeira classe do rateio, diz se o movimento e de
+     * entrada ou saida
+     *
+     * @return a direcao do movimento de acordo com as classes usadas
+     */
+    public MovementClassType getDirection() {
+        for (Apportionment apportionment : this.apportionments) {
+            return apportionment.getMovementClass().getMovementClassType();
+        }
+        return null;
+    }
+    
+    /**
+     * Realiza a validacao dos rateios do movimento fixo
+     */
+    public void validateApportionments() {
+
+        if (this.getApportionments().isEmpty()) {
+            throw new InternalServiceError(
+                    "error.apportionment.empty-apportionment");
+        } else if (this.getApportionmentsTotal().compareTo(this.value) > 0) {
+            final String difference = String.format("%10.2f",
+                    this.getApportionmentsTotal().subtract(this.value));
+            throw new InternalServiceError(
+                    "error.apportionment.gt-value", difference);
+        } else if (this.getApportionmentsTotal().compareTo(this.value) < 0) {
+            final String difference = String.format("%10.2f",
+                    this.value.subtract(this.getApportionmentsTotal()));
+            throw new InternalServiceError(
+                    "error.apportionment.lt-value", difference);
+        }
     }
 }

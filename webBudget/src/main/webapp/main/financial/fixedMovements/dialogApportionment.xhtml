@@ -38,7 +38,8 @@
             </div> 
         </div> 
 
-        <wb:apportionmentForm costCenterList="#{fixedMovementBean.costCenters}"
+        <wb:apportionmentForm blockForm="apportionmentForm"
+                              costCenterList="#{fixedMovementBean.costCenters}"
                               apportionment="#{fixedMovementBean.apportionment}"
                               movementClassList="#{fixedMovementBean.movementClasses}"
                               onCostCenterSelect="#{fixedMovementBean.loadMovementClasses()}"/>

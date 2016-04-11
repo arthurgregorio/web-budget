@@ -32,6 +32,7 @@ import br.com.webbudget.domain.model.entity.wallet.Wallet;
 import br.com.webbudget.domain.misc.filter.MovementFilter;
 import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.MovementsListModel;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.service.CardService;
 import br.com.webbudget.domain.model.service.ContactService;
 import br.com.webbudget.domain.model.service.FinancialPeriodService;
@@ -63,7 +64,7 @@ public class MovementBean extends AbstractBean {
     @Getter
     @Setter
     private String contactFilter;
-    
+
     @Getter
     @Setter
     private MovementFilter filter;
@@ -74,7 +75,7 @@ public class MovementBean extends AbstractBean {
     @Getter
     @Setter
     private Apportionment apportionment;
-    
+
     @Getter
     private Payment payment;
     @Getter
@@ -93,13 +94,7 @@ public class MovementBean extends AbstractBean {
     @Getter
     private List<FinancialPeriod> periods;
     @Getter
-    private List<FinancialPeriod> openPeriods;
-    @Getter
     private List<MovementClass> movementClasses;
-    
-    @Getter
-    @Setter
-    private DualListModel<FinancialPeriod> periodsModel;
 
     @Inject
     private CardService cardService;
@@ -115,16 +110,20 @@ public class MovementBean extends AbstractBean {
     @Getter
     private AbstractLazyModel<Movement> movementsModel;
 
+    @Getter
+    @Setter
+    private DualListModel<FinancialPeriod> periodsModel;
+
     /**
      * Inicializamos os objetos necessarios
      */
     @PostConstruct
     protected void initialize() {
-        
+
         // inicializa o model customizado
         this.movementsModel = new MovementsListModel(
                 this.movementService, () -> this.getFilter());
-        
+
         // inicializa o filtro
         this.filter = new MovementFilter();
     }
@@ -141,31 +140,34 @@ public class MovementBean extends AbstractBean {
         // cria o filtro por periodo
         this.periods = this.financialPeriodService.listFinancialPeriods(null);
         this.periodsModel = new DualListModel<>(this.periods, new ArrayList<>());
-        
-        // filtra somente os que estao em aberto
-        this.openPeriods = periods.stream()
-                .filter(period -> !period.isClosed())
-                .collect(Collectors.toList());
-        
+
         // seta a primeira busca sendo pelos periodos em aberto
-        this.filter.setPeriods(this.openPeriods);
+        this.filter.setPeriods(this.getOpenPeriods());
     }
 
     /**
      * Inicializa o form de cadastro, edicao ou visualizacao dos movimentos
-     * 
+     *
      * @param movementId o id do movimento a ser visualizado ou editado
      * @param viewState o estado da tela a ser aplicado
      */
     public void initializeForm(long movementId, String viewState) {
 
         this.viewState = ViewState.valueOf(viewState);
-        
+
+        this.costCenters = this.movementService.listCostCenters(false);
+        this.periods = this.financialPeriodService.listFinancialPeriods(false);
+
+        if (this.viewState == ViewState.ADDING) {
+            this.movement = new Movement();
+        } else {
+            this.movement = this.movementService.findMovementById(movementId);
+        }
     }
 
     /**
      * Inicializa o formulario de pagamento de movimentos
-     * 
+     *
      * @param movementId o id do movimento a ser pago
      */
     public void initializePayment(long movementId) {
@@ -173,17 +175,48 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
+     * Salva o movimento
+     */
+    public void doSave() {
+        try {
+            this.movementService.saveMovement(this.movement);
+            this.movement = new Movement();
+            this.addInfo(true, "movement.saved");
+        } catch (InternalServiceError ex) {
+            this.addError(false, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(false, "error.undefined-error", ex.getMessage());
+        } 
+    }
+
+    /**
+     *
+     */
+    public void doUpdate() {
+        try {
+            this.movement = this.movementService.updateMovement(this.movement);
+            this.addInfo(true, "movement.updated");
+        } catch (InternalServiceError ex) {
+            this.addError(false, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(false, "error.undefined-error", ex.getMessage());
+        } 
+    }
+
+    /**
      * @return volta para a tela de listagem
      */
-    public String changeToListing() {
+    public String changeToList() {
         return "listMovements.xhtml?faces-redirect=true";
     }
-    
+
     /**
      * @return envia o usuario para a tela de cadastro
      */
     public String changeToAdd() {
-        return "formMovement.xhtml?faces-redirect=true&viewState=" 
+        return "formMovement.xhtml?faces-redirect=true&viewState="
                 + ViewState.ADDING;
     }
 
@@ -192,10 +225,10 @@ public class MovementBean extends AbstractBean {
      * @return a tela de edicao
      */
     public String changeToEdit(long movementId) {
-        return "formMovement.xhtml?faces-redirect=true&movementId=" 
+        return "formMovement.xhtml?faces-redirect=true&movementId="
                 + movementId + "&viewState=" + ViewState.EDITING;
     }
-    
+
     /**
      * @param movementId o id do movimento a ser excluido
      */
@@ -203,12 +236,12 @@ public class MovementBean extends AbstractBean {
         this.movement = this.movementService.findMovementById(movementId);
         this.updateAndOpenDialog("deleteMovementDialog", "dialogDeleteMovement");
     }
-    
+
     /**
      * Da um redirect para os detalhes do movimento
      */
     public void changeToDetail() {
-        this.redirectTo("formMovement.xhtml?faces-redirect=true&movementId=" 
+        this.redirectTo("formMovement.xhtml?faces-redirect=true&movementId="
                 + this.movement.getId() + "&viewState=" + ViewState.DETAILING);
     }
 
@@ -219,42 +252,150 @@ public class MovementBean extends AbstractBean {
     public String changeToPay(long movementId) {
         return "formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
     }
-    
+
     /**
-     * Aplica os filtros customizados selecionados na listagem de movimentos
+     * Abre a dialog de busca de contatos
      */
-    public void applyCustomFilters() {
-        
-        this.filter.setPeriods(this.periodsModel.getTarget());
-        
-        this.updateComponent("movementsList");
-        this.closeDialog("dialogConfigFilter");
+    public void showContactDialog() {
+        this.contactFilter = null;
+        this.contacts = new ArrayList<>();
+        this.updateAndOpenDialog("contactDialog", "dialogContact");
+    }
+
+    /**
+     * Busca o contato de acordo com o filtro
+     */
+    public void filterContactsList() {
+        try {
+            this.contacts = this.contactService
+                    .listContactsByFilter(this.contactFilter, false);
+        } catch (InternalServiceError ex) {
+            this.addError(false, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(false, "error.undefined-error", ex.getMessage());
+        } finally {
+            this.updateComponent("contactForm");
+        }
+    }
+
+    /**
+     * Apos selecionar um contato este metodo fechara a dialog e atualizara a
+     * view
+     */
+    public void onContactSelect() {
+        this.updateComponent("contactBox");
+        this.closeDialog("dialogContact");
+    }
+
+    /**
+     * Remove o contato que foi vinculado ao movimento
+     */
+    public void removeContact() {
+        this.movement.setContact(null);
+        this.updateComponent("contactBox");
     }
     
     /**
-     * Limpa todos os filtro ja realizados
+     *
      */
-    public void clearFilters() {
-        this.filter.setCriteria(null);
-        this.filter.setPeriods(this.openPeriods);
-        this.updateComponent("movementsList");
-        this.updateComponent("controlsForm");
+    public void showApportionmentDialog() {
+
+        // se o valor do rateio for igual ao total do movimento nem deixa exibir
+        // a tela de rateios para que nao seja feito cagada
+        if (this.movement.hasValueToDivide()) {
+            this.addError(true, "error.fixed-movement.no-value-divide");
+            return;
+        }
+
+        this.apportionment = new Apportionment();
+        this.apportionment.setValue(this.movement.getValueToDivide());
+
+        this.updateAndOpenDialog("apportionmentDialog", "dialogApportionment");
     }
-    
+
+    /**
+     *
+     */
+    public void addApportionment() {
+        try {
+            this.movement.addApportionment(this.apportionment);
+            this.updateComponent("inValue");
+            this.updateComponent("apportionmentBox:container");
+            this.closeDialog("dialogApportionment");
+        } catch (InternalServiceError ex) {
+            this.addError(false, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(false, "error.undefined-error", ex.getMessage());
+        } finally {
+            this.updateComponent("apportionmentMessages");
+        }
+    }
+
+    /**
+     *
+     * @param code
+     */
+    public void deleteApportionment(String code) {
+        this.movement.removeApportionment(code);
+        this.updateComponent("inValue");
+        this.updateComponent("apportionmentBox:container");
+    }
+
+    /**
+     * Atualiza o combo de classes quando o usuario selecionar o centro de custo
+     */
+    public void loadMovementClasses() {
+        this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
+                this.apportionment.getCostCenter(), null);
+    }
+
     /**
      * Exibe a tela de customizacao dos filros avancados
      */
     public void showFilterConfigDialog() {
         this.updateAndOpenDialog("configFilterDialog", "dialogConfigFilter");
     }
-    
+
+    /**
+     * Aplica os filtros customizados selecionados na listagem de movimentos
+     */
+    public void applyCustomFilters() {
+
+        this.filter.setPeriods(this.periodsModel.getTarget());
+
+        this.updateComponent("movementsList");
+        this.closeDialog("dialogConfigFilter");
+    }
+
+    /**
+     * Limpa todos os filtro ja realizados
+     */
+    public void clearFilters() {
+        this.filter.setCriteria(null);
+        this.filter.setPeriods(this.getOpenPeriods());
+        this.updateComponent("movementsList");
+        this.updateComponent("controlsForm");
+    }
+
+    /**
+     * @return da lista de periodos, retorna apenas o que estiver ativo
+     */
+    public FinancialPeriod getActivePeriod() {
+        return this.periods.stream()
+                .filter(FinancialPeriod::isActive)
+                .findFirst()
+                .orElse(null);
+    }
+
     /**
      * @return os estados possiveis dos movimentos
      */
     public MovementStateType[] getMovementStateTypes() {
         return MovementStateType.values();
     }
-    
+
     /**
      * @return as possiveis direcoes de um movimento
      */
@@ -267,5 +408,14 @@ public class MovementBean extends AbstractBean {
      */
     public MovementType[] getMovementTypes() {
         return MovementType.values();
+    }
+
+    /**
+     * @return os periodos financeiros em aberto no sistema
+     */
+    public List<FinancialPeriod> getOpenPeriods() {
+        return this.periods.stream()
+                .filter(period -> !period.isClosed())
+                .collect(Collectors.toList());
     }
 }

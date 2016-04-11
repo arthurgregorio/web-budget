@@ -16,219 +16,179 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
+    <ui:param name="activeMenu" value="movements"/>
+    <ui:param name="activeSubmenu" value="period"/>
+
     <f:metadata>
-        <f:viewAction action="#{movementBean.initializeForm(param.movementId, param.detailing)}"/>
+        <f:viewAction action="#{movementBean.initializeForm(param.movementId, param.viewState)}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['movement.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        <h:outputText rendered="#{movementBean.viewState eq 'ADDING'}"
+                      value="#{messages['movement.page-description-including']}"/>
+        <o:outputFormat id="pageDescription" 
+                        rendered="#{movementBean.viewState eq 'EDITING'}" 
+                        value="#{messages['movement.page-description-editing']}">
+            <f:param value="#{movementBean.movement.code}"/>
+        </o:outputFormat>
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['financial']}" />
-        <p:menuitem url="listMovements.xhtml"
-                    value="#{breadcrumb['financial.movement']}" />
-        <p:menuitem url="formMovement.xhtml"
-                    value="#{breadcrumb['inclusion']}" 
-                    rendered="#{movementBean.viewState eq 'ADDING'}"/>
-        <p:menuitem url="#"
-                    value="#{breadcrumb['edition']}" 
-                    rendered="#{movementBean.viewState eq 'EDITING'}"/>
+        <li><a href="#">#{breadcrumb['financial']}</a></li>
+        <li><a href="#">#{breadcrumb['financial.movement']}</a></li>
+        <li class="active">
+            <a href="listMovements.xhtml">
+                #{breadcrumb['financial.movement.period']}
+            </a>
+        </li>
+        <li jsf:rendered="#{movementBean.viewState eq 'ADDING'}" 
+            class="active"><a href="#">#{breadcrumb['including']}</a></li>
+        <li jsf:rendered="#{movementBean.viewState eq 'EDITING'}" 
+            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
 
         <h:form id="movementForm" prependId="false">
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">
+
+            <div class="row">
+                <div class="col-sm-12">
                     <p:messages id="messages" closable="true" />
-                </div> 
-            </div> 
-            <div class="ui-grid-row financial-period-info flat-box"
-                 jsf:rendered="#{movementBean.haveOpenPeriod() eq true}">
-                <div class="ui-grid-col-5 active-period-text">
-                    <h:outputText value="#{messages['movement.form.current-period']}: "/>
-                    <p:spacer width="10"/>
-                    <h:outputText value="#{movementBean.financialPeriod.expired eq true 
-                                           ? messages['movement.form.financial-period.not-active'] 
-                                           : movementBean.financialPeriod.identification}" />
-                </div>
-                <div class="ui-grid-col-7 div-align-right form-group-s">
-                    <p:outputLabel for="inLaunchPeriod" 
-                                   value="#{messages['movement.form.launch-period']}: "/>
-                    <p:spacer width="10"/>
-                    <p:selectOneMenu id="inLaunchPeriod" 
-                                     converter="omnifaces.SelectItemsConverter"
-                                     value="#{movementBean.movement.financialPeriod}">
-                        <f:selectItems var="financialPeriod" 
-                                       itemValue="#{financialPeriod}"
-                                       itemLabel="#{financialPeriod.expired eq true 
-                                                    ? financialPeriod.identification.concat(' - ')
-                                                    .concat(messages['movement.form.expired']) 
-                                                    : financialPeriod.identification}"
-                                       value="#{movementBean.openFinancialPeriods}" /> 
-                    </p:selectOneMenu>
                 </div>
             </div>
-            <div class="ui-grid-row financial-period-info flat-box"
-                 jsf:rendered="#{movementBean.haveOpenPeriod() eq false}">
-                <div class="ui-grid-col-8 no-period-text">
-                    <h:outputText value="#{messages['movement.form.financial-period-not-open']}" />
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <b>#{messages['movement.form.active-period']}:</b>
+                        <p:spacer width="5"/>
+                        <h:outputText styleClass="text text-red"
+                                      rendered="#{movementBean.activePeriod eq null}"
+                                      value="#{messages['movement.form.no-active-period']}"/>
+                        <o:outputFormat rendered="#{movementBean.activePeriod ne null}"
+                                        value="#{messages['movement.form.active-period-identification']}">
+                            <f:param value="#{movementBean.activePeriod.identification}"/>
+                            <f:param value="#{movementBean.activePeriod.startAsString}"/>
+                            <f:param value="#{movementBean.activePeriod.endAsString}"/>
+                        </o:outputFormat>
+                    </h3>
                 </div>
-                <div class="ui-grid-col-4 div-align-right">
-                    <p:link href="#{movementBean.changeToOpenFinancialPeriod()}"
-                            value="#{messages['movement.form.financial-period-open']}" />
-                </div>
-            </div>
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6">
-                    <div class="ui-grid-row">
-                        <div jsf:id="contactPanel" 
-                             class="ui-grid-col-12 form-group form-group-m">
-                            <p:outputLabel for="inContact" 
-                                           value="#{messages['movement.form.contact']}: "/>
-                            <div class="input-and-button-box">
-                                <p:inputText id="inContact" 
-                                             readonly="true"
-                                             value="#{movementBean.movement.contactName}" />
-                                <p:commandButton immediate="true"
-                                                 icon="fa fa-search" 
-                                                 actionListener="#{movementBean.showContactDialog()}"/>
+
+                <div class="box-body row">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inPeriod" 
+                                               value="#{messages['movement.form.launch-period']}: "/>
+                                <p:selectOneMenu id="inPeriod" 
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 value="#{movementBean.movement.financialPeriod}">
+                                    <f:selectItems var="period" 
+                                                   itemValue="#{period}"
+                                                   value="#{movementBean.openPeriods}"
+                                                   itemLabel="#{period.expired eq true 
+                                                                ? period.identification.concat(' - ')
+                                                                .concat(messages['movement.form.expired']) 
+                                                                : period.identification}" /> 
+                                </p:selectOneMenu>
                             </div>
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
-                            <p:outputLabel for="inValue" 
-                                           value="#{messages['movement.form.value']}: "/>
-                            <pe:inputNumber id="inValue" 
-                                            symbol="R$ "
-                                            decimalPlaces="2" 
-                                            decimalSeparator="," 
-                                            thousandSeparator="." 
-                                            value="#{movementBean.movement.value}"
-                                            disabled="#{movementBean.viewState eq 'EDITING' or 
-                                                        not empty movementBean.movement.apportionments}">
-                                <f:converter converterId="javax.faces.BigDecimal" />
-                            </pe:inputNumber>  
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-m">
-                            <p:outputLabel for="inDueDate" 
-                                           value="#{messages['movement.form.due-date']}: "/>
-                            <p:calendar id="inDueDate" 
-                                        mask="true"
-                                        showOn="button" 
-                                        pattern="dd/MM/yyyy"
-                                        converter="localDateConverter"
-                                        value="#{movementBean.movement.dueDate}" />
-                        </div>                        
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12 form-group form-group-xl">
-                            <p:outputLabel for="inDescription" 
-                                           value="#{messages['movement.form.description']}: "/>
-                            <p:inputTextarea id="inDescription" 
-                                             maxlength="255"
-                                             autoResize="false"
-                                             value="#{movementBean.movement.description}" />
-                        </div>                        
-                    </div>
-                </div>
-                <div class="ui-grid-col-6 apportionment-box">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-6 apportionment-text-box">
-                            <p:outputLabel styleClass="apportionment-label"
-                                           value="#{messages['movement.form.apportionment']}:"/>
+                            <div jsf:id="contactBox"
+                                 class="form-group col-md-6">
+                                <p:outputLabel for="inContact" 
+                                               value="#{messages['movement.form.contact']}: "/>
+                                <div class="input-group">
+                                    <p:inputText id="inContact" 
+                                                 readonly="true"
+                                                 styleClass="form-control"
+                                                 value="#{movementBean.movement.contactName}" />
+                                    <div class="input-group-btn">
+                                        <p:commandButton immediate="true"
+                                                         icon="fa fa-search" 
+                                                         styleClass="btn btn-flat btn-warning"
+                                                         disabled="#{movementBean.viewState eq 'DETAILING'}"
+                                                         actionListener="#{movementBean.showContactDialog()}"/>
+                                        <p:spacer width="10"/>
+                                        <p:commandButton immediate="true"
+                                                         icon="fa fa-trash-o" 
+                                                         styleClass="btn btn-flat btn-danger"
+                                                         actionListener="#{movementBean.removeContact()}"
+                                                         disabled="#{movementBean.viewState eq 'DETAILING'}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inValue" 
+                                               value="#{messages['movement.form.value']}: "/>
+                                <pe:inputNumber id="inValue" 
+                                                symbol="R$ "
+                                                decimalPlaces="2" 
+                                                decimalSeparator="," 
+                                                thousandSeparator="." 
+                                                value="#{movementBean.movement.value}"
+                                                disabled="#{not empty movementBean.movement.apportionments}">
+                                    <f:converter converterId="javax.faces.BigDecimal" />
+                                </pe:inputNumber>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inDueDate" 
+                                               value="#{messages['movement.form.due-date']}: "/>
+                                <p:calendar id="inDueDate" 
+                                            mask="true"
+                                            pattern="dd/MM/yyyy"
+                                            converter="localDateConverter"
+                                            value="#{movementBean.movement.dueDate}" />
+                            </div>
+                            <div class="form-group col-md-12">
+                                <p:outputLabel for="inDescription" 
+                                               value="#{messages['movement.form.description']}: "/>
+                                <p:inputTextarea id="inDescription" 
+                                                 rows="5"
+                                                 maxlength="255"
+                                                 autoResize="false"
+                                                 styleClass="form-control"
+                                                 value="#{movementBean.movement.description}" />
+                            </div>
                         </div>
-                        <div class="ui-grid-col-6 div-align-right">
-                            <p:commandButton update="messages"
-                                             value="#{menu['add']}"
-                                             process="@this,inValue"
-                                             styleClass="ui-button-info"
+                    </div>
+                    <div class="col-sm-6">
+                        <wb:apportionmentBox id="apportionmentBox"
+                                             baseBean="#{movementBean}"
                                              disabled="#{movementBean.viewState eq 'DETAILING'}"
-                                             actionListener="#{movementBean.showApportionmentDialog()}"/>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row div-mg-t-15">
-                        <div class="ui-grid-col-12">
-                            <p:dataTable id="apportionmentList" 
-                                         rows="15"
-                                         paginator="true"
-                                         var="apportionment"
-                                         paginatorPosition="bottom"
-                                         paginatorAlwaysVisible="false"
-                                         value="#{movementBean.movement.apportionments}"
-                                         emptyMessage="#{messages['apportionment.empty']}">
-
-                                <p:column style="text-align: center"
-                                          headerText="#{messages['apportionment.cost-center']}">
-                                    #{apportionment.costCenter.name}
-                                </p:column>
-                                <p:column style="text-align: center"
-                                          headerText="#{messages['apportionment.movement-class']}">
-                                    #{apportionment.movementClass.name}
-                                </p:column>
-                                <p:column width="20%" 
-                                          style="text-align: center"
-                                          headerText="#{messages['apportionment.apportionment']}">
-                                    <h:outputText value="#{apportionment.value}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column width="10%" 
-                                          style="text-align: center"
-                                          headerText="#{menu['actions']}">
-                                    <p:commandButton immediate="true"
-                                                     icon="fa fa-remove"
-                                                     title="#{menu['delete']}"
-                                                     disabled="#{movementBean.viewState eq 'DETAILING'}"
-                                                     actionListener="#{movementBean.deleteApportionment(apportionment.code)}" />
-                                </p:column>
-                            </p:dataTable>
-                        </div>
+                                             showDialogAction="#{movementBean.showApportionmentDialog()}"
+                                             apportionmentsList="#{movementBean.movement.apportionments}"/>
                     </div>
                 </div>
-            </div>
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6">
 
-                </div>
-                <div class="ui-grid-col-6 form-controls-box">
+                <div class="box-footer align-right">
+                    <p:commandButton update="movementForm"
+                                     value="#{menu['save']}"
+                                     action="#{movementBean.doSave()}"
+                                     styleClass="btn btn-flat btn-success"
+                                     rendered="#{movementBean.viewState eq 'ADDING'}"/>
+                    <p:commandButton value="#{menu['update']}"
+                                     action="#{movementBean.doUpdate()}"
+                                     update="movementForm pageDescription"
+                                     styleClass="btn btn-flat btn-success"
+                                     rendered="#{movementBean.viewState eq 'EDITING'}"/>
+                    <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
-                                     action="#{movementBean.doCancel()}"/>
-                    <p:spacer width="10"/>
-                    <p:commandButton immediate="true"
-                                     value="#{menu['payment']}"
-                                     styleClass="ui-button-info"
-                                     rendered="#{movementBean.viewState eq 'DETAILING'}"
-                                     actionListener="#{movementBean.showPaymentDetails()}"/>
-                    <p:commandButton update="movementForm"
-                                     process="movementForm"
-                                     value="#{menu['pay']}"
-                                     styleClass="ui-button-warning"
-                                     rendered="#{movementBean.canSaveAndPay()}"
-                                     actionListener="#{movementBean.doSaveAndPay()}"/>
-                    <p:spacer width="10" rendered="#{movementBean.canSaveAndPay()}"/>
-                    <p:commandButton update="movementForm"
-                                     process="movementForm"
-                                     value="#{menu['save']}"
-                                     styleClass="ui-button-success"
-                                     rendered="#{movementBean.canSave()}"
-                                     actionListener="#{movementBean.doSave()}"/>
-                    <p:commandButton update="movementForm"
-                                     process="movementForm"
-                                     value="#{menu['update']}"
-                                     styleClass="ui-button-success"
-                                     actionListener="#{movementBean.doUpdate()}"
-                                     rendered="#{movementBean.viewState eq 'EDITING'}"/>
+                                     styleClass="btn btn-flat btn-default" 
+                                     action="#{movementBean.changeToList()}"/>
                 </div>
             </div>
         </h:form>
@@ -236,8 +196,6 @@
 
     <ui:define name="popups">
         <ui:include src="dialogContact.xhtml" />
-        <ui:include src="dialogPayment.xhtml" />
         <ui:include src="dialogApportionment.xhtml" />
-        <ui:include src="dialogDetailPayment.xhtml" />
     </ui:define>
 </ui:composition>

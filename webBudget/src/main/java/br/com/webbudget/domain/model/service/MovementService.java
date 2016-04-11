@@ -180,47 +180,54 @@ public class MovementService {
     }
 
     /**
+     * Salva o movimento
      *
-     * @param movement
-     * @return
+     * @param movement o movimento a ser salvo
      */
     @Transactional
-    public Movement saveMovement(Movement movement) {
+    public void saveMovement(Movement movement) {
 
         // validamos se os rateios estao corretos
-        if (!movement.getApportionments().isEmpty()) {
-            if (!movement.isApportionmentsValid()) {
+        movement.validateApportionments();
 
-                final String value = "R$ " + String.format("%10.2f",
-                        movement.getApportionmentsDifference());
-
-                throw new InternalServiceError(
-                        "movement.validate.apportionment-value", value);
-            }
-        } else {
-            throw new InternalServiceError("movement.validate.empty-apportionment");
-        }
-
-        // se for uma edicao, checa se existe alguma inconsistencia
-        if (movement.isSaved()) {
-
-            if (movement.getFinancialPeriod().isClosed()) {
-                throw new InternalServiceError("movement.validate.closed-financial-period");
-            }
-
-            // remove algum rateio editado
-            for (Apportionment apportionment : movement.getDeletedApportionments()) {
-                this.apportionmentRepository.delete(apportionment);
-            }
-        }
-
-        // checamos se o movimento esta com a data de vencimento setada, caso
-        // nao, setamos a data de hoje e salvamos
+        // se nao foi informada a data de vencimento, seta a data atual
         if (!movement.hasDueDate()) {
             movement.setDueDate(LocalDate.now());
         }
 
-        // pega os rateios antes de salvar o movimento para nao perder a lista
+        // pega a lista de rateios
+        final List<Apportionment> apportionments = movement.getApportionments();
+
+        // salva o movimento
+        movement = this.movementRepository.save(movement);
+
+        // salva os rateios
+        for (Apportionment apportionment : apportionments) {
+            apportionment.setMovement(movement);
+            this.apportionmentRepository.save(apportionment);
+        }
+    }
+
+    /**
+     * Atualiza o movimento
+     *
+     * @param movement o movimento a ser atualizado
+     * @return o movimento atualizado
+     */
+    @Transactional
+    public Movement updateMovement(Movement movement) {
+        
+        // validamos se os rateios estao corretos
+        movement.validateApportionments();
+
+        // deleta os rateios ja deletados na view
+        final List<Apportionment> deleteds = movement.getDeletedApportionments();
+
+        deleteds.stream().forEach(apportionment -> {
+            this.apportionmentRepository.delete(apportionment);
+        });
+        
+        // pega a lista de rateios
         final List<Apportionment> apportionments = movement.getApportionments();
 
         // salva o movimento
@@ -232,11 +239,10 @@ public class MovementService {
             this.apportionmentRepository.save(apportionment);
         }
 
-        // busca novamente as classes
         movement.getApportionments().clear();
         movement.setApportionments(new ArrayList<>(
                 this.apportionmentRepository.listByMovement(movement)));
-
+        
         return movement;
     }
 
@@ -530,7 +536,8 @@ public class MovementService {
                             .inTheFinancialPeriod(period)
                             .andDividedAmong(fixedMovement.getApportionments());
 
-                    final Movement movement = this.saveMovement(movementBuilder.build());
+                    final Movement movement = this.movementRepository
+                            .save(movementBuilder.build());
 
                     // criamos o lancamento 
                     final Launch launch = new Launch();
@@ -562,7 +569,8 @@ public class MovementService {
 
                         movement.setDescription(stringBuilder.toString());
 
-                        launch.setMovement(this.saveMovement(movement));
+                        launch.setMovement(
+                                this.movementRepository.save(movement));
                     } else {
                         launch.setMovement(movement);
                     }

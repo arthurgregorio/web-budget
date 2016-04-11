@@ -55,8 +55,8 @@
                             <f:facet name="targetCaption">
                                 #{messages['config-filter.form.selected-periods']}
                             </f:facet>
-                            <o:converter converterId="omnifaces.ListConverter" 
-                                         list="#{movementBean.periods}" />
+                            <o:converter list="#{movementBean.periods}"
+                                         converterId="omnifaces.ListConverter" />
                         </p:pickList>
                     </div>
                 </div>
