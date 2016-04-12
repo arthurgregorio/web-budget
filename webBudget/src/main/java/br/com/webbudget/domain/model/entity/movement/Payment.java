@@ -21,6 +21,7 @@ import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.wallet.Wallet;
 import br.com.webbudget.domain.model.entity.card.Card;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -81,33 +82,8 @@ public class Payment extends PersistentEntity {
      */
     public Payment() {
         this.paymentDate = LocalDate.now();
-        this.code = this.createPaymentCode();
-    }
-
-    /**
-     * @return
-     */
-    private String createPaymentCode() {
-
-        long decimalNumber = System.nanoTime();
-
-        String generated = "";
-        final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        synchronized (this.getClass()) {
-
-            int mod;
-            int authCodeLength = 0;
-
-            while (decimalNumber != 0 && authCodeLength < 5) {
-
-                mod = (int) (decimalNumber % 36);
-                generated = digits.substring(mod, mod + 1) + generated;
-                decimalNumber = decimalNumber / 36;
-                authCodeLength++;
-            }
-        }
-        return generated;
+        this.paymentMethodType = PaymentMethodType.IN_CASH;
+        this.code = ApplicationUtils.createRamdomCode(5, false);
     }
 
     /**

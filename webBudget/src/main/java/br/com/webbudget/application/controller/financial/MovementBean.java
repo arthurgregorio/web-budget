@@ -33,6 +33,7 @@ import br.com.webbudget.domain.misc.filter.MovementFilter;
 import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.MovementsListModel;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.model.entity.movement.PaymentMethodType;
 import br.com.webbudget.domain.model.service.CardService;
 import br.com.webbudget.domain.model.service.ContactService;
 import br.com.webbudget.domain.model.service.FinancialPeriodService;
@@ -75,11 +76,6 @@ public class MovementBean extends AbstractBean {
     @Getter
     @Setter
     private Apportionment apportionment;
-
-    @Getter
-    private Payment payment;
-    @Getter
-    private FinancialPeriod financialPeriod;
 
     @Getter
     private List<Wallet> wallets;
@@ -154,10 +150,17 @@ public class MovementBean extends AbstractBean {
     public void initializeForm(long movementId, String viewState) {
 
         this.viewState = ViewState.valueOf(viewState);
+        
+        // lista as formas de pagamento
+        this.wallets = this.walletService.listWallets(Boolean.FALSE);
+        this.debitCards = this.cardService.listDebitCards(Boolean.FALSE);
+        this.creditCards = this.cardService.listCreditCards(Boolean.FALSE);
 
+        // carrega os centros de custo e os periodos validos
         this.costCenters = this.movementService.listCostCenters(false);
         this.periods = this.financialPeriodService.listFinancialPeriods(false);
 
+        // inicializa o movimento
         if (this.viewState == ViewState.ADDING) {
             this.movement = new Movement();
         } else {
@@ -191,7 +194,7 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     *
+     * Atualiza o movimento
      */
     public void doUpdate() {
         try {
@@ -205,6 +208,21 @@ public class MovementBean extends AbstractBean {
         } 
     }
 
+    /**
+     * Salva e paga o movimento
+     */
+    public void doPayment() {
+        
+    }
+    
+    /**
+     * Exibe a telinha de pagamento
+     */
+    public void showPaymentDialog() {
+        this.movement.setPayment(new Payment());
+        this.updateAndOpenDialog("paymentDialog", "dialogPayment");
+    }
+    
     /**
      * @return volta para a tela de listagem
      */
@@ -244,6 +262,16 @@ public class MovementBean extends AbstractBean {
         this.redirectTo("formMovement.xhtml?faces-redirect=true&movementId="
                 + this.movement.getId() + "&viewState=" + ViewState.DETAILING);
     }
+    
+    /**
+     * Da um redirect para os detalhes do movimento
+     * 
+     * @param movementId qual o movimento que vamos ver os detalhes
+     */
+    public void changeToDetail(long movementId) {
+        this.redirectTo("formMovement.xhtml?faces-redirect=true&movementId="
+                + movementId + "&viewState=" + ViewState.DETAILING);
+    }
 
     /**
      * @param movementId o id do movimento a ser pago
@@ -253,6 +281,13 @@ public class MovementBean extends AbstractBean {
         return "formPayment.xhtml?faces-redirect=true&movementId=" + movementId;
     }
 
+    /**
+     * 
+     */
+    public void showPaymentDetails() {
+        this.updateAndOpenDialog("paymentDetailsDialog", "dialogPaymentDetails");
+    }
+    
     /**
      * Abre a dialog de busca de contatos
      */
@@ -408,6 +443,13 @@ public class MovementBean extends AbstractBean {
      */
     public MovementType[] getMovementTypes() {
         return MovementType.values();
+    }
+    
+    /**
+     * @return os possiveis metodos de pagamento
+     */
+    public PaymentMethodType[] getPaymentMethodTypes() {
+        return PaymentMethodType.values();
     }
 
     /**

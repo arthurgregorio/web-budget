@@ -25,27 +25,24 @@ package br.com.webbudget.domain.model.entity.movement;
  */
 public enum PaymentMethodType {
 
-    IN_CASH("beans.payment-method-type.in-cash"),
-    DEBIT_CARD("beans.payment-method-type.debit-card"),
-    CREDIT_CARD("beans.payment-method-type.credit-card");
-//    INSTALLMENT("beans.payment-method-type.installment");
+    IN_CASH("payment-method-type.in-cash"),
+    DEBIT_CARD("payment-method-type.debit-card"),
+    CREDIT_CARD("payment-method-type.credit-card");
 
-    private final String i18nKey;
+    private final String description;
 
     /**
-     *
-     * @param i18nKey
+     * @param description
      */
-    private PaymentMethodType(String i18nKey) {
-        this.i18nKey = i18nKey;
+    private PaymentMethodType(String description) {
+        this.description = description;
     }
 
     /**
-     *
      * @return
      */
     @Override
     public String toString() {
-        return this.i18nKey;
+        return this.description;
     }
 }

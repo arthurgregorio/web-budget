@@ -187,6 +187,9 @@ public class MovementService {
     @Transactional
     public void saveMovement(Movement movement) {
 
+        // limpa o pagamento se por algum acaso ele vier preenchido
+        movement.setPayment(null);
+        
         // validamos se os rateios estao corretos
         movement.validateApportionments();
 
@@ -251,14 +254,13 @@ public class MovementService {
      * @param movement
      */
     @Transactional
-    public void payAndUpdateMovement(Movement movement) {
+    public void payMovement(Movement movement) {
 
         // salva o pagamento
-        final Payment payment = this.paymentRepository.save(movement.getPayment());
-
-        // seta no pagamento e atualiza o movimento
-        movement.setPayment(payment);
-        movement.setMovementStateType(MovementStateType.PAID);
+        Payment payment = movement.getPayment();
+        
+        // validamos se os rateios estao corretos
+        movement.validateApportionments();
 
         // se pagamos no cartao de credito, coloca o vencimento do movimento 
         // para a data de vencimento da fatura do cartao
@@ -267,40 +269,62 @@ public class MovementService {
                     movement.getFinancialPeriod()));
         }
 
+        // pega a lista de rateios
+        final List<Apportionment> apportionments = movement.getApportionments();
+
+        // salva o movimento
+        movement = this.movementRepository.save(movement);
+
+        // salva os rateios
+        for (Apportionment apportionment : apportionments) {
+            apportionment.setMovement(movement);
+            this.apportionmentRepository.save(apportionment);
+        }
+
+        // salva o pagamento
+        payment = this.paymentRepository.save(payment);
+        
+        // seta no pagamento no movimento e atualiza
+        movement.setPayment(payment);
+        movement.setMovementStateType(MovementStateType.PAID);
+
         this.movementRepository.save(movement);
 
         // atualizamos os saldos das carteiras quando pagamento em dinheiro
-        if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH
-                || payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
-
-            Wallet wallet;
-
-            if (payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
-                wallet = payment.getCard().getWallet();
-            } else {
-                wallet = payment.getWallet();
-            }
-
-            // atualizamos o novo saldo
-            final BalanceBuilder builder = new BalanceBuilder();
-
-            final BigDecimal oldBalance = wallet.getBalance();
-
-            builder.forWallet(wallet)
-                    .withOldBalance(oldBalance)
-                    .withMovementedValue(movement.getValue())
-                    .referencingMovement(movement.getCode());
-
-            if (movement.isExpense()) {
-                builder.withActualBalance(oldBalance.subtract(movement.getValue()))
-                        .andType(WalletBalanceType.PAYMENT);
-            } else {
-                builder.withActualBalance(oldBalance.add(movement.getValue()))
-                        .andType(WalletBalanceType.REVENUE);
-            }
-
-            this.updateBalanceEvent.fire(builder);
-        }
+        
+        // TODO atualizar o saldo das carteiras com evento
+        
+//        if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH
+//                || payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
+//
+//            Wallet wallet;
+//
+//            if (payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
+//                wallet = payment.getCard().getWallet();
+//            } else {
+//                wallet = payment.getWallet();
+//            }
+//
+//            // atualizamos o novo saldo
+//            final BalanceBuilder builder = new BalanceBuilder();
+//
+//            final BigDecimal oldBalance = wallet.getBalance();
+//
+//            builder.forWallet(wallet)
+//                    .withOldBalance(oldBalance)
+//                    .withMovementedValue(movement.getValue())
+//                    .referencingMovement(movement.getCode());
+//
+//            if (movement.isExpense()) {
+//                builder.withActualBalance(oldBalance.subtract(movement.getValue()))
+//                        .andType(WalletBalanceType.PAYMENT);
+//            } else {
+//                builder.withActualBalance(oldBalance.add(movement.getValue()))
+//                        .andType(WalletBalanceType.REVENUE);
+//            }
+//
+//            this.updateBalanceEvent.fire(builder);
+//        }
     }
 
     /**
