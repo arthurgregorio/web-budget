@@ -150,7 +150,7 @@ public class MovementBean extends AbstractBean {
     public void initializeForm(long movementId, String viewState) {
 
         this.viewState = ViewState.valueOf(viewState);
-        
+
         // lista as formas de pagamento
         this.wallets = this.walletService.listWallets(Boolean.FALSE);
         this.debitCards = this.cardService.listDebitCards(Boolean.FALSE);
@@ -190,7 +190,7 @@ public class MovementBean extends AbstractBean {
         } catch (Exception ex) {
             this.logger.error(ex.getMessage(), ex);
             this.addError(false, "error.undefined-error", ex.getMessage());
-        } 
+        }
     }
 
     /**
@@ -205,16 +205,51 @@ public class MovementBean extends AbstractBean {
         } catch (Exception ex) {
             this.logger.error(ex.getMessage(), ex);
             this.addError(false, "error.undefined-error", ex.getMessage());
-        } 
+        }
     }
 
     /**
      * Salva e paga o movimento
      */
     public void doPayment() {
-        
+        try {
+            this.movementService.payMovement(this.movement);
+            this.movement = new Movement();
+            this.closeDialog("dialogPayment");
+            this.addInfo(true, "movement.saved-pay");
+        } catch (InternalServiceError ex) {
+            this.addError(false, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(false, "error.undefined-error", ex.getMessage());
+        }
     }
     
+    /**
+     * Deleta o movimento
+     */
+    public void doDelete() {
+        try {
+            final MovementType movementType = this.movement.getMovementType();
+
+            // fazemos a selecao do tipo de delecao a ser executado
+            if (movementType == MovementType.MOVEMENT) {
+                this.movementService.deleteMovement(this.movement);
+            } else if (movementType == MovementType.CARD_INVOICE) {
+                this.movementService.deleteCardInvoiceMovement(this.movement);
+            }
+            this.addInfo(true, "movement.deleted");
+        } catch (InternalServiceError ex) {
+            this.addError(false, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(false, "error.undefined-error", ex.getMessage());
+        } finally {
+            this.updateComponent("movementsList");
+            this.closeDialog("dialogDeleteMovement");
+        }
+    }
+
     /**
      * Exibe a telinha de pagamento
      */
@@ -222,7 +257,7 @@ public class MovementBean extends AbstractBean {
         this.movement.setPayment(new Payment());
         this.updateAndOpenDialog("paymentDialog", "dialogPayment");
     }
-    
+
     /**
      * @return volta para a tela de listagem
      */
@@ -262,10 +297,10 @@ public class MovementBean extends AbstractBean {
         this.redirectTo("formMovement.xhtml?faces-redirect=true&movementId="
                 + this.movement.getId() + "&viewState=" + ViewState.DETAILING);
     }
-    
+
     /**
      * Da um redirect para os detalhes do movimento
-     * 
+     *
      * @param movementId qual o movimento que vamos ver os detalhes
      */
     public void changeToDetail(long movementId) {
@@ -282,12 +317,12 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
-     * 
+     *
      */
     public void showPaymentDetails() {
         this.updateAndOpenDialog("paymentDetailsDialog", "dialogPaymentDetails");
     }
-    
+
     /**
      * Abre a dialog de busca de contatos
      */
@@ -330,7 +365,7 @@ public class MovementBean extends AbstractBean {
         this.movement.setContact(null);
         this.updateComponent("contactBox");
     }
-    
+
     /**
      *
      */
@@ -444,7 +479,7 @@ public class MovementBean extends AbstractBean {
     public MovementType[] getMovementTypes() {
         return MovementType.values();
     }
-    
+
     /**
      * @return os possiveis metodos de pagamento
      */
