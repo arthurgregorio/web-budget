@@ -18,30 +18,28 @@
 <p:dialog xmlns="http://www.w3.org/1999/xhtml"
           xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
-          xmlns:h="http://xmlns.jcp.org/jsf/html"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           id="confirmPaymentDialog" 
           modal="true" 
           closable="false"
           resizable="false" 
           widgetVar="dialogConfirmPayment" 
-          header="#{messages['movement.dialog.confirm-payment']}">
+          header="#{messages['confirm-payment.dialog.title']}">
 
-    <div class="ui-grid ui-grid-responsive">
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center div-mg-b-15">
-                <o:outputFormat var="_confirmation"
-                                value="#{messages['movement.dialog.payment-confirmed']}">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>
+                <o:outputFormat value="#{messages['confirm-payment.dialog.tip']}">
                     <f:param value="#{movementBean.movement.code}" />
                 </o:outputFormat>
-                <h:outputText value="#{_confirmation}" />
-            </div>
+            </h3>
         </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12 div-align-center">
-                <p:commandButton value="#{menu['back']}"
-                                 action="#{movementBean.doCancel()}"/>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 align-center">
+            <p:commandButton value="#{menu['back']}"
+                             styleClass="btn btn-flat btn-default"
+                             action="#{movementBean.changeToList()}"/>
         </div>
     </div>
 </p:dialog>

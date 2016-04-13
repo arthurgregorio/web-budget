@@ -174,7 +174,7 @@ public class MovementBean extends AbstractBean {
      * @param movementId o id do movimento a ser pago
      */
     public void initializePayment(long movementId) {
-
+        this.movement = this.movementService.findMovementById(movementId);
     }
 
     /**
@@ -224,7 +224,7 @@ public class MovementBean extends AbstractBean {
             this.addError(false, "error.undefined-error", ex.getMessage());
         }
     }
-    
+
     /**
      * Deleta o movimento
      */

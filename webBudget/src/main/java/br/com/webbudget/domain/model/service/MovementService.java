@@ -290,6 +290,10 @@ public class MovementService {
 
         this.movementRepository.save(movement);
         
+        movement.getApportionments().clear();
+        movement.setApportionments(new ArrayList<>(
+                this.apportionmentRepository.listByMovement(movement)));
+        
         // atualizamos os saldos das carteiras quando pagamento em dinheiro
         if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH
                 || payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {

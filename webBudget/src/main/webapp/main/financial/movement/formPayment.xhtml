@@ -16,48 +16,78 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
-    
+
+    <ui:param name="activeMenu" value="movements"/>
+    <ui:param name="activeSubmenu" value="period"/>
+
     <f:metadata>
         <f:viewAction action="#{movementBean.initializePayment(param.movementId)}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['movement.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        <o:outputFormat id="pageDescription" 
+                        value="#{messages['movement.page-description-payment']}">
+            <f:param value="#{movementBean.movement.code}"/>
+        </o:outputFormat>
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['financial']}" />
-        <p:menuitem url="listCards.xhtml"
-                    value="#{breadcrumb['financial.movement']}" />
-        <p:menuitem url="#"
-                    value="#{breadcrumb['financial.movement.payment']}"/>
+        <li><a href="#">#{breadcrumb['financial']}</a></li>
+        <li><a href="#">#{breadcrumb['financial.movement']}</a></li>
+        <li class="active">
+            <a href="listMovements.xhtml">
+                #{breadcrumb['financial.movement.period']}
+            </a>
+        </li>
+        <li jsf:rendered="#{movementBean.viewState eq 'ADDING'}" 
+            class="active">
+            <a href="#">
+                #{breadcrumb['financial.movement.period.payment']}
+            </a>
+        </li>
     </ui:define>
 
     <ui:define name="content">
-
+       
         <h:form id="paymentForm" prependId="false">
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-6">
-                    <ui:include src="paymentComposition.xhtml"/>
+         
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        
+                    </h3>
                 </div>
-                <div class="ui-grid-col-6">
 
+                <div class="box-body row">
+                    <div class="col-sm-6">
+                        <ui:include src="paymentBox.xhtml"/>
+                    </div>
+                    <div class="col-sm-6">
+                        
+                    </div>
                 </div>
-            </div>
-            <div class="ui-grid-row flat-box div-align-right">
-                <div class="ui-grid-col-12">
+
+                <div class="box-footer align-right">
+                    <p:commandButton update="paymentForm"
+                                     value="#{menu['pay']}"
+                                     styleClass="btn btn-flat btn-success" 
+                                     actionListener="#{movementBean.doPayment()}"/>
+                    <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
-                                     action="#{movementBean.doCancel()}"/>
-                    <p:spacer width="10"/>
-                    <p:commandButton update="paymentForm"
-                                     process="paymentForm"
-                                     value="#{menu['pay']}"
-                                     styleClass="ui-button-warning"
-                                     actionListener="#{movementBean.doPayment()}"/>
-
+                                     styleClass="btn btn-flat btn-default" 
+                                     action="#{movementBean.changeToList()}"/>
                 </div>
             </div>
         </h:form>
