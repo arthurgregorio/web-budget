@@ -216,11 +216,8 @@ public class Authorization {
     public final String GROUP_DELETE = "authority.group.delete";
 
     @Getter
-    @AuthorizationGroup("authority.private-message")
-    public final String PRIVATE_MESSAGE_VIEW = "authority.private-message.access";
-    @Getter
-    @AuthorizationGroup("authority.private-message")
-    public final String PRIVATE_MESSAGE_SEND = "authority.private-message.send";
+    @AuthorizationGroup("authority.message")
+    public final String MESSAGE_SEND = "authority.message.send";
 
     /**
      * Lista todas as authorities disponiveis para uso, este metodo e utilzado
