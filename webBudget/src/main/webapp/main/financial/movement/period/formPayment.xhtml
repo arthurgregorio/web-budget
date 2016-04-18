@@ -50,8 +50,7 @@
                 #{breadcrumb['financial.movement.period']}
             </a>
         </li>
-        <li jsf:rendered="#{movementBean.viewState eq 'ADDING'}" 
-            class="active">
+        <li class="active">
             <a href="#">
                 #{breadcrumb['financial.movement.period.payment']}
             </a>
@@ -59,22 +58,58 @@
     </ui:define>
 
     <ui:define name="content">
-       
-        <h:form id="paymentForm" prependId="false">
-         
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title">
-                        
-                    </h3>
-                </div>
 
+        <h:form id="paymentForm" prependId="false">
+
+            <div class="box">
                 <div class="box-body row">
                     <div class="col-sm-6">
                         <ui:include src="paymentBox.xhtml"/>
                     </div>
                     <div class="col-sm-6">
-                        
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <h4>#{messages['payment.form.movement-details']}</h4>
+                            </div>
+                            <div class="col-sm-8 form-group">
+                                <p:outputLabel value="#{messages['movement.form.contact']}: "/>
+                                <br/>
+                                <h:outputText value="#{empty movementBean.movement.contactName 
+                                                       ? messages['movement.form.no-contact'] 
+                                                       : movementBean.movement.contactName}"/>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <p:outputLabel value="#{messages['movement.form.launch-period']}: "/>
+                                <br/>
+                                #{movementBean.movement.financialPeriod.identification}
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <p:outputLabel value="#{messages['movement.form.value']}: "/>
+                                <br/>
+                                <h:outputText value="#{movementBean.movement.value}">
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                </h:outputText>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <p:outputLabel value="#{messages['movement.form.due-date']}: "/>
+                                <br/>
+                                <h:outputText value="#{movementBean.movement.dueDate}">
+                                    <f:converter converterId="localDateConverter"/>
+                                </h:outputText>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <p:outputLabel value="#{messages['movement.form.type']}: "/>
+                                <br/>
+                                #{enums[movementBean.movement.movementType]}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <p:outputLabel value="#{messages['movement.form.description']}: "/>
+                                <br/>
+                                #{movementBean.movement.description}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
