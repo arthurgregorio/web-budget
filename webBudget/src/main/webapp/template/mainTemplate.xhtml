@@ -52,6 +52,11 @@
 
     <h:body styleClass="hold-transition sidebar-mini #{userSessionBean.authenticatedUserUI}">
 
+        <h:form>
+            <p:remoteCommand name="updateMessages" 
+                             update="userMessagesBox"/>
+        </h:form>  
+        
         <div class="wrapper">
             <header class="main-header">
                 <a href="/main/dashboard.xhtml" class="logo">
@@ -64,7 +69,6 @@
                     </a>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
-
                             <li jsf:id="userMessagesBox" class="dropdown messages-menu">
                                 <ui:param name="unreadMessages" 
                                           value="#{messagingBean.unreadMessages}"/>
@@ -131,12 +135,11 @@
                                     </li>
                                     <li class="footer">
                                         <p:link href="/main/tools/messaging/received/listReceivedMessages.xhtml">
-                                            <span>#{menu['tools.messaging.received']}</span>
+                                            <span>#{menu['tools.messaging.view-received']}</span>
                                         </p:link>
                                     </li>
                                 </ul>
                             </li>
-
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <pe:gravatar id="userImage"
@@ -371,6 +374,10 @@
         </div>
 
         <ui:insert name="popups" />
+        
+        <script type="text/javascript">
+            window.setInterval("updateMessages()", 30000);
+        </script>
 
         <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
         <h:outputScript library="bootstrap" name="js/bootstrap.min.js"/>
