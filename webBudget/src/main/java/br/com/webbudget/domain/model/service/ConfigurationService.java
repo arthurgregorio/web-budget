@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.model.service;
 
-import br.com.webbudget.domain.model.entity.system.Configuration;
-import br.com.webbudget.domain.model.repository.system.IConfigurationRepository;
+import br.com.webbudget.domain.model.entity.tools.Configuration;
+import br.com.webbudget.domain.model.repository.tools.IConfigurationRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;

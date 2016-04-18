@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/mainTemplate.xhtml">
+
+    <ui:param name="activeMenu" value="messaging"/>
+    <ui:param name="activeSubmenu" value="messagesSent"/>
+
+    <f:metadata>
+        <f:viewAction action="#{messageSentBean.initializeDetailing(param.id, param.viewState)}"/>
+    </f:metadata>
+
+    <ui:define name="pageTitle">
+        #{messages['message-sent.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['message-sent.page-description']}
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li><a href="#">#{breadcrumb['tools']}</a></li>
+        <li><a href="#">#{breadcrumb['tools.messaging']}</a></li>
+        <li class="active">
+            <a href="listSent.xhtml">
+                #{breadcrumb['tools.messaging.sent']}
+            </a>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="userForm" prependId="false">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <p:messages id="messages" autoUpdate="false" closable="true" />
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-body row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <p:outputLabel value="#{messages['message-sent.form.title']}" />
+                                <br/>
+                                #{messageSentBean.message.title}
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <p:outputLabel value="#{messages['message-sent.form.priority']}" />
+                                <br/>
+                                <span class="text-red text-bold"
+                                      jsf:rendered="#{messageSentBean.message.priorityType eq 'HIGH'}">
+                                    #{enums[messageSentBean.message.priorityType]}
+                                </span>
+                                <span class="text-aqua text-bold"
+                                      jsf:rendered="#{messageSentBean.message.priorityType eq 'LOW'}">
+                                    #{enums[messageSentBean.message.priorityType]}
+                                </span>
+                                <span class="text-orange text-bold"
+                                      jsf:rendered="#{messageSentBean.message.priorityType eq 'MEDIUM'}">
+                                    #{enums[messageSentBean.message.priorityType]}
+                                </span>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <p:outputLabel value="#{messages['message-sent.form.content']}" />
+                                <br/>
+                                #{messageSentBean.message.content}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>#{messages['message-sent.recipients']}:</h4>
+                            </div>
+                            <div class="col-md-12">
+                                <p:dataTable id="usersList" 
+                                             rows="10" 
+                                             var="user" 
+                                             rowHover="true"
+                                             paginator="true"
+                                             rowKey="#{user.id}"
+                                             paginatorPosition="bottom"
+                                             paginatorAlwaysVisible="false"
+                                             emptyMessage="#{messages['list.empty']}"
+                                             value="#{messageSentBean.message.recipients}" >
+                                    <p:column headerText="#{messages['user.list.name']}">
+                                        #{user.name}
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box-footer align-right">
+                    <h:outputText styleClass="text-red text-bold delete-tip"
+                                  value="#{messages['message.delete-message']}"
+                                  rendered="#{messageSentBean.viewState eq 'DELETING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['yes']}"
+                                     styleClass="btn btn-flat btn-danger" 
+                                     action="#{messageSentBean.doDelete()}" 
+                                     rendered="#{messageSentBean.viewState eq 'DELETING'}"/>
+                    <p:spacer width="5" />
+                    <p:commandButton immediate="true"
+                                     styleClass="btn btn-flat btn-default"
+                                     action="#{messageSentBean.changeTolist()}" 
+                                     value="#{messageSentBean.viewState eq 'DETAILING' 
+                                              ? menu['back'] : menu['no']}"/>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

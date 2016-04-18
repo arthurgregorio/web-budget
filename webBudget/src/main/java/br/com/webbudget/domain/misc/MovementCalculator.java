@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.misc;
 
-import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.financial.Movement;
 import java.math.BigDecimal;
 import java.util.List;
 

@@ -32,6 +32,12 @@ no-padding {
     text-align: right;
 }
 
+/* texto de confirmacao de delecao */ 
+.delete-tip {
+    position: relative;
+    top: 3px;
+}
+
 /* imagem do usuario */
 #userImage {
     float: left;

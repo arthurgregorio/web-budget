@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.misc.MovementCalculator;
 import br.com.webbudget.application.component.chart.line.LineChartDatasetBuilder;
 import br.com.webbudget.application.component.chart.line.LineChartModel;

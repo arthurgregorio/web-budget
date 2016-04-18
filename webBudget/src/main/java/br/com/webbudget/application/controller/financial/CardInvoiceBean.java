@@ -17,9 +17,9 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.model.entity.card.Card;
-import br.com.webbudget.domain.model.entity.card.CardInvoice;
-import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.entries.Card;
+import br.com.webbudget.domain.model.entity.entries.CardInvoice;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.service.CardService;
 import br.com.webbudget.domain.model.service.FinancialPeriodService;

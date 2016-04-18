@@ -17,9 +17,9 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.model.entity.card.Card;
-import br.com.webbudget.domain.model.entity.card.CardInvoice;
-import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.entries.Card;
+import br.com.webbudget.domain.model.entity.entries.CardInvoice;
+import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;

@@ -16,9 +16,7 @@
  */
 package br.com.webbudget.domain.model.service;
 
-import br.com.webbudget.domain.model.entity.security.UserTypeEntity;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.model.repository.user.IUserRepository;
 import br.com.webbudget.domain.model.security.Grant;
 import br.com.webbudget.domain.model.security.Group;
 import br.com.webbudget.domain.model.security.GroupMembership;
@@ -58,9 +56,6 @@ public class AccountService {
     @Inject
     private RelationshipManager relationshipManager;
 
-    @Inject
-    private IUserRepository userRepository;
-    
     /**
      * 
      * @param user 
@@ -251,15 +246,6 @@ public class AccountService {
     }
 
     /**
-     * 
-     * @param user
-     * @return 
-     */
-    public UserTypeEntity userModelToUserEntity(User user) {
-        return this.userRepository.findById(user.getId(), false);
-    }
-
-    /**
      *
      * @param username
      * @return
@@ -302,11 +288,21 @@ public class AccountService {
     }
 
     /**
-     *
+     * 
      * @param userId
-     * @return
+     * @return 
      */
     public User findUserById(String userId) {
+        return this.findUserById(userId, true);
+    }
+    
+    /**
+     * 
+     * @param userId
+     * @param withGroup
+     * @return 
+     */
+    public User findUserById(String userId, boolean withGroup) {
 
         final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
 
@@ -317,7 +313,9 @@ public class AccountService {
             return null;
         } else if (users.size() == 1) {
             final User user = users.get(0);
-            user.setGroupMembership(this.listMembershipsByUser(user).get(0));
+            if (withGroup) {
+                user.setGroupMembership(this.listMembershipsByUser(user).get(0));
+            }
             return user;
         } else {
             throw new IdentityManagementException("user.error.duplicated-usernames");

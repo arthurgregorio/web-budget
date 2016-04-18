@@ -16,14 +16,14 @@
  */
 package br.com.webbudget.domain.model.service;
 
-import br.com.webbudget.domain.model.entity.wallet.Wallet;
-import br.com.webbudget.domain.model.entity.wallet.WalletBalance;
-import br.com.webbudget.domain.model.entity.wallet.WalletBalanceType;
-import br.com.webbudget.domain.model.entity.wallet.WalletType;
+import br.com.webbudget.domain.model.entity.entries.Wallet;
+import br.com.webbudget.domain.model.entity.entries.WalletBalance;
+import br.com.webbudget.domain.model.entity.entries.WalletBalanceType;
+import br.com.webbudget.domain.model.entity.entries.WalletType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.domain.model.repository.wallet.IWalletBalanceRepository;
-import br.com.webbudget.domain.model.repository.wallet.IWalletRepository;
+import br.com.webbudget.domain.model.repository.entries.IWalletBalanceRepository;
+import br.com.webbudget.domain.model.repository.entries.IWalletRepository;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;

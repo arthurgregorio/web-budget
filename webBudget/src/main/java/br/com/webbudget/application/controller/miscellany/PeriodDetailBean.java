@@ -17,10 +17,10 @@
 package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.model.entity.movement.Movement;
-import br.com.webbudget.domain.model.entity.movement.MovementClass;
-import br.com.webbudget.domain.model.entity.movement.MovementClassType;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.financial.Movement;
+import br.com.webbudget.domain.model.entity.entries.MovementClass;
+import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.misc.MovementCalculator;
 import br.com.webbudget.application.component.chart.donut.DonutChartModel;
 import br.com.webbudget.application.component.chart.line.LineChartModel;

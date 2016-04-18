@@ -16,22 +16,22 @@
  */
 package br.com.webbudget.domain.model.service;
 
-import br.com.webbudget.domain.model.entity.card.Card;
-import br.com.webbudget.domain.model.entity.card.CardInvoice;
-import br.com.webbudget.domain.model.entity.card.CardType;
-import br.com.webbudget.domain.model.entity.movement.Apportionment;
-import br.com.webbudget.domain.model.entity.movement.Movement;
-import br.com.webbudget.domain.model.entity.movement.MovementStateType;
-import br.com.webbudget.domain.model.entity.movement.MovementType;
-import br.com.webbudget.domain.model.entity.system.Configuration;
+import br.com.webbudget.domain.model.entity.entries.Card;
+import br.com.webbudget.domain.model.entity.entries.CardInvoice;
+import br.com.webbudget.domain.model.entity.entries.CardType;
+import br.com.webbudget.domain.model.entity.financial.Apportionment;
+import br.com.webbudget.domain.model.entity.financial.Movement;
+import br.com.webbudget.domain.model.entity.financial.MovementStateType;
+import br.com.webbudget.domain.model.entity.financial.MovementType;
+import br.com.webbudget.domain.model.entity.tools.Configuration;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
-import br.com.webbudget.domain.model.repository.card.ICardInvoiceRepository;
-import br.com.webbudget.domain.model.repository.card.ICardRepository;
-import br.com.webbudget.domain.model.repository.movement.IApportionmentRepository;
-import br.com.webbudget.domain.model.repository.movement.IMovementRepository;
-import br.com.webbudget.domain.model.repository.system.IConfigurationRepository;
+import br.com.webbudget.domain.model.repository.entries.ICardInvoiceRepository;
+import br.com.webbudget.domain.model.repository.entries.ICardRepository;
+import br.com.webbudget.domain.model.repository.financial.IApportionmentRepository;
+import br.com.webbudget.domain.model.repository.financial.IMovementRepository;
+import br.com.webbudget.domain.model.repository.tools.IConfigurationRepository;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

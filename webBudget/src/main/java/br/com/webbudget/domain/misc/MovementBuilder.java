@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.misc;
 
-import br.com.webbudget.domain.model.entity.movement.Apportionment;
-import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.financial.Apportionment;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.financial.Movement;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;

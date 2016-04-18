@@ -17,13 +17,13 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.model.entity.movement.Apportionment;
-import br.com.webbudget.domain.model.entity.movement.CostCenter;
-import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.model.entity.movement.FixedMovement;
-import br.com.webbudget.domain.model.entity.movement.FixedMovementStatusType;
-import br.com.webbudget.domain.model.entity.movement.Launch;
-import br.com.webbudget.domain.model.entity.movement.MovementClass;
+import br.com.webbudget.domain.model.entity.financial.Apportionment;
+import br.com.webbudget.domain.model.entity.entries.CostCenter;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.financial.FixedMovement;
+import br.com.webbudget.domain.model.entity.financial.FixedMovementStatusType;
+import br.com.webbudget.domain.model.entity.financial.Launch;
+import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.Page;

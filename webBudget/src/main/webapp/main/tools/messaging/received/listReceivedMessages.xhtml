@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/mainTemplate.xhtml">
+
+    <ui:param name="activeMenu" value="messaging"/>
+    <ui:param name="activeSubmenu" value="messagesReceived"/>
+
+    <f:metadata>
+        <f:viewAction action="#{messageReceivedBean.initializeList()}"/>
+    </f:metadata>
+
+    <ui:define name="pageTitle">
+        #{messages['message-received.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['message-received.page-description']}
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li><a href="#">#{breadcrumb['tools']}</a></li>
+        <li><a href="#">#{breadcrumb['tools.messaging']}</a></li>
+        <li class="active">
+            <a href="listReceivedMessages.xhtml">
+                #{breadcrumb['tools.messaging.received']}
+            </a>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <p:messages id="messages" closable="true" globalOnly="true"/>
+            </div>
+        </div>
+
+        <div class="box ">
+            <div class="box-header with-border">
+                <h:form id="controlsForm" prependId="false">
+                    <p:defaultCommand target="btSearch"/>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="input-group">
+                                <p:inputText size="50" 
+                                             styleClass="form-control"
+                                             value="#{messageReceivedBean.filter}"  
+                                             placeholder="#{messages['filter.messages-received']}" />
+                                <div class="input-group-btn">
+                                    <p:commandButton id="btSearch"
+                                                     update="messagesList"
+                                                     value="#{menu['search']}" 
+                                                     styleClass="btn btn-flat btn-warning" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="box-tools pull-right">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+
+            <div jsf:id="boxBody" class="box-body">
+                <h:form prependId="false">
+                    <p:dataTable id="messagesList" 
+                                 rows="20" 
+                                 lazy="true"
+                                 paginator="true"
+                                 var="userMessage" 
+                                 selectionMode="single" 
+                                 sortOrder="descending"
+                                 paginatorPosition="bottom"
+                                 paginatorAlwaysVisible="false"
+                                 emptyMessage="#{messages['list.empty']}"
+                                 value="#{messageReceivedBean.messagesModel}"
+                                 selection="#{messageReceivedBean.userMessage}" >
+
+                        <p:ajax event="rowSelect"
+                                listener="#{messageReceivedBean.changeToDetail()}" /> 
+
+                        <p:column width="15%" 
+                                  styleClass="align-center"
+                                  headerText="#{messages['message-received.list.received-on']}">
+                            #{userMessage.message.inclusionDateAsString}
+                        </p:column>
+                        <p:column headerText="#{messages['message-received.list.title']}">
+                            #{userMessage.message.title}
+                        </p:column>
+                        <p:column width="10%"
+                                  styleClass="align-center"
+                                  headerText="#{messages['message-received.list.priority']}">
+                            <span class="text-red text-bold"
+                                  jsf:rendered="#{userMessage.message.priorityType eq 'HIGH'}">
+                                #{enums[userMessage.message.priorityType]}
+                            </span>
+                            <span class="text-aqua text-bold"
+                                  jsf:rendered="#{userMessage.message.priorityType eq 'LOW'}">
+                                #{enums[userMessage.message.priorityType]}
+                            </span>
+                            <span class="text-orange text-bold"
+                                  jsf:rendered="#{userMessage.message.priorityType eq 'MEDIUM'}">
+                                #{enums[userMessage.message.priorityType]}
+                            </span>
+                        </p:column>
+
+                        <p:column width="10%" 
+                                  styleClass="align-center"
+                                  headerText="#{menu['actions']}">
+                            <p:commandButton immediate="true"
+                                             icon="fa fa-trash-o"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{messageReceivedBean.changeToDelete(userMessage.id)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

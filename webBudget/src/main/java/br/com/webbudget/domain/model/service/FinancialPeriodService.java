@@ -17,14 +17,14 @@
 package br.com.webbudget.domain.model.service;
 
 import br.com.webbudget.domain.misc.MovementsCalculator1;
-import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.misc.events.PeriodOpen;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
-import br.com.webbudget.domain.model.repository.movement.IFinancialPeriodRepository;
-import br.com.webbudget.domain.model.repository.movement.IMovementRepository;
+import br.com.webbudget.domain.model.repository.miscellany.IFinancialPeriodRepository;
+import br.com.webbudget.domain.model.repository.financial.IMovementRepository;
 import java.time.LocalDate;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;

@@ -16,10 +16,10 @@
  */
 package br.com.webbudget.domain.misc.filter;
 
-import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.model.entity.movement.MovementClassType;
-import br.com.webbudget.domain.model.entity.movement.MovementStateType;
-import br.com.webbudget.domain.model.entity.movement.MovementType;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.entries.MovementClassType;
+import br.com.webbudget.domain.model.entity.financial.MovementStateType;
+import br.com.webbudget.domain.model.entity.financial.MovementType;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

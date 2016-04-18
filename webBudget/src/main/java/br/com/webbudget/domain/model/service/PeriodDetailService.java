@@ -16,20 +16,20 @@
  */
 package br.com.webbudget.domain.model.service;
 
-import br.com.webbudget.domain.model.entity.movement.CostCenter;
-import br.com.webbudget.domain.model.entity.movement.FinancialPeriod;
-import br.com.webbudget.domain.model.entity.movement.Movement;
-import br.com.webbudget.domain.model.entity.movement.MovementClass;
-import br.com.webbudget.domain.model.entity.movement.MovementClassType;
-import br.com.webbudget.domain.model.entity.movement.MovementStateType;
-import br.com.webbudget.domain.model.entity.movement.MovementType;
+import br.com.webbudget.domain.model.entity.entries.CostCenter;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.model.entity.financial.Movement;
+import br.com.webbudget.domain.model.entity.entries.MovementClass;
+import br.com.webbudget.domain.model.entity.entries.MovementClassType;
+import br.com.webbudget.domain.model.entity.financial.MovementStateType;
+import br.com.webbudget.domain.model.entity.financial.MovementType;
 import br.com.webbudget.application.component.chart.donut.DonutChartDataset;
 import br.com.webbudget.application.component.chart.donut.DonutChartModel;
 import br.com.webbudget.application.component.chart.line.LineChartDatasetBuilder;
 import br.com.webbudget.application.component.chart.line.LineChartModel;
-import br.com.webbudget.domain.model.repository.movement.IApportionmentRepository;
-import br.com.webbudget.domain.model.repository.movement.IMovementClassRepository;
-import br.com.webbudget.domain.model.repository.movement.IMovementRepository;
+import br.com.webbudget.domain.model.repository.financial.IApportionmentRepository;
+import br.com.webbudget.domain.model.repository.entries.IMovementClassRepository;
+import br.com.webbudget.domain.model.repository.financial.IMovementRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

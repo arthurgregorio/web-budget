@@ -16,15 +16,15 @@
  */
 package br.com.webbudget.domain.model.service;
 
-import br.com.webbudget.domain.model.entity.contact.Contact;
-import br.com.webbudget.domain.model.entity.contact.Telephone;
-import br.com.webbudget.domain.model.entity.movement.Movement;
+import br.com.webbudget.domain.model.entity.entries.Contact;
+import br.com.webbudget.domain.model.entity.entries.Telephone;
+import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
-import br.com.webbudget.domain.model.repository.contact.IContactRepository;
-import br.com.webbudget.domain.model.repository.contact.ITelephoneRepository;
-import br.com.webbudget.domain.model.repository.movement.IMovementRepository;
+import br.com.webbudget.domain.model.repository.entries.IContactRepository;
+import br.com.webbudget.domain.model.repository.entries.ITelephoneRepository;
+import br.com.webbudget.domain.model.repository.financial.IMovementRepository;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

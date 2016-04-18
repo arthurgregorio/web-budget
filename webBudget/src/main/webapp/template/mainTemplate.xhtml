@@ -19,9 +19,12 @@
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:o="http://omnifaces.org/ui"
       xmlns:p="http://primefaces.org/ui"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:of="http://omnifaces.org/functions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:pe="http://primefaces.org/ui/extensions">
 
@@ -48,7 +51,7 @@
     </h:head>
 
     <h:body styleClass="hold-transition sidebar-mini #{userSessionBean.authenticatedUserUI}">
-       
+
         <div class="wrapper">
             <header class="main-header">
                 <a href="/main/dashboard.xhtml" class="logo">
@@ -61,6 +64,79 @@
                     </a>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
+
+                            <li jsf:id="userMessagesBox" class="dropdown messages-menu">
+                                <ui:param name="unreadMessages" 
+                                          value="#{messagingBean.unreadMessages}"/>
+                                <ui:param name="newMessages" 
+                                          value="#{messagingBean.countNewMessages()}"/>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-envelope-o"></i>
+                                    <span jsf:rendered="#{newMessages ne 0}"
+                                          class="label label-danger">#{newMessages}</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="header align-center">
+                                        <o:outputFormat rendered="#{newMessages ne 0}"
+                                                        value="#{messages['message-box.tip']}">
+                                            <f:param value="#{newMessages}"/>
+                                        </o:outputFormat>
+                                        <span jsf:rendered="#{newMessages eq 0}">
+                                            #{messages['message-box.no-messages']}
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <ul class="menu">
+                                            <ui:repeat value="#{unreadMessages}" var="unreadMessage">
+                                                <li>
+                                                    <p:link outcome="/main/tools/messaging/received/detailReceivedMessage.xhtml">
+                                                        <f:param name="id" value="#{unreadMessage.id}"/>
+                                                        <f:param name="viewState" value="DETAILING"/>
+                                                        <f:param name="faces-redirect" value="true"/>
+                                                        <div class="pull-left">
+                                                            <img class="img-circle"
+                                                                 src="#{resource['webbudget:img/ui-icon-high.svg']}"
+                                                                 jsf:rendered="#{unreadMessage.priority eq 'HIGH'}"/>
+                                                            <img class="img-circle"
+                                                                 src="#{resource['webbudget:img/ui-icon-medium.svg']}"
+                                                                 jsf:rendered="#{unreadMessage.priority eq 'MEDIUM'}"/>
+                                                            <img class="img-circle"
+                                                                 src="#{resource['webbudget:img/ui-icon-low.svg']}"
+                                                                 jsf:rendered="#{unreadMessage.priority eq 'LOW'}"/>
+                                                        </div>
+                                                        <h4>
+                                                            #{of:abbreviate(unreadMessage.title, 20)}
+                                                            <small>
+                                                                <i class="fa fa-clock-o"></i> 
+                                                                <p:spacer width="5"/>
+                                                                <o:outputFormat value="#{messages['message-box.hours']}"
+                                                                                rendered="#{unreadMessage.timeUnit eq 'message-box.hours'}">
+                                                                    <f:param value="#{unreadMessage.elapsedTime}"/>
+                                                                </o:outputFormat>
+                                                                <o:outputFormat value="#{messages['message-box.minutes']}"
+                                                                                rendered="#{unreadMessage.timeUnit eq 'message-box.minutes'}">
+                                                                    <f:param value="#{unreadMessage.elapsedTime}"/>
+                                                                </o:outputFormat>
+                                                                <o:outputFormat value="#{messages['message-box.date']}"
+                                                                                rendered="#{unreadMessage.timeUnit eq null}">
+                                                                    <f:param value="#{unreadMessage.elapsedTime}"/>
+                                                                </o:outputFormat>
+                                                            </small>
+                                                        </h4>
+                                                        <p>#{of:abbreviate(unreadMessage.content, 48)}</p>
+                                                    </p:link>
+                                                </li>
+                                            </ui:repeat>
+                                        </ul>
+                                    </li>
+                                    <li class="footer">
+                                        <p:link href="/main/tools/messaging/received/listReceivedMessages.xhtml">
+                                            <span>#{menu['tools.messaging.received']}</span>
+                                        </p:link>
+                                    </li>
+                                </ul>
+                            </li>
+
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <pe:gravatar id="userImage"
@@ -197,18 +273,33 @@
 
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['miscellany']}</li>
+                        <li class="treeview #{activeMenu eq 'messaging' ? 'active' : ''}">
+                            <p:link href="#">
+                                <i class="fa fa-envelope-o"></i> 
+                                <span>#{menu['tools.messaging']}</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </p:link>
+                            <ul class="treeview-menu">
+                                <li class="#{activeSubmenu eq 'messagesSent' ? 'active' : ''}"
+                                    jsf:rendered="#{userSessionBean.hasRole(authorization.MESSAGE_SEND)}">
+                                    <p:link href="/main/tools/messaging/sent/listSentMessages.xhtml">
+                                        <i class="fa fa-circle-o"></i> 
+                                        <span>#{menu['tools.messaging.sent']}</span>
+                                    </p:link>
+                                </li>
+                                <li class="#{activeSubmenu eq 'messagesReceived' ? 'active' : ''}">
+                                    <p:link href="/main/tools/messaging/received/listReceivedMessages.xhtml">
+                                        <i class="fa fa-circle-o"></i> 
+                                        <span>#{menu['tools.messaging.received']}</span>
+                                    </p:link>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="#{activeMenu eq 'closing' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.CLOSING_VIEW)}">
                             <p:link href="/main/miscellany/closing/closeFinancialPeriod.xhtml">
                                 <i class="fa fa-calculator"></i> 
                                 <span>#{menu['miscellany.closing']}</span>
-                            </p:link>
-                        </li>
-                        <li class="#{activeMenu eq 'privateMessages' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.MESSAGE_SEND)}">
-                            <p:link href="/main/miscellany/message/listMessages.xhtml">
-                                <i class="fa fa-envelope-o"></i> 
-                                <span>#{menu['miscellany.private-messages']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'financialPeriods' ? 'active' : ''}"
@@ -255,10 +346,10 @@
                     </h1>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="dashboard.xhtml">
+                            <p:link href="/main/dashboard.xhtml">
                                 <i class="fa fa-home"></i>
                                 Home
-                            </a>
+                            </p:link>
                         </li>
                         <ui:insert name="breadcrumb" />
                     </ol>

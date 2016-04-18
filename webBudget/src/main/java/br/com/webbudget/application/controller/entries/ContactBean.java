@@ -17,10 +17,10 @@
 package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.model.entity.contact.Contact;
-import br.com.webbudget.domain.model.entity.contact.ContactType;
-import br.com.webbudget.domain.model.entity.contact.NumberType;
-import br.com.webbudget.domain.model.entity.contact.Telephone;
+import br.com.webbudget.domain.model.entity.entries.Contact;
+import br.com.webbudget.domain.model.entity.entries.ContactType;
+import br.com.webbudget.domain.model.entity.entries.NumberType;
+import br.com.webbudget.domain.model.entity.entries.Telephone;
 import br.com.webbudget.domain.misc.AddressFinder;
 import br.com.webbudget.domain.misc.AddressFinder.Address;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;

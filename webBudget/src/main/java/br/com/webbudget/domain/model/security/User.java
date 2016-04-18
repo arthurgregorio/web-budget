@@ -110,7 +110,13 @@ public class User extends AbstractIdentityType implements Account {
     }
     
     /**
-     * 
+     * @return 
+     */
+    public String getGroupName() {
+        return this.groupMembership.getGroup().getName();
+    }
+    
+    /**
      * @return 
      */
     public boolean isBlocked() {
