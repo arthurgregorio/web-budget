@@ -100,7 +100,7 @@ public class Movement extends PersistentEntity {
     @Setter
     @OneToOne(mappedBy = "movement", cascade = REMOVE)
     private Launch launch;
-   
+
     @Getter
     @OneToOne(cascade = REMOVE)
     @JoinColumn(name = "id_payment")
@@ -196,8 +196,8 @@ public class Movement extends PersistentEntity {
         }
 
         // impossivel ter um rateio com valor igual a zero
-        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0 || 
-                apportionment.getValue().compareTo(this.value) > 0) {
+        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0
+                || apportionment.getValue().compareTo(this.value) > 0) {
             throw new InternalServiceError("error.apportionment.invalid-value");
         }
 
@@ -205,10 +205,10 @@ public class Movement extends PersistentEntity {
     }
 
     /**
-     * Remove um rateio pelo seu codigo, caso nao localize o mesmo dispara uma 
-     * exception para informor ao usuario que nao podera fazer nada pois sera
-     * um problema do sistema...
-     * 
+     * Remove um rateio pelo seu codigo, caso nao localize o mesmo dispara uma
+     * exception para informor ao usuario que nao podera fazer nada pois sera um
+     * problema do sistema...
+     *
      * LOL WHAT!?
      *
      * @param code o codigo
@@ -289,7 +289,7 @@ public class Movement extends PersistentEntity {
      * @return se o movimento esta pago ou nao
      */
     public boolean isPaid() {
-        return this.movementStateType == MovementStateType.PAID 
+        return this.movementStateType == MovementStateType.PAID
                 || this.movementStateType == MovementStateType.CALCULATED;
     }
 
@@ -366,7 +366,7 @@ public class Movement extends PersistentEntity {
 
         return costCenters;
     }
-    
+
     /**
      * De acordo com a primeira classe do rateio, diz se o movimento e de
      * entrada ou saida
@@ -381,10 +381,10 @@ public class Movement extends PersistentEntity {
     }
 
     /**
-     * Set customizado para o pagamento, com ele caso o movimento seja fruto
-     * de um lancamento de movimento fixo o proprio set se encarrega de 
-     * colocar a data de inicio do pagamento de acordo com o lancamento
-     * 
+     * Set customizado para o pagamento, com ele caso o movimento seja fruto de
+     * um lancamento de movimento fixo o proprio set se encarrega de colocar a
+     * data de inicio do pagamento de acordo com o lancamento
+     *
      * @param payment o pagamento
      */
     public void setPayment(Payment payment) {
@@ -393,7 +393,7 @@ public class Movement extends PersistentEntity {
         }
         this.payment = payment;
     }
-    
+
     /**
      * Realiza a validacao dos rateios do movimento fixo
      */

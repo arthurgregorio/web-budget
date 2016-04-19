@@ -552,8 +552,8 @@ public class MovementService {
                             .inTheFinancialPeriod(period)
                             .andDividedAmong(fixedMovement.getApportionments());
 
-                    final Movement movement = this.movementRepository
-                            .save(movementBuilder.build());
+                    final Movement movement = 
+                            this.updateMovement(movementBuilder.build());
 
                     // criamos o lancamento 
                     final Launch launch = new Launch();
