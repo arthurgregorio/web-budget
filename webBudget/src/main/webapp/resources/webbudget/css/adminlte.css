@@ -2095,7 +2095,7 @@ a:focus {
 }
 .timeline > li {
     position: relative;
-    margin-right: 10px;
+    /*margin-right: 10px;*/
     margin-bottom: 15px;
 }
 .timeline > li:before,
@@ -2114,7 +2114,7 @@ a:focus {
     background: #fff;
     color: #444;
     margin-left: 60px;
-    margin-right: 15px;
+    /*margin-right: 15px;*/
     padding: 0;
     position: relative;
 }

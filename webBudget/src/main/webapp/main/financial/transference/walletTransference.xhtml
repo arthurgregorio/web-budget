@@ -16,7 +16,6 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:f="http://java.sun.com/jsf/core"
@@ -52,7 +51,7 @@
         </div>
 
         <div jsf:id="transferencePanel" class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <h:form id="transferenceForm" prependId="false">
                     <div class="box">
                         <div class="box-header with-border">
@@ -62,62 +61,16 @@
                             <ui:include src="formTransference.xhtml"/>
                         </div>
                         <div class="box-footer align-right">
-                            <p:commandButton update="transferencePanel"
-                                             process="transferenceForm"
-                                             value="#{menu['transfer']}"
+                            <p:commandButton value="#{menu['transfer']}"
                                              styleClass="btn btn-flat btn-success"
+                                             update="transferenceForm timelineBox"
                                              actionListener="#{transferenceBean.doTransference()}"/>
                         </div>
                     </div>
                 </h:form>
             </div>
-            <div class="col-md-6">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">#{messages['transference.historic']}</h3>
-                    </div>
-                    <div class="box-body">
-                        <p:dataScroller id="transferencesList"
-                                        chunkSize="5" 
-                                        mode="inline"
-                                        scrollHeight="293"
-                                        var="transference"
-                                        value="#{transferenceBean.transferences}" >
-                            <div class="row" style="margin-right: -5px; margin-left: -15px;">
-                                <div class="col-xs-4 form-group">
-                                    <p:outputLabel value="#{messages['transference.list.source']}:"/>
-                                    <br/>
-                                    #{transference.sourceWallet.friendlyName}
-                                </div>
-                                <div class="col-xs-4 form-group">
-                                    <p:outputLabel value="#{messages['transference.list.target']}:"/>
-                                    <br/>
-                                    #{transference.targetWallet.friendlyName}
-                                </div>
-                                <div class="col-xs-4 form-group">
-                                    <p:outputLabel value="#{messages['transference.list.movemented-value']}:"/>
-                                    <br/>
-                                    <h:outputText value="#{transference.movementedValue}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </div>
-                                <div class="col-xs-12 form-group">
-                                    <p:outputLabel value="#{messages['transference.list.reason']}:"/>
-                                    <br/>
-                                    <h:outputText value="#{empty transference.reason 
-                                                           ? '---' : transference.reason}"/>
-                                </div>
-                            </div>
-                            <hr style="margin-top: 0px; margin-bottom: 15px;"/>
-                        </p:dataScroller>
-                    </div>
-                    <div class="box-footer align-right">
-                        <p:commandButton process="@this"
-                                         value="#{menu['update']}"
-                                         styleClass="btn btn-flat btn-default" 
-                                         actionListener="#{transferenceBean.updateHistoric()}"/>
-                    </div>
-                </div>
+            <div jsf:id="timelineBox" class="col-md-12">
+                <ui:include src="transferenceHistoric.xhtml"/>
             </div>
         </div>
     </ui:define>

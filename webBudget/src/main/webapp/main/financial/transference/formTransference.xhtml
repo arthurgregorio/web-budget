@@ -23,56 +23,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions">
 
-    <div class="col-md-6 form-group">
-        <p:outputLabel for="inWalletSource" 
-                       value="#{messages['transference.form.source']}: "/>
-        <p:selectOneMenu id="inWalletSource" 
-                         converter="omnifaces.SelectItemsConverter"
-                         value="#{transferenceBean.walletBalance.sourceWallet}">
-            <p:ajax event="change" 
-                    update="sourceBalance" />
-            <f:selectItem itemValue="#{null}"
-                          itemLabel="#{menu['select-one']}" />
-            <f:selectItems var="wallet"
-                           itemValue="#{wallet}"
-                           itemLabel="#{wallet.friendlyName}"
-                           value="#{transferenceBean.wallets}"/>
-        </p:selectOneMenu>
-    </div>
-    <div class="col-md-6 form-group">
-        <p:outputLabel for="inWalletTarget" 
-                       value="#{messages['transference.form.target']}: "/>
-        <p:selectOneMenu id="inWalletTarget" 
-                         converter="omnifaces.SelectItemsConverter"
-                         value="#{transferenceBean.walletBalance.targetWallet}">
-            <p:ajax event="change" 
-                    update="targetBalance" />
-            <f:selectItem itemValue="#{null}"
-                          noSelectionOption="true"
-                          itemLabel="#{menu['select-one']}" />
-            <f:selectItems var="wallet"
-                           itemValue="#{wallet}"
-                           itemLabel="#{wallet.friendlyName}"
-                           value="#{transferenceBean.wallets}"/>
-        </p:selectOneMenu>
-    </div>
-    <div jsf:id="sourceBalance" class="col-md-6 form-group">
-        #{messages['transference.form.balance']}
-        <h:outputText value="#{transferenceBean.walletBalance.sourceBalance}"
-                      styleClass="#{transferenceBean.walletBalance.sourceBalanceNegative
-                                    ? 'text-red' : 'text-green'}">
-            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-        </h:outputText>
-    </div>
-    <div jsf:id="targetBalance" class="col-md-6 form-group">
-        #{messages['transference.form.balance']}
-        <h:outputText value="#{transferenceBean.walletBalance.targetBalance}"
-                      styleClass="#{transferenceBean.walletBalance.targetBalanceNegative 
-                                    ? 'text-red' : 'text-green'}">
-            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-        </h:outputText>
-    </div>
-    <div class="col-md-12 form-group">
+    <div class="col-md-2 form-group">
         <p:outputLabel for="inValue" 
                        value="#{messages['transference.form.value']}: "/>
         <pe:inputNumber id="inValue" 
@@ -84,6 +35,69 @@
             <pe:keyFilter regEx="/[0-9_,]/i"/>
             <f:converter converterId="javax.faces.BigDecimal" />
         </pe:inputNumber>
+    </div>
+    <div class="col-md-5 form-group">
+        <div class="row">
+            <div class="col-xs-7 form-group">
+                <p:outputLabel for="inWalletSource" 
+                               value="#{messages['transference.form.source']}: "/>
+                <p:selectOneMenu id="inWalletSource" 
+                                 converter="omnifaces.SelectItemsConverter"
+                                 value="#{transferenceBean.walletBalance.sourceWallet}">
+                    <p:ajax event="change" 
+                            update="sourceBalance" />
+                    <f:selectItem itemValue="#{null}"
+                                  itemLabel="#{menu['select-one']}" />
+                    <f:selectItems var="wallet"
+                                   itemValue="#{wallet}"
+                                   itemLabel="#{wallet.friendlyName}"
+                                   value="#{transferenceBean.wallets}"/>
+                </p:selectOneMenu>
+            </div>
+            <div jsf:id="sourceBalance" 
+                 class="col-xs-5 form-group">
+                <p:outputLabel value="#{messages['transference.form.balance']}"/>
+                <h4>
+                    <h:outputText value="#{transferenceBean.walletBalance.sourceBalance}"
+                                  styleClass="#{transferenceBean.walletBalance.sourceBalanceNegative
+                                                ? 'text-red' : 'text-green'}">
+                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                    </h:outputText>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5 form-group">
+        <div class="row">
+            <div class="col-xs-7 form-group">
+                <p:outputLabel for="inWalletTarget" 
+                               value="#{messages['transference.form.target']}: "/>
+                <p:selectOneMenu id="inWalletTarget" 
+                                 converter="omnifaces.SelectItemsConverter"
+                                 value="#{transferenceBean.walletBalance.targetWallet}">
+                    <p:ajax event="change" 
+                            update="targetBalance" />
+                    <f:selectItem itemValue="#{null}"
+                                  noSelectionOption="true"
+                                  itemLabel="#{menu['select-one']}" />
+                    <f:selectItems var="wallet"
+                                   itemValue="#{wallet}"
+                                   itemLabel="#{wallet.friendlyName}"
+                                   value="#{transferenceBean.wallets}"/>
+                </p:selectOneMenu>
+            </div>
+            <div jsf:id="targetBalance" 
+                 class="col-xs-5 form-group">
+                <p:outputLabel value="#{messages['transference.form.balance']}"/>
+                <h4>
+                    <h:outputText value="#{transferenceBean.walletBalance.targetBalance}"
+                                  styleClass="#{transferenceBean.walletBalance.targetBalanceNegative 
+                                                ? 'text-red' : 'text-green'}">
+                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                    </h:outputText>
+                </h4>
+            </div>
+        </div>
     </div>
     <div class="col-md-12 form-group">
         <p:outputLabel for="inReason"

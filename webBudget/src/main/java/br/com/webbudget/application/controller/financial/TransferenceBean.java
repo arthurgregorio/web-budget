@@ -21,7 +21,10 @@ import br.com.webbudget.domain.model.entity.entries.Wallet;
 import br.com.webbudget.domain.model.entity.entries.WalletBalance;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.service.WalletService;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -99,6 +102,33 @@ public class TransferenceBean extends AbstractBean {
         } finally {
             this.updateComponent("transferencesList");
         }
+    }
+    
+    /**
+     * Monta uma lista somente com as transferencias daquela data especifica
+     * 
+     * @param inclusion a data de inclusao
+     * @return a lista de saldos daquela data
+     */
+    public List<WalletBalance> transferencesByInclusion(LocalDate inclusion) {
+        return this.transferences.stream()
+                .filter(balance -> balance.getInclusionAsLocalDate().equals(inclusion))
+                .collect(Collectors.toList());
+    }
+    
+    /**
+     * @return as transferencias agrupadas por data
+     */
+    public List<LocalDate> groupTransferencesByInclusion() {
+        
+        final List<LocalDate> grouped = new ArrayList<>();
+        
+        this.transferences.stream().forEach(balance -> {
+            if (!grouped.contains(balance.getInclusionAsLocalDate())) {
+                grouped.add(balance.getInclusionAsLocalDate());
+            }
+        });
+        return grouped;
     }
     
     /**

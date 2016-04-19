@@ -18,7 +18,6 @@ package br.com.webbudget.domain.model.entity.entries;
 
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
