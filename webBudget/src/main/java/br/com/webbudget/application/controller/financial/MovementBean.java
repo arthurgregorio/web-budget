@@ -174,7 +174,15 @@ public class MovementBean extends AbstractBean {
      * @param movementId o id do movimento a ser pago
      */
     public void initializePayment(long movementId) {
+        
+        // inicializa o movimento
         this.movement = this.movementService.findMovementById(movementId);
+        this.movement.setPayment(new Payment());
+        
+        // inicializa carteiras e afins
+        this.wallets = this.walletService.listWallets(Boolean.FALSE);
+        this.debitCards = this.cardService.listDebitCards(Boolean.FALSE);
+        this.creditCards = this.cardService.listCreditCards(Boolean.FALSE);
     }
 
     /**
@@ -216,7 +224,7 @@ public class MovementBean extends AbstractBean {
             this.movementService.payMovement(this.movement);
             this.movement = new Movement();
             this.closeDialog("dialogPayment");
-            this.addInfo(true, "movement.saved-pay");
+            this.addInfo(true, "movement.paid");
         } catch (InternalServiceError ex) {
             this.addError(false, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
