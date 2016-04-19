@@ -45,6 +45,13 @@ import java.util.List;
 public interface IMovementRepository extends IGenericRepository<Movement, Long> {
 
     /**
+     * 
+     * @param movementCode
+     * @return 
+     */
+    public Movement findByCode(String movementCode);
+    
+    /**
      *
      * @return
      */

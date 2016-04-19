@@ -100,8 +100,10 @@
                                         </span>
                                         <h3 class="timeline-header"
                                             jsf:rendered="#{balance.walletBalanceType eq 'PAYMENT'}">
-                                            <h:outputText styleClass="text-red text-bold"
-                                                          value="#{enums[balance.walletBalanceType]}"/>
+                                            <p:commandLink immediate="true" 
+                                                           styleClass="text-red text-bold"
+                                                           value="#{enums[balance.walletBalanceType]}"
+                                                           action="#{walletBean.changeToDetailMovement(balance.movementCode)}"/>
                                         </h3>
                                         <h3 class="timeline-header"
                                             jsf:rendered="#{balance.walletBalanceType eq 'REVENUE'}">

@@ -55,6 +55,21 @@ public class MovementRepository extends GenericRepository<Movement, Long>
         implements IMovementRepository {
 
     /**
+     * 
+     * @param movementCode
+     * @return 
+     */
+    @Override
+    public Movement findByCode(String movementCode) {
+        
+        final Criteria criteria = this.createCriteria();
+
+        criteria.add(Restrictions.eq("code", movementCode));
+
+        return (Movement) criteria.uniqueResult();
+    }
+
+    /**
      *
      * @return
      */

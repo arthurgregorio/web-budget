@@ -24,6 +24,8 @@ import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.model.entity.financial.Movement;
+import br.com.webbudget.domain.model.service.MovementService;
 import br.com.webbudget.domain.model.service.WalletService;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -62,6 +64,8 @@ public class WalletBean extends AbstractBean {
 
     @Inject
     private WalletService walletService;
+    @Inject
+    private MovementService movementService;
 
     @Getter
     private final AbstractLazyModel<Wallet> walletsModel;
@@ -167,6 +171,17 @@ public class WalletBean extends AbstractBean {
      */
     public String changeToBalanceHistoric(long walletId) {
         return "balanceHistory.xhtml?faces-redirect=true&walletId=" + walletId;
+    }
+    
+    /**
+     * 
+     * @param movementCode
+     * @return 
+     */
+    public String changeToDetailMovement(String movementCode) {
+        final Movement movement = this.movementService.findMovementByCode(movementCode);
+        return "/main/financial/movement/period/formMovement.xhtml?faces-redirect=true&movementId="
+                + movement.getId() + "&viewState=" + ViewState.DETAILING;
     }
 
     /**

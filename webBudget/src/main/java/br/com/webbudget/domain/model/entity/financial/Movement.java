@@ -289,7 +289,8 @@ public class Movement extends PersistentEntity {
      * @return se o movimento esta pago ou nao
      */
     public boolean isPaid() {
-        return this.movementStateType == MovementStateType.PAID;
+        return this.movementStateType == MovementStateType.PAID 
+                || this.movementStateType == MovementStateType.CALCULATED;
     }
 
     /**

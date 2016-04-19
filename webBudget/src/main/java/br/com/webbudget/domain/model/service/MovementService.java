@@ -828,6 +828,15 @@ public class MovementService {
 
         return page;
     }
+    
+    /**
+     * 
+     * @param movementCode
+     * @return 
+     */
+    public Movement findMovementByCode(String movementCode) {
+        return this.movementRepository.findByCode(movementCode);
+    }
 
     /**
      *
