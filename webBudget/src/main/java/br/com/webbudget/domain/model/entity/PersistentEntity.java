@@ -18,6 +18,8 @@ package br.com.webbudget.domain.model.entity;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -86,5 +88,14 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
      */
     public String getInclusionDateAsString() {
         return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(this.inclusion);
+    }
+    
+    /**
+     * @return a data de inclusao em localdate 
+     */
+    public LocalDate getInclusionAsLocalDate() {
+        return this.inclusion.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 }

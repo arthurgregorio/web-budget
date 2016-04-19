@@ -25,8 +25,11 @@ import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.domain.model.service.WalletService;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -117,6 +120,15 @@ public class WalletBean extends AbstractBean {
     public void initializeAdjustment(long walletId) {
         this.wallet = this.walletService.findWalletById(walletId);
     }
+    
+    /**
+     * 
+     * @param walletId 
+     */
+    public void initializeBalanceHistoric(long walletId) {
+        this.wallet = this.walletService.findWalletById(walletId);
+        this.walletBalances = this.walletService.listBalances(this.wallet);
+    }
 
     /**
      * @return o form de inclusao
@@ -146,6 +158,15 @@ public class WalletBean extends AbstractBean {
      */
     public String changeToAdjustment(long walletId) {
         return "formAdjustment.xhtml?faces-redirect=true&walletId=" + walletId;
+    }
+    
+    /**
+     * 
+     * @param walletId
+     * @return 
+     */
+    public String changeToBalanceHistoric(long walletId) {
+        return "balanceHistory.xhtml?faces-redirect=true&walletId=" + walletId;
     }
 
     /**
@@ -236,24 +257,30 @@ public class WalletBean extends AbstractBean {
     }
     
     /**
-     * @param wallet
+     * Monta uma lista somente com os saldos daquela data especifica
+     * 
+     * @param inclusion a data de inclusao
+     * @return a lista de saldos daquela data
      */
-    public void showBalance(Wallet wallet) {
-
-        this.wallet = wallet;
+    public List<WalletBalance> balancesByInclusion(LocalDate inclusion) {
+        return this.walletBalances.stream()
+                .filter(balance -> balance.getInclusionAsLocalDate().equals(inclusion))
+                .collect(Collectors.toList());
+    }
+    
+    /**
+     * @return os saldos agrupados por data
+     */
+    public List<LocalDate> groupBalancesByInclusion() {
         
-        this.walletBalances = this.walletService.listBalances(wallet);
+        final List<LocalDate> grouped = new ArrayList<>();
         
-        // se nao tem saldo, nao mostra a popup
-        if (this.walletBalances.isEmpty()) {
-            this.addWarning(true, "warning.wallet.no-balances");
-            return;
-        }
-
-        // se tem saldos, ja pega o primeiro e sai mostrando
-        this.selectedBalance = this.getWalletBalances().get(0);
-        
-        this.updateAndOpenDialog("balanceHistoryDialog", "dialogBalanceHistory");
+        this.walletBalances.stream().forEach(balance -> {
+            if (!grouped.contains(balance.getInclusionAsLocalDate())) {
+                grouped.add(balance.getInclusionAsLocalDate());
+            }
+        });
+        return grouped;
     }
     
     /**

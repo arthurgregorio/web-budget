@@ -3,7 +3,7 @@
      xmlns:h="http://xmlns.jcp.org/jsf/html"
      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <p:commandLink actionListener="#{walletBean.showBalance(wallet)}"
+    <p:commandLink action="#{walletBean.changeToBalanceHistoric(wallet.id)}"
                    rendered="#{appConfigBean.configuration.showWalletBalances}"
                    styleClass="#{wallet.balanceNegative  ? 'text-red' : 'text-green'}">
         <h:outputText value="R$ #{wallet.balance}" >
@@ -11,7 +11,7 @@
         </h:outputText>
     </p:commandLink>
     
-    <p:commandLink actionListener="#{walletBean.showBalance(wallet.id)}"
+    <p:commandLink action="#{walletBean.changeToBalanceHistoric(wallet.id)}"
                    rendered="#{not appConfigBean.configuration.showWalletBalances}">
         #{messages['wallet.list.click-to-see']}
     </p:commandLink>

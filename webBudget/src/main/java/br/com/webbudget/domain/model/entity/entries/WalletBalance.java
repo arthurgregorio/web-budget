@@ -83,13 +83,6 @@ public class WalletBalance extends PersistentEntity {
     private Wallet sourceWallet;
 
     /**
-     * @return 
-     */
-    public String getInclusionFormatted() {
-        return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(this.getInclusion());
-    }
-    
-    /**
      * @return se o saldo do destino esta ou nao negativo
      */
     public boolean isTargetBalanceNegative() {

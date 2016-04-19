@@ -134,3 +134,10 @@ div.ui-paginator {
     background-position: initial !important;
     background-image: url("#{resource['webbudget:img/ui-icon-arrow-down.png']}") !important;
 }
+
+/* customizacao do scroller */
+.ui-datascroller-content {
+    background: none !important;
+    border: none !important;
+    padding: 0px !important;
+}
