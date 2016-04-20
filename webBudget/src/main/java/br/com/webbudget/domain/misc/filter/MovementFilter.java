@@ -84,7 +84,12 @@ public final class MovementFilter {
         custom.add(this.getMovementTypeCriterion());
         custom.add(this.getMovementStateTypeCriterion());
         custom.add(this.getMovementClassTypeCriterion());
-        custom.add(this.getPeriodsCriterion());
+        
+        final Criterion periodsCriterion = this.getPeriodsCriterion();
+        
+        if (periodsCriterion != null) {
+            custom.add(periodsCriterion);
+        }
 
         return custom.stream()
                 .filter(criterion -> criterion != null)
@@ -146,15 +151,13 @@ public final class MovementFilter {
      */
     private Criterion getPeriodsCriterion() {
         
-        final List<Criterion> criterions = new ArrayList<>();
-        
         final Object[] values = this.periods.stream()
                 .map(FinancialPeriod::getId)
                 .collect(Collectors.toList())
                 .stream()
                 .toArray(Object[]::new);
         
-        return Restrictions.in("fp.id", values);
+        return values.length > 0 ? Restrictions.in("fp.id", values) : null;
     }
 
     /**
