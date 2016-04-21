@@ -261,6 +261,11 @@ public class MovementService {
         
         // validamos se os rateios estao corretos
         movement.validateApportionments();
+        
+        // se nao foi informada a data de vencimento, seta a data atual
+        if (!movement.hasDueDate()) {
+            movement.setDueDate(LocalDate.now());
+        }
 
         // se pagamos no cartao de credito, coloca o vencimento do movimento 
         // para a data de vencimento da fatura do cartao

@@ -224,7 +224,9 @@ public class MovementBean extends AbstractBean {
             this.movementService.payMovement(this.movement);
             this.movement = new Movement();
             this.closeDialog("dialogPayment");
-            this.addInfo(true, "movement.paid");
+            this.addInfo(false, "movement.paid");
+            this.updateComponent("movementForm");
+            this.temporizeHiding("messages");
         } catch (InternalServiceError ex) {
             this.addError(false, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {

@@ -43,9 +43,11 @@
         <servlet-name>FacesServlet</servlet-name>
     </filter-mapping>
     
-    <!-- Descomente estas linhas se voce quiser que o sistema rode apenas com
-         HTTPS, nao esqueca do redirect no wildfly 
-    <security-constraint>
+    <!-- 
+        Descomente estas linhas se voce quiser que o sistema rode apenas com
+        HTTPS, nao esqueca do redirect no wildfly 
+    -->    
+<!--    <security-constraint>
         <web-resource-collection>
             <web-resource-name>App</web-resource-name>
             <url-pattern>/*</url-pattern>
