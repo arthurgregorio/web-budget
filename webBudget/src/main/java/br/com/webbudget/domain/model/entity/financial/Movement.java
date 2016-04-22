@@ -332,8 +332,8 @@ public class Movement extends PersistentEntity {
         return this.apportionments
                 .stream()
                 .findFirst()
-                .get()
-                .isForExpenses();
+                .map(apportionment -> apportionment.isForExpenses())
+                .orElse(false);
     }
 
     /**
@@ -343,8 +343,8 @@ public class Movement extends PersistentEntity {
         return this.apportionments
                 .stream()
                 .findFirst()
-                .get()
-                .isForRevenues();
+                .map(apportionment -> apportionment.isForRevenues())
+                .orElse(false);
     }
 
     /**

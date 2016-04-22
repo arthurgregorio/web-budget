@@ -65,7 +65,8 @@
                                itemLabel="#{wallet.friendlyName}"/>
             </p:selectOneMenu>
         </div>
-        <div class="col-sm-12 form-group">
+        <div class="col-sm-12 form-group"
+             jsf:rendered="#{not movementBean.movement.revenue}">
             <p:outputLabel for="inCreditCard" 
                            value="#{messages['payment.form.credit-card']}: "/>
             <p:selectOneMenu id="inCreditCard" 
@@ -81,7 +82,8 @@
                                itemLabel="#{creditCard.readableName}"/>
             </p:selectOneMenu>
         </div>
-        <div class="col-sm-12 form-group">
+        <div class="col-sm-12 form-group"
+             jsf:rendered="#{not movementBean.movement.revenue}">
             <p:outputLabel for="inDebitCard" 
                            value="#{messages['payment.form.debit-card']}: "/>
             <p:selectOneMenu id="inDebitCard" 
