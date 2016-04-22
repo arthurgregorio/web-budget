@@ -305,6 +305,8 @@ public class MovementRepository extends GenericRepository<Movement, Long>
         criteria.createAlias("payment", "py").createAlias("py.card", "cc");
         criteria.add(Restrictions.eq("cc.id", card.getId()));
 
+        criteria.addOrder(Order.asc("py.paymentDate"));
+        
         return criteria.list();
     }
 
