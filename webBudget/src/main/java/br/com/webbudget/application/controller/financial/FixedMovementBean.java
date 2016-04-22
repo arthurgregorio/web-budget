@@ -129,27 +129,23 @@ public class FixedMovementBean extends AbstractBean {
     }
 
     /**
-     *
+     * 
      * @param fixedMovementId
-     * @param detailing
+     * @param viewState 
      */
-    public void initializeForm(long fixedMovementId, boolean detailing) {
+    public void initializeForm(long fixedMovementId, String viewState) {
 
+        this.viewState = ViewState.valueOf(viewState);
+        
         this.costCenters = this.movementService.listCostCenters(false);
 
-        if (fixedMovementId == 0 && !detailing) {
-            this.viewState = ViewState.ADDING;
+        if (this.viewState == ViewState.ADDING) {
             this.fixedMovement = new FixedMovement();
-        } else if (fixedMovementId != 0 && !detailing) {
-            this.viewState = ViewState.EDITING;
+        } else {
             this.fixedMovement = this.movementService
                     .findFixedMovementById(fixedMovementId);
             this.fixedMovement = this.movementService
                     .fetchLaunchesForFixedMovement(this.fixedMovement);
-        } else {
-            this.viewState = ViewState.DETAILING;
-            this.fixedMovement = this.movementService
-                    .findFixedMovementById(fixedMovementId);
         }
     }
 
@@ -157,7 +153,7 @@ public class FixedMovementBean extends AbstractBean {
      * @return
      */
     public String changeToAdd() {
-        return "formFixedMovement.xhtml?faces-redirect=true";
+        return "formFixedMovement.xhtml?faces-redirect=true&viewState=" + ViewState.ADDING;
     }
 
     /**
@@ -172,7 +168,8 @@ public class FixedMovementBean extends AbstractBean {
      * @return
      */
     public String changeToEdit(long fixedMovementId) {
-        return "formFixedMovement.xhtml?faces-redirect=true&fixedMovementId=" + fixedMovementId;
+        return "formFixedMovement.xhtml?faces-redirect=true&fixedMovementId=" 
+                + fixedMovementId + "&viewState=" + ViewState.EDITING;
     }
 
     /**
@@ -191,7 +188,7 @@ public class FixedMovementBean extends AbstractBean {
      */
     public String changeToDetail(long fixedMovementId) {
         return "formFixedMovement.xhtml?faces-redirect=true&fixedMovementId="
-                + fixedMovementId + "&detailing=true";
+                + fixedMovementId + "&viewState=" + ViewState.DETAILING;
     }
 
     /**

@@ -30,7 +30,7 @@
     <ui:param name="activeMenu" value="movements"/>
 
     <f:metadata>
-        <f:viewAction action="#{fixedMovementBean.initializeForm(param.fixedMovementId, param.detailing)}"/>
+        <f:viewAction action="#{fixedMovementBean.initializeForm(param.fixedMovementId, param.viewState)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -160,7 +160,7 @@
                     <div class="col-sm-6">
                         <wb:apportionmentBox id="apportionmentBox"
                                              baseBean="#{fixedMovementBean}"
-                                             disabled="#{movementBean.viewState ne 'ADDING'}"
+                                             disabled="#{fixedMovementBean.viewState ne 'ADDING'}"
                                              showDialogAction="#{fixedMovementBean.showApportionmentDialog()}"
                                              apportionmentsList="#{fixedMovementBean.fixedMovement.apportionments}"/>
                     </div>
@@ -179,6 +179,11 @@
                                      styleClass="btn btn-flat btn-success"
                                      action="#{fixedMovementBean.doUpdate()}"
                                      rendered="#{fixedMovementBean.viewState eq 'EDITING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['launches']}"
+                                     styleClass="btn btn-flat btn-warning" 
+                                     action="#{fixedMovementBean.showLaunchesDialog()}"
+                                     rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
