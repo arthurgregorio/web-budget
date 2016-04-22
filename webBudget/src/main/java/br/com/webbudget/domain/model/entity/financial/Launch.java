@@ -115,7 +115,8 @@ public class Launch extends PersistentEntity {
     /**
      * @return a data de incio do movimento fixo
      */
-    public LocalDate getStartDateForFixedMovement() {
-        return this.fixedMovement.getStartDate();
+    public LocalDate getStartDate() {
+        return this.fixedMovement.getStartDate() == null 
+                ? LocalDate.now() : this.fixedMovement.getStartDate();
     }
 }

@@ -177,7 +177,15 @@ public class MovementBean extends AbstractBean {
         
         // inicializa o movimento
         this.movement = this.movementService.findMovementById(movementId);
-        this.movement.setPayment(new Payment());
+        
+        final Payment payment = new Payment();
+        
+        // se for um lancamento, pega a data de incio como data de pagamento
+        if (this.movement.getLaunch() != null) {
+            payment.setPaymentDate(this.movement.getLaunch().getStartDate());
+        }
+        
+        this.movement.setPayment(payment);
         
         // inicializa carteiras e afins
         this.wallets = this.walletService.listWallets(Boolean.FALSE);
@@ -219,12 +227,12 @@ public class MovementBean extends AbstractBean {
     /**
      * Salva e paga o movimento
      */
-    public void doPayment() {
+    public void doSaveAndPayment() {
         try {
             this.movementService.payMovement(this.movement);
             this.movement = new Movement();
             this.closeDialog("dialogPayment");
-            this.addInfo(false, "movement.paid");
+            this.addInfo(false, "movement.saved-paid");
             this.updateComponent("movementForm");
             this.temporizeHiding("messages");
         } catch (InternalServiceError ex) {
@@ -232,6 +240,21 @@ public class MovementBean extends AbstractBean {
         } catch (Exception ex) {
             this.logger.error(ex.getMessage(), ex);
             this.addError(false, "error.undefined-error", ex.getMessage());
+        }
+    }
+    
+    /**
+     * Aepnas paga o movimento
+     */
+    public void doPayment() {
+        try {
+            this.movementService.payMovement(this.movement);
+            this.updateAndOpenDialog("confirmPaymentDialog", "dialogConfirmPayment");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
 
@@ -264,7 +287,14 @@ public class MovementBean extends AbstractBean {
      * Exibe a telinha de pagamento
      */
     public void showPaymentDialog() {
-        this.movement.setPayment(new Payment());
+        
+        final Payment payment = new Payment();
+       
+        // se for um lancamento, pega a data de incio como data de pagamento
+        if (this.movement.getLaunch() != null) {
+            payment.setPaymentDate(this.movement.getLaunch().getStartDate());
+        }
+        this.movement.setPayment(payment);
         this.updateAndOpenDialog("paymentDialog", "dialogPayment");
     }
 

@@ -27,12 +27,13 @@
           header="#{messages['confirm-payment.dialog.title']}">
 
     <div class="row">
-        <div class="col-sm-12">
-            <h3>
-                <o:outputFormat value="#{messages['confirm-payment.dialog.tip']}">
+        <div class="col-sm-12 form-group">
+            <h4>
+                <o:outputFormat escape="false"
+                                value="#{messages['confirm-payment.dialog.tip']}">
                     <f:param value="#{movementBean.movement.code}" />
                 </o:outputFormat>
-            </h3>
+            </h4>
         </div>
     </div>
     <div class="row">

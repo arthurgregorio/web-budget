@@ -109,4 +109,36 @@ public class Payment extends PersistentEntity {
             return period.getEnd();
         }
     }
+    
+    /**
+     * @return se este pagamento eh em dinheiro
+     */
+    public boolean isPaidInCash() {
+        return this.paymentMethodType == PaymentMethodType.IN_CASH;
+    }
+    
+    /**
+     * @return se este pagamento eh em credito
+     */
+    public boolean isPaidOnCredit() {
+        return this.paymentMethodType == PaymentMethodType.CREDIT_CARD;
+    }
+    
+    /**
+     * @return se este pagamento eh em debito
+     */
+    public boolean isPaidOnDebit() {
+        return this.paymentMethodType == PaymentMethodType.DEBIT_CARD;
+    }
+
+    /**
+     * Valida se este pagamento eh valido
+     */
+    public void validatePaymentMethod() {
+        if (this.isPaidInCash() && this.wallet == null) {
+            throw new InternalServiceError("error.payment.no-wallet");
+        } else if ((this.isPaidOnCredit() || this.isPaidOnDebit()) && this.card == null) {
+            throw new InternalServiceError("error.payment.no-card");
+        }
+    }
 }

@@ -102,6 +102,7 @@ public class Movement extends PersistentEntity {
     private Launch launch;
 
     @Getter
+    @Setter
     @OneToOne(cascade = REMOVE)
     @JoinColumn(name = "id_payment")
     private Payment payment;
@@ -378,20 +379,6 @@ public class Movement extends PersistentEntity {
             return apportionment.getMovementClass().getMovementClassType();
         }
         return null;
-    }
-
-    /**
-     * Set customizado para o pagamento, com ele caso o movimento seja fruto de
-     * um lancamento de movimento fixo o proprio set se encarrega de colocar a
-     * data de inicio do pagamento de acordo com o lancamento
-     *
-     * @param payment o pagamento
-     */
-    public void setPayment(Payment payment) {
-        if (this.launch != null) {
-            payment.setPaymentDate(this.launch.getStartDateForFixedMovement());
-        }
-        this.payment = payment;
     }
 
     /**

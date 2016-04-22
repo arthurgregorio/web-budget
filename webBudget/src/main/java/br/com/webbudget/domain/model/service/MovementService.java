@@ -256,8 +256,11 @@ public class MovementService {
     @Transactional
     public void payMovement(Movement movement) {
 
-        // salva o pagamento
+        // pega o pagamento
         Payment payment = movement.getPayment();
+
+        // valida o pagamento
+        payment.validatePaymentMethod();
         
         // validamos se os rateios estao corretos
         movement.validateApportionments();
@@ -661,7 +664,7 @@ public class MovementService {
         final Launch launch = this.launchRepository.findByMovement(movement);
 
         if (launch != null) {
-            return launch.getStartDateForFixedMovement();
+            return launch.getStartDate();
         } else {
             return null;
         }
