@@ -115,6 +115,15 @@
                                 #{messages['financial-period.list.expired']}
                         </strong>
                     </p:column>
+                    <p:column width="12%"
+                              styleClass="align-center" 
+                              headerText="#{messages['financial-period.list.result']}">
+                        <h:outputText value="#{financialPeriod.result}"
+                                      styleClass="#{financialPeriod.result.signum() lt 0 
+                                                    ? 'text-red' : 'text-green'}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </p:column>
 
                     <p:column width="15%" 
                               styleClass="align-center"

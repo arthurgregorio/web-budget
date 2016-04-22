@@ -178,4 +178,11 @@ public class FinancialPeriod extends PersistentEntity {
     public String getEndAsString() {
         return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.end);
     }
+    
+    /**
+     * @return o resultado para o periodo caso ele esteja fechado
+     */
+    public BigDecimal getResult() {
+        return this.closing != null ? this.closing.getBalance() : BigDecimal.ZERO;
+    }
 }
