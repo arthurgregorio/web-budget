@@ -3,9 +3,10 @@ package br.com.webbudget.application.controller;
 import br.com.webbudget.domain.model.entity.tools.UserMessage;
 import br.com.webbudget.domain.model.service.MessagingService;
 import java.util.List;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
 
 /**
  *
@@ -15,39 +16,47 @@ import javax.inject.Named;
  * @since 2.0.0, 13/04/2016
  */
 @Named
-@RequestScoped
+@SessionScoped
 public class MessagingBean extends AbstractBean {
+
+    @Getter
+    private int newMessages;
+    @Getter
+    private List<UserMessage> unreadMessages;
 
     @Inject
     private MessagingService messagingService;
 
     /**
-     *
-     * @return
+     * Atualiza o status das mensagens
      */
-    public long countNewMessages() {
-        return this.messagingService.countNewMessages();
+    public void updateMessageStatus() {
+
+        // lista as mensagens
+        this.unreadMessages = this.listUnreadMessages();
+
+        // conta as mensagens
+        this.newMessages = this.unreadMessages.size();
     }
 
     /**
-     *
-     * @return
+     * @return as mensagens nao lidas
      */
-    public List<UserMessage> getUnreadMessages() {
+    private List<UserMessage> listUnreadMessages() {
 
-        final List<UserMessage> unreadMessages
+        final List<UserMessage> messages
                 = this.messagingService.listUnreadMessages();
 
-        unreadMessages.stream().forEach(message -> {
+        messages.stream().forEach(message -> {
             message.calculateElapsedTime();
         });
 
-        return unreadMessages;
+        return messages;
     }
 
     /**
      * Redireciona para pagina de detalhes do vendedor
-     * 
+     *
      * @param userMessageId o id da mensagem a ser visualizada
      */
     public void changeToDetail(long userMessageId) {

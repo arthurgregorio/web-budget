@@ -53,10 +53,12 @@
     <h:body styleClass="hold-transition sidebar-mini #{userSessionBean.authenticatedUserUI}">
 
         <h:form>
-            <p:remoteCommand name="updateMessages" 
-                             update="userMessagesBox"/>
-        </h:form>  
-        
+            <p:remoteCommand autoRun="true"
+                             name="updateMessages" 
+                             update="userMessagesBox"
+                             actionListener="#{messagingBean.updateMessageStatus()}"/>
+        </h:form>    
+
         <div class="wrapper">
             <header class="main-header">
                 <a href="/main/dashboard.xhtml" class="logo">
@@ -70,28 +72,24 @@
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
                             <li jsf:id="userMessagesBox" class="dropdown messages-menu">
-                                <ui:param name="unreadMessages" 
-                                          value="#{messagingBean.unreadMessages}"/>
-                                <ui:param name="newMessages" 
-                                          value="#{messagingBean.countNewMessages()}"/>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-envelope-o"></i>
-                                    <span jsf:rendered="#{newMessages ne 0}"
-                                          class="label label-danger">#{newMessages}</span>
+                                    <span jsf:rendered="#{messagingBean.newMessages ne 0}"
+                                          class="label label-danger">#{messagingBean.newMessages}</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="header align-center">
-                                        <o:outputFormat rendered="#{newMessages ne 0}"
+                                        <o:outputFormat rendered="#{messagingBean.newMessages ne 0}"
                                                         value="#{messages['message-box.tip']}">
-                                            <f:param value="#{newMessages}"/>
+                                            <f:param value="#{messagingBean.newMessages}"/>
                                         </o:outputFormat>
-                                        <span jsf:rendered="#{newMessages eq 0}">
+                                        <span jsf:rendered="#{messagingBean.newMessages eq 0}">
                                             #{messages['message-box.no-messages']}
                                         </span>
                                     </li>
                                     <li>
                                         <ul class="menu">
-                                            <ui:repeat value="#{unreadMessages}" var="unreadMessage">
+                                            <ui:repeat value="#{messagingBean.unreadMessages}" var="unreadMessage">
                                                 <li>
                                                     <p:link outcome="/main/tools/messaging/received/detailReceivedMessage.xhtml">
                                                         <f:param name="id" value="#{unreadMessage.id}"/>
@@ -374,7 +372,7 @@
         </div>
 
         <ui:insert name="popups" />
-        
+
         <script type="text/javascript">
             window.setInterval("updateMessages()", 30000);
         </script>
