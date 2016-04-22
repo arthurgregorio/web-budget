@@ -45,6 +45,10 @@
                         value="#{messages['fixed-movement.page-description-editing']}">
             <f:param value="#{fixedMovementBean.fixedMovement.identification}"/>
         </o:outputFormat>
+        <o:outputFormat rendered="#{fixedMovementBean.viewState eq 'DETAILING'}" 
+                        value="#{messages['fixed-movement.page-description-detailing']}">
+            <f:param value="#{fixedMovementBean.fixedMovement.identification}"/>
+        </o:outputFormat>
     </ui:define>
 
     <ui:define name="breadcrumb">
@@ -55,6 +59,8 @@
             class="active"><a href="#">#{breadcrumb['including']}</a></li>
         <li jsf:rendered="#{fixedMovementBean.viewState eq 'EDITING'}" 
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
+        <li jsf:rendered="#{fixedMovementBean.viewState eq 'DETAILING'}" 
+            class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
