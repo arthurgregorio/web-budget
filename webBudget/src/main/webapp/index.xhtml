@@ -34,14 +34,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:img/favicon.ico']}"/>
-        
+
         <h:outputStylesheet library="bootstrap" name="css/bootstrap.css"/>
         <h:outputStylesheet library="webbudget" name="css/adminlte.css"/>
+        <h:outputStylesheet library="webbudget" name="css/common.css"/>
         <h:outputStylesheet library="primefaces-bootstrap" name="custom.css"/>
     </h:head>
 
     <h:body styleClass="hold-transition login-page">
-        
+
         <f:metadata>
             <f:viewAction action="#{authenticationBean.initialize()}"/>
         </f:metadata>
@@ -84,6 +85,14 @@
                                     jsf:action="#{authenticationBean.doLogin()}" >
                                 #{menu['login']}
                             </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 align-center margin-t-15">
+                            <i class="fa fa-hand-o-right"></i>
+                            <span class="text-bold">
+                                #{messages['login.system-test-tip']}
+                            </span>
                         </div>
                     </div>
                 </h:form>
