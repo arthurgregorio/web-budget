@@ -31,7 +31,9 @@
                            value="#{messages['payment.form.method']}: "/>
             <p:selectOneMenu id="inPaymentMethod" 
                              value="#{payment.paymentMethodType}"
-                             converter="omnifaces.GenericEnumConverter">
+                             converter="omnifaces.GenericEnumConverter"
+                             disabled="#{movementBean.movement.cardInvoice 
+                                         or movementBean.movement.revenue}">
                 <p:ajax event="change"  
                         update="paymentBox" />
                 <f:selectItems var="paymentType"
