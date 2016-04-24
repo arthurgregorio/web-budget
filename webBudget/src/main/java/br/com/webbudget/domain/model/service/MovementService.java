@@ -348,6 +348,17 @@ public class MovementService {
             throw new InternalServiceError("error.movement.paid-invoice");
         }
 
+        // se for movimento fixo e for a ultima parcela reabre o movimento fixo
+        if (movement.isLastLaunch()) {
+            final FixedMovement fixedMovement = 
+                    movement.getLaunch().getFixedMovement();
+            
+            fixedMovement.setFixedMovementStatusType(
+                    FixedMovementStatusType.ACTIVE);
+            
+            this.fixedMovementRepository.save(fixedMovement);
+        }
+        
         // devolve o saldo na carteira se for o caso
         if (movement.getMovementStateType() == MovementStateType.PAID
                 && movement.getPayment().getPaymentMethodType() == PaymentMethodType.IN_CASH) {

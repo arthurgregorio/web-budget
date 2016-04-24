@@ -263,4 +263,11 @@ public class FixedMovement extends PersistentEntity {
         }
         return null;
     }
+
+    /**
+     * @return se este movimento fixo ja finalizou ou nao
+     */
+    boolean isFinalized() {
+        return this.fixedMovementStatusType == FixedMovementStatusType.FINALIZED;
+    }
 }

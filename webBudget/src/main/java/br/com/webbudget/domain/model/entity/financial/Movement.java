@@ -416,4 +416,12 @@ public class Movement extends PersistentEntity {
                     "error.apportionment.lt-value", difference);
         }
     }
+
+    /**
+     * @return se este movimento e o ultimo lancamento de uma serie de 
+     * lancamentos de movimentos fixos
+     */
+    public boolean isLastLaunch() {
+        return this.launch != null && this.launch.getFixedMovement().isFinalized();
+    }
 }
