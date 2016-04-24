@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Classe utilitaria para uso em alguns pontos da aplicacao sem a necessidade de

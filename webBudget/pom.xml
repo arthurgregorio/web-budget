@@ -71,14 +71,25 @@
                 <version>2.6</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <webResources>
+                        <resource>
+                            <filtering>true</filtering>
+                            <directory>src/main/webapp</directory>
+                            <includes>
+                                <include>**/web.xml</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                 </configuration>
             </plugin>
         </plugins>
         
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
     </build>
@@ -99,6 +110,7 @@
                 <email.port>${wb.email-port}</email.port>
                 <email.user>${wb.email-user}</email.user>
                 <email.password>${wb.email-password}</email.password>
+                <jsf.stage>Development</jsf.stage>
             </properties>
         </profile>
         <profile>
@@ -109,6 +121,7 @@
                 <email.port>${wb.email-port}</email.port>
                 <email.user>${wb.email-user}</email.user>
                 <email.password>${wb.email-password}</email.password>
+                <jsf.stage>Production</jsf.stage>
             </properties>
         </profile>
         <profile>
@@ -120,6 +133,15 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.6</version>
                         <configuration>
+                            <webResources>
+                                <resource>
+                                    <filtering>true</filtering>
+                                    <directory>src/main/webapp</directory>
+                                    <includes>
+                                        <include>**/web.xml</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                             <outputDirectory>deployments</outputDirectory>
                             <warName>ROOT</warName>
@@ -134,6 +156,8 @@
                 <email.port>${wb.email-port}</email.port>
                 <email.user>${wb.email-user}</email.user>
                 <email.password>${wb.email-password}</email.password>
+                <!--<jsf.stage>Production</jsf.stage>-->
+                <jsf.stage>SystemTest</jsf.stage>
             </properties>
         </profile>
     </profiles>

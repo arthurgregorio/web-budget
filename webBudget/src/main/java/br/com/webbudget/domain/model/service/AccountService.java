@@ -93,10 +93,10 @@ public class AccountService {
     @Transactional
     public void update(User user) {
 
-        // inibe alterar a senha do admin em ambiente de testes
+        // limpa a senha para nao ser trocada quando em testes
         if (ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
                 && user.getUsername().equals("admin")) {
-            return;
+            user.setPassword(null);
         }
         
         // pegamos o grupo
@@ -129,12 +129,12 @@ public class AccountService {
     @Transactional
     public void updateProfile(User user) {
 
-        // inibe alterar a senha do admin em ambiente de testes
+        // limpa a senha para nao ser trocada quando em testes
         if (ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
                 && user.getUsername().equals("admin")) {
-            return;
+            user.setPassword(null);
         }
-
+        
         // pegamos a senha antes de salvar o usuario
         final String unsecurePassword = user.getPassword();
         
