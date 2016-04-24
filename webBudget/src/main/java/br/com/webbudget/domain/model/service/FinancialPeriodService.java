@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.model.service;
 
-import br.com.webbudget.domain.misc.MovementsCalculator1;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.misc.events.PeriodOpen;
@@ -41,9 +40,6 @@ import javax.transaction.Transactional;
  */
 @ApplicationScoped
 public class FinancialPeriodService {
-
-    @Inject
-    private MovementsCalculator1 movementsCalculator;
 
     @Inject
     private IMovementRepository movementRepository;

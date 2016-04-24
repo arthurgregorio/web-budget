@@ -19,25 +19,27 @@
           xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
-          id="closingConfirmationDialog"
-          modal="true" 
+          id="closingConfirmationDialog" 
+          modal="true"
           resizable="false" 
-          closable="false"
           widgetVar="dialogClosingConfirmation" 
-          header="#{messages['closing.confirm']}">
+          header="#{messages['closing-confirmation.dialog.title']}">
 
-    <div class="ui-grid-row">
-        <div class="ui-grid-col-12 div-align-center div-mg-b-15">
-            <o:outputFormat escape="false"
-                            value="#{messages['closing.confirmation']}" >
-                <f:param value="#{closingBean.financialPeriod.identification}"/>
-            </o:outputFormat>
+    <div class="row">
+        <div class="col-sm-12 form-group">
+            <h4>
+                <o:outputFormat escape="false" 
+                                value="#{messages['closing-confirmation.period-closed']}">
+                    <f:param value="#{closingBean.financialPeriod.identification}" />
+                </o:outputFormat>
+            </h4>
         </div>
     </div>
-    <div class="ui-grid-row">
-        <div class="ui-grid-col-12 div-align-center">
-            <p:commandButton value="#{menu['back']}" 
-                             action="#{closingBean.doCancel()}"/>
+    <div class="row">
+        <div class="col-sm-12 align-center">
+            <p:commandButton value="#{menu['back']}"
+                             styleClass="btn btn-flat btn-default" 
+                             action="closeFinancialPeriod.xhtml?faces-redirect=true"/>
         </div>
     </div>
 </p:dialog>

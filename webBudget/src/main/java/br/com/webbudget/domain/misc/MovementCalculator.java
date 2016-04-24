@@ -18,6 +18,7 @@ package br.com.webbudget.domain.misc;
 
 import br.com.webbudget.domain.model.entity.financial.Movement;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,6 +58,17 @@ public class MovementCalculator {
     public BigDecimal getExpensesTotal() {
         return this.movements.stream()
                 .filter(Movement::isExpense)
+                .filter(Movement::isNotCardInvoice)
+                .map(Movement::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+    
+    /**
+     * @return o valor total de todas as faturas de cartao
+     */
+    public BigDecimal getCardInvoicesTotal() {
+        return this.movements.stream()
+                .filter(Movement::isCardInvoice)
                 .map(Movement::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -70,11 +82,42 @@ public class MovementCalculator {
                 .map(Movement::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+    
+    /**
+     * @return o total pago no cartao de debito
+     */
+    public BigDecimal getTotalPaidOnDebitCard() {
+        return this.movements.stream()
+                .filter(Movement::isPaidOnDebitCard)
+                .map(Movement::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 
     /**
      * @return o saldo, receitas menos despesas
      */
     public BigDecimal getBalance() {
         return this.getRevenuesTotal().subtract(this.getExpensesTotal());
+    }
+    
+    /**
+     * @return se o saldo e negativo ou nao
+     */
+    public boolean isBalanceNegative() {
+        return this.getBalance().signum() < 0;
+    }
+    
+    /**
+     * @return se nossa calculadora tem ou nao movimentos para o calculo
+     */
+    public boolean isValid() {
+        return this.movements != null && !this.movements.isEmpty();
+    }
+
+    /**
+     * @return a lista dos movimentos que alimentam esta calculadora
+     */
+    public List<Movement> getMovements() {
+        return Collections.unmodifiableList(this.movements);
     }
 }

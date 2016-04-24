@@ -18,14 +18,19 @@ package br.com.webbudget.domain.model.repository.miscellany;
 
 import br.com.webbudget.domain.model.entity.miscellany.Closing;
 import br.com.webbudget.domain.model.repository.IGenericRepository;
+import java.math.BigDecimal;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 22/04/2014
  */
 public interface IClosingRepository extends IGenericRepository<Closing, Long> {
 
+    /**
+     * @return 
+     */
+    BigDecimal findLastAccumulated();
 }

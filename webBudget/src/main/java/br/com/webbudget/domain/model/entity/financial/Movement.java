@@ -270,12 +270,27 @@ public class Movement extends PersistentEntity {
         return this.isExpense() && this.payment.getPaymentMethodType()
                 == PaymentMethodType.CREDIT_CARD;
     }
+    
+    /**
+     * @return se este movimento foi pago em cartao de debito
+     */
+    public boolean isPaidOnDebitCard() {
+        return this.isExpense() && this.payment.getPaymentMethodType()
+                == PaymentMethodType.DEBIT_CARD;
+    }
 
     /**
      * @return se este movimento eh uma fatura de cartao ou nao
      */
     public boolean isCardInvoice() {
         return this.movementType == MovementType.CARD_INVOICE;
+    }
+    
+    /**
+     * @return se este movimento nao eh uma fatura de cartao
+     */
+    public boolean isNotCardInvoice() {
+        return this.movementType != MovementType.CARD_INVOICE;
     }
 
     /**

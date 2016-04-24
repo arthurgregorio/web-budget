@@ -16,158 +16,155 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="activeMenu" value="closing"/>
+
     <f:metadata>
-        <f:viewAction action="#{closingBean.initializeClosing(param.financialPeriodId)}"/>
+        <f:viewAction action="#{closingBean.initialize(param.financialPeriodId)}"/>
     </f:metadata>
 
+    <ui:define name="pageTitle">
+        #{messages['closing.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['closing.page-description']}
+    </ui:define>
+
     <ui:define name="breadcrumb">
-        <p:menuitem url="#"
-                    value="#{breadcrumb['miscellany']}" />
-        <p:menuitem url="closeFinancialPeriod.xhtml"
-                    value="#{breadcrumb['miscellany.financial-period.close']}" />
+        <li><a href="#">#{breadcrumb['miscellany']}</a></li>
+        <li class="active">
+            <a href="closeFinancialPeriod.xhtml">
+                #{breadcrumb['miscellany.closing']}
+            </a>
+        </li>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
+        <div class="row">
+            <div class="col-sm-12">
                 <p:messages id="messages" closable="true" />
             </div>
         </div>
 
-        <h:panelGroup id="closingPanel">
+        <div class="callout callout-warning">
+            <h4>
+                <i class="fa fa-warning"></i>
+                <p:spacer width="5"/>
+                #{messages['attention']}
+            </h4>
+            #{messages['closing.note.tip-1']}:
+            <ul>
+                <li>#{messages['closing.note.rule-1']}</li>
+                <li>#{messages['closing.note.rule-2']}</li>
+            </ul>
+            #{messages['closing.note.tip-2']}.
+        </div>
 
-            <h:panelGroup styleClass="ui-grid-row flat-box"
-                          layout="block"
-                          rendered="#{closingBean.canClosePeriod()}">
-                <div class="ui-grid-col-12 ui-messages-info ui-corner-all ui-messages ui-widget closing-messages">
-                    <span class="ui-messages-info-summary">
-                        #{messages['closing.can-close']}
-                    </span>
-                </div>
-            </h:panelGroup>
-
-            <h:panelGroup styleClass="ui-grid-row flat-box"
-                          layout="block"
-                          rendered="#{closingBean.hasIrregularities()}">
-                <div class="ui-grid-col-12">
-                    <div class="ui-grid-row">
-                        <h:panelGroup layout="block"
-                                      styleClass="ui-grid-col-12 ui-messages-error ui-corner-all ui-messages ui-widget closing-messages">
-                            <span class="ui-messages-error-summary">
-                                #{messages['closing.cant-close']}
-                            </span>
-                        </h:panelGroup>
-                    </div>
-                    <div class="ui-grid-row">
-                        <h:panelGroup layout="block"
-                                      rendered="#{closingBean.closing.movementsWithoutInvoice}"
-                                      styleClass="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget closing-messages">
-                            <span class="ui-messages-warn-summary">
-                                #{messages['closing.movements-no-invoice']}
-                            </span>
-                        </h:panelGroup>
-                    </div>
-                    <div class="ui-grid-row">
-                        <h:panelGroup layout="block"
-                                      rendered="#{not empty closingBean.closing.openMovements}"
-                                      styleClass="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget closing-messages">
-                            <span class="ui-messages-warn-summary">
-                                #{messages['closing.has-open-movements']}
-                            </span>
-                        </h:panelGroup>
-                    </div>
-                </div>
-            </h:panelGroup>
-
-            <h:form id="controlsForm" prependId="false">
-                <div class="ui-grid-row flat-box">
-                    <div class="ui-grid-col-8 form-group-m">
-                        <div class="form-filter-box">
-                            <p:outputLabel for="inFinancialPeriod" 
-                                           value="#{messages['closing.filter.financial-period']}: "/>
+        <div jsf:id="periodBox" class="box">
+            <div class="box-header with-border">
+                <h:form id="closingForm">
+                    <div class="row">
+                        <div class="col-md-5">
                             <p:selectOneMenu id="inFinancialPeriod" 
                                              value="#{closingBean.financialPeriod}"
                                              converter="omnifaces.SelectItemsConverter">
                                 <f:selectItem itemValue="#{null}"
                                               noSelectionOption="true"
-                                              itemLabel="#{messages['closing.select-one']}" />
+                                              itemLabel="#{messages['closing.form.period']}" />
                                 <f:selectItems var="financialPeriod" 
                                                itemValue="#{financialPeriod}"
                                                value="#{closingBean.financialPeriods}" 
                                                itemLabel="#{financialPeriod.identification}"/> 
                             </p:selectOneMenu> 
                         </div>
-                    </div>
-                    <div class="ui-grid-col-4 div-align-right">
-                        <p:commandButton styleClass="ui-button-success"
-                                         value="#{messages['closing.close']}"
-                                         actionListener="#{closingBean.changeToClose()}"
-                                         rendered="#{closingBean.canClosePeriod() 
-                                                     and userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
-                        <p:spacer width="10"/>
-                        <p:commandButton styleClass="ui-button-info"
-                                         value="#{messages['closing.process']}"
-                                         actionListener="#{closingBean.process()}"
-                                         rendered="#{userSessionBean.hasRole(authorization.CLOSING_PROCESS)}"/>
-                    </div>
-                </div>
-            </h:form>
-
-            <div class="ui-grid-row flat-box">
-                <div class="ui-grid-col-12">
-                    <div class="ui-grid-row form-header">
-                        #{messages['closing.open-movements']}
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
-                            <p:dataTable id="movementsList" 
-                                         rows="20"
-                                         var="movement"
-                                         paginator="true"
-                                         paginatorPosition="bottom"
-                                         paginatorAlwaysVisible="false"
-                                         value="#{closingBean.closing.openMovements}"
-                                         emptyMessage="#{closingBean.closing eq null 
-                                                         ? messages['closing.list.process-first'] 
-                                                         : messages['closing.list.empty']}">
-                                <p:column width="10%" 
-                                          style="text-align: center"
-                                          headerText="#{messages['closing.list.code']}">
-                                    #{movement.code}
-                                </p:column>
-                                <p:column headerText="#{messages['closing.list.description']}">
-                                    #{movement.description}
-                                </p:column>
-                                <p:column width="15%"
-                                          style="text-align: center" 
-                                          headerText="#{messages['closing.list.value']}">
-                                    <h:outputText value="#{movement.value}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column width="15%"
-                                          style="text-align: center" 
-                                          headerText="#{messages['closing.list.due-date']}">
-                                    <h:outputText value="#{movement.dueDate}">
-                                        <f:converter converterId="localDateConverter" />
-                                    </h:outputText> 
-                                </p:column>
-                            </p:dataTable>
+                        <div class="col-md-7">
+                            <p:commandButton id="btProcess"
+                                             value="#{menu['process']}"
+                                             styleClass="btn btn-flat btn-info"
+                                             onclick="PF('processBlock').block()"
+                                             oncomplete="PF('processBlock').unblock()"
+                                             actionListener="#{closingBean.processPeriod()}"
+                                             rendered="#{userSessionBean.hasRole(authorization.CLOSING_PROCESS)}"/>
                         </div>
                     </div>
+                </h:form>
+            </div>
+
+            <div class="box-body row"
+                 jsf:rendered="#{closingBean.calculator.valid}">
+                <div class="form-group col-md-4 align-center">
+                    <h4>
+                        <p:outputLabel value="#{messages['closing.form.revenues']}: "/>
+                    </h4>
+                    <h3 class="text-green">
+                        <h:outputText value="#{closingBean.calculator.revenuesTotal}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </h3>
+                </div>
+                <div class="form-group col-md-4 align-center">
+                    <h4>
+                        <p:outputLabel value="#{messages['closing.form.expenses']}: "/>
+                    </h4>
+                    <h3 class="text-red">
+                        <h:outputText value="#{closingBean.calculator.expensesTotal}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </h3>
+                </div>
+                <div class="form-group col-md-4 align-center">
+                    <h4>
+                        <p:outputLabel value="#{messages['closing.form.balance']}: "/>
+                    </h4>
+                    <h3 class="#{closingBean.calculator.balanceNegative ? 'text-red' : 'text-green'}">
+                        <h:outputText value="#{closingBean.calculator.balance}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </h3>
                 </div>
             </div>
-        </h:panelGroup>
+
+            <div class="box-footer align-right"
+                 jsf:rendered="#{closingBean.calculator.valid}">
+                <o:outputFormat styleClass="text-red text-bold"
+                                style="position: relative; top: 2px"
+                                value="#{messages['closing.form.confirmation']}">
+                    <f:param value="#{closingBean.financialPeriod.identification}"/>
+                </o:outputFormat>
+                <p:spacer width="10"/>
+                <p:commandButton value="#{menu['yes']}"
+                                 onclick="PF('processBlock').block()"
+                                 styleClass="btn btn-flat btn-danger"
+                                 action="#{closingBean.closePeriod()}"
+                                 oncomplete="PF('processBlock').unblock()"
+                                 rendered="#{userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
+                <p:spacer width="10"/>
+                <p:commandButton value="#{menu['no']}"
+                                 styleClass="btn btn-flat btn-default"
+                                 action="#{closingBean.changeToDashboard()}"/>
+            </div>
+        </div>
+        
+        <pe:blockUI target="periodBox"
+                    widgetVar="processBlock">
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
+        </pe:blockUI>
     </ui:define>
 
     <ui:define name="popups">
-        <ui:include src="dialogConfirmClosing.xhtml"/>
         <ui:include src="dialogClosingConfirmation.xhtml"/>
     </ui:define>
 </ui:composition>

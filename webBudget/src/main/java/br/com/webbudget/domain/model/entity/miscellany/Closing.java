@@ -17,17 +17,15 @@
 
 package br.com.webbudget.domain.model.entity.miscellany;
 
+import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
-import br.com.webbudget.domain.model.entity.financial.Movement;
+import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,7 +35,7 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0, 09/04/2014
  */
 @Entity
@@ -76,19 +74,9 @@ public class Closing extends PersistentEntity {
     private BigDecimal accumulated;
     @Getter
     @Setter
-    @Temporal(TemporalType.DATE)
+    @Convert(converter = JPALocalDateConverter.class)
     @Column(name = "closing_date", nullable = false)
-    private Date closingDate;
-    
-    @Getter
-    @Setter
-    @Transient
-    public boolean movementsWithoutInvoice;
-    
-    @Getter
-    @Setter
-    @Transient
-    private List<Movement> openMovements;
+    private LocalDate closingDate;
         
     /**
      * 
@@ -104,33 +92,8 @@ public class Closing extends PersistentEntity {
         this.balance = BigDecimal.ZERO;
         this.accumulated = BigDecimal.ZERO;
         
-        this.code = this.createClosingCode();
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    private String createClosingCode() {
+        this.closingDate = LocalDate.now();
         
-        long decimalNumber = System.nanoTime();
-        
-        String generated = "";
-        final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        
-        synchronized (this.getClass()) {
-            
-            int mod;
-            int authCodeLength = 0;
-
-            while (decimalNumber != 0 && authCodeLength < 5) {
-                
-                mod = (int) (decimalNumber % 36);
-                generated = digits.substring(mod, mod + 1) + generated;
-                decimalNumber = decimalNumber / 36;
-                authCodeLength++;
-            }
-        }
-        return generated;
+        this.code = ApplicationUtils.createRamdomCode(5, false);
     }
 }

@@ -17,10 +17,14 @@
 package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.domain.misc.MovementCalculator;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.model.entity.miscellany.Closing;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.service.ClosingService;
 import br.com.webbudget.domain.model.service.FinancialPeriodService;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -34,7 +38,7 @@ import lombok.Setter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 2.0.0
  * @since 1.0.0, 14/04/2014
  */
 @Named
@@ -46,15 +50,15 @@ public class ClosingBean extends AbstractBean {
     private FinancialPeriod financialPeriod;
 
     @Getter
-    private Closing closing;
-
+    private MovementCalculator calculator;
+    
     @Getter
     private List<FinancialPeriod> financialPeriods;
 
     @Inject
-    private transient ClosingService closingService;
+    private ClosingService closingService;
     @Inject
-    private transient FinancialPeriodService financialPeriodService;
+    private FinancialPeriodService financialPeriodService;
 
     /**
      * Inicializa o form do fechamento com os periodos disponiveis para
@@ -63,9 +67,10 @@ public class ClosingBean extends AbstractBean {
      * @param financialPeriodId se informado, apos a pesquisa por periodos
      * disponiveis selecione o periodo passado por parametro para fechamento
      */
-    public void initializeClosing(long financialPeriodId) {
+    public void initialize(long financialPeriodId) {
 
-        this.financialPeriods = this.financialPeriodService.listOpenFinancialPeriods();
+        this.financialPeriods = 
+                this.financialPeriodService.listOpenFinancialPeriods();
 
         if (financialPeriodId > 0) {
             this.financialPeriod = this.financialPeriodService
@@ -84,69 +89,44 @@ public class ClosingBean extends AbstractBean {
      * Processa o periodo financeiro selecionado e habilita ou nao a funcao de
      * fechamento
      */
-    public void process() {
+    public void processPeriod() {
 
-//        if (this.financialPeriod == null) {
-//            this.error("closing.validate.null-period", true);
-//            return;
-//        }
-//
-//        try {
-//            this.closing = this.closingService.process(this.financialPeriod);
-//        } catch (Exception ex) {
-//            this.logger.error("ClosingBean#process found errors", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        } finally {
-//            this.update("closingPanel");
-//        }
+        try {
+            final List<Movement> movements = 
+                    this.closingService.process(this.financialPeriod);
+            this.calculator = new MovementCalculator(movements);
+            this.updateComponent("periodBox");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
 
     /**
      * Dependendo da selecao do usuario este metodo calcula e encerra o periodo
      */
-    public void close() {
+    public void closePeriod() {
 
-//        try {
-//            this.closeDialog("dialogConfirmClosing");
-//
-//            this.closingService.close(this.financialPeriod);
-//
-//            this.openDialog("closingConfirmationDialog", "dialogClosingConfirmation");
-//        } catch (Exception ex) {
-//            this.logger.error("ClosingBean#close found errors", ex);
-//            this.fixedError("generic.operation-error", true, ex.getMessage());
-//        } finally {
-//            this.update("closingPanel");
-//        }
+        try {
+            this.closingService.close(this.financialPeriod, this.calculator);
+            this.updateAndOpenDialog(
+                    "closingConfirmationDialog", "dialogClosingConfirmation");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        } 
     }
 
     /**
-     * Faz popup de confirmacao do fechamento aparecer na tela apos ter
-     * processado o periodo
+     * Devolve o usuario para a dashboard do sistema
+     * 
+     * @return o link para navegacao
      */
-    public void changeToClose() {
-//        this.openDialog("confirmClosingDialog", "dialogConfirmClosing");
-    }
-
-    /**
-     * @return caso haja irregularidades que afetem o fechamento, avisa o
-     * usuario
-     */
-    public boolean hasIrregularities() {
-        if (this.closing != null) {
-            return !this.closing.getOpenMovements().isEmpty()
-                    || this.closing.isMovementsWithoutInvoice();
-        }
-        return false;
-    }
-
-    /**
-     * @return se true, renderiza o botao para fechamento
-     */
-    public boolean canClosePeriod() {
-        if (closing != null) {
-            return this.closing.getOpenMovements().isEmpty() && !this.closing.movementsWithoutInvoice;
-        }
-        return false;
+    public String changeToDashboard() {
+        return "/main/dashboard.xhtml?faces-redirect=true";
     }
 }

@@ -50,7 +50,7 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      * @return 
      */
     public Movement findByCode(String movementCode);
-    
+
     /**
      *
      * @return
@@ -64,6 +64,13 @@ public interface IMovementRepository extends IGenericRepository<Movement, Long> 
      */
     public List<Movement> listByContact(Contact contact);
 
+    /**
+     * 
+     * @param period
+     * @return 
+     */
+    public List<Movement> listByPeriod(FinancialPeriod period);
+    
     /**
      *
      * @param cardInvoice

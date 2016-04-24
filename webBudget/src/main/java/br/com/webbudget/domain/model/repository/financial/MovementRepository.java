@@ -106,6 +106,22 @@ public class MovementRepository extends GenericRepository<Movement, Long>
     }
 
     /**
+     * 
+     * @param period
+     * @return 
+     */
+    @Override
+    public List<Movement> listByPeriod(FinancialPeriod period) {
+       
+        final Criteria criteria = this.createCriteria();
+
+        criteria.createAlias("financialPeriod", "fp");
+        criteria.add(Restrictions.eq("fp.id", period.getId()));
+
+        return criteria.list();        
+    }
+
+    /**
      *
      * @param cardInvoice
      * @return

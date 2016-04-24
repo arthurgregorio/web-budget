@@ -18,14 +18,37 @@ package br.com.webbudget.domain.model.repository.miscellany;
 
 import br.com.webbudget.domain.model.entity.miscellany.Closing;
 import br.com.webbudget.domain.model.repository.GenericRepository;
+import java.math.BigDecimal;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0, 22/04/2014
  */
 public class ClosingRepository extends GenericRepository<Closing, Long> implements IClosingRepository {
 
+    /**
+     *
+     * @return
+     */
+    @Override
+    public BigDecimal findLastAccumulated() {
+
+        final Criteria criteria = this.createCriteria();
+
+        final DetachedCriteria mostRecent = DetachedCriteria
+                .forClass(Closing.class)
+                .setProjection(Projections.max("closingDate"));
+
+        criteria.add(Property.forName("closingDate").eq(mostRecent));
+        criteria.setProjection(Projections.sum("accumulated"));
+
+        return (BigDecimal) criteria.uniqueResult();
+    }
 }

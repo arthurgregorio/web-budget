@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.model.service;
 
-import br.com.webbudget.domain.misc.MovementsCalculator1;
+import br.com.webbudget.domain.misc.MovementCalculator;
 import br.com.webbudget.domain.model.entity.entries.Card;
 import br.com.webbudget.domain.model.entity.entries.CardType;
 import br.com.webbudget.domain.model.entity.miscellany.Closing;
@@ -25,12 +25,13 @@ import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.entity.financial.MovementStateType;
 import br.com.webbudget.domain.misc.events.PeriodClosed;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.repository.entries.ICardRepository;
 import br.com.webbudget.domain.model.repository.miscellany.IClosingRepository;
 import br.com.webbudget.domain.model.repository.miscellany.IFinancialPeriodRepository;
 import br.com.webbudget.domain.model.repository.financial.IMovementRepository;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -50,9 +51,6 @@ import javax.transaction.Transactional;
 public class ClosingService {
 
     @Inject
-    private MovementsCalculator1 movementsCalculator;
-
-    @Inject
     private ICardRepository cardRepository;
     @Inject
     private IClosingRepository closingRepository;
@@ -60,7 +58,7 @@ public class ClosingService {
     private IMovementRepository movementRepository;
     @Inject
     private IFinancialPeriodRepository financialPeriodRepository;
-    
+
     @Inject
     @PeriodClosed
     private Event<FinancialPeriod> periodClosedEvent;
@@ -69,99 +67,87 @@ public class ClosingService {
      * Processa o fechamento do mes, verificando por incosistencias de
      * movimentos
      *
-     * @param financialPeriod o periodo a ser processado
+     * @param period o periodo a ser processado
      * @return o resumo do fechamento
      */
     @Transactional
-    public Closing process(FinancialPeriod financialPeriod) {
+    public List<Movement> process(FinancialPeriod period) {
 
-        final Closing closing = new Closing();
-
+        if (period == null) {
+            throw new InternalServiceError("error.closing.no-period");
+        }
+        
         // verificamos por cartoes de credito com debitos sem fatura
-        final List<Card> cards = this.cardRepository.listByStatus(false);
+        final List<Card> cards = this.cardRepository.listByStatus(null);
 
-        for (Card card : cards) {
-            if (card.getCardType() != CardType.DEBIT) {
+        // se temos movimentos de cartao de credito que nao foram incluidos em
+        // uma fatura do periodo
+        cards.stream()
+                .filter(Card::isCreditCard)
+                .forEach(card -> {
+                    final List<Movement> movements = this.movementRepository
+                            .listPaidWithoutInvoiceByPeriodAndCard(period, card);
+                    if (!movements.isEmpty()) {
+                        throw new InternalServiceError(
+                                "error.closing.movements-no-invoice");
+                    }
+                });
 
-                final List<Movement> movements = this.movementRepository
-                        .listPaidWithoutInvoiceByPeriodAndCard(financialPeriod, card);
+        // checamos se existem movimentos em aberto
+        final List<Movement> movements = this.movementRepository
+                .listByPeriodAndState(period, MovementStateType.OPEN);
 
-                if (!movements.isEmpty()) {
-                    closing.setMovementsWithoutInvoice(true);
-                    break;
-                }
-            }
+        if (!movements.isEmpty()) {
+            throw new InternalServiceError(
+                    "error.closing.open-movements", movements.size());
         }
 
-        // atualizamos a lista de movimentos em aberto
-        final List<Movement> openMovements = this.movementRepository
-                .listByPeriodAndState(financialPeriod, MovementStateType.OPEN);
-
-        closing.setOpenMovements(openMovements);
-
-        return closing;
+        return this.movementRepository.listByPeriod(period);
     }
 
     /**
-     * Encerra um periodo, gerando toda a movimentacao necessaria e calculando
-     * os valores de receitas e despesas
-     *
-     * @param financialPeriod
+     * Realiza o encerramento do periodo informado
+     * 
+     * @param financialPeriod o periodo a ser encerrado
+     * @param calculator a calculadora com os movimentos a serem processados
      */
     @Transactional
-    public void close(FinancialPeriod financialPeriod) {
+    public void close(FinancialPeriod financialPeriod, MovementCalculator calculator) {
 
-        // calculamos os saldos
-        final BigDecimal revenuesTotal = this.movementsCalculator.
-                calculateTotalByDirection(financialPeriod, MovementClassType.IN);
-        final BigDecimal expensesTotal = this.movementsCalculator.
-                calculateTotalByDirection(financialPeriod, MovementClassType.OUT);
-
-        // calculamos o saldo final
-        final BigDecimal balance = revenuesTotal.subtract(expensesTotal);
-
-        // pegamos os totais de consumo por tipo de cartao
-        final BigDecimal debitCardExpenses = this.movementsCalculator.
-                calculateCardExpenses(financialPeriod, CardType.DEBIT);
-        final BigDecimal creditCardExpenses = this.movementsCalculator.
-                calculateCardExpenses(financialPeriod, CardType.CREDIT);
-
-        // pegamos tudo que foi paga de movimento e entao alteramos o status
-        // para calculado a fim de manter tudo inalterado
-        final List<Movement> movements = this.movementRepository
-                .listByPeriodAndState(financialPeriod, MovementStateType.PAID);
-        
-        movements.stream().map((movement) -> {
-            movement.setMovementStateType(MovementStateType.CALCULATED);
-            return movement;
-        }).forEach((movement) -> {
-            this.movementRepository.save(movement);
-        });
-        
         // criamos e salvamos o fechamento
         Closing closing = new Closing();
 
-        closing.setClosingDate(new Date());
+        closing.setBalance(calculator.getBalance());
+        closing.setRevenues(calculator.getRevenuesTotal());
+        closing.setExpenses(calculator.getExpensesTotal());
+        closing.setDebitCardExpenses(calculator.getTotalPaidOnDebitCard());
+        closing.setCreditCardExpenses(calculator.getTotalPaidOnCreditCard());
+        
+        final BigDecimal accumulated = 
+                this.closingRepository.findLastAccumulated();
+                
+        closing.setAccumulated(accumulated.add(closing.getBalance()));
 
-        closing.setBalance(balance);
-        closing.setRevenues(revenuesTotal);
-        closing.setExpenses(expensesTotal);
-        closing.setDebitCardExpenses(debitCardExpenses);
-        closing.setCreditCardExpenses(creditCardExpenses);
+        closing = this.closingRepository.save(closing);        
+        
+        // atualiza o status dos movimentos
+        calculator.getMovements().stream()
+                .map(movement -> { 
+                    movement.setMovementStateType(MovementStateType.CALCULATED);
+                    return movement;
+                }).forEach(movement -> {
+                    this.movementRepository.save(movement);
+                });
 
-        closing = this.closingRepository.save(closing);
-
-        // atualizamos o período para encerrado
+        // atualizamos o periodo para encerrado
         financialPeriod.setClosed(true);
         financialPeriod.setClosing(closing);
 
-        final FinancialPeriod closed = 
-                this.financialPeriodRepository.save(financialPeriod);
-        
-        // dispara o evento notificando quem precisar
-        this.periodClosedEvent.fire(closed);
+        // salva e dispara o evento informando que o periodo foi encerrado
+        this.periodClosedEvent.fire(
+                this.financialPeriodRepository.save(financialPeriod));
     }
-    
+
     /**
      * @return todos os fechamentos ja realizados
      */

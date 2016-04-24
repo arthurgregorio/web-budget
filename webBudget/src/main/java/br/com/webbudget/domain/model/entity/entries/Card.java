@@ -138,4 +138,18 @@ public class Card extends PersistentEntity {
 
         return secured.toString();
     }
+    
+    /**
+     * @return se temos um cartao de credito
+     */
+    public boolean isCreditCard() {
+        return this.cardType == CardType.CREDIT;
+    }
+    
+    /**
+     * @return se temos um cartao de debito
+     */
+    public boolean isDebitCard() {
+        return this.cardType == CardType.DEBIT;
+    }
 }
