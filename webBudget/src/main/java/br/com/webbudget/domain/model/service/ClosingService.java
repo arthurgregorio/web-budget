@@ -18,11 +18,9 @@ package br.com.webbudget.domain.model.service;
 
 import br.com.webbudget.domain.misc.MovementCalculator;
 import br.com.webbudget.domain.model.entity.entries.Card;
-import br.com.webbudget.domain.model.entity.entries.CardType;
 import br.com.webbudget.domain.model.entity.miscellany.Closing;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.entity.financial.Movement;
-import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.entity.financial.MovementStateType;
 import br.com.webbudget.domain.misc.events.PeriodClosed;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
@@ -31,8 +29,6 @@ import br.com.webbudget.domain.model.repository.miscellany.IClosingRepository;
 import br.com.webbudget.domain.model.repository.miscellany.IFinancialPeriodRepository;
 import br.com.webbudget.domain.model.repository.financial.IMovementRepository;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -126,7 +122,12 @@ public class ClosingService {
         final BigDecimal accumulated = 
                 this.closingRepository.findLastAccumulated();
                 
-        closing.setAccumulated(accumulated.add(closing.getBalance()));
+        // se nao tem acumulado, poe o saldo no lugar
+        if (accumulated != null) {
+            closing.setAccumulated(accumulated.add(closing.getBalance()));
+        } else {
+            closing.setAccumulated(closing.getBalance());
+        }
 
         closing = this.closingRepository.save(closing);        
         
