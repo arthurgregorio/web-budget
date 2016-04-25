@@ -96,7 +96,7 @@ public class AccountService {
         // limpa a senha para nao ser trocada quando em testes
         if (ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
                 && user.getUsername().equals("admin")) {
-            user.setPassword(null);
+            return;
         }
         
         // pegamos o grupo
