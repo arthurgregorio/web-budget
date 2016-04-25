@@ -94,22 +94,24 @@ public class MovementService {
 
     /**
      *
-     * @param movementClass
+     * @param clazz
      */
     @Transactional
-    public void saveMovementClass(MovementClass movementClass) {
+    public void saveMovementClass(MovementClass clazz) {
 
-        final MovementClass found = this.findMovementClassByNameAndTypeAndCostCenter(movementClass.getName(),
-                movementClass.getMovementClassType(), movementClass.getCostCenter());
+        final MovementClass found = 
+                this.findMovementClassByNameAndTypeAndCostCenter(
+                        clazz.getName(), clazz.getMovementClassType(), 
+                        clazz.getCostCenter());
 
         if (found != null) {
             throw new InternalServiceError("error.movement-class.duplicated");
         }
 
         // valida o orcamento, se estiver ok, salva!
-        this.hasValidBudget(movementClass);
+        this.hasValidBudget(clazz);
 
-        this.movementClassRepository.save(movementClass);
+        this.movementClassRepository.save(clazz);
     }
 
     /**
@@ -148,23 +150,23 @@ public class MovementService {
             final List<MovementClass> classes
                     = this.listMovementClassesByCostCenterAndType(costCenter, classType);
 
-            final BigDecimal consumedBudget = classes.stream()
+            final BigDecimal consumed = classes.stream()
                     .filter(mc -> !mc.equals(movementClass))
                     .map(MovementClass::getBudget)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            BigDecimal availableBudget;
+            BigDecimal available;
 
             if (classType == MovementClassType.IN) {
-                availableBudget = costCenter.getRevenuesBudget().subtract(consumedBudget);
+                available = costCenter.getRevenuesBudget().subtract(consumed);
             } else {
-                availableBudget = costCenter.getExpensesBudget().subtract(consumedBudget);
+                available = costCenter.getExpensesBudget().subtract(consumed);
             }
 
             // caso o valor disponivel seja menor que o desejado, exception!
-            if (availableBudget.compareTo(movementClass.getBudget()) < 0) {
-                final String value = "R$ " + String.format("%10.2f", availableBudget);
-                throw new InternalServiceError("movement-class.validate.no-budget", value);
+            if (available.compareTo(movementClass.getBudget()) < 0) {
+                final String value = "R$ " + String.format("%10.2f", available);
+                throw new InternalServiceError("error.movement-class.no-budget", value);
             }
         }
         return true;
