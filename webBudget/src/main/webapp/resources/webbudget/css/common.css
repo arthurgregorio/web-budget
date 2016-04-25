@@ -132,3 +132,9 @@ no-padding {
         bottom: 30px;
     }
 }
+
+/* arruma a legend dos donuts */ 
+.doughnut-legend {
+    list-style: none;
+    padding: 0;
+}
