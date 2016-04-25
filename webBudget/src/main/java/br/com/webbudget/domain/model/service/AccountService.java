@@ -154,6 +154,12 @@ public class AccountService {
     @Transactional
     public void delete(User user) {
         
+        // limpa a senha para nao ser trocada quando em testes
+        if (ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
+                && user.getUsername().equals("admin")) {
+            return;
+        }
+        
         // removemos os relacioanamentos
         for (GroupMembership membership : this.listMembershipsByUser(user)) {
             this.relationshipManager.remove(membership);
