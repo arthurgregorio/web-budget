@@ -500,6 +500,19 @@ public class MovementBean extends AbstractBean {
     }
 
     /**
+     * @return os periodos financeiros em aberto no sistema
+     */
+    public List<FinancialPeriod> getOpenPeriods() {
+        if (this.viewState == ViewState.DETAILING) {
+            return this.periods;
+        } else {
+            return this.periods.stream()
+                .filter(period -> !period.isClosed())
+                .collect(Collectors.toList());
+        }
+    }
+    
+    /**
      * @return os estados possiveis dos movimentos
      */
     public MovementStateType[] getMovementStateTypes() {
@@ -525,14 +538,5 @@ public class MovementBean extends AbstractBean {
      */
     public PaymentMethodType[] getPaymentMethodTypes() {
         return PaymentMethodType.values();
-    }
-
-    /**
-     * @return os periodos financeiros em aberto no sistema
-     */
-    public List<FinancialPeriod> getOpenPeriods() {
-        return this.periods.stream()
-                .filter(period -> !period.isClosed())
-                .collect(Collectors.toList());
     }
 }
