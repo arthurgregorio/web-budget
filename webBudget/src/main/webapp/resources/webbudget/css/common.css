@@ -138,3 +138,8 @@ no-padding {
     list-style: none;
     padding: 0;
 }
+
+/* linha checada da fatura do cartao */
+.checked-line {
+    background-color: rgba(0, 166, 90, 0.41) !important;
+}

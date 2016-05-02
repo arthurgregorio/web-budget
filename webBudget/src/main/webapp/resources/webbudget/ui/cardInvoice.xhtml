@@ -92,50 +92,56 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-12 table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th jsf:rendered="#{not cc.attrs.printVersion}">
-                                    <b>#{messages['card-invoice.checked']}</b>
-                                </th>
-                                <th><b>#{messages['card-invoice.movement-code']}</b></th>
-                                <th><b>#{messages['card-invoice.movement-description']}</b></th>
-                                <th><b>#{messages['card-invoice.payment-date']}</b></th>
-                                <th><b>#{messages['card-invoice.value']}</b></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <ui:repeat var="movement" 
-                                       value="#{cc.attrs.invoiceData.movements}">
+                <div jsf:id="movementsList"
+                     class="col-xs-12 table-responsive">
+                    <h:form prependId="false">
+                        
+                        <table class="table table-striped">
+                            <thead>
                                 <tr>
-                                    <td style="width:10%"
-                                        jsf:rendered="#{not cc.attrs.printVersion}">
-                                        <p:selectBooleanCheckbox value="#{movement.checked}"/>
-                                    </td>
-                                    <td style="width:10%">
-                                        <p:link target="_blank"
-                                                value="#{movement.code}" 
-                                                rendered="#{not cc.attrs.printVersion}"
-                                                href="#{cc.attrs.beanHandler.changeToViewMovement(movement.id)}"/>
-                                        <h:outputText value="#{movement.code}"
-                                                      rendered="#{cc.attrs.printVersion}"/>
-                                    </td>
-                                    <td>#{movement.description}</td>
-                                    <td>
-                                        <h:outputText value="#{movement.paymentDate}">
-                                            <f:converter converterId="localDateConverter"/>
-                                        </h:outputText>
-                                    </td>
-                                    <td>
-                                        <h:outputText value="#{movement.value}" >
-                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                        </h:outputText>                                                 
-                                    </td>
+                                    <th jsf:rendered="#{not cc.attrs.printVersion}">
+                                        <b>#{messages['card-invoice.checked']}</b>
+                                    </th>
+                                    <th><b>#{messages['card-invoice.movement-code']}</b></th>
+                                    <th><b>#{messages['card-invoice.movement-description']}</b></th>
+                                    <th><b>#{messages['card-invoice.payment-date']}</b></th>
+                                    <th><b>#{messages['card-invoice.value']}</b></th>
                                 </tr>
-                            </ui:repeat>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <ui:repeat var="movement" 
+                                           value="#{cc.attrs.invoiceData.movements}">
+                                    <tr class="#{movement.checked ? 'checked-line' : ''}">
+                                        <td style="width:10%"
+                                            jsf:rendered="#{not cc.attrs.printVersion}">
+                                            <p:selectBooleanCheckbox value="#{movement.checked}">
+                                                <p:ajax update="#{cc.id}:movementsList"/>
+                                            </p:selectBooleanCheckbox>
+                                        </td>
+                                        <td style="width:10%">
+                                            <p:link target="_blank"
+                                                    value="#{movement.code}" 
+                                                    rendered="#{not cc.attrs.printVersion}"
+                                                    href="#{cc.attrs.beanHandler.changeToViewMovement(movement.id)}"/>
+                                            <h:outputText value="#{movement.code}"
+                                                          rendered="#{cc.attrs.printVersion}"/>
+                                        </td>
+                                        <td>#{movement.description}</td>
+                                        <td>
+                                            <h:outputText value="#{movement.paymentDate}">
+                                                <f:converter converterId="localDateConverter"/>
+                                            </h:outputText>
+                                        </td>
+                                        <td>
+                                            <h:outputText value="#{movement.value}" >
+                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                            </h:outputText>                                                 
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                            </tbody>
+                        </table>
+                    </h:form>
                 </div>
             </div>
 
