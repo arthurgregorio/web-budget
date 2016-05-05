@@ -74,28 +74,30 @@
 
                 <div class="box-body row">
                     <div class="form-group col-md-6">
-                        <div class="form-group col-md-4">
-                            <p:outputLabel for="inGroup" 
-                                           value="#{messages['group.form.parent']}"/>
-                            <p:selectOneMenu id="inGroup" 
-                                             value="#{groupBean.group.parent}" 
-                                             converter="omnifaces.SelectItemsConverter">
-                                <f:selectItem itemValue="#{null}"
-                                              noSelectionOption="true"
-                                              itemLabel="#{messages['group.form.select-one']}" />
-                                <f:selectItems var="group" 
-                                               itemValue="#{group}"
-                                               itemLabel="#{group.name}"
-                                               value="#{groupBean.groups}" /> 
-                            </p:selectOneMenu>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <p:outputLabel for="inName" 
-                                           value="#{messages['group.form.name']}"/>
-                            <p:inputText id="inName" 
-                                         maxlength="90"
-                                         styleClass="form-control"
-                                         value="#{groupBean.group.name}" />
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <p:outputLabel for="inGroup" 
+                                               value="#{messages['group.form.parent']}"/>
+                                <p:selectOneMenu id="inGroup" 
+                                                 value="#{groupBean.group.parent}" 
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
+                                                  itemLabel="#{messages['group.form.select-one']}" />
+                                    <f:selectItems var="group" 
+                                                   itemValue="#{group}"
+                                                   itemLabel="#{group.name}"
+                                                   value="#{groupBean.groups}" /> 
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <p:outputLabel for="inName" 
+                                               value="#{messages['group.form.name']}"/>
+                                <p:inputText id="inName" 
+                                             maxlength="90"
+                                             styleClass="form-control"
+                                             value="#{groupBean.group.name}" />
+                            </div>
                         </div>
                     </div>
                     <div class="form-group col-md-6">

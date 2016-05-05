@@ -22,6 +22,7 @@ import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.domain.model.repository.IGenericRepository;
+import java.util.List;
 
 /**
  *
@@ -32,6 +33,13 @@ import br.com.webbudget.domain.model.repository.IGenericRepository;
  */
 public interface ICardInvoiceRepository extends IGenericRepository<CardInvoice, Long> {
 
+    /**
+     * 
+     * @param card
+     * @return 
+     */
+    public List<CardInvoice> listByCard(Card card);
+    
     /**
      *
      * @param movement

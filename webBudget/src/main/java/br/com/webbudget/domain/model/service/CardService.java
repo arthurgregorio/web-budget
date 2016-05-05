@@ -240,6 +240,16 @@ public class CardService {
 
         return cardInvoice;
     }
+    
+    /**
+     * Lista a ultimas doze faturas de cartao filtrando pelo cartao indicado
+     * 
+     * @param card o cartao que servira de filtro
+     * @return as faturas
+     */
+    public List<CardInvoice> listInvoicesByCard(Card card) {
+        return this.cardInvoiceRepository.listByCard(card);
+    }
 
     /**
      * Lista todas as faturas de um determinado cartao recebido como parametro

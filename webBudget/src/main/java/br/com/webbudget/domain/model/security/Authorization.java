@@ -48,6 +48,9 @@ public class Authorization {
     public final String CARD_VIEW = "authority.card.access";
     @Getter
     @AuthorizationGroup("authority.card")
+    public final String CARD_STATISTICS = "authority.card.statistics";
+    @Getter
+    @AuthorizationGroup("authority.card")
     public final String CARD_INSERT = "authority.card.add";
     @Getter
     @AuthorizationGroup("authority.card")

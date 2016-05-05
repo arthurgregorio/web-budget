@@ -22,6 +22,7 @@ import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.domain.model.repository.GenericRepository;
+import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -38,6 +39,22 @@ public class CardInvoiceRepository extends GenericRepository<CardInvoice, Long> 
 
     /**
      *
+     * @param card
+     * @return
+     */
+    @Override
+    public List<CardInvoice> listByCard(Card card) {
+
+        final Criteria criteria = this.createCriteria();
+
+        criteria.createAlias("card", "ca");
+        criteria.add(Restrictions.eq("ca.id", card.getId()));
+
+        return criteria.list();
+    }
+
+    /**
+     *
      * @param movement
      * @return
      */
@@ -51,16 +68,16 @@ public class CardInvoiceRepository extends GenericRepository<CardInvoice, Long> 
 
         return (CardInvoice) criteria.uniqueResult();
     }
-    
+
     /**
-     * 
+     *
      * @param card
      * @param pageRequest
-     * @return 
+     * @return
      */
     @Override
     public Page<CardInvoice> listByCard(Card card, PageRequest pageRequest) {
-        
+
         final Criteria criteria = this.createCriteria();
 
         // filtra
@@ -68,7 +85,7 @@ public class CardInvoiceRepository extends GenericRepository<CardInvoice, Long> 
             criteria.createAlias("card", "ca");
             criteria.add(Restrictions.eq("ca.id", card.getId()));
         }
-        
+
         // projetamos para pegar o total de paginas possiveis
         criteria.setProjection(Projections.count("id"));
 
@@ -77,7 +94,7 @@ public class CardInvoiceRepository extends GenericRepository<CardInvoice, Long> 
         // limpamos a projection para que a criteria seja reusada
         criteria.setProjection(null);
         criteria.setResultTransformer(Criteria.ROOT_ENTITY);
-        
+
         // paginamos
         criteria.setFirstResult(pageRequest.getFirstResult());
         criteria.setMaxResults(pageRequest.getPageSize());

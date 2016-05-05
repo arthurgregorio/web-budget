@@ -49,9 +49,10 @@ public class CardBean extends AbstractBean {
 
     @Getter
     private Card card;
+    
     @Getter
     private List<Wallet> wallets;
-
+    
     @Inject
     private CardService cardService;
     @Inject
@@ -110,7 +111,7 @@ public class CardBean extends AbstractBean {
             this.card = this.cardService.findCardById(cardId);
         }
     }
-
+    
     /**
      * @return 
      */
@@ -139,6 +140,15 @@ public class CardBean extends AbstractBean {
     public void changeToDelete(long cardId) {
         this.card = this.cardService.findCardById(cardId);
         this.updateAndOpenDialog("deleteCardDialog", "dialogDeleteCard");
+    }
+    
+    /**
+     * 
+     * @param cardId
+     * @return 
+     */
+    public String changeToStatistics(long cardId) {
+        return "cardStatistics.xhtml?faces-redirect=true&cardId=" + cardId;
     }
 
     /**

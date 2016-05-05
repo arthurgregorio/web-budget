@@ -44,4 +44,3 @@ function block(widget) {
 function unblock(widget) {
     PF(widget).unblock();
 };
-
