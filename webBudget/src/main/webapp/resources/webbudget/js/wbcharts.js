@@ -18,6 +18,7 @@
 /**
  * 
  * @param {type} data
+ * @param {type} canvas
  * @returns {undefined}
  */
 function drawLineChart(data, canvas) {
@@ -41,6 +42,7 @@ function drawLineChart(data, canvas) {
         datasetStroke: true,
         datasetStrokeWidth: 2,
         datasetFill: true,
+        multiTooltipTemplate: "<%= addCommas(value) %>",
         tooltipTemplate: "<%=label%>: <%= addCommas(value) %>",
         legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for \n\(var i=0; i<datasets.length; i++){%><li><span style=\"background-color:\n\<%=datasets[i].lineColor%>\"></span><%=datasets[i].label%></li><%}%></ul>",
         maintainAspectRatio: true,
@@ -54,6 +56,7 @@ function drawLineChart(data, canvas) {
 /**
  * 
  * @param {type} data
+ * @param {type} canvas
  * @returns {undefined}
  */
 function drawDonutChart(data, canvas) {
