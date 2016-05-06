@@ -138,13 +138,17 @@
                                      process="userForm"
                                      value="#{menu['save']}"
                                      action="#{userBean.doSave()}"
+                                     onstart="PF('formBlock').block()"
                                      styleClass="btn btn-flat btn-success"
+                                     oncomplete="PF('formBlock').unblock()"
                                      rendered="#{userBean.viewState eq 'ADDING'}" />
                     <p:commandButton process="userForm"
                                      value="#{menu['update']}"
                                      action="#{userBean.doUpdate()}"
+                                     onstart="PF('formBlock').block()"
                                      update="userForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
+                                     oncomplete="PF('formBlock').unblock()"
                                      rendered="#{userBean.viewState eq 'EDITING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
@@ -154,5 +158,13 @@
                 </div>
             </div>
         </h:form>
+        
+        <pe:blockUI target="groupForm"
+                    widgetVar="formBlock">
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
+        </pe:blockUI>
     </ui:define>
 </ui:composition>
