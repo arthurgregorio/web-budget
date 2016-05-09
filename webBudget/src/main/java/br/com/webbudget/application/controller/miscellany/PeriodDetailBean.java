@@ -27,8 +27,6 @@ import br.com.webbudget.application.component.chart.line.LineChartModel;
 import br.com.webbudget.domain.model.service.FinancialPeriodService;
 import br.com.webbudget.domain.model.service.MovementService;
 import br.com.webbudget.domain.model.service.PeriodDetailService;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -41,7 +39,7 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0, 11/04/2014
  */
 @Named
@@ -99,7 +97,7 @@ public class PeriodDetailBean extends AbstractBean {
             this.drawLineChart("dailySummaryChart", lineChartModel);
             
             this.revenuesCostCenterModel = this.periodDetailService
-                    .buidCostCenterChart(period, MovementClassType.IN);
+                    .buidCostCenterChart(this.period, MovementClassType.IN);
             
             if (this.revenuesCostCenterModel.containsData()) {
                 this.drawDonutChart("revenuesByCostCenter", this.revenuesCostCenterModel);
