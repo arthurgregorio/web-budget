@@ -201,15 +201,33 @@
                         <li class="#{activeMenu eq 'costCenters' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_VIEW)}">
                             <p:link href="/main/entries/costCenter/listCostCenters.xhtml">
-                                <i class="fa fa-line-chart"></i> 
+                                <i class="fa fa-sitemap"></i> 
                                 <span>#{menu['entries.cost-center']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'movementClasses' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_VIEW)}">
                             <p:link href="/main/entries/movementClass/listMovementClasses.xhtml">
-                                <i class="fa fa-reorder"></i> 
+                                <i class="fa fa-list"></i> 
                                 <span>#{menu['entries.movement-classes']}</span>
+                            </p:link>
+                        </li>
+                    </ul>
+                    
+                    <ul class="sidebar-menu">
+                        <li class="header">#{menu['logbook']}</li>
+                        <li class="#{activeMenu eq 'records' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.RECORD_VIEW)}">
+                            <p:link href="/main/logbook/records/listRecords.xhtml">
+                                <i class="fa fa-book"></i> 
+                                <span>#{menu['logbook.records']}</span>
+                            </p:link>
+                        </li>
+                        <li class="#{activeMenu eq 'occurrences' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.OCCURRENCE_VIEW)}">
+                            <p:link href="/main/logbook/occurrences/listOccurrences.xhtml">
+                                <i class="fa fa-exclamation-triangle"></i> 
+                                <span>#{menu['logbook.occurrences']}</span>
                             </p:link>
                         </li>
                     </ul>

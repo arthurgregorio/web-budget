@@ -18,6 +18,7 @@ package br.com.webbudget.domain.model.entity.financial;
 
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
+import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.time.LocalDate;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
@@ -49,7 +50,7 @@ public class Launch extends PersistentEntity {
     
     @Getter
     @Column(name = "code", nullable = false, length = 8, unique = true)
-    private String code;
+    private final String code;
     @Getter
     @Setter
     @Column(name = "quote")
@@ -75,35 +76,9 @@ public class Launch extends PersistentEntity {
      * Inicializamos o que for necessario
      */
     public Launch() {
-        this.code = this.createLaunchCode();
+        this.code = ApplicationUtils.createRamdomCode(5, false);
     }
 
-    /**
-     * @return o codigo unico gerado por marca de tempo para esta entidade
-     */
-    private String createLaunchCode() {
-
-        long decimalNumber = System.nanoTime();
-
-        String generated = "";
-        final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        synchronized (this.getClass()) {
-
-            int mod;
-            int authCodeLength = 0;
-
-            while (decimalNumber != 0 && authCodeLength < 5) {
-
-                mod = (int) (decimalNumber % 36);
-                generated = digits.substring(mod, mod + 1) + generated;
-                decimalNumber = decimalNumber / 36;
-                authCodeLength++;
-            }
-        }
-        return generated;
-    }
-    
     /**
      * @param period o periodo que devemos checar
      * @return se pertence ou nao ao periodo

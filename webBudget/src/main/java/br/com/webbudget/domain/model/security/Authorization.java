@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import lombok.Getter;
@@ -221,6 +222,32 @@ public class Authorization {
     @Getter
     @AuthorizationGroup("authority.message")
     public final String MESSAGE_SEND = "authority.message.send";
+    
+    @Getter
+    @AuthorizationGroup("authority.occurrence")
+    public final String OCCURRENCE_VIEW = "authority.occurrence.access";
+    @Getter
+    @AuthorizationGroup("authority.occurrence")
+    public final String OCCURRENCE_INSERT = "authority.occurrence.add";
+    @Getter
+    @AuthorizationGroup("authority.occurrence")
+    public final String OCCURRENCE_UPDATE = "authority.occurrence.edit";
+    @Getter
+    @AuthorizationGroup("authority.occurrence")
+    public final String OCCURRENCE_DELETE = "authority.occurrence.delete";
+    
+    @Getter
+    @AuthorizationGroup("authority.record")
+    public final String RECORD_VIEW = "authority.record.access";
+    @Getter
+    @AuthorizationGroup("authority.record")
+    public final String RECORD_INSERT = "authority.record.add";
+    @Getter
+    @AuthorizationGroup("authority.record")
+    public final String RECORD_UPDATE = "authority.record.edit";
+    @Getter
+    @AuthorizationGroup("authority.record")
+    public final String RECORD_DELETE = "authority.record.delete";
 
     /**
      * Lista todas as authorities disponiveis para uso, este metodo e utilzado
@@ -268,12 +295,10 @@ public class Authorization {
 
                 if (!authorities.containsKey(group)) {
 
-                    final List<String> grouped = new ArrayList<>();
-
-                    authorizations.stream().filter((authorization)
-                            -> (authorization.contains(group + "."))).forEach((key) -> {
-                                grouped.add(key);
-                            });
+                    final List<String> grouped = authorizations.stream()
+                            .filter(authorization -> authorization.contains(group + "."))
+                            .collect(Collectors.toList());
+                    
                     authorities.put(group, grouped);
                 }
             }
