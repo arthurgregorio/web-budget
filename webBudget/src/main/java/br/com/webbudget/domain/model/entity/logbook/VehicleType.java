@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2016 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,17 +25,19 @@ package br.com.webbudget.domain.model.entity.logbook;
  */
 public enum VehicleType {
 
-    MOVEMENT("movement-type.movement"),
-    CARD_INVOICE("movement-type.card-invoice");
+    CAR("vehicle-type.car"),
+    OTHER("vehicle-type.other"),
+    TRUCK("vehicle-type.truck"),
+    MOTORCYCLE("vehicle-type.motorcycle");
 
-    private final String i18nKey;
+    private final String description;
 
     /**
      *
-     * @param i18nKey
+     * @param description
      */
-    private VehicleType(String i18nKey) {
-        this.i18nKey = i18nKey;
+    private VehicleType(String description) {
+        this.description = description;
     }
 
     /**
@@ -44,6 +46,6 @@ public enum VehicleType {
      */
     @Override
     public String toString() {
-        return this.i18nKey;
+        return this.description;
     }
 }

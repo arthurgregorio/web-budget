@@ -16,35 +16,39 @@
  */
 package br.com.webbudget.domain.model.entity.logbook;
 
-import br.com.webbudget.domain.model.entity.PersistentEntity;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 /**
- * Representacao de um registro no logbook, cada registro e composto por uma 
- * ocorrencia que pode determinar um categoria para o registro e tambem se
- * este registro gerou ou nao uma movimentacao financeira
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.3.0, 09/05/2016
+ * @since 2.3.0, 15/05/2014
  */
-@Entity
-@Table(name = "records")
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class Record extends PersistentEntity {
+public enum LogbookEntryType {
 
-    @Getter
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_occurrence")
-    private Occurrence occurrence;
+    TAXES("logbook-entry-type.taxes"),
+    PARTS("logbook-entry-type.parts"),
+    OTHERS("logbook-entry-type.others"),
+    SERVICES("logbook-entry-type.services"),
+    REFUELING("logbook-entry-type.refueling"),
+    INSURANCE("logbook-entry-type.insurance"),
+    MAINTENANCES("logbook-entry-type.maintenances");
+
+    private final String description;
+
+    /**
+     *
+     * @param description
+     */
+    private LogbookEntryType(String description) {
+        this.description = description;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return this.description;
+    }
 }

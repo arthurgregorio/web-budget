@@ -17,9 +17,14 @@
 package br.com.webbudget.domain.model.entity.logbook;
 
 import br.com.webbudget.domain.model.entity.PersistentEntity;
+import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,6 +45,63 @@ public class Vehicle extends PersistentEntity {
 
     @Getter
     @Setter
+    @Column(name = "model", nullable = false, length = 90)
+    private String model;
+    @Getter
+    @Setter
+    @Column(name = "brand", nullable = false, length = 90)
+    private String brand;
+    @Getter
+    @Setter
+    @Column(name = "license_plate", nullable = false, length = 11)
+    private String licensePlate;
+    @Getter
+    @Setter
+    @Column(name = "model_year", length = 4)
+    private int modelYear;
+    @Getter
+    @Setter
+    @Column(name = "manufacturing_year", length = 4)
+    private int manufacturingYear;
+    @Getter
+    @Setter
+    @Column(name = "insurance_number", length = 90)
+    private String insuranceNumber;
+    @Getter
+    @Setter
+    @Column(name = "other_data", nullable = false)
+    private String otherData;
+    @Getter
+    @Setter
     @Column(name = "blocked")
     private boolean blocked;
+    
+    @Getter
+    @Setter
+    @Enumerated
+    @Column(name = "vehicle_type", nullable = false)
+    private VehicleType vehicleType;
+    
+    @Getter
+    @Setter
+    @ManyToOne
+    @NotNull(message = "{vehicle.cost-center}")
+    @JoinColumn(name = "id_cost_center", nullable = false)
+    private CostCenter costCenter;
+    
+    /**
+     * @return uma identificacao para o carro em questao
+     */
+    public String getIdentification() {
+        
+        final StringBuilder builder = new StringBuilder();
+        
+        builder.append(this.licensePlate);
+        builder.append(" - ");
+        builder.append(this.brand);
+        builder.append(" ");
+        builder.append(this.model);
+        
+        return builder.toString();
+    }
 }
