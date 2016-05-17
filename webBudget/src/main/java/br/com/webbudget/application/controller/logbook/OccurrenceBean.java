@@ -35,7 +35,7 @@ import org.primefaces.model.SortOrder;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.2.1, 09/05/2016
+ * @since 2.3.0, 09/05/2016
  */
 @Named
 @ViewScoped
