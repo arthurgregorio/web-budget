@@ -202,7 +202,7 @@
                             jsf:rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_VIEW)}">
                             <p:link href="/main/entries/costCenter/listCostCenters.xhtml">
                                 <i class="fa fa-sitemap"></i> 
-                                <span>#{menu['entries.cost-center']}</span>
+                                <span>#{menu['entries.cost-centers']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'movementClasses' ? 'active' : ''}"
@@ -218,7 +218,7 @@
                         <li class="header">#{menu['logbook']}</li>
                         <li class="#{activeMenu eq 'vehicles' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.VEHICLE_VIEW)}">
-                            <p:link href="/main/logbook/car/listVehicle.xhtml">
+                            <p:link href="/main/logbook/vehicle/listVehicle.xhtml">
                                 <i class="fa fa-car"></i> 
                                 <span>#{menu['logbook.vehicles']}</span>
                             </p:link>
