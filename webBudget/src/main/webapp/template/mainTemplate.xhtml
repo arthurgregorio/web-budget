@@ -216,11 +216,11 @@
                     
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['logbook']}</li>
-                        <li class="#{activeMenu eq 'cars' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.CAR_VIEW)}">
-                            <p:link href="/main/logbook/car/listCars.xhtml">
+                        <li class="#{activeMenu eq 'vehicles' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.VEHICLE_VIEW)}">
+                            <p:link href="/main/logbook/car/listVehicle.xhtml">
                                 <i class="fa fa-car"></i> 
-                                <span>#{menu['logbook.cars']}</span>
+                                <span>#{menu['logbook.vehicles']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'records' ? 'active' : ''}"

@@ -250,17 +250,17 @@ public class Authorization {
     public final String RECORD_DELETE = "authority.record.delete";
     
     @Getter
-    @AuthorizationGroup("authority.car")
-    public final String CAR_VIEW = "authority.car.access";
+    @AuthorizationGroup("authority.vehicle")
+    public final String VEHICLE_VIEW = "authority.vehicle.access";
     @Getter
-    @AuthorizationGroup("authority.car")
-    public final String CAR_INSERT = "authority.car.add";
+    @AuthorizationGroup("authority.vehicle")
+    public final String VEHICLE_INSERT = "authority.vehicle.add";
     @Getter
-    @AuthorizationGroup("authority.car")
-    public final String CAR_UPDATE = "authority.car.edit";
+    @AuthorizationGroup("authority.vehicle")
+    public final String VEHICLE_UPDATE = "authority.vehicle.edit";
     @Getter
-    @AuthorizationGroup("authority.car")
-    public final String CAR_DELETE = "authority.car.delete";
+    @AuthorizationGroup("authority.vehicle")
+    public final String VEHICLE_DELETE = "authority.vehicle.delete";
 
     /**
      * Lista todas as authorities disponiveis para uso, este metodo e utilzado
