@@ -216,16 +216,23 @@
                     
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['logbook']}</li>
+                        <li class="#{activeMenu eq 'cars' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.CAR_VIEW)}">
+                            <p:link href="/main/logbook/car/listCars.xhtml">
+                                <i class="fa fa-car"></i> 
+                                <span>#{menu['logbook.cars']}</span>
+                            </p:link>
+                        </li>
                         <li class="#{activeMenu eq 'records' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.RECORD_VIEW)}">
-                            <p:link href="/main/logbook/records/listRecords.xhtml">
+                            <p:link href="/main/logbook/record/listRecords.xhtml">
                                 <i class="fa fa-book"></i> 
                                 <span>#{menu['logbook.records']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'occurrences' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.OCCURRENCE_VIEW)}">
-                            <p:link href="/main/logbook/occurrences/listOccurrences.xhtml">
+                            <p:link href="/main/logbook/occurrence/listOccurrences.xhtml">
                                 <i class="fa fa-exclamation-triangle"></i> 
                                 <span>#{menu['logbook.occurrences']}</span>
                             </p:link>
