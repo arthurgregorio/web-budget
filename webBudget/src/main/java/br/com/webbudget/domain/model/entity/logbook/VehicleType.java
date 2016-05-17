@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Arthur Gregorio, AG.Software
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,30 +16,34 @@
  */
 package br.com.webbudget.domain.model.entity.logbook;
 
-import br.com.webbudget.domain.model.entity.PersistentEntity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 /**
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.3.0, 16/05/2016
+ * @since 2.3.0, 15/05/2014
  */
-@Entity
-@Table(name = "vehicles")
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class Vehicle extends PersistentEntity {
+public enum VehicleType {
 
-    @Getter
-    @Setter
-    @Column(name = "blocked")
-    private boolean blocked;
+    MOVEMENT("movement-type.movement"),
+    CARD_INVOICE("movement-type.card-invoice");
+
+    private final String i18nKey;
+
+    /**
+     *
+     * @param i18nKey
+     */
+    private VehicleType(String i18nKey) {
+        this.i18nKey = i18nKey;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return this.i18nKey;
+    }
 }
