@@ -27,7 +27,6 @@ public enum VehicleType {
 
     CAR("vehicle-type.car"),
     OTHER("vehicle-type.other"),
-    TRUCK("vehicle-type.truck"),
     MOTORCYCLE("vehicle-type.motorcycle");
 
     private final String description;
