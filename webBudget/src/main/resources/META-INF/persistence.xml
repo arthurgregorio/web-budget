@@ -36,6 +36,9 @@
         <class>br.com.webbudget.domain.model.entity.miscellany.Closing</class>
         <class>br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod</class>
         
+        <class>br.com.webbudget.domain.model.entity.logbook.Vehicle</class>
+        <class>br.com.webbudget.domain.model.entity.logbook.LogbookEntry</class>
+        
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         
         <properties>

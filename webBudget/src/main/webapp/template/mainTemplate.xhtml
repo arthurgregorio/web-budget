@@ -218,23 +218,9 @@
                         <li class="header">#{menu['logbook']}</li>
                         <li class="#{activeMenu eq 'vehicles' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.VEHICLE_VIEW)}">
-                            <p:link href="/main/logbook/vehicle/listVehicle.xhtml">
+                            <p:link href="/main/logbook/vehicle/listVehicles.xhtml">
                                 <i class="fa fa-car"></i> 
                                 <span>#{menu['logbook.vehicles']}</span>
-                            </p:link>
-                        </li>
-                        <li class="#{activeMenu eq 'records' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.RECORD_VIEW)}">
-                            <p:link href="/main/logbook/record/listRecords.xhtml">
-                                <i class="fa fa-book"></i> 
-                                <span>#{menu['logbook.records']}</span>
-                            </p:link>
-                        </li>
-                        <li class="#{activeMenu eq 'occurrences' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.OCCURRENCE_VIEW)}">
-                            <p:link href="/main/logbook/occurrence/listOccurrences.xhtml">
-                                <i class="fa fa-exclamation-triangle"></i> 
-                                <span>#{menu['logbook.occurrences']}</span>
                             </p:link>
                         </li>
                     </ul>

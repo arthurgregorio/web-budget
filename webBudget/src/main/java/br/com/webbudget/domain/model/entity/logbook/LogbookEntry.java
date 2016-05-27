@@ -58,9 +58,9 @@ public class LogbookEntry extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{logbook-entry.logbook}")
-    @JoinColumn(name = "id_logbook")
-    private Logbook logbook;
+    @NotNull(message = "{logbook-entry.vehicle}")
+    @JoinColumn(name = "id_vehicle")
+    private Vehicle vehicle;
     @Getter
     @Setter
     @ManyToOne

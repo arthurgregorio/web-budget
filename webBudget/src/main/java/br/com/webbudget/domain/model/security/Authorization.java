@@ -224,32 +224,6 @@ public class Authorization {
     public final String MESSAGE_SEND = "authority.message.send";
     
     @Getter
-    @AuthorizationGroup("authority.occurrence")
-    public final String OCCURRENCE_VIEW = "authority.occurrence.access";
-    @Getter
-    @AuthorizationGroup("authority.occurrence")
-    public final String OCCURRENCE_INSERT = "authority.occurrence.add";
-    @Getter
-    @AuthorizationGroup("authority.occurrence")
-    public final String OCCURRENCE_UPDATE = "authority.occurrence.edit";
-    @Getter
-    @AuthorizationGroup("authority.occurrence")
-    public final String OCCURRENCE_DELETE = "authority.occurrence.delete";
-    
-    @Getter
-    @AuthorizationGroup("authority.record")
-    public final String RECORD_VIEW = "authority.record.access";
-    @Getter
-    @AuthorizationGroup("authority.record")
-    public final String RECORD_INSERT = "authority.record.add";
-    @Getter
-    @AuthorizationGroup("authority.record")
-    public final String RECORD_UPDATE = "authority.record.edit";
-    @Getter
-    @AuthorizationGroup("authority.record")
-    public final String RECORD_DELETE = "authority.record.delete";
-    
-    @Getter
     @AuthorizationGroup("authority.vehicle")
     public final String VEHICLE_VIEW = "authority.vehicle.access";
     @Getter
