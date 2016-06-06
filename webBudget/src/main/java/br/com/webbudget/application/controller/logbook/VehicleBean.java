@@ -22,6 +22,7 @@ import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
+import br.com.webbudget.domain.model.entity.logbook.VehicleType;
 import br.com.webbudget.domain.model.service.LogbookService;
 import java.util.List;
 import java.util.Map;
@@ -198,5 +199,12 @@ public class VehicleBean extends AbstractBean {
             this.closeDialog("dialogDeleteVehicle");
             this.updateComponent("vehiclesList");
         }
+    }
+    
+    /**
+     * @return os tipos de veiculo para selecao
+     */
+    public VehicleType[] getVehicleTypes() {
+        return VehicleType.values();
     }
 }
