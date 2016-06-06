@@ -215,6 +215,8 @@ public class MovementBean extends AbstractBean {
     public void doUpdate() {
         try {
             this.movement = this.movementService.updateMovement(this.movement);
+            this.movement = this.movementService
+                    .findMovementById(this.movement.getId());
             this.addInfo(true, "movement.updated");
         } catch (InternalServiceError ex) {
             this.addError(false, ex.getMessage(), ex.getParameters());
@@ -235,6 +237,21 @@ public class MovementBean extends AbstractBean {
             this.addInfo(false, "movement.saved-paid");
             this.updateComponent("movementForm");
             this.temporizeHiding("messages");
+        } catch (InternalServiceError ex) {
+            this.addError(false, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(false, "error.undefined-error", ex.getMessage());
+        }
+    }
+    
+    /**
+     * 
+     */
+    public void doUpdateAndPayment() {
+        try {
+            this.movementService.payMovement(this.movement);
+            this.changeToDetail(this.movement.getId());
         } catch (InternalServiceError ex) {
             this.addError(false, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
