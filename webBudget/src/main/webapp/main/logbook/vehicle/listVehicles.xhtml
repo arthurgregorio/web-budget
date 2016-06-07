@@ -84,13 +84,22 @@
                         <p:selectBooleanCheckbox disabled="true" 
                                                  value="#{vehicle.blocked}" />
                     </p:column>
-                    <p:column headerText="#{messages['vehicle.list.brand']}">
+                    <p:column headerText="#{messages['vehicle.list.identification']}">
+                        #{vehicle.identification}
+                    </p:column>
+                    <p:column width="15%"
+                              styleClass="align-center"
+                              headerText="#{messages['vehicle.list.brand']}">
                         #{vehicle.brand}
                     </p:column>
-                    <p:column headerText="#{messages['vehicle.list.model']}">
+                    <p:column width="15%"
+                              styleClass="align-center"
+                              headerText="#{messages['vehicle.list.model']}">
                         #{vehicle.model}
                     </p:column>
-                    <p:column headerText="#{messages['vehicle.list.license-plate']}">
+                    <p:column width="15%"
+                              styleClass="align-center"
+                              headerText="#{messages['vehicle.list.license-plate']}">
                         #{vehicle.licensePlate}
                     </p:column>
                     

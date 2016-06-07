@@ -18,8 +18,11 @@ package br.com.webbudget.domain.model.entity.logbook;
 
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.entries.CostCenter;
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -29,6 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -45,12 +49,19 @@ public class Vehicle extends PersistentEntity {
 
     @Getter
     @Setter
-    @Column(name = "model", nullable = false, length = 90)
-    private String model;
+    @NotEmpty(message = "{vehicle.identification}")
+    @Column(name = "identification", nullable = false, length = 90)
+    private String identification;
     @Getter
     @Setter
+    @NotEmpty(message = "{vehicle.brand}")
     @Column(name = "brand", nullable = false, length = 90)
     private String brand;
+    @Getter
+    @Setter
+    @NotEmpty(message = "{vehicle.model}")
+    @Column(name = "model", nullable = false, length = 90)
+    private String model;
     @Getter
     @Setter
     @Column(name = "license_plate", nullable = false, length = 11)
@@ -65,20 +76,13 @@ public class Vehicle extends PersistentEntity {
     private int manufacturingYear;
     @Getter
     @Setter
-    @Column(name = "insurance_number", length = 90)
-    private String insuranceNumber;
-    @Getter
-    @Setter
-    @Column(name = "other_data", nullable = false)
-    private String otherData;
-    @Getter
-    @Setter
     @Column(name = "blocked")
     private boolean blocked;
     
     @Getter
     @Setter
-    @Enumerated
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "{vehicle.vehicle-type}")
     @Column(name = "vehicle_type", nullable = false)
     private VehicleType vehicleType;
     
@@ -88,20 +92,15 @@ public class Vehicle extends PersistentEntity {
     @NotNull(message = "{vehicle.cost-center}")
     @JoinColumn(name = "id_cost_center", nullable = false)
     private CostCenter costCenter;
-    
+
     /**
-     * @return uma identificacao para o carro em questao
+     * 
      */
-    public String getIdentification() {
+    public Vehicle() {
         
-        final StringBuilder builder = new StringBuilder();
+        final int year = LocalDate.now().get(ChronoField.YEAR);
         
-        builder.append(this.licensePlate);
-        builder.append(" - ");
-        builder.append(this.brand);
-        builder.append(" ");
-        builder.append(this.model);
-        
-        return builder.toString();
+        this.modelYear = year;
+        this.manufacturingYear = year;
     }
 }

@@ -25,9 +25,10 @@ package br.com.webbudget.domain.model.entity.logbook;
  */
 public enum VehicleType {
 
-    CAR("vehicle-type.car"),
     OTHER("vehicle-type.other"),
-    MOTORCYCLE("vehicle-type.motorcycle");
+    BACKUP_CAR("vehicle-type.backup-car"),
+    PRIVATE_CAR("vehicle-type.private-car"),
+    COMPANY_CAR("vehicle-type.company-car");
 
     private final String description;
 

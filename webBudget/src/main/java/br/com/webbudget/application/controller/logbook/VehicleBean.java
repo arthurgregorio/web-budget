@@ -21,9 +21,11 @@ import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.entity.logbook.VehicleType;
 import br.com.webbudget.domain.model.service.LogbookService;
+import br.com.webbudget.domain.model.service.MovementService;
 import java.util.List;
 import java.util.Map;
 import javax.faces.view.ViewScoped;
@@ -47,11 +49,16 @@ public class VehicleBean extends AbstractBean {
 
     @Getter
     private Vehicle vehicle;
+    
     @Getter
     private List<Vehicle> vehicles;
+    @Getter
+    private List<CostCenter> costCenters;
 
     @Inject
     private LogbookService logbookService;
+    @Inject
+    private MovementService movementService;
 
     @Getter
     private final AbstractLazyModel<Vehicle> vehiclesModel;
@@ -96,7 +103,7 @@ public class VehicleBean extends AbstractBean {
      */
     public void initializeForm(long vehicleId) {
 
-        this.vehicles = this.logbookService.listVehicles(false);
+        this.costCenters = this.movementService.listCostCenters(false);
 
         if (vehicleId == 0) {
             this.viewState = ViewState.ADDING;
