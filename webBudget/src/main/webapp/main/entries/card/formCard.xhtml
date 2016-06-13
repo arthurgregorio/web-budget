@@ -128,7 +128,7 @@
                     <div class="form-group col-xs-3">
                         <p:outputLabel for="inCreditLimit" 
                                        value="#{messages['card.form.credit-limit']}: "/>
-                        <pe:inputNumber id="inCreditLimit" 
+                        <p:inputNumber id="inCreditLimit" 
                                         symbol="R$ "
                                         decimalPlaces="2" 
                                         decimalSeparator="," 
@@ -146,7 +146,7 @@
                                      styleClass="form-control"
                                      value="#{cardBean.card.expirationDay}" 
                                      disabled="#{cardBean.card.cardType ne 'CREDIT'}">
-                            <pe:keyFilter regEx="/[0-9]/i"/>
+                            <p:keyFilter regEx="/[0-9]/i"/>
                         </p:inputText>
                     </div>
                     <div class="form-group col-xs-3">

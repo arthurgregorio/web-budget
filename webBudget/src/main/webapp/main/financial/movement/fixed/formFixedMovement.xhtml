@@ -115,7 +115,7 @@
                             <div class="col-sm-3 form-group">
                                 <p:outputLabel for="inValue" 
                                                value="#{messages['fixed-movement.form.value']}: "/>
-                                <pe:inputNumber id="inValue" 
+                                <p:inputNumber id="inValue" 
                                                 symbol="R$ "
                                                 decimalPlaces="2" 
                                                 decimalSeparator="," 
@@ -136,7 +136,7 @@
                                                      value="#{fixedMovementBean.fixedMovement.quotes}"
                                                      disabled="#{fixedMovementBean.viewState ne 'ADDING' 
                                                                  or fixedMovementBean.fixedMovement.undetermined}">
-                                            <pe:keyFilter mask="num"/>
+                                            <p:keyFilter mask="num"/>
                                         </p:inputText>
                                     </div>
                                     <div style="padding-top: 5px;"

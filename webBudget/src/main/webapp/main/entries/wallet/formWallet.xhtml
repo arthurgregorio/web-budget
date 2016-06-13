@@ -119,7 +119,7 @@
                                          styleClass="form-control"
                                          value="#{walletBean.wallet.agency}"
                                          disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
-                                <pe:keyFilter regEx="/[\d\-]/"/>  
+                                <p:keyFilter regEx="/[\d\-]/"/>  
                             </p:inputText>
                         </div>
                         <div class="form-group col-xs-2">
@@ -130,7 +130,7 @@
                                          styleClass="form-control"
                                          value="#{walletBean.wallet.account}"
                                          disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
-                                <pe:keyFilter regEx="/[\d\-.]/"/>  
+                                <p:keyFilter regEx="/[\d\-.]/"/>  
                             </p:inputText>
                         </div>
                         <div class="form-group col-xs-2">
@@ -141,7 +141,7 @@
                                          styleClass="form-control"
                                          value="#{walletBean.wallet.digit}"
                                          disabled="#{walletBean.wallet.walletType ne 'BANK_ACCOUNT'}">
-                                <pe:keyFilter regEx="/[a-z0-9_]/i"/>
+                                <p:keyFilter regEx="/[a-z0-9_]/i"/>
                             </p:inputText>
                         </div>
                     </div>
@@ -149,14 +149,14 @@
                     <div class="form-group col-xs-2">
                         <p:outputLabel for="inBalance" 
                                        value="#{messages['wallet.form.balance']}: "/>
-                        <pe:inputNumber id="inBalance" 
+                        <p:inputNumber id="inBalance" 
                                         symbol="R$ "
                                         decimalPlaces="2" 
                                         decimalSeparator="," 
                                         thousandSeparator="." 
                                         value="#{walletBean.wallet.balance}"
                                         disabled="#{walletBean.wallet.saved}">
-                            <pe:keyFilter regEx="/[0-9_,]/i"/>
+                            <p:keyFilter regEx="/[0-9_,]/i"/>
                             <f:converter converterId="javax.faces.BigDecimal" />
                         </pe:inputNumber>
                     </div>

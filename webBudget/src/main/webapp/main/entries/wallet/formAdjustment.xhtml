@@ -78,7 +78,7 @@
                     <div class="form-group col-md-6">
                         <p:outputLabel for="inBalance" 
                                        value="#{messages['adjustment.form.adjustment-value']}: "/>
-                        <pe:inputNumber id="inBalance" 
+                        <p:inputNumber id="inBalance" 
                                         symbol="R$ "
                                         decimalPlaces="2" 
                                         decimalSeparator="," 
@@ -86,7 +86,7 @@
                                         minValue="-99999999.99"
                                         value="#{walletBean.wallet.adjustmentValue}">
                             <f:converter converterId="javax.faces.BigDecimal" />
-                            <pe:keyFilter mask="num"/>
+                            <p:keyFilter mask="num"/>
                         </pe:inputNumber>
                     </div>
                     <div class="form-group col-md-12">

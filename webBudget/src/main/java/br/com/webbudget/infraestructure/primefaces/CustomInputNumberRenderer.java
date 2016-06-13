@@ -19,9 +19,9 @@ package br.com.webbudget.infraestructure.primefaces;
 import java.io.IOException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import org.primefaces.component.inputnumber.InputNumber;
+import org.primefaces.component.inputnumber.InputNumberRenderer;
 import org.primefaces.component.inputtext.InputText;
-import org.primefaces.extensions.component.inputnumber.InputNumber;
-import org.primefaces.extensions.component.inputnumber.InputNumberRenderer;
 import org.primefaces.util.HTML;
 
 /**
@@ -54,7 +54,7 @@ public class CustomInputNumberRenderer extends InputNumberRenderer {
         
         final String inputId = clientId + "_input";
 
-        // como o PF-extensions nao sabe colocar a class na input, coloca apenas 
+        // como o PF nao sabe colocar a class na input, coloca apenas 
         // na span que envolve o elemento, fiz esse bypass para que quando
         // renderizar o elemento a classe do form-control seja adicionada
         String defaultClass = InputText.STYLE_CLASS + " pe-inputNumber " + CUSTOM_CLASSES;

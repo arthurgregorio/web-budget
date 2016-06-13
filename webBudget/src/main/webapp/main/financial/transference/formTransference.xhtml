@@ -26,13 +26,13 @@
     <div class="col-md-2 form-group">
         <p:outputLabel for="inValue" 
                        value="#{messages['transference.form.value']}: "/>
-        <pe:inputNumber id="inValue" 
+        <p:inputNumber id="inValue" 
                         symbol="R$ "
                         decimalPlaces="2" 
                         decimalSeparator="," 
                         thousandSeparator="." 
                         value="#{transferenceBean.walletBalance.movementedValue}">
-            <pe:keyFilter regEx="/[0-9_,]/i"/>
+            <p:keyFilter regEx="/[0-9_,]/i"/>
             <f:converter converterId="javax.faces.BigDecimal" />
         </pe:inputNumber>
     </div>
