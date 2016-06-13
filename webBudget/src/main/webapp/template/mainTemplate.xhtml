@@ -223,6 +223,13 @@
                                 <span>#{menu['logbook.vehicles']}</span>
                             </p:link>
                         </li>
+                        <li class="#{activeMenu eq 'entries' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.ENTRIES_VIEW)}">
+                            <p:link href="/main/logbook/entries/listEntries.xhtml">
+                                <i class="fa fa-pencil"></i> 
+                                <span>#{menu['logbook.entries']}</span>
+                            </p:link>
+                        </li>
                     </ul>
 
                     <ul class="sidebar-menu">

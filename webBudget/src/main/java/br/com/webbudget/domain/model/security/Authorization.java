@@ -235,6 +235,19 @@ public class Authorization {
     @Getter
     @AuthorizationGroup("authority.vehicle")
     public final String VEHICLE_DELETE = "authority.vehicle.delete";
+    
+    @Getter
+    @AuthorizationGroup("authority.entries")
+    public final String ENTRIES_VIEW = "authority.entries.access";
+    @Getter
+    @AuthorizationGroup("authority.entries")
+    public final String ENTRIES_INSERT = "authority.entries.add";
+    @Getter
+    @AuthorizationGroup("authority.entries")
+    public final String ENTRIES_UPDATE = "authority.entries.edit";
+    @Getter
+    @AuthorizationGroup("authority.entries")
+    public final String ENTRIES_DELETE = "authority.entries.delete";
 
     /**
      * Lista todas as authorities disponiveis para uso, este metodo e utilzado
