@@ -28,8 +28,8 @@
     
     <render-kit>
         <renderer>
-            <component-family>org.primefaces.extensions.component</component-family>
-            <renderer-type>org.primefaces.extensions.component.InputNumberRenderer</renderer-type>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.InputNumberRenderer</renderer-type>
             <renderer-class>br.com.webbudget.infraestructure.primefaces.CustomInputNumberRenderer</renderer-class>
         </renderer>
         <renderer>

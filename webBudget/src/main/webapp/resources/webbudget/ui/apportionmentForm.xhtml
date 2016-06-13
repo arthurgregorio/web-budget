@@ -19,8 +19,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://java.sun.com/jsf/composite"
-      xmlns:pe="http://primefaces.org/ui/extensions">
+      xmlns:c="http://java.sun.com/jsf/composite">
 
     <c:interface>
         <c:attribute required="true"
@@ -46,14 +45,14 @@
             <div class="col-sm-6 form-group">
                 <p:outputLabel for="inApportionment" 
                                value="#{messages['apportionment.form.value']}: "/>
-                <pe:inputNumber id="inApportionment" 
-                                symbol="R$ "
-                                decimalPlaces="2" 
-                                decimalSeparator="," 
-                                thousandSeparator="." 
-                                value="#{cc.attrs.apportionment.value}">
+                <p:inputNumber id="inApportionment" 
+                               symbol="R$ "
+                               decimalPlaces="2" 
+                               decimalSeparator="," 
+                               thousandSeparator="." 
+                               value="#{cc.attrs.apportionment.value}">
                     <f:converter converterId="javax.faces.BigDecimal" />
-                </pe:inputNumber>  
+                </p:inputNumber>  
             </div>
             <div class="col-sm-12 form-group">
                 <p:outputLabel for="inCostCenter" 
@@ -91,7 +90,7 @@
                 </p:selectOneMenu>
             </div>                        
         </div>
-        
+
         <p:blockUI trigger="inCostCenter"
                    block="#{cc.attrs.blockForm}"
                    widgetVar="#{cc.attrs.id}_block" >
