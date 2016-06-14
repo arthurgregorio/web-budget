@@ -20,7 +20,7 @@ import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.model.entity.logbook.LogbookEntry;
+import br.com.webbudget.domain.model.entity.logbook.Entry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,22 +39,22 @@ import org.primefaces.model.SortOrder;
  */
 @Named
 @ViewScoped
-public class OccurrenceBean extends AbstractBean {
+public class EntryBean extends AbstractBean {
     
     @Getter
-    private LogbookEntry occurrence;
+    private Entry occurrence;
     
     @Getter
-    private final AbstractLazyModel<LogbookEntry> occurrencesModel;
+    private final AbstractLazyModel<Entry> occurrencesModel;
 
     /**
      * Incializa o lazy model das ocorrencias
      */
-    public OccurrenceBean() {
+    public EntryBean() {
         
-        this.occurrencesModel = new AbstractLazyModel<LogbookEntry>() {
+        this.occurrencesModel = new AbstractLazyModel<Entry>() {
             @Override
-            public List<LogbookEntry> load(int first, int pageSize, String sortField, 
+            public List<Entry> load(int first, int pageSize, String sortField, 
                     SortOrder sortOrder, Map<String, Object> filters) {
                 
                 final PageRequest pageRequest = new PageRequest();
@@ -65,7 +65,7 @@ public class OccurrenceBean extends AbstractBean {
                         .sortingBy(sortField, "inclusion")
                         .withDirection(sortOrder.name());
                 
-                final Page<LogbookEntry> page = new Page<>(new ArrayList<>(), 0L);
+                final Page<Entry> page = new Page<>(new ArrayList<>(), 0L);
                 
                 this.setRowCount(page.getTotalPagesInt());
                 

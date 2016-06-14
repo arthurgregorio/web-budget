@@ -23,15 +23,15 @@ package br.com.webbudget.domain.model.entity.logbook;
  * @version 1.0.0
  * @since 2.3.0, 15/05/2014
  */
-public enum LogbookEntryType {
+public enum EntryType {
 
-    TAXES("logbook-entry-type.taxes"),
-    PARTS("logbook-entry-type.parts"),
-    OTHERS("logbook-entry-type.others"),
-    SERVICES("logbook-entry-type.services"),
-    REFUELING("logbook-entry-type.refueling"),
-    INSURANCE("logbook-entry-type.insurance"),
-    MAINTENANCES("logbook-entry-type.maintenances");
+    TAXES("entry-type.taxes"),
+    PARTS("entry-type.parts"),
+    OTHERS("entry-type.others"),
+    SERVICES("entry-type.services"),
+    REFUELING("entry-type.refueling"),
+    INSURANCE("entry-type.insurance"),
+    MAINTENANCES("entry-type.maintenances");
 
     private final String description;
 
@@ -39,7 +39,7 @@ public enum LogbookEntryType {
      *
      * @param description
      */
-    private LogbookEntryType(String description) {
+    private EntryType(String description) {
         this.description = description;
     }
 

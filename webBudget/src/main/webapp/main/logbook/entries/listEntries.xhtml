@@ -26,13 +26,15 @@
     <ui:param name="activeMenu" value="entries"/>
 
     <f:metadata>
-
+        <f:viewAction action="#{entryBean.initializeListing()}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
+        #{messages['entry.page-title']}
     </ui:define>
 
     <ui:define name="pageDescription">
+        #{messages['entry.page-description']}
     </ui:define>
 
     <ui:define name="breadcrumb">
@@ -56,5 +58,6 @@
     </ui:define>
 `
     <ui:define name="popups">
+        
     </ui:define>
 </ui:composition>

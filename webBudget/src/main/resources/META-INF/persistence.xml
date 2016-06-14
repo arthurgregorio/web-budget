@@ -4,7 +4,6 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:/datasources/webBudgetDS</jta-data-source>
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
-        
         <class>br.com.webbudget.domain.model.entity.entries.CardInvoice</class>
         <class>br.com.webbudget.domain.model.entity.entries.Card</class>
         <class>br.com.webbudget.domain.model.entity.entries.Wallet</class>
@@ -13,7 +12,6 @@
         <class>br.com.webbudget.domain.model.entity.entries.Contact</class>
         <class>br.com.webbudget.domain.model.entity.entries.MovementClass</class>
         <class>br.com.webbudget.domain.model.entity.entries.CostCenter</class>
-        
         <class>br.com.webbudget.domain.model.entity.tools.Configuration</class>
         <class>br.com.webbudget.domain.model.entity.tools.PartitionTypeEntity</class>
         <class>br.com.webbudget.domain.model.entity.tools.RelationshipIdentityTypeEntity</class>
@@ -26,29 +24,22 @@
         <class>br.com.webbudget.domain.model.entity.tools.RelationshipTypeEntity</class>
         <class>br.com.webbudget.domain.model.entity.tools.Message</class>
         <class>br.com.webbudget.domain.model.entity.tools.UserMessage</class>
-        
         <class>br.com.webbudget.domain.model.entity.financial.Launch</class>
         <class>br.com.webbudget.domain.model.entity.financial.Payment</class>
         <class>br.com.webbudget.domain.model.entity.financial.Movement</class>
         <class>br.com.webbudget.domain.model.entity.financial.Apportionment</class>
         <class>br.com.webbudget.domain.model.entity.financial.FixedMovement</class>
-        
         <class>br.com.webbudget.domain.model.entity.miscellany.Closing</class>
         <class>br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod</class>
-        
         <class>br.com.webbudget.domain.model.entity.logbook.Vehicle</class>
-        <class>br.com.webbudget.domain.model.entity.logbook.LogbookEntry</class>
-        
+        <class>br.com.webbudget.domain.model.entity.logbook.Entry</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
-        
         <properties>
-            <!-- configuracoes do hibernate -->
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.connection.autocommit" value="false"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
-            <!-- desabilita JSR-303 no save/update -->
             <property name="javax.persistence.validation.mode" value="none"/>
         </properties>
     </persistence-unit>

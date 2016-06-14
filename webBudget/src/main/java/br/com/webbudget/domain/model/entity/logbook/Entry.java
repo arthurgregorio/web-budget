@@ -39,10 +39,10 @@ import lombok.ToString;
  * @since 2.2.1, 09/05/2016
  */
 @Entity
+@Table(name = "entries")
 @ToString(callSuper = true)
-@Table(name = "logbook_entries")
 @EqualsAndHashCode(callSuper = true)
-public class LogbookEntry extends PersistentEntity {
+public class Entry extends PersistentEntity {
 
     @Getter
     @Setter
@@ -52,27 +52,28 @@ public class LogbookEntry extends PersistentEntity {
     @Getter
     @Setter
     @Enumerated
-    @Column(name = "logbook_entry_type", nullable = false)
-    private LogbookEntryType logbookEntryType;
+    @NotNull(message = "{entry.entry-type}")
+    @Column(name = "entry_type", nullable = false)
+    private EntryType entryType;
     
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{logbook-entry.vehicle}")
+    @NotNull(message = "{entry.vehicle}")
     @JoinColumn(name = "id_vehicle")
     private Vehicle vehicle;
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{logbook-entry.movement-class}")
+    @NotNull(message = "{entry.movement-class}")
     @JoinColumn(name = "id_movement_class")
     private MovementClass movementClass;
 
     /**
      * 
      */
-    public LogbookEntry() {
+    public Entry() {
         this.financial = false;
-        this.logbookEntryType = LogbookEntryType.REFUELING;
+        this.entryType = EntryType.REFUELING;
     }
 }
