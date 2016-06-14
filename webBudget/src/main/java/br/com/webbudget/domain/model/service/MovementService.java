@@ -360,7 +360,7 @@ public class MovementService {
             
             this.fixedMovementRepository.save(fixedMovement);
         }
-        
+
         // devolve o saldo na carteira se for o caso
         if (movement.getMovementStateType() == MovementStateType.PAID
                 && movement.getPayment().getPaymentMethodType() == PaymentMethodType.IN_CASH) {
