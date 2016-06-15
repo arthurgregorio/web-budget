@@ -16,22 +16,25 @@
  */
 package br.com.webbudget.application.controller.logbook;
 
-import br.com.webbudget.application.component.table.AbstractLazyModel;
-import br.com.webbudget.application.component.table.Page;
-import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.entity.logbook.Entry;
+import br.com.webbudget.domain.model.entity.logbook.EntryType;
+import br.com.webbudget.domain.model.entity.logbook.Vehicle;
+import br.com.webbudget.domain.model.service.LogbookService;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import org.primefaces.model.SortOrder;
+import lombok.Setter;
 
 /**
  * Controller para a view de ocorrencias do diario de bordo
- * 
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -40,44 +43,110 @@ import org.primefaces.model.SortOrder;
 @Named
 @ViewScoped
 public class EntryBean extends AbstractBean {
-    
-    @Getter
-    private Entry occurrence;
-    
-    @Getter
-    private final AbstractLazyModel<Entry> occurrencesModel;
 
-    /**
-     * Incializa o lazy model das ocorrencias
-     */
-    public EntryBean() {
-        
-        this.occurrencesModel = new AbstractLazyModel<Entry>() {
-            @Override
-            public List<Entry> load(int first, int pageSize, String sortField, 
-                    SortOrder sortOrder, Map<String, Object> filters) {
-                
-                final PageRequest pageRequest = new PageRequest();
-                
-                pageRequest
-                        .setFirstResult(first)
-                        .withPageSize(pageSize)
-                        .sortingBy(sortField, "inclusion")
-                        .withDirection(sortOrder.name());
-                
-                final Page<Entry> page = new Page<>(new ArrayList<>(), 0L);
-                
-                this.setRowCount(page.getTotalPagesInt());
-                
-                return page.getContent();
-            }
-        };
-    }
-    
+    @Getter
+    @Setter
+    private EntryType selectedType;
+    @Getter
+    @Setter
+    private Vehicle selectedVehicle;
+
+    @Getter
+    private List<Entry> entries;
+    @Getter
+    private List<Vehicle> vehicles;
+
+    @Inject
+    private LogbookService logbookService;
+
     /**
      * Inicializa a view de listagem das ocorrencias o diario de bordo
      */
-    public void initializeListing() {
-        
+    public void initialize() {
+
+        this.entries = new ArrayList<>();
+
+        this.vehicles = this.logbookService.listVehicles(false);
+    }
+
+    /**
+     * @return a pagina para inclusao de um novo registro
+     */
+    public String changeToAdd() {
+        return "formEntry.xhtml?faces-redirect=true&vehicle=" 
+                + this.selectedVehicle.getId() + "&type=" + this.selectedType;
+    }
+
+    /**
+     * Abre a dialog de selecao do tipo de registro que iremos realizar
+     */
+    public void showEntryTypeDialog() {
+        if (this.selectedVehicle == null) {
+            this.addError(true, "error.entry.no-vehicle");
+        } else {
+            this.updateAndOpenDialog("entryTypeDialog", "dialogEntryType");
+        }
+    }
+
+    /**
+     * Carrega todas os registros para o diario de bordo do carro selecionado
+     */
+    public void viewEntries() {
+
+        // sem veiculo, sem pesquisa
+        if (this.selectedVehicle == null) {
+            return;
+        }
+
+        // com veiculo, com pesquisa :D
+        try {
+            this.entries = this.logbookService
+                    .listEntriesByVehicle(this.selectedVehicle);
+
+            // se os resultados forem vazios, avisa o user
+            if (this.entries.isEmpty()) {
+                this.addError(true, "error.entry.no-entries",
+                        this.selectedVehicle.getIdentification());
+            }
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
+    }
+
+    /**
+     * Pega os registro apenas de uma data de inclusao especifica
+     *
+     * @param inclusion a data de inclusao
+     * @return a lista com os itens incluidos nesta data
+     */
+    public List<Entry> entriesByInclusion(LocalDate inclusion) {
+        return this.entries.stream()
+                .filter(balance -> balance.getInclusionAsLocalDate().equals(inclusion))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @return agrupa todos os registros pela data de inclusao
+     */
+    public List<LocalDate> groupEntriesByInclusion() {
+
+        final List<LocalDate> grouped = new ArrayList<>();
+
+        this.entries.stream().forEach(entry -> {
+            if (!grouped.contains(entry.getInclusionAsLocalDate())) {
+                grouped.add(entry.getInclusionAsLocalDate());
+            }
+        });
+        return grouped;
+    }
+    
+    /**
+     * @return os tipos de registros que poderemos ter
+     */
+    public EntryType[] getEntryTypes() {
+        return EntryType.values();
     }
 }

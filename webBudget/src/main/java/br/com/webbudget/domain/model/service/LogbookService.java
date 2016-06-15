@@ -18,7 +18,9 @@ package br.com.webbudget.domain.model.service;
 
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.model.entity.logbook.Entry;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
+import br.com.webbudget.domain.model.repository.logbook.IEntryRepository;
 import br.com.webbudget.domain.model.repository.logbook.IVehicleRepository;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -36,6 +38,8 @@ import javax.transaction.Transactional;
 @ApplicationScoped
 public class LogbookService {
 
+    @Inject
+    private IEntryRepository entryRepository;
     @Inject
     private IVehicleRepository vehicleRepository;
 
@@ -93,5 +97,14 @@ public class LogbookService {
      */
     public Page<Vehicle> listVehiclesLazily(Boolean isBlocked, PageRequest pageRequest) {
         return this.vehicleRepository.listLazilyByStatus(isBlocked, pageRequest);
+    }
+
+    /**
+     * 
+     * @param vehicle
+     * @return 
+     */
+    public List<Entry> listEntriesByVehicle(Vehicle vehicle) {
+        return this.entryRepository.listByVehicle(vehicle);
     }
 }
