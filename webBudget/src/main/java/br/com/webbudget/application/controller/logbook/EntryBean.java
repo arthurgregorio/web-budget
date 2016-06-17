@@ -50,6 +50,9 @@ public class EntryBean extends AbstractBean {
     @Getter
     @Setter
     private Vehicle selectedVehicle;
+    
+    @Getter
+    private Entry entry;
 
     @Getter
     private List<Entry> entries;
@@ -70,13 +73,27 @@ public class EntryBean extends AbstractBean {
     }
 
     /**
+     * 
+     * @param vehicleId
+     * @param entryType 
+     */
+    public void initializeForm(long vehicleId, String entryType) {
+
+        // busca o veiculo
+        final Vehicle vehicle = this.logbookService.findVehicleById(vehicleId);
+
+        // cria a entrada 
+        this.entry = new Entry(EntryType.valueOf(entryType), vehicle);
+    }
+
+    /**
      * @return a pagina para inclusao de um novo registro
      */
     public String changeToAdd() {
-        return "formEntry.xhtml?faces-redirect=true&vehicle=" 
-                + this.selectedVehicle.getId() + "&type=" + this.selectedType;
+        return "formEntry.xhtml?faces-redirect=true&vehicleId="
+                + this.selectedVehicle.getId() + "&entryType=" + this.selectedType.name();
     }
-
+    
     /**
      * Abre a dialog de selecao do tipo de registro que iremos realizar
      */
@@ -88,6 +105,21 @@ public class EntryBean extends AbstractBean {
         }
     }
 
+    /**
+     * @return voltamos para a pagina de listagem
+     */
+    public String doCancel() {
+        return "listEntries.xhtml?faces-redirect=true";
+    }
+    
+    /**
+     * 
+     */
+    public void doSave() {
+        
+        
+    }
+    
     /**
      * Carrega todas os registros para o diario de bordo do carro selecionado
      */
@@ -113,6 +145,21 @@ public class EntryBean extends AbstractBean {
         } catch (Exception ex) {
             this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
+        }
+    }
+    
+    /**
+     * Metodo para definirmos que pagina vamos ter na view de acordo com o tipo
+     * de taxa selecionada
+     * 
+     * @return o fragmento de pagina que vamos bindar na view
+     */
+    public String definePageByType() {
+        switch (this.entry.getEntryType()) {
+            case REFUELING: 
+                return "";
+            default: 
+                return "";
         }
     }
 
@@ -142,7 +189,7 @@ public class EntryBean extends AbstractBean {
         });
         return grouped;
     }
-    
+
     /**
      * @return os tipos de registros que poderemos ter
      */

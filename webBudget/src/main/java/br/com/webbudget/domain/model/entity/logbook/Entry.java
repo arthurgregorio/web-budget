@@ -76,4 +76,22 @@ public class Entry extends PersistentEntity {
         this.financial = false;
         this.entryType = EntryType.REFUELING;
     }
+
+    /**
+     * 
+     * @param entryType
+     * @param vehicle 
+     */
+    public Entry(EntryType entryType, Vehicle vehicle) {
+        this.financial = true;
+        this.entryType = entryType;
+        this.vehicle = vehicle;
+    }
+    
+    /**
+     * @return a identificacao do veiculo vinculado ao registro
+     */
+    public String getVehicleIdentification() {
+        return this.vehicle.getIdentification();
+    }
 }

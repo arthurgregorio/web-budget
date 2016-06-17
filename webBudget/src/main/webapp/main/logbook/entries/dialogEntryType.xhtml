@@ -24,34 +24,38 @@
           resizable="false" 
           closeOnEscape="true"
           widgetVar="dialogEntryType" 
-          header="#{messages['entry.type-dialog.title']}">
+          header="#{messages['entry.type-dialog.title']}"
+          xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <div class="row">
-        <div class="col-sm-12">
-            <h4>
-                <o:outputFormat escape="false" 
-                                value="#{messages['entry.type-dialog.question']}">
-                    <f:param value="#{entryBean.selectedVehicle.identification}" />
-                </o:outputFormat>
-            </h4>
-            <p:selectOneMenu value="#{entryBean.selectedType}"
-                             converter="omnifaces.GenericEnumConverter">
-                <f:selectItems var="entryType"
-                               itemValue="#{entryType}"
-                               itemLabel="#{enums[entryType]}"
-                               value="#{entryBean.entryTypes}"/> 
-            </p:selectOneMenu>
+    <h:form>
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>
+                    <o:outputFormat escape="false" 
+                                    value="#{messages['entry.type-dialog.question']}">
+                        <f:param value="#{entryBean.selectedVehicle.identification}" />
+                    </o:outputFormat>
+                </h4>
+                <p:selectOneMenu value="#{entryBean.selectedType}"
+                                 converter="omnifaces.GenericEnumConverter">
+                    <f:selectItems var="entryType"
+                                   itemValue="#{entryType}"
+                                   itemLabel="#{enums[entryType]}"
+                                   value="#{entryBean.entryTypes}"/> 
+                </p:selectOneMenu>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 dialog-controls-box">
-            <p:commandButton value="#{menu['select']}"
-                             styleClass="btn btn-flat btn-info" 
-                             action="#{entryBean.changeToAdd()}"/>
-            <p:spacer width="10"/>
-            <p:commandButton value="#{menu['cancel']}"
-                             styleClass="btn btn-flat btn-default"
-                             onclick="closeDialog('dialogEntryType')" />
+        <div class="row">
+            <div class="col-sm-12 dialog-controls-box">
+                <p:commandButton value="#{menu['select']}"
+                                 styleClass="btn btn-flat btn-info" 
+                                 action="#{entryBean.changeToAdd()}"/>
+                <p:spacer width="10"/>
+                <p:commandButton immediate="true"
+                                 value="#{menu['cancel']}"
+                                 styleClass="btn btn-flat btn-default"
+                                 onclick="closeDialog('dialogEntryType')" />
+            </div>
         </div>
-    </div>
+    </h:form>
 </p:dialog>
