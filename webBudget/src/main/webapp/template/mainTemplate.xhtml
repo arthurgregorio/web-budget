@@ -52,7 +52,10 @@
     <h:body styleClass="hold-transition sidebar-mini #{userSessionBean.authenticatedUserUI}">
 
         <h:form>
-            <p:remoteCommand autoRun="true"
+            <p:remoteCommand async="true"
+                             autoRun="true"
+                             global="false"
+                             process="@this"
                              name="updateMessages" 
                              update="userMessagesBox"
                              actionListener="#{messagingBean.updateMessageStatus()}"/>
