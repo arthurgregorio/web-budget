@@ -18,10 +18,12 @@ package br.com.webbudget.application.controller.logbook;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.logbook.Entry;
 import br.com.webbudget.domain.model.entity.logbook.EntryType;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.service.LogbookService;
+import br.com.webbudget.domain.model.service.MovementService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,8 @@ public class EntryBean extends AbstractBean {
     private List<Entry> entries;
     @Getter
     private List<Vehicle> vehicles;
+    @Getter
+    private List<MovementClass> movementClasses;
 
     @Inject
     private LogbookService logbookService;
@@ -81,6 +85,10 @@ public class EntryBean extends AbstractBean {
 
         // busca o veiculo
         final Vehicle vehicle = this.logbookService.findVehicleById(vehicleId);
+        
+        // busca as classes do CC do veiculo
+        this.movementClasses = 
+                this.logbookService.listClassesForVehicle(vehicle);
 
         // cria a entrada 
         this.entry = new Entry(EntryType.valueOf(entryType), vehicle);
@@ -134,12 +142,6 @@ public class EntryBean extends AbstractBean {
         try {
             this.entries = this.logbookService
                     .listEntriesByVehicle(this.selectedVehicle);
-
-            // se os resultados forem vazios, avisa o user
-            if (this.entries.isEmpty()) {
-                this.addError(true, "error.entry.no-entries",
-                        this.selectedVehicle.getIdentification());
-            }
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
@@ -148,21 +150,6 @@ public class EntryBean extends AbstractBean {
         }
     }
     
-    /**
-     * Metodo para definirmos que pagina vamos ter na view de acordo com o tipo
-     * de taxa selecionada
-     * 
-     * @return o fragmento de pagina que vamos bindar na view
-     */
-    public String definePageByType() {
-        switch (this.entry.getEntryType()) {
-            case REFUELING: 
-                return "";
-            default: 
-                return "";
-        }
-    }
-
     /**
      * Pega os registro apenas de uma data de inclusao especifica
      *

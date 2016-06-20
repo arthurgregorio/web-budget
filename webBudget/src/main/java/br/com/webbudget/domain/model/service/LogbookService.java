@@ -18,8 +18,11 @@ package br.com.webbudget.domain.model.service;
 
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.model.entity.entries.MovementClass;
+import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.entity.logbook.Entry;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
+import br.com.webbudget.domain.model.repository.entries.IMovementClassRepository;
 import br.com.webbudget.domain.model.repository.logbook.IEntryRepository;
 import br.com.webbudget.domain.model.repository.logbook.IVehicleRepository;
 import java.util.List;
@@ -42,6 +45,8 @@ public class LogbookService {
     private IEntryRepository entryRepository;
     @Inject
     private IVehicleRepository vehicleRepository;
+    @Inject
+    private IMovementClassRepository movementClassRepository;
 
     /**
      * 
@@ -106,5 +111,15 @@ public class LogbookService {
      */
     public List<Entry> listEntriesByVehicle(Vehicle vehicle) {
         return this.entryRepository.listByVehicle(vehicle);
+    }
+
+    /**
+     * 
+     * @param vehicle
+     * @return 
+     */
+    public List<MovementClass> listClassesForVehicle(Vehicle vehicle) {
+        return this.movementClassRepository.listByCostCenterAndType(
+                vehicle.getCostCenter(), MovementClassType.OUT);
     }
 }

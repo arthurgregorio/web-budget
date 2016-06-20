@@ -26,11 +26,8 @@ package br.com.webbudget.domain.model.entity.logbook;
 public enum EntryType {
 
     TAXES("entry-type.taxes"),
-    PARTS("entry-type.parts"),
     OTHERS("entry-type.others"),
     SERVICES("entry-type.services"),
-    REFUELING("entry-type.refueling"),
-    INSURANCE("entry-type.insurance"),
     MAINTENANCES("entry-type.maintenances");
 
     private final String description;

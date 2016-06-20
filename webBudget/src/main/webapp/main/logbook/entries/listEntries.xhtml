@@ -22,7 +22,6 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
     <ui:param name="activeMenu" value="entries"/>
@@ -59,7 +58,7 @@
         <div class="box">
             <div class="box-body row">
                 <h:form id="controlsForm" prependId="false">
-                    <div class="col-sm-5">
+                    <div class="col-sm-6">
                         <div class="input-group">
                             <p:selectOneMenu value="#{entryBean.selectedVehicle}"
                                              converter="omnifaces.SelectItemsConverter">
@@ -73,78 +72,100 @@
                             </p:selectOneMenu>
                             <div class="input-group-btn">
                                 <p:spacer width="10"/>
-                                <p:commandButton update="controlsForm"
-                                                 value="#{menu['view']}"
+                                <p:commandButton value="#{menu['view']}"
+                                                 update="controlsForm contentBox"
                                                  styleClass="btn btn-flat btn-warning" 
                                                  actionListener="#{entryBean.viewEntries()}" />
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-7 align-right">
-                        <p:commandButton update="controlsForm"
-                                         value="#{menu['new']}"
-                                         styleClass="btn btn-flat btn-info" 
-                                         actionListener="#{entryBean.showEntryTypeDialog()}" />
+                    <div class="col-sm-6">
+
                     </div>
                 </h:form>
             </div>
         </div>
 
-        <div class="box-empty">
-            <div class="row">
-                <div class="col-md-12 align-center"
-                     jsf:rendered="#{empty entryBean.entries}">
-                    <h4>#{messages['entry.no-entries']}</h4>
-                </div>
-                <div class="col-md-12" 
-                     jsf:rendered="#{not empty entryBean.entries}">
-                    <p:dataScroller chunkSize="5"
-                                    var="inclusion"
-                                    value="#{entryBean.groupEntriesByInclusion()}">
-                        <ul class="timeline">
-                            <li class="time-label">
-                                <span class="bg-orange">
-                                    <h:outputText value="#{inclusion}">
-                                        <f:converter converterId="localDateConverter"/>
-                                    </h:outputText> 
-                                </span>
-                            </li>
-                            <ui:repeat var="entry" value="#{entryBean.entriesByInclusion(inclusion)}">
-                                <li>
-                                    <i class="fa fa-exchange bg-aqua"></i>
-                                    <div class="timeline-item">
-                                        <span class="time">
-                                            <i class="fa fa-clock-o"></i> 
-                                            <p:spacer width="5"/>
-                                            <o:outputFormat value="#{messages['entry.date-and-user']}">
-                                                <f:param value="#{entry.inclusionDateAsString}"/>
-                                                <f:param value="#{empty entry.includedBy 
-                                                                  ? messages['unknow'] : entry.includedBy}"/>
-                                            </o:outputFormat>
-                                        </span>
-                                        <h3 class="timeline-header">
-                                            <h:outputText styleClass="text-aqua text-bold"
-                                                          value="#{enums[entry.entryType]}"/>
-                                        </h3>
-                                        <div class="timeline-body">
-                                            <div class="row">
-                                                <div class="col-sm-4 form-group">
+        <div jsf:id="contentBox" class="row">
+            <div class="col-md-12 align-center"
+                 jsf:rendered="#{entryBean.selectedVehicle eq null}">
+                <h4>#{messages['entry.no-vehicle']}</h4>
+            </div>
+            <div class="col-md-12"
+                 jsf:rendered="#{entryBean.selectedVehicle ne null}">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="box">
+                            <div class="box-body row">
+                                <div class="col-md-10">
+                                    <p:commandButton update="controlsForm"
+                                                     value="#{menu['new']}"
+                                                     styleClass="btn btn-flat btn-info" 
+                                                     actionListener="#{entryBean.showEntryTypeDialog()}" />
+                                </div>
+                                <div class="col-md-2 align-right">
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-empty">
+                            <div class="col-md-12 align-center"
+                                 jsf:rendered="#{empty entryBean.entries}">
+                                <h4>#{messages['entry.no-entries']}</h4>
+                            </div>
+                            <div class="col-md-12"
+                                 jsf:rendered="#{not empty entryBean.entries}">
+                                <p:dataScroller chunkSize="5"
+                                                var="inclusion"
+                                                value="#{entryBean.groupEntriesByInclusion()}">
+                                    <ul class="timeline">
+                                        <li class="time-label">
+                                            <span class="bg-orange">
+                                                <h:outputText value="#{inclusion}">
+                                                    <f:converter converterId="localDateConverter"/>
+                                                </h:outputText> 
+                                            </span>
+                                        </li>
+                                        <ui:repeat var="entry" value="#{entryBean.entriesByInclusion(inclusion)}">
+                                            <li>
+                                                <i class="fa fa-exchange bg-aqua"></i>
+                                                <div class="timeline-item">
+                                                    <span class="time">
+                                                        <i class="fa fa-clock-o"></i> 
+                                                        <p:spacer width="5"/>
+                                                        <o:outputFormat value="#{messages['entry.date-and-user']}">
+                                                            <f:param value="#{entry.inclusionDateAsString}"/>
+                                                            <f:param value="#{empty entry.includedBy 
+                                                                              ? messages['unknow'] : entry.includedBy}"/>
+                                                        </o:outputFormat>
+                                                    </span>
+                                                    <h3 class="timeline-header">
+                                                        <h:outputText styleClass="text-aqua text-bold"
+                                                                      value="#{enums[entry.entryType]}"/>
+                                                    </h3>
+                                                    <div class="timeline-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-4 form-group">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ui:repeat>
-                        </ul>
-                    </p:dataScroller>
+                                            </li>
+                                        </ui:repeat>
+                                    </ul>
+                                </p:dataScroller>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                    </div>
                 </div>
             </div>
         </div>
-
-        <wb:backToTop />
     </ui:define>
-    `
+
     <ui:define name="popups">
         <ui:include src="dialogEntryType.xhtml"/>
     </ui:define>

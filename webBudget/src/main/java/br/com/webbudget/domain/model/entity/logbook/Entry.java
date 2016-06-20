@@ -16,10 +16,15 @@
  */
 package br.com.webbudget.domain.model.entity.logbook;
 
+import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -29,6 +34,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Representacao das ocorrencias de um registro do logbook
@@ -36,7 +42,7 @@ import lombok.ToString;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.2.1, 09/05/2016
+ * @since 2.3.0, 09/05/2016
  */
 @Entity
 @Table(name = "entries")
@@ -46,48 +52,75 @@ public class Entry extends PersistentEntity {
 
     @Getter
     @Setter
-    @Column(name = "financial", nullable = false)
-    private boolean financial;
-    
+    @NotBlank(message = "{entry.title}")
+    @Column(name = "title", nullable = false)
+    private String title;
     @Getter
     @Setter
-    @Enumerated
+    @Column(name = "odometer")
+    private Integer odometer;
+    @Getter
+    @Setter
+    @Column(name = "cost")
+    private BigDecimal cost;
+    @Getter
+    @Setter
+    @Column(name = "place")
+    private String place;
+    @Getter
+    @Setter
+    @Column(name = "description")
+    private String description;
+    @Getter
+    @Setter
+    @NotNull(message = "{entry.event-date}")
+    @Column(name = "event_date", nullable = false)
+    @Convert(converter = JPALocalDateConverter.class)
+    private LocalDate eventDate;
+    @Getter
+    @Setter
+    @Column(name = "financial", nullable = false)
+    private boolean financial;
+
+    @Getter
+    @Setter
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "{entry.entry-type}")
     @Column(name = "entry_type", nullable = false)
     private EntryType entryType;
-    
+
     @Getter
     @Setter
     @ManyToOne
     @NotNull(message = "{entry.vehicle}")
-    @JoinColumn(name = "id_vehicle")
+    @JoinColumn(name = "id_vehicle", nullable = false)
     private Vehicle vehicle;
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{entry.movement-class}")
     @JoinColumn(name = "id_movement_class")
     private MovementClass movementClass;
 
     /**
-     * 
+     *
      */
     public Entry() {
         this.financial = false;
-        this.entryType = EntryType.REFUELING;
+        this.eventDate = LocalDate.now();
+        this.entryType = EntryType.MAINTENANCES;
     }
 
     /**
-     * 
+     *
      * @param entryType
-     * @param vehicle 
+     * @param vehicle
      */
     public Entry(EntryType entryType, Vehicle vehicle) {
-        this.financial = true;
-        this.entryType = entryType;
+        this();
         this.vehicle = vehicle;
+        this.entryType = entryType;
     }
-    
+
     /**
      * @return a identificacao do veiculo vinculado ao registro
      */
