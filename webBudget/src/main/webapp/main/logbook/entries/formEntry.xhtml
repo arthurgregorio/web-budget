@@ -28,7 +28,7 @@
     <ui:param name="activeMenu" value="entries"/>
 
     <f:metadata>
-        <f:viewAction action="#{entryBean.initializeForm(param.vehicleId, param.entryType)}"/>
+        <f:viewAction action="#{entryBean.initializeForm(param.vehicleId)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -37,7 +37,6 @@
 
     <ui:define name="pageDescription">
         <o:outputFormat value="#{messages['entry.page-description-including']}">
-            <f:param value="#{enums[entryBean.entry.entryType]}"/>
             <f:param value="#{entryBean.entry.vehicleIdentification}"/>
         </o:outputFormat>
     </ui:define>
@@ -62,14 +61,16 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox value="#{entryBean.entry.financial}"
-                                                 itemLabel="#{messages['entry.form.financial']}"/>
+                                                 itemLabel="#{messages['entry.form.financial']}">
+                            <p:ajax event="change" update="movementClassBox" process="@this"/>
+                        </p:selectBooleanCheckbox>
                     </h3>
                 </div>
 
                 <div class="box-body row">
                     <div class="col-md-6">
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-12">
                                 <p:outputLabel for="inTitle" 
                                                value="#{messages['entry.form.title']}: "/>
                                 <p:inputText id="inTitle" 
@@ -78,13 +79,32 @@
                                              value="#{entryBean.entry.title}" />
                             </div>
                             <div class="form-group col-md-6">
-                                <p:outputLabel for="inPlace" 
-                                               value="#{messages['entry.form.place']}: "/>
-                                <p:inputText id="inPlace" 
-                                             maxlength="45"
-                                             styleClass="form-control"
-                                             value="#{entryBean.entry.place}" 
-                                             disabled="#{entryBean.entry.entryType eq 'TAXES'}"/>
+                                <p:outputLabel for="cbType" 
+                                               value="#{messages['entry.form.type']}: "/>
+                                <p:selectOneMenu id="cbType"
+                                                 value="#{entryBean.entry.entryType}"
+                                                 converter="omnifaces.GenericEnumConverter">
+                                    <f:selectItems var="entryType"
+                                                   itemValue="#{entryType}"
+                                                   itemLabel="#{enums[entryType]}"
+                                                   value="#{entryBean.entryTypes}"/> 
+                                </p:selectOneMenu>
+                            </div>
+                            <div jsf:id="movementClassBox" class="form-group col-md-6">
+                                <p:outputLabel for="inMovementClass" 
+                                               value="#{messages['entry.form.movement-class']}: "/>
+                                <p:selectOneMenu id="inMovementClass" 
+                                                     value="#{entryBean.entry.movementClass}" 
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 disabled="#{not entryBean.entry.financial}">
+                                    <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
+                                                  itemLabel="#{menu['select-one']}" />
+                                    <f:selectItems var="movementClass" 
+                                                   itemValue="#{movementClass}"
+                                                   itemLabel="#{movementClass.name}"
+                                                   value="#{entryBean.movementClasses}" /> 
+                                </p:selectOneMenu>
                             </div>
                             <div class="form-group col-md-6">
                                 <p:outputLabel for="inOdometer" 
@@ -118,19 +138,13 @@
                                 </p:inputNumber>
                             </div>
                             <div class="form-group col-md-6">
-                                <p:outputLabel for="inMovementClass" 
-                                               value="#{messages['entry.form.movement-class']}: "/>
-                                <p:selectOneMenu id="inMovementClass" 
-                                                 value="#{entryBean.entry.movementClass}" 
-                                                 converter="omnifaces.SelectItemsConverter">
-                                    <f:selectItem itemValue="#{null}"
-                                                  noSelectionOption="true"
-                                                  itemLabel="#{menu['select-one']}" />
-                                    <f:selectItems var="movementClass" 
-                                                   itemValue="#{movementClass}"
-                                                   itemLabel="#{movementClass.name}"
-                                                   value="#{entryBean.movementClasses}" /> 
-                                </p:selectOneMenu>
+                                <p:outputLabel for="inPlace" 
+                                               value="#{messages['entry.form.place']}: "/>
+                                <p:inputText id="inPlace" 
+                                             maxlength="45"
+                                             styleClass="form-control"
+                                             value="#{entryBean.entry.place}" 
+                                             disabled="#{entryBean.entry.entryType eq 'TAXES'}"/>
                             </div>
                         </div>
                     </div>
@@ -138,7 +152,7 @@
                         <p:outputLabel for="inDescription" 
                                        value="#{messages['entry.form.description']}: "/>
                         <p:inputTextarea id="inDescription" 
-                                         rows="6"
+                                         rows="9"
                                          autoResize="true"
                                          styleClass="form-control"
                                          value="#{entryBean.entry.description}" />

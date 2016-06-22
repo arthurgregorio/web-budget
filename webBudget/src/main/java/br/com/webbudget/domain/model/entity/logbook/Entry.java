@@ -29,6 +29,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -56,9 +57,8 @@ public class Entry extends PersistentEntity {
     @Column(name = "title", nullable = false)
     private String title;
     @Getter
-    @Setter
     @Column(name = "odometer")
-    private Integer odometer;
+    private int odometer;
     @Getter
     @Setter
     @Column(name = "cost")
@@ -102,29 +102,56 @@ public class Entry extends PersistentEntity {
     private MovementClass movementClass;
 
     /**
+     * Flag para indicar se devemos ou nao atualizar o odometro do carro vincu-
+     * lado a este registro
+     */
+    @Getter
+    @Transient
+    private boolean updateOdometer;
+    
+    /**
      *
      */
     public Entry() {
-        this.financial = false;
+        this.financial = true;
         this.eventDate = LocalDate.now();
-        this.entryType = EntryType.MAINTENANCES;
+        this.entryType = EntryType.SERVICES;
     }
 
     /**
      *
-     * @param entryType
      * @param vehicle
      */
-    public Entry(EntryType entryType, Vehicle vehicle) {
+    public Entry(Vehicle vehicle) {
         this();
         this.vehicle = vehicle;
-        this.entryType = entryType;
     }
 
+    /**
+     * 
+     * @param odometer 
+     */
+    public void setOdometer(int odometer) {
+        if (odometer > this.vehicle.getOdometer()) {
+            this.vehicle.setOdometer(odometer);
+            this.updateOdometer = true;
+        } else {
+            this.updateOdometer = false;
+        }
+        this.odometer = odometer;
+    }
+    
     /**
      * @return a identificacao do veiculo vinculado ao registro
      */
     public String getVehicleIdentification() {
         return this.vehicle.getIdentification();
+    }
+
+    /**
+     * @return se temos ou nao uma entrada financeira valida
+     */
+    public boolean isFinancialValid() {
+        return this.financial && this.movementClass != null;
     }
 }

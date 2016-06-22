@@ -70,18 +70,15 @@ public class EntryBean extends AbstractBean {
      * Inicializa a view de listagem das ocorrencias o diario de bordo
      */
     public void initialize() {
-
         this.entries = new ArrayList<>();
-
         this.vehicles = this.logbookService.listVehicles(false);
     }
 
     /**
      * 
      * @param vehicleId
-     * @param entryType 
      */
-    public void initializeForm(long vehicleId, String entryType) {
+    public void initializeForm(long vehicleId) {
 
         // busca o veiculo
         final Vehicle vehicle = this.logbookService.findVehicleById(vehicleId);
@@ -91,7 +88,7 @@ public class EntryBean extends AbstractBean {
                 this.logbookService.listClassesForVehicle(vehicle);
 
         // cria a entrada 
-        this.entry = new Entry(EntryType.valueOf(entryType), vehicle);
+        this.entry = new Entry(vehicle);
     }
 
     /**
@@ -99,20 +96,9 @@ public class EntryBean extends AbstractBean {
      */
     public String changeToAdd() {
         return "formEntry.xhtml?faces-redirect=true&vehicleId="
-                + this.selectedVehicle.getId() + "&entryType=" + this.selectedType.name();
+                + this.selectedVehicle.getId();
     }
     
-    /**
-     * Abre a dialog de selecao do tipo de registro que iremos realizar
-     */
-    public void showEntryTypeDialog() {
-        if (this.selectedVehicle == null) {
-            this.addError(true, "error.entry.no-vehicle");
-        } else {
-            this.updateAndOpenDialog("entryTypeDialog", "dialogEntryType");
-        }
-    }
-
     /**
      * @return voltamos para a pagina de listagem
      */
@@ -124,8 +110,17 @@ public class EntryBean extends AbstractBean {
      * 
      */
     public void doSave() {
-        
-        
+        try {
+            this.logbookService.saveEntry(this.entry);
+            this.entry = new Entry(this.logbookService.findVehicleById(
+                    this.entry.getVehicle().getId()));
+            this.addInfo(true, "entry.saved");
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
     
     /**
@@ -158,7 +153,8 @@ public class EntryBean extends AbstractBean {
      */
     public List<Entry> entriesByInclusion(LocalDate inclusion) {
         return this.entries.stream()
-                .filter(balance -> balance.getInclusionAsLocalDate().equals(inclusion))
+                .filter(e -> e.getInclusionAsLocalDate().equals(inclusion))
+                .sorted((e1, e2) -> e2.getInclusion().compareTo(e1.getInclusion()))
                 .collect(Collectors.toList());
     }
 
@@ -169,9 +165,9 @@ public class EntryBean extends AbstractBean {
 
         final List<LocalDate> grouped = new ArrayList<>();
 
-        this.entries.stream().forEach(entry -> {
-            if (!grouped.contains(entry.getInclusionAsLocalDate())) {
-                grouped.add(entry.getInclusionAsLocalDate());
+        this.entries.stream().forEach(e -> {
+            if (!grouped.contains(e.getInclusionAsLocalDate())) {
+                grouped.add(e.getInclusionAsLocalDate());
             }
         });
         return grouped;
