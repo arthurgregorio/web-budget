@@ -23,7 +23,6 @@ import br.com.webbudget.domain.model.entity.logbook.Entry;
 import br.com.webbudget.domain.model.entity.logbook.EntryType;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.service.LogbookService;
-import br.com.webbudget.domain.model.service.MovementService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +47,6 @@ public class EntryBean extends AbstractBean {
 
     @Getter
     @Setter
-    private EntryType selectedType;
-    @Getter
-    @Setter
     private Vehicle selectedVehicle;
     
     @Getter
@@ -67,11 +63,20 @@ public class EntryBean extends AbstractBean {
     private LogbookService logbookService;
 
     /**
-     * Inicializa a view de listagem das ocorrencias o diario de bordo
+     * Inicializa a etapa de selecao dos veiculos
      */
-    public void initialize() {
-        this.entries = new ArrayList<>();
+    public void initializeSelection() {
         this.vehicles = this.logbookService.listVehicles(false);
+    }
+    
+    /**
+     * Inicializa a etapa onde os registros sao listados
+     * 
+     * @param vehicleId 
+     */
+    public void initializeListing(long vehicleId) {
+        this.selectedVehicle = this.logbookService.findVehicleById(vehicleId);
+        this.entries = this.logbookService.listEntriesByVehicle(this.selectedVehicle);
     }
 
     /**
@@ -97,6 +102,19 @@ public class EntryBean extends AbstractBean {
     public String changeToAdd() {
         return "formEntry.xhtml?faces-redirect=true&vehicleId="
                 + this.selectedVehicle.getId();
+    }
+
+    /**
+     * @return o metodo para compor a navegacao apos selecionar o veiculo
+     */
+    public String changeToList() {
+        if (this.selectedVehicle == null) {
+            this.addError(true, "error.entry.no-vehicle");
+            return null;
+        } else {
+            return "listEntries.xhtml?faces-redirect=true&vehicleId="
+                + this.selectedVehicle.getId();
+        }
     }
     
     /**

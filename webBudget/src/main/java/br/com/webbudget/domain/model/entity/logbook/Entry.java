@@ -69,7 +69,7 @@ public class Entry extends PersistentEntity {
     private String place;
     @Getter
     @Setter
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition="TEXT")
     private String description;
     @Getter
     @Setter

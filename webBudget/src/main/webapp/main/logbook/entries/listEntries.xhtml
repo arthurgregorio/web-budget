@@ -27,7 +27,7 @@
     <ui:param name="activeMenu" value="entries"/>
 
     <f:metadata>
-        <f:viewAction action="#{entryBean.initialize()}"/>
+        <f:viewAction action="#{entryBean.initializeListing(param.vehicleId)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -35,7 +35,9 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        #{messages['entry.page-description']}
+        <o:outputFormat value="#{messages['entry.page-description-listing']}">
+            <f:param value="#{entryBean.selectedVehicle.identification}"/>
+        </o:outputFormat>
     </ui:define>
 
     <ui:define name="breadcrumb">
@@ -57,128 +59,76 @@
 
         <div class="box">
             <div class="box-body row">
-                <h:form id="controlsForm" prependId="false">
-                    <div class="col-sm-4">
-                        <div class="input-group">
-                            <p:selectOneMenu value="#{entryBean.selectedVehicle}"
-                                             converter="omnifaces.SelectItemsConverter">
-                                <f:selectItem itemValue="#{null}"
-                                              noSelectionOption="true"
-                                              itemLabel="#{menu['select-one']}" />
-                                <f:selectItems var="vehicle" 
-                                               itemValue="#{vehicle}"
-                                               value="#{entryBean.vehicles}" 
-                                               itemLabel="#{vehicle.identification}"/> 
-                            </p:selectOneMenu>
-                            <div class="input-group-btn">
-                                <p:spacer width="10"/>
-                                <p:commandButton value="#{menu['view']}"
-                                                 update="controlsForm contentBox"
-                                                 styleClass="btn btn-flat btn-warning" 
-                                                 actionListener="#{entryBean.viewEntries()}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
+                <div class="col-sm-8">
 
-                    </div>
-                </h:form>
+                </div>
             </div>
         </div>
 
-        <div jsf:id="contentBox" class="row">
+        <div class="box-empty row">
             <div class="col-md-12 align-center"
-                 jsf:rendered="#{entryBean.selectedVehicle eq null}">
-                <h4>#{messages['entry.no-vehicle']}</h4>
+                 jsf:rendered="#{empty entryBean.entries}">
+                <h4>#{messages['entry.no-entries']}</h4>
             </div>
             <div class="col-md-12"
-                 jsf:rendered="#{entryBean.selectedVehicle ne null}">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="box">
-                            <div class="box-body row">
-                                <div class="col-md-10">
-                                    <p:commandButton immediate="true"
-                                                     value="#{menu['new']}"
-                                                     styleClass="btn btn-flat btn-info" 
-                                                     action="#{entryBean.changeToAdd()}" />
+                 jsf:rendered="#{not empty entryBean.entries}">
+                <p:dataScroller chunkSize="5"
+                                var="inclusion"
+                                value="#{entryBean.groupEntriesByInclusion()}">
+                    <ul class="timeline">
+                        <li class="time-label">
+                            <span class="bg-black">
+                                <h:outputText value="#{inclusion}">
+                                    <f:converter converterId="localDateConverter"/>
+                                </h:outputText> 
+                            </span>
+                        </li>
+                        <ui:repeat var="entry" value="#{entryBean.entriesByInclusion(inclusion)}">
+                            <li>
+                                <i class="fa fa-medkit bg-orange"
+                                   jsf:rendered="#{entry.entryType eq 'MAINTENANCES'}"></i>
+                                <i class="fa fa-wrench bg-green"
+                                   jsf:rendered="#{entry.entryType eq 'SERVICES'}"></i>
+                                <i class="fa fa-exchange bg-red"
+                                   jsf:rendered="#{entry.entryType eq 'OTHERS'}"></i>
+                                <i class="fa fa-dollar bg-aqua"
+                                   jsf:rendered="#{entry.entryType eq 'TAXES'}"></i>
+                                <div class="timeline-item">
+                                    <span class="time">
+                                        <i class="fa fa-clock-o"></i> 
+                                        <p:spacer width="5"/>
+                                        <o:outputFormat value="#{messages['entry.date-and-user']}">
+                                            <f:param value="#{entry.inclusionDateAsString}"/>
+                                            <f:param value="#{empty entry.includedBy 
+                                                              ? messages['unknow'] : entry.includedBy}"/>
+                                        </o:outputFormat>
+                                    </span>
+                                    <h3 class="timeline-header">
+                                        <h:outputText styleClass="text-aqua text-bold"
+                                                      value="#{enums[entry.entryType]}"
+                                                      rendered="#{entry.entryType eq 'TAXES'}"/>
+                                        <h:outputText styleClass="text-red text-bold"
+                                                      value="#{enums[entry.entryType]}"
+                                                      rendered="#{entry.entryType eq 'OTHERS'}"/>
+                                        <h:outputText styleClass="text-green text-bold"
+                                                      value="#{enums[entry.entryType]}"
+                                                      rendered="#{entry.entryType eq 'SERVICES'}"/>
+                                        <h:outputText styleClass="text-orange text-bold"
+                                                      value="#{enums[entry.entryType]}"
+                                                      rendered="#{entry.entryType eq 'MAINTENANCES'}"/>
+                                    </h3>
+                                    <div class="timeline-body">
+                                        <div class="row">
+                                            <div class="col-sm-4 form-group">
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 align-right">
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="box-empty row">
-                            <div class="col-md-12 align-center"
-                                 jsf:rendered="#{empty entryBean.entries}">
-                                <h4>#{messages['entry.no-entries']}</h4>
-                            </div>
-                            <div class="col-md-12"
-                                 jsf:rendered="#{not empty entryBean.entries}">
-                                <p:dataScroller chunkSize="5"
-                                                var="inclusion"
-                                                value="#{entryBean.groupEntriesByInclusion()}">
-                                    <ul class="timeline">
-                                        <li class="time-label">
-                                            <span class="bg-black">
-                                                <h:outputText value="#{inclusion}">
-                                                    <f:converter converterId="localDateConverter"/>
-                                                </h:outputText> 
-                                            </span>
-                                        </li>
-                                        <ui:repeat var="entry" value="#{entryBean.entriesByInclusion(inclusion)}">
-                                            <li>
-                                                <i class="fa fa-medkit bg-orange"
-                                                   jsf:rendered="#{entry.entryType eq 'MAINTENANCES'}"></i>
-                                                <i class="fa fa-wrench bg-green"
-                                                   jsf:rendered="#{entry.entryType eq 'SERVICES'}"></i>
-                                                <i class="fa fa-exchange bg-red"
-                                                   jsf:rendered="#{entry.entryType eq 'OTHERS'}"></i>
-                                                <i class="fa fa-dollar bg-aqua"
-                                                   jsf:rendered="#{entry.entryType eq 'TAXES'}"></i>
-                                                <div class="timeline-item">
-                                                    <span class="time">
-                                                        <i class="fa fa-clock-o"></i> 
-                                                        <p:spacer width="5"/>
-                                                        <o:outputFormat value="#{messages['entry.date-and-user']}">
-                                                            <f:param value="#{entry.inclusionDateAsString}"/>
-                                                            <f:param value="#{empty entry.includedBy 
-                                                                              ? messages['unknow'] : entry.includedBy}"/>
-                                                        </o:outputFormat>
-                                                    </span>
-                                                    <h3 class="timeline-header">
-                                                        <h:outputText styleClass="text-aqua text-bold"
-                                                                      value="#{enums[entry.entryType]}"
-                                                                      rendered="#{entry.entryType eq 'TAXES'}"/>
-                                                        <h:outputText styleClass="text-red text-bold"
-                                                                      value="#{enums[entry.entryType]}"
-                                                                      rendered="#{entry.entryType eq 'OTHERS'}"/>
-                                                        <h:outputText styleClass="text-green text-bold"
-                                                                      value="#{enums[entry.entryType]}"
-                                                                      rendered="#{entry.entryType eq 'SERVICES'}"/>
-                                                        <h:outputText styleClass="text-orange text-bold"
-                                                                      value="#{enums[entry.entryType]}"
-                                                                      rendered="#{entry.entryType eq 'MAINTENANCES'}"/>
-                                                    </h3>
-                                                    <div class="timeline-body">
-                                                        <div class="row">
-                                                            <div class="col-sm-4 form-group">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ui:repeat>
-                                    </ul>
-                                </p:dataScroller>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-
-                    </div>
-                </div>
+                            </li>
+                        </ui:repeat>
+                    </ul>
+                </p:dataScroller>
             </div>
         </div>
     </ui:define>
