@@ -76,6 +76,10 @@ public class Vehicle extends PersistentEntity {
     private int manufacturingYear;
     @Getter
     @Setter
+    @Column(name = "fuel_capacity", length = 4)
+    private int fuelCapacity;
+    @Getter
+    @Setter
     @Column(name = "blocked")
     private boolean blocked;
     
