@@ -18,6 +18,7 @@ package br.com.webbudget.domain.model.service;
 
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.entity.logbook.Entry;
@@ -49,8 +50,8 @@ public class LogbookService {
     private IMovementClassRepository movementClassRepository;
 
     /**
-     * 
-     * @param vehicle 
+     *
+     * @param vehicle
      */
     @Transactional
     public void saveVehicle(Vehicle vehicle) {
@@ -58,9 +59,9 @@ public class LogbookService {
     }
 
     /**
-     * 
+     *
      * @param vehicle
-     * @return 
+     * @return
      */
     @Transactional
     public Vehicle updateVehicle(Vehicle vehicle) {
@@ -68,55 +69,95 @@ public class LogbookService {
     }
 
     /**
-     * 
-     * @param vehicle 
+     *
+     * @param vehicle
      */
     @Transactional
     public void deleteVehicle(Vehicle vehicle) {
         this.vehicleRepository.delete(vehicle);
     }
+    
+    /**
+     *
+     * @param entry
+     */
+    @Transactional
+    public void saveEntry(Entry entry) {
+        
+        // caso seja registro financeiro, checa a integridade
+        if (!entry.isFinancialValid()) {
+            throw new InternalServiceError("error.entry.financial-invalid");
+        }
+
+        // realiza o update na contagem do odometro do carro
+        if (entry.isUpdateOdometer()) {
+            this.vehicleRepository.save(entry.getVehicle());
+        }
+        
+        // salva o registro
+        this.entryRepository.save(entry);
+    }
 
     /**
-     * 
+     *
+     * @param entry
+     * @return
+     */
+    @Transactional
+    public Entry updateEntry(Entry entry) {
+        return this.entryRepository.save(entry);
+    }
+
+    /**
+     *
+     * @param entry
+     */
+    @Transactional
+    public void deleteEntry(Entry entry) {
+        this.entryRepository.delete(entry);
+    }
+
+    /**
+     *
      * @param vehicleId
-     * @return 
+     * @return
      */
     public Vehicle findVehicleById(long vehicleId) {
         return this.vehicleRepository.findById(vehicleId, false);
     }
 
     /**
-     * 
+     *
      * @param isBlocked
-     * @return 
+     * @return
      */
     public List<Vehicle> listVehicles(boolean isBlocked) {
         return this.vehicleRepository.listByStatus(isBlocked);
     }
 
     /**
-     * 
+     *
      * @param isBlocked
      * @param pageRequest
-     * @return 
+     * @return
      */
     public Page<Vehicle> listVehiclesLazily(Boolean isBlocked, PageRequest pageRequest) {
         return this.vehicleRepository.listLazilyByStatus(isBlocked, pageRequest);
     }
 
     /**
-     * 
+     *
      * @param vehicle
-     * @return 
+     * @return
      */
     public List<Entry> listEntriesByVehicle(Vehicle vehicle) {
         return this.entryRepository.listByVehicle(vehicle);
     }
 
     /**
-     * 
+     *
      * @param vehicle
-     * @return 
+     * @return
      */
     public List<MovementClass> listClassesForVehicle(Vehicle vehicle) {
         return this.movementClassRepository.listByCostCenterAndType(
