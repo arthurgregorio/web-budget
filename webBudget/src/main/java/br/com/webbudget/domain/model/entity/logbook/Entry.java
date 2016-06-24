@@ -60,6 +60,9 @@ public class Entry extends PersistentEntity {
     @Column(name = "odometer")
     private int odometer;
     @Getter
+    @Column(name = "distance")
+    private int distance;
+    @Getter
     @Setter
     @Column(name = "cost")
     private BigDecimal cost;
@@ -81,6 +84,10 @@ public class Entry extends PersistentEntity {
     @Setter
     @Column(name = "financial", nullable = false)
     private boolean financial;
+    @Getter
+    @Setter
+    @Column(name = "movement_code", length = 6)
+    private String movementCode;
 
     @Getter
     @Setter
@@ -134,6 +141,7 @@ public class Entry extends PersistentEntity {
     public void setOdometer(int odometer) {
         if (odometer > this.vehicle.getOdometer()) {
             this.vehicle.setOdometer(odometer);
+            this.distance = odometer - this.vehicle.getOdometer();
             this.updateOdometer = true;
         } else {
             this.updateOdometer = false;

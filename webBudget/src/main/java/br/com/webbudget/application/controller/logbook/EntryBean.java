@@ -47,6 +47,9 @@ public class EntryBean extends AbstractBean {
 
     @Getter
     @Setter
+    private String filter;
+    @Getter
+    @Setter
     private Vehicle selectedVehicle;
     
     @Getter
@@ -86,14 +89,14 @@ public class EntryBean extends AbstractBean {
     public void initializeForm(long vehicleId) {
 
         // busca o veiculo
-        final Vehicle vehicle = this.logbookService.findVehicleById(vehicleId);
+        this.selectedVehicle = this.logbookService.findVehicleById(vehicleId);
         
         // busca as classes do CC do veiculo
         this.movementClasses = 
-                this.logbookService.listClassesForVehicle(vehicle);
+                this.logbookService.listClassesForVehicle(this.selectedVehicle);
 
         // cria a entrada 
-        this.entry = new Entry(vehicle);
+        this.entry = new Entry(this.selectedVehicle);
     }
 
     /**
@@ -115,13 +118,6 @@ public class EntryBean extends AbstractBean {
             return "listEntries.xhtml?faces-redirect=true&vehicleId="
                 + this.selectedVehicle.getId();
         }
-    }
-    
-    /**
-     * @return voltamos para a pagina de listagem
-     */
-    public String doCancel() {
-        return "listEntries.xhtml?faces-redirect=true";
     }
     
     /**

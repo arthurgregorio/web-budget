@@ -22,6 +22,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
     <ui:param name="activeMenu" value="entries"/>
@@ -59,13 +60,31 @@
 
         <div class="box">
             <div class="box-body row">
-                <div class="col-sm-8">
-
+                <div class="col-sm-5">
+                    <p:defaultCommand target="btSearch"/>
+                    <div class="input-group">
+                        <p:inputText styleClass="form-control"
+                                     value="#{entryBean.filter}"
+                                     placeholder="#{messages['filter.entry']}" />
+                        <div class="input-group-btn">
+                            <p:commandButton id="btSearch"
+                                             update="entriesBox"
+                                             value="#{menu['search']}"
+                                             onstart="PF('listBlock').block()"
+                                             styleClass="btn btn-flat btn-warning"
+                                             oncomplete="PF('listBlock').unblock()"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-7 align-right">
+                    <p:commandButton value="#{menu['new']}"
+                                     styleClass="btn btn-flat btn-info" 
+                                     action="#{entryBean.changeToAdd()}" />
                 </div>
             </div>
         </div>
 
-        <div class="box-empty row">
+        <div jsf:id="entriesBox" class="box-empty row">
             <div class="col-md-12 align-center"
                  jsf:rendered="#{empty entryBean.entries}">
                 <h4>#{messages['entry.no-entries']}</h4>
@@ -77,7 +96,7 @@
                                 value="#{entryBean.groupEntriesByInclusion()}">
                     <ul class="timeline">
                         <li class="time-label">
-                            <span class="bg-black">
+                            <span class="bg-aqua">
                                 <h:outputText value="#{inclusion}">
                                     <f:converter converterId="localDateConverter"/>
                                 </h:outputText> 
@@ -89,9 +108,9 @@
                                    jsf:rendered="#{entry.entryType eq 'MAINTENANCES'}"></i>
                                 <i class="fa fa-wrench bg-green"
                                    jsf:rendered="#{entry.entryType eq 'SERVICES'}"></i>
-                                <i class="fa fa-exchange bg-red"
+                                <i class="fa fa-question bg-red"
                                    jsf:rendered="#{entry.entryType eq 'OTHERS'}"></i>
-                                <i class="fa fa-dollar bg-aqua"
+                                <i class="fa fa-dollar bg-teal"
                                    jsf:rendered="#{entry.entryType eq 'TAXES'}"></i>
                                 <div class="timeline-item">
                                     <span class="time">
@@ -104,7 +123,7 @@
                                         </o:outputFormat>
                                     </span>
                                     <h3 class="timeline-header">
-                                        <h:outputText styleClass="text-aqua text-bold"
+                                        <h:outputText styleClass="text-teal text-bold"
                                                       value="#{enums[entry.entryType]}"
                                                       rendered="#{entry.entryType eq 'TAXES'}"/>
                                         <h:outputText styleClass="text-red text-bold"
@@ -116,11 +135,42 @@
                                         <h:outputText styleClass="text-orange text-bold"
                                                       value="#{enums[entry.entryType]}"
                                                       rendered="#{entry.entryType eq 'MAINTENANCES'}"/>
+                                        <p:spacer width="10"/>
+                                        <span class="badge bg-maroon">
+                                            #{entry.movementCode}
+                                        </span>
+                                        <span class="badge bg-blue">
+                                            #{entry.movementClass.name}
+                                        </span>
+                                        <span class="badge bg-fuchsia">
+                                            +#{entry.distance}
+                                        </span>
                                     </h3>
                                     <div class="timeline-body">
                                         <div class="row">
                                             <div class="col-sm-4 form-group">
-
+                                                <p:outputLabel value="#{messages['entry.list.title']}"/>
+                                                <br/>
+                                                #{entry.title}
+                                            </div>
+                                            <div class="col-sm-4 form-group">
+                                                <p:outputLabel value="#{messages['entry.list.place']}"/>
+                                                <br/>
+                                                #{entry.place}
+                                            </div>
+                                            <div class="col-sm-4 form-group">
+                                                <p:outputLabel value="#{messages['entry.list.date']}"/>
+                                                <br/>
+                                                <h:outputText value="#{entry.eventDate}">
+                                                    <f:converter converterId="localDateConverter"/>
+                                                </h:outputText>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 form-group">
+                                                <p:outputLabel value="#{messages['entry.list.description']}"/>
+                                                <br/>
+                                                #{entry.description}
                                             </div>
                                         </div>
                                     </div>
@@ -131,5 +181,13 @@
                 </p:dataScroller>
             </div>
         </div>
+
+        <pe:blockUI target="entriesBox"
+                    widgetVar="listBlock">
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
+        </pe:blockUI>
     </ui:define>
 </ui:composition>
