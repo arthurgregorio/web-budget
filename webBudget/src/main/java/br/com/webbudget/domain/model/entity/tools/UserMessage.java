@@ -46,8 +46,8 @@ import lombok.ToString;
  */
 @Entity
 @ToString(callSuper = true)
+@Table(name = "user_messages")
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "user_messages", schema = "messaging")
 public class UserMessage extends PersistentEntity {
 
     @Getter

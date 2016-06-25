@@ -42,9 +42,9 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since 2.2.0, 05/04/2016
  */
 @Entity
+@Table(name = "messages")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "messages", schema = "messaging")
 public class Message extends PersistentEntity {
 
     @Getter
