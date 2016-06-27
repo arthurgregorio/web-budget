@@ -35,11 +35,11 @@ import br.com.webbudget.domain.model.entity.entries.WalletBalanceType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
 import br.com.webbudget.domain.misc.MovementBuilder;
 import br.com.webbudget.domain.misc.filter.MovementFilter;
-import br.com.webbudget.domain.misc.events.PeriodOpen;
 import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.misc.events.MovementDeleted;
 import br.com.webbudget.domain.model.repository.entries.ICardInvoiceRepository;
 import br.com.webbudget.domain.model.repository.financial.IApportionmentRepository;
 import br.com.webbudget.domain.model.repository.entries.ICostCenterRepository;
@@ -57,6 +57,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import br.com.webbudget.domain.misc.events.PeriodOpened;
 
 /**
  *
@@ -91,6 +92,10 @@ public class MovementService {
 
     @Inject
     private FinancialPeriodService financialPeriodService;
+    
+    @Inject
+    @MovementDeleted
+    private Event<String> deletedMovementEvent;
 
     /**
      *
@@ -396,7 +401,11 @@ public class MovementService {
             this.updateBalanceEvent.fire(builder);
         }
 
+        // deleta o movimento
         this.movementRepository.delete(movement);
+        
+        // dispara o evento indicando que o movimento foi deletado
+        this.deletedMovementEvent.fire(movement.getCode());
     }
 
     /**
@@ -623,7 +632,7 @@ public class MovementService {
      *
      * @param period
      */
-    public void autoLaunchFixedMovements(@Observes @PeriodOpen FinancialPeriod period) {
+    public void autoLaunchFixedMovements(@Observes @PeriodOpened FinancialPeriod period) {
 
         final List<FixedMovement> fixedMovements
                 = this.fixedMovementRepository.listAutoLaunch();

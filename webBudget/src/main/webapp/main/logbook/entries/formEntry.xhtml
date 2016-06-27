@@ -62,15 +62,18 @@
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox value="#{entryBean.entry.financial}"
                                                  itemLabel="#{messages['entry.form.financial']}">
-                            <p:ajax event="change" update="movementClassBox" process="@this"/>
+                            <p:ajax event="change" 
+                                    process="@this"
+                                    update="movementClassBox periodBox" 
+                                    listener="#{entryBean.onFinancialChange()}"/>
                         </p:selectBooleanCheckbox>
                     </h3>
                 </div>
 
                 <div class="box-body row">
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-8">
                                 <p:outputLabel for="inTitle" 
                                                value="#{messages['entry.form.title']}: "/>
                                 <p:inputText id="inTitle" 
@@ -78,7 +81,7 @@
                                              styleClass="form-control"
                                              value="#{entryBean.entry.title}" />
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <p:outputLabel for="cbType" 
                                                value="#{messages['entry.form.type']}: "/>
                                 <p:selectOneMenu id="cbType"
@@ -88,6 +91,22 @@
                                                    itemValue="#{entryType}"
                                                    itemLabel="#{enums[entryType]}"
                                                    value="#{entryBean.entryTypes}"/> 
+                                </p:selectOneMenu>
+                            </div>
+                            <div jsf:id="periodBox" class="form-group col-md-6">
+                                <p:outputLabel for="inPeriod" 
+                                               value="#{messages['entry.form.launch-period']}: "/>
+                                <p:selectOneMenu id="inPeriod" 
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 value="#{entryBean.entry.financialPeriod}"
+                                                 disabled="#{not entryBean.entry.financial}">
+                                    <f:selectItems var="period" 
+                                                   itemValue="#{period}"
+                                                   value="#{entryBean.openPeriods}"
+                                                   itemLabel="#{period.expired eq true 
+                                                                ? period.identification.concat(' - ')
+                                                                .concat(messages['entry.form.expired']) 
+                                                                : period.identification}" /> 
                                 </p:selectOneMenu>
                             </div>
                             <div jsf:id="movementClassBox" class="form-group col-md-6">
@@ -107,23 +126,13 @@
                                 </p:selectOneMenu>
                             </div>
                             <div class="form-group col-md-6">
-                                <p:outputLabel for="inOdometer" 
-                                               value="#{messages['entry.form.odometer']}: "/>
-                                <p:inputText id="inOdometer" 
-                                             maxlength="8"
+                                <p:outputLabel for="inPlace" 
+                                               value="#{messages['entry.form.place']}: "/>
+                                <p:inputText id="inPlace" 
+                                             maxlength="45"
                                              styleClass="form-control"
-                                             value="#{entryBean.entry.odometer}" >
-                                    <p:keyFilter mask="num"/>
-                                </p:inputText>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <p:outputLabel for="inEventDate" 
-                                               value="#{messages['entry.form.event-date']}: "/>
-                                <p:calendar id="inEventDate" 
-                                            mask="true"
-                                            pattern="dd/MM/yyyy"
-                                            converter="localDateConverter"
-                                            value="#{entryBean.entry.eventDate}" />
+                                             value="#{entryBean.entry.place}" 
+                                             disabled="#{entryBean.entry.entryType eq 'TAXES'}"/>
                             </div>
                             <div class="form-group col-md-6">
                                 <p:outputLabel for="inCost" 
@@ -138,22 +147,32 @@
                                 </p:inputNumber>
                             </div>
                             <div class="form-group col-md-6">
-                                <p:outputLabel for="inPlace" 
-                                               value="#{messages['entry.form.place']}: "/>
-                                <p:inputText id="inPlace" 
-                                             maxlength="45"
+                                <p:outputLabel for="inEventDate" 
+                                               value="#{messages['entry.form.event-date']}: "/>
+                                <p:calendar id="inEventDate" 
+                                            mask="true"
+                                            pattern="dd/MM/yyyy"
+                                            converter="localDateConverter"
+                                            value="#{entryBean.entry.eventDate}" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inOdometer" 
+                                               value="#{messages['entry.form.odometer']}: "/>
+                                <p:inputText id="inOdometer" 
+                                             maxlength="8"
                                              styleClass="form-control"
-                                             value="#{entryBean.entry.place}" 
-                                             disabled="#{entryBean.entry.entryType eq 'TAXES'}"/>
+                                             value="#{entryBean.entry.odometer}" >
+                                    <p:keyFilter mask="num"/>
+                                </p:inputText>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5">
                         <p:outputLabel for="inDescription" 
                                        value="#{messages['entry.form.description']}: "/>
                         <p:inputTextarea id="inDescription" 
-                                         rows="9"
-                                         autoResize="true"
+                                         autoResize="false"
+                                         style="height: 256px;"
                                          styleClass="form-control"
                                          value="#{entryBean.entry.description}" />
                     </div>

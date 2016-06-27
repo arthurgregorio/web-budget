@@ -18,7 +18,6 @@ package br.com.webbudget.domain.model.service;
 
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.entity.financial.Movement;
-import br.com.webbudget.domain.misc.events.PeriodOpen;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
@@ -30,6 +29,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import br.com.webbudget.domain.misc.events.PeriodOpened;
 
 /**
  *
@@ -47,7 +47,7 @@ public class FinancialPeriodService {
     private IFinancialPeriodRepository financialPeriodRepository;
     
     @Inject
-    @PeriodOpen
+    @PeriodOpened
     private Event<FinancialPeriod> periodOpenEvent;
     
     /**

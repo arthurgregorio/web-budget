@@ -18,9 +18,13 @@ package br.com.webbudget.domain.model.service;
 
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.misc.MovementBuilder;
+import br.com.webbudget.domain.misc.events.MovementDeleted;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
+import br.com.webbudget.domain.model.entity.financial.Apportionment;
+import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.model.entity.logbook.Entry;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.repository.entries.IMovementClassRepository;
@@ -28,6 +32,7 @@ import br.com.webbudget.domain.model.repository.logbook.IEntryRepository;
 import br.com.webbudget.domain.model.repository.logbook.IVehicleRepository;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -42,6 +47,9 @@ import javax.transaction.Transactional;
 @ApplicationScoped
 public class LogbookService {
 
+    @Inject
+    private MovementService movementService;
+    
     @Inject
     private IEntryRepository entryRepository;
     @Inject
@@ -76,24 +84,56 @@ public class LogbookService {
     public void deleteVehicle(Vehicle vehicle) {
         this.vehicleRepository.delete(vehicle);
     }
-    
+
     /**
      *
      * @param entry
      */
     @Transactional
     public void saveEntry(Entry entry) {
-        
+
         // caso seja registro financeiro, checa a integridade
-        if (!entry.isFinancialValid()) {
+        if (entry.isFinancial() && !entry.isFinancialValid()) {
             throw new InternalServiceError("error.entry.financial-invalid");
+        } 
+        
+        // se temos um registro financeiro, incluimos o movimento
+        if (entry.isFinancial()) {
+            // rateio
+            final Apportionment apportionment = new Apportionment(
+                            entry.getCostCenter(), 
+                            entry.getMovementClass(), 
+                            entry.getCost());
+            
+            // cria o movimento
+            final Movement movement = new MovementBuilder()
+                    .withValue(entry.getCost())
+                    .withDueDate(entry.getEventDate())
+                    .withDescription(entry.getTitle())
+                    .inTheFinancialPeriod(entry.getFinancialPeriod())
+                    .addingApportiomentOf(apportionment)
+                    .build();
+            
+            entry.setMovementCode(movement.getCode());
+            
+            this.movementService.saveMovement(movement);
         }
 
-        // realiza o update na contagem do odometro do carro
-        if (entry.isUpdateOdometer()) {
+        // verificamos se precisa atualizar a medida do odometro
+        final int lastVehicleOdometer = this.vehicleRepository
+                .findLastOdometer(entry.getVehicle());
+
+        if (entry.getOdometer() > lastVehicleOdometer) {
+            // atualizamos a distancia percorrida
+            entry.setDistance(entry.getOdometer() - lastVehicleOdometer);
+
+            // atualizamos o odometro
+            entry.updateVehicleOdometer();
+
+            // salvamos o carro
             this.vehicleRepository.save(entry.getVehicle());
         }
-        
+
         // salva o registro
         this.entryRepository.save(entry);
     }
@@ -114,9 +154,55 @@ public class LogbookService {
      */
     @Transactional
     public void deleteEntry(Entry entry) {
+        
+        // deleta o registro
         this.entryRepository.delete(entry);
+
+        // se tem movimento, deleta ele tambem
+        if (entry.isFinancial()) {
+            
+            final Movement movement = this.movementService
+                    .findMovementByCode(entry.getMovementCode());
+            
+            if (movement != null) {
+                this.movementService.deleteMovement(movement);
+            }
+        }
+    }
+    
+    /**
+     * Quando um movimento for deletado este evento escurtara por uma possivel
+     * delecao de um evento vinculado com um registro do logbook
+     * 
+     * @param code o codigo do movimento
+     */
+    public void whenMovementDeleted(@Observes @MovementDeleted String code) {
+        
+        // procura pelo registro
+        final Entry entry = this.entryRepository.findByMovementCode(code);
+        
+        // se encontrar, limpa as flags de movimentacao financeira
+        if (entry != null) {
+            
+            entry.setFinancial(false);
+            entry.setMovementClass(null);
+            entry.setFinancialPeriod(null);
+            entry.setMovementCode(null);
+            
+            // salva!
+            this.entryRepository.save(entry);
+        }
     }
 
+    /**
+     * 
+     * @param entryId
+     * @return 
+     */
+    public Entry findEntryById(long entryId) {
+        return this.entryRepository.findById(entryId, false);
+    }
+    
     /**
      *
      * @param vehicleId
@@ -162,5 +248,15 @@ public class LogbookService {
     public List<MovementClass> listClassesForVehicle(Vehicle vehicle) {
         return this.movementClassRepository.listByCostCenterAndType(
                 vehicle.getCostCenter(), MovementClassType.OUT);
+    }
+
+    /**
+     * 
+     * @param vehicle
+     * @param filter
+     * @return 
+     */
+    public List<Entry> listEntriesByVehicleAndFilter(Vehicle vehicle, String filter) {
+       return this.entryRepository.listByVehicleAndFilter(vehicle, filter);
     }
 }

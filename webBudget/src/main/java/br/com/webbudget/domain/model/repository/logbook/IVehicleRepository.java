@@ -32,6 +32,13 @@ import java.util.List;
 public interface IVehicleRepository extends IGenericRepository<Vehicle, Long> {
 
     /**
+     * 
+     * @param vehicle
+     * @return 
+     */
+    public int findLastOdometer(Vehicle vehicle);
+    
+    /**
      *
      * @param isBlocked
      * @return

@@ -23,6 +23,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
     <ui:param name="activeMenu" value="entries"/>
@@ -61,20 +62,23 @@
         <div class="box">
             <div class="box-body row">
                 <div class="col-sm-5">
-                    <p:defaultCommand target="btSearch"/>
-                    <div class="input-group">
-                        <p:inputText styleClass="form-control"
-                                     value="#{entryBean.filter}"
-                                     placeholder="#{messages['filter.entry']}" />
-                        <div class="input-group-btn">
-                            <p:commandButton id="btSearch"
-                                             update="entriesBox"
-                                             value="#{menu['search']}"
-                                             onstart="PF('listBlock').block()"
-                                             styleClass="btn btn-flat btn-warning"
-                                             oncomplete="PF('listBlock').unblock()"/>
+                    <h:form prependId="false">
+                        <p:defaultCommand target="btSearch"/>
+                        <div class="input-group">
+                            <p:inputText styleClass="form-control"
+                                         value="#{entryBean.filter}"
+                                         placeholder="#{messages['filter.entry']}" />
+                            <div class="input-group-btn">
+                                <p:commandButton id="btSearch"
+                                                 update="entriesBox"
+                                                 value="#{menu['search']}"
+                                                 onstart="PF('listBlock').block()"
+                                                 styleClass="btn btn-flat btn-warning"
+                                                 oncomplete="PF('listBlock').unblock()"
+                                                 actionListener="#{entryBean.filterList()}"/>
+                            </div>
                         </div>
-                    </div>
+                    </h:form>
                 </div>
                 <div class="col-sm-7 align-right">
                     <p:commandButton value="#{menu['new']}"
@@ -93,7 +97,7 @@
                  jsf:rendered="#{not empty entryBean.entries}">
                 <p:dataScroller chunkSize="5"
                                 var="inclusion"
-                                value="#{entryBean.groupEntriesByInclusion()}">
+                                value="#{entryBean.groupEntriesByEventDate()}">
                     <ul class="timeline">
                         <li class="time-label">
                             <span class="bg-aqua">
@@ -102,7 +106,7 @@
                                 </h:outputText> 
                             </span>
                         </li>
-                        <ui:repeat var="entry" value="#{entryBean.entriesByInclusion(inclusion)}">
+                        <ui:repeat var="entry" value="#{entryBean.entriesByEventDate(inclusion)}">
                             <li>
                                 <i class="fa fa-medkit bg-orange"
                                    jsf:rendered="#{entry.entryType eq 'MAINTENANCES'}"></i>
@@ -121,6 +125,13 @@
                                             <f:param value="#{empty entry.includedBy 
                                                               ? messages['unknow'] : entry.includedBy}"/>
                                         </o:outputFormat>
+                                        <p:spacer width="10"/>
+                                        <span class="badge bg-red">
+                                            <p:commandLink immediate="true"
+                                                           style="color: white"
+                                                           value="#{menu['delete']}" 
+                                                           actionListener="#{entryBean.changeToDelete(entry.id)}"/>
+                                        </span>
                                     </span>
                                     <h3 class="timeline-header">
                                         <h:outputText styleClass="text-teal text-bold"
@@ -136,13 +147,20 @@
                                                       value="#{enums[entry.entryType]}"
                                                       rendered="#{entry.entryType eq 'MAINTENANCES'}"/>
                                         <p:spacer width="10"/>
-                                        <span class="badge bg-maroon">
+                                        <span class="badge bg-maroon"
+                                              jsf:rendered="#{entry.financial}">
                                             #{entry.movementCode}
                                         </span>
-                                        <span class="badge bg-blue">
+                                        <p:spacer width="5"
+                                                  rendered="#{entry.financial}"/>
+                                        <span class="badge bg-blue"
+                                              jsf:rendered="#{entry.financial}">
                                             #{entry.movementClass.name}
                                         </span>
-                                        <span class="badge bg-fuchsia">
+                                        <p:spacer width="5"
+                                                  rendered="#{entry.financial}"/>
+                                        <span class="badge bg-black"
+                                              jsf:rendered="#{entry.distance ne 0}">
                                             +#{entry.distance}
                                         </span>
                                     </h3>
@@ -151,26 +169,37 @@
                                             <div class="col-sm-4 form-group">
                                                 <p:outputLabel value="#{messages['entry.list.title']}"/>
                                                 <br/>
-                                                #{entry.title}
+                                                <h:outputText value="#{empty entry.title
+                                                                       ? messages['no-data'] : entry.title}"/>
                                             </div>
                                             <div class="col-sm-4 form-group">
                                                 <p:outputLabel value="#{messages['entry.list.place']}"/>
                                                 <br/>
-                                                #{entry.place}
+                                                <h:outputText value="#{empty entry.place 
+                                                                       ? messages['no-data'] : entry.place}"/>
                                             </div>
-                                            <div class="col-sm-4 form-group">
+                                            <div class="col-sm-2 form-group">
                                                 <p:outputLabel value="#{messages['entry.list.date']}"/>
                                                 <br/>
-                                                <h:outputText value="#{entry.eventDate}">
+                                                <h:outputText value="#{entry.eventDate}"
+                                                              rendered="#{entry.eventDate ne null}">
                                                     <f:converter converterId="localDateConverter"/>
                                                 </h:outputText>
+                                                <h:outputText value="#{messages['no-data']}"
+                                                              rendered="#{entry.eventDate eq null}"/>
+                                            </div>
+                                            <div class="col-sm-2 form-group">
+                                                <p:outputLabel value="#{messages['entry.list.odometer']}"/>
+                                                <br/>
+                                                <h:outputText value="#{entry.odometer} Km"/>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-sm-12 form-group">
+                                            <div class="col-sm-12">
                                                 <p:outputLabel value="#{messages['entry.list.description']}"/>
                                                 <br/>
-                                                #{entry.description}
+                                                <h:outputText value="#{empty entry.description 
+                                                                       ? messages['no-data'] : entry.description}"/>
                                             </div>
                                         </div>
                                     </div>
@@ -182,6 +211,8 @@
             </div>
         </div>
 
+        <wb:backToTop />
+
         <pe:blockUI target="entriesBox"
                     widgetVar="listBlock">
             <p:graphicImage width="32" 
@@ -189,5 +220,9 @@
                             library="webbudget" 
                             name="img/loading.gif" />
         </pe:blockUI>
+    </ui:define>
+
+    <ui:define name="popups">
+        <ui:include src="dialogDeleteEntry.xhtml"/>
     </ui:define>
 </ui:composition>

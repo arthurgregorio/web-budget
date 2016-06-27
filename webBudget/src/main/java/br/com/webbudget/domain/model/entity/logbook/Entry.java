@@ -18,7 +18,9 @@ package br.com.webbudget.domain.model.entity.logbook;
 
 import br.com.webbudget.application.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
+import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -29,7 +31,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -57,9 +58,11 @@ public class Entry extends PersistentEntity {
     @Column(name = "title", nullable = false)
     private String title;
     @Getter
+    @Setter
     @Column(name = "odometer")
     private int odometer;
     @Getter
+    @Setter
     @Column(name = "distance")
     private int distance;
     @Getter
@@ -107,15 +110,12 @@ public class Entry extends PersistentEntity {
     @ManyToOne
     @JoinColumn(name = "id_movement_class")
     private MovementClass movementClass;
-
-    /**
-     * Flag para indicar se devemos ou nao atualizar o odometro do carro vincu-
-     * lado a este registro
-     */
     @Getter
-    @Transient
-    private boolean updateOdometer;
-    
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "id_financial_period")
+    private FinancialPeriod financialPeriod;
+
     /**
      *
      */
@@ -135,21 +135,6 @@ public class Entry extends PersistentEntity {
     }
 
     /**
-     * 
-     * @param odometer 
-     */
-    public void setOdometer(int odometer) {
-        if (odometer > this.vehicle.getOdometer()) {
-            this.vehicle.setOdometer(odometer);
-            this.distance = odometer - this.vehicle.getOdometer();
-            this.updateOdometer = true;
-        } else {
-            this.updateOdometer = false;
-        }
-        this.odometer = odometer;
-    }
-    
-    /**
      * @return a identificacao do veiculo vinculado ao registro
      */
     public String getVehicleIdentification() {
@@ -160,6 +145,20 @@ public class Entry extends PersistentEntity {
      * @return se temos ou nao uma entrada financeira valida
      */
     public boolean isFinancialValid() {
-        return this.financial && this.movementClass != null;
+        return this.movementClass != null && this.getCost() != null;
+    }
+
+    /**
+     * 
+     */
+    public void updateVehicleOdometer() {
+        this.vehicle.setOdometer(this.odometer);
+    }
+
+    /**
+     * @return o centro de custo do veiculo vinculado ao registro
+     */
+    public CostCenter getCostCenter() {
+        return this.getVehicle().getCostCenter();
     }
 }

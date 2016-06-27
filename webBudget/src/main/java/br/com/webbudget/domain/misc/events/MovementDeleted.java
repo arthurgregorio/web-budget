@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * Evento de notificacao de novos periodos abertos
+ * Qualificador para indicar um evento de delecao de algum movimento
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.1.0, 30/09/2015
+ * @since 2.3.0, 26/06/2016
  */
 @Qualifier
 @Retention(RUNTIME)
 @Target({TYPE, FIELD, METHOD, PARAMETER})
-public @interface PeriodOpen { }
+public @interface MovementDeleted { }

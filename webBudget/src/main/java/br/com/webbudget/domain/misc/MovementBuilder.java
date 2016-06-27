@@ -79,6 +79,15 @@ public final class MovementBuilder {
         this.movement.setFinancialPeriod(financialPeriod);
         return this;
     }
+
+    /**
+     * @param apportionment o rateio a ser adicionado
+     * @return o builder
+     */
+    public MovementBuilder addingApportiomentOf(Apportionment apportionment) {
+        this.movement.addApportionment(apportionment.copy());
+        return this;
+    }
     
     /**
      * @param apportionments os rateios 

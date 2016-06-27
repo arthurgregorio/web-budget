@@ -97,7 +97,12 @@
                               headerText="#{messages['vehicle.list.model']}">
                         #{vehicle.model}
                     </p:column>
-                    <p:column width="15%"
+                    <p:column width="10%"
+                              styleClass="align-center"
+                              headerText="#{messages['vehicle.list.odometer']}">
+                        #{vehicle.odometer} Km
+                    </p:column>
+                    <p:column width="10%"
                               styleClass="align-center"
                               headerText="#{messages['vehicle.list.license-plate']}">
                         #{vehicle.licensePlate}

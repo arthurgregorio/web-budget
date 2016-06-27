@@ -20,6 +20,7 @@ import br.com.webbudget.domain.model.entity.logbook.Entry;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.repository.GenericRepository;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
@@ -33,18 +34,60 @@ import org.hibernate.criterion.Restrictions;
 public class EntryRepository extends GenericRepository<Entry, Long> implements IEntryRepository {
 
     /**
-     * 
+     *
+     * @param code
+     * @return
+     */
+    @Override
+    public Entry findByMovementCode(String code) {
+
+        final Criteria criteria = this.createCriteria();
+
+        criteria.add(Restrictions.eq("financial", true));
+        criteria.add(Restrictions.eq("movementCode", code));
+
+        return (Entry) criteria.uniqueResult();
+    }
+
+    /**
+     *
      * @param vehicle
-     * @return 
+     * @return
      */
     @Override
     public List<Entry> listByVehicle(Vehicle vehicle) {
 
         final Criteria criteria = this.createCriteria();
-        
+
         criteria.createAlias("vehicle", "v");
         criteria.add(Restrictions.eq("v.id", vehicle.getId()));
-        
+
+        return criteria.list();
+    }
+
+    /**
+     *
+     * @param vehicle
+     * @param filter
+     * @return
+     */
+    @Override
+    public List<Entry> listByVehicleAndFilter(Vehicle vehicle, String filter) {
+
+        final Criteria criteria = this.createCriteria();
+
+        criteria.createAlias("vehicle", "v");
+        criteria.add(Restrictions.eq("v.id", vehicle.getId()));
+
+        if (StringUtils.isNoneBlank(filter)) {
+            criteria.createAlias("movementClass", "mc");
+            criteria.add(Restrictions.or(
+                    Restrictions.ilike("place", filter + "%"),
+                    Restrictions.ilike("title", filter + "%"),
+                    Restrictions.ilike("mc.name", filter + "%"),
+                    Restrictions.ilike("description", "%" + filter + "%")));
+        }
+
         return criteria.list();
     }
 }

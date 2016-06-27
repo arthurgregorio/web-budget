@@ -74,13 +74,24 @@
                 </div>
 
                 <div class="box-body row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <p:outputLabel for="inIdentification" 
                                        value="#{messages['vehicle.form.identification']}: "/>
                         <p:inputText id="inIdentification" 
                                      maxlength="90"
                                      styleClass="form-control"
                                      value="#{vehicleBean.vehicle.identification}" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <p:outputLabel for="inOdometer" 
+                                       value="#{messages['vehicle.form.odometer']}: "/>
+                        <p:inputText id="inOdometer" 
+                                     maxlength="4"
+                                     styleClass="form-control"
+                                     value="#{vehicleBean.vehicle.odometer}" 
+                                     disabled="#{vehicleBean.viewState eq 'EDITING'}">
+                            <p:keyFilter mask="num"/>
+                        </p:inputText>
                     </div>
                     <div class="form-group col-md-3">
                         <p:outputLabel for="inVehicleType" 

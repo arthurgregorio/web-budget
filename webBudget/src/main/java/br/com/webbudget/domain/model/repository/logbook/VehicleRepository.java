@@ -37,6 +37,22 @@ public class VehicleRepository extends GenericRepository<Vehicle, Long> implemen
 
     /**
      *
+     * @param vehicle
+     * @return
+     */
+    @Override
+    public int findLastOdometer(Vehicle vehicle) {
+
+        final Criteria criteria = this.createCriteria();
+
+        criteria.add(Restrictions.eq("id", vehicle.getId()));
+        criteria.setProjection(Projections.property("odometer"));
+
+        return (int) criteria.uniqueResult();
+    }
+
+    /**
+     *
      * @param isBlocked
      * @return
      */
@@ -53,16 +69,16 @@ public class VehicleRepository extends GenericRepository<Vehicle, Long> implemen
 
         return criteria.list();
     }
-    
+
     /**
-     * 
+     *
      * @param isBlocked
      * @param pageRequest
-     * @return 
+     * @return
      */
     @Override
     public Page<Vehicle> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest) {
-        
+
         final Criteria criteria = this.createCriteria();
 
         if (isBlocked != null) {

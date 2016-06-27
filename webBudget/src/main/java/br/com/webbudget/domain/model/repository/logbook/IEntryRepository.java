@@ -31,9 +31,24 @@ import java.util.List;
 public interface IEntryRepository extends IGenericRepository<Entry, Long> {
 
     /**
+     * 
+     * @param code
+     * @return 
+     */
+    public Entry findByMovementCode(String code);
+    
+    /**
      *
      * @param vehicle
      * @return
      */
     public List<Entry> listByVehicle(Vehicle vehicle);
+
+    /**
+     * 
+     * @param vehicle
+     * @param filter
+     * @return 
+     */
+    public List<Entry> listByVehicleAndFilter(Vehicle vehicle, String filter);
 }

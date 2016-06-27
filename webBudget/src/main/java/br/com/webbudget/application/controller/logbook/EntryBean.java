@@ -22,9 +22,12 @@ import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.logbook.Entry;
 import br.com.webbudget.domain.model.entity.logbook.EntryType;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.model.service.FinancialPeriodService;
 import br.com.webbudget.domain.model.service.LogbookService;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.faces.view.ViewScoped;
@@ -51,7 +54,7 @@ public class EntryBean extends AbstractBean {
     @Getter
     @Setter
     private Vehicle selectedVehicle;
-    
+
     @Getter
     private Entry entry;
 
@@ -60,10 +63,14 @@ public class EntryBean extends AbstractBean {
     @Getter
     private List<Vehicle> vehicles;
     @Getter
+    private List<FinancialPeriod> openPeriods;
+    @Getter
     private List<MovementClass> movementClasses;
 
     @Inject
     private LogbookService logbookService;
+    @Inject
+    private FinancialPeriodService periodService;
 
     /**
      * Inicializa a etapa de selecao dos veiculos
@@ -71,32 +78,51 @@ public class EntryBean extends AbstractBean {
     public void initializeSelection() {
         this.vehicles = this.logbookService.listVehicles(false);
     }
-    
+
     /**
      * Inicializa a etapa onde os registros sao listados
-     * 
-     * @param vehicleId 
+     *
+     * @param vehicleId
      */
     public void initializeListing(long vehicleId) {
         this.selectedVehicle = this.logbookService.findVehicleById(vehicleId);
-        this.entries = this.logbookService.listEntriesByVehicle(this.selectedVehicle);
+        this.filterList();
     }
 
     /**
-     * 
+     *
      * @param vehicleId
      */
     public void initializeForm(long vehicleId) {
 
         // busca o veiculo
         this.selectedVehicle = this.logbookService.findVehicleById(vehicleId);
-        
+
         // busca as classes do CC do veiculo
-        this.movementClasses = 
-                this.logbookService.listClassesForVehicle(this.selectedVehicle);
+        this.movementClasses
+                = this.logbookService.listClassesForVehicle(this.selectedVehicle);
+
+        // pegamos os periodos financeiros em aberto
+        this.openPeriods = this.periodService.listOpenFinancialPeriods();
 
         // cria a entrada 
         this.entry = new Entry(this.selectedVehicle);
+    }
+
+    /**
+     * Filtra a listagem quando utilizamos o campo de pesquisa ou no load da 
+     * pagina, trazendo todos os registro
+     */
+    public void filterList() {
+        try {
+            this.entries = this.logbookService
+                    .listEntriesByVehicleAndFilter(this.selectedVehicle, this.filter);
+        } catch (InternalServiceError ex) {
+            this.addError(true, ex.getMessage(), ex.getParameters());
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage(), ex);
+            this.addError(true, "error.undefined-error", ex.getMessage());
+        }
     }
 
     /**
@@ -108,6 +134,16 @@ public class EntryBean extends AbstractBean {
     }
 
     /**
+     * Inicia o processo para deletar um registro
+     *
+     * @param entryId o registro que queremos deletar
+     */
+    public void changeToDelete(long entryId) {
+        this.entry = this.logbookService.findEntryById(entryId);
+        this.updateAndOpenDialog("deleteEntryDialog", "dialogDeleteEntry");
+    }
+
+    /**
      * @return o metodo para compor a navegacao apos selecionar o veiculo
      */
     public String changeToList() {
@@ -116,12 +152,12 @@ public class EntryBean extends AbstractBean {
             return null;
         } else {
             return "listEntries.xhtml?faces-redirect=true&vehicleId="
-                + this.selectedVehicle.getId();
+                    + this.selectedVehicle.getId();
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public void doSave() {
         try {
@@ -136,61 +172,77 @@ public class EntryBean extends AbstractBean {
             this.addError(true, "error.undefined-error", ex.getMessage());
         }
     }
-    
+
     /**
-     * Carrega todas os registros para o diario de bordo do carro selecionado
+     *
      */
-    public void viewEntries() {
-
-        // sem veiculo, sem pesquisa
-        if (this.selectedVehicle == null) {
-            return;
-        }
-
-        // com veiculo, com pesquisa :D
+    public void doDelete() {
         try {
+            this.logbookService.deleteEntry(this.entry);
             this.entries = this.logbookService
                     .listEntriesByVehicle(this.selectedVehicle);
+            this.addInfo(true, "entry.deleted");
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             this.logger.error(ex.getMessage(), ex);
             this.addError(true, "error.undefined-error", ex.getMessage());
+        } finally {
+            this.updateComponent("entriesBox");
+            this.closeDialog("dialogDeleteEntry");
         }
     }
-    
+
     /**
-     * Pega os registro apenas de uma data de inclusao especifica
+     * Pega todos os registro do diario de bordo agrupados pela data indicada
      *
-     * @param inclusion a data de inclusao
-     * @return a lista com os itens incluidos nesta data
+     * @param eventDate a data do evento registrado
+     * @return a lista com os itens para a data indicada
      */
-    public List<Entry> entriesByInclusion(LocalDate inclusion) {
+    public List<Entry> entriesByEventDate(LocalDate eventDate) {
         return this.entries.stream()
-                .filter(e -> e.getInclusionAsLocalDate().equals(inclusion))
+                .filter(e -> e.getEventDate().equals(eventDate))
                 .sorted((e1, e2) -> e2.getInclusion().compareTo(e1.getInclusion()))
                 .collect(Collectors.toList());
     }
 
     /**
-     * @return agrupa todos os registros pela data de inclusao
+     * @return agrupa todos os registros pela data do evento
      */
-    public List<LocalDate> groupEntriesByInclusion() {
+    public List<LocalDate> groupEntriesByEventDate() {
 
         final List<LocalDate> grouped = new ArrayList<>();
 
         this.entries.stream().forEach(e -> {
-            if (!grouped.contains(e.getInclusionAsLocalDate())) {
-                grouped.add(e.getInclusionAsLocalDate());
+            if (!grouped.contains(e.getEventDate())) {
+                grouped.add(e.getEventDate());
             }
         });
+
+        grouped.sort((d1, d2) -> d2.compareTo(d1));
+
         return grouped;
     }
 
     /**
-     * @return os tipos de registros que poderemos ter
+     * Quando muda o status de movimentacao do registro, limpa a classe se for
+     * necessario
      */
-    public EntryType[] getEntryTypes() {
-        return EntryType.values();
+    public void onFinancialChange() {
+        if (!this.entry.isFinancial()) {
+            this.entry.setMovementClass(null);
+            this.entry.setFinancialPeriod(null);
+        }
+    }
+
+    /**
+     * @return os tipos de registros possiveis, menos o de abastecimento que e 
+     * feito em uma tela separada
+     */
+    public List<EntryType> getEntryTypes() {
+        return Arrays.asList(EntryType.values())
+                .stream()
+                .filter(e -> e != EntryType.REFUELING)
+                .collect(Collectors.toList());
     }
 }
