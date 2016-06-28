@@ -38,7 +38,7 @@
 
     <ui:define name="pageDescription">
         <o:outputFormat value="#{messages['entry.page-description-listing']}">
-            <f:param value="#{entryBean.selectedVehicle.identification}"/>
+            <f:param value="#{entryBean.vehicle.identification}"/>
         </o:outputFormat>
     </ui:define>
 
@@ -81,9 +81,19 @@
                     </h:form>
                 </div>
                 <div class="col-sm-7 align-right">
-                    <p:commandButton value="#{menu['new']}"
-                                     styleClass="btn btn-flat btn-info" 
-                                     action="#{entryBean.changeToAdd()}" />
+                    <div class="input-group">
+                        <h4>Incluir um novo:</h4>
+                        <div class="input-group-btn">
+                            <p:spacer width="10"/>
+                            <p:commandButton value="#{menu['entry.entry']}"
+                                             styleClass="btn btn-flat btn-info" 
+                                             action="#{entryBean.changeToAddEntry()}" />
+                            <p:spacer width="10"/>
+                            <p:commandButton value="#{menu['entry.refueling']}"
+                                             styleClass="btn btn-flat btn-info" 
+                                             action="#{entryBean.changeToAddRefueling()}" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

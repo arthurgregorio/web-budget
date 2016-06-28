@@ -53,7 +53,7 @@ public class EntryBean extends AbstractBean {
     private String filter;
     @Getter
     @Setter
-    private Vehicle selectedVehicle;
+    private Vehicle vehicle;
 
     @Getter
     private Entry entry;
@@ -85,7 +85,7 @@ public class EntryBean extends AbstractBean {
      * @param vehicleId
      */
     public void initializeListing(long vehicleId) {
-        this.selectedVehicle = this.logbookService.findVehicleById(vehicleId);
+        this.vehicle = this.logbookService.findVehicleById(vehicleId);
         this.filterList();
     }
 
@@ -96,17 +96,17 @@ public class EntryBean extends AbstractBean {
     public void initializeForm(long vehicleId) {
 
         // busca o veiculo
-        this.selectedVehicle = this.logbookService.findVehicleById(vehicleId);
+        this.vehicle = this.logbookService.findVehicleById(vehicleId);
 
         // busca as classes do CC do veiculo
         this.movementClasses
-                = this.logbookService.listClassesForVehicle(this.selectedVehicle);
+                = this.logbookService.listClassesForVehicle(this.vehicle);
 
         // pegamos os periodos financeiros em aberto
         this.openPeriods = this.periodService.listOpenFinancialPeriods();
 
         // cria a entrada 
-        this.entry = new Entry(this.selectedVehicle);
+        this.entry = new Entry(this.vehicle);
     }
 
     /**
@@ -115,8 +115,7 @@ public class EntryBean extends AbstractBean {
      */
     public void filterList() {
         try {
-            this.entries = this.logbookService
-                    .listEntriesByVehicleAndFilter(this.selectedVehicle, this.filter);
+            this.entries = this.logbookService.listEntriesByVehicleAndFilter(this.vehicle, this.filter);
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
@@ -128,9 +127,17 @@ public class EntryBean extends AbstractBean {
     /**
      * @return a pagina para inclusao de um novo registro
      */
-    public String changeToAdd() {
+    public String changeToAddEntry() {
         return "formEntry.xhtml?faces-redirect=true&vehicleId="
-                + this.selectedVehicle.getId();
+                + this.vehicle.getId();
+    }
+    
+    /**
+     * @return a pagina para inclusao de um novo abastecimento
+     */
+    public String changeToAddRefueling() {
+        return "formRefueling.xhtml?faces-redirect=true&vehicleId="
+                + this.vehicle.getId();
     }
 
     /**
@@ -147,12 +154,12 @@ public class EntryBean extends AbstractBean {
      * @return o metodo para compor a navegacao apos selecionar o veiculo
      */
     public String changeToList() {
-        if (this.selectedVehicle == null) {
+        if (this.vehicle == null) {
             this.addError(true, "error.entry.no-vehicle");
             return null;
         } else {
             return "listEntries.xhtml?faces-redirect=true&vehicleId="
-                    + this.selectedVehicle.getId();
+                    + this.vehicle.getId();
         }
     }
 
@@ -180,7 +187,7 @@ public class EntryBean extends AbstractBean {
         try {
             this.logbookService.deleteEntry(this.entry);
             this.entries = this.logbookService
-                    .listEntriesByVehicle(this.selectedVehicle);
+                    .listEntriesByVehicle(this.vehicle);
             this.addInfo(true, "entry.deleted");
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
