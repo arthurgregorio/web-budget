@@ -66,12 +66,8 @@ public class Refueling extends PersistentEntity {
     private BigDecimal cost;
     @Getter
     @Setter
-    @Column(name = "place")
+    @Column(name = "place", length = 90)
     private String place;
-    @Getter
-    @Setter
-    @Column(name = "description", columnDefinition="TEXT")
-    private String description;
     @Getter
     @Setter
     @NotNull(message = "{refueling.event-date}")
