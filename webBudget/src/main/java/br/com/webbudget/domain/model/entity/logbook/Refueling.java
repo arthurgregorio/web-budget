@@ -54,12 +54,12 @@ public class Refueling extends PersistentEntity {
     private boolean fullTank;
     @Getter
     @Setter
-    @Column(name = "financial", nullable = false)
-    private boolean financial;
-    @Getter
-    @Setter
     @Column(name = "odometer", nullable = false)
     private int odometer;
+    @Getter
+    @Setter
+    @Column(name = "liters", nullable = false)
+    private BigDecimal liters;
     @Getter
     @Setter
     @Column(name = "cost", nullable = false)
@@ -105,7 +105,6 @@ public class Refueling extends PersistentEntity {
      */
     public Refueling() {
         this.fullTank = true;
-        this.financial = true;
         this.eventDate = LocalDate.now();
     }
     

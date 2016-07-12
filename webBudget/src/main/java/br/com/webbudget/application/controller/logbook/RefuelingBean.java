@@ -18,9 +18,13 @@ package br.com.webbudget.application.controller.logbook;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.logbook.Refueling;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
+import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.model.service.FinancialPeriodService;
 import br.com.webbudget.domain.model.service.LogbookService;
+import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -40,8 +44,16 @@ public class RefuelingBean extends AbstractBean {
     @Getter
     private Refueling refueling;
 
+    @Getter
+    private List<FinancialPeriod> openPeriods;
+    @Getter
+    private List<MovementClass> movementClasses;
+    
     @Inject
     private LogbookService logbookService;
+    @Inject
+    private FinancialPeriodService periodService;
+    
 
     /**
      *
@@ -50,6 +62,13 @@ public class RefuelingBean extends AbstractBean {
     public void initializeForm(long vehicleId) {
 
         final Vehicle vehicle = this.logbookService.findVehicleById(vehicleId);
+        
+        // busca as classes do CC do veiculo
+        this.movementClasses
+                = this.logbookService.listClassesForVehicle(vehicle);
+
+        // pegamos os periodos financeiros em aberto
+        this.openPeriods = this.periodService.listOpenFinancialPeriods();
 
         this.refueling = new Refueling(vehicle);
     }
