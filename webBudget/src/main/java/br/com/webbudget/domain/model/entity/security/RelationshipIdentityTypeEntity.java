@@ -14,22 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.model.entity.tools;
+package br.com.webbudget.domain.model.entity.security;
 
+import org.picketlink.idm.jpa.annotations.OwnerReference;
+import org.picketlink.idm.jpa.annotations.RelationshipDescriptor;
+import org.picketlink.idm.jpa.annotations.RelationshipMember;
+import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
+import org.picketlink.idm.model.Relationship;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import javax.persistence.Column;
-import org.picketlink.idm.jpa.annotations.AttributeValue;
-import org.picketlink.idm.jpa.annotations.Identifier;
-import org.picketlink.idm.jpa.annotations.PartitionClass;
-import org.picketlink.idm.jpa.annotations.entity.ConfigurationName;
-import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
-import org.picketlink.idm.model.Partition;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,29 +41,31 @@ import lombok.Setter;
  * @since 2.0.0, 26/05/2015
  */
 @Entity
-@EqualsAndHashCode
-@Table(name = "partitions")
-@IdentityManaged(Partition.class)
-@Inheritance(strategy = InheritanceType.JOINED)
-public class PartitionTypeEntity implements Serializable {
+@IdentityManaged(Relationship.class)
+@Table(name = "identity_relationships")
+public class RelationshipIdentityTypeEntity implements Serializable {
 
     @Id
-    @Identifier
+    @Getter
+    @Setter
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    private String id;
+    private Long id;
     @Getter
     @Setter
-    @AttributeValue
-    @Column(name = "name")
-    private String name;
+    @RelationshipDescriptor
+    @Column(name = "descriptor")
+    private String descriptor;
     @Getter
     @Setter
-    @PartitionClass
-    @Column(name = "type_name")
-    private String typeName;
+    @RelationshipMember
+    @Column(name = "identity_type")
+    private String identityType;
+    
     @Getter
     @Setter
-    @ConfigurationName
-    @Column(name = "configuration")
-    private String configuration;
+    @ManyToOne
+    @OwnerReference
+    @JoinColumn(name = "id_owner")
+    private RelationshipTypeEntity owner;
 }

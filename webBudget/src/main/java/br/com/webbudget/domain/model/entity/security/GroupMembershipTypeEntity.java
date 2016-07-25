@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.model.entity.tools;
+package br.com.webbudget.domain.model.entity.security;
 
-import br.com.webbudget.domain.model.security.Grant;
+import br.com.webbudget.domain.model.security.GroupMembership;
 import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -29,6 +29,6 @@ import javax.persistence.Table;
  * @since 2.0.0, 26/05/2015
  */
 @Entity
-@Table(name = "grants")
-@IdentityManaged(Grant.class)
-public class GrantTypeEntity extends RelationshipTypeEntity { }
+@Table(name = "group_memberships")
+@IdentityManaged(GroupMembership.class)
+public class GroupMembershipTypeEntity extends RelationshipTypeEntity { }

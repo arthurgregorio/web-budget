@@ -23,12 +23,15 @@ import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,6 +39,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
+ * Classe que representa o abastecimento de um veiculo
  *
  * @author Arthur Gregorio
  *
@@ -96,12 +100,18 @@ public class Refueling extends PersistentEntity {
     @JoinColumn(name = "id_financial_period")
     private FinancialPeriod financialPeriod;
     
+    @Getter
+    @Setter
+    @Transient
+    private List<Fuel> fuels;
+    
     /**
      * 
      */
     public Refueling() {
         this.fullTank = true;
         this.eventDate = LocalDate.now();
+        this.fuels = new ArrayList<>();
     }
     
     /**

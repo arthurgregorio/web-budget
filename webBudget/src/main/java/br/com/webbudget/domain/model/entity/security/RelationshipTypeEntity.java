@@ -14,18 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.model.entity.tools;
+package br.com.webbudget.domain.model.entity.security;
 
 import java.io.Serializable;
-import java.util.Date;
-import org.picketlink.idm.jpa.annotations.AttributeValue;
-import org.picketlink.idm.jpa.annotations.Identifier;
-import org.picketlink.idm.jpa.annotations.IdentityClass;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.picketlink.idm.jpa.annotations.Identifier;
+import org.picketlink.idm.jpa.annotations.RelationshipClass;
+import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
+import org.picketlink.idm.model.Relationship;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,34 +37,21 @@ import lombok.Setter;
  * @version 1.0.0
  * @since 2.0.0, 26/05/2015
  */
-@MappedSuperclass
-public abstract class AbstractIdentityTypeEntity implements Serializable {
+@Entity
+@Table(name = "relationships")
+@IdentityManaged(Relationship.class)
+@Inheritance(strategy = InheritanceType.JOINED)
+public class RelationshipTypeEntity implements Serializable {
 
     @Id
     @Getter
+    @Setter
     @Identifier
     @Column(name = "id", unique = true)
     private String id;
     @Getter
     @Setter
-    @IdentityClass
+    @RelationshipClass
     @Column(name = "type_name")
     private String typeName;
-    @Getter
-    @Setter
-    @AttributeValue
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date")
-    private Date createdDate;
-    @Getter
-    @Setter
-    @AttributeValue
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "expiration_date")
-    private Date expirationDate;
-    @Getter
-    @Setter
-    @AttributeValue
-    @Column(name = "enable")
-    private boolean enabled;
 }

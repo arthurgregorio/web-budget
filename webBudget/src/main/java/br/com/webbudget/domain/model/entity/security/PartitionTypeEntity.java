@@ -14,19 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.model.entity.tools;
+package br.com.webbudget.domain.model.entity.security;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import org.picketlink.idm.jpa.annotations.AttributeValue;
 import org.picketlink.idm.jpa.annotations.Identifier;
-import org.picketlink.idm.jpa.annotations.RelationshipClass;
+import org.picketlink.idm.jpa.annotations.PartitionClass;
+import org.picketlink.idm.jpa.annotations.entity.ConfigurationName;
 import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
-import org.picketlink.idm.model.Relationship;
+import org.picketlink.idm.model.Partition;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,20 +41,29 @@ import lombok.Setter;
  * @since 2.0.0, 26/05/2015
  */
 @Entity
-@Table(name = "relationships")
-@IdentityManaged(Relationship.class)
+@EqualsAndHashCode
+@Table(name = "partitions")
+@IdentityManaged(Partition.class)
 @Inheritance(strategy = InheritanceType.JOINED)
-public class RelationshipTypeEntity implements Serializable {
+public class PartitionTypeEntity implements Serializable {
 
     @Id
-    @Getter
-    @Setter
     @Identifier
     @Column(name = "id", unique = true)
     private String id;
     @Getter
     @Setter
-    @RelationshipClass
+    @AttributeValue
+    @Column(name = "name")
+    private String name;
+    @Getter
+    @Setter
+    @PartitionClass
     @Column(name = "type_name")
     private String typeName;
+    @Getter
+    @Setter
+    @ConfigurationName
+    @Column(name = "configuration")
+    private String configuration;
 }

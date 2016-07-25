@@ -17,15 +17,15 @@
 package br.com.webbudget.infraestructure.configuration;
 
 import br.com.webbudget.infraestructure.picketlink.CustomPartitionManager;
-import br.com.webbudget.domain.model.entity.tools.GrantTypeEntity;
-import br.com.webbudget.domain.model.entity.tools.GroupMembershipTypeEntity;
-import br.com.webbudget.domain.model.entity.tools.GroupTypeEntity;
-import br.com.webbudget.domain.model.entity.tools.PartitionTypeEntity;
-import br.com.webbudget.domain.model.entity.tools.PasswordTypeEntity;
-import br.com.webbudget.domain.model.entity.tools.RelationshipIdentityTypeEntity;
-import br.com.webbudget.domain.model.entity.tools.RelationshipTypeEntity;
-import br.com.webbudget.domain.model.entity.tools.RoleTypeEntity;
-import br.com.webbudget.domain.model.entity.tools.UserTypeEntity;
+import br.com.webbudget.domain.model.entity.security.GrantTypeEntity;
+import br.com.webbudget.domain.model.entity.security.GroupMembershipTypeEntity;
+import br.com.webbudget.domain.model.entity.security.GroupTypeEntity;
+import br.com.webbudget.domain.model.entity.security.PartitionTypeEntity;
+import br.com.webbudget.domain.model.entity.security.PasswordTypeEntity;
+import br.com.webbudget.domain.model.entity.security.RelationshipIdentityTypeEntity;
+import br.com.webbudget.domain.model.entity.security.RelationshipTypeEntity;
+import br.com.webbudget.domain.model.entity.security.RoleTypeEntity;
+import br.com.webbudget.domain.model.entity.security.UserTypeEntity;
 import br.com.webbudget.domain.model.security.Grant;
 import br.com.webbudget.domain.model.security.Authorization;
 import br.com.webbudget.domain.model.security.Group;
