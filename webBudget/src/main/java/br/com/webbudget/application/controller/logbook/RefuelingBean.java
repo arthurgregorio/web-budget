@@ -19,6 +19,7 @@ package br.com.webbudget.application.controller.logbook;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
+import br.com.webbudget.domain.model.entity.logbook.FuelType;
 import br.com.webbudget.domain.model.entity.logbook.Refueling;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
@@ -112,5 +113,12 @@ public class RefuelingBean extends AbstractBean {
             this.updateComponent("entriesBox");
             this.closeDialog("dialogDeleteEntry");
         }
+    }
+    
+    /**
+     * @return os tipos de combustivel disponiveis para selecao
+     */
+    public FuelType[] getFuelTypes() {
+        return FuelType.values();
     }
 }

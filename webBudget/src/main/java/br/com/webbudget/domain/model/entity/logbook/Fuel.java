@@ -69,6 +69,15 @@ public class Fuel extends PersistentEntity {
      * 
      */
     public Fuel() {
+        this.liters = BigDecimal.ZERO;
         this.fuelType = FuelType.GASOLINE;
+        this.valuePerLiter = BigDecimal.ZERO;
+    }
+    
+    /**
+     * @return o custo deste combustivel
+     */
+    public BigDecimal getCost() {
+        return this.valuePerLiter.multiply(this.liters);
     }
 }

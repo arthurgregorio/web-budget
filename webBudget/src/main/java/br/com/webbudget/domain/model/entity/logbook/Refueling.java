@@ -82,7 +82,7 @@ public class Refueling extends PersistentEntity {
     @Setter
     @Column(name = "movement_code", length = 6)
     private String movementCode;
-    
+
     @Getter
     @Setter
     @ManyToOne
@@ -99,21 +99,22 @@ public class Refueling extends PersistentEntity {
     @ManyToOne
     @JoinColumn(name = "id_financial_period")
     private FinancialPeriod financialPeriod;
-    
+
     @Getter
     @Setter
     @Transient
     private List<Fuel> fuels;
-    
+
     /**
-     * 
+     *
      */
     public Refueling() {
         this.fullTank = true;
+        this.cost = BigDecimal.ZERO;
         this.eventDate = LocalDate.now();
         this.fuels = new ArrayList<>();
     }
-    
+
     /**
      *
      * @param vehicle
@@ -121,6 +122,22 @@ public class Refueling extends PersistentEntity {
     public Refueling(Vehicle vehicle) {
         this();
         this.vehicle = vehicle;
+    }
+
+    /**
+     * Adiciona um novo combustivel a este abastecimento
+     */
+    public void addFuel() {
+        this.fuels.add(new Fuel());
+    }
+
+    /**
+     * Deleta um combustivel da lista de combustiveis
+     *
+     * @param fuel o combustivel
+     */
+    public void deleteFuel(Fuel fuel) {
+        this.fuels.remove(fuel);
     }
 
     /**
@@ -136,7 +153,17 @@ public class Refueling extends PersistentEntity {
     public boolean isFinancialValid() {
         return this.movementClass != null && this.getCost() != null;
     }
-    
+
+    /**
+     * Calcula o valor total dos combustiveis utilizados
+     */
+    public void calculateTotal() {
+        this.cost = this.fuels
+                .stream()
+                .map(Fuel::getCost)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     /**
      * @return o centro de custo do veiculo vinculado ao registro
      */
