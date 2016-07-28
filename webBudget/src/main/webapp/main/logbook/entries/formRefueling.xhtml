@@ -125,6 +125,35 @@
                                 </p:selectOneMenu>
                             </div>
                         </div>
+                        <div jsf:id="summaryBox" class="row">
+                            <div class="form-group col-md-3">
+                                <h4><b>#{messages['refueling.form.cost-per-litre']}</b></h4>
+                                <h4>
+                                    <h:outputText value="#{refuelingBean.refueling.costPerLiter}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
+                                </h4>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <h4><b>#{messages['refueling.form.total-liters']}</b></h4>
+                                <h4>
+                                    <h:outputText value="#{refuelingBean.refueling.liters}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
+                                </h4>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <h4><b>#{messages['refueling.form.total']}</b></h4>
+                                <h4>
+                                    <h:outputText value="#{refuelingBean.refueling.cost}">
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </h:outputText>
+                                </h4>
+                            </div>
+                            <div class="form-group col-md-3">
+
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group col-md-8">
@@ -148,11 +177,11 @@
                                          paginatorAlwaysVisible="false"
                                          value="#{refuelingBean.refueling.fuels}"
                                          emptyMessage="#{messages['list.empty']}">
-                                
-                                <p:ajax event="cellEdit" 
-                                        update="totalBox"
-                                        process="@this"
-                                        listener="#{refuelingBean.refueling.calculateTotal()}" />
+
+                                <p:ajax process="@this"
+                                        event="cellEdit" 
+                                        update="summaryBox"
+                                        listener="#{refuelingBean.refueling.totalize()}" />
 
                                 <p:column styleClass="align-center"
                                           headerText="#{messages['fuel.list.type']}">
@@ -220,14 +249,6 @@
                                                      actionListener="#{refuelingBean.refueling.deleteFuel(fuel)}" />
                                 </p:column>
                             </p:dataTable>
-                        </div>
-                        <div jsf:id="totalBox" class="form-group col-md-12">
-                            <h4><b>#{messages['refueling.form.total']}</b></h4>
-                            <h4>
-                                <h:outputText value="#{refuelingBean.refueling.cost}">
-                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                </h:outputText>
-                            </h4>
                         </div>
                     </div>
                 </div>

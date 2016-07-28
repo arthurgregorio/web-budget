@@ -22,6 +22,7 @@ import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,10 @@ public class Refueling extends PersistentEntity {
     private BigDecimal cost;
     @Getter
     @Setter
+    @Column(name = "cost_per_litre", nullable = false)
+    private BigDecimal costPerLiter;
+    @Getter
+    @Setter
     @Column(name = "place", length = 90)
     private String place;
     @Getter
@@ -109,9 +114,15 @@ public class Refueling extends PersistentEntity {
      *
      */
     public Refueling() {
+        
         this.fullTank = true;
-        this.cost = BigDecimal.ZERO;
+        
         this.eventDate = LocalDate.now();
+        
+        this.cost = BigDecimal.ZERO;
+        this.liters = BigDecimal.ZERO;
+        this.costPerLiter = BigDecimal.ZERO;
+        
         this.fuels = new ArrayList<>();
     }
 
@@ -155,13 +166,26 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
-     * Calcula o valor total dos combustiveis utilizados
+     * Totaliza os valores referentes aos combustiveis
      */
-    public void calculateTotal() {
+    public void totalize() {
+        
+        // calcula o total em reais 
         this.cost = this.fuels
                 .stream()
                 .map(Fuel::getCost)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        // calcula o total em litros abastecido
+        this.liters = this.fuels
+                .stream()
+                .map(Fuel::getLiters)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        // calcula o custo por litro
+        if (this.cost != BigDecimal.ZERO && this.liters != BigDecimal.ZERO) {
+            this.costPerLiter = this.cost.divide(this.liters, RoundingMode.CEILING);
+        }
     }
 
     /**
