@@ -117,41 +117,12 @@
                                                  value="#{refuelingBean.refueling.financialPeriod}">
                                     <f:selectItems var="period" 
                                                    itemValue="#{period}"
-                                                   value="#{entryBean.openPeriods}"
+                                                   value="#{refuelingBean.openPeriods}"
                                                    itemLabel="#{period.expired eq true 
                                                                 ? period.identification.concat(' - ')
                                                                 .concat(messages['refueling.form.expired']) 
                                                                 : period.identification}" /> 
                                 </p:selectOneMenu>
-                            </div>
-                        </div>
-                        <div jsf:id="summaryBox" class="row">
-                            <div class="form-group col-md-3">
-                                <h4><b>#{messages['refueling.form.cost-per-litre']}</b></h4>
-                                <h4>
-                                    <h:outputText value="#{refuelingBean.refueling.costPerLiter}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </h4>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <h4><b>#{messages['refueling.form.total-liters']}</b></h4>
-                                <h4>
-                                    <h:outputText value="#{refuelingBean.refueling.liters}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </h4>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <h4><b>#{messages['refueling.form.total']}</b></h4>
-                                <h4>
-                                    <h:outputText value="#{refuelingBean.refueling.cost}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </h4>
-                            </div>
-                            <div class="form-group col-md-3">
-
                             </div>
                         </div>
                     </div>
@@ -177,11 +148,6 @@
                                          paginatorAlwaysVisible="false"
                                          value="#{refuelingBean.refueling.fuels}"
                                          emptyMessage="#{messages['list.empty']}">
-
-                                <p:ajax process="@this"
-                                        event="cellEdit" 
-                                        update="summaryBox"
-                                        listener="#{refuelingBean.refueling.totalize()}" />
 
                                 <p:column styleClass="align-center"
                                           headerText="#{messages['fuel.list.type']}">

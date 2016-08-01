@@ -87,7 +87,7 @@ public class RefuelingBean extends AbstractBean {
      */
     public void doSave() {
         try {
-
+            this.logbookService.saveRefueling(this.refueling);
             this.addInfo(true, "refueling.saved");
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());

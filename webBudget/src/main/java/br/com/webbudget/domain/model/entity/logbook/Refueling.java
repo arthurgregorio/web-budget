@@ -33,11 +33,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Classe que representa o abastecimento de um veiculo
@@ -59,6 +61,7 @@ public class Refueling extends PersistentEntity {
     private boolean fullTank;
     @Getter
     @Setter
+    @Min(value = 1, message = "{refueling.odometer}")
     @Column(name = "odometer", nullable = false)
     private int odometer;
     @Getter
@@ -98,16 +101,19 @@ public class Refueling extends PersistentEntity {
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_movement_class")
+    @NotNull(message = "{refueling.movement-class}")
     private MovementClass movementClass;
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_financial_period")
+    @NotNull(message = "{refueling.financial-period}")
     private FinancialPeriod financialPeriod;
 
     @Getter
     @Setter
     @Transient
+    @NotEmpty(message = "{refueling.fuels}")
     private List<Fuel> fuels;
 
     /**
@@ -140,6 +146,7 @@ public class Refueling extends PersistentEntity {
      */
     public void addFuel() {
         this.fuels.add(new Fuel());
+        this.totalize();
     }
 
     /**
@@ -149,6 +156,7 @@ public class Refueling extends PersistentEntity {
      */
     public void deleteFuel(Fuel fuel) {
         this.fuels.remove(fuel);
+        this.totalize();
     }
 
     /**
@@ -166,9 +174,34 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
+     * @return o centro de custo do veiculo vinculado ao registro
+     */
+    public CostCenter getCostCenter() {
+        return this.getVehicle().getCostCenter();
+    }
+    
+    /**
+     * @return se temos ou nao combustiveis
+     */
+    public boolean isFuelsValid() {
+        
+        boolean valid = this.fuels != null && !this.fuels.isEmpty();
+        
+        if (valid) {
+            final Fuel fuel = this.fuels
+                    .stream()
+                    .filter(Fuel::isInvalid)
+                    .findAny()
+                    .get();
+            valid = (fuel == null);
+        }
+        return valid;
+    }
+
+    /**
      * Totaliza os valores referentes aos combustiveis
      */
-    public void totalize() {
+    private void totalize() {
         
         // calcula o total em reais 
         this.cost = this.fuels
@@ -186,12 +219,5 @@ public class Refueling extends PersistentEntity {
         if (this.cost != BigDecimal.ZERO && this.liters != BigDecimal.ZERO) {
             this.costPerLiter = this.cost.divide(this.liters, RoundingMode.CEILING);
         }
-    }
-
-    /**
-     * @return o centro de custo do veiculo vinculado ao registro
-     */
-    public CostCenter getCostCenter() {
-        return this.getVehicle().getCostCenter();
     }
 }

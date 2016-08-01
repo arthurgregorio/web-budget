@@ -26,6 +26,7 @@ import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.entity.financial.Apportionment;
 import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.model.entity.logbook.Entry;
+import br.com.webbudget.domain.model.entity.logbook.Refueling;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.repository.entries.IMovementClassRepository;
 import br.com.webbudget.domain.model.repository.logbook.IEntryRepository;
@@ -168,6 +169,20 @@ public class LogbookService {
                 this.movementService.deleteMovement(movement);
             }
         }
+    }
+
+    /**
+     * 
+     * @param refueling 
+     */
+    @Transactional
+    public void saveRefueling(Refueling refueling) {
+       
+        if (!refueling.isFuelsValid()) {
+            throw new InternalServiceError("error.refueling.invalid-fuels");
+        }
+        
+        
     }
     
     /**
