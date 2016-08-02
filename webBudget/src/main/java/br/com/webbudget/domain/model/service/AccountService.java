@@ -41,7 +41,7 @@ import org.picketlink.idm.query.IdentityQueryBuilder;
 import org.picketlink.idm.query.RelationshipQuery;
 
 /**
- * Servico responsavel por todo o gerenciamento do modelo de seguranca
+ * Servico responsavel pelo gerenciamento do modelo de seguranca
  *
  * @author Arthur Gregorio
  *

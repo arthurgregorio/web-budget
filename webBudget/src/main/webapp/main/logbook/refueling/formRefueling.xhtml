@@ -24,10 +24,10 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="entries"/>
+    <ui:param name="activeMenu" value="refuelings"/>
 
     <f:metadata>
-        <f:viewAction action="#{refuelingBean.initializeForm(param.vehicleId)}"/>
+        <f:viewAction action="#{refuelingBean.initializeForm()}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -35,15 +35,22 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat value="#{messages['refueling.page-description-including']}">
-            <f:param value="#{refuelingBean.refueling.vehicleIdentification}"/>
+        <h:outputText rendered="#{refuelingBean.viewState eq 'ADDING'}"
+                      value="#{messages['refueling.page-description-including']}"/>
+        <o:outputFormat id="pageDescription" 
+                        rendered="#{refuelingBean.viewState eq 'EDITING'}" 
+                        value="#{messages['refueling.page-description-editing']}">
+            <f:param value="#{refuelingBean.refueling.code}"/>
         </o:outputFormat>
     </ui:define>
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['logbook']}</a></li>
-        <li><a href="listEntries.xhtml">#{breadcrumb['logbook.refueling']}</a></li>
-        <li class="active"><a href="#">#{breadcrumb['logbook.refueling.including']}</a></li>
+        <li><a href="listRefuelings.xhtml">#{breadcrumb['logbook.refueling']}</a></li>
+        <li jsf:rendered="#{refuelingBean.viewState eq 'ADDING'}" 
+            class="active"><a href="#">#{breadcrumb['including']}</a></li>
+        <li jsf:rendered="#{refuelingBean.viewState eq 'EDITING'}" 
+            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
@@ -228,7 +235,7 @@
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
                                      styleClass="btn btn-flat btn-default" 
-                                     action="#{refuelingBean.changeToList()}"/>
+                                     action="#{refuelingBean.doCancel()}"/>
                 </div>
             </div>
         </h:form>

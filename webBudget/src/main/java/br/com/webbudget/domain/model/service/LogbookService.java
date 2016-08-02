@@ -30,7 +30,8 @@ import br.com.webbudget.domain.model.entity.logbook.Refueling;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.repository.entries.IMovementClassRepository;
 import br.com.webbudget.domain.model.repository.logbook.IEntryRepository;
-import br.com.webbudget.domain.model.repository.logbook.IVehicleRepository;
+import br.com.webbudget.domain.model.repository.entries.IVehicleRepository;
+import br.com.webbudget.domain.model.repository.logbook.IRefuelingRepository;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -55,6 +56,8 @@ public class LogbookService {
     private IEntryRepository entryRepository;
     @Inject
     private IVehicleRepository vehicleRepository;
+    @Inject
+    private IRefuelingRepository refuelingRepository;
     @Inject
     private IMovementClassRepository movementClassRepository;
 
@@ -181,7 +184,14 @@ public class LogbookService {
         if (!refueling.isFuelsValid()) {
             throw new InternalServiceError("error.refueling.invalid-fuels");
         }
-        
+    }
+
+    /**
+     * 
+     * @param refueling 
+     */
+    @Transactional
+    public void deleteRefueling(Refueling refueling) {
         
     }
     
@@ -225,6 +235,15 @@ public class LogbookService {
      */
     public Vehicle findVehicleById(long vehicleId) {
         return this.vehicleRepository.findById(vehicleId, false);
+    }
+    
+    /**
+     * 
+     * @param refuelingId
+     * @return 
+     */
+    public Refueling findRefuelingById(long refuelingId) {
+        return this.refuelingRepository.findById(refuelingId, false);
     }
 
     /**
@@ -273,5 +292,15 @@ public class LogbookService {
      */
     public List<Entry> listEntriesByVehicleAndFilter(Vehicle vehicle, String filter) {
        return this.entryRepository.listByVehicleAndFilter(vehicle, filter);
+    }
+
+    /**
+     * 
+     * @param filter
+     * @param pageRequest
+     * @return 
+     */
+    public Page<Refueling> listRefuelingsLazily(String filter, PageRequest pageRequest) {
+        return this.refuelingRepository.listLazily(filter, pageRequest);
     }
 }

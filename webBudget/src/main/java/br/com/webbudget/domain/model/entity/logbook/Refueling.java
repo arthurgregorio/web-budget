@@ -21,6 +21,7 @@ import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
+import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -55,6 +56,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 @EqualsAndHashCode(callSuper = true)
 public class Refueling extends PersistentEntity {
 
+    @Getter
+    @Column(name = "code", length = 6, unique = true)
+    private String code;
     @Getter
     @Setter
     @Column(name = "full_tank", nullable = false)
@@ -121,6 +125,8 @@ public class Refueling extends PersistentEntity {
      */
     public Refueling() {
         
+        this.code = ApplicationUtils.createRamdomCode(6, false);
+        
         this.fullTank = true;
         
         this.eventDate = LocalDate.now();
@@ -130,15 +136,6 @@ public class Refueling extends PersistentEntity {
         this.costPerLiter = BigDecimal.ZERO;
         
         this.fuels = new ArrayList<>();
-    }
-
-    /**
-     *
-     * @param vehicle
-     */
-    public Refueling(Vehicle vehicle) {
-        this();
-        this.vehicle = vehicle;
     }
 
     /**

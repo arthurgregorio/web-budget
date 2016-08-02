@@ -18,13 +18,12 @@ package br.com.webbudget.domain.model.repository.logbook;
 
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
-import br.com.webbudget.domain.model.entity.logbook.Vehicle;
+import br.com.webbudget.domain.model.entity.logbook.Refueling;
 import br.com.webbudget.domain.model.repository.GenericRepository;
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -33,56 +32,21 @@ import org.hibernate.criterion.Restrictions;
  * @version 1.0.0
  * @since 2.3.0, 05/06/2016
  */
-public class VehicleRepository extends GenericRepository<Vehicle, Long> implements IVehicleRepository {
+public class RefuelingRepository extends GenericRepository<Refueling, Long> implements IRefuelingRepository {
 
     /**
-     *
-     * @param vehicle
-     * @return
-     */
-    @Override
-    public int findLastOdometer(Vehicle vehicle) {
-
-        final Criteria criteria = this.createCriteria();
-
-        criteria.add(Restrictions.eq("id", vehicle.getId()));
-        criteria.setProjection(Projections.property("odometer"));
-
-        return (int) criteria.uniqueResult();
-    }
-
-    /**
-     *
-     * @param isBlocked
-     * @return
-     */
-    @Override
-    public List<Vehicle> listByStatus(Boolean isBlocked) {
-
-        final Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-
-        if (isBlocked != null) {
-            criteria.add(Restrictions.eq("blocked", isBlocked));
-        }
-
-        criteria.addOrder(Order.asc("brand"));
-
-        return criteria.list();
-    }
-
-    /**
-     *
-     * @param isBlocked
+     * 
+     * @param filter
      * @param pageRequest
-     * @return
+     * @return 
      */
     @Override
-    public Page<Vehicle> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest) {
-
+    public Page<Refueling> listLazily(String filter, PageRequest pageRequest) {
+       
         final Criteria criteria = this.createCriteria();
 
-        if (isBlocked != null) {
-            criteria.add(Restrictions.eq("blocked", isBlocked));
+        if (StringUtils.isNotBlank(filter)) {
+            // TODO colocar os filtros aqui
         }
 
         // projetamos para pegar o total de paginas possiveis

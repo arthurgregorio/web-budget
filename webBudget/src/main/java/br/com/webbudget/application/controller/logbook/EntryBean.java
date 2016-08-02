@@ -115,7 +115,8 @@ public class EntryBean extends AbstractBean {
      */
     public void filterList() {
         try {
-            this.entries = this.logbookService.listEntriesByVehicleAndFilter(this.vehicle, this.filter);
+            this.entries = this.logbookService
+                    .listEntriesByVehicleAndFilter(this.vehicle, this.filter);
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
@@ -132,14 +133,6 @@ public class EntryBean extends AbstractBean {
                 + this.vehicle.getId();
     }
     
-    /**
-     * @return a pagina para inclusao de um novo abastecimento
-     */
-    public String changeToAddRefueling() {
-        return "formRefueling.xhtml?faces-redirect=true&vehicleId="
-                + this.vehicle.getId();
-    }
-
     /**
      * Inicia o processo para deletar um registro
      *
