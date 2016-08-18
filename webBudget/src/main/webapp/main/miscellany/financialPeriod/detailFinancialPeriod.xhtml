@@ -146,7 +146,7 @@
                                     </div>
                                     <div class="col-sm-4 col-xs-6">
                                         <div class="description-block border-right">
-                                            <h5 class="description-header text-yellow">
+                                            <h5 class="description-header text-red">
                                                 <h:outputText value="#{periodDetailBean.calculator.expensesTotal}" >
                                                     <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                                 </h:outputText>
@@ -157,7 +157,7 @@
                                     <div class="col-sm-4 col-xs-6">
                                         <div class="description-block border-right">
                                             <h5 class="description-header #{periodDetailBean.calculator.balance.signum() 
-                                                                            lt 0 ? 'text-red' : 'text-aqua'}">
+                                                                            lt 0 ? 'text-red' : 'text-green'}">
                                                 <h:outputText value="#{periodDetailBean.calculator.balance}" >
                                                     <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                                 </h:outputText>
