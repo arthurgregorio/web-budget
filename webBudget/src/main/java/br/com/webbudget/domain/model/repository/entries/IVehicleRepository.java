@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.model.repository.logbook;
+package br.com.webbudget.domain.model.repository.entries;
 
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;

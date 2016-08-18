@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2016 Arthur Gregorio, AG.Software
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -24,10 +24,10 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="entries"/>
+    <ui:param name="activeMenu" value="refuelings"/>
 
     <f:metadata>
-        <f:viewAction action="#{refuelingBean.initializeForm(param.vehicleId)}"/>
+        <f:viewAction action="#{refuelingBean.initializeForm()}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -35,15 +35,22 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat value="#{messages['refueling.page-description-including']}">
-            <f:param value="#{refuelingBean.refueling.vehicleIdentification}"/>
+        <h:outputText rendered="#{refuelingBean.viewState eq 'ADDING'}"
+                      value="#{messages['refueling.page-description-including']}"/>
+        <o:outputFormat id="pageDescription" 
+                        rendered="#{refuelingBean.viewState eq 'EDITING'}" 
+                        value="#{messages['refueling.page-description-editing']}">
+            <f:param value="#{refuelingBean.refueling.code}"/>
         </o:outputFormat>
     </ui:define>
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['logbook']}</a></li>
-        <li><a href="listEntries.xhtml">#{breadcrumb['logbook.refueling']}</a></li>
-        <li class="active"><a href="#">#{breadcrumb['logbook.refueling.including']}</a></li>
+        <li><a href="listRefuelings.xhtml">#{breadcrumb['logbook.refueling']}</a></li>
+        <li jsf:rendered="#{refuelingBean.viewState eq 'ADDING'}" 
+            class="active"><a href="#">#{breadcrumb['including']}</a></li>
+        <li jsf:rendered="#{refuelingBean.viewState eq 'EDITING'}" 
+            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
@@ -117,41 +124,12 @@
                                                  value="#{refuelingBean.refueling.financialPeriod}">
                                     <f:selectItems var="period" 
                                                    itemValue="#{period}"
-                                                   value="#{entryBean.openPeriods}"
+                                                   value="#{refuelingBean.openPeriods}"
                                                    itemLabel="#{period.expired eq true 
                                                                 ? period.identification.concat(' - ')
                                                                 .concat(messages['refueling.form.expired']) 
                                                                 : period.identification}" /> 
                                 </p:selectOneMenu>
-                            </div>
-                        </div>
-                        <div jsf:id="summaryBox" class="row">
-                            <div class="form-group col-md-3">
-                                <h4><b>#{messages['refueling.form.cost-per-litre']}</b></h4>
-                                <h4>
-                                    <h:outputText value="#{refuelingBean.refueling.costPerLiter}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </h4>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <h4><b>#{messages['refueling.form.total-liters']}</b></h4>
-                                <h4>
-                                    <h:outputText value="#{refuelingBean.refueling.liters}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </h4>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <h4><b>#{messages['refueling.form.total']}</b></h4>
-                                <h4>
-                                    <h:outputText value="#{refuelingBean.refueling.cost}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </h4>
-                            </div>
-                            <div class="form-group col-md-3">
-
                             </div>
                         </div>
                     </div>
@@ -177,11 +155,6 @@
                                          paginatorAlwaysVisible="false"
                                          value="#{refuelingBean.refueling.fuels}"
                                          emptyMessage="#{messages['list.empty']}">
-
-                                <p:ajax process="@this"
-                                        event="cellEdit" 
-                                        update="summaryBox"
-                                        listener="#{refuelingBean.refueling.totalize()}" />
 
                                 <p:column styleClass="align-center"
                                           headerText="#{messages['fuel.list.type']}">
@@ -262,7 +235,7 @@
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
                                      styleClass="btn btn-flat btn-default" 
-                                     action="#{refuelingBean.changeToList()}"/>
+                                     action="#{refuelingBean.doCancel()}"/>
                 </div>
             </div>
         </h:form>

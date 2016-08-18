@@ -80,4 +80,20 @@ public class Fuel extends PersistentEntity {
     public BigDecimal getCost() {
         return this.valuePerLiter.multiply(this.liters);
     }
+    
+    /**
+     * @return se o combustivel eh valido ou nao para ser salvo
+     */
+    public boolean isValid() {
+        return this.liters != null && this.liters != BigDecimal.ZERO 
+                && this.valuePerLiter != null && this.valuePerLiter != BigDecimal.ZERO;
+    }
+    
+    /**
+     * @return se o combustivel e invalido
+     */
+    public boolean isInvalid() {
+        return this.liters == null && this.liters == BigDecimal.ZERO 
+                && this.valuePerLiter == null && this.valuePerLiter == BigDecimal.ZERO;
+    }
 }

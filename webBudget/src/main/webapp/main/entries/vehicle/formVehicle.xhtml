@@ -46,8 +46,8 @@
     </ui:define>
 
     <ui:define name="breadcrumb">
-        <li><a href="#">#{breadcrumb['logbook']}</a></li>
-        <li><a href="listVehicles.xhtml">#{breadcrumb['logbook.vehicle']}</a></li>
+        <li><a href="#">#{breadcrumb['entries']}</a></li>
+        <li><a href="listVehicles.xhtml">#{breadcrumb['entries.vehicle']}</a></li>
         <li jsf:rendered="#{vehicleBean.viewState eq 'ADDING'}" 
             class="active"><a href="#">#{breadcrumb['including']}</a></li>
         <li jsf:rendered="#{vehicleBean.viewState eq 'EDITING'}" 

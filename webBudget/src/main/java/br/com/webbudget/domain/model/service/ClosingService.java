@@ -36,7 +36,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
- * Classe que realiza todo o processo de fechamento do periodo
+ * Classe que realiza o processo de fechamento do periodo
  *
  * @author Arthur Gregorio
  *

@@ -30,7 +30,7 @@ import lombok.Getter;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.0.0, 24/06/2014
  */
 @Named
@@ -248,6 +248,16 @@ public class Authorization {
     @Getter
     @AuthorizationGroup("authority.entries")
     public final String ENTRIES_DELETE = "authority.entries.delete";
+    
+    @Getter
+    @AuthorizationGroup("authority.refueling")
+    public final String REFUELING_VIEW = "authority.refueling.access";
+    @Getter
+    @AuthorizationGroup("authority.refueling")
+    public final String REFUELING_INSERT = "authority.refueling.add";
+    @Getter
+    @AuthorizationGroup("authority.refueling")
+    public final String REFUELING_DELETE = "authority.refueling.delete";
 
     /**
      * Lista todas as authorities disponiveis para uso, este metodo e utilzado

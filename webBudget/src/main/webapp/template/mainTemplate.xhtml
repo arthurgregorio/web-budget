@@ -187,6 +187,13 @@
                                 <span>#{menu['entries.cards']}</span>
                             </p:link>
                         </li>
+                        <li class="#{activeMenu eq 'vehicles' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.VEHICLE_VIEW)}">
+                            <p:link href="/main/entries/vehicle/listVehicles.xhtml">
+                                <i class="fa fa-car"></i> 
+                                <span>#{menu['logbook.vehicles']}</span>
+                            </p:link>
+                        </li>
                         <li class="#{activeMenu eq 'wallets' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.WALLET_VIEW)}">
                             <p:link href="/main/entries/wallet/listWallets.xhtml">
@@ -219,18 +226,18 @@
                     
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['logbook']}</li>
-                        <li class="#{activeMenu eq 'vehicles' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.VEHICLE_VIEW)}">
-                            <p:link href="/main/logbook/vehicle/listVehicles.xhtml">
-                                <i class="fa fa-car"></i> 
-                                <span>#{menu['logbook.vehicles']}</span>
-                            </p:link>
-                        </li>
                         <li class="#{activeMenu eq 'entries' ? 'active' : ''}"
                             jsf:rendered="#{userSessionBean.hasRole(authorization.ENTRIES_VIEW)}">
                             <p:link href="/main/logbook/entries/vehicleSelection.xhtml">
                                 <i class="fa fa-pencil"></i> 
                                 <span>#{menu['logbook.entries']}</span>
+                            </p:link>
+                        </li>
+                        <li class="#{activeMenu eq 'refuelings' ? 'active' : ''}"
+                            jsf:rendered="#{userSessionBean.hasRole(authorization.REFUELING_VIEW)}">
+                            <p:link href="/main/logbook/refueling/listRefuelings.xhtml">
+                                <i class="fa fa-refresh"></i> 
+                                <span>#{menu['logbook.refueling']}</span>
                             </p:link>
                         </li>
                     </ul>
