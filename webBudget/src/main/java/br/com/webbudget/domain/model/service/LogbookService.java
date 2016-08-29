@@ -31,7 +31,9 @@ import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.repository.entries.IMovementClassRepository;
 import br.com.webbudget.domain.model.repository.logbook.IEntryRepository;
 import br.com.webbudget.domain.model.repository.entries.IVehicleRepository;
+import br.com.webbudget.domain.model.repository.logbook.IFuelRepository;
 import br.com.webbudget.domain.model.repository.logbook.IRefuelingRepository;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -52,6 +54,8 @@ public class LogbookService {
     @Inject
     private MovementService movementService;
     
+    @Inject
+    private IFuelRepository fuelRepository;
     @Inject
     private IEntryRepository entryRepository;
     @Inject
@@ -184,6 +188,69 @@ public class LogbookService {
         if (!refueling.isFuelsValid()) {
             throw new InternalServiceError("error.refueling.invalid-fuels");
         }
+        
+        // pegamos a lista dos abastecimentos nao contabilizados e reservamos
+        final List<Refueling> unaccounteds = this.refuelingRepository
+                .findUnaccountedsForVehicle(refueling.getVehicle());
+        
+        // se nao e um tanque cheio, marcamos que sera contabilizado no proximo
+        // tanque cheio, se for, contabiliza a media do tanque
+        if (refueling.isFullTank()) {
+            
+            final int lastOdometer;
+            
+            // montamos o valor do ultimo odometro com base nas parciais ou 
+            // com base no ultimo odometro registrado com tanque cheio
+            if (!unaccounteds.isEmpty()) { 
+                lastOdometer = unaccounteds
+                        .stream()
+                        .sorted((r1, r2) -> Integer.compare(
+                                r1.getOdometer(), r2.getOdometer()))
+                        .findFirst()
+                        .get()
+                        .getOdometer();
+                
+                refueling.setFirstRefueling(lastOdometer == 0);
+                
+                // pega o total de litros utilizados 
+                BigDecimal liters = unaccounteds.stream()
+                        .map(Refueling::getLiters)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                
+                // adiciona os litros atuais e manda calcular a media
+                refueling.calculateAverageComsumption(lastOdometer, 
+                        liters.add(refueling.getLiters()));
+            } else {
+                lastOdometer = this.refuelingRepository
+                           .findLastOdometerForVehicle(refueling.getVehicle());
+                refueling.setFirstRefueling(lastOdometer == 0);
+                refueling.calculateAverageComsumption(lastOdometer);
+            }
+            
+            // seta os que nao estavam contabilizados como contabilizados
+            unaccounteds.stream().forEach(unaccounted -> {
+                unaccounted.setAccounted(true);
+                unaccounted.setAccountedBy(refueling.getCode());
+                this.refuelingRepository.save(unaccounted);
+            });
+            
+            // marca o abastecimento atual como contabilizado
+            refueling.setAccounted(true);
+        } else {
+            refueling.setAccounted(false);
+        }
+        
+        // salvamos o abastecimento
+        final Refueling saved = this.refuelingRepository.save(refueling);
+        
+        // salvamos os combustiveis
+        refueling.getFuels().stream().forEach(fuel -> {
+            fuel.setRefueling(saved);
+            this.fuelRepository.save(fuel);
+        });
+        
+        // TODO gerar o movimento financeiro
+        // TODO atualizar o odometro do carro
     }
 
     /**
@@ -193,6 +260,26 @@ public class LogbookService {
     @Transactional
     public void deleteRefueling(Refueling refueling) {
         
+        // verifica se estamos deletando o ultimo abastecimento
+        if (!this.refuelingRepository.isLast(refueling)) {
+            throw new InternalServiceError("error.refueling.not-last");
+        }
+        
+        // lista os contabilizados por esta abastecimento que queremos deletar        
+        final List<Refueling> accounteds = this.refuelingRepository
+                .listAccountedsBy(refueling.getCode());
+        
+        // volta os contabilizados para nao contabilizados
+        accounteds.stream().forEach(accounted -> {
+            accounted.setAccounted(false);
+            accounted.setAccountedBy(null);
+            this.refuelingRepository.save(refueling);
+        });
+        
+        // deleta o abastecimento
+        this.refuelingRepository.delete(refueling);
+        
+        // TODO ecluir o movimento financeiro
     }
     
     /**

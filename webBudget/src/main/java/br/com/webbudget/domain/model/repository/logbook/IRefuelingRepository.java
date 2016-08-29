@@ -19,7 +19,9 @@ package br.com.webbudget.domain.model.repository.logbook;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.domain.model.entity.logbook.Refueling;
+import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.repository.IGenericRepository;
+import java.util.List;
 
 /**
  *
@@ -30,6 +32,34 @@ import br.com.webbudget.domain.model.repository.IGenericRepository;
  */
 public interface IRefuelingRepository extends IGenericRepository<Refueling, Long> {
 
+    /**
+     * 
+     * @param refueling
+     * @return 
+     */
+    public boolean isLast(Refueling refueling);
+
+    /**
+     * 
+     * @param code
+     * @return 
+     */
+    public List<Refueling> listAccountedsBy(String code);
+    
+    /**
+     * 
+     * @param vehicle
+     * @return 
+     */
+    public int findLastOdometerForVehicle(Vehicle vehicle);
+    
+    /**
+     * 
+     * @param vehicle
+     * @return 
+     */
+    public List<Refueling> findUnaccountedsForVehicle(Vehicle vehicle);
+    
     /**
      * 
      * @param filter

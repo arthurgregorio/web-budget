@@ -72,8 +72,56 @@
                 </div>
 
                 <div class="box-body row">
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="row">
+                            <div class="form-group col-md-4">
+                                <p:outputLabel for="inVehicle" 
+                                               value="#{messages['refueling.form.vehicle']}: "/>
+                                <p:selectOneMenu id="inVehicle"
+                                                 value="#{refuelingBean.refueling.vehicle}"
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <p:ajax event="change" 
+                                            update="inMovementClass"
+                                            listener="#{refuelingBean.onVehicleSelect()}" />                                    
+                                    <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
+                                                  itemLabel="#{menu['select-one']}" />
+                                    <f:selectItems var="vehicle" 
+                                                   itemValue="#{vehicle}"
+                                                   value="#{refuelingBean.vehicles}" 
+                                                   itemLabel="#{vehicle.identification}"/> 
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <p:outputLabel for="inMovementClass" 
+                                               value="#{messages['refueling.form.movement-class']}: "/>
+                                <p:selectOneMenu id="inMovementClass" 
+                                                 value="#{refuelingBean.refueling.movementClass}" 
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
+                                                  itemLabel="#{menu['select-one']}" />
+                                    <f:selectItems var="movementClass" 
+                                                   itemValue="#{movementClass}"
+                                                   itemLabel="#{movementClass.name}"
+                                                   value="#{refuelingBean.movementClasses}" /> 
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <p:outputLabel for="inPeriod" 
+                                               value="#{messages['refueling.form.launch-period']}: "/>
+                                <p:selectOneMenu id="inPeriod" 
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 value="#{refuelingBean.refueling.financialPeriod}">
+                                    <f:selectItems var="period" 
+                                                   itemValue="#{period}"
+                                                   value="#{refuelingBean.openPeriods}"
+                                                   itemLabel="#{period.expired eq true 
+                                                                ? period.identification.concat(' - ')
+                                                                .concat(messages['refueling.form.expired']) 
+                                                                : period.identification}" /> 
+                                </p:selectOneMenu>
+                            </div>
                             <div class="form-group col-md-3">
                                 <p:outputLabel for="inEventDate" 
                                                value="#{messages['refueling.form.refueling-date']}: "/>
@@ -101,39 +149,41 @@
                                              styleClass="form-control"
                                              value="#{refuelingBean.refueling.place}" />
                             </div>
-                            <div class="form-group col-md-6">
-                                <p:outputLabel for="inMovementClass" 
-                                               value="#{messages['refueling.form.movement-class']}: "/>
-                                <p:selectOneMenu id="inMovementClass" 
-                                                 value="#{refuelingBean.refueling.movementClass}" 
-                                                 converter="omnifaces.SelectItemsConverter">
-                                    <f:selectItem itemValue="#{null}"
-                                                  noSelectionOption="true"
-                                                  itemLabel="#{menu['select-one']}" />
-                                    <f:selectItems var="movementClass" 
-                                                   itemValue="#{movementClass}"
-                                                   itemLabel="#{movementClass.name}"
-                                                   value="#{refuelingBean.movementClasses}" /> 
-                                </p:selectOneMenu>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <p:outputLabel for="inPeriod" 
-                                               value="#{messages['refueling.form.launch-period']}: "/>
-                                <p:selectOneMenu id="inPeriod" 
-                                                 converter="omnifaces.SelectItemsConverter"
-                                                 value="#{refuelingBean.refueling.financialPeriod}">
-                                    <f:selectItems var="period" 
-                                                   itemValue="#{period}"
-                                                   value="#{refuelingBean.openPeriods}"
-                                                   itemLabel="#{period.expired eq true 
-                                                                ? period.identification.concat(' - ')
-                                                                .concat(messages['refueling.form.expired']) 
-                                                                : period.identification}" /> 
-                                </p:selectOneMenu>
-                            </div>
+                            <p:fragment id="totalsBox">
+                                <div class="form-group col-md-4">
+                                    <p:outputLabel for="inTotalCost" 
+                                                   value="#{messages['refueling.form.total-cost']}: "/>
+                                    <p:inputText id="inTotalCost" 
+                                                 readonly="true"
+                                                 styleClass="form-control"
+                                                 value="#{refuelingBean.refueling.cost}" >
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </p:inputText>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <p:outputLabel for="inCostPerLiter" 
+                                                   value="#{messages['refueling.form.cost-liter']}: "/>
+                                    <p:inputText id="inCostPerLiter" 
+                                                 readonly="true"
+                                                 styleClass="form-control"
+                                                 value="#{refuelingBean.refueling.costPerLiter}" >
+                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                    </p:inputText>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <p:outputLabel for="inLiters" 
+                                                   value="#{messages['refueling.form.liters']}: "/>
+                                    <p:inputText id="inLiters" 
+                                                 readonly="true"
+                                                 styleClass="form-control"
+                                                 value="#{refuelingBean.refueling.liters}" >
+                                        <f:convertNumber pattern="#0.00" />
+                                    </p:inputText>
+                                </div>
+                            </p:fragment>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="form-group col-md-8">
                             <h4>#{messages['refueling.form.fuels']}</h4>
                         </div>
@@ -156,6 +206,11 @@
                                          value="#{refuelingBean.refueling.fuels}"
                                          emptyMessage="#{messages['list.empty']}">
 
+                                <p:ajax process="@this"
+                                        event="cellEdit" 
+                                        update="totalsBox"
+                                        listener="#{refuelingBean.refueling.totalize()}" />
+                                
                                 <p:column styleClass="align-center"
                                           headerText="#{messages['fuel.list.type']}">
                                     <p:cellEditor>
@@ -215,9 +270,9 @@
                                           styleClass="align-center"
                                           headerText="#{menu['actions']}">
                                     <p:commandButton immediate="true"
-                                                     update="fuelsList"
                                                      icon="fa fa-remove"
                                                      title="#{menu['delete']}"
+                                                     update="fuelsList totalsBox"
                                                      styleClass="btn btn-flat btn-default"
                                                      actionListener="#{refuelingBean.refueling.deleteFuel(fuel)}" />
                                 </p:column>

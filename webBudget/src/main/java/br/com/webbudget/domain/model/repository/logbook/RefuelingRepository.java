@@ -19,11 +19,14 @@ package br.com.webbudget.domain.model.repository.logbook;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.domain.model.entity.logbook.Refueling;
+import br.com.webbudget.domain.model.entity.logbook.Vehicle;
 import br.com.webbudget.domain.model.repository.GenericRepository;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -36,13 +39,90 @@ public class RefuelingRepository extends GenericRepository<Refueling, Long> impl
 
     /**
      * 
-     * @param filter
-     * @param pageRequest
+     * @param refueling
      * @return 
      */
     @Override
-    public Page<Refueling> listLazily(String filter, PageRequest pageRequest) {
+    public boolean isLast(Refueling refueling) {
+        
+        Criteria criteria = this.createCriteria();
+        
+        criteria.createAlias("vehicle", "ve");
+        criteria.add(Restrictions.eq("ve.id", refueling.getVehicle().getId()));
+        criteria.setProjection(Projections.max("id"));
+        
+        Object maxId = criteria.uniqueResult();
+        
+        if (maxId != null) {
+            return refueling.getId().equals((Long) maxId);
+        }
+        return true;
+    }
+    
+    /**
+     * 
+     * @param code
+     * @return 
+     */
+    @Override
+    public List<Refueling> listAccountedsBy(String code) {
        
+        final Criteria criteria = this.createCriteria();
+        
+        criteria.add(Restrictions.eq("accountedBy", code));
+        
+        return criteria.list();
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public int findLastOdometerForVehicle(Vehicle vehicle) {
+
+        Criteria criteria = this.createCriteria();
+
+        criteria.createAlias("vehicle", "ve");
+        criteria.add(Restrictions.eq("ve.id", vehicle.getId()));
+        criteria.setProjection(Projections.max("id"));
+
+        Object maxId = criteria.uniqueResult();
+
+        if (maxId != null) {
+            criteria = this.createCriteria();
+            criteria.add(Restrictions.eq("id", (Long) maxId));
+            return ((Refueling) criteria.uniqueResult()).getOdometer();
+        }
+        return 0;
+    }
+
+    /**
+     * 
+     * @param vehicle
+     * @return 
+     */
+    @Override
+    public List<Refueling> findUnaccountedsForVehicle(Vehicle vehicle) {
+       
+        final Criteria criteria = this.createCriteria();
+        
+        criteria.createAlias("vehicle", "ve");
+        criteria.add(Restrictions.eq("ve.id", vehicle.getId()));
+        criteria.add(Restrictions.eq("accounted", false));
+        
+        return criteria.list();
+    }
+    
+    /**
+     *
+     * @param filter
+     * @param pageRequest
+     * @return
+     */
+    @Override
+    public Page<Refueling> listLazily(String filter, PageRequest pageRequest) {
+
         final Criteria criteria = this.createCriteria();
 
         if (StringUtils.isNotBlank(filter)) {

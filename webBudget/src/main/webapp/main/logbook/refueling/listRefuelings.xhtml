@@ -105,9 +105,19 @@
                     <p:column width="12%"
                               styleClass="align-center" 
                               headerText="#{messages['refueling.list.average-consumption']}">
-                        <h:outputText value="#{refueling.liters} Km/L">
+                        <h:outputText rendered="#{refueling.fullTank 
+                                                  and not refueling.firstRefueling}"
+                                      value="#{refueling.averageConsumption} Km/L">
                             <f:convertNumber pattern="#0.00" />
                         </h:outputText>
+                        <span class="text text-info text-bold"
+                              jsf:rendered="#{refueling.firstRefueling}">
+                            #{messages['refueling.first']}
+                        </span>
+                        <span class="text text-warning text-bold"
+                              jsf:rendered="#{not refueling.fullTank}">
+                            #{messages['refueling.partial']}
+                        </span>
                     </p:column>
 
                     <p:column width="15%" 

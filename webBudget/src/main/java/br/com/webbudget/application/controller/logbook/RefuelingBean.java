@@ -22,6 +22,7 @@ import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
+import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.entity.logbook.FuelType;
 import br.com.webbudget.domain.model.entity.logbook.Refueling;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
@@ -113,6 +114,9 @@ public class RefuelingBean extends AbstractBean {
 
         // pegamos os periodos financeiros em aberto
         this.openPeriods = this.periodService.listOpenFinancialPeriods();
+        
+        // lista os veiculos disponiveis
+        this.vehicles = this.logbookService.listVehicles(false);
 
         this.viewState = ViewState.ADDING;
         this.refueling = new Refueling();
@@ -159,7 +163,6 @@ public class RefuelingBean extends AbstractBean {
      *
      */
     public void doSave() {
-
         try {
             this.logbookService.saveRefueling(this.refueling);
             this.refueling = new Refueling();
@@ -176,7 +179,6 @@ public class RefuelingBean extends AbstractBean {
      *
      */
     public void doDelete() {
-
         try {
             this.logbookService.deleteRefueling(this.refueling);
             this.addInfo(true, "refueling.deleted");
@@ -191,6 +193,14 @@ public class RefuelingBean extends AbstractBean {
         }
     }
 
+    /**
+     * Quando um veiculo eh selecionado, carregamos aqui as classes do CC 
+     */
+    public void onVehicleSelect() {
+        this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
+                this.refueling.getCostCenter(), MovementClassType.OUT);
+    }
+    
     /**
      * @return os tipos de combustivel disponiveis para selecao
      */

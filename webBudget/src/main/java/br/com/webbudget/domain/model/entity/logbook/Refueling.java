@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.model.entity.logbook;
 
 import br.com.webbudget.application.converter.JPALocalDateConverter;
+import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
@@ -26,21 +27,25 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import static javax.persistence.FetchType.EAGER;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  * Classe que representa o abastecimento de um veiculo
@@ -61,6 +66,18 @@ public class Refueling extends PersistentEntity {
     private String code;
     @Getter
     @Setter
+    @Column(name = "accounted", nullable = false)
+    private boolean accounted;
+    @Getter
+    @Setter
+    @Column(name = "accounted_by")
+    private String accountedBy;
+    @Getter
+    @Setter
+    @Column(name = "first_refueling", nullable = false)
+    private boolean firstRefueling;
+    @Getter
+    @Setter
     @Column(name = "full_tank", nullable = false)
     private boolean fullTank;
     @Getter
@@ -68,6 +85,10 @@ public class Refueling extends PersistentEntity {
     @Min(value = 1, message = "{refueling.odometer}")
     @Column(name = "odometer", nullable = false)
     private int odometer;
+    @Getter
+    @Setter
+    @Column(name = "average_consumption")
+    private BigDecimal averageConsumption;
     @Getter
     @Setter
     @Column(name = "liters", nullable = false)
@@ -78,7 +99,7 @@ public class Refueling extends PersistentEntity {
     private BigDecimal cost;
     @Getter
     @Setter
-    @Column(name = "cost_per_litre", nullable = false)
+    @Column(name = "cost_per_liter", nullable = false)
     private BigDecimal costPerLiter;
     @Getter
     @Setter
@@ -114,10 +135,8 @@ public class Refueling extends PersistentEntity {
     @NotNull(message = "{refueling.financial-period}")
     private FinancialPeriod financialPeriod;
 
-    @Getter
-    @Setter
-    @Transient
-    @NotEmpty(message = "{refueling.fuels}")
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "refueling", fetch = EAGER, cascade = REMOVE)
     private List<Fuel> fuels;
 
     /**
@@ -128,6 +147,7 @@ public class Refueling extends PersistentEntity {
         this.code = ApplicationUtils.createRamdomCode(6, false);
         
         this.fullTank = true;
+        this.accounted = false;
         
         this.eventDate = LocalDate.now();
         
@@ -136,6 +156,13 @@ public class Refueling extends PersistentEntity {
         this.costPerLiter = BigDecimal.ZERO;
         
         this.fuels = new ArrayList<>();
+    }
+
+    /**
+     * @return uma lista nao modificavel dos combustiveis
+     */
+    public List<Fuel> getFuels() {
+        return Collections.unmodifiableList(this.fuels);
     }
 
     /**
@@ -189,7 +216,7 @@ public class Refueling extends PersistentEntity {
                     .stream()
                     .filter(Fuel::isInvalid)
                     .findAny()
-                    .get();
+                    .orElse(null);
             valid = (fuel == null);
         }
         return valid;
@@ -198,7 +225,7 @@ public class Refueling extends PersistentEntity {
     /**
      * Totaliza os valores referentes aos combustiveis
      */
-    private void totalize() {
+    public void totalize() {
         
         // calcula o total em reais 
         this.cost = this.fuels
@@ -215,6 +242,40 @@ public class Refueling extends PersistentEntity {
         // calcula o custo por litro
         if (this.cost != BigDecimal.ZERO && this.liters != BigDecimal.ZERO) {
             this.costPerLiter = this.cost.divide(this.liters, RoundingMode.CEILING);
+        } else {
+            this.costPerLiter = BigDecimal.ZERO;
+        }
+    }
+
+    /**
+     * Metodo utilizado para calcular a media de consumo ate o abastecimento
+     * 
+     * @param lastOdometer o ultimo odometro registrado
+     */
+    public void calculateAverageComsumption(int lastOdometer) {
+        if (!this.firstRefueling) {
+            if (lastOdometer >= this.odometer) {
+                throw new InternalServiceError("error.refueling.last-odometer-invalid");
+            }
+            this.averageConsumption = new BigDecimal(
+                    (this.odometer - lastOdometer) / this.liters.doubleValue());
+        }
+    }
+    
+    /**
+     * Metodo utilizado para calcular a media de consumo ate o abastecimento 
+     * quando temos abastecimentos anteriores em estado parcial, sem media
+     * 
+     * @param lastOdometer o total do odometro percorrido
+     * @param liters a quantidade total de litros
+     */
+    public void calculateAverageComsumption(int lastOdometer, BigDecimal liters) {
+        if (!this.firstRefueling) {
+            if (lastOdometer >= this.odometer) {
+                throw new InternalServiceError("error.refueling.last-odometer-invalid");
+            }
+            this.averageConsumption = new BigDecimal(
+                    (this.odometer - lastOdometer) / liters.doubleValue());
         }
     }
 }

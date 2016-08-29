@@ -81,15 +81,9 @@
                     </h:form>
                 </div>
                 <div class="col-sm-7 align-right">
-                    <div class="input-group">
-                        <h4>Incluir um novo:</h4>
-                        <div class="input-group-btn">
-                            <p:spacer width="10"/>
-                            <p:commandButton value="#{menu['entry.entry']}"
-                                             styleClass="btn btn-flat btn-info" 
-                                             action="#{entryBean.changeToAddEntry()}" />
-                        </div>
-                    </div>
+                    <p:commandButton value="#{menu['add']}"
+                                     styleClass="btn btn-flat btn-info" 
+                                     action="#{entryBean.changeToAddEntry()}" />
                 </div>
             </div>
         </div>

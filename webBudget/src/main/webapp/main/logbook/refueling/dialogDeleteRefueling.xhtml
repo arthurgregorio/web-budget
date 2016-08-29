@@ -19,19 +19,19 @@
           xmlns:p="http://primefaces.org/ui"
           xmlns:o="http://omnifaces.org/ui"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
-          id="deleteVehicleDialog"
+          id="deleteRefuelingDialog"
           modal="true"
           resizable="false" 
           closeOnEscape="true"
-          widgetVar="dialogDeleteVehicle" 
-          header="#{messages['vehicle.delete-dialog.title']}">
+          widgetVar="dialogDeleteRefueling" 
+          header="#{messages['refueling.delete-dialog.title']}">
 
     <div class="row">
         <div class="col-sm-12">
             <h4>
                 <o:outputFormat escape="false" 
-                                value="#{messages['vehicle.delete-dialog.advice']}">
-                    <f:param value="#{vehicleBean.vehicle.identification}" />
+                                value="#{messages['refueling.delete-dialog.advice']}">
+                    <f:param value="#{refuelingBean.refueling.vehicleIdentification}" />
                 </o:outputFormat>
             </h4>
         </div>
@@ -40,11 +40,11 @@
         <div class="col-sm-12 dialog-controls-box">
             <p:commandButton value="#{menu['yes']}"
                              styleClass="btn btn-flat btn-danger" 
-                             action="#{vehicleBean.doDelete()}"/>
+                             action="#{refuelingBean.doDelete()}"/>
             <p:spacer width="10"/>
             <p:commandButton value="#{menu['no']}"
                              styleClass="btn btn-flat btn-default"
-                             onclick="closeDialog('dialogDeleteVehicle')" />
+                             onclick="closeDialog('dialogDeleteRefueling')" />
         </div>
     </div>
 </p:dialog>
