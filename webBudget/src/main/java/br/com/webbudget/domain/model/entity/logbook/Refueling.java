@@ -25,6 +25,7 @@ import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -277,5 +278,22 @@ public class Refueling extends PersistentEntity {
             this.averageConsumption = new BigDecimal(
                     (this.odometer - lastOdometer) / liters.doubleValue());
         }
+    }
+
+    /**
+     * @return a descricao para o movimento
+     */
+    public String createMovementDescription() {
+        
+        final StringBuilder builder = new StringBuilder();
+        
+        builder.append(this.code);
+        builder.append(" - ");
+        builder.append(this.vehicle.getIdentification());
+        builder.append(",  ");
+        builder.append(NumberFormat.getNumberInstance().format(this.liters));
+        builder.append("lts");
+        
+        return builder.toString();
     }
 }
