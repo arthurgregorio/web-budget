@@ -36,4 +36,4 @@ import javax.inject.Qualifier;
 @Qualifier
 @Retention(RUNTIME)
 @Target({TYPE, FIELD, METHOD, PARAMETER})
-public @interface MovementDeleted { }
+public @interface DeleteMovement { }

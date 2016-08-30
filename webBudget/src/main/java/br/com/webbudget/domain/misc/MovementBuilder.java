@@ -30,18 +30,16 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 2.1.0, 27/09/2015
  */
-public final class MovementBuilder {
-
-    private final Movement movement;
+public final class MovementBuilder extends Builder<Movement> {
 
     /**
      * Inicializa o movimento a ser construido
      */
     public MovementBuilder() {
-        this.movement = new Movement();
+        this.value = new Movement();
     }
 
     /**
@@ -49,63 +47,63 @@ public final class MovementBuilder {
      * @return este builder
      */
     public MovementBuilder withValue(BigDecimal value) {
-        this.movement.setValue(value);
-        return this;
-    }
-    
-    /**
-     * @param description a sua descricao
-     * @return este builder
-     */
-    public MovementBuilder withDescription(String description) {
-        this.movement.setDescription(description);
-        return this;
-    }
-    
-    /**
-     * @param dueDate a sua data de vencimento
-     * @return este builder
-     */
-    public MovementBuilder withDueDate(LocalDate dueDate) {
-        this.movement.setDueDate(dueDate);
-        return this;
-    }
-    
-    /**
-     * @param financialPeriod o periodo que vamos usar no moviemento
-     * @return este builder
-     */
-    public MovementBuilder inTheFinancialPeriod(FinancialPeriod financialPeriod) {
-        this.movement.setFinancialPeriod(financialPeriod);
+        this.value.setValue(value);
         return this;
     }
 
     /**
-     * @param apportionment o rateio a ser adicionado
-     * @return o builder
-     */
-    public MovementBuilder addingApportiomentOf(Apportionment apportionment) {
-        this.movement.addApportionment(apportionment.copy());
-        return this;
-    }
-    
-    /**
-     * @param apportionments os rateios 
+     * @param description a sua descricao
      * @return este builder
      */
-    public MovementBuilder andDividedAmong(List<Apportionment> apportionments) {
+    public MovementBuilder describedBy(String description) {
+        this.value.setDescription(description);
+        return this;
+    }
+
+    /**
+     * @param dueDate a sua data de vencimento
+     * @return este builder
+     */
+    public MovementBuilder onDueDate(LocalDate dueDate) {
+        this.value.setDueDate(dueDate);
+        return this;
+    }
+
+    /**
+     * @param financialPeriod o periodo que vamos usar no moviemento
+     * @return este builder
+     */
+    public MovementBuilder inThePeriodOf(FinancialPeriod financialPeriod) {
+        this.value.setFinancialPeriod(financialPeriod);
+        return this;
+    }
+
+    /**
+     * @param builder o builder de rateios
+     * @return este builder
+     */
+    public MovementBuilder dividedAmong(ApportionmentBuilder builder) {
+        this.value.addApportionment(builder.build());
+        return this;
+    }
+
+    /**
+     * @param apportionments os rateios
+     * @return este builder
+     */
+    public MovementBuilder dividedAmong(List<Apportionment> apportionments) {
         apportionments
                 .stream()
                 .forEach(apportionment -> {
-            this.movement.addApportionment(apportionment.copy());
-        });
+                    this.value.addApportionment(apportionment.copy());
+                });
         return this;
     }
     
     /**
-     * @return uma instancia de movimento com os itens preenchidos
+     * @return o codigo do movimento gerado
      */
-    public Movement build() {
-        return this.movement;
+    public String getMovementCode() {
+        return this.value.getCode();
     }
 }

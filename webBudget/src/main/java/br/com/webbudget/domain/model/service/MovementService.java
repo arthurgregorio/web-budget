@@ -39,7 +39,12 @@ import br.com.webbudget.domain.misc.events.UpdateBalance;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
+import br.com.webbudget.domain.misc.events.CreateMovement;
+import br.com.webbudget.domain.misc.events.DeleteMovement;
 import br.com.webbudget.domain.misc.events.MovementDeleted;
+import br.com.webbudget.domain.misc.events.MovementPaid;
+import br.com.webbudget.domain.misc.events.MovementSaved;
+import br.com.webbudget.domain.misc.events.MovementUpdated;
 import br.com.webbudget.domain.model.repository.entries.ICardInvoiceRepository;
 import br.com.webbudget.domain.model.repository.financial.IApportionmentRepository;
 import br.com.webbudget.domain.model.repository.entries.ICostCenterRepository;
@@ -70,10 +75,6 @@ import br.com.webbudget.domain.misc.events.PeriodOpened;
 public class MovementService {
 
     @Inject
-    @UpdateBalance
-    private Event<BalanceBuilder> updateBalanceEvent;
-
-    @Inject
     private ILaunchRepository launchRepository;
     @Inject
     private IPaymentRepository paymentRepository;
@@ -94,8 +95,21 @@ public class MovementService {
     private FinancialPeriodService financialPeriodService;
     
     @Inject
+    @MovementPaid
+    private Event<String> movementPaidEvent;
+    @Inject
+    @MovementSaved
+    private Event<String> movementSavedEvent;
+    @Inject
+    @MovementUpdated
+    private Event<String> movementUpdatedEvent;
+    @Inject
     @MovementDeleted
-    private Event<String> deletedMovementEvent;
+    private Event<String> movementDeletedEvent;
+    
+    @Inject
+    @UpdateBalance
+    private Event<BalanceBuilder> updateBalanceEvent;
 
     /**
      *
@@ -216,8 +230,21 @@ public class MovementService {
             apportionment.setMovement(movement);
             this.apportionmentRepository.save(apportionment);
         }
+        
+        // dispara um evento informando que um movimento foi salvo
+        this.movementSavedEvent.fire(movement.getCode());
     }
-
+    
+    /**
+     * Metodo que observa pedidos de inclusao de movimentos
+     * 
+     * @param builder o builder dos movimentos
+     */
+    @Transactional
+    public void saveMovement(@Observes @CreateMovement MovementBuilder builder) {
+        this.saveMovement(builder.build());
+    }
+    
     /**
      * Atualiza o movimento
      *
@@ -252,6 +279,9 @@ public class MovementService {
         movement.getApportionments().clear();
         movement.setApportionments(new ArrayList<>(
                 this.apportionmentRepository.listByMovement(movement)));
+        
+        // dispara um evento informando que o movimento foi atualizado
+        this.movementUpdatedEvent.fire(movement.getCode());
         
         return movement;
     }
@@ -341,6 +371,9 @@ public class MovementService {
 
             this.updateBalanceEvent.fire(builder);
         }
+        
+        // dispara um evento informando que o movimento foi pago
+        this.movementPaidEvent.fire(movement.getCode());
     }
 
     /**
@@ -405,7 +438,25 @@ public class MovementService {
         this.movementRepository.delete(movement);
         
         // dispara o evento indicando que o movimento foi deletado
-        this.deletedMovementEvent.fire(movement.getCode());
+        this.movementDeletedEvent.fire(movement.getCode());
+    }
+    
+    /**
+     * Escuta por possiveis pedidos de exclusao de movimentos via evento
+     * 
+     * @param code o codigo do movimento a ser deletado
+     */
+    @Transactional
+    public void deleteMovement(@Observes @DeleteMovement String code) {
+        
+        // busca o movimento
+        final Movement movement = this.movementRepository.findByCode(code);
+
+        // checa e se achar, envia para exclusao
+        if (movement == null) {
+            throw new InternalServiceError("error.movement.not-found", code);
+        }
+        this.deleteMovement(movement);
     }
 
     /**
@@ -577,10 +628,10 @@ public class MovementService {
 
                     movementBuilder
                             .withValue(fixedMovement.getValue())
-                            .withDueDate(period.getEnd())
-                            .withDescription(fixedMovement.getDescription())
-                            .inTheFinancialPeriod(period)
-                            .andDividedAmong(fixedMovement.getApportionments());
+                            .onDueDate(period.getEnd())
+                            .describedBy(fixedMovement.getDescription())
+                            .inThePeriodOf(period)
+                            .dividedAmong(fixedMovement.getApportionments());
 
                     final Movement movement = 
                             this.updateMovement(movementBuilder.build());
