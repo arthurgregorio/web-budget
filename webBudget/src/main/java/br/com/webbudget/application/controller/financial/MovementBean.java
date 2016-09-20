@@ -307,6 +307,11 @@ public class MovementBean extends AbstractBean {
         
         final Payment payment = new Payment();
        
+        if (!this.movement.hasValueToDivide()) {
+            this.addError(true, "error.movement.no-apportionment");
+            return;
+        }
+        
         // se for um lancamento, pega a data de incio como data de pagamento
         if (this.movement.getLaunch() != null) {
             payment.setPaymentDate(this.movement.getLaunch().getStartDate());
