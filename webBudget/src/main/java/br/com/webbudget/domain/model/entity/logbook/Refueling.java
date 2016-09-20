@@ -287,9 +287,9 @@ public class Refueling extends PersistentEntity {
         
         final StringBuilder builder = new StringBuilder();
         
-        builder.append(this.code);
-        builder.append(" - ");
         builder.append(this.vehicle.getIdentification());
+        builder.append(" - ");
+        builder.append(this.movementClass.getName());
         builder.append(",  ");
         builder.append(NumberFormat.getNumberInstance().format(this.liters));
         builder.append("lts");

@@ -387,7 +387,7 @@ public class MovementService {
         if (movement.isCardInvoicePaid()) {
             throw new InternalServiceError("error.movement.paid-invoice");
         }
-
+        
         // se for movimento fixo e for a ultima parcela reabre o movimento fixo
         if (movement.isLastLaunch()) {
             final FixedMovement fixedMovement = 
@@ -456,6 +456,12 @@ public class MovementService {
         if (movement == null) {
             throw new InternalServiceError("error.movement.not-found", code);
         }
+        
+        // checa se o periodo permite deletar o movimento
+        if (movement.getFinancialPeriod().isClosed()) {
+            throw new InternalServiceError("error.movement.closed-period", code);
+        }
+        
         this.deleteMovement(movement);
     }
 

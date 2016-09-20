@@ -58,6 +58,21 @@ public class RefuelingRepository extends GenericRepository<Refueling, Long> impl
         }
         return true;
     }
+
+    /**
+     * 
+     * @param code
+     * @return 
+     */
+    @Override
+    public Refueling findByMovementCode(String code) {
+        
+        final Criteria criteria = this.createCriteria();
+        
+        criteria.add(Restrictions.eq("movementCode", code));
+        
+        return (Refueling) criteria.uniqueResult();
+    }
     
     /**
      * 

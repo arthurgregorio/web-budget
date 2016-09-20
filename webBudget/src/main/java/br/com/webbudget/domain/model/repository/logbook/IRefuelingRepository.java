@@ -38,6 +38,13 @@ public interface IRefuelingRepository extends IGenericRepository<Refueling, Long
      * @return 
      */
     public boolean isLast(Refueling refueling);
+    
+    /**
+     * 
+     * @param code
+     * @return 
+     */
+    public Refueling findByMovementCode(String code);
 
     /**
      * 

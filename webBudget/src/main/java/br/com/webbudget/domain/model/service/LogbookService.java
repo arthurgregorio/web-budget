@@ -44,6 +44,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Servico para executar as operacoes pertinentes ao diario de bordo
@@ -259,15 +260,13 @@ public class LogbookService {
                         .withMovementClass(saved.getMovementClass())
                         .withValue(saved.getCost()));
 
-        refueling.setMovementCode(builder.getMovementCode());
+        saved.setMovementCode(builder.getMovementCode());
 
         // invoca inclusao do movimento
         this.createMovementEvent.fire(builder);
         
         // atualiza o codigo do movimento no abastecimento
         this.refuelingRepository.save(saved);
-
-        // TODO atualizar o odometro do carro
     }
 
     /**
@@ -296,7 +295,11 @@ public class LogbookService {
         // deleta o abastecimento
         this.refuelingRepository.delete(refueling);
 
-        // TODO ecluir o movimento financeiro
+        // dispara o evento para deletar o movimento caso ainda haja movimento
+        // vinculado a este abastecimento
+        if (StringUtils.isNotBlank(refueling.getMovementCode())) {
+            this.deleteMovementEvent.fire(refueling.getMovementCode());
+        }
     }
 
     /**
@@ -305,7 +308,7 @@ public class LogbookService {
      *
      * @param code o codigo do movimento
      */
-    public void whenMovementDeleted(@Observes @MovementDeleted String code) {
+    public void whenEntryMovementDeleted(@Observes @MovementDeleted String code) {
 
         // procura pelo registro
         final Entry entry = this.entryRepository.findByMovementCode(code);
@@ -318,9 +321,26 @@ public class LogbookService {
             entry.setFinancialPeriod(null);
             entry.setMovementCode(null);
 
-            // salva!
             this.entryRepository.save(entry);
         }
+    }
+    
+    /**
+     * Escuta o evento de delecao de um movimento para verificar se o mesmo 
+     * pertence a um abastecimento, se sim, limpa a flag do codigo do movimento
+     * vinculado a ele
+     * 
+     * @param code o codigo do movimento deletado
+     */
+    public void whenRefuelingMovementDeleted(@Observes @MovementDeleted String code) {
+        
+        final Refueling refueling = this.refuelingRepository.findByMovementCode(code);
+        
+        // se achar, limpa a flag e salva
+        if (refueling != null) {
+            refueling.setMovementCode(null);
+            this.refuelingRepository.save(refueling);
+        }        
     }
 
     /**
