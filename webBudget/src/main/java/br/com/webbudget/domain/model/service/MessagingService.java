@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.model.service;
 
+import br.com.webbudget.application.channels.WebSocketSessions;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
@@ -49,6 +50,9 @@ public class MessagingService {
     private AccountService accountService;
 
     @Inject
+    private WebSocketSessions sessions;
+    
+    @Inject
     private IMessageRepository messageRepository;
     @Inject
     private IUserMessageRepository userMessageRepository;
@@ -76,6 +80,9 @@ public class MessagingService {
         for (User recipient : recipients) {
             this.userMessageRepository.save(new UserMessage(recipient, message));
         }
+        
+        // notifica todas as sessoes abertas 
+        this.sessions.notifyOpenSessions();
     }
 
     /**

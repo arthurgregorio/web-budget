@@ -52,14 +52,11 @@
     <h:body styleClass="hold-transition sidebar-mini #{userSessionBean.authenticatedUserUI}">
 
         <h:form>
-            <p:remoteCommand async="true"
-                             autoRun="true"
-                             global="false"
-                             process="@this"
+            <p:remoteCommand autoRun="true"
                              name="updateMessages" 
                              update="userMessagesBox"
                              actionListener="#{messagingBean.updateMessageStatus()}"/>
-        </h:form>    
+        </h:form>
 
         <div class="wrapper">
             <header class="main-header">
@@ -401,7 +398,12 @@
         <ui:insert name="popups" />
 
         <script type="text/javascript">
-            window.setInterval("updateMessages()", 30000);
+            var messagesChannel = new WebSocket("#{viewManagerBean.messagesChannel}");
+            messagesChannel.onmessage = function(message) {
+                if (message.data === "newMessage") {
+                    updateMessages();
+                }
+            };
         </script>
 
         <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />

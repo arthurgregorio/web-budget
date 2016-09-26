@@ -77,7 +77,14 @@ public class ViewManagerBean {
         
         final StringBuilder builder = new StringBuilder();
         
-        builder.append(this.getBaseURL().replace("https", "wss"));
+        final String baseURL = this.getBaseURL();
+        
+        if (baseURL.contains("https")) {
+            builder.append(baseURL.replace("https", "wss"));
+        } else {
+            builder.append(baseURL.replace("http", "ws"));
+        }
+        
         builder.append("channels/messages");
         
         return builder.toString();
