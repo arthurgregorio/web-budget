@@ -105,7 +105,6 @@
             <div class="col-xs-12"
                  jsf:rendered="#{cardInvoiceBean.cardInvoice.hasMovements()}">
                 <wb:cardInvoice printVersion="false"
-                                beanHandler="#{cardInvoiceBean}"
                                 invoiceData="#{cardInvoiceBean.cardInvoice}"
                                 payInvoiceAction="#{cardInvoiceBean.moveInvoice()}"
                                 printInvoiceAction="#{cardInvoiceBean.changeToPrintInvoice()}"/>

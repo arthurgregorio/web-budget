@@ -141,5 +141,5 @@ no-padding {
 
 /* linha checada da fatura do cartao */
 .checked-line {
-    background-color: rgba(0, 166, 90, 0.41) !important;
+    background-color: #fecf34 !important;
 }

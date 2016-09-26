@@ -27,10 +27,6 @@
 
     <c:interface>
         <c:attribute required="true"
-                     name="beanHandler"
-                     type="java.lang.Object"/>
-
-        <c:attribute required="true"
                      name="printVersion" 
                      type="java.lang.Boolean"/>
 
@@ -120,9 +116,14 @@
                                         </td>
                                         <td style="width:10%">
                                             <p:link target="_blank"
+                                                    includeViewParams="true"
                                                     value="#{movement.code}" 
                                                     rendered="#{not cc.attrs.printVersion}"
-                                                    href="#{cc.attrs.beanHandler.changeToViewMovement(movement.id)}"/>
+                                                    outcome="/main/financial/movement/period/formMovement.xhtml">
+                                                <f:param name="movementId" value="#{movement.id}"/>
+                                                <f:param name="viewState" value="#{'DETAILING'}"/>
+                                                <f:param name="faces-redirect" value="#{true}"/>
+                                            </p:link>
                                             <h:outputText value="#{movement.code}"
                                                           rendered="#{cc.attrs.printVersion}"/>
                                         </td>
@@ -151,7 +152,7 @@
                 <div class="col-xs-6">
                     <p class="lead">
                         <o:outputFormat value="#{messages['card-invoice.movements-until']}">
-                            <f:param value="#{cc.attrs.beanHandler.actualDateAsString}"/>
+                            <f:param value="#{viewManagerBean.actualDate}"/>
                         </o:outputFormat>
                     </p>
                     <div class="table-responsive">

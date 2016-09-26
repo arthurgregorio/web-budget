@@ -129,17 +129,6 @@ public class CardInvoiceBean extends AbstractBean {
     }
     
     /**
-     * Redireciona o usuario para ver o movimento referente a fatura
-     * 
-     * @param movementId o id do movimento
-     * @return a URL para visualizar o movimento
-     */
-    public String changeToViewMovement(long movementId) {
-        return "../movement/formMovement.xhtml?faces-redirect=true"
-                + "&movementId=" + movementId + "&detailing=true";
-    }
-    
-    /**
      * @return muda para a impressao da fatura
      */
     public String changeToPrintInvoice() {
