@@ -296,4 +296,11 @@ public class Refueling extends PersistentEntity {
         
         return builder.toString();
     }
+
+    /**
+     * Atualiza o odometro do veiculo vinculado de acordo com o odometro atual
+     */
+    public void updateVehicleOdometer() {
+        this.vehicle.setOdometer(this.odometer);
+    }
 }

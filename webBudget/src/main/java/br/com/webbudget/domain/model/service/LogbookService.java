@@ -19,7 +19,6 @@ package br.com.webbudget.domain.model.service;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.domain.misc.ApportionmentBuilder;
-import br.com.webbudget.domain.misc.Builder;
 import br.com.webbudget.domain.misc.MovementBuilder;
 import br.com.webbudget.domain.misc.events.CreateMovement;
 import br.com.webbudget.domain.misc.events.DeleteMovement;
@@ -27,8 +26,6 @@ import br.com.webbudget.domain.misc.events.MovementDeleted;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
-import br.com.webbudget.domain.model.entity.financial.Apportionment;
-import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.model.entity.logbook.Entry;
 import br.com.webbudget.domain.model.entity.logbook.Refueling;
 import br.com.webbudget.domain.model.entity.logbook.Vehicle;
@@ -133,7 +130,6 @@ public class LogbookService {
             this.createMovementEvent.fire(builder);
         }
 
-        // verificamos se precisa atualizar a medida do odometro
         final int lastVehicleOdometer = this.vehicleRepository
                 .findLastOdometer(entry.getVehicle());
 
@@ -267,6 +263,15 @@ public class LogbookService {
         
         // atualiza o codigo do movimento no abastecimento
         this.refuelingRepository.save(saved);
+        
+        final int lastVehicleOdometer = this.vehicleRepository
+                .findLastOdometer(refueling.getVehicle());
+
+        // atualiza ou nao o odometro
+        if (refueling.getOdometer() > lastVehicleOdometer) {
+            refueling.updateVehicleOdometer();
+            this.vehicleRepository.save(refueling.getVehicle());
+        }
     }
 
     /**
@@ -301,7 +306,7 @@ public class LogbookService {
             this.deleteMovementEvent.fire(refueling.getMovementCode());
         }
     }
-
+    
     /**
      * Quando um movimento for deletado este evento escurtara por uma possivel
      * delecao de um evento vinculado com um registro do logbook
