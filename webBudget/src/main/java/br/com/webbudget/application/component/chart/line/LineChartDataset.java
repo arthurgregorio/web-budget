@@ -63,4 +63,11 @@ public class LineChartDataset<T> {
     public void addData(T data) {
         this.data.add(data);
     }
+    
+    /**
+     * @return se os dados estao ou nao vazios
+     */
+    public boolean isEmpty() {
+        return this.data.isEmpty();
+    }
 }

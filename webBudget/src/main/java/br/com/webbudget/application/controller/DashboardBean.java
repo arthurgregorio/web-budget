@@ -24,6 +24,7 @@ import br.com.webbudget.application.component.chart.line.LineChartModel;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.service.FinancialPeriodService;
 import br.com.webbudget.domain.model.service.MovementService;
+import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,9 @@ import lombok.Getter;
 @ViewScoped
 public class DashboardBean extends AbstractBean {
 
+    @Getter
+    private LineChartModel lineChartModel;
+    
     @Getter
     private BigDecimal accumulated;
     @Getter
@@ -108,7 +112,7 @@ public class DashboardBean extends AbstractBean {
      * @return a versao da aplicacao
      */
     public String getVersion() {
-        return ResourceBundle.getBundle("webbudget").getString("application.version");
+        return ApplicationUtils.getConfiguration("application.version");
     }
     
     /**
@@ -186,7 +190,7 @@ public class DashboardBean extends AbstractBean {
                 .withPointHighlightFillColor("#fff")
                 .withPointHighlightStroke("rgba(204,0,0,1)");
 
-        final LineChartModel chartModel = new LineChartModel();
+        this.lineChartModel = new LineChartModel();
 
         // ordena pela inclusao, do mais velho para o menos novo
         this.closedPeriods.sort((v1, v2) 
@@ -195,16 +199,18 @@ public class DashboardBean extends AbstractBean {
         // coloca o nome das series e os dados
         this.closedPeriods.stream().forEach(period -> {
 
-            chartModel.addLabel(period.getIdentification());
+            this.lineChartModel.addLabel(period.getIdentification());
 
             revenueDatasetBuilder.andData(period.getRevenuesTotal());
             expenseDatasetBuilder.andData(period.getExpensesTotal());
         });
 
-        chartModel.addDataset(revenueDatasetBuilder.build());
-        chartModel.addDataset(expenseDatasetBuilder.build());
+        this.lineChartModel.addDataset(revenueDatasetBuilder.build());
+        this.lineChartModel.addDataset(expenseDatasetBuilder.build());
 
-        this.drawLineChart("closingsChart", chartModel);
+        if (!this.lineChartModel.isEmptyChart()) {
+            this.drawLineChart("closingsChart", lineChartModel);
+        }
     }
 
     /**

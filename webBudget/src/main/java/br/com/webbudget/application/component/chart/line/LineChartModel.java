@@ -20,7 +20,6 @@ import br.com.webbudget.application.component.chart.AbstractChartModel;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Setter;
 
 /**
  *
@@ -33,7 +32,6 @@ public class LineChartModel extends AbstractChartModel {
     
     private final List<String> labels;
     
-    @Setter
     private final List<LineChartDataset> datasets;
 
     /**
@@ -56,6 +54,15 @@ public class LineChartModel extends AbstractChartModel {
      */
     public void addDataset(LineChartDataset chartDataset) {
         this.datasets.add(chartDataset);
+    }
+    
+    /**
+     * @return se todos os datasets forem vazios, este grafico e vazio
+     */
+    public boolean isEmptyChart() {
+        return this.datasets.size() == this.datasets.stream()
+                .filter(LineChartDataset::isEmpty)
+                .count();
     }
     
     /**

@@ -67,16 +67,20 @@
                                     <p class="text-center">
                                         <strong>#{messages['dashboard.periods-summary']}</strong>
                                     </p>
-
-                                    <div class="chart">
+                                    <div class="chart"
+                                         jsf:rendered="#{not dashboardBean.lineChartModel.emptyChart}">
                                         <canvas id="closingsChart" style="height: 245px;"></canvas>
+                                    </div>
+                                    <div class="chart" 
+                                         style="text-align: center; margin-top: 75px"
+                                         jsf:rendered="#{dashboardBean.lineChartModel.emptyChart}">
+                                        <h4>#{messages['dashboard.no-periods-summary']}</h4>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <p class="text-center">
                                         <strong>#{messages['dahsboard.goals']}</strong>
                                     </p>
-
                                     <div class="progress-group">
                                         <span class="progress-text">#{messages['dashboard.goal.credit-card']}</span>
                                         <span class="progress-number">
