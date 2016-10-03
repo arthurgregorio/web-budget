@@ -39,6 +39,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -86,6 +87,10 @@ public class Refueling extends PersistentEntity {
     @Min(value = 1, message = "{refueling.odometer}")
     @Column(name = "odometer", nullable = false)
     private int odometer;
+    @Getter
+    @Setter
+    @Column(name = "distance", nullable = false)
+    private int distance;
     @Getter
     @Setter
     @Column(name = "average_consumption")
@@ -139,7 +144,7 @@ public class Refueling extends PersistentEntity {
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "refueling", fetch = EAGER, cascade = REMOVE)
     private List<Fuel> fuels;
-
+    
     /**
      *
      */
@@ -249,34 +254,24 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
-     * Metodo utilizado para calcular a media de consumo ate o abastecimento
-     * 
-     * @param lastOdometer o ultimo odometro registrado
+     * Metodo utilizado para calcular a media de consumo baseado na distancia
+     * do abastecimento atual
      */
-    public void calculateAverageComsumption(int lastOdometer) {
-        if (!this.firstRefueling) {
-            if (lastOdometer >= this.odometer) {
-                throw new InternalServiceError("error.refueling.last-odometer-invalid");
-            }
-            this.averageConsumption = new BigDecimal(
-                    (this.odometer - lastOdometer) / this.liters.doubleValue());
-        }
+    public void calculateAverageComsumption() {
+        this.calculateAverageComsumption(this.distance, this.liters);
     }
     
     /**
      * Metodo utilizado para calcular a media de consumo ate o abastecimento 
      * quando temos abastecimentos anteriores em estado parcial, sem media
      * 
-     * @param lastOdometer o total do odometro percorrido
+     * @param totalDistance o total de distancia percorrida
      * @param liters a quantidade total de litros
      */
-    public void calculateAverageComsumption(int lastOdometer, BigDecimal liters) {
-        if (!this.firstRefueling) {
-            if (lastOdometer >= this.odometer) {
-                throw new InternalServiceError("error.refueling.last-odometer-invalid");
-            }
-            this.averageConsumption = new BigDecimal(
-                    (this.odometer - lastOdometer) / liters.doubleValue());
+    public void calculateAverageComsumption(int totalDistance, BigDecimal liters) {
+        if (!this.firstRefueling && totalDistance > 0) {
+            this.averageConsumption = 
+                    new BigDecimal(totalDistance / liters.doubleValue());
         }
     }
 
@@ -302,5 +297,14 @@ public class Refueling extends PersistentEntity {
      */
     public void updateVehicleOdometer() {
         this.vehicle.setOdometer(this.odometer);
+    }
+
+    /**
+     * Calcula a distancia percorrida pelo ultimo odometro infomado
+     * 
+     * @param lastOdometer o ultimo odometro registrado por um abastecimento
+     */
+    public void calculateDistance(int lastOdometer) {
+        this.distance = this.firstRefueling ? 0 : this.odometer - lastOdometer;
     }
 }

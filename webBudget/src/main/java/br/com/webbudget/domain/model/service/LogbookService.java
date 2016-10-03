@@ -184,7 +184,15 @@ public class LogbookService {
         if (!refueling.isFuelsValid()) {
             throw new InternalServiceError("error.refueling.invalid-fuels");
         }
-
+        
+        // pega o ultimo odometro para calcular a distancia percorrida
+        int lastOdometer = this.refuelingRepository
+                .findLastOdometerForVehicle(refueling.getVehicle());
+        
+        // calcula a distancia
+        refueling.setFirstRefueling(lastOdometer == 0);
+        refueling.calculateDistance(lastOdometer);
+        
         // pegamos a lista dos abastecimentos nao contabilizados e reservamos
         final List<Refueling> unaccounteds = this.refuelingRepository
                 .findUnaccountedsForVehicle(refueling.getVehicle());
@@ -193,34 +201,24 @@ public class LogbookService {
         // tanque cheio, se for, contabiliza a media do tanque
         if (refueling.isFullTank()) {
 
-            final int lastOdometer;
-
             // montamos o valor do ultimo odometro com base nas parciais ou 
             // com base no ultimo odometro registrado com tanque cheio
             if (!unaccounteds.isEmpty()) {
-                lastOdometer = unaccounteds
-                        .stream()
-                        .sorted((r1, r2) -> Integer.compare(
-                                r1.getOdometer(), r2.getOdometer()))
-                        .findFirst()
-                        .get()
-                        .getOdometer();
-
-                refueling.setFirstRefueling(lastOdometer == 0);
+                final int totalDistance = unaccounteds.
+                        stream()
+                        .mapToInt(Refueling::getDistance)
+                        .sum() + refueling.getDistance();
 
                 // pega o total de litros utilizados 
-                BigDecimal liters = unaccounteds.stream()
+                final BigDecimal liters = unaccounteds.stream()
                         .map(Refueling::getLiters)
-                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                        .reduce(BigDecimal.ZERO, BigDecimal::add)
+                        .add(refueling.getLiters());
 
                 // adiciona os litros atuais e manda calcular a media
-                refueling.calculateAverageComsumption(lastOdometer,
-                        liters.add(refueling.getLiters()));
+                refueling.calculateAverageComsumption(totalDistance, liters);
             } else {
-                lastOdometer = this.refuelingRepository
-                        .findLastOdometerForVehicle(refueling.getVehicle());
-                refueling.setFirstRefueling(lastOdometer == 0);
-                refueling.calculateAverageComsumption(lastOdometer);
+                refueling.calculateAverageComsumption();
             }
 
             // seta os que nao estavam contabilizados como contabilizados
