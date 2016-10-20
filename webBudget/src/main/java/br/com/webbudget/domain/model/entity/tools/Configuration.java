@@ -69,4 +69,13 @@ public class Configuration extends PersistentEntity {
     public Configuration() {
         this.showWalletBalances = false;
     }
+    
+    /**
+     * @return se esta configuracao eh valida para uso na geracao de faturas
+     * dos cartoes de credito
+     */
+    public boolean isValidForCardInvoice() {
+        return this.invoiceDefaultCostCenter != null 
+                && this.invoiceDefaultMovementClass != null;
+    }
 }

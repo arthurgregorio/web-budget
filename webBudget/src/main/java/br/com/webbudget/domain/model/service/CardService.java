@@ -137,6 +137,11 @@ public class CardService {
 
         final Configuration config = this.configurationRepository.findDefault();
 
+        // checa se temos uma configuracao valida
+        if (!config.isValidForCardInvoice()) {
+            throw new InternalServiceError("error.card-invoice.no-default-config");
+        }
+        
         // cria o movimento para aparecer no financeiro
         Movement movement = new Movement();
 
