@@ -53,7 +53,7 @@ public class Deployments {
         // cria o arquivo war
         return ShrinkWrap.create(WebArchive.class, "webbudget-test.war")
                 .addPackages(true, 
-                        "br.com.turismoitaipu.cti.domain.model",
+                        "br.com.webbudget.domain.model",
                         "br.com.webbudget.application.component.table")
                 .addClasses(
                         LoggerProducer.class,
