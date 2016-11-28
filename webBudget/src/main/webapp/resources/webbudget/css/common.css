@@ -8,6 +8,25 @@
     Created on : 19/01/2016
 */
 
+@font-face {
+  font-family: 'ReklameScript';
+  font-style: normal;
+  font-weight: normal;
+  src: local('ReklameScript'), url("#{resource['webbudget:font/ReklameScript.otf']}") format('truetype');
+}
+
+.wb-font {
+  font-family: 'ReklameScript', serif !important;
+}
+
+.wb-logo-prefix {
+    color: #007fff;
+}
+
+.wb-logo-sufix {
+    color: black;
+}
+
 .align-right {
     text-align: right;
 }
