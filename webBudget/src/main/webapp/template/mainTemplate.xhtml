@@ -41,8 +41,8 @@
 
         <h:outputStylesheet library="bootstrap" name="css/bootstrap.css"/>
         <h:outputStylesheet library="ionicons" name="css/ionicons.css"/>
-        <h:outputStylesheet library="webbudget" name="css/adminlte.css"/>
-        <h:outputStylesheet library="webbudget" name="css/all-skins.min.css"/>
+        <h:outputStylesheet library="adminlte" name="css/adminlte.css"/>
+        <h:outputStylesheet library="adminlte" name="css/all-skins.min.css"/>
         <h:outputStylesheet library="webbudget" name="css/common.css"/>
         <h:outputStylesheet library="primefaces-bootstrap" name="custom.css"/>
 
@@ -410,11 +410,11 @@
             };
         </script>
 
-        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+        <h:outputScript library="primefaces" name="jquery/jquery.js" />
+        <h:outputScript library="primefaces" name="primefaces-locale.js" />
         <h:outputScript library="bootstrap" name="js/bootstrap.min.js"/>
-        <h:outputScript library="webbudget" name="js/app.min.js"/>
+        <h:outputScript library="adminlte" name="js/app.min.js"/>
         <h:outputScript library="webbudget" name="js/chart.min.js"/>
         <h:outputScript library="webbudget" name="js/helpers.js"/>
-        <h:outputScript library="webbudget" name="js/primefaces-locale.js" />
     </h:body>
 </html>
