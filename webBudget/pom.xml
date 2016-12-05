@@ -178,10 +178,25 @@
             <version>1.16.10</version>
         </dependency>
         
-        <!-- picketlink -->
+        <!--picketlink-->
         <dependency>
             <groupId>org.picketlink</groupId>
-            <artifactId>picketlink</artifactId>
+            <artifactId>picketlink-api</artifactId>
+            <version>2.7.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-impl</artifactId>
+            <version>2.7.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-idm-api</artifactId>
+            <version>2.7.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-idm-impl</artifactId>
             <version>2.7.1.Final</version>
         </dependency>
         
