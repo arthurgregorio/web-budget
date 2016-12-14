@@ -66,6 +66,36 @@
             </properties>
         </profile>
         <profile>
+            <id>testing</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <skip.tests>true</skip.tests>
+                <application.version>${project.version}</application.version>
+                <email.host>${wb.email-host}</email.host>
+                <email.port>${wb.email-port}</email.port>
+                <email.user>${wb.email-user}</email.user>
+                <email.password>${wb.email-password}</email.password>
+                <jsf.stage>SystemTest</jsf.stage>
+            </properties>
+        </profile>
+        <profile>
+            <id>approval</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <skip.tests>true</skip.tests>
+                <application.version>${project.version}</application.version>
+                <email.host>${wb.email-host}</email.host>
+                <email.port>${wb.email-port}</email.port>
+                <email.user>${wb.email-user}</email.user>
+                <email.password>${wb.email-password}</email.password>
+                <jsf.stage>Production</jsf.stage>
+            </properties>
+        </profile>
+        <profile>
             <id>production</id>
             <properties>
                 <skip.tests>false</skip.tests>
