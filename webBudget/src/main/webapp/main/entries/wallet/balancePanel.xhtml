@@ -6,11 +6,15 @@
     <p:commandLink action="#{walletBean.changeToBalanceHistoric(wallet.id)}"
                    rendered="#{appConfigBean.configuration.showWalletBalances}"
                    styleClass="#{wallet.balanceNegative  ? 'text-red' : 'text-green'}">
-        <h:outputText value="R$ #{wallet.balance}" >
+        <h:outputText value="R$ #{wallet.balance}" 
+                      rendered="#{not wallet.blocked}">
             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
         </h:outputText>
+        <h:outputText style="color: black;"
+                      rendered="#{wallet.blocked}"
+                      value="#{messages['wallet.list.no-balance']}" />
     </p:commandLink>
-    
+
     <p:commandLink action="#{walletBean.changeToBalanceHistoric(wallet.id)}"
                    rendered="#{not appConfigBean.configuration.showWalletBalances}">
         #{messages['wallet.list.click-to-see']}
