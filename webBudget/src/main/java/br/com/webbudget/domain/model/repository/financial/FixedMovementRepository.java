@@ -77,8 +77,7 @@ public class FixedMovementRepository extends GenericRepository<FixedMovement, Lo
             // se conseguir castar para bigdecimal trata como um filtro
             try {
                 criterions.add(Restrictions.eq("value", new BigDecimal(filter)));
-            } catch (NumberFormatException ex) {
-            }
+            } catch (NumberFormatException ex) { }
         }
 
         criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));

@@ -103,7 +103,7 @@ public class FixedMovementBean extends AbstractBean {
                 pageRequest
                         .setFirstResult(first)
                         .withPageSize(pageSize)
-                        .sortingBy(sortField, "inclusion")
+                        .sortingBy(sortField, "fixedMovementStatusType")
                         .withDirection(sortOrder.name());
 
                 final Page<FixedMovement> page = movementService

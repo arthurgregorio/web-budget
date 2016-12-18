@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.model.SortMeta;
 
 /**
@@ -128,12 +129,7 @@ public class PageRequest {
      * @return por qual campos estamos fazendo sort na tabela
      */
     public String getSortField() {
-
-        if (this.sortField == null || this.sortField.isEmpty()) {
-            return this.defaultField;
-        } else {
-            return this.sortField;
-        }
+        return StringUtils.isBlank(this.sortField) ? this.defaultField : this.sortField;
     }
 
     /**
