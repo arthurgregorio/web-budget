@@ -31,11 +31,10 @@
     <h:head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
         <meta http-equiv="refresh" content="${request.session.maxInactiveInterval};url=/logout"/>
 
         <title>webBudget</title>
-
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:img/favicon.ico']}"/>
 
@@ -390,7 +389,7 @@
 
             <footer class="main-footer">
                 <a target="_blank"
-                   href="http://arthurgregorio.github.io/web-budget/">
+                   href="http://webbudget.com.br/">
                     Copyright (C) 2016 Arthur Gregorio, AG.Software
                 </a>
                 <div class="pull-right hidden-xs">
@@ -416,5 +415,6 @@
         <h:outputScript library="adminlte" name="js/app.min.js"/>
         <h:outputScript library="webbudget" name="js/chart.min.js"/>
         <h:outputScript library="webbudget" name="js/helpers.js"/>
+        <h:outputScript library="webbudget" name="js/wbcharts.js"/>
     </h:body>
 </html>
