@@ -67,9 +67,6 @@
         </profile>
         <profile>
             <id>testing</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <skip.tests>true</skip.tests>
                 <application.version>${project.version}</application.version>
@@ -82,9 +79,6 @@
         </profile>
         <profile>
             <id>approval</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <skip.tests>true</skip.tests>
                 <application.version>${project.version}</application.version>

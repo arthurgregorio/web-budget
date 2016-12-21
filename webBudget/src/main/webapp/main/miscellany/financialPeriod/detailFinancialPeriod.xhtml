@@ -1,18 +1,18 @@
- <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
- 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
- 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
- 
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+<!--
+ Copyright (C) 2015 Arthur Gregorio, AG.Software
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
@@ -52,237 +52,47 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-4">
-                <div class="box box-success">
+            <div class="col-md-12">  
+                <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">#{messages['period-detail.cost-centers-revenues']}</h3>
+                        <h3 class="box-title">#{messages['period-detail.daily-summary']}</h3>
                     </div>
                     <div class="box-body">
-                        <div class="col-sm-12 align-center"
-                             jsf:rendered="#{empty periodDetailBean.revenueClasses}">
-                            <h4>#{messages['period-detail.no-data']}</h4>
-                        </div>
-                        <ui:repeat var="movementClass" 
-                                   value="#{periodDetailBean.revenueClasses}"
-                                   rendered="#{not empty periodDetailBean.revenueClasses}">
-                            <div class="progress-group">
-                                <span class="progress-text">#{movementClass.costCenter.name} / #{movementClass.name}</span>
-                                <span class="progress-number">
-                                    <h:outputText styleClass="text-bold"
-                                                  value="#{movementClass.totalMovements}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText> 
-                                    /
-                                    <h:outputText value="#{movementClass.budget}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </span>
-                                <div class="progress sm">
-                                    <div style="width: #{movementClass.budgetCompletionPercentage()}%"
-                                         class="progress-bar progress-bar-striped #{movementClass.overBudget ? 'progress-bar-green' : ''}">
-                                    </div>
-                                </div>
-                            </div>
-                        </ui:repeat>
-                    </div>
-                </div>
-                <div class="box box-danger">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">#{messages['period-detail.cost-centers-expenses']}</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="col-sm-12 align-center"
-                             jsf:rendered="#{empty periodDetailBean.expensesClasses}">
-                            <h4>#{messages['period-detail.no-data']}</h4>
-                        </div>
-                        <ui:repeat var="movementClass" 
-                                   value="#{periodDetailBean.expensesClasses}"
-                                   rendered="#{not empty periodDetailBean.expensesClasses}">
-                            <div class="progress-group">
-                                <span class="progress-text">#{movementClass.costCenter.name} / #{movementClass.name}</span>
-                                <span class="progress-number">
-                                    <h:outputText styleClass="text-bold"
-                                                  value="#{movementClass.totalMovements}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText> 
-                                    /
-                                    <h:outputText value="#{movementClass.budget}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </span>
-                                <div class="progress sm">
-                                    <div style="width: #{movementClass.budgetCompletionPercentage()}%"
-                                         class="progress-bar progress-bar-striped #{movementClass.overBudget ? 'progress-bar-red' : ''}" >
-                                    </div>
-                                </div>
-                            </div>
-                        </ui:repeat>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-8">
-                <div class="row">
-                    <div class="col-sm-12">  
-                        <div class="box">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">#{messages['period-detail.daily-summary']}</h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="chart">
-                                    <canvas id="dailySummaryChart" style="height: 250px;"></canvas>
-                                </div>
-                            </div>
-                            <div class="box-footer">
-                                <div class="row">
-                                    <div class="col-sm-4 col-xs-6">
-                                        <div class="description-block border-right">
-                                            <h5 class="description-header text-green">
-                                                <h:outputText value="#{periodDetailBean.calculator.revenuesTotal}" >
-                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                                </h:outputText>
-                                            </h5>
-                                            <span class="description-text">#{messages['period-detail.revenues']}</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4 col-xs-6">
-                                        <div class="description-block border-right">
-                                            <h5 class="description-header text-red">
-                                                <h:outputText value="#{periodDetailBean.calculator.expensesTotal}" >
-                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                                </h:outputText>
-                                            </h5>
-                                            <span class="description-text">#{messages['period-detail.expenses']}</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4 col-xs-6">
-                                        <div class="description-block border-right">
-                                            <h5 class="description-header #{periodDetailBean.calculator.balance.signum() 
-                                                                            lt 0 ? 'text-red' : 'text-green'}">
-                                                <h:outputText value="#{periodDetailBean.calculator.balance}" >
-                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                                </h:outputText>
-                                            </h5>
-                                            <span class="description-text">#{messages['period-detail.balance']}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="chart">
+                            <canvas id="dailySummaryChart" style="height: 250px;"></canvas>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="info-box">
-                            <span class="info-box-icon bg-teal"><i class="ion ion-card"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">#{messages['period-detail.credit-goal']}</span>
-                                <span class="info-box-number">
-                                    <h:outputText value="#{periodDetailBean.calculator.totalPaidOnCreditCard}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </span>
-                                <div class="progress">
-                                    <div class="progress-bar bg-teal" 
-                                         style="width: #{periodDetailBean.paidOnCreditPercentage}%">
-                                    </div>
-                                </div>
-                                <span class="progress-description">
-                                    #{messages['period-detail.goal']}:
-                                    <h:outputText value="#{periodDetailBean.period.creditCardGoal}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="info-box">
-                            <span class="info-box-icon bg-red"><i class="ion ion-arrow-graph-down-right"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">#{messages['period-detail.expenses-goal']}</span>
-                                <span class="info-box-number">
-                                    <h:outputText value="#{periodDetailBean.calculator.expensesTotal}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </span>
-                                <div class="progress">
-                                    <div class="progress-bar bg-red" 
-                                         style="width: #{periodDetailBean.expensesGoalPercentage}%"></div>
-                                </div>
-                                <span class="progress-description">
-                                    #{messages['period-detail.goal']}:
-                                    <h:outputText value="#{periodDetailBean.period.expensesGoal}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="info-box">
-                            <span class="info-box-icon bg-green"><i class="ion ion-arrow-graph-up-right"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">#{messages['period-detail.revenues-goal']}</span>
-                                <span class="info-box-number">
-                                    <h:outputText value="#{periodDetailBean.calculator.revenuesTotal}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </span>
-                                <div class="progress">
-                                    <div class="progress-bar bg-green" 
-                                         style="width: #{periodDetailBean.revenuesGoalPercentage}%"></div>
-                                </div>
-                                <span class="progress-description">
-                                    #{messages['period-detail.goal']}:
-                                    <h:outputText value="#{periodDetailBean.period.revenuesGoal}" >
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="box box-success">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">#{messages['period-detail.revenues-by-cost-center']}</h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="col-xs-12 align-center"
-                                     jsf:rendered="#{not periodDetailBean.revenuesCostCenterModel.containsData()}">
-                                    <h4>#{messages['period-detail.no-data']}</h4>
-                                </div>
-                                <div class="col-xs-4"
-                                     jsf:rendered="#{periodDetailBean.revenuesCostCenterModel.containsData()}">
-                                    <div id="revenuesByCostCenterLegend" class="chart-legend"></div>
-                                </div>
-                                <div class="col-xs-8"
-                                     jsf:rendered="#{periodDetailBean.revenuesCostCenterModel.containsData()}">
-                                    <div class="chart">
-                                        <canvas id="revenuesByCostCenter" style="height:300px"></canvas>
-                                    </div>
+                    <div class="box-footer">
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-6">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header text-green">
+                                        <h:outputText value="#{periodDetailBean.calculator.revenuesTotal}" >
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                        </h:outputText>
+                                    </h5>
+                                    <span class="description-text">#{messages['period-detail.revenues']}</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="box box-danger">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">#{messages['period-detail.expenses-by-cost-center']}</h3>
+                            <div class="col-sm-4 col-xs-6">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header text-red">
+                                        <h:outputText value="#{periodDetailBean.calculator.expensesTotal}" >
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                        </h:outputText>
+                                    </h5>
+                                    <span class="description-text">#{messages['period-detail.expenses']}</span>
+                                </div>
                             </div>
-                            <div class="box-body">
-                                <div class="col-xs-12 align-center"
-                                     jsf:rendered="#{not periodDetailBean.expensesCostCenterModel.containsData()}">
-                                    <h4>#{messages['period-detail.no-data']}</h4>
-                                </div>
-                                <div class="col-xs-4"
-                                     jsf:rendered="#{periodDetailBean.expensesCostCenterModel.containsData()}">
-                                    <div id="expensesByCostCenterLegend" class="chart-legend"></div>
-                                </div>
-                                <div class="col-xs-8"
-                                     jsf:rendered="#{periodDetailBean.expensesCostCenterModel.containsData()}">
-                                    <div class="chart">
-                                        <canvas id="expensesByCostCenter" style="height:300px"></canvas>
-                                    </div>
+                            <div class="col-sm-4 col-xs-6">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header #{periodDetailBean.calculator.balance.signum() 
+                                                                    lt 0 ? 'text-red' : 'text-green'}">
+                                        <h:outputText value="#{periodDetailBean.calculator.balance}" >
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                        </h:outputText>
+                                    </h5>
+                                    <span class="description-text">#{messages['period-detail.balance']}</span>
                                 </div>
                             </div>
                         </div>
@@ -290,7 +100,158 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6">
 
-        <h:outputScript library="webbudget" name="js/wbcharts.js"/>
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
+        
+        
+        <!--<div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">#{messages['period-detail.cost-centers-revenues']}</h3>
+            </div>
+            <div class="box-body">
+                <div class="col-sm-12 align-center"
+                     jsf:rendered="#{empty periodDetailBean.revenueClasses}">
+                    <h4>#{messages['period-detail.no-data']}</h4>
+                </div>
+                <ui:repeat var="movementClass" 
+                           value="#{periodDetailBean.revenueClasses}"
+                           rendered="#{not empty periodDetailBean.revenueClasses}">
+                    <div class="progress-group">
+                        <span class="progress-text">#{movementClass.costCenter.name} / #{movementClass.name}</span>
+                        <span class="progress-number">
+                            <h:outputText styleClass="text-bold"
+                                          value="#{movementClass.totalMovements}" >
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText> 
+                            /
+                            <h:outputText value="#{movementClass.budget}" >
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </span>
+                        <div class="progress sm">
+                            <div style="width: #{movementClass.budgetCompletionPercentage()}%"
+                                 class="progress-bar progress-bar-striped #{movementClass.overBudget ? 'progress-bar-green' : ''}">
+                            </div>
+                        </div>
+                    </div>
+                </ui:repeat>
+            </div>
+        </div>
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">#{messages['period-detail.cost-centers-expenses']}</h3>
+            </div>
+            <div class="box-body">
+                <div class="col-sm-12 align-center"
+                     jsf:rendered="#{empty periodDetailBean.expensesClasses}">
+                    <h4>#{messages['period-detail.no-data']}</h4>
+                </div>
+                <ui:repeat var="movementClass" 
+                           value="#{periodDetailBean.expensesClasses}"
+                           rendered="#{not empty periodDetailBean.expensesClasses}">
+                    <div class="progress-group">
+                        <span class="progress-text">#{movementClass.costCenter.name} / #{movementClass.name}</span>
+                        <span class="progress-number">
+                            <h:outputText styleClass="text-bold"
+                                          value="#{movementClass.totalMovements}" >
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText> 
+                            /
+                            <h:outputText value="#{movementClass.budget}" >
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </span>
+                        <div class="progress sm">
+                            <div style="width: #{movementClass.budgetCompletionPercentage()}%"
+                                 class="progress-bar progress-bar-striped #{movementClass.overBudget ? 'progress-bar-red' : ''}" >
+                            </div>
+                        </div>
+                    </div>
+                </ui:repeat>
+            </div>
+        </div>-->
+
+        <!--<div class="row">
+            <div class="col-sm-4">
+                <div class="info-box">
+                    <span class="info-box-icon bg-teal"><i class="ion ion-card"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">#{messages['period-detail.credit-goal']}</span>
+                        <span class="info-box-number">
+                            <h:outputText value="#{periodDetailBean.calculator.totalPaidOnCreditCard}" >
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </span>
+                        <div class="progress">
+                            <div class="progress-bar bg-teal" 
+                                 style="width: #{periodDetailBean.paidOnCreditPercentage}%">
+                            </div>
+                        </div>
+                        <span class="progress-description">
+        #{messages['period-detail.goal']}:
+        <h:outputText value="#{periodDetailBean.period.creditCardGoal}" >
+            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+        </h:outputText>
+    </span>
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-4">
+            <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="ion ion-arrow-graph-down-right"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">#{messages['period-detail.expenses-goal']}</span>
+                <span class="info-box-number">
+                    <h:outputText value="#{periodDetailBean.calculator.expensesTotal}" >
+                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                    </h:outputText>
+                </span>
+                <div class="progress">
+                    <div class="progress-bar bg-red" 
+                         style="width: #{periodDetailBean.expensesGoalPercentage}%"></div>
+                </div>
+                <span class="progress-description">
+                    #{messages['period-detail.goal']}:
+                    <h:outputText value="#{periodDetailBean.period.expensesGoal}" >
+                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                    </h:outputText>
+                </span>
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-4">
+            <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="ion ion-arrow-graph-up-right"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">#{messages['period-detail.revenues-goal']}</span>
+                <span class="info-box-number">
+                    <h:outputText value="#{periodDetailBean.calculator.revenuesTotal}" >
+                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                    </h:outputText>
+                </span>
+                <div class="progress">
+                    <div class="progress-bar bg-green" 
+                         style="width: #{periodDetailBean.revenuesGoalPercentage}%"></div>
+                </div>
+                <span class="progress-description">
+                    #{messages['period-detail.goal']}:
+                    <h:outputText value="#{periodDetailBean.period.revenuesGoal}" >
+                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                    </h:outputText>
+                </span>
+            </div>
+            </div>
+            </div>
+            </div>-->
+        
+        
+        
+        
     </ui:define>
 </ui:composition>
