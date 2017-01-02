@@ -16,40 +16,58 @@
  */
 package br.com.webbudget.application.producer;
 
-import br.com.webbudget.domain.model.security.Partition;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import org.picketlink.annotations.PicketLink;
 
 /**
- * Um producer para os recursos necessarios ao Picketlink:
- * 
- * {@link EntityManager} para que o PL possa gerenciar nosso modelo de seguranca
- * baseado em JPA
- * {@link Partition} para que nossa producao do gerenciador de identidades ja 
- * saia configurada de fabrica
- * 
- * Recursos do PL sao identificados pela anotacao {@link PicketLink}
+ * Producer de entitymanagers para os recursos do projeto
  * 
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 2.0.0, 21/05/2015
  */
 @ApplicationScoped
 public class EntityManagerProducer {
     
-    @PersistenceContext
-    private EntityManager entityManager;
+    @PersistenceUnit
+    private EntityManagerFactory factory;
     
     /**
-     * @return um entityManager configurado para o nosso webBudgetPU
+     * 
+     * @return 
+     */
+    @Produces
+    @RequestScoped
+    EntityManager produce() {
+        return this.factory.createEntityManager();
+    }
+    
+    /**
+     * 
+     * @return 
      */
     @Produces
     @PicketLink
-    EntityManager produceEntityManager() {
-        return this.entityManager;
+    EntityManager produceForPicketlink() {
+        return this.produce();
+    }
+    
+    /**
+     * Encerra um entityManager ja utilizado pelo sistema
+     * 
+     * @param entityManager o entity manager a ser encerrado
+     */
+    void dispose(@Disposes EntityManager entityManager) {
+        if (entityManager.isOpen()) {
+            entityManager.clear();
+            entityManager.close();
+        }
     }
 }
