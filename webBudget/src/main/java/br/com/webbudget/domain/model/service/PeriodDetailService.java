@@ -34,6 +34,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +62,7 @@ public class PeriodDetailService {
     private IMovementClassRepository movementClassRepository;
 
     /**
-     * Metodo que busca as classes de movimentacao e seu respectivo valor 
+     * Metodo que busca as classes de movimentacao e seu respectivo valor
      * movimento, ou seja, a somatoria de todos os rateios para a aquela classe
      *
      * @param period o periodo
@@ -100,20 +101,15 @@ public class PeriodDetailService {
     /**
      * Monta o model do grafico de consumo por centro de custo
      *
-     * @param period o periodo
+     * @param periods os periodos
      * @param direction a direcao que vamos montar no grafico, entrada ou saida
      * @return o modelo do grafico para a view
      */
-    public DonutChartModel buidCostCenterChart(FinancialPeriod period, MovementClassType direction) {
+    public DonutChartModel buidCostCenterChart(List<FinancialPeriod> periods, MovementClassType direction) {
 
-        final List<Movement> movements;
-
-        // pela direcao, decide qual lista de movimentos usar
-        if (direction == MovementClassType.OUT) {
-            movements = this.getExpensesFor(period);
-        } else {
-            movements = this.getRevenuesFor(period);
-        }
+        // lista os movimentos
+        final List<Movement> movements = 
+                this.listMovementsFrom(periods, direction);
 
         // mapeia para cada centro de custo, seus movimentos
         final Map<CostCenter, List<Movement>> costCentersAndMovements
@@ -132,9 +128,9 @@ public class PeriodDetailService {
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
             final String color = this.createRandomColor();
-            
-            donutChartModel.addData(new DonutChartDataset<>(total, "rgb("+ color +")",
-                    "rgba("+ color +",0.8)", costCenter.getName()));
+
+            donutChartModel.addData(new DonutChartDataset<>(total, "rgb(" + color + ")",
+                    "rgba(" + color + ",0.8)", costCenter.getName()));
         });
 
         return donutChartModel;
@@ -149,8 +145,10 @@ public class PeriodDetailService {
     public LineChartModel bulidDailyChart(FinancialPeriod period) {
 
         // lista receitas e despesas do periodo
-        final List<Movement> revenues = this.getRevenuesFor(period);
-        final List<Movement> expenses = this.getExpensesFor(period);
+        final List<Movement> revenues = this.listMovementsFrom(
+                period, MovementClassType.IN);
+        final List<Movement> expenses = this.listMovementsFrom(
+                period, MovementClassType.OUT);
 
         // agrupamos pelas datas das despesas e receitas
         final List<LocalDate> payDates = this.groupPaymentDates(
@@ -226,65 +224,62 @@ public class PeriodDetailService {
 
         return dates;
     }
-
+    
     /**
-     * Pega todas as receitas para um determinado periodo considerando se ele
-     * esta ou nao encerrado
+     * Lista todos os movimentos do periodo informado em uma lista
      *
-     * @param period o periodo
+     * @param periods os periodos
+     * @param direction a direcao (entrada ou saida)
      * @return a lista de movimentos
      */
-    private List<Movement> getRevenuesFor(FinancialPeriod period) {
-
-        MovementStateType state = MovementStateType.PAID;
-
-        if (period.isClosed()) {
-            state = MovementStateType.CALCULATED;
-        }
-
-        return this.movementRepository.listByPeriodAndStateAndTypeAndDirection(
-                period, state, MovementType.MOVEMENT, MovementClassType.IN);
+    private List<Movement> listMovementsFrom(FinancialPeriod period, MovementClassType direction) {
+        return this.listMovementsFrom(Arrays.asList(period), direction);
     }
 
     /**
-     * Pega todas as despesas para um determinado periodo considerando se ele
-     * esta ou nao encerrado
+     * Lista todos os movimentos dos periodos informados agrupados em uma lista
      *
-     * @param period o periodo
+     * @param periods os periodos
+     * @param direction a direcao (entrada ou saida)
      * @return a lista de movimentos
      */
-    private List<Movement> getExpensesFor(FinancialPeriod period) {
+    private List<Movement> listMovementsFrom(List<FinancialPeriod> periods, MovementClassType direction) {
 
-        MovementStateType state = MovementStateType.PAID;
+        final List<Movement> movements = new ArrayList<>();
 
-        if (period.isClosed()) {
-            state = MovementStateType.CALCULATED;
-        }
+        periods.stream().forEach(period -> {
 
-        return this.movementRepository.listByPeriodAndStateAndTypeAndDirection(
-                period, state, MovementType.MOVEMENT, MovementClassType.OUT);
+            final MovementStateType state = period.isClosed()
+                    ? MovementStateType.CALCULATED : MovementStateType.PAID;
+
+            movements.addAll(this.movementRepository
+                    .listByPeriodAndStateAndTypeAndDirection(period, state,
+                            MovementType.MOVEMENT, direction));
+        });
+
+        return movements;
     }
 
     /**
      * @return gera uma cor hex randomica para o grafico
      */
     public String createRandomColor() {
-        
+
         final StringBuilder builder = new StringBuilder();
-        
+
         for (int i = 0; i < 3; i++) {
             builder.append(ThreadLocalRandom.current().nextInt(1, 255 + 1));
             if (i != 2) {
                 builder.append(",");
             }
         }
-        
+
         return builder.toString();
     }
 
     /**
      * Mapeia os movimentos para dentro de seu respectivo centro de custo
-     * 
+     *
      * @param movements o movimentos
      * @return o mapa de CC X movimentos
      */

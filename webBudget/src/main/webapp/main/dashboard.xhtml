@@ -191,19 +191,19 @@
                 <div class="col-sm-6">
                     <div class="box box-success">
                         <div class="box-header with-border">
-                            <h3 class="box-title">#{messages['period-detail.revenues-by-cost-center']}</h3>
+                            <h3 class="box-title">#{messages['dashboard.revenues-by-cost-center']}</h3>
                         </div>
                         <div class="box-body">
                             <div class="col-xs-12 align-center"
-                                 jsf:rendered="#{not periodDetailBean.revenuesCostCenterModel.containsData()}">
+                                 jsf:rendered="#{not dashboardBean.revenuesCostCenterModel.containsData()}">
                                 <h4>#{messages['period-detail.no-data']}</h4>
                             </div>
                             <div class="col-xs-4"
-                                 jsf:rendered="#{periodDetailBean.revenuesCostCenterModel.containsData()}">
+                                 jsf:rendered="#{dashboardBean.revenuesCostCenterModel.containsData()}">
                                 <div id="revenuesByCostCenterLegend" class="chart-legend"></div>
                             </div>
                             <div class="col-xs-8"
-                                 jsf:rendered="#{periodDetailBean.revenuesCostCenterModel.containsData()}">
+                                 jsf:rendered="#{dashboardBean.revenuesCostCenterModel.containsData()}">
                                 <div class="chart">
                                     <canvas id="revenuesByCostCenter" style="height:300px"></canvas>
                                 </div>
@@ -214,19 +214,19 @@
                 <div class="col-sm-6">
                     <div class="box box-danger">
                         <div class="box-header with-border">
-                            <h3 class="box-title">#{messages['period-detail.expenses-by-cost-center']}</h3>
+                            <h3 class="box-title">#{messages['dashboard.expenses-by-cost-center']}</h3>
                         </div>
                         <div class="box-body">
                             <div class="col-xs-12 align-center"
-                                 jsf:rendered="#{not periodDetailBean.expensesCostCenterModel.containsData()}">
+                                 jsf:rendered="#{not dashboardBean.expensesCostCenterModel.containsData()}">
                                 <h4>#{messages['period-detail.no-data']}</h4>
                             </div>
                             <div class="col-xs-4"
-                                 jsf:rendered="#{periodDetailBean.expensesCostCenterModel.containsData()}">
+                                 jsf:rendered="#{dashboardBean.expensesCostCenterModel.containsData()}">
                                 <div id="expensesByCostCenterLegend" class="chart-legend"></div>
                             </div>
                             <div class="col-xs-8"
-                                 jsf:rendered="#{periodDetailBean.expensesCostCenterModel.containsData()}">
+                                 jsf:rendered="#{dashboardBean.expensesCostCenterModel.containsData()}">
                                 <div class="chart">
                                     <canvas id="expensesByCostCenter" style="height:300px"></canvas>
                                 </div>

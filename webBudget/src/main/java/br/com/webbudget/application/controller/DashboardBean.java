@@ -16,19 +16,21 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.application.component.chart.donut.DonutChartModel;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.misc.MovementCalculator;
 import br.com.webbudget.application.component.chart.line.LineChartDatasetBuilder;
 import br.com.webbudget.application.component.chart.line.LineChartModel;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.service.FinancialPeriodService;
 import br.com.webbudget.domain.model.service.MovementService;
+import br.com.webbudget.domain.model.service.PeriodDetailService;
 import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,7 +52,7 @@ public class DashboardBean extends AbstractBean {
 
     @Getter
     private LineChartModel lineChartModel;
-    
+
     @Getter
     private BigDecimal accumulated;
     @Getter
@@ -59,7 +61,12 @@ public class DashboardBean extends AbstractBean {
     private BigDecimal totalExpensesGoal;
     @Getter
     private BigDecimal totalCreditCardGoal;
-    
+
+    @Getter
+    private DonutChartModel expensesCostCenterModel;
+    @Getter
+    private DonutChartModel revenuesCostCenterModel;
+
     @Getter
     private int percentageExpenses;
     @Getter
@@ -76,6 +83,8 @@ public class DashboardBean extends AbstractBean {
     @Inject
     private MovementService movementService;
     @Inject
+    private PeriodDetailService periodDetailService;
+    @Inject
     private FinancialPeriodService financialPeriodService;
 
     /**
@@ -91,13 +100,14 @@ public class DashboardBean extends AbstractBean {
         this.closedPeriods = new ArrayList<>();
 
         try {
-            this.openPeriods
-                    = this.financialPeriodService.listOpenFinancialPeriods();
+            this.openPeriods = this.financialPeriodService
+                    .listOpenFinancialPeriods();
 
             this.initializePeriodSummary();
             this.initializeBalanceHistory();
             this.initializeClosingsGraph();
-            
+            this.initializeCostCentersGraphs();
+
             this.countGoals();
             this.calculatePercentages();
         } catch (InternalServiceError ex) {
@@ -114,22 +124,22 @@ public class DashboardBean extends AbstractBean {
     public String getVersion() {
         return ApplicationUtils.getConfiguration("application.version");
     }
-    
+
     /**
      * Porcentagem da meta de receitas
      */
     private void calculatePercentages() {
-        
+
         this.percentageCreditCard = this.percentageOf(
                 this.calculator.getTotalPaidOnCreditCard(), this.totalCreditCardGoal);
-        
+
         this.percentageExpenses = this.percentageOf(
                 this.calculator.getExpensesTotal(), this.totalExpensesGoal);
-        
+
         this.percentageRevenues = this.percentageOf(
                 this.calculator.getRevenuesTotal(), this.totalRevenueGoal);
     }
-    
+
     /**
      * Inicializa o bloco com as informacoes sobre os periodos ativos
      */
@@ -193,9 +203,9 @@ public class DashboardBean extends AbstractBean {
         this.lineChartModel = new LineChartModel();
 
         // ordena pela inclusao, do mais velho para o menos novo
-        this.closedPeriods.sort((v1, v2) 
+        this.closedPeriods.sort((v1, v2)
                 -> v1.getInclusion().compareTo(v2.getInclusion()));
-        
+
         // coloca o nome das series e os dados
         this.closedPeriods.stream().forEach(period -> {
 
@@ -220,13 +230,33 @@ public class DashboardBean extends AbstractBean {
         this.totalCreditCardGoal = this.openPeriods.stream()
                 .map(FinancialPeriod::getCreditCardGoal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
+
         this.totalExpensesGoal = this.openPeriods.stream()
                 .map(FinancialPeriod::getExpensesGoal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
+
         this.totalRevenueGoal = this.openPeriods.stream()
                 .map(FinancialPeriod::getRevenuesGoal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * Inicializa o grafico de consumo e receita por centro de custo
+     */
+    private void initializeCostCentersGraphs() {
+
+        this.revenuesCostCenterModel = this.periodDetailService
+                .buidCostCenterChart(this.openPeriods, MovementClassType.IN);
+
+        if (this.revenuesCostCenterModel.containsData()) {
+            this.drawDonutChart("revenuesByCostCenter", this.revenuesCostCenterModel);
+        }
+
+        this.expensesCostCenterModel = this.periodDetailService
+                .buidCostCenterChart(this.openPeriods, MovementClassType.OUT);
+
+        if (this.expensesCostCenterModel.containsData()) {
+            this.drawDonutChart("expensesByCostCenter", this.expensesCostCenterModel);
+        }
     }
 }

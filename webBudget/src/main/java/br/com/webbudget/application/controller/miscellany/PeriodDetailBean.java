@@ -52,11 +52,6 @@ public class PeriodDetailBean extends AbstractBean {
     private MovementCalculator calculator;
     
     @Getter
-    private DonutChartModel expensesCostCenterModel;
-    @Getter
-    private DonutChartModel revenuesCostCenterModel;
-    
-    @Getter
     private List<MovementClass> revenueClasses;
     @Getter
     private List<MovementClass> expensesClasses;
@@ -95,20 +90,6 @@ public class PeriodDetailBean extends AbstractBean {
                     this.periodDetailService.bulidDailyChart(this.period);
             
             this.drawLineChart("dailySummaryChart", lineChartModel);
-            
-            this.revenuesCostCenterModel = this.periodDetailService
-                    .buidCostCenterChart(this.period, MovementClassType.IN);
-            
-            if (this.revenuesCostCenterModel.containsData()) {
-                this.drawDonutChart("revenuesByCostCenter", this.revenuesCostCenterModel);
-            }
-
-            this.expensesCostCenterModel = this.periodDetailService
-                    .buidCostCenterChart(this.period, MovementClassType.OUT);
-                    
-            if (this.expensesCostCenterModel.containsData()) {
-                this.drawDonutChart("expensesByCostCenter", this.expensesCostCenterModel);
-            }
         } catch (Exception ex) {
             this.logger.error("Cant fill period {} details",
                     this.period.getIdentification(), ex);
