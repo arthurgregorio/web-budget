@@ -56,7 +56,7 @@ public class EntityManagerProducer {
     @Produces
     @PicketLink
     EntityManager produceForPicketlink() {
-        return this.produce();
+        return this.factory.createEntityManager();
     }
     
     /**
