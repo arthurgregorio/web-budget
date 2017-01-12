@@ -17,17 +17,15 @@
 package br.com.webbudget.application.producer;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-import org.picketlink.annotations.PicketLink;
 
 /**
  * Producer de entitymanagers para os recursos do projeto
- * 
+ *
  * @author Arthur Gregorio
  *
  * @version 2.0.0
@@ -35,33 +33,22 @@ import org.picketlink.annotations.PicketLink;
  */
 @ApplicationScoped
 public class EntityManagerProducer {
-    
+
     @PersistenceUnit
     private EntityManagerFactory factory;
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Produces
-    @RequestScoped
     EntityManager produce() {
         return this.factory.createEntityManager();
     }
-    
-    /**
-     * 
-     * @return 
-     */
-    @Produces
-    @PicketLink
-    EntityManager produceForPicketlink() {
-        return this.factory.createEntityManager();
-    }
-    
+
     /**
      * Encerra um entityManager ja utilizado pelo sistema
-     * 
+     *
      * @param entityManager o entity manager a ser encerrado
      */
     void dispose(@Disposes EntityManager entityManager) {
