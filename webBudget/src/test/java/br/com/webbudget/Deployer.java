@@ -16,8 +16,8 @@
  */
 package br.com.webbudget;
 
-import br.com.webbudget.application.converter.JPALocalDateConverter;
-import br.com.webbudget.application.converter.JPALocalTimeConverter;
+import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
+import br.com.webbudget.domain.model.entity.converter.JPALocalTimeConverter;
 import br.com.webbudget.application.producer.EntityManagerProducer;
 import br.com.webbudget.application.producer.LoggerProducer;
 import br.com.webbudget.infraestructure.configuration.ApplicationUtils;

@@ -16,9 +16,12 @@
  */
 package br.com.webbudget.domain.model.entity.entries;
 
+import br.com.webbudget.application.component.Color;
+import br.com.webbudget.domain.model.entity.converter.ColorConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import java.math.BigDecimal;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -49,6 +52,11 @@ public class CostCenter extends PersistentEntity {
     @NotEmpty(message = "{cost-center.name}")
     @Column(name = "name", nullable = false, length = 90)
     private String name;
+    @Getter
+    @Setter
+    @Convert(converter = ColorConverter.class)
+    @Column(name = "color", nullable = false, length = 20)
+    private Color color;
     @Getter
     @Setter
     @NotNull(message = "{cost-center.expenses-budget}")
@@ -87,6 +95,8 @@ public class CostCenter extends PersistentEntity {
      *
      */
     public CostCenter() {
+        this.color = Color.randomize();
+        
         this.percentage = BigDecimal.ZERO;
         this.totalMovements = BigDecimal.ZERO;
         this.revenuesBudget = BigDecimal.ZERO;

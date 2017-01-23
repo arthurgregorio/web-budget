@@ -1,0 +1,21 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsf/composite">
+
+    <c:interface>
+        <c:attribute name="color" 
+                     rendered="true"
+                     type="br.com.webbudget.application.component.Color"/>
+    </c:interface>
+
+    <c:implementation>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.minicolor-picker').minicolors({format: 'rgb', theme: 'bootstrap'});
+            });
+        </script>
+        <p:inputText value="#{cc.attrs.color}"
+                     converter="rgbColorConverter"
+                     class="form-control minicolor-picker"/>
+    </c:implementation>
+</html>

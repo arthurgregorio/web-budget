@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.model.entity.logbook;
 
-import br.com.webbudget.application.converter.JPALocalDateConverter;
+import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;

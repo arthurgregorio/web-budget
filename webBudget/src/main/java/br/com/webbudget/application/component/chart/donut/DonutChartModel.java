@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class DonutChartModel extends AbstractChartModel {
 
-    private List<DonutChartDataset> chartDatasets;
+    private final List<DonutChartDataset> chartDatasets;
 
     /**
      * 

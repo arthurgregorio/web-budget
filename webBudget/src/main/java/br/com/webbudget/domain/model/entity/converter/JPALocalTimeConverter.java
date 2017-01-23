@@ -14,15 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.converter;
+package br.com.webbudget.domain.model.entity.converter;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * Converter customizado para dar suporte ao uso de LocalDate no JPA
+ * Converter customizado para dar suporte para LocalTime no JPA
  *
  * @author Arthur Gregorio
  *
@@ -30,7 +30,7 @@ import javax.persistence.Converter;
  * @since 1.2.0, 09/02/2015
  */
 @Converter(autoApply = true)
-public class JPALocalDateConverter implements AttributeConverter<LocalDate, Date> {
+public class JPALocalTimeConverter implements AttributeConverter<LocalTime, String> {
 
     /**
      * Converte o valor da entity para a base de dados
@@ -39,8 +39,8 @@ public class JPALocalDateConverter implements AttributeConverter<LocalDate, Date
      * @return 
      */
     @Override
-    public Date convertToDatabaseColumn(LocalDate attribute) {
-        return attribute != null ? Date.valueOf(attribute) : null;
+    public String convertToDatabaseColumn(LocalTime attribute) {
+        return attribute == null ? null : attribute.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     /**
@@ -50,7 +50,7 @@ public class JPALocalDateConverter implements AttributeConverter<LocalDate, Date
      * @return 
      */
     @Override
-    public LocalDate convertToEntityAttribute(Date dbData) {
-        return dbData != null ? dbData.toLocalDate() : null;
+    public LocalTime convertToEntityAttribute(String dbData) {
+        return dbData == null ? null : LocalTime.parse(dbData, DateTimeFormatter.ofPattern("HH:mm"));
     }
 }

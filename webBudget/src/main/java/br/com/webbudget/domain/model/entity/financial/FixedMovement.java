@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.model.entity.financial;
 
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
-import br.com.webbudget.application.converter.JPALocalDateConverter;
+import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.infraestructure.configuration.ApplicationUtils;

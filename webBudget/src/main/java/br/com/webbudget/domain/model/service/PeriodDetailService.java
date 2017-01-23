@@ -27,6 +27,7 @@ import br.com.webbudget.application.component.chart.donut.DonutChartDataset;
 import br.com.webbudget.application.component.chart.donut.DonutChartModel;
 import br.com.webbudget.application.component.chart.line.LineChartDatasetBuilder;
 import br.com.webbudget.application.component.chart.line.LineChartModel;
+import br.com.webbudget.application.component.Color;
 import br.com.webbudget.domain.model.repository.financial.IApportionmentRepository;
 import br.com.webbudget.domain.model.repository.entries.IMovementClassRepository;
 import br.com.webbudget.domain.model.repository.financial.IMovementRepository;
@@ -127,10 +128,13 @@ public class PeriodDetailService {
                     .map(Movement::getValue)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            final String color = this.createRandomColor();
-
-            donutChartModel.addData(new DonutChartDataset<>(total, "rgb(" + color + ")",
-                    "rgba(" + color + ",0.8)", costCenter.getName()));
+            // pega a cor para este CC caso tenha, senao randomiza uma cor
+            final Color color = costCenter.getColor() != null 
+                    ? costCenter.getColor() : Color.randomize();
+            
+            donutChartModel.addData(new DonutChartDataset<>(total, 
+                    color.lighter().toString(), color.toString(), 
+                    costCenter.getName()));
         });
 
         return donutChartModel;
@@ -258,23 +262,6 @@ public class PeriodDetailService {
         });
 
         return movements;
-    }
-
-    /**
-     * @return gera uma cor hex randomica para o grafico
-     */
-    public String createRandomColor() {
-
-        final StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < 3; i++) {
-            builder.append(ThreadLocalRandom.current().nextInt(1, 255 + 1));
-            if (i != 2) {
-                builder.append(",");
-            }
-        }
-
-        return builder.toString();
     }
 
     /**

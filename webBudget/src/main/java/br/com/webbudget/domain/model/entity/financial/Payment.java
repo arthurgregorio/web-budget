@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.model.entity.financial;
 
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
-import br.com.webbudget.application.converter.JPALocalDateConverter;
+import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.entries.Wallet;
 import br.com.webbudget.domain.model.entity.entries.Card;

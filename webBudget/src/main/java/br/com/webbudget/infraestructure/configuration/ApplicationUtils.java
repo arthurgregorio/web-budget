@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Classe utilitaria para uso em alguns pontos da aplicacao sem a necessidade de
@@ -91,13 +90,13 @@ public class ApplicationUtils {
     public static String createRamdomCode(int size, boolean onlyNumbers) {
 
         final String digits;
-        
+
         if (onlyNumbers) {
             digits = "0123456789";
         } else {
             digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         }
-        
+
         long decimalNumber = System.nanoTime();
 
         String generated = "";
@@ -111,7 +110,7 @@ public class ApplicationUtils {
             decimalNumber = decimalNumber / digits.length();
             authCodeLength++;
         }
-        
+
         return generated;
     }
 }

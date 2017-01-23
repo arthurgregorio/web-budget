@@ -20,6 +20,8 @@ import lombok.Getter;
 
 /**
  *
+ * @param <T>
+ * 
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -28,13 +30,13 @@ import lombok.Getter;
 public class DonutChartDataset<T> {
 
     @Getter
-    private T value;
+    private final T value;
     @Getter
-    private String color;
+    private final String color;
     @Getter
-    private String highlight;
+    private final String highlight;
     @Getter
-    private String label;
+    private final String label;
 
     /**
      * 
