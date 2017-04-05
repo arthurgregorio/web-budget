@@ -314,6 +314,13 @@ public class MovementService {
                     movement.getFinancialPeriod()));
         }
 
+        // deleta os rateios ja deletados na view
+        final List<Apportionment> deleteds = movement.getDeletedApportionments();
+
+        deleteds.stream().forEach(apportionment -> {
+            this.apportionmentRepository.delete(apportionment);
+        });
+        
         // pega a lista de rateios
         final List<Apportionment> apportionments = movement.getApportionments();
 
