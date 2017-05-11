@@ -280,7 +280,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.2.4.Final</version>
+            <version>5.1.6.Final</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.jboss</groupId>
@@ -291,14 +291,14 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.2.4.Final</version>
+            <version>5.1.6.Final</version>
         </dependency> 
         
         <!-- hibernate validator -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.2.4.Final</version> 
+            <version>5.4.1.Final</version> 
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -313,7 +313,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator-annotation-processor</artifactId>
-            <version>5.2.4.Final</version> 
+            <version>5.4.1.Final</version> 
         </dependency>
 
         <!-- caelum stella -->
