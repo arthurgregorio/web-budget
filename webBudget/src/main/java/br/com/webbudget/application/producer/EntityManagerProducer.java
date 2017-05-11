@@ -16,12 +16,14 @@
  */
 package br.com.webbudget.application.producer;
 
+import br.com.webbudget.application.producer.qualifier.DefaultDatabase;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import org.picketlink.annotations.PicketLink;
 
 /**
  * Producer de entitymanagers para os recursos do projeto
@@ -42,6 +44,8 @@ public class EntityManagerProducer {
      * @return
      */
     @Produces
+    @PicketLink
+    @DefaultDatabase
     EntityManager produce() {
         return this.factory.createEntityManager();
     }
@@ -51,7 +55,7 @@ public class EntityManagerProducer {
      *
      * @param entityManager o entity manager a ser encerrado
      */
-    void dispose(@Disposes EntityManager entityManager) {
+    void dispose(@Disposes @DefaultDatabase EntityManager entityManager) {
         if (entityManager.isOpen()) {
             entityManager.clear();
             entityManager.close();

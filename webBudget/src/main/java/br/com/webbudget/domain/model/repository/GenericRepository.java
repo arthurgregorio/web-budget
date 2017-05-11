@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.model.repository;
 
+import br.com.webbudget.application.producer.qualifier.DefaultDatabase;
 import br.com.webbudget.domain.model.entity.IPersistentEntity;
 import java.util.List;
 import java.io.Serializable;
@@ -44,6 +45,7 @@ import org.hibernate.Session;
 public abstract class GenericRepository<T extends IPersistentEntity, ID extends Serializable> 
         implements IGenericRepository<T, ID>, Serializable {
 
+    @DefaultDatabase
     @PersistenceContext
     private EntityManager entityManager;
 

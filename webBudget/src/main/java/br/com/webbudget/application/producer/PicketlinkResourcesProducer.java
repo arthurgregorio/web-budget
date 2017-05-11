@@ -20,7 +20,6 @@ import br.com.webbudget.domain.model.security.Partition;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import org.picketlink.annotations.PicketLink;
 import org.picketlink.idm.PartitionManager;
 
@@ -41,9 +40,7 @@ import org.picketlink.idm.PartitionManager;
 public class PicketlinkResourcesProducer {
 
     @Inject
-    private EntityManager entityManager;
-    
-    @Inject
+    @PicketLink
     private PartitionManager partitionManager;
     
     /**
@@ -62,11 +59,5 @@ public class PicketlinkResourcesProducer {
         }
 
         return partition;
-    }
-    
-    @Produces
-    @PicketLink
-    EntityManager produceEntityManager() {
-        return this.entityManager;
     }
 }
