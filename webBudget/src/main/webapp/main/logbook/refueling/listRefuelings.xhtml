@@ -67,70 +67,78 @@
                 </h:form>
             </div>
             <div jsf:id="boxBody" class="box-body">
-                <p:dataTable id="refuelingsList" 
-                             rows="15"
-                             lazy="true"
-                             rowHover="true"
-                             var="refueling"
-                             paginator="true"
-                             sortOrder="descending"
-                             paginatorPosition="bottom"
-                             paginatorAlwaysVisible="false"
-                             value="#{refuelingBean.refuelingsModel}"
-                             emptyMessage="#{messages['list.empty']}">
+                <h:form prependId="false">
+                    <p:dataTable id="refuelingsList" 
+                                 rows="15"
+                                 lazy="true"
+                                 rowHover="true"
+                                 var="refueling"
+                                 paginator="true"
+                                 selectionMode="single"
+                                 sortOrder="descending"
+                                 rowKey="#{refueling.id}"
+                                 paginatorPosition="bottom"
+                                 paginatorAlwaysVisible="false"
+                                 selection="#{refuelingBean.refueling}"
+                                 value="#{refuelingBean.refuelingsModel}"
+                                 emptyMessage="#{messages['list.empty']}">
 
-                    <p:column headerText="#{messages['refueling.list.vehicle']}">
-                        #{refueling.vehicleIdentification}
-                    </p:column>
-                    <p:column width="12%"
-                              styleClass="align-center" 
-                              headerText="#{messages['refueling.list.liters']}">
-                        <h:outputText value="#{refueling.liters}">
-                            <f:convertNumber pattern="#0.00" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column width="12%"
-                              styleClass="align-center" 
-                              headerText="#{messages['refueling.list.cost']}">
-                        <h:outputText value="#{refueling.cost}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                        </h:outputText>
-                    </p:column>
-                    <p:column width="12%"
-                              styleClass="align-center" 
-                              headerText="#{messages['refueling.list.cost-liter']}">
-                        <h:outputText value="#{refueling.costPerLiter}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                        </h:outputText>
-                    </p:column>
-                    <p:column width="12%"
-                              styleClass="align-center" 
-                              headerText="#{messages['refueling.list.average-consumption']}">
-                        <h:outputText rendered="#{refueling.fullTank 
-                                                  and not refueling.firstRefueling}"
-                                      value="#{refueling.averageConsumption} Km/L">
-                            <f:convertNumber pattern="#0.00" />
-                        </h:outputText>
-                        <span class="text text-info text-bold"
-                              jsf:rendered="#{refueling.firstRefueling}">
-                            #{messages['refueling.first']}
-                        </span>
-                        <span class="text text-warning text-bold"
-                              jsf:rendered="#{not refueling.fullTank}">
-                            #{messages['refueling.partial']}
-                        </span>
-                    </p:column>
+                        <p:ajax event="rowSelect" 
+                                listener="#{refuelingBean.changeToDetail()}" />
 
-                    <p:column width="15%" 
-                              styleClass="align-center"
-                              headerText="#{menu['actions']}">
-                        <p:commandButton icon="fa fa-remove"
-                                         title="#{menu['delete']}"
-                                         styleClass="btn btn-flat btn-default"
-                                         actionListener="#{refuelingBean.changeToDelete(refueling.id)}" 
-                                         rendered="#{userSessionBean.hasRole(authorization.REFUELING_DELETE)}"/>
-                    </p:column>
-                </p:dataTable>
+                        <p:column headerText="#{messages['refueling.list.vehicle']}">
+                            #{refueling.vehicleIdentification}
+                        </p:column>
+                        <p:column width="12%"
+                                  styleClass="align-center" 
+                                  headerText="#{messages['refueling.list.liters']}">
+                            <h:outputText value="#{refueling.liters}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="12%"
+                                  styleClass="align-center" 
+                                  headerText="#{messages['refueling.list.cost']}">
+                            <h:outputText value="#{refueling.cost}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="12%"
+                                  styleClass="align-center" 
+                                  headerText="#{messages['refueling.list.cost-liter']}">
+                            <h:outputText value="#{refueling.costPerLiter}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="12%"
+                                  styleClass="align-center" 
+                                  headerText="#{messages['refueling.list.average-consumption']}">
+                            <h:outputText rendered="#{refueling.fullTank 
+                                                      and not refueling.firstRefueling}"
+                                          value="#{refueling.averageConsumption} Km/L">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                            <span class="text text-info text-bold"
+                                  jsf:rendered="#{refueling.firstRefueling}">
+                                #{messages['refueling.first']}
+                            </span>
+                            <span class="text text-warning text-bold"
+                                  jsf:rendered="#{not refueling.fullTank}">
+                                #{messages['refueling.partial']}
+                            </span>
+                        </p:column>
+
+                        <p:column width="15%" 
+                                  styleClass="align-center"
+                                  headerText="#{menu['actions']}">
+                            <p:commandButton icon="fa fa-remove"
+                                             title="#{menu['delete']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             actionListener="#{refuelingBean.changeToDelete(refueling.id)}" 
+                                             rendered="#{userSessionBean.hasRole(authorization.REFUELING_DELETE)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
             </div>
         </div>
 

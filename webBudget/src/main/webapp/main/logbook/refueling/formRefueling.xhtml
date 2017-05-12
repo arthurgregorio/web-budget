@@ -27,7 +27,7 @@
     <ui:param name="activeMenu" value="refuelings"/>
 
     <f:metadata>
-        <f:viewAction action="#{refuelingBean.initializeForm()}"/>
+        <f:viewAction action="#{refuelingBean.initializeForm(param.refuelingId, param.viewState)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="box-body row">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <p:outputLabel for="inVehicle" 
@@ -183,7 +183,7 @@
                             </p:fragment>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <div class="form-group col-md-8">
                             <h4>#{messages['refueling.form.fuels']}</h4>
                         </div>
@@ -192,6 +192,7 @@
                                              update="fuelsList"
                                              value="#{menu['add']}"
                                              styleClass="btn btn-flat btn-info"
+                                             disabled="#{refuelingBean.viewState ne 'ADDING'}"
                                              actionListener="#{refuelingBean.refueling.addFuel()}" />
                         </div>
                         <div class="form-group col-md-12">
@@ -199,13 +200,13 @@
                                          rows="15"
                                          var="fuel"
                                          rowHover="true"
-                                         editable="true"
                                          editMode="cell"
                                          paginator="true"
                                          paginatorPosition="bottom"
                                          paginatorAlwaysVisible="false"
                                          value="#{refuelingBean.refueling.fuels}"
-                                         emptyMessage="#{messages['list.empty']}">
+                                         emptyMessage="#{messages['list.empty']}"
+                                         editable="#{refuelingBean.viewState eq 'ADDING' ? true : false}">
 
                                 <p:ajax process="@this"
                                         event="cellEdit" 
@@ -267,7 +268,7 @@
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                                <p:column width="10%" 
+                                <p:column width="15%" 
                                           styleClass="align-center"
                                           headerText="#{menu['actions']}">
                                     <p:commandButton immediate="true"
@@ -275,6 +276,7 @@
                                                      title="#{menu['delete']}"
                                                      update="fuelsList totalsBox"
                                                      styleClass="btn btn-flat btn-default"
+                                                     disabled="#{refuelingBean.viewState ne 'ADDING'}"
                                                      actionListener="#{refuelingBean.refueling.deleteFuel(fuel)}" />
                                 </p:column>
                             </p:dataTable>
@@ -286,7 +288,8 @@
                     <p:commandButton update="refuelingForm"
                                      value="#{menu['save']}"
                                      action="#{refuelingBean.doSave()}"
-                                     styleClass="btn btn-flat btn-success"/>
+                                     styleClass="btn btn-flat btn-success"
+                                     rendered="#{refuelingBean.viewState eq 'ADDING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

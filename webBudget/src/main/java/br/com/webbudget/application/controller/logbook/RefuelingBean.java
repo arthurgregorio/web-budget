@@ -36,6 +36,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -51,6 +52,7 @@ import org.primefaces.model.SortOrder;
 public class RefuelingBean extends AbstractBean {
 
     @Getter
+    @Setter
     private Refueling refueling;
 
     @Getter
@@ -109,24 +111,32 @@ public class RefuelingBean extends AbstractBean {
 
     /**
      * 
+     * @param refuelingId
+     * @param viewState 
      */
-    public void initializeForm() {
+    public void initializeForm(long refuelingId, String viewState) {
 
+        this.viewState = ViewState.valueOf(viewState);
+        
         // pegamos os periodos financeiros em aberto
         this.openPeriods = this.periodService.listOpenFinancialPeriods();
         
         // lista os veiculos disponiveis
         this.vehicles = this.logbookService.listVehicles(false);
 
-        this.viewState = ViewState.ADDING;
-        this.refueling = new Refueling();
+        if (refuelingId != 0 && this.viewState == ViewState.DETAILING) { 
+            this.refueling = this.logbookService.findRefuelingById(refuelingId);
+        } else {
+            this.refueling = new Refueling();
+        }
     }
 
     /**
      * @return
      */
     public String changeToAdd() {
-        return "formRefueling.xhtml?faces-redirect=true";
+        return "formRefueling.xhtml?faces-redirect=true"
+                + "&viewState=" + ViewState.ADDING;
     }
 
     /**
@@ -137,11 +147,11 @@ public class RefuelingBean extends AbstractBean {
     }
 
     /**
-     * @param refuelingId
-     * @return
+     * 
      */
-    public String changeToEdit(long refuelingId) {
-        return "formRefueling.xhtml?faces-redirect=true&refuelingId=" + refuelingId;
+    public void changeToDetail() {
+        this.redirectTo("formRefueling.xhtml?faces-redirect=true&refuelingId="
+                + this.refueling.getId() + "&viewState=" + ViewState.DETAILING);
     }
 
     /**
