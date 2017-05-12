@@ -22,6 +22,7 @@ import javax.faces.context.ResponseWriter;
 import org.primefaces.component.inputnumber.InputNumber;
 import org.primefaces.component.inputnumber.InputNumberRenderer;
 import org.primefaces.component.inputtext.InputText;
+import org.primefaces.context.RequestContext;
 import org.primefaces.util.HTML;
 
 /**
@@ -35,8 +36,8 @@ import org.primefaces.util.HTML;
  */
 public class CustomInputNumberRenderer extends InputNumberRenderer {
 
-    private static final String CUSTOM_CLASSES = "form-control";
-    
+    private static final String CUSTOM_CLASSES = " form-control";
+
     /**
      * GAMBIARRA NECESSARIA! Zeus tenha piedade de mim e do programador que fez
      * a merda do inputnumber, o class deve ser escrito no input de saida e nao
@@ -45,27 +46,32 @@ public class CustomInputNumberRenderer extends InputNumberRenderer {
      * @param context
      * @param inputNumber
      * @param clientId
+     * @param valueToRender 
      * @throws IOException 
      */
     @Override
-    protected void encodeOutput(FacesContext context, InputNumber inputNumber, String clientId) throws IOException {
+    protected void encodeInput(FacesContext context, InputNumber inputNumber, String clientId, String valueToRender) throws IOException {
         
-        final ResponseWriter writer = context.getResponseWriter();
-        
-        final String inputId = clientId + "_input";
+        ResponseWriter writer = context.getResponseWriter();
+        String inputId = clientId + "_input";
 
-        // como o PF nao sabe colocar a class na input, coloca apenas 
-        // na span que envolve o elemento, fiz esse bypass para que quando
-        // renderizar o elemento a classe do form-control seja adicionada
-        String defaultClass = InputText.STYLE_CLASS + " pe-inputNumber " + CUSTOM_CLASSES;
+        String inputStyle = inputNumber.getInputStyle();
+        String inputStyleClass = inputNumber.getInputStyleClass();
+
+        String style = inputStyle;
         
-        defaultClass = inputNumber.isValid() ? defaultClass : defaultClass + " ui-state-error";
-        defaultClass = !inputNumber.isDisabled() ? defaultClass : defaultClass + " ui-state-disabled";
+        String styleClass = InputText.STYLE_CLASS + CUSTOM_CLASSES;
+        styleClass = inputNumber.isValid() ? styleClass : styleClass + " ui-state-error";
+        styleClass = !inputNumber.isDisabled() ? styleClass : styleClass + " ui-state-disabled";
+        if (!isValueBlank(inputStyleClass)) {
+            styleClass += " " + inputStyleClass;
+        }
 
         writer.startElement("input", null);
         writer.writeAttribute("id", inputId, null);
         writer.writeAttribute("name", inputId, null);
         writer.writeAttribute("type", inputNumber.getType(), null);
+        writer.writeAttribute("value", valueToRender, null);
 
         renderPassThruAttributes(context, inputNumber, HTML.INPUT_TEXT_ATTRS_WITHOUT_EVENTS);
         renderDomEvents(context, inputNumber, HTML.INPUT_TEXT_EVENTS);
@@ -77,7 +83,15 @@ public class CustomInputNumberRenderer extends InputNumberRenderer {
             writer.writeAttribute("disabled", "disabled", "disabled");
         }
 
-        writer.writeAttribute("class", defaultClass, "");
+        if (!isValueBlank(style)) {
+            writer.writeAttribute("style", style, null);
+        }
+        
+        writer.writeAttribute("class", styleClass, null);
+
+        if(RequestContext.getCurrentInstance().getApplicationContext().getConfig().isClientSideValidationEnabled()) {
+            renderValidationMetadata(context, inputNumber);
+        }
 
         writer.endElement("input");
     }
