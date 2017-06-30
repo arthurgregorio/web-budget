@@ -16,14 +16,13 @@
  */
 package br.com.webbudget.domain.model.repository;
 
-import br.com.webbudget.application.producer.qualifier.DefaultDatabase;
 import br.com.webbudget.domain.model.entity.IPersistentEntity;
 import java.util.List;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -45,8 +44,7 @@ import org.hibernate.Session;
 public abstract class GenericRepository<T extends IPersistentEntity, ID extends Serializable> 
         implements IGenericRepository<T, ID>, Serializable {
 
-    @DefaultDatabase
-    @PersistenceContext
+    @Inject
     private EntityManager entityManager;
 
     private final Class<T> persistentClass;

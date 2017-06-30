@@ -23,19 +23,18 @@ import br.com.webbudget.domain.model.security.GroupMembership;
 import br.com.webbudget.domain.model.security.Partition;
 import br.com.webbudget.domain.model.security.Role;
 import br.com.webbudget.domain.model.security.User;
+import br.com.webbudget.domain.model.service.AccountService;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
+import org.picketlink.annotations.PicketLink;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.PartitionManager;
 import org.picketlink.idm.RelationshipManager;
 import org.picketlink.idm.credential.Password;
-import org.picketlink.idm.query.IdentityQuery;
-import org.picketlink.idm.query.IdentityQueryBuilder;
 
 /**
  * Classe de inicializacao do modelo de seguranca do sistema, por ela toda o
@@ -50,11 +49,14 @@ import org.picketlink.idm.query.IdentityQueryBuilder;
 @Singleton
 public class SecurityInitializer {
 
-    private IdentityManager identityManager;
-
     @Inject
     private Authorization authorization;
+    
     @Inject
+    private AccountService accountService;
+    
+    @Inject
+    @PicketLink
     private PartitionManager partitionManager;
 
     private static final String DEFAULT_ADMIN_USER = "admin";
@@ -71,23 +73,25 @@ public class SecurityInitializer {
         final Partition partition = this.checkPartition();
 
         // cria o gestor de identidades
-        this.identityManager = this.partitionManager
+        final IdentityManager identityManager = this.partitionManager
                 .createIdentityManager(partition);
 
+        final List<String> authorizations = this.authorization.listAuthorizations();
+        
         // checamos se todas as roles estao dentro do sistema
-        for (String role : this.authorization.listAuthorizations()) {
-            if (!this.hasRole(role)) {
-                this.identityManager.add(new Role(role));
+        for (String role : authorizations) {
+            if (this.accountService.findRoleByName(role) == null) {
+                identityManager.add(new Role(role));
             }
         }
 
         // checamos se existe o grupo default
-        if (!this.hasGroup(DEFAULT_ADMIN_GROUP)) {
-            this.identityManager.add(new Group(DEFAULT_ADMIN_GROUP));
+        if (this.accountService.findGroupByName(DEFAULT_ADMIN_GROUP) == null) {
+            identityManager.add(new Group(DEFAULT_ADMIN_GROUP));
         }
 
         // checa se existe o usuario admin
-        if (!this.hasUser(DEFAULT_ADMIN_USER)) {
+        if (this.accountService.findUserByUsername(DEFAULT_ADMIN_USER) == null) {
 
             final User user = new User(DEFAULT_ADMIN_USER);
 
@@ -95,22 +99,24 @@ public class SecurityInitializer {
             user.setCreatedDate(new Date());
             user.setEnabled(true);
             user.setExpirationDate(null);
-            user.setEmail("admin@webbudget.com");
+            user.setEmail("admin@webbudget.com.br");
             
-            this.identityManager.add(user);
+            identityManager.add(user);
 
-            this.identityManager.updateCredential(
+            identityManager.updateCredential(
                     user, new Password(DEFAULT_ADMIN_PASSWORD));
 
             // setamos agora as permissoes no grupo
-            final Group group = this.getGroup(DEFAULT_ADMIN_GROUP);
+            final Group group = this.accountService.findGroupByName(DEFAULT_ADMIN_GROUP);
 
             // criamos um gerenciador de relacionamentos
             final RelationshipManager relationshipManager
                     = this.partitionManager.createRelationshipManager();
 
+            final List<Role> roles = this.accountService.listRoles();
+            
             // adicionamos no grupo, todas as roles do sistema
-            for (Role role : this.getRoles()) {
+            for (Role role : roles) {
                 relationshipManager.add(new Grant(role, group));
             }
 
@@ -129,84 +135,9 @@ public class SecurityInitializer {
 
         if (partition == null) {
             partition = new Partition(Partition.DEFAULT);
-            this.partitionManager.add(partition);
+            this.partitionManager.add(partition, "jpa.config");
         }
 
         return partition;
-    }
-
-    /**
-     * Verifica se o usuario informado existe ou nao
-     *
-     * @param user o usuario a ser buscado
-     * @return se o usuario existe ou nao
-     */
-    private boolean hasUser(String user) {
-
-        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
-        final IdentityQuery<User> query = queryBuilder.createIdentityQuery(User.class);
-
-        query.where(queryBuilder.equal(User.USER_NAME, user));
-
-        return !query.getResultList().isEmpty();
-    }
-
-    /**
-     * Verifica se o grupo informado existe ou nao
-     *
-     * @param group o grupo a ser verificado
-     * @return se o grupo existe ou nao
-     */
-    private boolean hasGroup(String group) {
-
-        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
-        final IdentityQuery<Group> query = queryBuilder.createIdentityQuery(Group.class);
-
-        query.where(queryBuilder.equal(Group.NAME, group));
-
-        return !query.getResultList().isEmpty();
-    }
-
-    /**
-     * Verifica se a role existe ou nao
-     *
-     * @param role a role a ser verificada
-     * @return se a role existe ou nao
-     */
-    private boolean hasRole(String role) {
-
-        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
-        final IdentityQuery<Role> query = queryBuilder.createIdentityQuery(Role.class);
-
-        query.where(queryBuilder.equal(Role.AUTHORIZATION, role));
-
-        return !query.getResultList().isEmpty();
-    }
-
-    /**
-     * Busca um grupo em especifico
-     *
-     * @param group o grupo a ser buscado
-     * @return o grupo encontrado
-     */
-    private Group getGroup(String group) {
-
-        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
-        final IdentityQuery<Group> query = queryBuilder.createIdentityQuery(Group.class);
-
-        query.where(queryBuilder.equal(Group.NAME, group));
-
-        return query.getResultList().get(0);
-    }
-
-    /**
-     * @return todas as roles do sistema
-     */
-    private List<Role> getRoles() {
-
-        final IdentityQueryBuilder queryBuilder = this.identityManager.getQueryBuilder();
-        final IdentityQuery<Role> query = queryBuilder.createIdentityQuery(Role.class);
-
-        return query.getResultList();
     }
 }

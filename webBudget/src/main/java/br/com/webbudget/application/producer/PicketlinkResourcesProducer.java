@@ -20,6 +20,7 @@ import br.com.webbudget.domain.model.security.Partition;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import org.picketlink.annotations.PicketLink;
 import org.picketlink.idm.PartitionManager;
 
@@ -38,10 +39,13 @@ import org.picketlink.idm.PartitionManager;
  */
 @ApplicationScoped
 public class PicketlinkResourcesProducer {
-
+    
     @Inject
     @PicketLink
     private PartitionManager partitionManager;
+    
+    @Inject
+    private EntityManager entityManager;
     
     /**
      * @return a particao default da aplicacao para que o sistema possa iniciar
@@ -59,5 +63,14 @@ public class PicketlinkResourcesProducer {
         }
 
         return partition;
+    }
+    
+    /**
+     * @return
+     */
+    @Produces
+    @PicketLink
+    EntityManager produce() {
+        return this.entityManager;
     }
 }

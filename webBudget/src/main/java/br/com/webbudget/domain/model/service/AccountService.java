@@ -30,6 +30,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.ProjectStage;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import org.picketlink.annotations.PicketLink;
 import org.picketlink.idm.IdentityManagementException;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.RelationshipManager;
@@ -57,38 +58,38 @@ public class AccountService {
     private RelationshipManager relationshipManager;
 
     /**
-     * 
-     * @param user 
+     *
+     * @param user
      */
     @Transactional
     public void save(User user) {
-        
+
         // validamos os dados do usuario
         final User found = this.findUserByUsername(user.getUsername());
-        
+
         if (found != null) {
             throw new InternalServiceError("user.error.duplicated-username");
         }
 
         // pegamos o grupo e setamos o user no membership dele
         final GroupMembership groupMembership = user.getGroupMembership();
-        
+
         // pegamos a senha antes de salvar o usuario
         final String unsecurePassword = user.getPassword();
-        
+
         // salvamos
         this.identityManager.add(user);
 
         // atualizamos o usuario com a senha
         this.identityManager.updateCredential(user, new Password(unsecurePassword));
-        
+
         // concedemos ao usuario o grant para o grupo que ele escolheu
         this.relationshipManager.add(groupMembership);
     }
-    
+
     /**
-     * 
-     * @param user 
+     *
+     * @param user
      */
     @Transactional
     public void update(User user) {
@@ -98,18 +99,18 @@ public class AccountService {
                 && user.getUsername().equals("admin")) {
             return;
         }
-        
+
         // pegamos o grupo
         final GroupMembership groupMembership = user.getGroupMembership();
-        
+
         // removemos o vinculo antigo
         this.listMembershipsByUser(user).forEach(membership -> {
             this.removeFromGroup(membership.getGroup(), user);
         });
-        
+
         // pegamos a senha antes de salvar o usuario
         final String unsecurePassword = user.getPassword();
-        
+
         // atualizamos o usuario com a senha
         if (unsecurePassword != null && !unsecurePassword.isEmpty()) {
             this.identityManager.updateCredential(user, new Password(unsecurePassword));
@@ -117,14 +118,14 @@ public class AccountService {
             // salvamos
             this.identityManager.update(user);
         }
-        
+
         // concedemos ao usuario o grant para o grupo que ele escolheu
         this.relationshipManager.add(groupMembership);
     }
-    
+
     /**
-     * 
-     * @param user 
+     *
+     * @param user
      */
     @Transactional
     public void updateProfile(User user) {
@@ -134,10 +135,10 @@ public class AccountService {
                 && user.getUsername().equals("admin")) {
             user.setPassword(null);
         }
-        
+
         // pegamos a senha antes de salvar o usuario
         final String unsecurePassword = user.getPassword();
-        
+
         // atualizamos o usuario com a senha
         if (unsecurePassword != null && !unsecurePassword.isEmpty()) {
             this.identityManager.updateCredential(user, new Password(unsecurePassword));
@@ -146,107 +147,107 @@ public class AccountService {
             this.identityManager.update(user);
         }
     }
-    
+
     /**
-     * 
-     * @param user 
+     *
+     * @param user
      */
     @Transactional
     public void delete(User user) {
-        
+
         // limpa a senha para nao ser trocada quando em testes
         if (ApplicationUtils.isStageRunning(ProjectStage.SystemTest)
                 && user.getUsername().equals("admin")) {
             return;
         }
-        
+
         // removemos os relacioanamentos
         for (GroupMembership membership : this.listMembershipsByUser(user)) {
             this.relationshipManager.remove(membership);
         }
-        
+
         // removemos o usuario do contexto de seguranca
         this.identityManager.remove(user);
     }
-    
+
     /**
-     * 
+     *
      * @param group
-     * @param authorizations 
+     * @param authorizations
      */
     @Transactional
     public void save(Group group, List<String> authorizations) {
-        
+
         // validamos os dados do grupo
         final Group found = this.findGroupByName(group.getName());
-        
+
         if (found != null) {
             throw new InternalServiceError("group.error.duplicated-group");
         }
-        
+
         // checamos se existem permissoes para este grupo
         if (authorizations == null || authorizations.isEmpty()) {
             throw new InternalServiceError("group.error.empty-authorizations");
         }
-        
+
         // cria o grupo
         this.identityManager.add(group);
-        
+
         // criamos os grants para aquele grupo
         for (String authorization : authorizations) {
-            
+
             final Role role = this.findRoleByName(authorization);
-            
+
             this.relationshipManager.add(new Grant(role, group));
         }
     }
-    
+
     /**
-     * 
+     *
      * @param group
-     * @param authorizations 
+     * @param authorizations
      */
     @Transactional
     public void update(Group group, List<String> authorizations) {
-        
+
         // checamos se existem permissoes para este grupo
         if (authorizations == null || authorizations.isEmpty()) {
             throw new InternalServiceError("group.error.empty-authorizations");
         }
-        
+
         // removemos todos os grants atuais
         final List<Grant> oldGrants = this.listGrantsByGroup(group);
-        
+
         for (Grant grant : oldGrants) {
             this.relationshipManager.remove(grant);
         }
-        
+
         // atualiza o grupo
         this.identityManager.update(group);
-        
+
         // recriamos os grants para aquele grupo
         for (String authorization : authorizations) {
-            
+
             final Role role = this.findRoleByName(authorization);
-            
+
             this.relationshipManager.add(new Grant(role, group));
         }
     }
-    
+
     /**
-     * 
-     * @param group 
+     *
+     * @param group
      */
     @Transactional
     public void delete(Group group) {
-        
+
         // removemos todos os grants
         final List<Grant> oldGrants = this.listGrantsByGroup(group);
-        
+
         for (Grant grant : oldGrants) {
             this.relationshipManager.remove(grant);
         }
-        
+
         // remove o grupo
         this.identityManager.remove(group);
     }
@@ -271,11 +272,11 @@ public class AccountService {
             throw new IdentityManagementException("user.error.duplicated-usernames");
         }
     }
-    
+
     /**
-     * 
+     *
      * @param email
-     * @return 
+     * @return
      */
     public User findUserByEmail(String email) {
 
@@ -294,19 +295,19 @@ public class AccountService {
     }
 
     /**
-     * 
+     *
      * @param userId
-     * @return 
+     * @return
      */
     public User findUserById(String userId) {
         return this.findUserById(userId, true);
     }
-    
+
     /**
-     * 
+     *
      * @param userId
      * @param withGroup
-     * @return 
+     * @return
      */
     public User findUserById(String userId, boolean withGroup) {
 
@@ -327,7 +328,7 @@ public class AccountService {
             throw new IdentityManagementException("user.error.duplicated-usernames");
         }
     }
-    
+
     /**
      *
      * @param groupId
@@ -446,7 +447,7 @@ public class AccountService {
 
         return query.getResultList();
     }
-    
+
     /**
      *
      * @param filter
@@ -464,8 +465,8 @@ public class AccountService {
         // considera que a busca ira ou nao bucar os bloqueados
         if (isBlocked != null) {
             conditions.add(queryBuilder.equal(User.ENABLED, !isBlocked));
-        } 
-        
+        }
+
         // considere que os filtros devem ser setados
         if (filter != null && !filter.isEmpty()) {
             conditions = Arrays.asList(
@@ -477,12 +478,12 @@ public class AccountService {
 
         return query.getResultList();
     }
-    
+
     /**
-     * 
+     *
      * @param filter
      * @param isBlocked
-     * @return 
+     * @return
      */
     public List<Group> listGroupsByFilter(String filter, Boolean isBlocked) {
 
@@ -495,8 +496,8 @@ public class AccountService {
         // considera que a busca ira ou nao bucar os bloqueados
         if (isBlocked != null) {
             conditions.add(queryBuilder.equal(User.ENABLED, !isBlocked));
-        } 
-        
+        }
+
         // considere que os filtros devem ser setados
         if (filter != null && !filter.isEmpty()) {
             conditions = Arrays.asList(
@@ -678,5 +679,19 @@ public class AccountService {
         for (Grant grant : query.getResultList()) {
             this.relationshipManager.remove(grant);
         }
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public List<Role> listRoles() {
+
+        final IdentityQueryBuilder queryBuilder = 
+                this.identityManager.getQueryBuilder();
+        final IdentityQuery<Role> query = 
+                queryBuilder.createIdentityQuery(Role.class);
+
+        return query.getResultList();
     }
 }
