@@ -26,7 +26,7 @@
     <ui:param name="payment" value="#{movementBean.movement.payment}"/>
 
     <div jsf:id="paymentBox" class="row">
-        <div class="col-sm-7 form-group">
+        <div class="col-sm-5 form-group">
             <p:outputLabel for="inPaymentMethod" 
                            value="#{messages['payment.form.method']}: "/>
             <p:selectOneMenu id="inPaymentMethod" 
@@ -42,7 +42,7 @@
                                value="#{movementBean.paymentMethodTypes}"/>
             </p:selectOneMenu>
         </div>
-        <div class="col-sm-5 form-group">
+        <div class="col-sm-4 form-group">
             <p:outputLabel for="inPaymentDate" 
                            value="#{messages['payment.form.date']}: "/>
             <p:calendar id="inPaymentDate" 
@@ -50,6 +50,18 @@
                         pattern="dd/MM/yyyy"
                         converter="localDateConverter"
                         value="#{payment.paymentDate}"/>
+        </div>
+        <div class="col-sm-3 form-group">
+            <p:outputLabel for="inDiscount" 
+                           value="#{messages['payment.form.discount']}: "/>
+            <p:inputNumber id="inDiscount" 
+                           symbol="R$ "
+                           decimalPlaces="2" 
+                           decimalSeparator="," 
+                           thousandSeparator="." 
+                           value="#{payment.discount}">
+                <f:converter converterId="javax.faces.BigDecimal" />
+            </p:inputNumber>
         </div>
         <div class="col-sm-12 form-group">
             <p:outputLabel for="inWallet" 

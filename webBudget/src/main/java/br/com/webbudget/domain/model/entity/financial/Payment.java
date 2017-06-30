@@ -23,6 +23,7 @@ import br.com.webbudget.domain.model.entity.entries.Wallet;
 import br.com.webbudget.domain.model.entity.entries.Card;
 import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -60,6 +61,10 @@ public class Payment extends PersistentEntity {
     @Column(name = "payment_date", nullable = false)
     @Convert(converter = JPALocalDateConverter.class)
     private LocalDate paymentDate;
+    @Getter
+    @Setter
+    @Column(name = "discount", length = 8)
+    private BigDecimal discount;
     @Getter
     @Setter
     @Enumerated
@@ -100,7 +105,7 @@ public class Payment extends PersistentEntity {
         if (this.card == null) {
             throw new InternalServiceError("movement.validate.payment-not-credit-card");
         }
-        
+
         final int expiration = this.card.getExpirationDay();
 
         if (expiration != 0) {
@@ -109,21 +114,21 @@ public class Payment extends PersistentEntity {
             return period.getEnd();
         }
     }
-    
+
     /**
      * @return se este pagamento eh em dinheiro
      */
     public boolean isPaidInCash() {
         return this.paymentMethodType == PaymentMethodType.IN_CASH;
     }
-    
+
     /**
      * @return se este pagamento eh em credito
      */
     public boolean isPaidOnCredit() {
         return this.paymentMethodType == PaymentMethodType.CREDIT_CARD;
     }
-    
+
     /**
      * @return se este pagamento eh em debito
      */
