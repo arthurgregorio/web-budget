@@ -33,7 +33,7 @@
             jQuery('#closeButton').focus();
         };
     </script>
-    
+
     <ui:param name="payment" value="#{movementBean.movement.payment}" />
 
     <div class="row">
@@ -54,7 +54,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12 form-group">
+        <div class="col-sm-9 form-group">
             <p:outputLabel value="#{messages['payment-details.dialog.source']}: "/>
             <p:inputText readonly="true" 
                          styleClass="form-control"
@@ -64,6 +64,17 @@
                          styleClass="form-control"
                          value="#{payment.card.readableName}"
                          rendered="#{payment.paymentMethodType ne 'IN_CASH'}"/>
+        </div>
+        <div class="col-sm-3 form-group">
+            <p:outputLabel value="#{messages['payment-details.dialog.discount']}: "/>
+            <p:inputNumber symbol="R$ "
+                           readonly="true"
+                           decimalPlaces="2" 
+                           decimalSeparator="," 
+                           thousandSeparator="." 
+                           value="#{payment.discount}">
+                <f:converter converterId="javax.faces.BigDecimal" />
+            </p:inputNumber>
         </div>
     </div>
 

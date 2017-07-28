@@ -146,4 +146,23 @@ public class Payment extends PersistentEntity {
             throw new InternalServiceError("error.payment.no-card");
         }
     }
+
+    /**
+     * Valida se o desconto aqui inserido e menor que o valor do movimento 
+     * que estamos pagando por este pagamento
+     * 
+     * @param value o valor do movimento para comparacao
+     */
+    public void validateDiscount(BigDecimal value) {
+       if (this.discount != null && this.discount.compareTo(value) >= 0) {
+           throw new InternalServiceError("error.payment.invalid-discount");
+       }
+    }
+
+    /**
+     * @return se temos ou nao um desconto para este pagamento
+     */
+    boolean hasDiscount() {
+        return this.discount != null && this.discount != BigDecimal.ZERO;
+    }
 }

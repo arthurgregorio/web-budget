@@ -30,8 +30,14 @@
 
     <h:form id="paymentForm" prependId="false">
 
+        <div class="row">
+            <div class="col-sm-12">
+                <p:messages closable="true" />
+            </div>
+        </div>
+
         <ui:include src="paymentBox.xhtml"/>
-        
+
         <div class="row">
             <div class="col-sm-12 align-right">
                 <p:commandButton update="paymentForm"

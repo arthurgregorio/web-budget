@@ -66,7 +66,6 @@ public class Movement extends PersistentEntity {
     @Getter
     @Column(name = "code", nullable = false, length = 8, unique = true)
     private String code;
-    @Getter
     @Setter
     @NotNull(message = "{movement.value}")
     @Column(name = "value", nullable = false, length = 8)
@@ -230,6 +229,23 @@ public class Movement extends PersistentEntity {
 
         // remove da lista principal
         this.apportionments.remove(toRemove);
+    }
+
+    /**
+     * @return o valor deste movimento considerando seu possivel desconto
+     */
+    public BigDecimal getValue() {
+        if (this.payment != null && this.payment.hasDiscount()) {
+            return this.value.subtract(this.payment.getDiscount());
+        } 
+        return value;
+    }
+    
+    /**
+     * @return retorna o valor original deste movimento, sem descontos
+     */
+    public BigDecimal getOriginalValue() {
+        return this.value;
     }
 
     /**
@@ -423,5 +439,20 @@ public class Movement extends PersistentEntity {
      */
     public boolean isLastLaunch() {
         return this.launch != null && this.launch.getFixedMovement().isFinalized();
+    }
+
+    /**
+     * Valida o pagamento deste movimento
+     */
+    public void validatePayment() {
+
+        // valida as formas de pagamento informadas
+        this.payment.validatePaymentMethod();
+        
+        // valida o valor do desconto
+        this.payment.validateDiscount(this.value);
+        
+        // TODO validar para que movimento com multiplos rateios nao permitam 
+        //      descontos 
     }
 }

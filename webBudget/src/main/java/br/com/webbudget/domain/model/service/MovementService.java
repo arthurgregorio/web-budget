@@ -293,14 +293,14 @@ public class MovementService {
     @Transactional
     public void payMovement(Movement movement) {
 
-        // pega o pagamento
-        Payment payment = movement.getPayment();
-
-        // valida o pagamento
-        payment.validatePaymentMethod();
+        // valida se temos uma pagamento valido
+        movement.validatePayment();
         
         // validamos se os rateios estao corretos
         movement.validateApportionments();
+        
+        // pega o pagamento
+        Payment payment = movement.getPayment();
         
         // se nao foi informada a data de vencimento, seta a data atual
         if (!movement.hasDueDate()) {
