@@ -420,14 +420,14 @@ public class Movement extends PersistentEntity {
         if (this.getApportionments().isEmpty()) {
             throw new InternalServiceError(
                     "error.apportionment.empty-apportionment");
-        } else if (this.getApportionmentsTotal().compareTo(this.value) > 0) {
+        } else if (this.getApportionmentsTotal().compareTo(this.getValue()) > 0) {
             final String difference = String.format("%10.2f",
-                    this.getApportionmentsTotal().subtract(this.value));
+                    this.getApportionmentsTotal().subtract(this.getValue()));
             throw new InternalServiceError(
                     "error.apportionment.gt-value", difference);
-        } else if (this.getApportionmentsTotal().compareTo(this.value) < 0) {
+        } else if (this.getApportionmentsTotal().compareTo(this.getValue()) < 0) {
             final String difference = String.format("%10.2f",
-                    this.value.subtract(this.getApportionmentsTotal()));
+                    this.getValue().subtract(this.getApportionmentsTotal()));
             throw new InternalServiceError(
                     "error.apportionment.lt-value", difference);
         }
@@ -442,17 +442,31 @@ public class Movement extends PersistentEntity {
     }
 
     /**
+     * @return se este movimento tem ou nao mais de um rateio
+     */
+    public boolean isMultiApportionment() {
+        return this.apportionments.size() > 1;
+    }
+    
+    /**
      * Valida o pagamento deste movimento
      */
     public void validatePayment() {
 
+        // movimentos com multiplos rateios nao sao passiveis de desconto
+        if (this.payment.hasDiscount() && this.isMultiApportionment()) {
+            throw new InternalServiceError("error.payment.discount-app-multi");
+        } 
+        
         // valida as formas de pagamento informadas
         this.payment.validatePaymentMethod();
         
         // valida o valor do desconto
         this.payment.validateDiscount(this.value);
         
-        // TODO validar para que movimento com multiplos rateios nao permitam 
-        //      descontos 
+        // aplica o desconto nos rateios caso tenha
+        this.apportionments.forEach(a -> {
+            a.setValue(this.getValue());
+        });
     }
 }
