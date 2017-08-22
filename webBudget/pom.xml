@@ -224,44 +224,6 @@
             <version>2.7.1.Final</version>
         </dependency>
         
-        <!--deltaspike-->
-        <dependency>
-            <groupId>org.apache.deltaspike.core</groupId>
-            <artifactId>deltaspike-core-api</artifactId>
-            <version>1.7.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.deltaspike.core</groupId>
-            <artifactId>deltaspike-core-impl</artifactId>
-            <version>1.7.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.deltaspike.modules</groupId>
-            <artifactId>deltaspike-jpa-module-api</artifactId>
-            <version>1.7.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.deltaspike.modules</groupId>
-            <artifactId>deltaspike-jpa-module-impl</artifactId>
-            <version>1.7.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.deltaspike.modules</groupId>
-            <artifactId>deltaspike-jsf-module-api</artifactId>
-            <version>1.7.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.deltaspike.modules</groupId>
-            <artifactId>deltaspike-jsf-module-impl</artifactId>
-            <version>1.7.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        
         <!-- retrofit --> 
         <dependency>
             <groupId>com.squareup.retrofit</groupId>
@@ -281,16 +243,6 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.1.6.Final</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss</groupId>
-                    <artifactId>jandex</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml</groupId>
-                    <artifactId>classmate</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -302,7 +254,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.4.1.Final</version> 
+            <version>5.1.3.Final</version> 
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -317,7 +269,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator-annotation-processor</artifactId>
-            <version>5.4.1.Final</version> 
+            <version>5.1.3.Final</version> 
         </dependency>
 
         <!-- caelum stella -->
@@ -368,7 +320,7 @@
         </dependency>
         
         <!-- libs de testes -->
-        <dependency>
+<!--        <dependency>
             <groupId>org.jboss.arquillian.testng</groupId>
             <artifactId>arquillian-testng-container</artifactId>
             <scope>test</scope>
@@ -401,7 +353,7 @@
             <artifactId>h2</artifactId>
             <version>1.4.193</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
     
     <build>
