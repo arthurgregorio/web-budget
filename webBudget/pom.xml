@@ -144,19 +144,6 @@
         </profile>
     </profiles>
 
-    <dependencyManagement>
-        <dependencies>
-            <!--arquillian-->
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>1.1.11.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <!-- JEE 7 -->
         <dependency>
@@ -318,42 +305,6 @@
             <artifactId>velocity-tools</artifactId>
             <version>1.4</version>
         </dependency>
-        
-        <!-- libs de testes -->
-<!--        <dependency>
-            <groupId>org.jboss.arquillian.testng</groupId>
-            <artifactId>arquillian-testng-container</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.arquillian</groupId>
-            <artifactId>wildfly-arquillian-container-managed</artifactId>
-            <version>2.0.0.Final</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>sun.jdk</groupId>
-                    <artifactId>jconsole</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.5.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.193</version>
-            <scope>test</scope>
-        </dependency>-->
     </dependencies>
     
     <build>
