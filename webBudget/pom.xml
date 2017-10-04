@@ -56,7 +56,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <skip.tests>true</skip.tests>
                 <application.version>${project.version}</application.version>
                 <email.host>${wb.email-host}</email.host>
                 <email.port>${wb.email-port}</email.port>
@@ -68,78 +67,23 @@
         <profile>
             <id>testing</id>
             <properties>
-                <skip.tests>true</skip.tests>
                 <application.version>${project.version}</application.version>
                 <email.host>${wb.email-host}</email.host>
                 <email.port>${wb.email-port}</email.port>
                 <email.user>${wb.email-user}</email.user>
                 <email.password>${wb.email-password}</email.password>
                 <jsf.stage>SystemTest</jsf.stage>
-            </properties>
-        </profile>
-        <profile>
-            <id>approval</id>
-            <properties>
-                <skip.tests>true</skip.tests>
-                <application.version>${project.version}</application.version>
-                <email.host>${wb.email-host}</email.host>
-                <email.port>${wb.email-port}</email.port>
-                <email.user>${wb.email-user}</email.user>
-                <email.password>${wb.email-password}</email.password>
-                <jsf.stage>Production</jsf.stage>
             </properties>
         </profile>
         <profile>
             <id>production</id>
             <properties>
-                <skip.tests>false</skip.tests>
-                <jboss.home>${env.JBOSS_HOME}</jboss.home>
-                <standalone.config>standalone.xml</standalone.config>
                 <application.version>${project.version}</application.version>
                 <email.host>${wb.email-host}</email.host>
                 <email.port>${wb.email-port}</email.port>
                 <email.user>${wb.email-user}</email.user>
                 <email.password>${wb.email-password}</email.password>
                 <jsf.stage>Production</jsf.stage>
-            </properties>
-        </profile>
-        <profile>
-            <id>openshift</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>2.6</version>
-                        <configuration>
-                            <webResources>
-                                <resource>
-                                    <filtering>true</filtering>
-                                    <directory>src/main/webapp</directory>
-                                    <includes>
-                                        <include>**/web.xml</include>
-                                    </includes>
-                                </resource>
-                            </webResources>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <outputDirectory>deployments</outputDirectory>
-                            <warName>ROOT</warName>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <properties>
-                <skip.tests>false</skip.tests>
-                <jboss.home>${env.JBOSS_HOME}</jboss.home>
-                <standalone.config>standalone.xml</standalone.config>
-                <application.version>${project.version}</application.version>
-                <orm.show-sql>false</orm.show-sql>
-                <email.host>${wb.email-host}</email.host>
-                <email.port>${wb.email-port}</email.port>
-                <email.user>${wb.email-user}</email.user>
-                <email.password>${wb.email-password}</email.password>
-                <!--<jsf.stage>Production</jsf.stage>-->
-                <jsf.stage>SystemTest</jsf.stage>
             </properties>
         </profile>
     </profiles>
@@ -346,14 +290,6 @@
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <configuration>
-                    <skipTests>${skip.tests}</skipTests>
-                </configuration>
-            </plugin>
         </plugins>
         
         <resources>
@@ -362,12 +298,5 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
-        
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
     </build>
 </project>
