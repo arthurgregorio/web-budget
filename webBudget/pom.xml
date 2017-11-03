@@ -133,6 +133,13 @@
             <version>1.16.18</version>
         </dependency>
         
+        <!--guava-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.3-jre</version>
+        </dependency>
+        
         <!--picketlink-->
         <dependency>
             <groupId>org.picketlink</groupId>
