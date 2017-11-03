@@ -251,3 +251,8 @@ no-padding {
 .btn-warning.hover {
     background-color: #e08e0b !important;
 }
+
+/* corrige a borda da section que guarda a invoice */
+.invoice {
+    margin: 10px 0px    
+}

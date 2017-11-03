@@ -38,7 +38,7 @@ span.ui-icon-check {
 }
 
 /* posicionamento da caixa do checkbox */
-.ui-chkbox-box {
+td .ui-chkbox-box {
     position: relative;
     top: 4px;
 }
