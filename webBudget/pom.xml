@@ -49,45 +49,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
-    <profiles>
-        <profile>
-            <id>development</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <application.version>${project.version}</application.version>
-                <email.host>${wb.email-host}</email.host>
-                <email.port>${wb.email-port}</email.port>
-                <email.user>${wb.email-user}</email.user>
-                <email.password>${wb.email-password}</email.password>
-                <jsf.stage>Development</jsf.stage>
-            </properties>
-        </profile>
-        <profile>
-            <id>testing</id>
-            <properties>
-                <application.version>${project.version}</application.version>
-                <email.host>${wb.email-host}</email.host>
-                <email.port>${wb.email-port}</email.port>
-                <email.user>${wb.email-user}</email.user>
-                <email.password>${wb.email-password}</email.password>
-                <jsf.stage>SystemTest</jsf.stage>
-            </properties>
-        </profile>
-        <profile>
-            <id>production</id>
-            <properties>
-                <application.version>${project.version}</application.version>
-                <email.host>${wb.email-host}</email.host>
-                <email.port>${wb.email-port}</email.port>
-                <email.user>${wb.email-user}</email.user>
-                <email.password>${wb.email-password}</email.password>
-                <jsf.stage>Production</jsf.stage>
-            </properties>
-        </profile>
-    </profiles>
-
     <dependencies>
         <!-- JEE 7 -->
         <dependency>
@@ -257,9 +218,42 @@
             <version>1.4</version>
         </dependency>
     </dependencies>
-    
+
+    <profiles>
+        <profile>
+            <id>ALPHA</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <application.version>
+                    ${project.version}-${project.activeProfiles[0].id}
+                </application.version>
+                <jsf.stage>Development</jsf.stage>
+            </properties>
+        </profile>
+        <profile>
+            <id>BETA</id>
+            <properties>
+                <application.version>
+                    ${project.version}-${project.activeProfiles[0].id}
+                </application.version>
+                <jsf.stage>SystemTest</jsf.stage>
+            </properties>
+        </profile>
+        <profile>
+            <id>RELEASE</id>
+            <properties>
+                <application.version>
+                    ${project.version}-${project.activeProfiles[0].id}
+                </application.version>
+                <jsf.stage>Production</jsf.stage>
+            </properties>
+        </profile>
+    </profiles>
+            
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${application.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
