@@ -201,4 +201,12 @@ public final class MovementFilter {
     public void setMovementClassType(MovementClassType movementClassType) {
         this.movementClassType = Optional.ofNullable(movementClassType);
     }
+
+    public void clear() {
+        this.criteria = null;
+        this.periods.clear();
+        this.movementType = Optional.empty();
+        this.movementStateType = Optional.empty();
+        this.movementClassType = Optional.empty();
+    }
 }

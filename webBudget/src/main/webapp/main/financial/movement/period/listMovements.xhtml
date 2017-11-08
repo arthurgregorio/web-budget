@@ -88,8 +88,8 @@
                                                      oncomplete="PF('listBlock').hide()"
                                                      title="#{messages['filter.clear']}"
                                                      styleClass="btn btn-flat btn-danger"
-                                                     onclick="PF('movementsDatatable').clearFilters()"
-                                                     actionListener="#{movementBean.clearFilters()}"/>
+                                                     actionListener="#{movementBean.clearFilters()}"
+                                                     onclick="PF('movementsDatatable').clearFilters()"/>
                                 </div>
                             </div>
                         </div>
@@ -112,13 +112,12 @@
                                  lazy="true"
                                  var="movement"
                                  paginator="true"
-                                 clientCache="true"
                                  sortMode="multiple"
                                  sortOrder="descending"
                                  selectionMode="single"
                                  rowKey="#{movement.id}"
-                                 widgetVar="movementsDatatable"
                                  paginatorPosition="bottom"
+                                 widgetVar="movementsDatatable"
                                  paginatorAlwaysVisible="false"
                                  rowStyleClass="row-with-button"
                                  selection="#{movementBean.movement}"

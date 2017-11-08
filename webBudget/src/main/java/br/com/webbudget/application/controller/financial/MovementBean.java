@@ -134,7 +134,11 @@ public class MovementBean extends AbstractBean {
         this.filter = new MovementFilter();
 
         // cria o filtro por periodo
-        this.periods = this.financialPeriodService.listFinancialPeriods(null);
+        this.periods = this.financialPeriodService.listFinancialPeriods(null)
+                .stream()
+                .sorted((v1, v2) -> v2.getStart().compareTo(v1.getStart()))
+                .collect(Collectors.toList());
+        
         this.periodsModel = new DualListModel<>(this.periods, new ArrayList<>());
 
         // seta a primeira busca sendo pelos periodos em aberto
@@ -505,8 +509,7 @@ public class MovementBean extends AbstractBean {
      * Limpa todos os filtro ja realizados
      */
     public void clearFilters() {
-        this.filter.setCriteria(null);
-        this.filter.setPeriods(this.getOpenPeriods());
+        this.filter.clear();
         this.updateComponent("movementsList");
         this.updateComponent("controlsForm");
     }
