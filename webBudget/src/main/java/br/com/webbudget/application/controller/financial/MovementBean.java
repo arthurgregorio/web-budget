@@ -111,25 +111,15 @@ public class MovementBean extends AbstractBean {
     private DualListModel<FinancialPeriod> periodsModel;
 
     /**
-     * Inicializamos os objetos necessarios
-     */
-    @PostConstruct
-    protected void initialize() {
-
-        // inicializa o model customizado
-        this.movementsModel = new MovementsListModel(
-                this.movementService, () -> this.getFilter());
-
-        // inicializa o filtro
-        this.filter = new MovementFilter();
-    }
-
-    /**
      * Inicializa a tela de listagem de movimentos
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
 
+        // inicializa o model customizado
+        this.movementsModel = new MovementsListModel(
+                this.movementService, () -> this.getFilter());
+        
         // inicializa o filtro
         this.filter = new MovementFilter();
 
