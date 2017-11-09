@@ -231,6 +231,8 @@ public class MovementService {
             this.apportionmentRepository.save(apportionment);
         }
         
+        this.movementRepository.refresh(movement);
+        
         // dispara um evento informando que um movimento foi salvo
         this.movementSavedEvent.fire(movement.getCode());
     }

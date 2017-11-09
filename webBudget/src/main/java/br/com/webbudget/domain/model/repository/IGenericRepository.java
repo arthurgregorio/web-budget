@@ -75,4 +75,10 @@ public interface IGenericRepository<T extends IPersistentEntity, ID extends Seri
      * @param entity a entidade a ser deletada
      */
     void delete(T entity);
+    
+    /**
+     * 
+     * @param entity 
+     */
+    void refresh(T entity);
 }

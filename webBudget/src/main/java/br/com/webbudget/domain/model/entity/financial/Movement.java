@@ -129,7 +129,7 @@ public class Movement extends PersistentEntity {
      */
     @Getter
     @Setter
-    @Fetch(FetchMode.SUBSELECT)
+    @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "movement", fetch = EAGER, cascade = REMOVE)
     private List<Apportionment> apportionments;
 

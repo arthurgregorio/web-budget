@@ -172,4 +172,14 @@ public abstract class GenericRepository<T extends IPersistentEntity, ID extends 
                 this.getPersistentClass(), entity.getId());
         this.getEntityManager().remove(persistentEntity);
     }
+
+    /**
+     * 
+     * @param entity 
+     */
+    @Override
+    public void refresh(T entity) {
+        this.entityManager.flush();
+        this.entityManager.refresh(entity);
+    }
 }
