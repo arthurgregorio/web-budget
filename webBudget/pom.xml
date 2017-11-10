@@ -227,7 +227,7 @@
             </activation>
             <properties>
                 <application.version>
-                    ${project.version}-${project.activeProfiles[0].id}
+                    ${project.version}-ALPHA
                 </application.version>
                 <jsf.stage>Development</jsf.stage>
             </properties>
@@ -236,7 +236,7 @@
             <id>BETA</id>
             <properties>
                 <application.version>
-                    ${project.version}-${project.activeProfiles[0].id}
+                    ${project.version}-BETA
                 </application.version>
                 <jsf.stage>SystemTest</jsf.stage>
             </properties>
@@ -245,7 +245,7 @@
             <id>RELEASE</id>
             <properties>
                 <application.version>
-                    ${project.version}-${project.activeProfiles[0].id}
+                    ${project.version}
                 </application.version>
                 <jsf.stage>Production</jsf.stage>
             </properties>
