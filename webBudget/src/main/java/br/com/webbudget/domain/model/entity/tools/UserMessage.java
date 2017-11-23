@@ -17,7 +17,6 @@
 package br.com.webbudget.domain.model.entity.tools;
 
 import br.com.webbudget.domain.model.entity.PersistentEntity;
-import br.com.webbudget.domain.model.entity.converter.UserConverter;
 import br.com.webbudget.domain.model.security.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,7 +25,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -60,7 +58,6 @@ public class UserMessage extends PersistentEntity {
     private boolean deleted;
     @Getter
     @Setter
-    @Convert(converter = UserConverter.class)
     @Column(name = "recipient", nullable = false)
     private User recipient;
     

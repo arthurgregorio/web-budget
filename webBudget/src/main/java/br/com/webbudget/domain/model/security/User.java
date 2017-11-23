@@ -16,31 +16,29 @@
  */
 package br.com.webbudget.domain.model.security;
 
+import br.com.webbudget.domain.model.entity.PersistentEntity;
 import javax.persistence.Column;
-import javax.persistence.Transient;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.picketlink.idm.model.AbstractIdentityType;
-import org.picketlink.idm.model.Account;
-import org.picketlink.idm.model.annotation.AttributeProperty;
-import org.picketlink.idm.model.annotation.IdentityStereotype;
-import org.picketlink.idm.query.QueryParameter;
-import static org.picketlink.idm.model.annotation.IdentityStereotype.Stereotype.USER;
-import org.picketlink.idm.model.annotation.StereotypeProperty;
-import static org.picketlink.idm.model.annotation.StereotypeProperty.Property.IDENTITY_USER_NAME;
-import org.picketlink.idm.model.annotation.Unique;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 2.0.0, 26/05/2015
  */
-@IdentityStereotype(USER)
-public class User extends AbstractIdentityType implements Account {
+@Entity
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "users", schema = "security")
+public class User extends PersistentEntity {
 
     @Getter
     @Setter
@@ -55,93 +53,21 @@ public class User extends AbstractIdentityType implements Account {
     private String email;
     @Setter
     @Getter
-    @Unique
-    @StereotypeProperty(IDENTITY_USER_NAME)
     @NotEmpty(message = "{user.username}")
     @Column(name = "username", length = 45, nullable = false)
     private String username;
     
     @Getter
     @Setter
-    @AttributeProperty
-    private String theme;
+    private Group group;
     @Getter
     @Setter
-    @AttributeProperty
-    private String menuLayout;
-
-    @Getter
-    @Setter
-    @Transient
-    private GroupMembership groupMembership;
-    
-    @Getter
-    @Setter
-    @Transient
-    private boolean selected;
-    @Getter
-    @Setter
-    @Transient
-    private String password;
-    @Getter
-    @Setter
-    @Transient
-    private String passwordConfirmation;
-
-    public static final QueryParameter NAME = QUERY_ATTRIBUTE.byName("name");
-    public static final QueryParameter EMAIL = QUERY_ATTRIBUTE.byName("email");
-    public static final QueryParameter USER_NAME = QUERY_ATTRIBUTE.byName("username");
-
-    /**
-     *
-     */
-    public User() {
-        this.theme = "skin-black";
-        this.groupMembership = new GroupMembership(null, this);
-    }
-
-    /**
-     *
-     * @param username 
-     */
-    public User(String username) {
-        this();
-        this.username = username;
-    }
+    private Profile profile;
     
     /**
      * @return 
      */
     public String getGroupName() {
-        return this.groupMembership.getGroup().getName();
-    }
-    
-    /**
-     * @return 
-     */
-    public boolean isBlocked() {
-        return !this.isEnabled();
-    }
-    
-    /**
-     * 
-     * @param blocked 
-     */
-    public void setBlocked(boolean blocked) {
-        this.setEnabled(!blocked);
-    }
-    
-    /**
-     * @return 
-     */
-    public boolean isSmallMenu() {
-        return this.menuLayout != null && !this.menuLayout.isEmpty();
-    }
-    
-    /**
-     * @param smallMenu 
-     */
-    public void setSmallMenu(boolean smallMenu) {
-        this.menuLayout = smallMenu ? "sidebar-collapse" : "";
+        return this.group.getName();
     }
 }

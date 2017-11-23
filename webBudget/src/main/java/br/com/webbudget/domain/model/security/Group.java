@@ -16,65 +16,59 @@
  */
 package br.com.webbudget.domain.model.security;
 
-import br.com.webbudget.domain.model.service.AccountService;
+import br.com.webbudget.domain.model.entity.PersistentEntity;
 import java.util.Collections;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.picketlink.idm.model.AbstractIdentityType;
-import org.picketlink.idm.model.annotation.AttributeProperty;
-import org.picketlink.idm.model.annotation.IdentityStereotype;
-import org.picketlink.idm.model.annotation.InheritsPrivileges;
-import org.picketlink.idm.model.annotation.StereotypeProperty;
-import org.picketlink.idm.model.annotation.Unique;
-import org.picketlink.idm.query.QueryParameter;
-import static org.picketlink.idm.model.annotation.IdentityStereotype.Stereotype.GROUP;
-import static org.picketlink.idm.model.annotation.StereotypeProperty.Property.IDENTITY_GROUP_NAME;
+import lombok.ToString;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 2.0.0
  * @since 2.0.0, 26/05/2015
  */
-@IdentityStereotype(GROUP)
-public class Group extends AbstractIdentityType {
+@Entity
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "groups", schema = "security")
+public class Group extends PersistentEntity {
 
     @Getter
     @Setter
-    @Unique
-    @AttributeProperty
-    @NotEmpty(message = "{group.name}")
-    @StereotypeProperty(IDENTITY_GROUP_NAME)
+    @Column(name = "name", nullable = false, length = 45)
     private String name;
     @Getter
     @Setter
-    @AttributeProperty
-    @InheritsPrivileges
+    @Column(name = "blocked", nullable = false)
+    private boolean blocked;
+    
+    @Getter
+    @Setter
     private Group parent;
     
-    /**
-     * Cache dos grants deste grupo preenchido pelo metodo 
-     * {@link AccountService#listUserGroupsAndGrants(User user)}
-     */
-    @Setter
-    private List<Grant> grants;
+    private final List<Role> roles;
     
-    public static final QueryParameter NAME = QUERY_ATTRIBUTE.byName("name");
-    public static final QueryParameter PARENT = QUERY_ATTRIBUTE.byName("parent");
-
     /**
      * 
      */
-    public Group() { }
+    public Group() { 
+        this.blocked = false;
+        this.roles = Collections.emptyList();
+    }
 
     /**
      * 
      * @param name 
      */
     public Group(String name) {
+        this();
         this.name = name;
     }
 
@@ -84,28 +78,32 @@ public class Group extends AbstractIdentityType {
      * @param parent 
      */
     public Group(String name, Group parent) {
+        this();
         this.name = name;
         this.parent = parent;
     }
     
     /**
-     * @return 
+     * 
+     * @param role 
      */
-    public boolean isBlocked() {
-        return !this.isEnabled();
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
     
     /**
-     * @param blocked 
+     * 
+     * @param roles 
      */
-    public void setBlocked(boolean blocked) {
-        this.setEnabled(!blocked);
+    public void addRoles(List<Role> roles) {
+        this.roles.addAll(roles);
     }
 
     /**
-     * @return uma lista nao modificavel dos grants
+     * 
+     * @return 
      */
-    public List<Grant> getGrants() {
-        return Collections.unmodifiableList(this.grants);
+    public List<Role> getRoles() {
+        return Collections.unmodifiableList(this.roles);
     }
 }

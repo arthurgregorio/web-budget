@@ -24,7 +24,7 @@ import br.com.webbudget.domain.model.entity.financial.FixedMovement;
 import br.com.webbudget.domain.model.entity.financial.FixedMovementStatusType;
 import br.com.webbudget.domain.model.entity.financial.Launch;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;

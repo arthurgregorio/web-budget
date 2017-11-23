@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.configuration;
+package br.com.webbudget.application.utils;
 
 import java.util.ResourceBundle;
 import javax.faces.application.ProjectStage;
@@ -28,11 +28,17 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 2.0.0, 07/07/2015
  */
-public class ApplicationUtils {
+public class Utilities {
 
+    private static final ResourceBundle CONFIG_BUNDLE;
+    
+    static {
+        CONFIG_BUNDLE = ResourceBundle.getBundle("application");
+    }
+    
     /**
      * Busca no bundle de configuracoes da aplicacao uma determinada chave para
      * uma configuracao
@@ -41,10 +47,7 @@ public class ApplicationUtils {
      * @return a configuracao para a chave informada
      */
     public static String getConfiguration(String configurationKey) {
-
-        final ResourceBundle bundle = ResourceBundle.getBundle("webbudget");
-
-        return bundle.getString(configurationKey);
+        return CONFIG_BUNDLE.getString(configurationKey);
     }
 
     /**
@@ -56,7 +59,8 @@ public class ApplicationUtils {
 
         final FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        final HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+        final HttpServletRequest request = (HttpServletRequest) 
+                facesContext.getExternalContext().getRequest();
 
         final StringBuilder builder = new StringBuilder();
 
@@ -78,39 +82,5 @@ public class ApplicationUtils {
     public static boolean isStageRunning(ProjectStage projectStage) {
         return FacesContext.getCurrentInstance()
                 .isProjectStage(projectStage);
-    }
-
-    /**
-     * Gera um codigo aleatorio baseado em marcas do tempo
-     *
-     * @param size o tamanho
-     * @param onlyNumbers se deve ou nao usar somente numeros
-     * @return o codigo
-     */
-    public static String createRamdomCode(int size, boolean onlyNumbers) {
-
-        final String digits;
-
-        if (onlyNumbers) {
-            digits = "0123456789";
-        } else {
-            digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        }
-
-        long decimalNumber = System.nanoTime();
-
-        String generated = "";
-
-        int mod;
-        int authCodeLength = 0;
-
-        while (decimalNumber != 0 && authCodeLength < size) {
-            mod = (int) (decimalNumber % digits.length());
-            generated = digits.substring(mod, mod + 1) + generated;
-            decimalNumber = decimalNumber / digits.length();
-            authCodeLength++;
-        }
-
-        return generated;
     }
 }

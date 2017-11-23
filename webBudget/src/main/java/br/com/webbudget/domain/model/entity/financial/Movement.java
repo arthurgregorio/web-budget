@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.model.entity.financial;
 
+import br.com.webbudget.application.utils.RandomCodeGenerator;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
@@ -23,8 +24,7 @@ import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.entries.Contact;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.entries.CardInvoice;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -151,7 +151,7 @@ public class Movement extends PersistentEntity {
      */
     public Movement() {
 
-        this.code = ApplicationUtils.createRamdomCode(5, false);
+        this.code = RandomCodeGenerator.alphanumericCode(5);
 
         this.apportionments = new ArrayList<>();
         this.deletedApportionments = new ArrayList<>();

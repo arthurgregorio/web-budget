@@ -17,7 +17,7 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.domain.model.security.Authorization;
 import br.com.webbudget.domain.model.security.Grant;
 import br.com.webbudget.domain.model.security.Group;

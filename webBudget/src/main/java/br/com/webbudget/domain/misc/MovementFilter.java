@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.misc.filter;
+package br.com.webbudget.domain.misc;
 
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;

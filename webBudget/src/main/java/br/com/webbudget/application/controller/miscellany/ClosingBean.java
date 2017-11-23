@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.miscellany;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.misc.MovementCalculator;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.model.entity.miscellany.Closing;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;

@@ -14,17 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.model.entity;
 
-import br.com.webbudget.domain.model.security.User;
 import java.util.Date;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.inject.Inject;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import org.omnifaces.util.BeansLocal;
-import org.picketlink.Identity;
 
 /**
  * Listener de edicao e persistencia dos dados, com ele preenchemos os valores
@@ -37,9 +31,6 @@ import org.picketlink.Identity;
   */
 public class PersistentEntityListener {
 
-    @Inject
-    private BeanManager beanManager;
-
     /**
      * Listerner de pre-persistencia do dados
      * 
@@ -48,7 +39,7 @@ public class PersistentEntityListener {
     @PrePersist
     public void prePersist(PersistentEntity entity) {
         entity.setInclusion(new Date());
-        entity.setIncludedBy(this.getAuthenticated().getUsername());
+//        entity.setIncludedBy(this.getAuthenticated().getUsername());
     }
     
     /**
@@ -59,18 +50,7 @@ public class PersistentEntityListener {
     @PreUpdate
     public void preUpdate(PersistentEntity entity) {
         entity.setLastEdition(new Date());
-        entity.setEditedBy(this.getAuthenticated().getUsername());
-    }
-    
-    /**
-     * @return o usuario autenticado
-     */
-    private User getAuthenticated() {
-
-        final Identity identity = BeansLocal.getInstance(
-                this.beanManager, Identity.class);
-        
-        return (User) identity.getAccount();
+//        entity.setEditedBy(this.getAuthenticated().getUsername());
     }
 }
 

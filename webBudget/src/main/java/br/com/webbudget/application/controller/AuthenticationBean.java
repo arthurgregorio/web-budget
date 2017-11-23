@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
+import br.com.webbudget.application.utils.Utilities;
 import javax.enterprise.event.Observes;
 import javax.faces.application.ProjectStage;
 import javax.faces.view.ViewScoped;
@@ -103,6 +103,6 @@ public class AuthenticationBean extends AbstractBean {
      * ambiente
      */
     public boolean isSystemTest() {
-        return ApplicationUtils.isStageRunning(ProjectStage.SystemTest);
+        return Utilities.isStageRunning(ProjectStage.SystemTest);
     }
 }

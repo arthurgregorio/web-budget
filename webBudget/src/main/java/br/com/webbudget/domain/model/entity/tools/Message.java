@@ -17,7 +17,6 @@
 package br.com.webbudget.domain.model.entity.tools;
 
 import br.com.webbudget.domain.model.entity.PersistentEntity;
-import br.com.webbudget.domain.model.entity.converter.UserConverter;
 import br.com.webbudget.domain.model.security.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +68,6 @@ public class Message extends PersistentEntity {
     
     @Getter
     @Setter
-    @Convert(converter = UserConverter.class)
     @Column(name = "sender", nullable = false)
     private User sender;
     

@@ -19,7 +19,7 @@ package br.com.webbudget.application.controller.miscellany;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.model.entity.miscellany.Closing;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;

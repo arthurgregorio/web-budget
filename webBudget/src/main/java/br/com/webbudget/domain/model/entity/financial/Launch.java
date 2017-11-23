@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.model.entity.financial;
 
+import br.com.webbudget.application.utils.RandomCodeGenerator;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
-import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.time.LocalDate;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
@@ -76,7 +76,7 @@ public class Launch extends PersistentEntity {
      * Inicializamos o que for necessario
      */
     public Launch() {
-        this.code = ApplicationUtils.createRamdomCode(5, false);
+        this.code = RandomCodeGenerator.alphanumericCode(5);
     }
 
     /**

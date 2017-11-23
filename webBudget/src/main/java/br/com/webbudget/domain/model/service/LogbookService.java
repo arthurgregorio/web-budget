@@ -23,7 +23,7 @@ import br.com.webbudget.domain.misc.MovementBuilder;
 import br.com.webbudget.domain.misc.events.CreateMovement;
 import br.com.webbudget.domain.misc.events.DeleteMovement;
 import br.com.webbudget.domain.misc.events.MovementDeleted;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.entity.logbook.Entry;

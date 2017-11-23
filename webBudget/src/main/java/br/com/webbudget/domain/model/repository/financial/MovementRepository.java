@@ -27,7 +27,7 @@ import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.entity.financial.MovementStateType;
 import br.com.webbudget.domain.model.entity.financial.MovementType;
-import br.com.webbudget.domain.misc.filter.MovementFilter;
+import br.com.webbudget.domain.misc.MovementFilter;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.application.component.table.PageRequest.SortDirection;

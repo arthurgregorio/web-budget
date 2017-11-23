@@ -17,7 +17,7 @@
 package br.com.webbudget.application.component.table;
 
 import br.com.webbudget.domain.model.entity.financial.Movement;
-import br.com.webbudget.domain.misc.filter.MovementFilter;
+import br.com.webbudget.domain.misc.MovementFilter;
 import br.com.webbudget.domain.model.service.MovementService;
 import java.util.List;
 import java.util.Map;

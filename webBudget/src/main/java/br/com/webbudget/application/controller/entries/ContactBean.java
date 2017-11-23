@@ -23,7 +23,7 @@ import br.com.webbudget.domain.model.entity.entries.NumberType;
 import br.com.webbudget.domain.model.entity.entries.Telephone;
 import br.com.webbudget.domain.misc.AddressFinder;
 import br.com.webbudget.domain.misc.AddressFinder.Address;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;

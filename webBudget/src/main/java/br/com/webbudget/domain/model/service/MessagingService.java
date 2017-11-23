@@ -20,7 +20,7 @@ import br.com.webbudget.application.channels.WebSocketSessions;
 import br.com.webbudget.application.component.table.Page;
 import br.com.webbudget.application.component.table.PageRequest;
 import br.com.webbudget.application.producer.qualifier.AuthenticatedUser;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.domain.model.entity.tools.Message;
 import br.com.webbudget.domain.model.entity.tools.UserMessage;
 import br.com.webbudget.domain.model.repository.tools.IMessageRepository;

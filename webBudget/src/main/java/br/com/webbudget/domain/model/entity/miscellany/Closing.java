@@ -19,7 +19,7 @@ package br.com.webbudget.domain.model.entity.miscellany;
 
 import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
-import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
+import br.com.webbudget.application.utils.Utilities;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -94,6 +94,6 @@ public class Closing extends PersistentEntity {
         
         this.closingDate = LocalDate.now();
         
-        this.code = ApplicationUtils.createRamdomCode(5, false);
+        this.code = Utilities.createRamdomCode(5, false);
     }
 }

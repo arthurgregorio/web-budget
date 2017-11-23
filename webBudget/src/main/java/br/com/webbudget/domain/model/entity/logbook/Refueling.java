@@ -16,13 +16,12 @@
  */
 package br.com.webbudget.domain.model.entity.logbook;
 
+import br.com.webbudget.application.utils.RandomCodeGenerator;
 import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
-import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -39,7 +38,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -150,7 +148,7 @@ public class Refueling extends PersistentEntity {
      */
     public Refueling() {
         
-        this.code = ApplicationUtils.createRamdomCode(6, false);
+        this.code = RandomCodeGenerator.alphanumericCode(6);
         
         this.fullTank = true;
         this.accounted = false;

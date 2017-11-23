@@ -17,7 +17,7 @@
 package br.com.webbudget.application.controller.logbook;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.logbook.Entry;
 import br.com.webbudget.domain.model.entity.logbook.EntryType;

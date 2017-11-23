@@ -21,7 +21,7 @@ import br.com.webbudget.domain.model.entity.entries.WalletBalance;
 import br.com.webbudget.domain.model.entity.entries.WalletBalanceType;
 import br.com.webbudget.domain.model.entity.entries.WalletType;
 import br.com.webbudget.domain.misc.BalanceBuilder;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.domain.model.repository.entries.IWalletBalanceRepository;
 import br.com.webbudget.domain.model.repository.entries.IWalletRepository;
 import java.math.BigDecimal;

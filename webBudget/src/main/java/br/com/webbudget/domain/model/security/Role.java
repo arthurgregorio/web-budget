@@ -16,46 +16,48 @@
  */
 package br.com.webbudget.domain.model.security;
 
+import br.com.webbudget.domain.model.entity.PersistentEntity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.picketlink.idm.model.AbstractIdentityType;
-import org.picketlink.idm.model.annotation.AttributeProperty;
-import org.picketlink.idm.model.annotation.IdentityStereotype;
-import org.picketlink.idm.model.annotation.StereotypeProperty;
-import org.picketlink.idm.model.annotation.Unique;
-import org.picketlink.idm.query.QueryParameter;
-import static org.picketlink.idm.model.annotation.IdentityStereotype.Stereotype.ROLE;
-import static org.picketlink.idm.model.annotation.StereotypeProperty.Property.IDENTITY_ROLE_NAME;
+import lombok.ToString;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 2.0.0, 26/05/2015
  */
-@IdentityStereotype(ROLE)
-public class Role extends AbstractIdentityType {
+@Entity
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "roles", schema = "security")
+public class Role extends PersistentEntity {
 
     @Getter
     @Setter
-    @Unique
-    @AttributeProperty
-    @StereotypeProperty(IDENTITY_ROLE_NAME)
-    private String authorization;
+    @Column(name = "permission", nullable = false, length = 90)
+    private String permission;
     
-    public static final QueryParameter AUTHORIZATION = QUERY_ATTRIBUTE.byName("authorization");
+    @Getter
+    @Setter
+    private Group group;
 
     /**
      * 
      */
-    public Role() { }
+    public Role() {
+    }
 
     /**
      * 
-     * @param authorization 
+     * @param permission 
      */
-    public Role(String authorization) {
-        this.authorization = authorization;
+    public Role(String permission) {
+        this.permission = permission;
     }
 }

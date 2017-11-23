@@ -22,12 +22,12 @@ import br.com.webbudget.domain.model.entity.financial.Movement;
 import br.com.webbudget.domain.misc.MovementCalculator;
 import br.com.webbudget.application.component.chart.line.LineChartDatasetBuilder;
 import br.com.webbudget.application.component.chart.line.LineChartModel;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.service.FinancialPeriodService;
 import br.com.webbudget.domain.model.service.MovementService;
 import br.com.webbudget.domain.model.service.PeriodDetailService;
-import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
+import br.com.webbudget.application.utils.Utilities;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +122,7 @@ public class DashboardBean extends AbstractBean {
      * @return a versao da aplicacao
      */
     public String getVersion() {
-        return ApplicationUtils.getConfiguration("application.version");
+        return Utilities.getConfiguration("application.version");
     }
 
     /**

@@ -16,13 +16,13 @@
  */
 package br.com.webbudget.domain.model.entity.financial;
 
+import br.com.webbudget.application.utils.RandomCodeGenerator;
 import br.com.webbudget.domain.model.entity.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.entries.Wallet;
 import br.com.webbudget.domain.model.entity.entries.Card;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
-import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -89,7 +89,7 @@ public class Payment extends PersistentEntity {
     public Payment() {
         this.paymentDate = LocalDate.now();
         this.paymentMethodType = PaymentMethodType.IN_CASH;
-        this.code = ApplicationUtils.createRamdomCode(5, false);
+        this.code = RandomCodeGenerator.alphanumericCode(5);
     }
 
     /**

@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.misc;
 
-import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
+import br.com.webbudget.application.utils.Utilities;
 import javax.enterprise.context.RequestScoped;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -46,7 +46,7 @@ public class AddressFinder {
     public Address findAddressByZipcode(String zipcode) {
 
         final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(ApplicationUtils.getConfiguration("ws.cep"))
+                .setEndpoint(Utilities.getConfiguration("ws.cep"))
                 .build();
         
         final ZipcodeService zipcodeService 

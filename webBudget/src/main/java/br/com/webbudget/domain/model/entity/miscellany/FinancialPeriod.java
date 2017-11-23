@@ -19,7 +19,7 @@ package br.com.webbudget.domain.model.entity.miscellany;
 import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.entity.miscellany.Closing;
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

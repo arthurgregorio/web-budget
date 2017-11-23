@@ -16,12 +16,12 @@
  */
 package br.com.webbudget.domain.model.entity.financial;
 
-import br.com.webbudget.domain.misc.ex.InternalServiceError;
+import br.com.webbudget.application.utils.RandomCodeGenerator;
+import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.domain.model.entity.entries.CostCenter;
 import br.com.webbudget.domain.model.entity.entries.MovementClass;
 import br.com.webbudget.domain.model.entity.entries.MovementClassType;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
-import br.com.webbudget.infraestructure.configuration.ApplicationUtils;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -83,7 +83,7 @@ public class Apportionment extends PersistentEntity {
      *
      */
     public Apportionment() {
-        this.code = ApplicationUtils.createRamdomCode(5, false);
+        this.code = RandomCodeGenerator.alphanumericCode(5);
     }
     
     /**
