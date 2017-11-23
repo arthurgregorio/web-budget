@@ -232,7 +232,7 @@
             <id>RELEASE</id>
             <properties>
                 <application.version>
-                    ${project.version}
+                    ${project.version}-RELEASE
                 </application.version>
                 <jsf.stage>Production</jsf.stage>
             </properties>

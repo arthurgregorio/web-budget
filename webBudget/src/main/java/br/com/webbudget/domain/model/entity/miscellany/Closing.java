@@ -17,6 +17,7 @@
 
 package br.com.webbudget.domain.model.entity.miscellany;
 
+import br.com.webbudget.application.utils.RandomCodeGenerator;
 import br.com.webbudget.domain.model.entity.converter.JPALocalDateConverter;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.application.utils.Utilities;
@@ -94,6 +95,6 @@ public class Closing extends PersistentEntity {
         
         this.closingDate = LocalDate.now();
         
-        this.code = Utilities.createRamdomCode(5, false);
+        this.code = RandomCodeGenerator.alphanumericCode(5);
     }
 }

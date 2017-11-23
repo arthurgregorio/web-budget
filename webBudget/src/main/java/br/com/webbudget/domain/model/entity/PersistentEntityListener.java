@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.model.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
@@ -26,7 +26,7 @@ import javax.persistence.PreUpdate;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 2.2.0, 02/03/2016
   */
 public class PersistentEntityListener {
@@ -38,7 +38,7 @@ public class PersistentEntityListener {
      */
     @PrePersist
     public void prePersist(PersistentEntity entity) {
-        entity.setInclusion(new Date());
+        entity.setInclusion(LocalDateTime.now());
 //        entity.setIncludedBy(this.getAuthenticated().getUsername());
     }
     
@@ -49,7 +49,7 @@ public class PersistentEntityListener {
      */
     @PreUpdate
     public void preUpdate(PersistentEntity entity) {
-        entity.setLastEdition(new Date());
+        entity.setLastEdition(LocalDateTime.now());
 //        entity.setEditedBy(this.getAuthenticated().getUsername());
     }
 }

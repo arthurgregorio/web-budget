@@ -25,5 +25,25 @@ package br.com.webbudget.domain.model.security;
  */
 public enum Theme {
 
-    BLACK, DEFAULT;
+    BLACK(""), 
+    DEFAULT("");
+    
+    private final String i18nKey;
+
+    /**
+     *
+     * @param i18nKey
+     */
+    private Theme(String i18nKey) {
+        this.i18nKey = i18nKey;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return this.i18nKey;
+    }
 }

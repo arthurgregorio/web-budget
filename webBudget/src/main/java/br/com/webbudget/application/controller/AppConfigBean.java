@@ -24,8 +24,6 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import org.picketlink.authentication.event.LoggedInEvent;
-import org.picketlink.authentication.event.PostLoggedOutEvent;
 
 /**
  *
@@ -38,25 +36,25 @@ import org.picketlink.authentication.event.PostLoggedOutEvent;
 @SessionScoped
 public class AppConfigBean implements Serializable {
 
-    @Getter
-    private Configuration configuration;
-    
-    @Inject
-    private transient ConfigurationService configurationService;
-    
-    /**
-     * 
-     * @param event 
-     */
-    protected void initialize(@Observes LoggedInEvent event) {
-        this.configuration = this.configurationService.loadDefault();
-    }
-    
-    /**
-     * 
-     * @param event 
-     */
-    protected void destroy(@Observes PostLoggedOutEvent event) {
-        this.configuration = null;
-    }
+//    @Getter
+//    private Configuration configuration;
+//    
+//    @Inject
+//    private transient ConfigurationService configurationService;
+//    
+//    /**
+//     * 
+//     * @param event 
+//     */
+//    protected void initialize(@Observes LoggedInEvent event) {
+//        this.configuration = this.configurationService.loadDefault();
+//    }
+//    
+//    /**
+//     * 
+//     * @param event 
+//     */
+//    protected void destroy(@Observes PostLoggedOutEvent event) {
+//        this.configuration = null;
+//    }
 }

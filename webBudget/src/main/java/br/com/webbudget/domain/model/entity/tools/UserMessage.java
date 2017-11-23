@@ -18,12 +18,6 @@ package br.com.webbudget.domain.model.entity.tools;
 
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import br.com.webbudget.domain.model.security.User;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -117,25 +111,25 @@ public class UserMessage extends PersistentEntity {
      */
     public void calculateElapsedTime() {
         
-        final LocalDateTime sentOn = LocalDateTime.ofInstant(
-                this.message.getInclusion().toInstant(), ZoneId.systemDefault());
-        
-        if (sentOn.toLocalDate().isBefore(LocalDate.now())) {
-            this.elapsedTime = DateTimeFormatter
-                    .ofPattern("dd/MM/yyyy HH:mm").format(sentOn);
-        } else {
-            long difference = ChronoUnit.MINUTES
-                    .between(sentOn.toLocalTime(), LocalTime.now());
-            
-            if (difference > 60) {
-                difference = ChronoUnit.HOURS
-                    .between(sentOn.toLocalTime(), LocalTime.now());
-                this.elapsedTime = String.valueOf(difference);
-                this.timeUnit = "message-box.hours";
-            } else {
-                this.elapsedTime = String.valueOf(difference);
-                this.timeUnit = "message-box.minutes";
-            }
-        }
+//        final LocalDateTime sentOn = LocalDateTime.ofInstant(
+//                this.message.getInclusion().toInstant(), ZoneId.systemDefault());
+//        
+//        if (sentOn.toLocalDate().isBefore(LocalDate.now())) {
+//            this.elapsedTime = DateTimeFormatter
+//                    .ofPattern("dd/MM/yyyy HH:mm").format(sentOn);
+//        } else {
+//            long difference = ChronoUnit.MINUTES
+//                    .between(sentOn.toLocalTime(), LocalTime.now());
+//            
+//            if (difference > 60) {
+//                difference = ChronoUnit.HOURS
+//                    .between(sentOn.toLocalTime(), LocalTime.now());
+//                this.elapsedTime = String.valueOf(difference);
+//                this.timeUnit = "message-box.hours";
+//            } else {
+//                this.elapsedTime = String.valueOf(difference);
+//                this.timeUnit = "message-box.minutes";
+//            }
+//        }
     }
 }

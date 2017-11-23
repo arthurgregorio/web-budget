@@ -22,7 +22,6 @@ import br.com.webbudget.domain.model.entity.entries.ContactType;
 import br.com.webbudget.domain.model.entity.entries.NumberType;
 import br.com.webbudget.domain.model.entity.entries.Telephone;
 import br.com.webbudget.domain.misc.AddressFinder;
-import br.com.webbudget.domain.misc.AddressFinder.Address;
 import br.com.webbudget.domain.misc.exceptions.InternalServiceError;
 import br.com.webbudget.application.component.table.AbstractLazyModel;
 import br.com.webbudget.application.component.table.Page;
@@ -216,21 +215,21 @@ public class ContactBean extends AbstractBean {
      */
     public void doAddressFind() {
 
-        try {
-            final Address address = this.addressFinderService
-                    .findAddressByZipcode(this.contact.getZipcode());
-
-            this.contact.setStreet(address.getLogradouro());
-            this.contact.setComplement(address.getComplemento());
-            this.contact.setProvince(address.getFullUfName());
-            this.contact.setCity(address.getLocalidade());
-            this.contact.setNeighborhood(address.getBairro());
-
-            this.updateComponent("addressBox");
-        } catch (Exception ex) {
-            this.logger.error(ex.getMessage(), ex);
-            this.addError(true, "error.contact.find-address-error");
-        }
+//        try {
+//            final Address address = this.addressFinderService
+//                    .findAddressByZipcode(this.contact.getZipcode());
+//
+//            this.contact.setStreet(address.getLogradouro());
+//            this.contact.setComplement(address.getComplemento());
+//            this.contact.setProvince(address.getFullUfName());
+//            this.contact.setCity(address.getLocalidade());
+//            this.contact.setNeighborhood(address.getBairro());
+//
+//            this.updateComponent("addressBox");
+//        } catch (Exception ex) {
+//            this.logger.error(ex.getMessage(), ex);
+//            this.addError(true, "error.contact.find-address-error");
+//        }
     }
     
     /**

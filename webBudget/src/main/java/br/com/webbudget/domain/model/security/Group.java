@@ -19,8 +19,15 @@ package br.com.webbudget.domain.model.security;
 import br.com.webbudget.domain.model.entity.PersistentEntity;
 import java.util.Collections;
 import java.util.List;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import static javax.persistence.FetchType.EAGER;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -51,16 +58,19 @@ public class Group extends PersistentEntity {
     
     @Getter
     @Setter
+    @ManyToOne
+    @JoinColumn(name = "id_parent")
     private Group parent;
     
-    private final List<Role> roles;
+    @OneToMany(mappedBy = "group", fetch = EAGER, cascade = {PERSIST, MERGE, REMOVE})
+    private final List<Grant> grants;
     
     /**
      * 
      */
     public Group() { 
         this.blocked = false;
-        this.roles = Collections.emptyList();
+        this.grants = Collections.emptyList();
     }
 
     /**
@@ -85,25 +95,25 @@ public class Group extends PersistentEntity {
     
     /**
      * 
-     * @param role 
+     * @param grant 
      */
-    public void addRole(Role role) {
-        this.roles.add(role);
+    public void addRole(Grant grant) {
+        this.grants.add(grant);
     }
     
     /**
      * 
-     * @param roles 
+     * @param grants 
      */
-    public void addRoles(List<Role> roles) {
-        this.roles.addAll(roles);
+    public void addRoles(List<Grant> grants) {
+        this.grants.addAll(grants);
     }
 
     /**
      * 
      * @return 
      */
-    public List<Role> getRoles() {
-        return Collections.unmodifiableList(this.roles);
+    public List<Grant> getGrants() {
+        return Collections.unmodifiableList(this.grants);
     }
 }

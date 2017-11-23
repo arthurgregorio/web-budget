@@ -17,9 +17,15 @@
 package br.com.webbudget.domain.model.security;
 
 import br.com.webbudget.domain.model.entity.PersistentEntity;
+import java.time.LocalDateTime;
+import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +51,11 @@ public class User extends PersistentEntity {
     @NotEmpty(message = "{user.name}")
     @Column(name = "name", length = 90, nullable = false)
     private String name;
+    @Setter
+    @Getter
+    @NotEmpty(message = "{user.username}")
+    @Column(name = "username", length = 45, nullable = false)
+    private String username;
     @Getter
     @Setter
     @Email(message = "{user.email}")
@@ -53,19 +64,40 @@ public class User extends PersistentEntity {
     private String email;
     @Setter
     @Getter
-    @NotEmpty(message = "{user.username}")
-    @Column(name = "username", length = 45, nullable = false)
-    private String username;
+    @NotEmpty(message = "{user.password}")
+    @Column(name = "password", length = 256, nullable = false)
+    private String password;
+    @Getter
+    @Setter
+    @Column(name = "expired", nullable = false)
+    private boolean expired;
+    @Getter
+    @Setter
+    @Column(name = "expiration_date", nullable = false)
+    private LocalDateTime expirationDate;
     
     @Getter
     @Setter
+    @ManyToOne
+    @NotNull(message = "{user.group}")
+    @JoinColumn(name = "id_group", nullable = false)
     private Group group;
     @Getter
     @Setter
+    @OneToOne(cascade = ALL)
+    @JoinColumn(name = "id_profile", nullable = false)
     private Profile profile;
+
+    /**
+     * 
+     */
+    public User() {
+        this.profile = new Profile();
+        this.expirationDate = LocalDateTime.now().plusMonths(6);
+    }
     
     /**
-     * @return 
+     * @return o nome do grupo deste usuario
      */
     public String getGroupName() {
         return this.group.getName();

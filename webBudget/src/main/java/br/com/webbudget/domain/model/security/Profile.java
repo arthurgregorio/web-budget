@@ -21,6 +21,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -43,7 +45,7 @@ public class Profile extends PersistentEntity {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "menu_layoyt", nullable = false, length = 45)
+    @Column(name = "theme", nullable = false, length = 45)
     private Theme theme;
     @Getter
     @Setter
@@ -51,10 +53,6 @@ public class Profile extends PersistentEntity {
     @Column(name = "menu_layoyt", nullable = false, length = 45)
     private MenuLayout menuLayout;
     
-    @Getter
-    @Setter
-    private User user;
-
     /**
      * 
      */

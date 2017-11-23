@@ -112,7 +112,7 @@ public class TransferenceBean extends AbstractBean {
      */
     public List<WalletBalance> transferencesByInclusion(LocalDate inclusion) {
         return this.transferences.stream()
-                .filter(balance -> balance.getInclusionAsLocalDate().equals(inclusion))
+                .filter(balance -> balance.getInclusion().toLocalDate().equals(inclusion))
                 .collect(Collectors.toList());
     }
     
@@ -124,8 +124,8 @@ public class TransferenceBean extends AbstractBean {
         final List<LocalDate> grouped = new ArrayList<>();
         
         this.transferences.stream().forEach(balance -> {
-            if (!grouped.contains(balance.getInclusionAsLocalDate())) {
-                grouped.add(balance.getInclusionAsLocalDate());
+            if (!grouped.contains(balance.getInclusion().toLocalDate())) {
+                grouped.add(balance.getInclusion().toLocalDate());
             }
         });
         return grouped;

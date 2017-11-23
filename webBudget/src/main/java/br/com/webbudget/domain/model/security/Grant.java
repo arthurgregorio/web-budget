@@ -17,8 +17,9 @@
 package br.com.webbudget.domain.model.security;
 
 import br.com.webbudget.domain.model.entity.PersistentEntity;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,29 +36,32 @@ import lombok.ToString;
 @Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "roles", schema = "security")
-public class Role extends PersistentEntity {
+@Table(name = "grants", schema = "security")
+public class Grant extends PersistentEntity {
 
     @Getter
     @Setter
-    @Column(name = "permission", nullable = false, length = 90)
-    private String permission;
-    
-    @Getter
-    @Setter
+    @ManyToOne
+    @JoinColumn(name = "id_group", nullable = false)
     private Group group;
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "id_authorization", nullable = false)
+    private Authorization authorization;
 
     /**
      * 
      */
-    public Role() {
-    }
+    public Grant() { }
 
     /**
      * 
-     * @param permission 
+     * @param group
+     * @param authorization 
      */
-    public Role(String permission) {
-        this.permission = permission;
+    public Grant(Group group, Authorization authorization) {
+        this.group = group;
+        this.authorization = authorization;
     }
 }

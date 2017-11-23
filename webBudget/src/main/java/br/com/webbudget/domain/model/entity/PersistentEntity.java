@@ -17,18 +17,14 @@
 package br.com.webbudget.domain.model.entity;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,31 +36,29 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0, 06/10/2013
  */
+@ToString
 @MappedSuperclass
-@ToString(of = "id")
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode
 @EntityListeners(PersistentEntityListener.class)
 public abstract class PersistentEntity implements IPersistentEntity<Long>, Serializable {
 
     @Id
     @Getter
-    @Column(name = "id", unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, updatable = false)
     private Long id;
 
     @Getter
     @Setter
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "inclusion", nullable = false)
-    private Date inclusion;
+    private LocalDateTime inclusion;
     @Getter
     @Setter
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_edition")
-    private Date lastEdition;
+    private LocalDateTime lastEdition;
     
     @Getter
     @Setter
@@ -80,22 +74,14 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
      */
     @Override
     public boolean isSaved() {
-        return !(getId() == null || getId() == 0);
+        return this.id != null && this.id != 0;
     }
     
     /**
-     * @return a data de inclusao em formato string
+     * @return a data de inclusao em formato string dd/MM/yyyy HH:mm
      */
-    public String getInclusionDateAsString() {
-        return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(this.inclusion);
-    }
-    
-    /**
-     * @return a data de inclusao em localdate 
-     */
-    public LocalDate getInclusionAsLocalDate() {
-        return this.inclusion.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+    public String getInclusionAsString() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+                .format(this.inclusion);
     }
 }

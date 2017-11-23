@@ -16,16 +16,9 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.utils.Utilities;
-import javax.enterprise.event.Observes;
-import javax.faces.application.ProjectStage;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import org.picketlink.Identity;
-import org.picketlink.Identity.AuthenticationResult;
-import org.picketlink.authentication.event.LoginFailedEvent;
 
 /**
  * Bean que controla a autenticacao no sistema, por ele invocamos o gerenciador
@@ -40,9 +33,6 @@ import org.picketlink.authentication.event.LoginFailedEvent;
 @ViewScoped
 public class AuthenticationBean extends AbstractBean {
 
-    @Inject
-    private Identity identity;
-    
     @Getter
     private boolean authenticationError;
 
@@ -54,10 +44,10 @@ public class AuthenticationBean extends AbstractBean {
      */
     public String initialize() {
         
-        // validamos se nao existe uma sessao ativa
-        if (this.identity.isLoggedIn()) {
-            return "/main/dashboard.xhtml?faces-redirect=true";
-        } 
+//        // validamos se nao existe uma sessao ativa
+//        if (this.identity.isLoggedIn()) {
+//            return "/main/dashboard.xhtml?faces-redirect=true";
+//        } 
 
         // permanecemos na pagina
         return null;
@@ -71,11 +61,11 @@ public class AuthenticationBean extends AbstractBean {
      */
     public String doLogin() {
         
-        final AuthenticationResult result = this.identity.login();
-        
-        if (result == AuthenticationResult.SUCCESS) {
-            return "/main/dashboard.xhtml?faces-redirect=true";
-        } 
+//        final AuthenticationResult result = this.identity.login();
+//        
+//        if (result == AuthenticationResult.SUCCESS) {
+//            return "/main/dashboard.xhtml?faces-redirect=true";
+//        } 
         return null;
     }
     
@@ -85,24 +75,7 @@ public class AuthenticationBean extends AbstractBean {
      * @return a home para login
      */
     public String doLogout() {
-        this.identity.logout();
+//        this.identity.logout();
         return "/index.xhtml?faces-redirect=true";
-    }
-    
-    /**
-     * Trata erros de autenticacao
-     * 
-     * @param event o evento de autenticacao
-     */
-    protected void handleUnsuccesfulLogin(@Observes LoginFailedEvent event) {
-        this.addError(true, "error.invalid-credentials");
-    }
-    
-    /**
-     * @return verifica se a aplicacao esta em teste ou se estamos em outro 
-     * ambiente
-     */
-    public boolean isSystemTest() {
-        return Utilities.isStageRunning(ProjectStage.SystemTest);
     }
 }

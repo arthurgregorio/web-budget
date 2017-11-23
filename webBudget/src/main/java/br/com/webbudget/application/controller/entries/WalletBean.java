@@ -279,7 +279,7 @@ public class WalletBean extends AbstractBean {
      */
     public List<WalletBalance> balancesByInclusion(LocalDate inclusion) {
         return this.walletBalances.stream()
-                .filter(balance -> balance.getInclusionAsLocalDate().equals(inclusion))
+                .filter(balance -> balance.getInclusion().toLocalDate().equals(inclusion))
                 .collect(Collectors.toList());
     }
     
@@ -291,8 +291,8 @@ public class WalletBean extends AbstractBean {
         final List<LocalDate> grouped = new ArrayList<>();
         
         this.walletBalances.stream().forEach(balance -> {
-            if (!grouped.contains(balance.getInclusionAsLocalDate())) {
-                grouped.add(balance.getInclusionAsLocalDate());
+            if (!grouped.contains(balance.getInclusion().toLocalDate())) {
+                grouped.add(balance.getInclusion().toLocalDate());
             }
         });
         return grouped;

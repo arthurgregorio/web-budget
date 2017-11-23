@@ -115,18 +115,18 @@ public class MessageSentBean extends AbstractBean {
      */
     public void initializeForm(long messageId, String viewState) {
 
-        // capturamos o estado da tela 
-        this.viewState = ViewState.valueOf(viewState);
-        
-        final List<User> allUsers = this.accountService.listUsers(Boolean.FALSE);
-
-        // remove o usuario logado da lista de destinatarios
-        this.users = allUsers.stream()
-                .filter(user -> !user.getId().equals(this.authenticatedUser.getId()))
-                .collect(Collectors.toList());
-        
-        // inicia a mensagem
-        this.message = new Message(this.authenticatedUser);
+//        // capturamos o estado da tela 
+//        this.viewState = ViewState.valueOf(viewState);
+//        
+//        final List<User> allUsers = this.accountService.listUsers(Boolean.FALSE);
+//
+//        // remove o usuario logado da lista de destinatarios
+//        this.users = allUsers.stream()
+//                .filter(user -> !user.getId().equals(this.authenticatedUser.getId()))
+//                .collect(Collectors.toList());
+//        
+//        // inicia a mensagem
+//        this.message = new Message(this.authenticatedUser);
     }
     
     /**

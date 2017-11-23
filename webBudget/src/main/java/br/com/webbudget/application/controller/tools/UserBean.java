@@ -26,8 +26,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import org.picketlink.Identity;
-import org.picketlink.idm.model.Attribute;
 
 /**
  *
@@ -49,9 +47,6 @@ public class UserBean extends AbstractBean {
     private List<Group> groups;
 
     @Inject
-    private Identity identity;
-    
-    @Inject
     private AccountService accountService;
 
     /**
@@ -59,7 +54,7 @@ public class UserBean extends AbstractBean {
      */
     public void initializeListing() {
         this.viewState = ViewState.LISTING;
-        this.users = this.accountService.listUsers(null);
+//        this.users = this.accountService.listUsers(null);
     }
 
     /**
@@ -68,23 +63,23 @@ public class UserBean extends AbstractBean {
     public void initializeProfile() {
         
         // setamos no usuario o usuario autenticado e seu perfil
-        this.user = (User) this.identity.getAccount();
+//        this.user = (User) this.identity.getAccount();
     }
     
     /**
      * @param userId
      */
-    public void initializeForm(String userId) {
+    public void initializeForm(Long userId) {
             
-        this.groups = this.accountService.listGroups(null);
-
-        if (userId.isEmpty()) {
-            this.viewState = ViewState.ADDING;
-            this.user = new User();
-        } else {
-            this.viewState = ViewState.EDITING;
-            this.user = this.accountService.findUserById(userId);
-        }
+//        this.groups = this.accountService.listGroups(null);
+//
+//        if (userId.isEmpty()) {
+//            this.viewState = ViewState.ADDING;
+//            this.user = new User();
+//        } else {
+//            this.viewState = ViewState.EDITING;
+//            this.user = this.accountService.findUserById(userId);
+//        }
     }
 
     /**
@@ -106,7 +101,7 @@ public class UserBean extends AbstractBean {
      * @param userId
      */
     public void changeToDelete(String userId) {
-        this.user = this.accountService.findUserById(userId);
+//        this.user = this.accountService.findUserById(userId);
         this.updateAndOpenDialog("deleteUserDialog", "dialogDeleteUser");
     }
 
@@ -116,7 +111,7 @@ public class UserBean extends AbstractBean {
     public void doSave() {
 
         try {
-            this.accountService.save(this.user);
+//            this.accountService.save(this.user);
             this.user = new User();
             this.addInfo(true, "user.saved");
         } catch (InternalServiceError ex) {
@@ -132,7 +127,7 @@ public class UserBean extends AbstractBean {
     public void doUpdate() {
 
         try {
-            this.accountService.update(this.user);
+//            this.accountService.update(this.user);
 
             this.addInfo(true, "user.updated");
         } catch (InternalServiceError ex) {
@@ -148,8 +143,8 @@ public class UserBean extends AbstractBean {
     public void doDelete() {
 
         try {
-            this.accountService.delete(this.user);
-            this.users = this.accountService.listUsers(null);
+//            this.accountService.delete(this.user);
+//            this.users = this.accountService.listUsers(null);
 
             this.addInfo(true, "user.deleted");
         } catch (InternalServiceError ex) {
@@ -169,7 +164,7 @@ public class UserBean extends AbstractBean {
     public void doProfileUpdate() {
         
         try {
-            this.accountService.updateProfile(this.user);
+//            this.accountService.updateProfile(this.user);
             this.addInfo(true, "user.profile-updated");
         } catch (InternalServiceError ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
@@ -186,15 +181,15 @@ public class UserBean extends AbstractBean {
      */
     public void changeTheme(String theme) {
 
-        // remove o tema atual
-        this.executeScript("$(\"body\").removeClass('"
-                + this.user.getTheme() + "')");
-        
-        // coloca o novo
-        this.executeScript("$(\"body\").addClass('" + theme + "')");
-
-        // seta no usuario para quando for salvo
-        this.user.setTheme(theme);
+//        // remove o tema atual
+//        this.executeScript("$(\"body\").removeClass('"
+//                + this.user.getTheme() + "')");
+//        
+//        // coloca o novo
+//        this.executeScript("$(\"body\").addClass('" + theme + "')");
+//
+//        // seta no usuario para quando for salvo
+//        this.user.setTheme(theme);
     }
 
     /**

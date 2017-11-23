@@ -118,7 +118,7 @@ public class MessagingService {
 
         final Message message = userMessage.getMessage();
 
-        message.setSender(this.fillUserData(message.getSender().getId()));
+//        message.setSender(this.fillUserData(message.getSender().getId()));
 
         final List<UserMessage> userMessages = 
                 this.userMessageRepository.listByMessage(message);
@@ -126,7 +126,7 @@ public class MessagingService {
         final List<User> users = new ArrayList<>();
 
         userMessages.stream().forEach(_userMessage -> {
-            users.add(this.fillUserData(_userMessage.getRecipient().getId()));
+//            users.add(this.fillUserData(_userMessage.getRecipient().getId()));
         });
 
         message.setRecipients(users);
@@ -156,7 +156,7 @@ public class MessagingService {
             final List<User> users = new ArrayList<>();
 
             userMessages.stream().forEach(userMessage -> {
-                users.add(this.fillUserData(userMessage.getRecipient().getId()));
+//                users.add(this.fillUserData(userMessage.getRecipient().getId()));
             });
 
             message.setRecipients(users);
@@ -199,14 +199,5 @@ public class MessagingService {
      */
     public Page<UserMessage> listReceivedMessages(String filter, PageRequest pageRequest) {
         return this.userMessageRepository.listReceived(this.authenticatedUser, filter, pageRequest);
-    }
-
-    /**
-     *
-     * @param userId
-     * @return
-     */
-    private User fillUserData(String userId) {
-        return this.accountService.findUserById(userId, false);
     }
 }
