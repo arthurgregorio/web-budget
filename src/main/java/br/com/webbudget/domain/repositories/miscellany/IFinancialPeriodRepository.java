@@ -17,8 +17,8 @@
 package br.com.webbudget.domain.repositories.miscellany;
 
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
-import br.com.webbudget.infraestructure.components.table.Page;
-import br.com.webbudget.infraestructure.components.table.PageRequest;
+import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.components.table.PageRequest;
 import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;

@@ -20,8 +20,6 @@ import br.com.webbudget.domain.entities.security.Authorization;
 import br.com.webbudget.domain.entities.security.Grant;
 import br.com.webbudget.domain.entities.security.Group;
 import br.com.webbudget.domain.entities.security.Permissions;
-import br.com.webbudget.domain.entities.security.Profile;
-import br.com.webbudget.domain.entities.security.User;
 import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
@@ -33,7 +31,6 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -47,6 +44,9 @@ import org.slf4j.LoggerFactory;
 public class Bootstrap {
 
     @Inject
+    private Logger logger;
+    
+    @Inject
     private Permissions permissions;
     
     @Inject
@@ -58,8 +58,6 @@ public class Bootstrap {
     private GroupRepository groupRepository;
     @Inject
     private AuthorizationRepository authorizationRepository;
-    
-    private final Logger logger = LoggerFactory.getLogger(Bootstrap.class);
     
     /**
      * 
@@ -112,7 +110,7 @@ public class Bootstrap {
         
         if (!group.isSaved()) {
 
-            this.logger.info("Creatimg default group");
+            this.logger.info("Creating default group");
             
             this.userAccountService.save(group);
             
@@ -134,29 +132,29 @@ public class Bootstrap {
      */
     private void createDefaultUser() {
         
-        final User user = this.userRepository.findOptionalByUsername("admin")
-                .orElseGet(() -> {
-                    final User newOne = new User();
-                    newOne.setName("Administrador");
-                    newOne.setEmail("contato@webbudget.com.br");
-                    newOne.setUsername("admin");
-                    newOne.setPassword("admin");
-                    newOne.setProfile(Profile.createDefault());
-                    newOne.setIncludedBy("system");
-                    return newOne;
-                });
-        
-        if (!user.isSaved()) {
-            
-            this.logger.info("Creatimg default user");
-            
-            final Group group = this.groupRepository
-                    .findOptionalByName("Administradores")
-                    .get();
-            
-            user.setGroup(group);
-            
-            this.userAccountService.save(user);
-        }
+//        final User user = this.userRepository.findOptionalByUsername("admin")
+//                .orElseGet(() -> {
+//                    final User newOne = new User();
+//                    newOne.setName("Administrador");
+//                    newOne.setEmail("contato@webbudget.com.br");
+//                    newOne.setUsername("admin");
+//                    newOne.setPassword("admin");
+//                    newOne.setProfile(Profile.createDefault());
+//                    newOne.setIncludedBy("system");
+//                    return newOne;
+//                });
+//        
+//        if (!user.isSaved()) {
+//            
+//            this.logger.info("Creating default user");
+//            
+//            final Group group = this.groupRepository
+//                    .findOptionalByName("Administradores")
+//                    .get();
+//            
+//            user.setGroup(group);
+//            
+//            this.userAccountService.save(user);
+//        }
     }
 }

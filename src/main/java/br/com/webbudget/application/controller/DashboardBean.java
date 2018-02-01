@@ -16,12 +16,12 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.infraestructure.components.chart.donut.DonutChartModel;
+import br.com.webbudget.application.components.chart.donut.DonutChartModel;
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.entities.financial.Movement;
 import br.com.webbudget.domain.misc.MovementCalculator;
-import br.com.webbudget.infraestructure.components.chart.line.LineChartDatasetBuilder;
-import br.com.webbudget.infraestructure.components.chart.line.LineChartModel;
+import br.com.webbudget.application.components.chart.line.LineChartDatasetBuilder;
+import br.com.webbudget.application.components.chart.line.LineChartModel;
 import br.com.webbudget.domain.exceptions.ApplicationException;
 import br.com.webbudget.domain.entities.entries.MovementClassType;
 import br.com.webbudget.domain.services.FinancialPeriodService;

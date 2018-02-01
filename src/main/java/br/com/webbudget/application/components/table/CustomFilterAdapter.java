@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Arthur Gregorio, AG.Software
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,37 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.converters.jpa;
-
-import br.com.webbudget.infraestructure.components.Color;
-import javax.persistence.AttributeConverter;
+package br.com.webbudget.application.components.table;
 
 /**
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.3.1, 22/01/2017
+ * @since 2.1.2, 26/12/2015
  */
-public class ColorConverter implements AttributeConverter<Color, String>{
-
+@FunctionalInterface
+public interface CustomFilterAdapter<T> {
+    
     /**
      * 
-     * @param attribute
      * @return 
      */
-    @Override
-    public String convertToDatabaseColumn(Color attribute) {
-        return attribute != null ? attribute.toString() : null;
-    }
-
-    /**
-     * 
-     * @param dbData
-     * @return 
-     */
-    @Override
-    public Color convertToEntityAttribute(String dbData) {
-        return dbData != null ? Color.parse(dbData) : null;
-    }
+    T getFilter();
 }

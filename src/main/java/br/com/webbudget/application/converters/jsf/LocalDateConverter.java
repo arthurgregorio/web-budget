@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.converters.jsf;
+package br.com.webbudget.application.converters.jsf;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

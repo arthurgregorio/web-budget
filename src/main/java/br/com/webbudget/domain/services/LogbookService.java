@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.infraestructure.components.table.Page;
-import br.com.webbudget.infraestructure.components.table.PageRequest;
+import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.components.table.PageRequest;
 import br.com.webbudget.domain.misc.ApportionmentBuilder;
 import br.com.webbudget.domain.misc.MovementBuilder;
 import br.com.webbudget.domain.events.CreateMovement;

@@ -17,8 +17,8 @@
 package br.com.webbudget.domain.repositories.entries;
 
 import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.infraestructure.components.table.Page;
-import br.com.webbudget.infraestructure.components.table.PageRequest;
+import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.components.table.PageRequest;
 import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;

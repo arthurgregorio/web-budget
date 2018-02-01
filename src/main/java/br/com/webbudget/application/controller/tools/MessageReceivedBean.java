@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.application.controller.tools;
 
-import br.com.webbudget.infraestructure.components.table.AbstractLazyModel;
-import br.com.webbudget.infraestructure.components.table.Page;
-import br.com.webbudget.infraestructure.components.table.PageRequest;
+import br.com.webbudget.application.components.table.AbstractLazyModel;
+import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.components.table.PageRequest;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.exceptions.ApplicationException;
 import br.com.webbudget.domain.entities.tools.UserMessage;

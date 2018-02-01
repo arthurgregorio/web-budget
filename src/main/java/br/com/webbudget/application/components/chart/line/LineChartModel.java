@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.components.chart.line;
+package br.com.webbudget.application.components.chart.line;
 
-import br.com.webbudget.infraestructure.components.chart.AbstractChartModel;
+import br.com.webbudget.application.components.chart.AbstractChartModel;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.components.chart.donut;
+package br.com.webbudget.application.components.chart.donut;
 
 import lombok.Getter;
 

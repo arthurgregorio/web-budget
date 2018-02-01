@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.components.table;
+package br.com.webbudget.application.components.table;
 
 import br.com.webbudget.domain.entities.IPersistentEntity;
 import java.util.List;
