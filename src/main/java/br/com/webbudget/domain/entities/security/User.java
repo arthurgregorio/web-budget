@@ -1,6 +1,7 @@
 package br.com.webbudget.domain.entities.security;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
+import br.com.webbudget.infraestructure.shiro.UserDetails;
 import java.util.HashSet;
 import java.util.Set;
 import static javax.persistence.CascadeType.MERGE;
@@ -33,7 +34,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Table(name = "users")
 @EqualsAndHashCode(callSuper = true)
-public class User extends PersistentEntity {
+public class User extends PersistentEntity implements UserDetails {
 
     @Getter
     @Setter

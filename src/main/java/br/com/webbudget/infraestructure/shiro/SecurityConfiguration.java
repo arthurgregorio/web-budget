@@ -1,16 +1,20 @@
 package br.com.webbudget.infraestructure.shiro;
 
-import br.eti.arthurgregorio.shirotest.model.service.AccountService;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import lombok.NoArgsConstructor;
 import org.apache.shiro.authc.credential.PasswordMatcher;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Hex;
 import org.apache.shiro.crypto.AesCipherService;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.web.filter.authc.AnonymousFilter;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
+import org.apache.shiro.web.filter.authz.RolesAuthorizationFilter;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.FilterChainManager;
 import org.apache.shiro.web.filter.mgt.FilterChainResolver;
@@ -23,34 +27,37 @@ import org.apache.shiro.web.mgt.WebSecurityManager;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
- * @since 1.0.0, 29/09/2016
+ * @since 3.0.0
+ * @version 1.0.0, 31/01/2018
  */
+@NoArgsConstructor
 @ApplicationScoped
-public class ShiroConfiguration {
+public class SecurityConfiguration {
 
     @Inject
-    private AccountService accountService;
+    private Instance<UserDetailsService> userDetailsService;
 
     private FilterChainResolver filterChainResolver;
     private DefaultWebSecurityManager securityManager;
 
     /**
-     *
-     */
-    public ShiroConfiguration() { }
-
-    /**
      * @return the default security manager for this application
      */
     @Produces
-    public WebSecurityManager getSecurityManager() {
+    public WebSecurityManager produceWebSecurityManager() {
 
         if (this.securityManager == null) {
 
+            if (this.userDetailsService.isUnsatisfied()) {
+                throw new IllegalStateException("No bean instance for UserDetailsService is provided, check you implementation!");
+            }
+            
             // creates a custom security realm
-            final AuthorizingRealm realm
-                    = new SecurityRealm(this.accountService);
+            final AuthorizingRealm realm =
+                    new SecurityRealm(this.userDetailsService.get());
+            
+            realm.setCachingEnabled(true);
+            realm.setCacheManager(new EhCacheManager());
 
             // instantiate the custom password matcher based on bcrypt
             final PasswordMatcher passwordMatcher = new PasswordMatcher();
@@ -59,17 +66,16 @@ public class ShiroConfiguration {
 
             realm.setCredentialsMatcher(passwordMatcher);
 
-            // create the security manager
-            this.securityManager = new DefaultWebSecurityManager(realm);
-
             // enable the remember me function based on cookies 
             final CookieRememberMeManager rememberMeManager
                     = new CookieRememberMeManager();
 
             rememberMeManager.setCipherKey(this.createCypherKey());
+            
+            // create the security manager
+            this.securityManager = new DefaultWebSecurityManager(realm);
 
             this.securityManager.setRememberMeManager(rememberMeManager);
-
         }
         return this.securityManager;
     }
@@ -82,20 +88,36 @@ public class ShiroConfiguration {
 
         if (this.filterChainResolver == null) {
 
-            final FilterChainManager chainManager = new DefaultFilterChainManager();
+            final FilterChainManager manager = new DefaultFilterChainManager();
 
-            chainManager.addFilter("anon", new AnonymousFilter());
-            chainManager.addFilter("authc", this.configureFormAuthentication());
-            chainManager.addFilter("perms", new PermissionsAuthorizationFilter());
-
+            manager.addFilter("authc", this.configureFormAuthentication());
+            
+            manager.addFilter("logout", new LogoutFilter());
+            manager.addFilter("anon", new AnonymousFilter());
+            manager.addFilter("roles", new RolesAuthorizationFilter());
+            
+            final PermissionsAuthorizationFilter permsFilter = 
+                    new PermissionsAuthorizationFilter();
+            
+            permsFilter.setUnauthorizedUrl("/error/401.xhtml");
+            
+            manager.addFilter("perms", permsFilter);
+            
+            // FIXME create a better way to build de ACL's
+            manager.createChain("/secured/tools/users/**", 
+                    "authc, perms[user:access]");
+            manager.createChain("/secured/tools/groups/**", 
+                    "authc, perms[group:access]");
+            
+            manager.createChain("/secured/**", "authc");
+            manager.createChain("/error/**", "anon");
+            manager.createChain("/logout", "logout");
+            
             final PathMatchingFilterChainResolver resolver
                     = new PathMatchingFilterChainResolver();
+            
+            resolver.setFilterChainManager(manager);
 
-            chainManager.createChain("/secured/**", "authc");
-            chainManager.createChain("/index.xhtml", "anon");
-            
-            resolver.setFilterChainManager(chainManager);
-            
             this.filterChainResolver = resolver;
         }
         return this.filterChainResolver;

@@ -1,20 +1,16 @@
 package br.com.webbudget.infraestructure.shiro;
 
 import javax.servlet.annotation.WebFilter;
+import lombok.NoArgsConstructor;
 import org.apache.shiro.web.servlet.ShiroFilter;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
- * @since 1.0.0, 29/09/2016
+ * @since 3.0.0
+ * @version 1.0.0, 31/01/2018
  */
 @WebFilter("/*")
-public class ShiroFilterActivator extends ShiroFilter {
-
-    /**
-     * 
-     */
-    public ShiroFilterActivator() { }
-}
+@NoArgsConstructor
+public class SecurityFilterActivator extends ShiroFilter { }

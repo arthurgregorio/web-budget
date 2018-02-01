@@ -16,9 +16,13 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.infraestructure.shiro.Authenticator;
+import br.com.webbudget.infraestructure.shiro.Credential;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import org.apache.shiro.authc.AuthenticationException;
 
 /**
  * Bean que controla a autenticacao no sistema, por ele invocamos o gerenciador
@@ -33,49 +37,52 @@ import lombok.Getter;
 @ViewScoped
 public class AuthenticationBean extends AbstractBean {
 
+    @Inject
+    private Authenticator authenticator;
+    
     @Getter
-    private boolean authenticationError;
-
+    private Credential credential;
+    
     /**
-     * Iniciliazacao da pagina da login onde checamos pela existencia de uma 
-     * sessao valida
      * 
-     * @return a dashboard do sistema
+     * @return 
      */
     public String initialize() {
-        
-//        // validamos se nao existe uma sessao ativa
-//        if (this.identity.isLoggedIn()) {
-//            return "/main/dashboard.xhtml?faces-redirect=true";
-//        } 
-
-        // permanecemos na pagina
-        return null;
-    }
-
-    /**
-     * Realiza o login, se houver erro redireciona para a home novamente e 
-     * impede que prossiga
-     *
-     * @return a home autenticada ou a home de login caso acesso negado
-     */
-    public String doLogin() {
-        
-//        final AuthenticationResult result = this.identity.login();
-//        
-//        if (result == AuthenticationResult.SUCCESS) {
-//            return "/main/dashboard.xhtml?faces-redirect=true";
-//        } 
-        return null;
+        if (this.authenticator.authenticationIsNeeded()) {
+            this.credential = new Credential();
+            return "";
+        } else {
+            return "/secured/dashboard.xhtml?faces-redirect=true";
+        }
     }
     
     /**
-     * Realiza logout do sistema
+     *
+     * @return
+     */
+    public String doLogin() {
+        try {
+            this.authenticator.login(this.credential);
+            return "/secured/dashboard.xhtml?faces-redirect=true";
+        } catch (AuthenticationException ex) {
+            this.logger.error("Login error", ex);
+            this.addError(true, "error.authentication-failed");
+            return null;
+        } catch (Exception ex) {
+            this.logger.error("Login error", ex);
+            this.addError(true, "error.generic-error", ex);
+            return null;
+        }
+    }
+    
+    /**
      * 
-     * @return a home para login
+     * @return 
      */
     public String doLogout() {
-//        this.identity.logout();
+        this.authenticator.logout();
         return "/index.xhtml?faces-redirect=true";
     }
+
 }
+

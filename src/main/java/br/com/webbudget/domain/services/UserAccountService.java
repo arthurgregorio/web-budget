@@ -8,7 +8,10 @@ import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GrantRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
+import br.com.webbudget.infraestructure.shiro.UserDetails;
+import br.com.webbudget.infraestructure.shiro.UserDetailsService;
 import java.util.List;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -17,11 +20,11 @@ import javax.transaction.Transactional;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0, 27/12/2017
  */
 @ApplicationScoped
-public class UserAccountService {
+public class UserAccountService implements UserDetailsService {
 
     @Inject
     private UserRepository userRepository;
@@ -195,5 +198,16 @@ public class UserAccountService {
     public User findUserByUsername(String username) {
         return this.userRepository.findOptionalByUsername(username)
                 .orElse(null);
+    }
+    
+    /**
+     * 
+     * @param username
+     * @return 
+     */
+    @Override
+    public Optional<UserDetails> findUserDetailsByUsername(String username) {
+        return Optional.ofNullable(this.userRepository.findOptionalByUsername(username)
+                .get());
     }
 }

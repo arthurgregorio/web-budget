@@ -14,11 +14,11 @@ import org.apache.shiro.web.mgt.WebSecurityManager;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
- * @since 1.0.0, 29/09/2016
+ * @since 3.0.0
+ * @version 1.0.0, 31/01/2018
  */
 @WebListener
-public class ShiroListener extends EnvironmentLoaderListener {
+public class SecurityWebListener extends EnvironmentLoaderListener {
 
     @Inject
     private WebSecurityManager webSecurityManager;
