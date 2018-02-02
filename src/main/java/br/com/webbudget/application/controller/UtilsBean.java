@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Named
 @RequestScoped
-public class ViewManagerBean {
+public class UtilsBean {
     
     @Inject
     private FacesContext facesContext;

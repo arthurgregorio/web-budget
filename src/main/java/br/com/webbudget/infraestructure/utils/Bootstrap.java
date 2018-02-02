@@ -20,10 +20,11 @@ import br.com.webbudget.domain.entities.security.Authorization;
 import br.com.webbudget.domain.entities.security.Grant;
 import br.com.webbudget.domain.entities.security.Group;
 import br.com.webbudget.domain.entities.security.Permissions;
+import br.com.webbudget.domain.entities.security.User;
 import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
+import br.com.webbudget.domain.repositories.tools.GrantRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
-import br.com.webbudget.domain.services.UserAccountService;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
@@ -45,32 +46,31 @@ public class Bootstrap {
 
     @Inject
     private Logger logger;
-    
+
     @Inject
     private Permissions permissions;
-    
-    @Inject
-    private UserAccountService userAccountService;
-    
+
     @Inject
     private UserRepository userRepository;
+    @Inject
+    private GrantRepository grantRepository;
     @Inject
     private GroupRepository groupRepository;
     @Inject
     private AuthorizationRepository authorizationRepository;
-    
+
     /**
-     * 
+     *
      */
     @PostConstruct
     protected void initialize() {
-        
+
         this.logger.info("Bootstraping webbudget application....");
-        
+
         this.createAuthorizations();
         this.createDefaultGroup();
         this.createDefaultUser();
-        
+
         this.logger.info("Bootstraping finished...");
     }
 
@@ -78,19 +78,19 @@ public class Bootstrap {
      * Salva no banco as autorizacoes do sistema
      */
     private void createAuthorizations() {
-       
-        final List<Authorization> authorizations = 
-                this.permissions.toAuthorizationList();
-        
+
+        final List<Authorization> authorizations
+                = this.permissions.toAuthorizationList();
+
         authorizations.stream().forEach(authorization -> {
-        
+
             final Optional<Authorization> optionalAuthz = this.authorizationRepository
                     .findOptionalByFunctionalityAndPermission(authorization
                             .getFunctionality(), authorization.getPermission());
-            
+
             if (!optionalAuthz.isPresent()) {
                 authorization.setIncludedBy("system");
-                this.userAccountService.save(authorization);
+                this.authorizationRepository.save(authorization);
             }
         });
     }
@@ -99,7 +99,7 @@ public class Bootstrap {
      * Cria o grupo default do sistema
      */
     private void createDefaultGroup() {
-       
+
         final Group group = this.groupRepository
                 .findOptionalByName("Administradores")
                 .orElseGet(() -> {
@@ -107,22 +107,22 @@ public class Bootstrap {
                     newOne.setIncludedBy("system");
                     return newOne;
                 });
-        
+
         if (!group.isSaved()) {
 
             this.logger.info("Creating default group");
-            
-            this.userAccountService.save(group);
-            
-            final List<Authorization> authorizations = 
-                    this.authorizationRepository.findAll();
-            
+
+            this.groupRepository.save(group);
+
+            final List<Authorization> authorizations
+                    = this.authorizationRepository.findAll();
+
             authorizations.stream().forEach(authorization -> {
-                
+
                 final Grant grant = new Grant(group, authorization);
                 grant.setIncludedBy("system");
-                
-                this.userAccountService.save(grant);
+
+                this.grantRepository.save(grant);
             });
         }
     }
@@ -131,30 +131,29 @@ public class Bootstrap {
      * Cria o usuario default do sistema
      */
     private void createDefaultUser() {
-        
-//        final User user = this.userRepository.findOptionalByUsername("admin")
-//                .orElseGet(() -> {
-//                    final User newOne = new User();
-//                    newOne.setName("Administrador");
-//                    newOne.setEmail("contato@webbudget.com.br");
-//                    newOne.setUsername("admin");
-//                    newOne.setPassword("admin");
-//                    newOne.setProfile(Profile.createDefault());
-//                    newOne.setIncludedBy("system");
-//                    return newOne;
-//                });
-//        
-//        if (!user.isSaved()) {
-//            
-//            this.logger.info("Creating default user");
-//            
-//            final Group group = this.groupRepository
-//                    .findOptionalByName("Administradores")
-//                    .get();
-//            
-//            user.setGroup(group);
-//            
-//            this.userAccountService.save(user);
-//        }
+
+        final Optional<User> optionalUser = 
+                this.userRepository.findOptionalByUsername("admin");
+
+        if (!optionalUser.isPresent()) {
+            
+            this.logger.info("Creating default user");
+
+            final Group group = this.groupRepository
+                    .findOptionalByName("Administradores")
+                    .get();
+            
+            final User user = new User();
+            
+            user.setName("Administrador");
+            user.setEmail("contato@webbudget.com.br");
+            user.setUsername("admin");
+            user.setPassword("admin"); // FIXME encriptar senha
+            user.setIncludedBy("system");
+            
+            user.setGroup(group);
+
+            this.userRepository.save(user);
+        }
     }
 }

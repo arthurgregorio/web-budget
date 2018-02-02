@@ -30,12 +30,4 @@ public interface UserRepository extends EntityRepository<User, Long> {
      */
     @Query("FROM User u WHERE u.blocked = false")
     List<User> findAllActive();
-    
-    /**
-     * 
-     * @param name
-     * @param username
-     * @return 
-     */
-    List<User> findByNameLikeOrUsernameLike(String name, String username);
 }

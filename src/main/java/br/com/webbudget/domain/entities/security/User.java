@@ -4,8 +4,6 @@ import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.infraestructure.shiro.UserDetails;
 import java.util.HashSet;
 import java.util.Set;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -66,18 +64,13 @@ public class User extends PersistentEntity implements UserDetails {
     @Setter
     @ManyToOne
     @NotNull(message = "{user.group}")
-    @JoinColumn(name = "id_group", nullable = true)
+    @JoinColumn(name = "id_group", nullable = false)
     private Group group;
-    @Getter
-    @Setter
-    @OneToOne(cascade = {PERSIST, MERGE, REMOVE})
-    @JoinColumn(name = "id_profile", nullable = true)
-    private Profile profile;
-
+    
     @Transient
     @NotNull(message = "{user.password}")
     private String passwordConfirmation;
-    
+
     /**
      *
      * @param name

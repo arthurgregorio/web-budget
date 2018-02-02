@@ -83,6 +83,5 @@ public class AuthenticationBean extends AbstractBean {
         this.authenticator.logout();
         return "/index.xhtml?faces-redirect=true";
     }
-
 }
 
