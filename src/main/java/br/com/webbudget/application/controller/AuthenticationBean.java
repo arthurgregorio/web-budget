@@ -52,7 +52,7 @@ public class AuthenticationBean extends AbstractBean {
             this.credential = new Credential();
             return "";
         } else {
-            return "/secured/dashboard.xhtml?faces-redirect=true";
+            return "/main/dashboard.xhtml?faces-redirect=true";
         }
     }
     
@@ -63,7 +63,7 @@ public class AuthenticationBean extends AbstractBean {
     public String doLogin() {
         try {
             this.authenticator.login(this.credential);
-            return "/secured/dashboard.xhtml?faces-redirect=true";
+            return "/main/dashboard.xhtml?faces-redirect=true";
         } catch (AuthenticationException ex) {
             this.logger.error("Login error", ex);
             this.addError(true, "error.authentication-failed");

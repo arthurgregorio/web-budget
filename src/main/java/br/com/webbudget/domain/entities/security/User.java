@@ -4,12 +4,10 @@ import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.infraestructure.shiro.UserDetails;
 import java.util.HashSet;
 import java.util.Set;
-import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.metamodel.SingularAttribute;
@@ -52,7 +50,7 @@ public class User extends PersistentEntity implements UserDetails {
     @Getter
     @Setter
     @NotNull(message = "{user.password}")
-    @Column(name = "password", length = 20, nullable = false)
+    @Column(name = "password", length = 60, nullable = false)
     private String password;
     @Getter
     @Setter

@@ -25,6 +25,7 @@ import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GrantRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
+import br.com.webbudget.infraestructure.shiro.BCryptPasswordService;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
@@ -58,6 +59,9 @@ public class Bootstrap {
     private GroupRepository groupRepository;
     @Inject
     private AuthorizationRepository authorizationRepository;
+    
+    @Inject
+    private BCryptPasswordService passwordService;
 
     /**
      *
@@ -148,7 +152,7 @@ public class Bootstrap {
             user.setName("Administrador");
             user.setEmail("contato@webbudget.com.br");
             user.setUsername("admin");
-            user.setPassword("admin"); // FIXME encriptar senha
+            user.setPassword(this.passwordService.encryptPassword("admin"));
             user.setIncludedBy("system");
             
             user.setGroup(group);
