@@ -51,14 +51,13 @@ public class UserSessionBean implements Serializable {
     @PostConstruct
     protected void initialize() {
         
-        // FIXME verificar utilidade deste pedaco de codigo
-//        final String principalUsername = String.valueOf(
-//                this.getSubject().getPrincipal());
-//        
-//        this.principal = this.userRepository
-//                .findOptionalByUsername(principalUsername)
-//                .orElseThrow(() -> new AuthenticationException(String.format(
-//                        "User %s has no local user", principalUsername)));
+        final String principalUsername = String.valueOf(
+                this.getSubject().getPrincipal());
+        
+        this.principal = this.userRepository
+                .findOptionalByUsername(principalUsername)
+                .orElseThrow(() -> new AuthenticationException(String.format(
+                        "User %s not found", principalUsername)));
     }
         
     /**
@@ -88,6 +87,14 @@ public class UserSessionBean implements Serializable {
         return this.getSubject().isPermitted(permission);
     }
 
+    /**
+     * 
+     * @return 
+     */
+    public String getMenuStyle() {
+        return "skin-black";
+    }
+    
     /**
      * 
      * @return 

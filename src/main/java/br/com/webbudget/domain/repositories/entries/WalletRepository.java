@@ -16,12 +16,10 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Card;
-import br.com.webbudget.domain.entities.entries.CardType;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
+import br.com.webbudget.domain.entities.entries.Wallet;
 import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 
 /**
@@ -32,42 +30,36 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface ICardRepository extends EntityRepository<Card, Long> {
+public interface WalletRepository extends EntityRepository<Wallet, Long> {
 
-    /**
-     *
-     * @param isBlocked
-     * @return
-     */
-    public List<Card> listDebit(Boolean isBlocked);
-
-    /**
-     *
-     * @param isBlocked
-     * @return
-     */
-    public List<Card> listCredit(Boolean isBlocked);
-
-    /**
-     *
-     * @param isBlocked
-     * @return
-     */
-    public List<Card> listByStatus(Boolean isBlocked);
-    
-    /**
-     *
-     * @param number
-     * @param cardType
-     * @return
-     */
-    public Card findByNumberAndType(String number, CardType cardType);
-    
     /**
      * 
-     * @param isBlocked
-     * @param pageRequest
      * @return 
      */
-    public Page<Card> listByStatus(Boolean isBlocked, PageRequest pageRequest);
+    @Query("FROM Wallet w WHERE w.blocked = false")
+    List<Wallet> findAllActive();
+    
+//    /**
+//     *
+//     * @param isBlocked
+//     * @return
+//     */
+//    public List<Wallet> listByStatus(Boolean isBlocked);
+//
+//    /**
+//     * 
+//     * @param isBlocked
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<Wallet> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
+//    
+//    /**
+//     *
+//     * @param name
+//     * @param bank
+//     * @param walletType
+//     * @return
+//     */
+//    public Wallet findByNameAndBankAndType(String name, String bank, WalletType walletType);
 }

@@ -1,5 +1,23 @@
+/*
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package br.com.webbudget.infraestructure.shiro;
 
+import br.com.webbudget.domain.entities.security.Permissions;
+import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
@@ -27,8 +45,8 @@ import org.apache.shiro.web.mgt.WebSecurityManager;
  *
  * @author Arthur Gregorio
  *
- * @since 3.0.0
- * @version 1.0.0, 31/01/2018
+ * @version 1.0.0
+ * @since 3.0.0, 03/02/2018
  */
 @NoArgsConstructor
 @ApplicationScoped
@@ -36,6 +54,9 @@ public class SecurityConfiguration {
 
     @Inject
     private Instance<UserDetailsService> userDetailsService;
+    
+    @Inject
+    private Permissions permissions;
 
     private FilterChainResolver filterChainResolver;
     private DefaultWebSecurityManager securityManager;
@@ -103,13 +124,14 @@ public class SecurityConfiguration {
             
             manager.addFilter("perms", permsFilter);
             
-            // FIXME create a better way to build de ACL's
-            manager.createChain("/secured/tools/users/**", 
-                    "authc, perms[user:access]");
-            manager.createChain("/secured/tools/groups/**", 
-                    "authc, perms[group:access]");
+            // build the http security rules
+            final Map<String, String> chains = this.buildHttpSecurity();
             
-            manager.createChain("/secured/**", "authc");
+            chains.keySet().stream().forEach(path -> {
+                manager.createChain(path, chains.get(path));
+            });
+            
+            manager.createChain("/main/**", "authc");
             manager.createChain("/error/**", "anon");
             manager.createChain("/logout", "logout");
             
@@ -140,8 +162,34 @@ public class SecurityConfiguration {
                 = new FormAuthenticationFilter();
 
         formAuthenticator.setLoginUrl("/index.xhtml");
-        formAuthenticator.setSuccessUrl("/secured/dashboard.xhtml");
+        formAuthenticator.setSuccessUrl("/main/dashboard.xhtml");
 
         return formAuthenticator;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    private Map<String, String> buildHttpSecurity() {
+        
+        final HttpSecurityBuilder builder = new PermissionHttpSecurityBuilder();
+                
+        builder.addRule("/main/entries/card/**", this.permissions.getGROUP_ACCESS(), true)
+                .addRule("/main/entries/contact/**", this.permissions.getCONTACT_ACCESS(), true)
+                .addRule("/main/entries/costCenter/**", this.permissions.getCOST_CENTER_ACCESS(), true)
+                .addRule("/main/entries/wallet/**", this.permissions.getWALLET_ACCESS(), true)
+                .addRule("/main/entries/movementClass/**", this.permissions.getMOVEMENT_CLASS_ACCESS(), true)
+                .addRule("/main/financial/movement/**", this.permissions.getMOVEMENT_ACCESS(), true)
+                .addRule("/main/financial/cardInvoice/**", this.permissions.getCARD_INVOICE_ACCESS(), true)
+                .addRule("/main/financial/transference/**", this.permissions.getBALANCE_TRANSFERENCE_ACCESS(), true)
+                .addRule("/main/tools/configuration/**", this.permissions.getCONFIGURATION_ACCESS(), true)
+                .addRule("/main/tools/message/send/**", this.permissions.getMESSAGE_SEND(), true)
+                .addRule("/main/tools/user/**", this.permissions.getUSER_ACCESS(), true)
+                .addRule("/main/tools/group/**", this.permissions.getGROUP_ACCESS(), true)
+                .addRule("/main/miscellany/closing/**", this.permissions.getCLOSING_ACCESS(), true)
+                .addRule("/main/miscellany/financialPeriod/**", this.permissions.getFINANCIAL_PERIOD_ACCESS(), true);
+        
+        return builder.build();
     }
 }

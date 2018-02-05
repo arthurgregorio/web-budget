@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.infraestructure.utils.Configurations;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -88,5 +89,21 @@ public class UtilsBean {
         builder.append("channels/messages");
         
         return builder.toString();
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public String getCurrentVersion() {
+        return Configurations.get("application.version");
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public int getCurrentYear() {
+        return LocalDate.now().getYear();
     }
 }

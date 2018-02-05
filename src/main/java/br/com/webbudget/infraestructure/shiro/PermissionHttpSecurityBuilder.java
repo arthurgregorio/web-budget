@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,33 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package br.com.webbudget.infraestructure.shiro;
 
 /**
- * Fecha dialogs do primefaces
- * 
- * @param {type} widget
- * @returns {undefined}
+ *
+ * @author Arthur Gregorio
+ *
+ * @version 1.0.0
+ * @since 3.0.0, 03/02/2018
  */
-function closeDialog(widget) {
-    PF(widget).hide();
-};
+public class PermissionHttpSecurityBuilder extends HttpSecurityBuilder {
 
-/**
- * Invoca o blockUI pelo seu widget var
- * 
- * @param {type} widget
- * @returns {undefined}
- */
-function block(widget) {
-    PF(widget).block();
-};
+    private final String permOperator = "perms[%s]";
 
-/**
- * Finaliza o blockUI pelo seu widget var
- * 
- * @param {type} widget
- * @returns {undefined}
- */
-function unblock(widget) {
-    PF(widget).unblock();
-};
+    /**
+     * 
+     */
+    public PermissionHttpSecurityBuilder() {
+        super();
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String getDefaultPrefix() {
+        return this.permOperator;
+    }
+}

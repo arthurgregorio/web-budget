@@ -16,9 +16,22 @@
  */
 package br.com.webbudget.application.controller.entries;
 
+import br.com.webbudget.application.components.table.AbstractLazyModel;
 import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.domain.entities.entries.Card;
+import br.com.webbudget.domain.entities.entries.CardType;
+import br.com.webbudget.domain.entities.entries.Wallet;
+import br.com.webbudget.domain.repositories.entries.CardRepository;
+import br.com.webbudget.domain.repositories.entries.WalletRepository;
+import br.com.webbudget.domain.services.CardService;
+import br.com.webbudget.domain.services.WalletService;
+import java.util.List;
+import java.util.Map;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller para a view do manutencao dos cartoes de credito
@@ -32,71 +45,66 @@ import javax.inject.Named;
 @ViewScoped
 public class CardBean extends AbstractBean {
 
-//    @Getter
-//    private Card card;
-//    
-//    @Getter
-//    private List<Wallet> wallets;
-//    
-//    @Inject
-//    private CardService cardService;
-//    @Inject
-//    private WalletService walletService;
-//    
-//    @Getter
-//    private final AbstractLazyModel<Card> cardsModel;
-//
-//    /**
-//     * 
-//     */
-//    public CardBean() {
-//        
-//        this.cardsModel = new AbstractLazyModel<Card>() {
-//            @Override
-//            public List<Card> load(int first, int pageSize, String sortField, 
-//                    SortOrder sortOrder, Map<String, Object> filters) {
-//                
-//                final PageRequest pageRequest = new PageRequest();
-//                
-//                pageRequest
-//                        .setFirstResult(first)
-//                        .withPageSize(pageSize)
-//                        .sortingBy(sortField, "inclusion")
-//                        .withDirection(sortOrder.name());
-//                
-//                final Page<Card> page = cardService.listCards(null, pageRequest);
-//                
-//                this.setRowCount(page.getTotalPagesInt());
-//                
-//                return page.getContent();
-//            }
-//        };
-//    }
-//    
-//    /**
-//     * 
-//     */
-//    public void initializeListing() {
-//        this.viewState = ViewState.LISTING;
-//    }
-//
-//    /**
-//     * 
-//     * @param cardId 
-//     */
-//    public void initializeForm(long cardId) {
-//
-//        this.wallets = this.walletService.listWallets(false);
-//
-//        if (cardId == 0) {
-//            this.viewState = ViewState.ADDING;
-//            this.card = new Card();
-//        } else {
-//            this.viewState = ViewState.EDITING;
-//            this.card = this.cardService.findCardById(cardId);
-//        }
-//    }
-//    
+    @Getter
+    private String filter;
+    @Getter
+    private boolean statusFilter;
+    @Getter
+    private CardType cardTypeFilter;
+    
+    @Getter
+    private Card card;
+    
+    @Getter
+    private List<Wallet> wallets;
+    
+    @Inject
+    private CardService cardService;
+    @Inject
+    private WalletService walletService;
+    
+    @Inject
+    private CardRepository cardRepository;
+    @Inject
+    private WalletRepository walletRepository;
+    
+    @Getter
+    private final AbstractLazyModel<Card> cardsModel;
+
+    /**
+     * 
+     */
+    public CardBean() {
+        this.cardsModel = new AbstractLazyModel<Card>() {
+            @Override
+            public List<Card> load(int first, int pageSize, String sortField, 
+                    SortOrder sortOrder, Map<String, Object> filters) {
+                return cardRepository.findByLike(Card.asExample(filter, 
+                        cardTypeFilter, statusFilter), first, pageSize, 
+                        Card.filterProperties());
+            }
+        };
+    }
+    
+    /**
+     * 
+     */
+    public void initializeListing() {
+        this.viewState = ViewState.LISTING;
+    }
+
+    /**
+     * 
+     * @param id
+     * @param viewState 
+     */
+    public void initializeForm(long id, ViewState viewState) {
+        this.viewState = viewState;
+        this.wallets = this.walletRepository.findAllActive();
+        this.card = this.cardRepository.findOptionalById(id)
+                .orElseGet(Card::new);
+    }
+    
 //    /**
 //     * @return 
 //     */

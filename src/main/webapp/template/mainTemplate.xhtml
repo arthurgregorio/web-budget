@@ -49,14 +49,14 @@
         <ui:insert name="head" />
     </h:head>
 
-    <h:body styleClass="hold-transition sidebar-mini #{userSessionBean.authenticatedUserUI}">
+    <h:body styleClass="hold-transition sidebar-mini #{userSessionBean.menuStyle}">
 
-        <h:form>
+<!--        <h:form>
             <p:remoteCommand autoRun="true"
                              name="updateMessages" 
                              update="userMessagesBox"
                              actionListener="#{messagingBean.updateMessageStatus()}"/>
-        </h:form>
+        </h:form>-->
 
         <div class="wrapper">
             <header class="main-header">
@@ -74,7 +74,7 @@
                     </a>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
-                            <li jsf:id="userMessagesBox" class="dropdown messages-menu">
+<!--                            <li jsf:id="userMessagesBox" class="dropdown messages-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-envelope-o"></i>
                                     <span jsf:rendered="#{messagingBean.newMessages ne 0}"
@@ -140,20 +140,20 @@
                                         </p:link>
                                     </li>
                                 </ul>
-                            </li>
+                            </li>-->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <pe:gravatar id="userImage"
-                                                 value="#{userSessionBean.authenticatedUserEmail}"/>
-                                    <span class="hidden-xs">#{userSessionBean.authenticatedUserName}</span>
+                                                 value="#{userSessionBean.principal.email}"/>
+                                    <span class="hidden-xs">#{userSessionBean.principal.username}</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="user-header">
                                         <pe:gravatar style="border-radius: 50%"
-                                                     value="#{userSessionBean.authenticatedUserEmail}"/>
+                                                     value="#{userSessionBean.principal.email}"/>
                                         <p>
-                                            #{userSessionBean.authenticatedUserName}
-                                            <small>#{userSessionBean.authenticatedUserGroup}</small>
+                                            #{userSessionBean.principal.name}
+                                            <small>#{userSessionBean.principal.groupName}</small>
                                         </p>
                                     </li>
                                     <li class="user-footer">
@@ -164,9 +164,7 @@
                                                                action="/main/profile/formUserProfile.xhtml?faces-redirect=true"/>
                                             </div>
                                             <div class="pull-right">
-                                                <p:commandLink value="#{menu['logout']}"
-                                                               styleClass="btn btn-flat btn-danger" 
-                                                               action="#{authenticationBean.doLogout()}"/>
+                                                <a class="btn btn-flat btn-danger" href="/logout">#{menu['logout']}</a>
                                             </div>
                                         </h:form>
                                     </li>
@@ -182,42 +180,42 @@
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['entries']}</li>
                         <li class="#{activeMenu eq 'cards' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_ACCESS)}">
                             <p:link href="/main/entries/card/listCards.xhtml">
                                 <i class="fa fa-credit-card"></i> 
                                 <span>#{menu['entries.cards']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'vehicles' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.VEHICLE_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.VEHICLE_ACCESS)}">
                             <p:link href="/main/entries/vehicle/listVehicles.xhtml">
                                 <i class="fa fa-car"></i> 
                                 <span>#{menu['logbook.vehicles']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'wallets' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.WALLET_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.WALLET_ACCESS)}">
                             <p:link href="/main/entries/wallet/listWallets.xhtml">
                                 <i class="fa fa-bank"></i> 
                                 <span>#{menu['entries.wallets']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'contacts' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.CONTACT_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.CONTACT_ACCESS)}">
                             <p:link href="/main/entries/contact/listContacts.xhtml">
                                 <i class="fa fa-fax"></i> 
                                 <span>#{menu['entries.contacts']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'costCenters' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.COST_CENTER_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_ACCESS)}">
                             <p:link href="/main/entries/costCenter/listCostCenters.xhtml">
                                 <i class="fa fa-sitemap"></i> 
                                 <span>#{menu['entries.cost-centers']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'movementClasses' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_CLASS_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_ACCESS)}">
                             <p:link href="/main/entries/movementClass/listMovementClasses.xhtml">
                                 <i class="fa fa-list"></i> 
                                 <span>#{menu['entries.movement-classes']}</span>
@@ -228,14 +226,14 @@
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['logbook']}</li>
                         <li class="#{activeMenu eq 'entries' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.ENTRIES_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.ENTRIES_ACCESS)}">
                             <p:link href="/main/logbook/entries/vehicleSelection.xhtml">
                                 <i class="fa fa-pencil"></i> 
                                 <span>#{menu['logbook.entries']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'refuelings' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.REFUELING_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.REFUELING_ACCESS)}">
                             <p:link href="/main/logbook/refueling/listRefuelings.xhtml">
                                 <i class="fa fa-refresh"></i> 
                                 <span>#{menu['logbook.refueling']}</span>
@@ -253,14 +251,14 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li class="#{activeSubmenu eq 'fixed' ? 'active' : ''}"
-                                    jsf:rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_VIEW)}">
+                                    jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">
                                     <p:link href="/main/financial/movement/fixed/listFixedMovements.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         #{menu['financial.movements.fixed']}
                                     </p:link>
                                 </li>
                                 <li class="#{activeSubmenu eq 'period' ? 'active' : ''}"
-                                    jsf:rendered="#{userSessionBean.hasRole(authorization.MOVEMENT_VIEW)}">
+                                    jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_ACCESS)}">
                                     <p:link href="/main/financial/movement/period/listMovements.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         #{menu['financial.movements.period']}
@@ -276,14 +274,14 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li class="#{activeSubmenu eq 'current' ? 'active' : ''}"
-                                    jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_VIEW)}">
+                                    jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_ACCESS)}">
                                     <p:link href="/main/financial/cardInvoice/current/cardInvoiceView.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         #{menu['financial.card-invoice.current']}
                                     </p:link>
                                 </li>
                                 <li class="#{activeSubmenu eq 'historic' ? 'active' : ''}"
-                                    jsf:rendered="#{userSessionBean.hasRole(authorization.CARD_INVOICE_HISTORIC)}">
+                                    jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_HISTORIC)}">
                                     <p:link href="/main/financial/cardInvoice/historic/cardInvoiceHistoric.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         #{menu['financial.card-invoice.historic']}
@@ -292,7 +290,7 @@
                             </ul>
                         </li>
                         <li class="#{activeMenu eq 'transference' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.BALANCE_TRANSFERENCE_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.BALANCE_TRANSFERENCE_ACCESS)}">
                             <p:link href="/main/financial/transference/walletTransference.xhtml">
                                 <i class="fa fa-exchange"></i> 
                                 <span>#{menu['financial.transferences']}</span>
@@ -310,7 +308,7 @@
                             </p:link>
                             <ul class="treeview-menu">
                                 <li class="#{activeSubmenu eq 'messagesSent' ? 'active' : ''}"
-                                    jsf:rendered="#{userSessionBean.hasRole(authorization.MESSAGE_SEND)}">
+                                    jsf:rendered="#{userSessionBean.isPermitted(permissions.MESSAGE_SEND)}">
                                     <p:link href="/main/tools/messaging/sent/listSentMessages.xhtml">
                                         <i class="fa fa-circle-o"></i> 
                                         <span>#{menu['tools.messaging.sent']}</span>
@@ -325,14 +323,14 @@
                             </ul>
                         </li>
                         <li class="#{activeMenu eq 'closing' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.CLOSING_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.CLOSING_ACCESS)}">
                             <p:link href="/main/miscellany/closing/closeFinancialPeriod.xhtml">
                                 <i class="fa fa-calculator"></i> 
                                 <span>#{menu['miscellany.closing']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'financialPeriods' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_ACCESS)}">
                             <p:link href="/main/miscellany/financialPeriod/listFinancialPeriods.xhtml">
                                 <i class="fa fa-calendar-o"></i> 
                                 <span>#{menu['miscellany.financial-periods']}</span>
@@ -343,21 +341,21 @@
                     <ul class="sidebar-menu">
                         <li class="header">#{menu['tools']}</li>
                         <li class="#{activeMenu eq 'groups' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.GROUP_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.GROUP_ACCESS)}">
                             <p:link href="/main/tools/group/listGroups.xhtml">
                                 <i class="fa fa-users"></i> 
                                 <span>#{menu['tools.groups']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'users' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.USER_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.USER_ACCESS)}">
                             <p:link href="/main/tools/user/listUsers.xhtml">
                                 <i class="fa fa-user"></i> 
                                 <span>#{menu['tools.users']}</span>
                             </p:link>
                         </li>
                         <li class="#{activeMenu eq 'configurations' ? 'active' : ''}"
-                            jsf:rendered="#{userSessionBean.hasRole(authorization.CONFIGURATION_VIEW)}">
+                            jsf:rendered="#{userSessionBean.isPermitted(permissions.CONFIGURATION_ACCESS)}">
                             <p:link href="/main/tools/configuration/configurations.xhtml">
                                 <i class="fa fa-gears"></i> 
                                 <span>#{menu['tools.configurations']}</span>
@@ -391,10 +389,10 @@
             <footer class="main-footer">
                 <a target="_blank"
                    href="http://webbudget.com.br/">
-                    Copyright (C) 2016 Arthur Gregorio, AG.Software
+                    Copyright (C) #{utilsBean.currentYear} Arthur Gregorio, AG.Software
                 </a>
                 <div class="pull-right hidden-xs">
-                    <strong>#{dashboardBean.version}</strong>
+                    <strong>#{utilsBean.currentVersion}</strong>
                 </div>
             </footer>
         </div>
@@ -402,7 +400,7 @@
         <ui:insert name="popups" />
 
         <script type="text/javascript">
-            var messagesChannel = new WebSocket("#{viewManagerBean.messagesChannel}");
+            var messagesChannel = new WebSocket("#{utilsBean.messagesChannel}");
             messagesChannel.onmessage = function(message) {
                 if (message.data === "newMessage") {
                     updateMessages();
@@ -410,13 +408,10 @@
             };
         </script>
 
-        <h:outputScript library="primefaces" name="jquery/jquery.js" />
         <h:outputScript library="primefaces" name="primefaces-locale.js" />
         <h:outputScript library="bootstrap" name="js/bootstrap.min.js"/>
-        <h:outputScript library="adminlte" name="js/app.min.js"/>
-        <h:outputScript library="webbudget" name="js/chart.min.js"/>
+        <h:outputScript library="adminlte" name="js/adminlte.min.js"/>
+        <!--<h:outputScript library="webbudget" name="js/chart.min.js"/>-->
         <h:outputScript library="minicolors" name="js/jquery.minicolors.js"/>
-        <h:outputScript library="webbudget" name="js/helpers.js"/>
-        <h:outputScript library="webbudget" name="js/wbcharts.js"/>
     </h:body>
 </html>

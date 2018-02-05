@@ -10,40 +10,11 @@
 /* customizacao da apreentacao do texto dos botoes */
 .ui-button {
     height: 34px;
+    text-shadow: none !important;
+    background-image: none !important;
 }
 
-/* remove todos os efeitos arredondadinhos dos elementos */
-.ui-corner-all, .ui-state-default {
-    border-radius: 0 !important;
-}
-.ui-selectonemenu-trigger {
-    border-radius: 0 !important;
-}
-
-/* tira aquele fundo vermelho do label na hr da validacao */
-label.ui-state-error {
-    background: none !important;
-}
-
-/* tira a sembra para que os botoes fiquem certos quando em widgets */
-.ui-widget-content button.ui-state-default {
-    box-shadow: none !important;
-}
-
-/* posicionamento do check nos checkboxes de datatable */ 
-span.ui-icon-check {
-    position: relative;
-    right: 1px;
-    bottom: 1px;
-}
-
-/* posicionamento da caixa do checkbox */
-td .ui-chkbox-box {
-    position: relative;
-    top: 4px;
-}
-
-/* customizacao das mensagens de erro */ 
+/* customizacao do componente de mensagem */ 
 .ui-messages > div {
     padding: 15px;
     margin-bottom: 15px;
@@ -95,15 +66,29 @@ div.ui-paginator {
     border-top: 0px !important;
 }
 
-/* remove aquele asterisco porco dos forms */
-.ui-outputlabel-rfi {
-    display: none;
+/* corrige a borda da summary row */
+.ui-datatable-summaryrow {
+    border: 1px solid #dddddd !important; 
+}
+
+/* posicionamento do check nos checkboxes de datatable */ 
+span.ui-icon-check {
+    position: relative;
+    right: 1px;
+    bottom: 1px;
+}
+span.ui-icon-minus {
+    position: relative;
+    right: 1px;
+    bottom: 2px;
 }
 
 /* corrige a exibicao do selectonemenu */
 .ui-selectonemenu {
     height: 34px;
+    min-width: 130px !important;
     display: block !important;
+    position: relative !important;
     border-color: #d2d6de !important;
     border-radius: 0 !important;
 }
@@ -116,6 +101,25 @@ div.ui-paginator {
     padding: 6px !important;
 }
 
+/* customizacao dos paineis */
+.ui-panel {
+    padding: 0 !important;
+    border: none !important;
+}
+.ui-panel .ui-panel-content {
+    padding: 0 !important;
+}
+
+/* remove aquele asterisco porco dos forms */
+.ui-outputlabel-rfi {
+    display: none;
+}
+
+/* tira aquele fundo vermelho do label na hr da validacao */
+label.ui-state-error {
+    background: none !important;
+}
+
 /* corrige o label dos treenodes da arvore de permissoes */
 .ui-treenode-label {
     position: relative;
@@ -124,20 +128,15 @@ div.ui-paginator {
 .ui-tree-toggler {
     position: relative !important;
 }
-.ui-icon-triangle-1-e {
-    top: 4px;
-    background-position: initial !important;
-    background-image: url("#{resource['webbudget:img/ui-icon-arrow-right.png']}") !important;
-}
-.ui-icon-triangle-1-s {
-    top: 4px;
-    background-position: initial !important;
-    background-image: url("#{resource['webbudget:img/ui-icon-arrow-down.png']}") !important;
-}
 
 /* customizacao do scroller */
 .ui-datascroller-content {
     background: none !important;
     border: none !important;
     padding: 0px !important;
+}
+
+/* corrige o CSS no seletor da datatables */
+th > div > div.ui-chkbox-box {
+    position: inherit;
 }

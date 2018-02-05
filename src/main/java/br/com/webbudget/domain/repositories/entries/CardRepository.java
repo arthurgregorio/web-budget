@@ -16,11 +16,8 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Wallet;
-import br.com.webbudget.domain.entities.entries.WalletType;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import java.util.List;
+import br.com.webbudget.domain.entities.entries.Card;
+import java.util.Optional;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -32,29 +29,49 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface IWalletRepository extends EntityRepository<Wallet, Long> {
-
-    /**
-     *
-     * @param isBlocked
-     * @return
-     */
-    public List<Wallet> listByStatus(Boolean isBlocked);
+public interface CardRepository extends EntityRepository<Card, Long> {
 
     /**
      * 
-     * @param isBlocked
-     * @param pageRequest
+     * @param id
      * @return 
      */
-    public Page<Wallet> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
+    Optional<Card> findOptionalById(Long id);
     
-    /**
-     *
-     * @param name
-     * @param bank
-     * @param walletType
-     * @return
-     */
-    public Wallet findByNameAndBankAndType(String name, String bank, WalletType walletType);
+//    /**
+//     *
+//     * @param isBlocked
+//     * @return
+//     */
+//    public List<Card> listDebit(Boolean isBlocked);
+//
+//    /**
+//     *
+//     * @param isBlocked
+//     * @return
+//     */
+//    public List<Card> listCredit(Boolean isBlocked);
+//
+//    /**
+//     *
+//     * @param isBlocked
+//     * @return
+//     */
+//    public List<Card> listByStatus(Boolean isBlocked);
+//    
+//    /**
+//     *
+//     * @param number
+//     * @param cardType
+//     * @return
+//     */
+//    public Card findByNumberAndType(String number, CardType cardType);
+//    
+//    /**
+//     * 
+//     * @param isBlocked
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<Card> listByStatus(Boolean isBlocked, PageRequest pageRequest);
 }

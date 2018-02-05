@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@ import java.util.Optional;
  *
  * @author Arthur Gregorio
  *
- * @version 3.0.0
- * @since 1.0.0, 31/01/2018
+ * @version 1.0.0
+ * @since 3.0.0, 03/02/2018
  */
 public interface UserDetailsService {
 

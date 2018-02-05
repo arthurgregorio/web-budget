@@ -28,7 +28,6 @@ import br.com.webbudget.domain.exceptions.ApplicationException;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.components.table.PageRequest;
 import br.com.webbudget.domain.repositories.entries.ICardInvoiceRepository;
-import br.com.webbudget.domain.repositories.entries.ICardRepository;
 import br.com.webbudget.domain.repositories.financial.IApportionmentRepository;
 import br.com.webbudget.domain.repositories.financial.IMovementRepository;
 import java.util.List;
@@ -36,6 +35,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import br.com.webbudget.domain.repositories.tools.ConfigurationRepository;
+import br.com.webbudget.domain.repositories.entries.CardRepository;
 
 /**
  * Service responsavel por todas as operacoes que envolvem cartoes no sistema

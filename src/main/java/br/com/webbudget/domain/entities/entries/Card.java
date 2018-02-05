@@ -20,14 +20,18 @@ import br.com.webbudget.domain.entities.PersistentEntity;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.metamodel.SingularAttribute;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -38,6 +42,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @since 1.0.0, 03/04/2014
  */
 @Entity
+@NoArgsConstructor
 @Table(name = "cards")
 @ToString(callSuper = true, of = {"number", "cardType"})
 @EqualsAndHashCode(callSuper = true, of = {"number", "cardType"})
@@ -78,7 +83,7 @@ public class Card extends PersistentEntity {
 
     @Getter
     @Setter
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "card_type", nullable = false)
     private CardType cardType;
 
@@ -87,6 +92,49 @@ public class Card extends PersistentEntity {
     @ManyToOne
     @JoinColumn(name = "id_wallet")
     private Wallet wallet;
+
+    /**
+     * 
+     * @param name
+     * @param number
+     * @param flag
+     * @param owner
+     * @param blocked
+     * @param cardType 
+     */
+    private Card(String name, String number, String flag, String owner, 
+            boolean blocked, CardType cardType) {
+        this.name = name;
+        this.number = number;
+        this.flag = flag;
+        this.owner = owner;
+        this.blocked = blocked;
+        this.cardType = cardType;
+    }
+
+    /**
+     * 
+     * @param data
+     * @param type
+     * @param status
+     * @return 
+     */
+    public static Card asExample(String data, CardType type, boolean status) {
+        if (StringUtils.isBlank(data)) {
+            data = "";
+        }
+        return new Card(data, data, data, data, status, type);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static SingularAttribute<Card, ?>[] filterProperties() {
+        return new SingularAttribute[]{Card_.name, Card_.number, Card_.flag, 
+            Card_.owner, Card_.blocked, Card_.cardType};
+    }
+
 
     /**
      * Um nome mais legivel para o cartao:
