@@ -18,8 +18,9 @@ package br.com.webbudget.application.controller.entries;
 
 import br.com.webbudget.application.components.table.AbstractLazyModel;
 import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.application.controller.NavigationManager;
+import br.com.webbudget.application.controller.NavigationManager.Parameter;
 import br.com.webbudget.domain.entities.entries.Card;
-import br.com.webbudget.domain.entities.entries.CardType;
 import br.com.webbudget.domain.entities.entries.Wallet;
 import br.com.webbudget.domain.repositories.entries.CardRepository;
 import br.com.webbudget.domain.repositories.entries.WalletRepository;
@@ -49,8 +50,6 @@ public class CardBean extends AbstractBean {
     private String filter;
     @Getter
     private boolean statusFilter;
-    @Getter
-    private CardType cardTypeFilter;
     
     @Getter
     private Card card;
@@ -70,17 +69,26 @@ public class CardBean extends AbstractBean {
     
     @Getter
     private final AbstractLazyModel<Card> cardsModel;
+    
+    private final NavigationManager formManager;
+    private final NavigationManager listManager;
+    private final NavigationManager detailManager;
 
     /**
      * 
      */
     public CardBean() {
+        
+        this.formManager = new NavigationManager("formCard.xhtml");
+        this.listManager = new NavigationManager("listCards.xhtml");
+        this.detailManager = new NavigationManager("detailCard.xhtml");
+        
         this.cardsModel = new AbstractLazyModel<Card>() {
             @Override
             public List<Card> load(int first, int pageSize, String sortField, 
                     SortOrder sortOrder, Map<String, Object> filters) {
                 return cardRepository.findByLike(Card.asExample(filter, 
-                        cardTypeFilter, statusFilter), first, pageSize, 
+                        null, statusFilter), first, pageSize, 
                         Card.filterProperties());
             }
         };
@@ -89,7 +97,7 @@ public class CardBean extends AbstractBean {
     /**
      * 
      */
-    public void initializeListing() {
+    public void initialize() {
         this.viewState = ViewState.LISTING;
     }
 
@@ -98,42 +106,67 @@ public class CardBean extends AbstractBean {
      * @param id
      * @param viewState 
      */
-    public void initializeForm(long id, ViewState viewState) {
+    public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.wallets = this.walletRepository.findAllActive();
         this.card = this.cardRepository.findOptionalById(id)
                 .orElseGet(Card::new);
     }
     
-//    /**
-//     * @return 
-//     */
-//    public String changeToAdd() {
-//        return "formCard.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @return 
-//     */
-//    public String changeToListing() {
-//        return "listCards.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @param cardId 
-//     * @return 
-//     */
-//    public String changeToEdit(long cardId) {
-//        return "formCard.xhtml?faces-redirect=true&cardId=" + cardId;
-//    }
-//
-//    /**
-//     * @param cardId 
-//     */
-//    public void changeToDelete(long cardId) {
-//        this.card = this.cardService.findCardById(cardId);
-//        this.updateAndOpenDialog("deleteCardDialog", "dialogDeleteCard");
-//    }
+    /**
+     * @return 
+     */
+    public String changeToListing() {
+        return this.listManager.toRoot();
+    }
+    
+    /**
+     * @return 
+     */
+    public String changeToAdd() {
+        return this.formManager.toRootWithParameter(
+                Parameter.of("viewState", ViewState.ADDING));
+    }
+
+    /**
+     * @param id 
+     * @return 
+     */
+    public String changeToEdit(long id) {
+        return this.formManager.toRootWithParameters(
+                Parameter.of("cardId", id),
+                Parameter.of("viewState", ViewState.EDITING));
+    }
+    
+    /**
+     * @param id 
+     * @return 
+     */
+    public String changeToDetails(long id) {
+        return this.formManager.toRootWithParameters(
+                Parameter.of("cardId", id),
+                Parameter.of("viewState", ViewState.DETAILING));
+    }
+
+    /**
+     * 
+     * @param id
+     * @return 
+     */
+    public String changeToDelete(long id) {
+        return this.detailManager.toRootWithParameters(
+                Parameter.of("cardId", id),
+                Parameter.of("viewState", ViewState.DELETING));
+    }
+    
+    /**
+     * 
+     */
+    public void clearFilters() {
+        this.filter = null;
+        this.updateComponent("controlsForm");
+    }
+    
 //    
 //    /**
 //     * 
@@ -143,13 +176,7 @@ public class CardBean extends AbstractBean {
 //    public String changeToStatistics(long cardId) {
 //        return "cardStatistics.xhtml?faces-redirect=true&cardId=" + cardId;
 //    }
-//
-//    /**
-//     * @return 
-//     */
-//    public String doCancel() {
-//        return "listCards.xhtml?faces-redirect=true";
-//    }
+
 //
 //    /**
 //     * 
