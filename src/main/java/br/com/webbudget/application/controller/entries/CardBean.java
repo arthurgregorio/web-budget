@@ -87,8 +87,8 @@ public class CardBean extends AbstractBean {
             @Override
             public List<Card> load(int first, int pageSize, String sortField, 
                     SortOrder sortOrder, Map<String, Object> filters) {
-                return cardRepository.findByLike(Card.asExample(filter, 
-                        null, statusFilter), first, pageSize, 
+                return cardRepository.findByLike(
+                        Card.asExample(filter, statusFilter), first, pageSize, 
                         Card.filterProperties());
             }
         };
@@ -167,15 +167,15 @@ public class CardBean extends AbstractBean {
         this.updateComponent("controlsForm");
     }
     
-//    
-//    /**
-//     * 
-//     * @param cardId
-//     * @return 
-//     */
-//    public String changeToStatistics(long cardId) {
-//        return "cardStatistics.xhtml?faces-redirect=true&cardId=" + cardId;
-//    }
+    
+    /**
+     * 
+     * @param id
+     * @return 
+     */
+    public String changeToStatistics(long id) {
+        return "";
+    }
 
 //
 //    /**

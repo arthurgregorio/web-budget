@@ -102,28 +102,25 @@ public class Card extends PersistentEntity {
      * @param blocked
      * @param cardType 
      */
-    private Card(String name, String number, String flag, String owner, 
-            boolean blocked, CardType cardType) {
+    private Card(String name, String number, String flag, String owner, boolean blocked) {
         this.name = name;
         this.number = number;
         this.flag = flag;
         this.owner = owner;
         this.blocked = blocked;
-        this.cardType = cardType;
     }
 
     /**
      * 
      * @param data
-     * @param type
      * @param status
      * @return 
      */
-    public static Card asExample(String data, CardType type, boolean status) {
+    public static Card asExample(String data, boolean status) {
         if (StringUtils.isBlank(data)) {
             data = "";
         }
-        return new Card(data, data, data, data, status, type);
+        return new Card(data, data, data, data, status);
     }
 
     /**
@@ -132,7 +129,7 @@ public class Card extends PersistentEntity {
      */
     public static SingularAttribute<Card, ?>[] filterProperties() {
         return new SingularAttribute[]{Card_.name, Card_.number, Card_.flag, 
-            Card_.owner, Card_.blocked, Card_.cardType};
+            Card_.owner, Card_.blocked};
     }
 
 
