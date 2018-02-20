@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.entities.entries;
 
+import br.com.webbudget.application.components.filter.Filterable;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -31,7 +32,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -46,7 +46,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Table(name = "cards")
 @ToString(callSuper = true, of = {"number", "cardType"})
 @EqualsAndHashCode(callSuper = true, of = {"number", "cardType"})
-public class Card extends PersistentEntity {
+public class Card extends PersistentEntity implements Filterable<Card>{
 
     @Getter
     @Setter
@@ -94,44 +94,14 @@ public class Card extends PersistentEntity {
     private Wallet wallet;
 
     /**
-     * 
-     * @param name
-     * @param number
-     * @param flag
-     * @param owner
-     * @param blocked
-     * @param cardType 
-     */
-    private Card(String name, String number, String flag, String owner, boolean blocked) {
-        this.name = name;
-        this.number = number;
-        this.flag = flag;
-        this.owner = owner;
-        this.blocked = blocked;
-    }
-
-    /**
-     * 
-     * @param data
-     * @param status
-     * @return 
-     */
-    public static Card asExample(String data, boolean status) {
-        if (StringUtils.isBlank(data)) {
-            data = "";
-        }
-        return new Card(data, data, data, data, status);
-    }
-
-    /**
      *
      * @return
      */
-    public static SingularAttribute<Card, ?>[] filterProperties() {
+    @Override
+    public SingularAttribute<Card, ?>[] getSingularAttributes() {
         return new SingularAttribute[]{Card_.name, Card_.number, Card_.flag, 
             Card_.owner, Card_.blocked};
     }
-
 
     /**
      * Um nome mais legivel para o cartao:
