@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.application.controller.entries;
 
+import br.com.webbudget.application.components.filter.Filter;
 import br.com.webbudget.application.components.table.AbstractLazyModel;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.controller.NavigationManager;
@@ -47,9 +48,7 @@ import org.primefaces.model.SortOrder;
 public class CardBean extends AbstractBean {
 
     @Getter
-    private String filter;
-    @Getter
-    private boolean statusFilter;
+    private Filter<Card> cardFilter;
     
     @Getter
     private Card card;
@@ -78,6 +77,8 @@ public class CardBean extends AbstractBean {
      * 
      */
     public CardBean() {
+        
+        this.cardFilter = Filter.getInstance();
         
         this.formManager = new NavigationManager("formCard.xhtml");
         this.listManager = new NavigationManager("listCards.xhtml");

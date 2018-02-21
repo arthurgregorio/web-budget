@@ -17,6 +17,7 @@
 package br.com.webbudget.application.components.filter;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
+import java.util.Set;
 import javax.persistence.metamodel.SingularAttribute;
 
 /**
@@ -36,5 +37,5 @@ public interface Filterable<T extends PersistentEntity> {
      *
      * @return
      */
-    SingularAttribute<T, ?>[] getSingularAttributes();
+    Set<SingularAttribute<T, ?>> getSingularAttributes();
 }
