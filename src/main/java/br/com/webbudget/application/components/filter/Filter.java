@@ -20,6 +20,7 @@ import com.google.common.collect.Sets;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.metamodel.SingularAttribute;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,19 +65,23 @@ public class Filter<T extends Filterable> {
      * @return 
      */
     public T toExample() {
-        return this.applyValueToAttributes(this.createInstance());
+        return this.applyValueToAttributes();
     }
     
-    private T applyValueToAttributes(T example) {
+    private T applyValueToAttributes() {
         
         final Set<Field> fields = Sets.newHashSet(
-                this.exampleClass.getDeclaredFields());
+                this.exampleClass.getDeclaredFields())
+                .stream()
+                .filter(field -> this.filterAttributes.contains(field.getName()))
+                .collect(Collectors.toSet());
         
-        this.filterAttributes.stream().forEach(filterAttr -> {
+        this.filterAttributes.stream().forEach(attribute -> {
             
-            if (fields.contains)
             
         });
+        
+        final T example = this.createInstance();
         
         return example;
     }
