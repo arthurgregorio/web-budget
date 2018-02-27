@@ -84,12 +84,10 @@ public class UserAccountService implements UserDetailsService {
         this.groupRepository.save(group);
 
         authorizations.stream().forEach(authz -> {
-
-            Authorization authorization = this.authorizationRepository
+            final Authorization authorization = this.authorizationRepository
                     .findOptionalByFunctionalityAndPermission(
                             authz.getFunctionality(), authz.getPermission())
                     .get();
-
             this.grantRepository.save(new Grant(group, authorization));
         });
     }
@@ -208,6 +206,6 @@ public class UserAccountService implements UserDetailsService {
     @Override
     public Optional<UserDetails> findUserDetailsByUsername(String username) {
         return Optional.ofNullable(this.userRepository.findOptionalByUsername(username)
-                .get());
+                .orElse(null));
     }
 }
