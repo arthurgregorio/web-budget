@@ -16,20 +16,18 @@
  */
 package br.com.webbudget.application.components.filter;
 
-import com.google.common.collect.Sets;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.persistence.metamodel.SingularAttribute;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Filter mapping for use with deltaspike
- * 
+ *
  * @param <T> the parametrized type of this class
- * 
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -42,67 +40,73 @@ public class Filter<T extends Filterable> {
     private String textFilter;
     @Getter
     @Setter
-    private String booleanFilter;
-    
-    @Getter
-    private final Class<T> exampleClass;
-    
+    private StatusFilterType statusFilter;
+
+    private final T example;
+
     private final Set<SingularAttribute<T, ?>> filterAttributes;
 
     /**
-     * 
+     *
      */
     public Filter() {
-        this.exampleClass = (Class<T>) ((ParameterizedType) this.getClass()
+        
+        final Class<?> clazz = (Class<T>) ((ParameterizedType) this.getClass()
                 .getGenericSuperclass()).getActualTypeArguments()[0];
+        
+        try {
+             this.example = (T) clazz.newInstance();
+        } catch (IllegalAccessException | InstantiationException ex) {
+            throw new RuntimeException("Can't create instance for filter class: "
+                    + clazz.getName());
+        }
 
-        this.filterAttributes = ((Filterable) this.createInstance())
-                .getSingularAttributes();
+        this.filterAttributes = ((Filterable) 
+                this.example).getSingularAttributes();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public T toExample() {
+        return this.applyValueToAttributes();
     }
 
     /**
      * 
      * @return 
      */
-    public T toExample() {
-        
-        final T example = this.createInstance();
-        
-        final Set<Field> fields = Sets.newHashSet(
-                this.exampleClass.getDeclaredFields());
+    private T applyValueToAttributes() {
         
         this.filterAttributes.stream().forEach(attribute -> {
             
-                        
-        });        
-        
+            final Field field = this.findField(attribute.getName());
+            
+            if (field.getName().equals("blocked")) {
+                field.setBoolean(this.example, this.statusFilter.value());
+            } else {
+                field.setBoolean(this.example, this.textFilter);
+            }
+        });
+
+
         return example;
     }
 
     /**
      * 
+     * @param name
      * @return 
      */
-    public SingularAttribute<T, ?>[] getFilterAttributes() {
-        return filterAttributes.toArray(new SingularAttribute[]{});
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    private T createInstance() {
-        try {
-            return this.exampleClass.newInstance();
-        } catch (IllegalAccessException | InstantiationException ex) {
-            throw new RuntimeException("Can't create instance for filter class: " 
-                    + this.exampleClass.getName());
+    private Field findField(String name) {
+        for (Field field : this.example.getDeclaredFields()) {
+            if (field.getName().equals(name)) {
+                return field;
+            }
         }
-    }
-    
-    private static class FilterPropertie {
-        
-        private String name;
-        private Object value;
+        throw new IllegalArgumentException(String.format(
+                "Can't find field %s on class %s", name, 
+                this.example.getName()));
     }
 }
