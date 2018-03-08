@@ -28,7 +28,10 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://webbudget.com.br/</url>
-    <description>A free and open-source financial control to manage small business or your personal life</description>
+    <description>
+        A free and open-source financial control to manage small business or 
+        your personal life
+    </description>
 
     <licenses>
         <license>

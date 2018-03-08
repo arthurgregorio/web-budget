@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
  * @version 1.1.0
  * @since 2.0.0, 07/07/2015
  */
-public class Configurations {
+public final class Configurations {
 
     private static final ResourceBundle CONFIG_PROPERTIES;
     

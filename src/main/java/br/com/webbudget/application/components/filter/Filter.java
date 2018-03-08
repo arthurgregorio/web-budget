@@ -65,25 +65,26 @@ public class Filter<T extends Filterable> {
      * @return 
      */
     public T toExample() {
-        return this.applyValueToAttributes();
-    }
-    
-    private T applyValueToAttributes() {
-        
-        final Set<Field> fields = Sets.newHashSet(
-                this.exampleClass.getDeclaredFields())
-                .stream()
-                .filter(field -> this.filterAttributes.contains(field.getName()))
-                .collect(Collectors.toSet());
-        
-        this.filterAttributes.stream().forEach(attribute -> {
-            
-            
-        });
         
         final T example = this.createInstance();
         
+        final Set<Field> fields = Sets.newHashSet(
+                this.exampleClass.getDeclaredFields());
+        
+        this.filterAttributes.stream().forEach(attribute -> {
+            
+                        
+        });        
+        
         return example;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public SingularAttribute<T, ?>[] getFilterAttributes() {
+        return filterAttributes.toArray(new SingularAttribute[]{});
     }
 
     /**

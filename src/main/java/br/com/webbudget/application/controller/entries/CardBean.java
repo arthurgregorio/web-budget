@@ -48,7 +48,7 @@ import org.primefaces.model.SortOrder;
 public class CardBean extends AbstractBean {
 
     @Getter
-    private Filter<Card> cardFilter;
+    private Filter<Card> filter;
     
     @Getter
     private Card card;
@@ -78,7 +78,7 @@ public class CardBean extends AbstractBean {
      */
     public CardBean() {
         
-        this.cardFilter = Filter.getInstance();
+        this.filter = new Filter();
         
         this.formManager = new NavigationManager("formCard.xhtml");
         this.listManager = new NavigationManager("listCards.xhtml");
@@ -88,9 +88,8 @@ public class CardBean extends AbstractBean {
             @Override
             public List<Card> load(int first, int pageSize, String sortField, 
                     SortOrder sortOrder, Map<String, Object> filters) {
-                return cardRepository.findByLike(
-                        Card.asExample(filter, statusFilter), first, pageSize, 
-                        Card.filterProperties());
+                return cardRepository.findByLike(filter.toExample(), 
+                        first, pageSize, filter.getFilterAttributes());
             }
         };
     }
