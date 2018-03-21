@@ -16,10 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
 import br.com.webbudget.domain.entities.logbook.Vehicle;
-import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -33,25 +30,25 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface IVehicleRepository extends EntityRepository<Vehicle, Long> {
 
-    /**
-     * 
-     * @param vehicle
-     * @return 
-     */
-    public int findLastOdometer(Vehicle vehicle);
-    
-    /**
-     *
-     * @param isBlocked
-     * @return
-     */
-    public List<Vehicle> listByStatus(Boolean isBlocked);
-
-    /**
-     * 
-     * @param isBlocked
-     * @param pageRequest
-     * @return 
-     */
-    public Page<Vehicle> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
+//    /**
+//     * 
+//     * @param vehicle
+//     * @return 
+//     */
+//    public int findLastOdometer(Vehicle vehicle);
+//    
+//    /**
+//     *
+//     * @param isBlocked
+//     * @return
+//     */
+//    public List<Vehicle> listByStatus(Boolean isBlocked);
+//
+//    /**
+//     * 
+//     * @param isBlocked
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<Vehicle> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
 }

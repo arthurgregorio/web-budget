@@ -16,12 +16,8 @@
  */
 package br.com.webbudget.domain.entities.entries;
 
-import br.com.webbudget.application.components.filter.Filterable;
 import br.com.webbudget.domain.entities.PersistentEntity;
-import com.google.common.collect.Sets;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -29,7 +25,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.metamodel.SingularAttribute;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,7 +44,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Table(name = "cards")
 @ToString(callSuper = true, of = {"number", "cardType"})
 @EqualsAndHashCode(callSuper = true, of = {"number", "cardType"})
-public class Card extends PersistentEntity implements Filterable<Card>{
+public class Card extends PersistentEntity {
 
     @Getter
     @Setter
@@ -95,16 +90,6 @@ public class Card extends PersistentEntity implements Filterable<Card>{
     @ManyToOne
     @JoinColumn(name = "id_wallet")
     private Wallet wallet;
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Set<SingularAttribute<Card, ?>> getSingularAttributes() {
-        return Sets.newHashSet(Card_.name, Card_.number, Card_.flag, 
-                Card_.owner, Card_.blocked);
-    }
 
     /**
      * Um nome mais legivel para o cartao:

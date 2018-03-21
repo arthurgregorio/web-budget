@@ -16,20 +16,7 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
-import br.com.webbudget.domain.entities.financial.Movement;
-import br.com.webbudget.domain.exceptions.ApplicationException;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import br.com.webbudget.domain.repositories.miscellany.IFinancialPeriodRepository;
-import br.com.webbudget.domain.repositories.financial.IMovementRepository;
-import java.time.LocalDate;
-import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import br.com.webbudget.domain.events.PeriodOpened;
 
 /**
  *

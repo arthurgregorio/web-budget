@@ -16,8 +16,9 @@
  */
 package br.com.webbudget.application.controller.entries;
 
-import br.com.webbudget.application.components.filter.Filter;
-import br.com.webbudget.application.components.table.AbstractLazyModel;
+import br.com.webbudget.application.components.table.LazyDataProvider;
+import br.com.webbudget.application.components.table.LazyFilter;
+import br.com.webbudget.application.components.table.LazyModel;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.controller.NavigationManager;
 import br.com.webbudget.application.controller.NavigationManager.Parameter;
@@ -28,7 +29,6 @@ import br.com.webbudget.domain.repositories.entries.WalletRepository;
 import br.com.webbudget.domain.services.CardService;
 import br.com.webbudget.domain.services.WalletService;
 import java.util.List;
-import java.util.Map;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -45,10 +45,10 @@ import org.primefaces.model.SortOrder;
  */
 @Named
 @ViewScoped
-public class CardBean extends AbstractBean {
+public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
 
     @Getter
-    private Filter<Card> filter;
+    private LazyFilter filter;
     
     @Getter
     private Card card;
@@ -67,7 +67,7 @@ public class CardBean extends AbstractBean {
     private WalletRepository walletRepository;
     
     @Getter
-    private final AbstractLazyModel<Card> cardsModel;
+    private final LazyModel<Card> cardsModel;
     
     private final NavigationManager formManager;
     private final NavigationManager listManager;
@@ -78,20 +78,27 @@ public class CardBean extends AbstractBean {
      */
     public CardBean() {
         
-        this.filter = new Filter();
+        this.filter = LazyFilter.initialize();
+        
+        this.cardsModel = new LazyModel<>(this);
         
         this.formManager = new NavigationManager("formCard.xhtml");
         this.listManager = new NavigationManager("listCards.xhtml");
         this.detailManager = new NavigationManager("detailCard.xhtml");
-        
-        this.cardsModel = new AbstractLazyModel<Card>() {
-            @Override
-            public List<Card> load(int first, int pageSize, String sortField, 
-                    SortOrder sortOrder, Map<String, Object> filters) {
-                return cardRepository.findByLike(filter.toExample(), 
-                        first, pageSize, filter.getFilterAttributes());
-            }
-        };
+    }
+
+    /**
+     * 
+     * @param first
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return 
+     */
+    @Override
+    public List<Card> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.cardRepository.findAllBy(this.filter.getValue(), 
+                this.filter.getEntityStatusValue(), first, pageSize);
     }
     
     /**
@@ -108,7 +115,7 @@ public class CardBean extends AbstractBean {
      */
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.wallets = this.walletRepository.findAllActive();
+        this.wallets = this.walletRepository.findAllUnblocked();
         this.card = this.cardRepository.findOptionalById(id)
                 .orElseGet(Card::new);
     }

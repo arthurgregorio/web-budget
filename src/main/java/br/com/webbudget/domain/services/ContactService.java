@@ -16,19 +16,7 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.entries.Contact;
-import br.com.webbudget.domain.entities.entries.Telephone;
-import br.com.webbudget.domain.entities.financial.Movement;
-import br.com.webbudget.domain.exceptions.ApplicationException;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import br.com.webbudget.domain.repositories.entries.IContactRepository;
-import br.com.webbudget.domain.repositories.entries.ITelephoneRepository;
-import br.com.webbudget.domain.repositories.financial.IMovementRepository;
-import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 /**
  * Service responsavel pro todos os processos relacionados aos contatos

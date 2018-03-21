@@ -38,7 +38,7 @@ import org.slf4j.Logger;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0, 27/12/2017
  */
 @Startup
@@ -93,7 +93,7 @@ public class Bootstrap {
                             .getFunctionality(), authorization.getPermission());
 
             if (!optionalAuthz.isPresent()) {
-                authorization.setIncludedBy("system");
+                authorization.setCreatedBy("system");
                 this.authorizationRepository.save(authorization);
             }
         });
@@ -108,7 +108,7 @@ public class Bootstrap {
                 .findOptionalByName("Administradores")
                 .orElseGet(() -> {
                     final Group newOne = new Group("Administradores");
-                    newOne.setIncludedBy("system");
+                    newOne.setCreatedBy("system");
                     return newOne;
                 });
 
@@ -124,7 +124,7 @@ public class Bootstrap {
             authorizations.stream().forEach(authorization -> {
 
                 final Grant grant = new Grant(group, authorization);
-                grant.setIncludedBy("system");
+                grant.setCreatedBy("system");
 
                 this.grantRepository.save(grant);
             });
@@ -153,7 +153,7 @@ public class Bootstrap {
             user.setEmail("contato@webbudget.com.br");
             user.setUsername("admin");
             user.setPassword(this.passwordService.encryptPassword("admin"));
-            user.setIncludedBy("system");
+            user.setCreatedBy("system");
             
             user.setGroup(group);
 

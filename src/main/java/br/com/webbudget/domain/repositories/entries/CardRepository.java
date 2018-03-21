@@ -17,9 +17,11 @@
 package br.com.webbudget.domain.repositories.entries;
 
 import br.com.webbudget.domain.entities.entries.Card;
-import java.util.Optional;
-import org.apache.deltaspike.data.api.EntityRepository;
+import br.com.webbudget.domain.entities.entries.Card_;
+import br.com.webbudget.domain.repositories.DefaultRepository;
+import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
+import org.apache.deltaspike.data.api.criteria.Criteria;
 
 /**
  *
@@ -29,49 +31,28 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface CardRepository extends EntityRepository<Card, Long> {
+public interface CardRepository extends DefaultRepository<Card> {
 
     /**
      * 
-     * @param id
      * @return 
      */
-    Optional<Card> findOptionalById(Long id);
-    
-//    /**
-//     *
-//     * @param isBlocked
-//     * @return
-//     */
-//    public List<Card> listDebit(Boolean isBlocked);
-//
-//    /**
-//     *
-//     * @param isBlocked
-//     * @return
-//     */
-//    public List<Card> listCredit(Boolean isBlocked);
-//
-//    /**
-//     *
-//     * @param isBlocked
-//     * @return
-//     */
-//    public List<Card> listByStatus(Boolean isBlocked);
-//    
-//    /**
-//     *
-//     * @param number
-//     * @param cardType
-//     * @return
-//     */
-//    public Card findByNumberAndType(String number, CardType cardType);
-//    
-//    /**
-//     * 
-//     * @param isBlocked
-//     * @param pageRequest
-//     * @return 
-//     */
-//    public Page<Card> listByStatus(Boolean isBlocked, PageRequest pageRequest);
+    @Override
+    default SingularAttribute<Card, Boolean> getBlockedProperty() {
+        return Card_.blocked;
+    }
+
+    /**
+     * 
+     * @param filter
+     * @return 
+     */
+    @Override
+    default Criteria<Card, Card> getRestrictions(String filter) {
+        return criteria()
+                .likeIgnoreCase(Card_.name, filter)
+                .likeIgnoreCase(Card_.number, filter)
+                .likeIgnoreCase(Card_.owner, filter)
+                .likeIgnoreCase(Card_.flag, filter);
+    }
 }

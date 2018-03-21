@@ -26,24 +26,31 @@ import java.io.Serializable;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 06/10/2013
  */
 public interface IPersistentEntity<T extends Serializable> {
 
     /**
-     * Getter para o ID da entidade
-     *
-     * @return o id da entidade
+     * Define que toda as entidades devem ter um getter para o ID
+     * 
+     * @return o ID da entidade
      */
-    public T getId();
+    T getId();
 
     /**
-     * Metodo que indica se uma entidade ja foi ou nao persistida (salva)
-     *
-     * @return se a entidade ja foi persistida, retorna <code>true</code>
-     * indicando
-     * que a mesma ja foi salva se nao retorna <code>false</code>
+     * Metodo de utilidade para determinar o estado da entidade
+     * 
+     * @return se a entidade foi salva ou nao
      */
-    public boolean isSaved();
+    boolean isSaved();
+    
+    /**
+     * Metodo de conveniencia para utilizacao em streams com method reference
+     * 
+     * @return se a entidade ja foi ou nao salva
+     */
+    default boolean isNotSaved() {
+        return !this.isSaved();
+    }
 }

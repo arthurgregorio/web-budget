@@ -16,12 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.CostCenter;
 import br.com.webbudget.domain.entities.entries.MovementClass;
-import br.com.webbudget.domain.entities.entries.MovementClassType;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -35,43 +30,43 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface IMovementClassRepository extends EntityRepository<MovementClass, Long> {
 
-    /**
-     *
-     * @param isBlocked
-     * @return
-     */
-    public List<MovementClass> listByStatus(Boolean isBlocked);
-
-    /**
-     *
-     * @param type
-     * @param blocked
-     * @return
-     */
-    public List<MovementClass> listByTypeAndStatus(MovementClassType type, Boolean blocked);
-
-    /**
-     * 
-     * @param isBlocked
-     * @param pageRequest
-     * @return 
-     */
-    public Page<MovementClass> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
-
-    /**
-     *
-     * @param costCenter
-     * @param type
-     * @return
-     */
-    public List<MovementClass> listByCostCenterAndType(CostCenter costCenter, MovementClassType type);
-
-    /**
-     *
-     * @param name
-     * @param type
-     * @param costCenter
-     * @return
-     */
-    public MovementClass findByNameAndTypeAndCostCenter(String name, MovementClassType type, CostCenter costCenter);
+//    /**
+//     *
+//     * @param isBlocked
+//     * @return
+//     */
+//    public List<MovementClass> listByStatus(Boolean isBlocked);
+//
+//    /**
+//     *
+//     * @param type
+//     * @param blocked
+//     * @return
+//     */
+//    public List<MovementClass> listByTypeAndStatus(MovementClassType type, Boolean blocked);
+//
+//    /**
+//     * 
+//     * @param isBlocked
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<MovementClass> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
+//
+//    /**
+//     *
+//     * @param costCenter
+//     * @param type
+//     * @return
+//     */
+//    public List<MovementClass> listByCostCenterAndType(CostCenter costCenter, MovementClassType type);
+//
+//    /**
+//     *
+//     * @param name
+//     * @param type
+//     * @param costCenter
+//     * @return
+//     */
+//    public MovementClass findByNameAndTypeAndCostCenter(String name, MovementClassType type, CostCenter costCenter);
 }

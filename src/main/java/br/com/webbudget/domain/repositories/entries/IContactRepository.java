@@ -17,9 +17,6 @@
 package br.com.webbudget.domain.repositories.entries;
 
 import br.com.webbudget.domain.entities.entries.Contact;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -33,26 +30,26 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface IContactRepository extends EntityRepository<Contact, Long> {
 
-    /**
-     *
-     * @param blocked
-     * @return
-     */
-    public List<Contact> listByStatus(Boolean blocked);
-    
-    /**
-     * 
-     * @param filter
-     * @return 
-     */
-    public List<Contact> listByFilter(String filter, Boolean blocked);
-    
-    /**
-     * 
-     * @param filter
-     * @param blocked
-     * @param pageRequest
-     * @return 
-     */
-    public Page<Contact> listLazilyByFilter(String filter, Boolean blocked, PageRequest pageRequest);
+//    /**
+//     *
+//     * @param blocked
+//     * @return
+//     */
+//    public List<Contact> listByStatus(Boolean blocked);
+//    
+//    /**
+//     * 
+//     * @param filter
+//     * @return 
+//     */
+//    public List<Contact> listByFilter(String filter, Boolean blocked);
+//    
+//    /**
+//     * 
+//     * @param filter
+//     * @param blocked
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<Contact> listLazilyByFilter(String filter, Boolean blocked, PageRequest pageRequest);
 }

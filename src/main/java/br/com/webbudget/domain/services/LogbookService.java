@@ -16,32 +16,7 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import br.com.webbudget.domain.misc.ApportionmentBuilder;
-import br.com.webbudget.domain.misc.MovementBuilder;
-import br.com.webbudget.domain.events.CreateMovement;
-import br.com.webbudget.domain.events.DeleteMovement;
-import br.com.webbudget.domain.events.MovementDeleted;
-import br.com.webbudget.domain.exceptions.ApplicationException;
-import br.com.webbudget.domain.entities.entries.MovementClass;
-import br.com.webbudget.domain.entities.entries.MovementClassType;
-import br.com.webbudget.domain.entities.logbook.Entry;
-import br.com.webbudget.domain.entities.logbook.Refueling;
-import br.com.webbudget.domain.entities.logbook.Vehicle;
-import br.com.webbudget.domain.repositories.entries.IMovementClassRepository;
-import br.com.webbudget.domain.repositories.logbook.IEntryRepository;
-import br.com.webbudget.domain.repositories.entries.IVehicleRepository;
-import br.com.webbudget.domain.repositories.logbook.IFuelRepository;
-import br.com.webbudget.domain.repositories.logbook.IRefuelingRepository;
-import java.math.BigDecimal;
-import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Servico para executar as operacoes pertinentes ao diario de bordo

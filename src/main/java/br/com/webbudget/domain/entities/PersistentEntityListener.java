@@ -19,7 +19,7 @@ package br.com.webbudget.domain.entities;
 import java.time.LocalDateTime;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import org.apache.commons.lang3.StringUtils;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import org.apache.shiro.SecurityUtils;
 
 /**
@@ -40,10 +40,10 @@ public class PersistentEntityListener {
      */
     @PrePersist
     public void prePersist(PersistentEntity entity) {
-        entity.setInclusion(LocalDateTime.now());
+        entity.setCreatedOn(LocalDateTime.now());
         
-        if (StringUtils.isBlank(entity.getIncludedBy())) {
-            entity.setIncludedBy(this.getLoggedUser());
+        if (isBlank(entity.getCreatedBy())) {
+            entity.setCreatedBy(this.getLoggedUser());
         }
     }
 
@@ -54,10 +54,10 @@ public class PersistentEntityListener {
      */
     @PreUpdate
     public void preUpdate(PersistentEntity entity) {
-        entity.setLastEdition(LocalDateTime.now());
+        entity.setModifiedOn(LocalDateTime.now());
         
-        if (StringUtils.isBlank(entity.getEditedBy())) {
-            entity.setEditedBy(this.getLoggedUser());
+        if (isBlank(entity.getModifiedBy())) {
+            entity.setModifiedBy(this.getLoggedUser());
         }
     }
 

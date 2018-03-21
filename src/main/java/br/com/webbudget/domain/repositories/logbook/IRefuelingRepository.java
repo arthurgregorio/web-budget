@@ -16,11 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.logbook;
 
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
 import br.com.webbudget.domain.entities.logbook.Refueling;
-import br.com.webbudget.domain.entities.logbook.Vehicle;
-import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -34,46 +30,46 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface IRefuelingRepository extends EntityRepository<Refueling, Long> {
 
-    /**
-     * 
-     * @param refueling
-     * @return 
-     */
-    public boolean isLast(Refueling refueling);
-    
-    /**
-     * 
-     * @param code
-     * @return 
-     */
-    public Refueling findByMovementCode(String code);
-
-    /**
-     * 
-     * @param code
-     * @return 
-     */
-    public List<Refueling> listAccountedsBy(String code);
-    
-    /**
-     * 
-     * @param vehicle
-     * @return 
-     */
-    public int findLastOdometerForVehicle(Vehicle vehicle);
-    
-    /**
-     * 
-     * @param vehicle
-     * @return 
-     */
-    public List<Refueling> findUnaccountedsForVehicle(Vehicle vehicle);
-    
-    /**
-     * 
-     * @param filter
-     * @param pageRequest
-     * @return 
-     */
-    public Page<Refueling> listLazily(String filter, PageRequest pageRequest);
+//    /**
+//     * 
+//     * @param refueling
+//     * @return 
+//     */
+//    public boolean isLast(Refueling refueling);
+//    
+//    /**
+//     * 
+//     * @param code
+//     * @return 
+//     */
+//    public Refueling findByMovementCode(String code);
+//
+//    /**
+//     * 
+//     * @param code
+//     * @return 
+//     */
+//    public List<Refueling> listAccountedsBy(String code);
+//    
+//    /**
+//     * 
+//     * @param vehicle
+//     * @return 
+//     */
+//    public int findLastOdometerForVehicle(Vehicle vehicle);
+//    
+//    /**
+//     * 
+//     * @param vehicle
+//     * @return 
+//     */
+//    public List<Refueling> findUnaccountedsForVehicle(Vehicle vehicle);
+//    
+//    /**
+//     * 
+//     * @param filter
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<Refueling> listLazily(String filter, PageRequest pageRequest);
 }

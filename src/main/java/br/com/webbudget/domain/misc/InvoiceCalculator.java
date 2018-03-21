@@ -85,7 +85,7 @@ public class InvoiceCalculator {
      */
     public BigDecimal getLastTotal() {
         return this.cardInvoices.stream()
-                .sorted((i1, i2) -> i2.getInclusion().compareTo(i1.getInclusion()))
+                .sorted((i1, i2) -> i2.getCreatedBy().compareTo(i1.getCreatedBy()))
                 .map(CardInvoice::getTotal)
                 .findFirst()
                 .orElse(BigDecimal.ZERO);
@@ -96,7 +96,7 @@ public class InvoiceCalculator {
      */
     public List<CardInvoice> getOrderedByInclusion() {
         return this.cardInvoices.stream()
-                .sorted((i1, i2) -> i1.getInclusion().compareTo(i2.getInclusion()))
+                .sorted((i1, i2) -> i1.getCreatedBy().compareTo(i2.getCreatedBy()))
                 .collect(Collectors.toList());
     }
 }

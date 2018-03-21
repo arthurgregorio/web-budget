@@ -17,9 +17,6 @@
 package br.com.webbudget.domain.repositories.entries;
 
 import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -33,26 +30,26 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface ICostCenterRepository extends EntityRepository<CostCenter, Long> {
 
-    /**
-     *
-     * @param isBlocked
-     * @return
-     */
-    public List<CostCenter> listByStatus(Boolean isBlocked);
-
-    /**
-     *
-     * @param name
-     * @param parent
-     * @return
-     */
-    public CostCenter findByNameAndParent(String name, CostCenter parent);
-    
-    /**
-     * 
-     * @param isBlocked
-     * @param pageRequest
-     * @return 
-     */
-    public Page<CostCenter> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
+//    /**
+//     *
+//     * @param isBlocked
+//     * @return
+//     */
+//    public List<CostCenter> listByStatus(Boolean isBlocked);
+//
+//    /**
+//     *
+//     * @param name
+//     * @param parent
+//     * @return
+//     */
+//    public CostCenter findByNameAndParent(String name, CostCenter parent);
+//    
+//    /**
+//     * 
+//     * @param isBlocked
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<CostCenter> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
 }

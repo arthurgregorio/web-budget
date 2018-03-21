@@ -36,7 +36,7 @@ import lombok.ToString;
  *
  * @author Arthur Gregorio
  *
- * @version 2.1.0
+ * @version 3.0.0
  * @since 1.0.0, 06/10/2013
  */
 @ToString
@@ -53,24 +53,26 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
 
     @Getter
     @Setter
-    @Column(name = "inclusion", nullable = false)
-    private LocalDateTime inclusion;
+    @Column(name = "created_on", nullable = false)
+    private LocalDateTime createdOn;
     @Getter
     @Setter
-    @Column(name = "last_edition")
-    private LocalDateTime lastEdition;
+    @Column(name = "modified_on")
+    private LocalDateTime modifiedOn;
     
     @Getter
     @Setter
-    @Column(name = "included_by", length = 45)
-    private String includedBy;
+    @Column(name = "created_by", length = 45, nullable = false)
+    private String createdBy;
     @Getter
     @Setter
-    @Column(name = "edited_by", length = 45)
-    private String editedBy;
+    @Column(name = "modified_by", length = 45)
+    private String modifiedBy;
 
     /**
-     * @return {@inheritDoc}
+     * {@inheritDoc }
+     * 
+     * @return
      */
     @Override
     public boolean isSaved() {
@@ -78,10 +80,13 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     }
     
     /**
+     * Faz o parse da data de inclusao para {@link String}
+     * 
      * @return a data de inclusao em formato string dd/MM/yyyy HH:mm
      */
     public String getInclusionAsString() {
-        return DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-                .format(this.inclusion);
+        return DateTimeFormatter
+                .ofPattern("dd/MM/yyyy HH:mm")
+                .format(this.createdOn);
     }
 }

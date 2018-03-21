@@ -16,26 +16,7 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.entries.Card;
-import br.com.webbudget.domain.entities.entries.CardInvoice;
-import br.com.webbudget.domain.entities.entries.CardType;
-import br.com.webbudget.domain.entities.financial.Apportionment;
-import br.com.webbudget.domain.entities.financial.Movement;
-import br.com.webbudget.domain.entities.financial.MovementStateType;
-import br.com.webbudget.domain.entities.financial.MovementType;
-import br.com.webbudget.domain.entities.tools.Configuration;
-import br.com.webbudget.domain.exceptions.ApplicationException;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import br.com.webbudget.domain.repositories.entries.ICardInvoiceRepository;
-import br.com.webbudget.domain.repositories.financial.IApportionmentRepository;
-import br.com.webbudget.domain.repositories.financial.IMovementRepository;
-import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import br.com.webbudget.domain.repositories.tools.ConfigurationRepository;
-import br.com.webbudget.domain.repositories.entries.CardRepository;
 
 /**
  * Service responsavel por todas as operacoes que envolvem cartoes no sistema

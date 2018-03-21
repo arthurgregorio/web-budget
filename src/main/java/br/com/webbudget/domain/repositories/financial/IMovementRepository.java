@@ -16,23 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.financial;
 
-import br.com.webbudget.domain.entities.entries.Card;
-import br.com.webbudget.domain.entities.entries.CardInvoice;
-import br.com.webbudget.domain.entities.entries.CardType;
-import br.com.webbudget.domain.entities.entries.Contact;
-import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.entities.financial.Movement;
-import br.com.webbudget.domain.entities.entries.MovementClass;
-import br.com.webbudget.domain.entities.entries.MovementClassType;
-import br.com.webbudget.domain.entities.financial.MovementStateType;
-import br.com.webbudget.domain.entities.financial.MovementType;
-import br.com.webbudget.domain.misc.MovementFilter;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -46,121 +30,121 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface IMovementRepository extends EntityRepository<Movement, Long> {
 
-    /**
-     * 
-     * @param movementCode
-     * @return 
-     */
-    public Movement findByCode(String movementCode);
-
-    /**
-     *
-     * @return
-     */
-    public List<Movement> listByActiveFinancialPeriod();
-    
-    /**
-     * 
-     * @param contact
-     * @return 
-     */
-    public List<Movement> listByContact(Contact contact);
-
-    /**
-     * 
-     * @param period
-     * @return 
-     */
-    public List<Movement> listByPeriod(FinancialPeriod period);
-    
-    /**
-     *
-     * @param cardInvoice
-     * @return
-     */
-    public List<Movement> listByCardInvoice(CardInvoice cardInvoice);
-
-    /**
-     *
-     * @param dueDate
-     * @param showOverdue
-     * @return
-     */
-    public List<Movement> listByDueDate(LocalDate dueDate, boolean showOverdue);
-
-    /**
-     * 
-     * @param filter
-     * @param pageRequest
-     * @return 
-     */
-    public Page<Movement> listByFilter(MovementFilter filter, PageRequest pageRequest);
-    
-    /**
-     *
-     * @param period
-     * @param type
-     * @return
-     */
-    public List<Movement> listByPeriodAndCardType(FinancialPeriod period, CardType type);
-
-    /**
-     *
-     * @param period
-     * @param state
-     * @return
-     */
-    public List<Movement> listByPeriodAndState(FinancialPeriod period, MovementStateType state);
-
-    /**
-     *
-     * @param period
-     * @param card
-     * @return
-     */
-    public List<Movement> listPaidWithoutInvoiceByPeriodAndCard(FinancialPeriod period, Card card);
-    
-    /**
-     *
-     * @param period
-     * @param direction
-     * @return
-     */
-    public List<Movement> listByPeriodAndDirection(FinancialPeriod period, MovementClassType direction);
-    
-    /**
-     *
-     * @param period
-     * @param movementClass
-     * @return
-     */
-    public BigDecimal countTotalByPeriodAndMovementClass(FinancialPeriod period, MovementClass movementClass);
-
-    /**
-     *
-     * @param period
-     * @param state
-     * @param type
-     * @return
-     */
-    public List<Movement> listByPeriodAndStateAndType(FinancialPeriod period, MovementStateType state, MovementType type);
-
-    /**
-     *
-     * @param period
-     * @param costCenter
-     * @param direction
-     * @return
-     */
-    public List<Movement> listByPeriodAndCostCenterAndDirection(FinancialPeriod period, CostCenter costCenter, MovementClassType direction);
-
-    /**
-     *
-     * @param period
-     * @param state
-     * @param type
-     * @param direction
-     * @return
-     */
-    public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period, MovementStateType state, MovementType type, MovementClassType direction);
+//    /**
+//     * 
+//     * @param movementCode
+//     * @return 
+//     */
+//    public Movement findByCode(String movementCode);
+//
+//    /**
+//     *
+//     * @return
+//     */
+//    public List<Movement> listByActiveFinancialPeriod();
+//    
+//    /**
+//     * 
+//     * @param contact
+//     * @return 
+//     */
+//    public List<Movement> listByContact(Contact contact);
+//
+//    /**
+//     * 
+//     * @param period
+//     * @return 
+//     */
+//    public List<Movement> listByPeriod(FinancialPeriod period);
+//    
+//    /**
+//     *
+//     * @param cardInvoice
+//     * @return
+//     */
+//    public List<Movement> listByCardInvoice(CardInvoice cardInvoice);
+//
+//    /**
+//     *
+//     * @param dueDate
+//     * @param showOverdue
+//     * @return
+//     */
+//    public List<Movement> listByDueDate(LocalDate dueDate, boolean showOverdue);
+//
+//    /**
+//     * 
+//     * @param filter
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<Movement> listByFilter(MovementFilter filter, PageRequest pageRequest);
+//    
+//    /**
+//     *
+//     * @param period
+//     * @param type
+//     * @return
+//     */
+//    public List<Movement> listByPeriodAndCardType(FinancialPeriod period, CardType type);
+//
+//    /**
+//     *
+//     * @param period
+//     * @param state
+//     * @return
+//     */
+//    public List<Movement> listByPeriodAndState(FinancialPeriod period, MovementStateType state);
+//
+//    /**
+//     *
+//     * @param period
+//     * @param card
+//     * @return
+//     */
+//    public List<Movement> listPaidWithoutInvoiceByPeriodAndCard(FinancialPeriod period, Card card);
+//    
+//    /**
+//     *
+//     * @param period
+//     * @param direction
+//     * @return
+//     */
+//    public List<Movement> listByPeriodAndDirection(FinancialPeriod period, MovementClassType direction);
+//    
+//    /**
+//     *
+//     * @param period
+//     * @param movementClass
+//     * @return
+//     */
+//    public BigDecimal countTotalByPeriodAndMovementClass(FinancialPeriod period, MovementClass movementClass);
+//
+//    /**
+//     *
+//     * @param period
+//     * @param state
+//     * @param type
+//     * @return
+//     */
+//    public List<Movement> listByPeriodAndStateAndType(FinancialPeriod period, MovementStateType state, MovementType type);
+//
+//    /**
+//     *
+//     * @param period
+//     * @param costCenter
+//     * @param direction
+//     * @return
+//     */
+//    public List<Movement> listByPeriodAndCostCenterAndDirection(FinancialPeriod period, CostCenter costCenter, MovementClassType direction);
+//
+//    /**
+//     *
+//     * @param period
+//     * @param state
+//     * @param type
+//     * @param direction
+//     * @return
+//     */
+//    public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period, MovementStateType state, MovementType type, MovementClassType direction);
 }

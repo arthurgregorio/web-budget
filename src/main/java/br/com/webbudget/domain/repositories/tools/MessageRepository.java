@@ -16,8 +16,6 @@
  */
 package br.com.webbudget.domain.repositories.tools;
 
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
 import br.com.webbudget.domain.entities.tools.Message;
 import org.apache.deltaspike.data.api.EntityRepository;
 

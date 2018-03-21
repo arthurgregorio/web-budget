@@ -16,12 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.financial;
 
-import br.com.webbudget.domain.entities.financial.FixedMovement;
 import br.com.webbudget.domain.entities.financial.Launch;
-import br.com.webbudget.domain.entities.financial.Movement;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -35,32 +30,32 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface ILaunchRepository extends EntityRepository<Launch, Long> {
 
-    /**
-     * 
-     * @param movement
-     * @return 
-     */
-    public Launch findByMovement(Movement movement);
-    
-    /**
-     * 
-     * @param fixedMovement
-     * @return 
-     */
-    public Long countByFixedMovement(FixedMovement fixedMovement);
-    
-    /**
-     * 
-     * @param fixedMovement
-     * @return 
-     */
-    public List<Launch> listByFixedMovement(FixedMovement fixedMovement);
-    
-    /**
-     * 
-     * @param fixedMovement
-     * @param pageRequest
-     * @return 
-     */
-    public Page<Launch> listByFixedMovement(FixedMovement fixedMovement, PageRequest pageRequest);
+//    /**
+//     * 
+//     * @param movement
+//     * @return 
+//     */
+//    public Launch findByMovement(Movement movement);
+//    
+//    /**
+//     * 
+//     * @param fixedMovement
+//     * @return 
+//     */
+//    public Long countByFixedMovement(FixedMovement fixedMovement);
+//    
+//    /**
+//     * 
+//     * @param fixedMovement
+//     * @return 
+//     */
+//    public List<Launch> listByFixedMovement(FixedMovement fixedMovement);
+//    
+//    /**
+//     * 
+//     * @param fixedMovement
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<Launch> listByFixedMovement(FixedMovement fixedMovement, PageRequest pageRequest);
 }

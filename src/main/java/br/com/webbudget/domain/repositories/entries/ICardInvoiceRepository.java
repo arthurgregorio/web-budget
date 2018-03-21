@@ -16,12 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Card;
 import br.com.webbudget.domain.entities.entries.CardInvoice;
-import br.com.webbudget.domain.entities.financial.Movement;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -35,25 +30,25 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface ICardInvoiceRepository extends EntityRepository<CardInvoice, Long> {
 
-    /**
-     * 
-     * @param card
-     * @return 
-     */
-    public List<CardInvoice> listByCard(Card card);
-    
-    /**
-     *
-     * @param movement
-     * @return
-     */
-    public CardInvoice findByMovement(Movement movement);
-    
-    /**
-     * 
-     * @param card
-     * @param pageRequest
-     * @return 
-     */
-    public Page<CardInvoice> listByCard(Card card, PageRequest pageRequest);
+//    /**
+//     * 
+//     * @param card
+//     * @return 
+//     */
+//    public List<CardInvoice> listByCard(Card card);
+//    
+//    /**
+//     *
+//     * @param movement
+//     * @return
+//     */
+//    public CardInvoice findByMovement(Movement movement);
+//    
+//    /**
+//     * 
+//     * @param card
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<CardInvoice> listByCard(Card card, PageRequest pageRequest);
 }

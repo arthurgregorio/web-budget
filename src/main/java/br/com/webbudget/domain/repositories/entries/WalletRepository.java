@@ -17,9 +17,9 @@
 package br.com.webbudget.domain.repositories.entries;
 
 import br.com.webbudget.domain.entities.entries.Wallet;
-import java.util.List;
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Query;
+import br.com.webbudget.domain.entities.entries.Wallet_;
+import br.com.webbudget.domain.repositories.DefaultRepository;
+import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
 
 /**
@@ -30,30 +30,17 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface WalletRepository extends EntityRepository<Wallet, Long> {
+public interface WalletRepository extends DefaultRepository<Wallet> {
 
     /**
      * 
      * @return 
      */
-    @Query("FROM Wallet w WHERE w.blocked = false")
-    List<Wallet> findAllActive();
+    @Override
+    public default SingularAttribute<Wallet, Boolean> getBlockedProperty() {
+        return Wallet_.blocked;
+    }
     
-//    /**
-//     *
-//     * @param isBlocked
-//     * @return
-//     */
-//    public List<Wallet> listByStatus(Boolean isBlocked);
-//
-//    /**
-//     * 
-//     * @param isBlocked
-//     * @param pageRequest
-//     * @return 
-//     */
-//    public Page<Wallet> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
-//    
 //    /**
 //     *
 //     * @param name

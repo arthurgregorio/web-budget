@@ -31,13 +31,22 @@ import org.primefaces.model.SortOrder;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 2.1.0, 05/09/2015
  */
-public class AbstractLazyModel<T extends IPersistentEntity> extends LazyDataModel<T> {
+public class LazyModel<T extends IPersistentEntity> extends LazyDataModel<T> {
+
+    private final LazyDataProvider<T> provider;
 
     /**
-     * @see LazyDataModel#load(int, int, java.util.List, java.util.Map)
+     *
+     * @param provider
+     */
+    public LazyModel(LazyDataProvider provider) {
+        this.provider = provider;
+    }
+
+    /**
      *
      * @param first
      * @param pageSize
@@ -47,12 +56,10 @@ public class AbstractLazyModel<T extends IPersistentEntity> extends LazyDataMode
      */
     @Override
     public List<T> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
-        throw new IllegalStateException("Lazy loading not implemented");
+        return this.provider.load(first, pageSize, multiSortMeta);
     }
 
     /**
-     * @see LazyDataModel#load(int, int, java.lang.String,
-     * org.primefaces.model.SortOrder, java.util.Map)
      *
      * @param first
      * @param pageSize
@@ -63,7 +70,7 @@ public class AbstractLazyModel<T extends IPersistentEntity> extends LazyDataMode
      */
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
-        throw new IllegalStateException("Lazy loading not implemented");
+        return this.provider.load(first, pageSize, sortField, sortOrder);
     }
 
     /**
@@ -85,16 +92,10 @@ public class AbstractLazyModel<T extends IPersistentEntity> extends LazyDataMode
      */
     @Override
     public T getRowData(String rowKey) {
-
-        final Long key = Long.parseLong(rowKey);
-
-        for (T t : this.getModelSource()) {
-            if (t.getId().equals(key)) {
-                return t;
-            }
-        }
-
-        return null;
+        return this.getModelSource().stream()
+                .filter(object -> object.getId().equals(Long.parseLong(rowKey)))
+                .findFirst()
+                .orElse(null);
     }
 
     /**

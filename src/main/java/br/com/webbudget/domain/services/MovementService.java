@@ -16,53 +16,7 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.entries.CardInvoice;
-import br.com.webbudget.domain.entities.financial.Apportionment;
-import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
-import br.com.webbudget.domain.entities.financial.FixedMovement;
-import br.com.webbudget.domain.entities.financial.FixedMovementStatusType;
-import br.com.webbudget.domain.entities.financial.Launch;
-import br.com.webbudget.domain.entities.financial.Movement;
-import br.com.webbudget.domain.entities.entries.MovementClass;
-import br.com.webbudget.domain.entities.entries.MovementClassType;
-import br.com.webbudget.domain.entities.financial.MovementStateType;
-import br.com.webbudget.domain.entities.financial.MovementType;
-import br.com.webbudget.domain.entities.financial.Payment;
-import br.com.webbudget.domain.entities.financial.PaymentMethodType;
-import br.com.webbudget.domain.entities.entries.Wallet;
-import br.com.webbudget.domain.entities.entries.WalletBalanceType;
-import br.com.webbudget.domain.misc.BalanceBuilder;
-import br.com.webbudget.domain.misc.MovementBuilder;
-import br.com.webbudget.domain.misc.MovementFilter;
-import br.com.webbudget.domain.events.UpdateBalance;
-import br.com.webbudget.domain.exceptions.ApplicationException;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import br.com.webbudget.domain.events.CreateMovement;
-import br.com.webbudget.domain.events.DeleteMovement;
-import br.com.webbudget.domain.events.MovementDeleted;
-import br.com.webbudget.domain.events.MovementPaid;
-import br.com.webbudget.domain.events.MovementSaved;
-import br.com.webbudget.domain.events.MovementUpdated;
-import br.com.webbudget.domain.repositories.entries.ICardInvoiceRepository;
-import br.com.webbudget.domain.repositories.financial.IApportionmentRepository;
-import br.com.webbudget.domain.repositories.entries.ICostCenterRepository;
-import br.com.webbudget.domain.repositories.financial.IFixedMovementRepository;
-import br.com.webbudget.domain.repositories.financial.ILaunchRepository;
-import br.com.webbudget.domain.repositories.financial.IMovementRepository;
-import br.com.webbudget.domain.repositories.entries.IMovementClassRepository;
-import br.com.webbudget.domain.repositories.financial.IPaymentRepository;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import br.com.webbudget.domain.events.PeriodOpened;
 
 /**
  *

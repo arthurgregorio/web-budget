@@ -17,9 +17,6 @@
 package br.com.webbudget.domain.repositories.miscellany;
 
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.PageRequest;
-import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -33,42 +30,42 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface IFinancialPeriodRepository extends EntityRepository<FinancialPeriod, Long> {
 
-    /**
-     * @return 
-     */
-    public FinancialPeriod findLatestClosed();
-    
-    /**
-     *
-     * @return
-     */
-    public List<FinancialPeriod> listOpen();
-    
-
-    /**
-     * @return 
-     */
-    public List<FinancialPeriod> listLastSixClosed();
-    
-    /**
-     *
-     * @param isClosed
-     * @return
-     */
-    public List<FinancialPeriod> listByStatus(Boolean isClosed);
-
-    /**
-     *
-     * @param identification
-     * @return
-     */
-    public FinancialPeriod findByIdentification(String identification);
-    
-    /**
-     * 
-     * @param isClosed
-     * @param pageRequest
-     * @return 
-     */
-    public Page<FinancialPeriod> listByStatusLazily(Boolean isClosed, PageRequest pageRequest);
+//    /**
+//     * @return 
+//     */
+//    public FinancialPeriod findLatestClosed();
+//    
+//    /**
+//     *
+//     * @return
+//     */
+//    public List<FinancialPeriod> listOpen();
+//    
+//
+//    /**
+//     * @return 
+//     */
+//    public List<FinancialPeriod> listLastSixClosed();
+//    
+//    /**
+//     *
+//     * @param isClosed
+//     * @return
+//     */
+//    public List<FinancialPeriod> listByStatus(Boolean isClosed);
+//
+//    /**
+//     *
+//     * @param identification
+//     * @return
+//     */
+//    public FinancialPeriod findByIdentification(String identification);
+//    
+//    /**
+//     * 
+//     * @param isClosed
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<FinancialPeriod> listByStatusLazily(Boolean isClosed, PageRequest pageRequest);
 }
