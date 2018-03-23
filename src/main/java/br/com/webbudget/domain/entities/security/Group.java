@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.metamodel.SingularAttribute;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -79,26 +78,6 @@ public class Group extends PersistentEntity {
         this();
         this.name = name;
         this.parent = parent;
-    }
-
-    /**
-     *
-     * @param exampleData
-     * @return
-     */
-    public static Group asExample(String exampleData) {
-        if (exampleData == null) {
-            exampleData = "";
-        }
-        return new Group(exampleData);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static SingularAttribute<Group, ?>[] filterProperties() {
-        return new SingularAttribute[]{Group_.name};
     }
     
     /**

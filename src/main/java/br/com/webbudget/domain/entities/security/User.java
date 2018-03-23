@@ -1,7 +1,7 @@
 package br.com.webbudget.domain.entities.security;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.infraestructure.shiro.UserDetails;
+import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -68,33 +68,14 @@ public class User extends PersistentEntity implements UserDetails {
     @Transient
     @NotNull(message = "{user.password}")
     private String passwordConfirmation;
-
+    
     /**
-     *
-     * @param name
-     * @param email
-     * @param username
-     * @param blocked
-     * @param group
-     * @param profile
+     * 
+     * @return 
      */
-    private User(String name, String email, String username, boolean blocked) {
-        this.name = name;
-        this.email = email;
-        this.username = username;
-        this.blocked = blocked;
-    }
-
-    /**
-     *
-     * @param exampleData
-     * @return
-     */
-    public static User asExample(String exampleData) {
-        if (exampleData == null) {
-            exampleData = "";
-        }
-        return new User(exampleData, exampleData, exampleData, false);
+    @Override
+    public boolean isLdapBindAccount() {
+        return false;
     }
 
     /**

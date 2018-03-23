@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+                    
+    <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">#{menu['tools']}</li>
+        <li class="#{activeMenu eq 'groups' ? 'active' : ''}">
+            <p:link href="/secured/tools/groups/listGroups.xhtml"
+                    rendered="#{userSessionBean.isPermitted(permissions.GROUP_ACCESS)}">
+                <i class="fa fa-group"></i> 
+                <span>#{menu['tools.groups']}</span>
+            </p:link>
+        </li>
+        <li class="#{activeMenu eq 'users' ? 'active' : ''}">
+            <p:link href="/secured/tools/users/listUsers.xhtml"
+                    rendered="#{userSessionBean.isPermitted(permissions.USER_ACCESS)}">
+                <i class="fa fa-user"></i> 
+                <span>#{menu['tools.users']}</span>
+            </p:link>
+        </li>
+    </ul>
+</ui:composition>

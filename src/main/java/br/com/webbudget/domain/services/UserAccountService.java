@@ -24,8 +24,8 @@ import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GrantRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
-import br.com.webbudget.infraestructure.shiro.UserDetails;
-import br.com.webbudget.infraestructure.shiro.UserDetailsService;
+import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
+import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetailsProvider;
 import java.util.List;
 import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
@@ -40,7 +40,7 @@ import javax.transaction.Transactional;
  * @since 1.0.0, 27/12/2017
  */
 @ApplicationScoped
-public class UserAccountService implements UserDetailsService {
+public class UserAccountService implements UserDetailsProvider {
 
     @Inject
     private UserRepository userRepository;

@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.infraestructure.shiro.Authenticator;
-import br.com.webbudget.infraestructure.shiro.Credential;
+import br.eti.arthurgregorio.shiroee.auth.Authenticator;
+import br.eti.arthurgregorio.shiroee.auth.Credential;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,7 +52,7 @@ public class AuthenticationBean extends AbstractBean {
             this.credential = new Credential();
             return "";
         } else {
-            return "/main/dashboard.xhtml?faces-redirect=true";
+            return "/secured/dashboard.xhtml?faces-redirect=true";
         }
     }
     
@@ -63,14 +63,10 @@ public class AuthenticationBean extends AbstractBean {
     public String doLogin() {
         try {
             this.authenticator.login(this.credential);
-            return "/main/dashboard.xhtml?faces-redirect=true";
+            return "/secured/dashboard.xhtml?faces-redirect=true";
         } catch (AuthenticationException ex) {
             this.logger.error("Login error", ex);
             this.addError(true, "error.authentication-failed");
-            return null;
-        } catch (Exception ex) {
-            this.logger.error("Login error", ex);
-            this.addError(true, "error.generic-error", ex);
             return null;
         }
     }

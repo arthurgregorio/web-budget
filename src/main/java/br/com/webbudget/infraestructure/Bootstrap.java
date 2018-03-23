@@ -25,7 +25,7 @@ import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GrantRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
-import br.com.webbudget.infraestructure.shiro.BCryptPasswordService;
+import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
@@ -61,7 +61,7 @@ public class Bootstrap {
     private AuthorizationRepository authorizationRepository;
     
     @Inject
-    private BCryptPasswordService passwordService;
+    private PasswordEncoder passwordEncoder;
 
     /**
      *
@@ -69,7 +69,7 @@ public class Bootstrap {
     @PostConstruct
     protected void initialize() {
 
-        this.logger.info("Bootstraping webbudget application....");
+        this.logger.info("Bootstraping application....");
 
         this.createAuthorizations();
         this.createDefaultGroup();
@@ -152,7 +152,7 @@ public class Bootstrap {
             user.setName("Administrador");
             user.setEmail("contato@webbudget.com.br");
             user.setUsername("admin");
-            user.setPassword(this.passwordService.encryptPassword("admin"));
+            user.setPassword(this.passwordEncoder.encryptPassword("admin"));
             user.setCreatedBy("system");
             
             user.setGroup(group);

@@ -104,13 +104,7 @@ public class UserBean extends AbstractBean {
      *
      */
     public void filterList() {
-        try {
-            this.users = this.userRepository.findByLike(
-                    User.asExample(this.filter), User.filterProperties());
-        } catch (Exception ex) {
-            this.logger.error("UserBean#filterList has found erros", ex);
-            this.addError(true, "error.generic-error", ex.getMessage());
-        }
+        this.updateComponent("usersList");
     }
 
     /**

@@ -16,23 +16,33 @@
  */
 package br.com.webbudget.infraestructure.shiro;
 
-import java.util.Optional;
+import br.eti.arthurgregorio.shiroee.config.HttpSecurityConfiguration;
+import br.eti.arthurgregorio.shiroee.config.http.HttpSecurityBuilder;
+import br.eti.arthurgregorio.shiroee.config.http.PermissionHttpSecurityBuilder;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
- * Facade to give the hability to retrieve informations about the user and his
- * permissions in conjunction with the security real
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 03/02/2018
+ * @since 1.0.0, 06/03/2018
  */
-public interface UserDetailsService {
+@ApplicationScoped
+public class PathSecurityConfiguration implements HttpSecurityConfiguration {
 
     /**
      * 
-     * @param username
      * @return 
      */
-    Optional<UserDetails> findUserDetailsByUsername(String username);
+    @Override
+    public HttpSecurityBuilder configureHttpSecurity() {
+        
+        final HttpSecurityBuilder builder = new PermissionHttpSecurityBuilder();
+        
+        builder.add("/secured/tools/user/**", "user:access", true)
+                .add("/secured/tools/group/**", "group:access", true);
+        
+        return builder;
+    }    
 }

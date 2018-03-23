@@ -120,13 +120,7 @@ public class GroupBean extends AbstractBean {
      *
      */
     public void filterList() {
-        try {
-            this.groups = this.groupRepository.findByLike(
-                    Group.asExample(this.filter), Group.filterProperties());
-        } catch (Exception ex) {
-            this.logger.error("GroupBean#filterList has found erros", ex);
-            this.addError(true, "error.generic-error", ex.getMessage());
-        }
+        this.updateComponent("groupsList");
     }
 
     /**
