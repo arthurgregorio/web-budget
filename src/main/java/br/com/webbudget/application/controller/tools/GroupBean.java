@@ -1,7 +1,7 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.exceptions.ApplicationException;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.entities.security.Authorization;
 import br.com.webbudget.domain.entities.security.Grant;
 import br.com.webbudget.domain.entities.security.Group;
@@ -174,7 +174,7 @@ public class GroupBean extends AbstractBean {
             this.group = new Group();
             this.unselectAuthorizations();
             this.addInfo(true, "group.saved");
-        } catch (ApplicationException ex) {
+        } catch (BusinessLogicException ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
@@ -190,7 +190,7 @@ public class GroupBean extends AbstractBean {
         try {
             this.userAccountService.update(this.group, this.parseAuthorizations());
             this.addInfo(true, "group.updated");
-        } catch (ApplicationException ex) {
+        } catch (BusinessLogicException ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("GroupBean#doSave has found erros", ex);
@@ -207,7 +207,7 @@ public class GroupBean extends AbstractBean {
         try {
             this.userAccountService.delete(this.group);
             return this.changeTolist();
-        } catch (ApplicationException ex) {
+        } catch (BusinessLogicException ex) {
             this.logger.error("GroupBean#doDelete has found erros", ex);
             this.addError(true, ex.getMessage(), ex.getParameters());
             return null;

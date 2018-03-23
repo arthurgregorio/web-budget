@@ -17,7 +17,7 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.components.chart.AbstractChartModel;
-import br.com.webbudget.infraestructure.utils.Translator;
+import br.com.webbudget.infrastructure.utils.MessageSource;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -46,9 +46,6 @@ public abstract class AbstractBean implements Serializable {
     @Inject
     protected Logger logger;
 
-    @Inject
-    private Translator translator;
-    
     @Inject
     private FacesContext facesContext;
     @Inject
@@ -80,7 +77,7 @@ public abstract class AbstractBean implements Serializable {
      * @return o texto
      */
     public String translate(String message) {
-        return this.translator.translate(message);
+        return MessageSource.get(message);
     }
     
     /**

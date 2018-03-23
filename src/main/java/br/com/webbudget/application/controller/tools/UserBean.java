@@ -1,7 +1,7 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.exceptions.ApplicationException;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.entities.security.Group;
 import br.com.webbudget.domain.entities.security.User;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
@@ -156,7 +156,7 @@ public class UserBean extends AbstractBean {
             this.userAccountService.save(this.user);
             this.user = new User();
             this.addInfo(true, "user.saved");
-        } catch (ApplicationException ex) {
+        } catch (BusinessLogicException ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("UserBean#doSave has found erros", ex);
@@ -171,7 +171,7 @@ public class UserBean extends AbstractBean {
         try {
             this.userAccountService.update(this.user);
             this.addInfo(true, "user.updated");
-        } catch (ApplicationException ex) {
+        } catch (BusinessLogicException ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
         } catch (Exception ex) {
             this.logger.error("UserBean#doUpdate has found erros", ex);
@@ -188,7 +188,7 @@ public class UserBean extends AbstractBean {
         try {
             this.userAccountService.delete(this.user);
             return this.changeTolist();
-        } catch (ApplicationException ex) {
+        } catch (BusinessLogicException ex) {
             this.addError(true, ex.getMessage(), ex.getParameters());
             return null;
         } catch (Exception ex) {
