@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.entries;
 
 import br.com.webbudget.application.components.Color;
-import br.com.webbudget.application.converters.jpa.ColorConverter;
+import br.com.webbudget.infrastructure.jpa.ColorConverter;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import java.math.BigDecimal;
 import javax.persistence.Column;

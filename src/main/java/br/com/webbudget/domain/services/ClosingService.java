@@ -23,7 +23,7 @@ import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.entities.financial.Movement;
 import br.com.webbudget.domain.entities.financial.MovementStateType;
 import br.com.webbudget.domain.events.PeriodClosed;
-import br.com.webbudget.domain.exceptions.ApplicationException;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.miscellany.IClosingRepository;
 import br.com.webbudget.domain.repositories.miscellany.IFinancialPeriodRepository;
 import br.com.webbudget.domain.repositories.financial.IMovementRepository;

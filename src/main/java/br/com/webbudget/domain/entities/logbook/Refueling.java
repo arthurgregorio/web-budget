@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.entities.logbook;
 
-import br.com.webbudget.infraestructure.utils.RandomCode;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.entries.CostCenter;
 import br.com.webbudget.domain.entities.entries.MovementClass;

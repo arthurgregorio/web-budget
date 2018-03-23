@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.utils;
+package br.com.webbudget.infrastructure.utils;
 
 /**
  * Class that's generate sequences of random codes to use in unique 

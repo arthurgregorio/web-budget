@@ -16,12 +16,12 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
-import br.com.webbudget.infraestructure.utils.RandomCode;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.entries.Wallet;
 import br.com.webbudget.domain.entities.entries.Card;
-import br.com.webbudget.domain.exceptions.ApplicationException;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -100,7 +100,7 @@ public class Payment extends PersistentEntity {
     public LocalDate getCreditCardInvoiceDueDate(FinancialPeriod period) {
 
         if (this.card == null) {
-            throw new ApplicationException("movement.validate.payment-not-credit-card");
+            throw new BusinessLogicException("movement.validate.payment-not-credit-card");
         }
 
         final int expiration = this.card.getExpirationDay();
@@ -138,9 +138,9 @@ public class Payment extends PersistentEntity {
      */
     public void validatePaymentMethod() {
         if (this.isPaidInCash() && this.wallet == null) {
-            throw new ApplicationException("error.payment.no-wallet");
+            throw new BusinessLogicException("error.payment.no-wallet");
         } else if ((this.isPaidOnCredit() || this.isPaidOnDebit()) && this.card == null) {
-            throw new ApplicationException("error.payment.no-card");
+            throw new BusinessLogicException("error.payment.no-card");
         }
     }
 
@@ -152,7 +152,7 @@ public class Payment extends PersistentEntity {
      */
     public void validateDiscount(BigDecimal value) {
        if (this.discount != null && this.discount.compareTo(value) >= 0) {
-           throw new ApplicationException("error.payment.invalid-discount");
+           throw new BusinessLogicException("error.payment.invalid-discount");
        }
     }
 

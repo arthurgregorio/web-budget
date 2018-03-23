@@ -14,35 +14,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.cdi;
+package br.com.webbudget.infrastructure.cdi;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 
 /**
- * Produto que gera os objetos de para fins de log do sistema, cada classe 
- * que ncessitar de um logger pode requisitar a injecao via CDI
+ * Produtor de contextos do sistema
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
-@Dependent
-public class LoggerProducer {
+@ApplicationScoped
+public class FacesContextProducer {
 
     /**
-     * Produz um objeto de logger para quem solicitar via {@link Inject}
-     * 
-     * @param injectionPoint o ponto de injecao onde o logger sera inserido
-     * @return o objeto org.slf4j.Logger para a classe solcitante
+     * Produz um contexto valido do {@link RequestContext}
+     *
+     * @return um {@link RequestContext} valido
      */
     @Produces
-    Logger produceLogger(InjectionPoint injectionPoint) {
-        return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
+    @RequestScoped
+    RequestContext produceRequestContext() {
+        return RequestContext.getCurrentInstance();
+    }
+
+    /**
+     * Produz um contexto valido do {@link FacesContext}
+     *
+     * @return um {@link FacesContext} valido
+     */
+    @Produces
+    @RequestScoped
+    FacesContext produceFacesContext() {
+        return FacesContext.getCurrentInstance();
     }
 }

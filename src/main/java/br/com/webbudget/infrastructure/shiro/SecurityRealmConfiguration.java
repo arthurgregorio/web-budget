@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.shiro;
+package br.com.webbudget.infrastructure.shiro;
 
 import br.com.webbudget.domain.services.UserAccountService;
 import br.eti.arthurgregorio.shiroee.auth.AuthenticationMechanism;

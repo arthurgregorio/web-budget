@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
-import br.com.webbudget.infraestructure.utils.RandomCode;
-import br.com.webbudget.domain.exceptions.ApplicationException;
+import br.com.webbudget.infrastructure.utils.RandomCode;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.entities.entries.CostCenter;
 import br.com.webbudget.domain.entities.entries.MovementClass;
 import br.com.webbudget.domain.entities.entries.MovementClassType;
@@ -95,7 +95,7 @@ public class Apportionment extends PersistentEntity {
     public Apportionment(CostCenter costCenter, MovementClass movementClass, BigDecimal value) {
         this();
         if (!movementClass.getCostCenter().equals(costCenter)) {
-            throw new ApplicationException("error.apportionment.invalid-class-for-cc");
+            throw new BusinessLogicException("error.apportionment.invalid-class-for-cc");
         } else {
             this.value = value;
             this.costCenter = costCenter;

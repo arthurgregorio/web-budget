@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.infraestructure.mail.Postman;
+import br.com.webbudget.infrastructure.mail.Postman;
 import javax.enterprise.context.ApplicationScoped;
 import javax.mail.internet.MimeMessage;
 

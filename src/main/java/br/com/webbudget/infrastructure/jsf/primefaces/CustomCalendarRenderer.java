@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.primefaces;
+package br.com.webbudget.infrastructure.jsf.primefaces;
 
 import java.io.IOException;
 import javax.faces.context.FacesContext;

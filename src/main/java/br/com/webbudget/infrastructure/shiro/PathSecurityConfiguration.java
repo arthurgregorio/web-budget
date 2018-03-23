@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.shiro;
+package br.com.webbudget.infrastructure.shiro;
 
 import br.eti.arthurgregorio.shiroee.config.HttpSecurityConfiguration;
 import br.eti.arthurgregorio.shiroee.config.http.HttpSecurityBuilder;
@@ -26,7 +26,7 @@ import javax.enterprise.context.ApplicationScoped;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 06/03/2018
+ * @since 3.0.0, 06/03/2018
  */
 @ApplicationScoped
 public class PathSecurityConfiguration implements HttpSecurityConfiguration {

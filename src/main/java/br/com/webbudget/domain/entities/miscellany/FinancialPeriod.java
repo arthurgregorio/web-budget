@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.miscellany;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.exceptions.ApplicationException;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -113,7 +113,7 @@ public class FinancialPeriod extends PersistentEntity {
         if (this.closed) {
             return this.closing.getAccumulated();
         }
-        throw new ApplicationException(
+        throw new BusinessLogicException(
                 "error.financial-period.not-closed", this.identification);
     }
     
@@ -125,7 +125,7 @@ public class FinancialPeriod extends PersistentEntity {
         if (this.closed) {
             return this.closing.getBalance();
         }
-        throw new ApplicationException(
+        throw new BusinessLogicException(
                 "error.financial-period.not-closed", this.identification);
     }
     
@@ -137,7 +137,7 @@ public class FinancialPeriod extends PersistentEntity {
         if (this.closed) {
             return this.closing.getExpenses();
         }
-        throw new ApplicationException(
+        throw new BusinessLogicException(
                 "error.financial-period.not-closed", this.identification);
     }
     
@@ -149,7 +149,7 @@ public class FinancialPeriod extends PersistentEntity {
         if (this.closed) {
             return this.closing.getRevenues();
         }
-        throw new ApplicationException(
+        throw new BusinessLogicException(
                 "error.financial-period.not-closed", this.identification);
     }
     

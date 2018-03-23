@@ -14,47 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.cdi;
+package br.com.webbudget.infrastructure.cdi;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Disposes;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
+import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Producer de entitymanagers para os recursos do projeto
+ * Produto que gera os objetos de para fins de log do sistema, cada classe 
+ * que ncessitar de um logger pode requisitar a injecao via CDI
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
-@ApplicationScoped
-public class EntityManagerProducer {
-
-    @PersistenceUnit
-    private EntityManagerFactory ctbFactory;
+@Dependent
+public class LoggerProducer {
 
     /**
-     *
-     * @return
+     * Produz um objeto de logger para quem solicitar via {@link Inject}
+     * 
+     * @param injectionPoint o ponto de injecao onde o logger sera inserido
+     * @return o objeto org.slf4j.Logger para a classe solcitante
      */
     @Produces
-    @RequestScoped
-    EntityManager create() {
-        return this.ctbFactory.createEntityManager();
-    }
-
-    /**
-     *
-     * @param entityManager
-     */
-    void close(@Disposes EntityManager entityManager) {
-        if (entityManager.isOpen()) {
-            entityManager.close();
-        }
+    Logger produceLogger(InjectionPoint injectionPoint) {
+        return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
     }
 }

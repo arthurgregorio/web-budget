@@ -14,44 +14,47 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infraestructure.cdi;
+package br.com.webbudget.infrastructure.cdi;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
-import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 
 /**
- * Produtor de contextos do sistema
+ * Producer de entitymanagers para os recursos do projeto
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 2.0.0, 21/05/2015
  */
 @ApplicationScoped
-public class FacesContextProducer {
+public class EntityManagerProducer {
+
+    @PersistenceUnit
+    private EntityManagerFactory ctbFactory;
 
     /**
-     * Produz um contexto valido do {@link RequestContext}
      *
-     * @return um {@link RequestContext} valido
+     * @return
      */
     @Produces
     @RequestScoped
-    RequestContext produceRequestContext() {
-        return RequestContext.getCurrentInstance();
+    EntityManager create() {
+        return this.ctbFactory.createEntityManager();
     }
 
     /**
-     * Produz um contexto valido do {@link FacesContext}
      *
-     * @return um {@link FacesContext} valido
+     * @param entityManager
      */
-    @Produces
-    @RequestScoped
-    FacesContext produceFacesContext() {
-        return FacesContext.getCurrentInstance();
+    void close(@Disposes EntityManager entityManager) {
+        if (entityManager.isOpen()) {
+            entityManager.close();
+        }
     }
 }

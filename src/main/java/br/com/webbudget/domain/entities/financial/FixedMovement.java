@@ -16,10 +16,10 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
-import br.com.webbudget.infraestructure.utils.RandomCode;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.com.webbudget.domain.entities.entries.MovementClassType;
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.exceptions.ApplicationException;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -142,14 +142,14 @@ public class FixedMovement extends PersistentEntity {
 
         // checa se nao esta sendo inserido outro exatamente igual
         if (this.apportionments.contains(apportionment)) {
-            throw new ApplicationException("error.apportionment.duplicated");
+            throw new BusinessLogicException("error.apportionment.duplicated");
         }
 
         // checa se nao esta inserindo outro para o mesmo CC e MC
         for (Apportionment a : this.apportionments) {
             if (a.getCostCenter().equals(apportionment.getCostCenter())
                     && a.getMovementClass().equals(apportionment.getMovementClass())) {
-                throw new ApplicationException("error.apportionment.duplicated");
+                throw new BusinessLogicException("error.apportionment.duplicated");
             }
         }
 
@@ -163,14 +163,14 @@ public class FixedMovement extends PersistentEntity {
 
             if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT)
                     || (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN)) {
-                throw new ApplicationException("error.apportionment.mix-of-classes");
+                throw new BusinessLogicException("error.apportionment.mix-of-classes");
             }
         }
 
         // impossivel ter um rateio com valor igual a zero
         if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0 || 
                 apportionment.getValue().compareTo(this.value) > 0) {
-            throw new ApplicationException("error.apportionment.invalid-value");
+            throw new BusinessLogicException("error.apportionment.invalid-value");
         }
 
         this.apportionments.add(apportionment);
@@ -190,7 +190,7 @@ public class FixedMovement extends PersistentEntity {
         final Apportionment toRemove = this.apportionments.stream()
                 .filter(apportionment -> apportionment.getCode().equals(code))
                 .findFirst()
-                .orElseThrow(() -> new ApplicationException(
+                .orElseThrow(() -> new BusinessLogicException(
                         "error.apportionment.not-found", code));
 
         // se o rateio ja foi salvo, adicionamos ele em outra lista 
@@ -233,17 +233,17 @@ public class FixedMovement extends PersistentEntity {
     public void validateApportionments() {
 
         if (this.getApportionments().isEmpty()) {
-            throw new ApplicationException(
+            throw new BusinessLogicException(
                     "error.apportionment.empty-apportionment");
         } else if (this.getApportionmentsTotal().compareTo(this.value) > 0) {
             final String difference = String.format("%10.2f",
                     this.getApportionmentsTotal().subtract(this.value));
-            throw new ApplicationException(
+            throw new BusinessLogicException(
                     "error.apportionment.gt-value", difference);
         } else if (this.getApportionmentsTotal().compareTo(this.value) < 0) {
             final String difference = String.format("%10.2f",
                     this.value.subtract(this.getApportionmentsTotal()));
-            throw new ApplicationException(
+            throw new BusinessLogicException(
                     "error.apportionment.lt-value", difference);
         }
     }

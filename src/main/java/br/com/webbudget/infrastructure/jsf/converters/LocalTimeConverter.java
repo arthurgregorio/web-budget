@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Arthur Gregorio, AG.Software
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,45 +14,53 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.converters.jsf;
+package br.com.webbudget.infrastructure.jsf.converters;
 
-import br.com.webbudget.application.components.Color;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
+ * Converter para manter a compatibilidade dos componentes hora do primefaces
+ * com o java.time.LocalTime do Java 8
  * 
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.3.1, 22/01/2017
+ * @since 1.2.0, 27/08/2014
  */
-@FacesConverter("rgbColorConverter")
-public class RgbColorConverter implements Converter { 
+@FacesConverter("localTimeConverter")
+public class LocalTimeConverter implements Converter {
 
     /**
+     * Manda o objeto para o bean convertido em LocalTime
      * 
      * @param context
      * @param component
      * @param value
+     * 
      * @return 
      */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        return Color.parse(value);
+        return value != null ? LocalTime.parse(value, DateTimeFormatter.ofPattern("HH:mm")) : null;
     }
 
     /**
+     * Manda o objeto para a view, em String
      * 
      * @param context
      * @param component
      * @param value
+     * 
      * @return 
      */
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return ((Color) value).toString();
+        final LocalTime time = (LocalTime) value;
+        return time.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 }

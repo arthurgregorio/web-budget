@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.converters.jsf;
+package br.com.webbudget.infrastructure.jsf.converters;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -58,9 +58,7 @@ public class LocalDateConverter implements Converter {
      */
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        
         final LocalDate date = (LocalDate) value;
-        
         return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 }

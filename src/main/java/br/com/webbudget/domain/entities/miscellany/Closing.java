@@ -17,7 +17,7 @@
 
 package br.com.webbudget.domain.entities.miscellany;
 
-import br.com.webbudget.infraestructure.utils.RandomCode;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
