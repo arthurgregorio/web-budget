@@ -26,7 +26,7 @@ import lombok.Getter;
  * @version 1.0.0
  * @since 3.0.0, 17/01/2018
  */
-public class ApplicationException extends RuntimeException {
+public class BusinessLogicException extends RuntimeException {
 
     @Getter
     private Object[] parameters;
@@ -36,7 +36,7 @@ public class ApplicationException extends RuntimeException {
      * 
      * @param message a mensagem de erro
      */
-    public ApplicationException(String message) {
+    public BusinessLogicException(String message) {
         super(message);
     }
 
@@ -47,7 +47,7 @@ public class ApplicationException extends RuntimeException {
      * @param message a mensagem de erro
      * @param parameters os parametros do erro
      */
-    public ApplicationException(String message, Object... parameters) {
+    public BusinessLogicException(String message, Object... parameters) {
         super(message);
         this.parameters = parameters;
     }
@@ -60,7 +60,7 @@ public class ApplicationException extends RuntimeException {
      * @param throwable o detalhamento do erro
      * @param parameters os parametros do erro
      */
-    public ApplicationException(String message, Throwable throwable, Object... parameters) {
+    public BusinessLogicException(String message, Throwable throwable, Object... parameters) {
         super(message, throwable);
         this.parameters = parameters;
     }
