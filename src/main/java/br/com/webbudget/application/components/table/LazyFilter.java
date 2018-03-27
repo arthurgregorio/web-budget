@@ -26,7 +26,7 @@ import lombok.Setter;
  * @version 1.0.0
  * @since 3.0.0, 20/03/2018
  */
-public class LazyFilter {
+public final class LazyFilter {
 
     @Getter
     @Setter
@@ -36,30 +36,40 @@ public class LazyFilter {
     public EntityStatus entityStatus;
 
     /**
-     * 
+     * Construtor...
      */
     private LazyFilter() {
        this.entityStatus = EntityStatus.UNBLOCKED; 
     }
     
     /**
+     * Inicializa um novo filtro
      * 
-     * @return 
+     * @return a instancia do filtro
      */
     public static LazyFilter initialize() {
         return new LazyFilter();
     }
+    
+    /**
+     * Reseta o filtro para seu estado inicial
+     */
+    public void clear() {
+        this.value = null;
+        this.entityStatus = EntityStatus.UNBLOCKED;
+    }
 
     /**
+     * Pega o valor do status de entidade a ser buscado
      * 
-     * @return 
+     * @return o valor que queremos buscar para o status da entidade
      */
     public Boolean getEntityStatusValue() {
         return entityStatus.value();
     }
     
     /**
-     * 
+     * Enum de tipos de entidades
      */
     public enum EntityStatus {
 

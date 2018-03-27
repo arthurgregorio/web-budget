@@ -39,17 +39,17 @@
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:img/favicon.ico']}"/>
 
         <h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css"/>
-        <h:outputStylesheet library="ionicons" name="css/ionicons.min.css"/>
         <h:outputStylesheet library="adminlte" name="css/adminlte.min.css"/>
         <h:outputStylesheet library="adminlte" name="css/all-skins.min.css"/>
+        <h:outputStylesheet library="ionicons" name="css/ionicons.min.css"/>
+        <h:outputStylesheet library="minicolors" name="css/jquery.minicolors.css"/>
         <h:outputStylesheet library="webbudget" name="css/custom.css"/>
         <h:outputStylesheet library="webbudget" name="css/common.css"/>
-        <h:outputStylesheet library="minicolors" name="css/jquery.minicolors.css"/>
 
         <ui:insert name="head" />
     </h:head>
 
-    <h:body styleClass="hold-transition skin-blue layout-top-nav">
+    <h:body styleClass="hold-transition layout-top-nav wysihtml5-supported skin-black">
 
         <!--        <h:form>
                     <p:remoteCommand autoRun="true"
@@ -59,196 +59,21 @@
                 </h:form>-->
 
         <div class="wrapper">
-
             <header class="main-header">
                 <nav class="navbar navbar-static-top">
                     <div class="navbar-header">
-                        <a href="/secured/dashboard.xhtml" class="navbar-brand"><b>Admin</b>LTE</a>
+                        <a href="/secured/dashboard.xhtml" class="navbar-brand wb-font">
+                            <span class="wb-logo-prefix" style="font-size: 32px">
+                                web<span class="wb-logo-sufix">Budget</span>
+                            </span>
+                        </a>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                             <i class="fa fa-bars"></i>
                         </button>
                     </div>
 
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
-                        <ul class="nav navbar-nav">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['entries']} <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_ACCESS)}">
-                                        <p:link href="/main/entries/card/listCards.xhtml">
-                                            <i class="fa fa-credit-card"></i> 
-                                            <span>#{menu['entries.cards']}</span>
-                                        </p:link>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.VEHICLE_ACCESS)}">
-                                        <p:link href="/main/entries/vehicle/listVehicles.xhtml">
-                                            <i class="fa fa-car"></i> 
-                                            <span>#{menu['logbook.vehicles']}</span>
-                                        </p:link>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.WALLET_ACCESS)}">
-                                        <p:link href="/main/entries/wallet/listWallets.xhtml">
-                                            <i class="fa fa-bank"></i> 
-                                            <span>#{menu['entries.wallets']}</span>
-                                        </p:link>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CONTACT_ACCESS)}">
-                                        <p:link href="/main/entries/contact/listContacts.xhtml">
-                                            <i class="fa fa-fax"></i> 
-                                            <span>#{menu['entries.contacts']}</span>
-                                        </p:link>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_ACCESS)}">
-                                        <p:link href="/main/entries/costCenter/listCostCenters.xhtml">
-                                            <i class="fa fa-sitemap"></i> 
-                                            <span>#{menu['entries.cost-centers']}</span>
-                                        </p:link>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_ACCESS)}">
-                                        <p:link href="/main/entries/movementClass/listMovementClasses.xhtml">
-                                            <i class="fa fa-list"></i> 
-                                            <span>#{menu['entries.movement-classes']}</span>
-                                        </p:link>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['logbook']} <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.ENTRIES_ACCESS)}">
-                                        <p:link href="/main/logbook/entries/vehicleSelection.xhtml">
-                                            <i class="fa fa-pencil"></i> 
-                                            <span>#{menu['logbook.entries']}</span>
-                                        </p:link>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.REFUELING_ACCESS)}">
-                                        <p:link href="/main/logbook/refueling/listRefuelings.xhtml">
-                                            <i class="fa fa-refresh"></i> 
-                                            <span>#{menu['logbook.refueling']}</span>
-                                        </p:link>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['financial']} <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li class="treeview #{activeMenu eq 'movements' ? 'active' : ''}">
-                                        <a href="#">
-                                            <i class="fa fa-money"></i> 
-                                            <span>#{menu['financial.movements']}</span> 
-                                            <i class="fa fa-angle-left pull-right"></i>
-                                        </a>
-                                        <ul class="treeview-menu">
-                                            <li class="#{activeSubmenu eq 'fixed' ? 'active' : ''}"
-                                                jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">
-                                                <p:link href="/main/financial/movement/fixed/listFixedMovements.xhtml">
-                                                    <i class="fa fa-circle-o"></i> 
-                                                    #{menu['financial.movements.fixed']}
-                                                </p:link>
-                                            </li>
-                                            <li class="#{activeSubmenu eq 'period' ? 'active' : ''}"
-                                                jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_ACCESS)}">
-                                                <p:link href="/main/financial/movement/period/listMovements.xhtml">
-                                                    <i class="fa fa-circle-o"></i> 
-                                                    #{menu['financial.movements.period']}
-                                                </p:link>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="#{activeMenu eq 'cardInvoice' ? 'active' : ''} treeview">
-                                        <a href="#">
-                                            <i class="fa fa-file-text-o"></i> 
-                                            <span>#{menu['financial.card-invoice']}</span> 
-                                            <i class="fa fa-angle-left pull-right"></i>
-                                        </a>
-                                        <ul class="treeview-menu">
-                                            <li class="#{activeSubmenu eq 'current' ? 'active' : ''}"
-                                                jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_ACCESS)}">
-                                                <p:link href="/main/financial/cardInvoice/current/cardInvoiceView.xhtml">
-                                                    <i class="fa fa-circle-o"></i> 
-                                                    #{menu['financial.card-invoice.current']}
-                                                </p:link>
-                                            </li>
-                                            <li class="#{activeSubmenu eq 'historic' ? 'active' : ''}"
-                                                jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_HISTORIC)}">
-                                                <p:link href="/main/financial/cardInvoice/historic/cardInvoiceHistoric.xhtml">
-                                                    <i class="fa fa-circle-o"></i> 
-                                                    #{menu['financial.card-invoice.historic']}
-                                                </p:link>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.BALANCE_TRANSFERENCE_ACCESS)}">
-                                        <p:link href="/main/financial/transference/walletTransference.xhtml">
-                                            <i class="fa fa-exchange"></i> 
-                                            <span>#{menu['financial.transferences']}</span>
-                                        </p:link>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['miscellany']} <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li class="treeview #{activeMenu eq 'messaging' ? 'active' : ''}">
-                                        <p:link href="#">
-                                            <i class="fa fa-envelope-o"></i> 
-                                            <span>#{menu['tools.messaging']}</span>
-                                            <i class="fa fa-angle-left pull-right"></i>
-                                        </p:link>
-                                        <ul class="treeview-menu">
-                                            <li class="#{activeSubmenu eq 'messagesSent' ? 'active' : ''}"
-                                                jsf:rendered="#{userSessionBean.isPermitted(permissions.MESSAGE_SEND)}">
-                                                <p:link href="/main/tools/messaging/sent/listSentMessages.xhtml">
-                                                    <i class="fa fa-circle-o"></i> 
-                                                    <span>#{menu['tools.messaging.sent']}</span>
-                                                </p:link>
-                                            </li>
-                                            <li class="#{activeSubmenu eq 'messagesReceived' ? 'active' : ''}">
-                                                <p:link href="/main/tools/messaging/received/listReceivedMessages.xhtml">
-                                                    <i class="fa fa-circle-o"></i> 
-                                                    <span>#{menu['tools.messaging.received']}</span>
-                                                </p:link>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CLOSING_ACCESS)}">
-                                        <p:link href="/main/miscellany/closing/closeFinancialPeriod.xhtml">
-                                            <i class="fa fa-calculator"></i> 
-                                            <span>#{menu['miscellany.closing']}</span>
-                                        </p:link>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_ACCESS)}">
-                                        <p:link href="/main/miscellany/financialPeriod/listFinancialPeriods.xhtml">
-                                            <i class="fa fa-calendar-o"></i> 
-                                            <span>#{menu['miscellany.financial-periods']}</span>
-                                        </p:link>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['tools']} <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.GROUP_ACCESS)}">
-                                        <p:link href="/main/tools/group/listGroups.xhtml">
-                                            <i class="fa fa-users"></i> 
-                                            <span>#{menu['tools.groups']}</span>
-                                        </p:link>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.USER_ACCESS)}">
-                                        <p:link href="/main/tools/user/listUsers.xhtml">
-                                            <i class="fa fa-user"></i> 
-                                            <span>#{menu['tools.users']}</span>
-                                        </p:link>
-                                    </li>
-                                    <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CONFIGURATION_ACCESS)}">
-                                        <p:link href="/main/tools/configuration/configurations.xhtml">
-                                            <i class="fa fa-gears"></i> 
-                                            <span>#{menu['tools.configurations']}</span>
-                                        </p:link>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <ui:include src="/template/mainMenu.xhtml"/>
                     </div>
 
                     <div class="navbar-custom-menu">
@@ -397,10 +222,10 @@
             };
         </script>
 
-        <h:outputScript library="primefaces" name="primefaces-locale.js" />
         <h:outputScript library="bootstrap" name="js/bootstrap.min.js"/>
         <h:outputScript library="adminlte" name="js/adminlte.min.js"/>
-        <!--<h:outputScript library="webbudget" name="js/chart.min.js"/>-->
+        <h:outputScript library="primefaces" name="primefaces-locale.js" />
         <h:outputScript library="minicolors" name="js/jquery.minicolors.js"/>
+        <h:outputScript library="webbudget" name="js/chart.min.js"/>
     </h:body>
 </html>

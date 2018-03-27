@@ -16,7 +16,13 @@
  */
 package br.com.webbudget.domain.services;
 
+import br.com.webbudget.domain.entities.entries.Card;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.repositories.entries.CardRepository;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  * Service responsavel por todas as operacoes que envolvem cartoes no sistema
@@ -30,8 +36,8 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class CardService {
 
-//    @Inject
-//    private ICardRepository cardRepository;
+    @Inject
+    private CardRepository cardRepository;
 //    @Inject
 //    private IMovementRepository movementRepository;
 //    @Inject
@@ -40,59 +46,55 @@ public class CardService {
 //    private IApportionmentRepository apportionmentRepository;
 //    @Inject
 //    private IConfigurationRepository configurationRepository;
-//
-//    /**
-//     *
-//     * @param card
-//     */
-//    @Transactional
-//    public void saveCard(Card card) {
-//
-//        final Card found = this.findCardByNumberAndType(card.getNumber(),
-//                card.getCardType());
-//
-//        if (found != null) {
-//            throw new InternalServiceError("error.card.duplicated");
-//        }
-//
-//        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-//            throw new InternalServiceError("error.card.no-debit-wallet");
-//        }
-//
-//        this.cardRepository.save(card);
-//    }
-//
-//    /**
-//     *
-//     * @param card
-//     * @return
-//     */
-//    @Transactional
-//    public Card updateCard(Card card) {
-//
-//        final Card found = this.findCardByNumberAndType(card.getNumber(),
-//                card.getCardType());
-//
-//        if (found != null && !found.equals(card)) {
-//            throw new InternalServiceError("error.card.duplicated");
-//        }
-//
-//        if (card.getCardType() == CardType.DEBIT && card.getWallet() == null) {
-//            throw new InternalServiceError("error.card.no-debit-wallet");
-//        }
-//
-//        return this.cardRepository.save(card);
-//    }
-//
-//    /**
-//     *
-//     * @param card
-//     */
-//    @Transactional
-//    public void deleteCard(Card card) {
-//        this.cardRepository.delete(card);
-//    }
-//
+
+    /**
+     *
+     * @param card
+     */
+    @Transactional
+    public void save(Card card) {
+
+        card.validate();
+        
+        final Optional<Card> found = this.cardRepository.findOptionalByNumberAndType(
+                card.getNumber(), card.getCardType());
+        
+        if (found.isPresent()) {
+            throw new BusinessLogicException("error.card.duplicated");
+        }
+
+        this.cardRepository.save(card);
+    }
+
+    /**
+     *
+     * @param card
+     * @return
+     */
+    @Transactional
+    public Card update(Card card) {
+
+        card.validate();
+        
+        final Optional<Card> found = this.cardRepository.findOptionalByNumberAndType(
+                card.getNumber(), card.getCardType());
+        
+        if (found.isPresent() && !found.get().equals(card)) {
+            throw new BusinessLogicException("error.card.duplicated");
+        }
+
+        return this.cardRepository.save(card);
+    }
+
+    /**
+     *
+     * @param card
+     */
+    @Transactional
+    public void delete(Card card) {
+        this.cardRepository.removeAndFlush(card);
+    }
+
 //    /**
 //     * Metodo que cria a movimentacao para a fatura referente ao cartao
 //     *
@@ -120,7 +122,7 @@ public class CardService {
 //
 //        // checa se temos uma configuracao valida
 //        if (!config.isValidForCardInvoice()) {
-//            throw new InternalServiceError("error.card-invoice.no-default-config");
+//            throw new BusinessLogicException("error.card-invoice.no-default-config");
 //        }
 //        
 //        // cria o movimento para aparecer no financeiro

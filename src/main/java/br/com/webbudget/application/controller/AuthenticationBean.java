@@ -36,12 +36,12 @@ import org.apache.shiro.authc.AuthenticationException;
 @Named
 @ViewScoped
 public class AuthenticationBean extends AbstractBean {
-
-    @Inject
-    private Authenticator authenticator;
     
     @Getter
     private Credential credential;
+    
+    @Inject
+    private Authenticator authenticator;
     
     /**
      * 
@@ -65,7 +65,6 @@ public class AuthenticationBean extends AbstractBean {
             this.authenticator.login(this.credential);
             return "/secured/dashboard.xhtml?faces-redirect=true";
         } catch (AuthenticationException ex) {
-            this.logger.error("Login error", ex);
             this.addError(true, "error.authentication-failed");
             return null;
         }

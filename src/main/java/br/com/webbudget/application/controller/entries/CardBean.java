@@ -21,8 +21,11 @@ import br.com.webbudget.application.components.table.LazyFilter;
 import br.com.webbudget.application.components.table.LazyModel;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.controller.NavigationManager;
-import br.com.webbudget.application.controller.NavigationManager.Parameter;
+import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
+import static br.com.webbudget.application.controller.NavigationManager.Parameter.of;
+import br.com.webbudget.application.controller.ViewState;
 import br.com.webbudget.domain.entities.entries.Card;
+import br.com.webbudget.domain.entities.entries.CardType;
 import br.com.webbudget.domain.entities.entries.Wallet;
 import br.com.webbudget.domain.repositories.entries.CardRepository;
 import br.com.webbudget.domain.repositories.entries.WalletRepository;
@@ -49,69 +52,71 @@ public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
 
     @Getter
     private LazyFilter filter;
-    
+
     @Getter
     private Card card;
-    
+
     @Getter
     private List<Wallet> wallets;
-    
+
     @Inject
     private CardService cardService;
     @Inject
     private WalletService walletService;
-    
+
     @Inject
     private CardRepository cardRepository;
     @Inject
     private WalletRepository walletRepository;
-    
+
     @Getter
     private final LazyModel<Card> cardsModel;
-    
-    private final NavigationManager formManager;
-    private final NavigationManager listManager;
-    private final NavigationManager detailManager;
+
+    private final NavigationManager navigation;
 
     /**
-     * 
+     *
      */
     public CardBean() {
-        
+
         this.filter = LazyFilter.initialize();
-        
+
         this.cardsModel = new LazyModel<>(this);
+
+        this.navigation = NavigationManager.getInstance();
         
-        this.formManager = new NavigationManager("formCard.xhtml");
-        this.listManager = new NavigationManager("listCards.xhtml");
-        this.detailManager = new NavigationManager("detailCard.xhtml");
+        this.navigation.addPage(LIST_PAGE, "listCards.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formCard.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formCard.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailCard.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailCard.xhtml");
     }
 
     /**
-     * 
+     *
      * @param first
      * @param pageSize
      * @param sortField
      * @param sortOrder
-     * @return 
+     * @return
      */
     @Override
     public List<Card> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.cardRepository.findAllBy(this.filter.getValue(), 
+        return this.cardRepository.findAllBy(this.filter.getValue(),
                 this.filter.getEntityStatusValue(), first, pageSize);
     }
-    
+
     /**
-     * 
+     *
      */
     public void initialize() {
         this.viewState = ViewState.LISTING;
     }
 
     /**
-     * 
+     *
      * @param id
-     * @param viewState 
+     * @param viewState
      */
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
@@ -119,134 +124,92 @@ public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
         this.card = this.cardRepository.findOptionalById(id)
                 .orElseGet(Card::new);
     }
-    
+
     /**
-     * @return 
+     * @return
      */
     public String changeToListing() {
-        return this.listManager.toRoot();
+        return this.navigation.to(LIST_PAGE);
     }
-    
+
     /**
-     * @return 
+     * @return
      */
     public String changeToAdd() {
-        return this.formManager.toRootWithParameter(
-                Parameter.of("viewState", ViewState.ADDING));
+        return this.navigation.to(ADD_PAGE);
     }
 
     /**
-     * @param id 
-     * @return 
+     * @param id
+     * @return
      */
     public String changeToEdit(long id) {
-        return this.formManager.toRootWithParameters(
-                Parameter.of("cardId", id),
-                Parameter.of("viewState", ViewState.EDITING));
-    }
-    
-    /**
-     * @param id 
-     * @return 
-     */
-    public String changeToDetails(long id) {
-        return this.formManager.toRootWithParameters(
-                Parameter.of("cardId", id),
-                Parameter.of("viewState", ViewState.DETAILING));
+        return this.navigation.to(UPDATE_PAGE, of("cardId", id));
     }
 
     /**
-     * 
      * @param id
-     * @return 
+     * @return
+     */
+    public String changeToDetails(long id) {
+        return this.navigation.to(DETAIL_PAGE, of("cardId", id));
+    }
+
+    /**
+     *
+     * @param id
+     * @return
      */
     public String changeToDelete(long id) {
-        return this.detailManager.toRootWithParameters(
-                Parameter.of("cardId", id),
-                Parameter.of("viewState", ViewState.DELETING));
+        return this.navigation.to(DELETE_PAGE, of("cardId", id));
     }
-    
+
     /**
-     * 
+     *
      */
     public void clearFilters() {
-        this.filter = null;
+        this.filter.clear();
         this.updateComponent("controlsForm");
     }
-    
-    
+
     /**
-     * 
+     *
      * @param id
-     * @return 
+     * @return
      */
     public String changeToStatistics(long id) {
         return "";
     }
 
-//
-//    /**
-//     * 
-//     */
-//    public void doSave() {
-//
-//        try {
-//            this.cardService.saveCard(this.card);
-//            this.card = new Card();
-//
-//            this.addInfo(true, "card.saved");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doUpdate() {
-//
-//        try {
-//            this.card = this.cardService.updateCard(this.card);
-//            this.addInfo(true, "card.updated");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doDelete() {
-//
-//        try {
-//            this.cardService.deleteCard(this.card);
-//            this.addInfo(true, "card.deleted");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            if (this.containsException(ConstraintViolationException.class, ex)) {
-//                this.addError(true, "error.card.integrity-violation",
-//                        this.card.getName());
-//            } else {
-//                this.logger.error(ex.getMessage(), ex);
-//                this.addError(true, "error.undefined-error", ex.getMessage());
-//            }
-//        } finally {
-//            this.updateComponent("cardsList");
-//            this.closeDialog("dialogDeleteCard");
-//        }
-//    }
-//
-//    /**
-//     * @return a lista de tipos validos para cartoes
-//     */
-//    public CardType[] getAvailableCardTypes() {
-//        return CardType.values();
-//    }
+    /**
+     *
+     */
+    public void doSave() {
+        this.cardService.save(this.card);
+        this.card = new Card();
+        this.addInfo(true, "card.saved");
+    }
+
+    /**
+     *
+     */
+    public void doUpdate() {
+        this.card = this.cardService.update(this.card);
+        this.addInfo(true, "card.updated");
+    }
+
+    /**
+     *
+     */
+    public void doDelete() {
+        this.cardService.delete(this.card);
+        this.addInfo(true, "card.deleted");
+    }
+
+    /**
+     * @return a lista de tipos validos para cartoes
+     */
+    public CardType[] getCardTypes() {
+        return CardType.values();
+    }
 }

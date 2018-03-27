@@ -46,6 +46,11 @@ public interface IPersistentEntity<T extends Serializable> {
     boolean isSaved();
     
     /**
+     * Metodo para validar as entidades do sistema 
+     */
+    public void validate();
+    
+    /**
      * Metodo de conveniencia para utilizacao em streams com method reference
      * 
      * @return se a entidade ja foi ou nao salva

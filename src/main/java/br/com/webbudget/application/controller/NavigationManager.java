@@ -16,9 +16,13 @@
  */
 package br.com.webbudget.application.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 
 /**
+ * Gerenciador de navegacao para facilitar os redirects e a navegacao entre 
+ * as paginas da aplicacao
  *
  * @author Arthur Gregorio
  *
@@ -27,47 +31,81 @@ import lombok.Getter;
  */
 public final class NavigationManager {
 
-    private final String rootView;
+    private final Map<PageType, String> pages;
 
     /**
-     * 
-     * @param rootView 
+     * Construtor...
      */
-    public NavigationManager(String rootView) {
-        this.rootView = rootView;
+    private NavigationManager() {
+        this.pages = new HashMap<>();
     }
     
     /**
+     * Cria um novo navegador de paginas
      * 
-     * @return 
+     * @return uma nova instancia do navegador
      */
-    public String toRoot() {
-        return this.rootView + "?faces-redirect=true";
+    public static NavigationManager getInstance() {
+        return new NavigationManager();
+    }
+
+    /**
+     * Adiciona as paginas no mapa de paginas
+     * 
+     * @param pageType o tipo da pagina adicionada
+     * @param page a pagina a ser ligada ao tipo
+     * @return se uma pagina ja associada a um tipo for adicionada, retorna a 
+     * pagina associada
+     */
+    public String addPage(PageType pageType, String page) {
+        return this.pages.putIfAbsent(pageType, page);
     }
     
     /**
+     * Navega para uma determinada pagina
      * 
-     * @param parameter
-     * @return 
+     * @param page a pagina a ser redirecionada 
+     * @param parameters os parametros para serem usados
+     * @return o outcome da pagina
      */
-    public String toRootWithParameter(Parameter parameter) {
-        return this.toRoot() + parameter.toString();
-    }
-    
-    /**
-     * 
-     * @param parameters
-     * @return 
-     */
-    public String toRootWithParameters(Parameter... parameters) {
-       
-        final StringBuilder builder = new StringBuilder(this.toRoot());
+    public String to(PageType page, Parameter... parameters) {
         
-        for (Parameter p : parameters) {
-            builder.append(p.toString());
+        final String root = this.pages.get(page);
+        
+        final StringBuilder builder = new StringBuilder(root);
+        
+        builder.append("?faces-redirect=true");
+        
+        for (Parameter parameter : parameters) {
+            builder.append(parameter);
         }
         
+        builder.append(Parameter.of("viewState", page.getViewState()));
+        
         return builder.toString();
+    }
+    
+    /**
+     * 
+     */
+    public enum PageType {
+        
+        LIST_PAGE(ViewState.LISTING),
+        DETAIL_PAGE(ViewState.DETAILING),
+        ADD_PAGE(ViewState.ADDING),
+        UPDATE_PAGE(ViewState.EDITING),
+        DELETE_PAGE(ViewState.DELETING);
+        
+        @Getter
+        private final ViewState viewState;
+
+        /**
+         * 
+         * @param viewState 
+         */
+        private PageType(ViewState viewState) {
+            this.viewState = viewState;
+        }
     }
     
     /**

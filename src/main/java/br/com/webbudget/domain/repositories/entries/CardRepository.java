@@ -17,8 +17,10 @@
 package br.com.webbudget.domain.repositories.entries;
 
 import br.com.webbudget.domain.entities.entries.Card;
+import br.com.webbudget.domain.entities.entries.CardType;
 import br.com.webbudget.domain.entities.entries.Card_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
+import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
@@ -33,6 +35,14 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 @Repository
 public interface CardRepository extends DefaultRepository<Card> {
 
+    /**
+     * 
+     * @param number
+     * @param type
+     * @return 
+     */
+    Optional<Card> findOptionalByNumberAndType(String number, CardType type);
+    
     /**
      * 
      * @return 

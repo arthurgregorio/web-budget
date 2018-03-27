@@ -23,19 +23,21 @@
               version="2.2">
 
     <factory>
-        <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory>
+        <exception-handler-factory>
+            br.com.webbudget.infrastructure.jsf.exception.CustomExceptionHandlerFactory
+        </exception-handler-factory>
     </factory>
     
     <render-kit>
         <renderer>
             <component-family>org.primefaces.component</component-family>
             <renderer-type>org.primefaces.component.InputNumberRenderer</renderer-type>
-            <renderer-class>br.com.webbudget.infraestructure.primefaces.CustomInputNumberRenderer</renderer-class>
+            <renderer-class>br.com.webbudget.infrastructure.jsf.primefaces.CustomInputNumberRenderer</renderer-class>
         </renderer>
         <renderer>
             <component-family>org.primefaces.component</component-family>
             <renderer-type>org.primefaces.component.CalendarRenderer</renderer-type>
-            <renderer-class>br.com.webbudget.infraestructure.primefaces.CustomCalendarRenderer</renderer-class>
+            <renderer-class>br.com.webbudget.infrastructure.jsf.primefaces.CustomCalendarRenderer</renderer-class>
         </renderer>
     </render-kit>
     

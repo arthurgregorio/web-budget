@@ -56,7 +56,9 @@ public class LazyModel<T extends IPersistentEntity> extends LazyDataModel<T> {
      */
     @Override
     public List<T> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
-        return this.provider.load(first, pageSize, multiSortMeta);
+        final List<T> data = this.provider.load(first, pageSize, multiSortMeta);
+        this.setRowCount(data.size());
+        return data;
     }
 
     /**
@@ -70,7 +72,9 @@ public class LazyModel<T extends IPersistentEntity> extends LazyDataModel<T> {
      */
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
-        return this.provider.load(first, pageSize, sortField, sortOrder);
+        final List<T> data = this.provider.load(first, pageSize, sortField, sortOrder);
+        this.setRowCount(data.size());
+        return data;
     }
 
     /**

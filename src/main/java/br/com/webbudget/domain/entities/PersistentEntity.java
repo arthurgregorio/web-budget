@@ -70,6 +70,13 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     private String modifiedBy;
 
     /**
+     * Metodo de auxilio para validacao da classe de entidade
+     */
+    public void validate() {
+        throw new IllegalStateException("Validate method not implemented yet");
+    }
+    
+    /**
      * {@inheritDoc }
      * 
      * @return

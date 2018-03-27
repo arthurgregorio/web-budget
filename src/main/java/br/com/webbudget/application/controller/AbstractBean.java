@@ -256,16 +256,4 @@ public abstract class AbstractBean implements Serializable {
         
         return percentage.intValue() > 100 ? 100 : percentage.intValue();
     }
-
-    /**
-     * Enum para controle do estado de execucao da tela
-     */
-    protected enum ViewState {
-        ADDING,
-        LISTING,
-        INSERTING,
-        EDITING,
-        DELETING,
-        DETAILING;
-    }
 }

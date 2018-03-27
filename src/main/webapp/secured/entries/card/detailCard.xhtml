@@ -34,11 +34,14 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{cardBean.viewState eq 'ADDING'}"
-                      value="#{messages['card.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{cardBean.viewState eq 'EDITING'}" 
-                        value="#{messages['card.page-description-editing']}">
+                        rendered="#{cardBean.viewState eq 'DETAILING'}" 
+                        value="#{messages['card.page-description-detailing']}">
+            <f:param value="#{cardBean.card.readableName}"/>
+        </o:outputFormat>
+        <o:outputFormat id="pageDescription" 
+                        rendered="#{cardBean.viewState eq 'DELETING'}" 
+                        value="#{messages['card.page-description-deleting']}">
             <f:param value="#{cardBean.card.readableName}"/>
         </o:outputFormat>
     </ui:define>
@@ -46,10 +49,10 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['entries']}</a></li>
         <li><a href="listCards.xhtml">#{breadcrumb['entries.card']}</a></li>
-        <li jsf:rendered="#{cardBean.viewState eq 'ADDING'}" 
-            class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{cardBean.viewState eq 'EDITING'}" 
-            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
+        <li jsf:rendered="#{cardBean.viewState eq 'DELETING'}" 
+            class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
+        <li jsf:rendered="#{cardBean.viewState eq 'DETAILING'}" 
+            class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
@@ -161,18 +164,12 @@
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <p:commandButton update="cardForm"
-                                     process="cardForm"
-                                     value="#{menu['save']}"
-                                     action="#{cardBean.doSave()}"
-                                     styleClass="btn btn-flat btn-success"
-                                     rendered="#{cardBean.viewState eq 'ADDING'}"/>
                     <p:commandButton process="cardForm"
-                                     value="#{menu['update']}"
-                                     action="#{cardBean.doUpdate()}"
+                                     value="#{menu['delete']}"
+                                     action="#{cardBean.doDelete()}"
                                      update="cardForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{cardBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{cardBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.entities.entries;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -91,6 +92,16 @@ public class Card extends PersistentEntity {
     @JoinColumn(name = "id_wallet")
     private Wallet wallet;
 
+    /**
+     * 
+     */
+    @Override
+    public void validate() throws BusinessLogicException {
+        if (this.cardType == CardType.DEBIT && this.wallet == null) {
+            throw new BusinessLogicException("error.card.no-debit-wallet");
+        }
+    }
+    
     /**
      * Um nome mais legivel para o cartao:
      *
