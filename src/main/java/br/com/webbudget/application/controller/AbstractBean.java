@@ -18,6 +18,7 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.components.chart.AbstractChartModel;
 import br.com.webbudget.infrastructure.utils.MessageSource;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -145,7 +146,7 @@ public abstract class AbstractBean implements Serializable {
     protected void redirectTo(String url) {
         try {
             this.facesContext.getExternalContext().redirect(url);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             throw new RuntimeException(
                     String.format("Can't redirect to url [%s]", url));
         }
@@ -182,6 +183,16 @@ public abstract class AbstractBean implements Serializable {
     public void addInfo(boolean updateDefault, String message, Object... parameters) {
         Messages.addInfo(null, this.translate(message), parameters);
         if (updateDefault) this.updateDefaultMessages();
+    }
+    
+    /**
+     * 
+     * @param message
+     * @param parameters 
+     */
+    public void addInfoToFlash(String message, Object... parameters) {
+        Messages.addInfo(null, this.translate(message), parameters);
+        this.facesContext.getExternalContext().getFlash().setKeepMessages(true);
     }
     
     /**

@@ -56,7 +56,7 @@ public class CardService {
 
         card.validate();
         
-        final Optional<Card> found = this.cardRepository.findOptionalByNumberAndType(
+        final Optional<Card> found = this.cardRepository.findOptionalByNumberAndCardType(
                 card.getNumber(), card.getCardType());
         
         if (found.isPresent()) {
@@ -76,7 +76,7 @@ public class CardService {
 
         card.validate();
         
-        final Optional<Card> found = this.cardRepository.findOptionalByNumberAndType(
+        final Optional<Card> found = this.cardRepository.findOptionalByNumberAndCardType(
                 card.getNumber(), card.getCardType());
         
         if (found.isPresent() && !found.get().equals(card)) {
@@ -92,7 +92,7 @@ public class CardService {
      */
     @Transactional
     public void delete(Card card) {
-        this.cardRepository.removeAndFlush(card);
+        this.cardRepository.attachAndRemove(card);
     }
 
 //    /**

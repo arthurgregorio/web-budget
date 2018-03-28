@@ -76,7 +76,7 @@
             <ul class="dropdown-menu" role="menu">
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">
                     <p:link href="/main/movement/fixed/listFixedMovements.xhtml">
-                        <i class="fa fa-circle-o"></i> 
+                        <i class="fa fa-circle"></i> 
                         #{menu['movements.fixed']}
                     </p:link>
                 </li>
@@ -89,7 +89,7 @@
                 <li class="divider"></li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_ACCESS)}">
                     <p:link href="/main/movement/cardInvoice/cardInvoiceView.xhtml">
-                        <i class="fa fa-circle-o"></i> 
+                        <i class="fa fa-credit-card"></i> 
                         #{menu['movements.card-invoice']}
                     </p:link>
                 </li>

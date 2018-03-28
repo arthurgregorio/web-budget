@@ -1,6 +1,7 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.application.controller.ViewState;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.entities.security.Group;
 import br.com.webbudget.domain.entities.security.User;

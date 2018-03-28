@@ -30,12 +30,12 @@ import br.com.webbudget.domain.entities.entries.Wallet;
 import br.com.webbudget.domain.repositories.entries.CardRepository;
 import br.com.webbudget.domain.repositories.entries.WalletRepository;
 import br.com.webbudget.domain.services.CardService;
-import br.com.webbudget.domain.services.WalletService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -51,9 +51,7 @@ import org.primefaces.model.SortOrder;
 public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
 
     @Getter
-    private LazyFilter filter;
-
-    @Getter
+    @Setter
     private Card card;
 
     @Getter
@@ -61,14 +59,14 @@ public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
 
     @Inject
     private CardService cardService;
-    @Inject
-    private WalletService walletService;
 
     @Inject
     private CardRepository cardRepository;
     @Inject
     private WalletRepository walletRepository;
 
+    @Getter
+    private final LazyFilter filter;
     @Getter
     private final LazyModel<Card> cardsModel;
 
@@ -79,10 +77,11 @@ public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
      */
     public CardBean() {
 
+        // initialize the search and lazy mechanism of datatable
         this.filter = LazyFilter.initialize();
-
         this.cardsModel = new LazyModel<>(this);
 
+        // configure navigation manager
         this.navigation = NavigationManager.getInstance();
         
         this.navigation.addPage(LIST_PAGE, "listCards.xhtml");
@@ -93,6 +92,7 @@ public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
     }
 
     /**
+     * {@inheritDoc }
      *
      * @param first
      * @param pageSize
@@ -107,10 +107,11 @@ public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
     }
 
     /**
-     *
+     * 
      */
     public void initialize() {
         this.viewState = ViewState.LISTING;
+        this.temporizeHiding(this.getDefaultMessagesComponentId());
     }
 
     /**
@@ -148,11 +149,10 @@ public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
     }
 
     /**
-     * @param id
-     * @return
+     * 
      */
-    public String changeToDetails(long id) {
-        return this.navigation.to(DETAIL_PAGE, of("cardId", id));
+    public void changeToDetail() {
+        this.navigation.redirect(DETAIL_PAGE, of("cardId", this.card.getId()));
     }
 
     /**
@@ -199,11 +199,13 @@ public class CardBean extends AbstractBean implements LazyDataProvider<Card> {
     }
 
     /**
-     *
+     * 
+     * @return 
      */
-    public void doDelete() {
+    public String doDelete() {
         this.cardService.delete(this.card);
-        this.addInfo(true, "card.deleted");
+        this.addInfoToFlash("card.deleted");
+        return this.changeToListing();
     }
 
     /**

@@ -16,8 +16,10 @@
  */
 package br.com.webbudget.application.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.faces.context.FacesContext;
 import lombok.Getter;
 
 /**
@@ -62,7 +64,8 @@ public final class NavigationManager {
     }
     
     /**
-     * Navega para uma determinada pagina
+     * Navega para uma determinada pagina via navegacao implicita do JSF atraves
+     * da action de um componente de acao
      * 
      * @param page a pagina a ser redirecionada 
      * @param parameters os parametros para serem usados
@@ -83,6 +86,25 @@ public final class NavigationManager {
         builder.append(Parameter.of("viewState", page.getViewState()));
         
         return builder.toString();
+    }
+    
+    /**
+     * Navega para uma determinada pagina via navegacao explicita do JSF atraves
+     * de um redirect pelo contexto
+     * 
+     * @param page a pagina a ser redirecionada 
+     * @param parameters os parametros para serem usados
+     */
+    public void redirect(PageType page, Parameter... parameters) {
+       
+        final String url = this.to(page, parameters);
+        
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+        } catch (IOException ex) {
+            throw new RuntimeException(String.format(
+                    "Can't rendirect to url %s", url));
+        }
     }
     
     /**

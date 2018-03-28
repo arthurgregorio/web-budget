@@ -41,7 +41,7 @@ public interface CardRepository extends DefaultRepository<Card> {
      * @param type
      * @return 
      */
-    Optional<Card> findOptionalByNumberAndType(String number, CardType type);
+    Optional<Card> findOptionalByNumberAndCardType(String number, CardType type);
     
     /**
      * 

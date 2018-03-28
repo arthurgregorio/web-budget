@@ -34,13 +34,11 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat id="pageDescription" 
-                        rendered="#{cardBean.viewState eq 'DETAILING'}" 
+        <o:outputFormat rendered="#{cardBean.viewState eq 'DETAILING'}" 
                         value="#{messages['card.page-description-detailing']}">
             <f:param value="#{cardBean.card.readableName}"/>
         </o:outputFormat>
-        <o:outputFormat id="pageDescription" 
-                        rendered="#{cardBean.viewState eq 'DELETING'}" 
+        <o:outputFormat rendered="#{cardBean.viewState eq 'DELETING'}" 
                         value="#{messages['card.page-description-deleting']}">
             <f:param value="#{cardBean.card.readableName}"/>
         </o:outputFormat>
@@ -164,11 +162,13 @@
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <p:commandButton process="cardForm"
-                                     value="#{menu['delete']}"
+                    <h:outputText styleClass="text-red text-bold"
+                                  value="#{menu['delete.confirmation']}"
+                                  rendered="#{cardBean.viewState eq 'DELETING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['yes']}"
                                      action="#{cardBean.doDelete()}"
-                                     update="cardForm pageDescription"
-                                     styleClass="btn btn-flat btn-success"
+                                     styleClass="btn btn-flat btn-danger"
                                      rendered="#{cardBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"

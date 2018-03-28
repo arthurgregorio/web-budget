@@ -88,65 +88,72 @@
                 </h:form>
             </div>
             <div jsf:id="boxBody" class="box-body">
-                <p:dataTable id="cardsList" 
-                             rows="15"
-                             var="card"
-                             lazy="true"
-                             rowHover="true"
-                             paginator="true"
-                             sortOrder="ascending"
-                             paginatorPosition="bottom"
-                             value="#{cardBean.cardsModel}"
-                             paginatorAlwaysVisible="false"
-                             emptyMessage="#{messages['list.empty']}">
+                <h:form id="cardsList">
+                    <p:dataTable rows="15"
+                                 var="card"
+                                 lazy="true"
+                                 rowHover="true"
+                                 paginator="true"
+                                 rowKey="#{card.id}"
+                                 sortOrder="ascending"
+                                 selectionMode="single" 
+                                 paginatorPosition="bottom"
+                                 selection="#{cardBean.card}"
+                                 value="#{cardBean.cardsModel}"
+                                 paginatorAlwaysVisible="false"
+                                 emptyMessage="#{messages['list.empty']}">
 
-                    <p:column width="10%" 
-                              styleClass="align-center"
-                              headerText="#{messages['card.list.blocked']}">
-                        <p:selectBooleanCheckbox disabled="true" 
-                                                 value="#{card.blocked}" />
-                    </p:column>
-                    <p:column headerText="#{messages['card.list.name']}">
-                        #{card.readableName}
-                    </p:column>
-                    <p:column width="20%" 
-                              styleClass="align-center"
-                              headerText="#{messages['card.list.owner']}">
-                        #{card.owner}
-                    </p:column>
-                    <p:column width="10%"
-                              styleClass="align-center"
-                              headerText="#{messages['card.list.type']}">
-                        #{enums[card.cardType]}
-                    </p:column>
-                    <p:column width="15%" 
-                              styleClass="align-center"
-                              headerText="#{menu['actions']}">
-                        <p:commandButton icon="fa fa-line-chart"
-                                         title="#{menu['statistics']}"
-                                         styleClass="btn btn-flat btn-default"
-                                         action="#{cardBean.changeToStatistics(card.id)}" 
-                                         rendered="#{userSessionBean.isPermitted(permissions.CARD_STATISTICS)}"/>
-                        <p:spacer width="10"/>
-                        <p:commandButton icon="fa fa-edit"
-                                         title="#{menu['edit']}"
-                                         styleClass="btn btn-flat btn-warning"
-                                         action="#{cardBean.changeToEdit(card.id)}" 
-                                         rendered="#{userSessionBean.isPermitted(permissions.CARD_UPDATE)}"/>
-                        <p:spacer width="10"/>
-                        <p:commandButton icon="fa fa-remove"
-                                         title="#{menu['delete']}"
-                                         styleClass="btn btn-flat btn-danger"
-                                         actionListener="#{cardBean.changeToDelete(card.id)}" 
-                                         rendered="#{userSessionBean.isPermitted(permissions.CARD_DELETE)}"/>
-                    </p:column>
-                </p:dataTable>
+                        <p:ajax event="rowSelect"
+                                listener="#{cardBean.changeToDetail()}" /> 
+
+                        <p:column width="10%" 
+                                  styleClass="align-center"
+                                  headerText="#{messages['card.list.blocked']}">
+                            <p:selectBooleanCheckbox disabled="true" 
+                                                     value="#{card.blocked}" />
+                        </p:column>
+                        <p:column headerText="#{messages['card.list.name']}">
+                            #{card.readableName}
+                        </p:column>
+                        <p:column width="20%" 
+                                  styleClass="align-center"
+                                  headerText="#{messages['card.list.owner']}">
+                            #{card.owner}
+                        </p:column>
+                        <p:column width="10%"
+                                  styleClass="align-center"
+                                  headerText="#{messages['card.list.type']}">
+                            #{enums[card.cardType]}
+                        </p:column>
+                        <p:column width="15%" 
+                                  styleClass="align-center"
+                                  headerText="#{menu['actions']}">
+                            <p:commandButton icon="fa fa-line-chart"
+                                             title="#{menu['statistics']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{cardBean.changeToStatistics(card.id)}" 
+                                             rendered="#{userSessionBean.isPermitted(permissions.CARD_STATISTICS)}"/>
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="fa fa-edit"
+                                             title="#{menu['edit']}"
+                                             styleClass="btn btn-flat btn-warning"
+                                             action="#{cardBean.changeToEdit(card.id)}" 
+                                             rendered="#{userSessionBean.isPermitted(permissions.CARD_UPDATE)}"/>
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="fa fa-remove"
+                                             title="#{menu['delete']}"
+                                             styleClass="btn btn-flat btn-danger"
+                                             action="#{cardBean.changeToDelete(card.id)}" 
+                                             rendered="#{userSessionBean.isPermitted(permissions.CARD_DELETE)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
             </div>
         </div>
         <wb:blocker />
     </ui:define>
 
     <ui:define name="popups">
-        <ui:include src="dialogDeleteCard.xhtml"/>
+
     </ui:define>
 </ui:composition>
