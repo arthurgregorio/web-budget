@@ -82,11 +82,11 @@
     <!-- paginas de erro -->
     <error-page>  
         <error-code>401</error-code>
-        <location>/home.xhtml</location>
+        <location>/error/401.xhtml</location>
     </error-page>
     <error-page>  
         <error-code>403</error-code>
-        <location>/error/403.xhtml</location>
+        <location>/error/401.xhtml</location>
     </error-page>
     <error-page>      
         <error-code>404</error-code>
