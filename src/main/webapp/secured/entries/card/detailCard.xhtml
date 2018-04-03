@@ -172,9 +172,9 @@
                                      rendered="#{cardBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
-                                     styleClass="btn btn-flat btn-default" 
-                                     action="#{cardBean.changeToListing()}"/>
+                                     styleClass="btn btn-flat btn-primary" 
+                                     action="#{cardBean.changeToListing()}"
+                                     value="#{cardBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>

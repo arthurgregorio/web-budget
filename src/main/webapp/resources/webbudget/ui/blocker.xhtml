@@ -22,6 +22,9 @@
       xmlns:p="http://primefaces.org/ui">
 
     <c:interface>
+        <c:attribute name="widgetVar"
+                     required="true"
+                     type="java.lang.String"/>
         <c:attribute name="trigger"
                      required="false"
                      type="java.lang.String"/>
@@ -29,8 +32,8 @@
 
     <c:implementation>
         <p:blockUI block="boxBody"
-                   widgetVar="listBlock"
-                   trigger="#{cc.attrs.trigger}">
+                   trigger="#{cc.attrs.trigger}"
+                   widgetVar="#{cc.attrs.widgetVar}">
             <p:graphicImage width="32" 
                             height="32"
                             library="webbudget" 
