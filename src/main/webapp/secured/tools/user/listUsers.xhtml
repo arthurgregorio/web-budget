@@ -67,20 +67,20 @@
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{userBean.filter.value}"
-                                             placeholder="#{messages['filter.card']}" />
+                                             placeholder="#{messages['filter.user']}" />
                                 <div class="input-group-btn">
                                     <p:commandButton id="btSearch"
                                                      update="itemsList"
                                                      value="#{menu['search']}"
-                                                     onstart="PF('itemsBlock').show()"
-                                                     oncomplete="PF('itemsBlock').hide()"
+                                                     onstart="PF('blocker').show()"
+                                                     oncomplete="PF('blocker').hide()"
                                                      styleClass="btn btn-flat btn-primary"/>
                                     <p:spacer width="10"/>
                                     <p:commandButton icon="fa fa-trash-o"
+                                                     onstart="PF('blocker').show()"
                                                      update="itemsList controlsForm"
-                                                     onstart="PF('itemsBlock').show()"
+                                                     oncomplete="PF('blocker').hide()"
                                                      title="#{messages['filter.clear']}"
-                                                     oncomplete="PF('itemsBlock').hide()"
                                                      styleClass="btn btn-flat btn-danger"
                                                      actionListener="#{userBean.clearFilters()}"/>
                                 </div>
@@ -151,13 +151,13 @@
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
-                                             actionListener="#{userBean.changeToDelete(user.id)}"
+                                             action="#{userBean.changeToDelete(user.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.USER_DELETE)}"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>
             </div>
         </div>
-        <wb:blocker widgetVar="itemsBlock"/>
+        <wb:blocker target="boxBody"/>
     </ui:define>
 </ui:composition>

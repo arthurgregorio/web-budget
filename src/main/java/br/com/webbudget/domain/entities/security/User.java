@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.metamodel.SingularAttribute;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -50,8 +49,7 @@ public class User extends PersistentEntity implements UserDetails {
     private String username;
     @Getter
     @Setter
-    @NotNull(message = "{user.password}")
-    @Column(name = "password", length = 60, nullable = false)
+    @Column(name = "password", length = 60)
     private String password;
     @Getter
     @Setter
@@ -76,7 +74,6 @@ public class User extends PersistentEntity implements UserDetails {
     @Getter
     @Setter
     @Transient
-    @NotNull(message = "{user.password}")
     private String passwordConfirmation;
 
     /**

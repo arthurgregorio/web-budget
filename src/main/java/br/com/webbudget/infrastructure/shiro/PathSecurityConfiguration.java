@@ -16,10 +16,12 @@
  */
 package br.com.webbudget.infrastructure.shiro;
 
+import br.com.webbudget.domain.entities.security.Permissions;
 import br.eti.arthurgregorio.shiroee.config.HttpSecurityConfiguration;
 import br.eti.arthurgregorio.shiroee.config.http.HttpSecurityBuilder;
 import br.eti.arthurgregorio.shiroee.config.http.PermissionHttpSecurityBuilder;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  *
@@ -31,6 +33,9 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PathSecurityConfiguration implements HttpSecurityConfiguration {
 
+    @Inject
+    private Permissions permissions;
+    
     /**
      * 
      * @return 
@@ -40,8 +45,8 @@ public class PathSecurityConfiguration implements HttpSecurityConfiguration {
         
         final HttpSecurityBuilder builder = new PermissionHttpSecurityBuilder();
         
-        builder.add("/secured/tools/user/**", "user:access", true)
-                .add("/secured/tools/group/**", "group:access", true);
+        builder.add("/secured/tools/user/**", this.permissions.getUSER_ACCESS(), true)
+                .add("/secured/tools/group/**", this.permissions.getGROUP_ACCESS(), true);
         
         return builder;
     }    

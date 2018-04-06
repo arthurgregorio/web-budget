@@ -69,6 +69,14 @@
                 </div>
                 <div class="box-body row">
                     <div class="form-group col-md-3">
+                        <p:outputLabel for="inName" 
+                                       value="#{messages['card.form.name']}: "/>
+                        <p:inputText id="inName" 
+                                     maxlength="45"
+                                     styleClass="form-control"
+                                     value="#{cardBean.value.name}" />
+                    </div>
+                    <div class="form-group col-md-3">
                         <p:outputLabel for="inCardType" 
                                        value="#{messages['card.form.card-type']}: "/>
                         <p:selectOneMenu id="inCardType" 
@@ -86,23 +94,15 @@
                                            itemLabel="#{enums[cardType]}"/> 
                         </p:selectOneMenu>
                     </div>
-                    <div class="form-group col-md-12">
-                        <p:outputLabel for="inName" 
-                                       value="#{messages['card.form.name']}: "/>
-                        <p:inputText id="inName" 
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inFlag" 
+                                       value="#{messages['card.form.flag']}: "/>
+                        <p:inputText id="inFlag" 
                                      maxlength="45"
                                      styleClass="form-control"
-                                     value="#{cardBean.value.name}" />
+                                     value="#{cardBean.value.flag}" />
                     </div>
-                    <div class="form-group col-md-6">
-                        <p:outputLabel for="inOwner" 
-                                       value="#{messages['card.form.owner']}: "/>
-                        <p:inputText id="inOwner" 
-                                     maxlength="45"
-                                     styleClass="form-control"
-                                     value="#{cardBean.value.owner}" />
-                    </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-3">
                         <p:outputLabel for="inNumber" 
                                        value="#{messages['card.form.number']}: "/>
                         <p:inputMask id="inNumber"
@@ -111,15 +111,15 @@
                                      value="#{cardBean.value.number}" 
                                      disabled="#{cardBean.viewState eq 'EDITING'}"/>
                     </div>
-                    <div class="form-group col-xs-3">
-                        <p:outputLabel for="inFlag" 
-                                       value="#{messages['card.form.flag']}: "/>
-                        <p:inputText id="inFlag" 
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inOwner" 
+                                       value="#{messages['card.form.owner']}: "/>
+                        <p:inputText id="inOwner" 
                                      maxlength="45"
                                      styleClass="form-control"
-                                     value="#{cardBean.value.flag}" />
+                                     value="#{cardBean.value.owner}" />
                     </div>
-                    <div class="form-group col-xs-3">
+                    <div class="form-group col-md-3">
                         <p:outputLabel for="inCreditLimit" 
                                        value="#{messages['card.form.credit-limit']}: "/>
                         <p:inputNumber id="inCreditLimit" 
@@ -132,7 +132,7 @@
                             <f:converter converterId="javax.faces.BigDecimal" />
                         </p:inputNumber>
                     </div>
-                    <div class="form-group col-xs-3">
+                    <div class="form-group col-md-3">
                         <p:outputLabel for="inExpirationDay" 
                                        value="#{messages['card.form.expiration-day']}: "/>
                         <p:inputText id="inExpirationDay" 
@@ -143,7 +143,7 @@
                             <p:keyFilter regEx="/[0-9]/i"/>
                         </p:inputText>
                     </div>
-                    <div class="form-group col-xs-3">
+                    <div class="form-group col-md-3">
                         <p:outputLabel for="inWallet" 
                                        value="#{messages['card.form.wallet']}: "/>
                         <p:selectOneMenu id="inWallet" 

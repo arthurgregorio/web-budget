@@ -16,14 +16,18 @@
  */
 package br.com.webbudget.domain.services;
 
+import br.com.webbudget.application.controller.ProfileBean.PasswordChangeDTO;
 import br.com.webbudget.domain.entities.security.Authorization;
 import br.com.webbudget.domain.entities.security.Grant;
 import br.com.webbudget.domain.entities.security.Group;
+import br.com.webbudget.domain.entities.security.StoreType;
 import br.com.webbudget.domain.entities.security.User;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GrantRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
+import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetailsProvider;
 import java.util.List;
@@ -31,6 +35,7 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import org.apache.shiro.SecurityUtils;
 
 /**
  *
@@ -42,6 +47,9 @@ import javax.transaction.Transactional;
 @ApplicationScoped
 public class UserAccountService implements UserDetailsProvider {
 
+    @Inject
+    private PasswordEncoder passwordEncoder;
+    
     @Inject
     private UserRepository userRepository;
     @Inject
@@ -58,6 +66,35 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public User save(User user) {
+        
+        // validate the email
+        final Optional<User> emailOptional = this.userRepository
+                .findOptionalByEmail(user.getEmail());
+        
+        if (emailOptional.isPresent()) {
+            throw new BusinessLogicException("error.user.email-duplicated");
+        }
+        
+        // validate the username
+        final Optional<User> usernameOptional = this.userRepository
+                .findOptionalByUsername(user.getUsername());
+        
+        if (usernameOptional.isPresent()) {
+            throw new BusinessLogicException("error.user.username-duplicated");
+        }
+
+        // if the user is local...
+        if (user.getStoreType() == StoreType.LOCAL) {
+            
+            if (!user.isPasswordValid()) {
+                throw new BusinessLogicException("error.user.password-not-match-or-invalid");
+            }
+
+            user.setPassword(this.passwordEncoder
+                    .encryptPassword(user.getPassword()));
+        }
+        
+        // save
         return this.userRepository.save(user);
     }
 
@@ -67,6 +104,36 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public void update(User user) {
+        
+        // validate the email
+        final Optional<User> emailOptional = this.userRepository
+                .findOptionalByEmail(user.getEmail());
+        
+        if (emailOptional.isPresent()) {
+            
+            final User found = emailOptional.get();
+            
+            if (!found.getUsername().equals(user.getUsername())) {
+                throw new BusinessLogicException("error.user.email-duplicated");
+            }
+        }
+        
+        // if the user is local...
+        if (user.getStoreType() == StoreType.LOCAL) {
+
+            if (user.hasChangedPasswords()) {
+
+                // check if passwords match
+                if (!user.isPasswordValid()) {
+                    throw new BusinessLogicException("error.user.password-not-match");
+                }
+
+                // crypt the user password
+                user.setPassword(this.passwordEncoder.encryptPassword(
+                        user.getPassword()));            
+            }
+        }
+        
         this.userRepository.saveAndFlushAndRefresh(user);
     }
 
@@ -76,7 +143,50 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public void delete(User user) {
+        
+        final String principal = String.valueOf(SecurityUtils
+                .getSubject().getPrincipal());
+        
+        // prevent to delete you own user 
+        if (principal.equals(user.getUsername())) {
+            throw new BusinessLogicException("error.user.delete-principal");
+        }
+        
+        // prevent to delete the main admin
+        if (user.isAdministrator()) {
+            throw new BusinessLogicException("error.user.delete-administrator");
+        }
+        
         this.userRepository.attachAndRemove(user);
+    }
+    
+    /**
+     * 
+     * @param passwordChangeDTO
+     * @param user 
+     */
+    @Transactional
+    public void changePasswordForCurrentUser(PasswordChangeDTO passwordChangeDTO, User user) {
+        
+        final boolean actualsMatch = this.passwordEncoder.passwordsMatch(
+                passwordChangeDTO.getActualPassword(), user.getPassword());
+
+        if (actualsMatch) {
+            
+            if (passwordChangeDTO.isNewPassMatching()) {
+                
+                final String newPass = this.passwordEncoder.encryptPassword(
+                        passwordChangeDTO.getNewPassword());
+                
+                user.setPassword(newPass);
+                
+                this.userRepository.saveAndFlushAndRefresh(user);
+                
+                return;
+            }            
+            throw new BusinessLogicException("error.profile.new-pass-not-match");        
+        }
+        throw new BusinessLogicException("error.profile.actual-pass-not-match");        
     }
 
     /**

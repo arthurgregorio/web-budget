@@ -34,9 +34,12 @@ import static javax.servlet.RequestDispatcher.ERROR_REQUEST_URI;
 import static javax.servlet.RequestDispatcher.ERROR_STATUS_CODE;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.RollbackException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.omnifaces.config.WebXml;
 import org.omnifaces.util.Exceptions;
 import org.omnifaces.util.Messages;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -96,8 +99,11 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 
             final Throwable rootCause = Exceptions.unwrap(throwable);
 
-            if (rootCause instanceof BusinessLogicException) {
-                handleBusinessException(context, (BusinessLogicException) rootCause);
+            if (Exceptions.is(rootCause, BusinessLogicException.class)) {
+                this.handleBusinessException(context, (BusinessLogicException) rootCause);
+                return;
+            } else if (Exceptions.is(rootCause, ConstraintViolationException.class)) {
+                this.handleConstraintViolationException(context, (RollbackException) rootCause);
                 return;
             }
 
@@ -105,7 +111,6 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
             // application model 
             goToErrorPage(context, rootCause);
         }
-
     }
 
     /**
@@ -167,5 +172,33 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
                 i18nMessage, ex.getParameters());
 
         context.renderResponse();
+        
+        this.temporizeHiding();
+    }
+    
+    /**
+     * 
+     * @param context
+     * @param ex 
+     */
+    private void handleConstraintViolationException(FacesContext context, RollbackException ex) {
+
+        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+            throw new FacesException(ex);
+        }
+
+        Messages.add(FacesMessage.SEVERITY_ERROR, null, 
+                MessageSource.get("error.core.constraint-violation"));
+
+        context.renderResponse();
+        
+        this.temporizeHiding();
+    }
+    
+    /**
+     * After display the message, hide the message box
+     */
+    private void temporizeHiding() {
+        PrimeFaces.current().executeScript("setTimeout(\"$(\'#messages\').slideUp(300)\", 8000)");
     }
 }

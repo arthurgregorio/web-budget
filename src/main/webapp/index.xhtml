@@ -22,8 +22,9 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
     <h:head>
         <meta charset="utf-8"/>
@@ -77,7 +78,9 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-8" style="padding-top: 10px;">
-                            <a href="#">#{menu['recover-password']}</a>
+                            <p:commandLink process="@this"
+                                           value="#{menu['recover-password']}"
+                                           actionListener="#{recoverPasswordBean.showRecoverPassDialog()}"/>
                         </div>
                         <div class="col-xs-4">
                             <button type="submit" 
@@ -92,6 +95,8 @@
                 </h:form>
             </div>
         </div>
+        
+        <ui:include src="dialogRecoverPassword.xhtml"/>
 
         <h:outputScript library="bootstrap" name="js/bootstrap.min.js"/>
         <h:outputScript library="adminlte" name="js/adminlte.min.js"/>        

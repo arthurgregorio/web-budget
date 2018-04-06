@@ -1,7 +1,6 @@
 package br.com.webbudget.domain.repositories.tools;
 
-import br.com.webbudget.domain.entities.entries.Card;
-import br.com.webbudget.domain.entities.entries.Card_;
+import br.com.webbudget.domain.entities.security.StoreType;
 import br.com.webbudget.domain.entities.security.User;
 import br.com.webbudget.domain.entities.security.User_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
@@ -26,6 +25,21 @@ public interface UserRepository extends DefaultRepository<User> {
      * @return 
      */
     Optional<User> findOptionalById(long id);
+    
+    /**
+     * 
+     * @param email
+     * @return 
+     */
+    Optional<User> findOptionalByEmail(String email);
+    
+    /**
+     * 
+     * @param email
+     * @param storeType
+     * @return 
+     */
+    Optional<User> findOptionalByEmailAndStoreType(String email, StoreType storeType);
     
     /**
      * 

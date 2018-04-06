@@ -186,6 +186,15 @@
             <artifactId>guava</artifactId>
             <version>24.0-jre</version>
         </dependency>
+        
+        <!--mustache-->
+        <dependency>
+            <groupId>com.github.spullara.mustache.java</groupId>
+            <artifactId>compiler</artifactId>
+            <version>0.9.5</version>
+        </dependency>
+        
+        <!--gson-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -217,6 +226,11 @@
             <properties>
                 <application.version>${project.version}-ALPHA</application.version>
                 <jsf.stage>Development</jsf.stage>
+                <ldap.enabled>false</ldap.enabled>
+                <ldap.url>ldap://localhost</ldap.url>
+                <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
+                <ldap.user>CN=binduser,OU=Aplicacoes,DC=arthurgregorio,DC=eti,DC=br</ldap.user>
+                <ldap.password>minha-senha</ldap.password>
             </properties>
         </profile>
         <profile>
@@ -224,6 +238,11 @@
             <properties>
                 <application.version>${project.version}-BETA</application.version>
                 <jsf.stage>SystemTest</jsf.stage>
+                <ldap.enabled>false</ldap.enabled>
+                <ldap.url>ldap://localhost</ldap.url>
+                <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
+                <ldap.user>CN=binduser,OU=Aplicacoes,DC=arthurgregorio,DC=eti,DC=br</ldap.user>
+                <ldap.password>minha-senha</ldap.password>
             </properties>
         </profile>
         <profile>
@@ -231,6 +250,11 @@
             <properties>
                 <application.version>${project.version}</application.version>
                 <jsf.stage>Production</jsf.stage>
+                <ldap.enabled>false</ldap.enabled>
+                <ldap.url>ldap://localhost</ldap.url>
+                <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
+                <ldap.user>CN=binduser,OU=Aplicacoes,DC=arthurgregorio,DC=eti,DC=br</ldap.user>
+                <ldap.password>minha-senha</ldap.password>
             </properties>
         </profile>
     </profiles>

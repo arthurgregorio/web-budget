@@ -16,51 +16,18 @@
  */
 package br.com.webbudget.infrastructure.mail;
 
-import javax.mail.Address;
-import javax.mail.internet.InternetAddress;
-
 /**
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 02/04/2018
+ * @since 1.0.0, 03/04/2018
  */
-public interface MailMessage {
+public interface MailContentProvider {
 
     /**
      * 
      * @return 
      */
-    public String getTitle();
-    
-    /**
-     * 
-     * @return 
-     */
-    public String getContent();
-    
-    /**
-     * 
-     * @return 
-     */
-    public Address getFrom();
-    
-    /**
-     * 
-     * @return 
-     */
-    public Address getReplyTo();
-    
-    /**
-     * 
-     * @return 
-     */
-    public InternetAddress[] getAddressees();
-    
-    /**
-     * 
-     * @return 
-     */
-    public InternetAddress[] getCcs();
+    String getContent();
 }

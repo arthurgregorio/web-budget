@@ -18,22 +18,18 @@
 -->
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:c="http://java.sun.com/jsf/composite"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsf/composite">
 
     <c:interface>
-        <c:attribute name="widgetVar"
+        <c:attribute name="target"
                      required="true"
-                     type="java.lang.String"/>
-        <c:attribute name="trigger"
-                     required="false"
                      type="java.lang.String"/>
     </c:interface>
 
     <c:implementation>
-        <p:blockUI block="boxBody"
-                   trigger="#{cc.attrs.trigger}"
-                   widgetVar="#{cc.attrs.widgetVar}">
+        <p:blockUI widgetVar="blocker"
+                   block="#{cc.attrs.target}">
             <p:graphicImage width="32" 
                             height="32"
                             library="webbudget" 

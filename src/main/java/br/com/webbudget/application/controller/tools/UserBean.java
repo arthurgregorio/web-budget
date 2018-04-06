@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package br.com.webbudget.application.controller.tools;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
@@ -14,9 +30,11 @@ import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.domain.services.UserAccountService;
+import br.com.webbudget.infrastructure.utils.Configurations;
 import br.eti.arthurgregorio.shiroee.config.ldap.LdapUser;
 import br.eti.arthurgregorio.shiroee.config.ldap.LdapUserProvider;
 import java.util.List;
+import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -41,12 +59,12 @@ public class UserBean extends FormBean<User> {
     private UserRepository userRepository;
     @Inject
     private GroupRepository groupRepository;
-
-    @Inject
-    private LdapUserProvider ldapUserProvider;
     
     @Inject
     private UserAccountService userAccountService;
+    
+    @Inject
+    private Instance<LdapUserProvider> ldapUserProviderInstance;
 
     /**
      *
@@ -133,7 +151,7 @@ public class UserBean extends FormBean<User> {
 
         final String username = this.value.getUsername();
 
-        final LdapUser userDetails = this.ldapUserProvider
+        final LdapUser userDetails = this.getLdapUserProvider()
                 .search(username)
                 .orElseThrow(() -> new BusinessLogicException(
                         "error.user.not-found-ldap", username));
@@ -141,6 +159,21 @@ public class UserBean extends FormBean<User> {
         this.value.setUsername(userDetails.getSAMAccountName());
         this.value.setEmail(userDetails.getMail());
         this.value.setName(userDetails.getName());
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    private LdapUserProvider getLdapUserProvider() {
+        
+        final boolean ldapEnabled = Boolean.valueOf(
+                Configurations.get("ldap.enabled"));
+        
+        if (ldapEnabled && !this.ldapUserProviderInstance.isUnsatisfied()) {
+            return this.ldapUserProviderInstance.get();
+        }
+        throw new BusinessLogicException("error.user.no-ldap-provider");
     }
     
     /**
