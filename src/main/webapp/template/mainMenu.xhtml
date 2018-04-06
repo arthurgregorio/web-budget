@@ -34,6 +34,7 @@
                         <span>#{menu['entries.contacts']}</span>
                     </p:link>
                 </li>
+                <li class="divider"></li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_ACCESS)}">
                     <p:link href="/main/entries/costCenter/listCostCenters.xhtml">
                         <i class="fa fa-sitemap"></i> 
@@ -46,6 +47,7 @@
                         <span>#{menu['entries.movement-classes']}</span>
                     </p:link>
                 </li>
+                <li class="divider"></li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_ACCESS)}">
                     <p:link href="/main/entries/financialPeriod/listFinancialPeriods.xhtml">
                         <i class="fa fa-calendar-o"></i> 
@@ -113,7 +115,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['tools']} <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.USER_ACCESS)}">
-                    <p:link href="/main/tools/user/listUsers.xhtml">
+                    <p:link href="/secured/tools/user/listUsers.xhtml">
                         <i class="fa fa-user"></i> 
                         <span>#{menu['tools.users']}</span>
                     </p:link>

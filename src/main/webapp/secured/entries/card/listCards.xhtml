@@ -52,7 +52,16 @@
                 <h:form id="controlsForm">
                     <p:defaultCommand target="btSearch"/>
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-2">
+                            <p:selectOneMenu value="#{cardBean.filter.entityStatus}"
+                                             converter="omnifaces.GenericEnumConverter">
+                                <f:selectItems var="entityStatus"
+                                               itemValue="#{entityStatus}"
+                                               itemLabel="#{enums[entityStatus]}"
+                                               value="#{cardBean.filter.entityStatusValues}"/> 
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-xs-4">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{cardBean.filter.value}"
@@ -65,8 +74,8 @@
                                                      oncomplete="PF('itemsBlock').hide()"
                                                      styleClass="btn btn-flat btn-primary"/>
                                     <p:spacer width="10"/>
-                                    <p:commandButton update="itemsList"
-                                                     icon="fa fa-trash-o"
+                                    <p:commandButton icon="fa fa-trash-o"
+                                                     update="itemsList controlsForm"
                                                      onstart="PF('itemsBlock').show()"
                                                      title="#{messages['filter.clear']}"
                                                      oncomplete="PF('itemsBlock').hide()"
@@ -98,8 +107,8 @@
                                  sortOrder="ascending"
                                  selectionMode="single" 
                                  paginatorPosition="bottom"
-                                 selection="#{cardBean.card}"
-                                 value="#{cardBean.cardsModel}"
+                                 selection="#{cardBean.value}"
+                                 value="#{cardBean.dataModel}"
                                  paginatorAlwaysVisible="false"
                                  emptyMessage="#{messages['list.empty']}">
 
@@ -158,9 +167,5 @@
             </div>
         </div>
         <wb:blocker widgetVar="itemsBlock"/>
-    </ui:define>
-
-    <ui:define name="popups">
-
     </ui:define>
 </ui:composition>

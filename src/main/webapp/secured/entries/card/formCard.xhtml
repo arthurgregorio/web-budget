@@ -26,7 +26,7 @@
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
-        <f:viewAction action="#{cardBean.initialize(param.cardId, param.viewState)}"/>
+        <f:viewAction action="#{cardBean.initialize(param.id, param.viewState)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -39,7 +39,7 @@
         <o:outputFormat id="pageDescription" 
                         rendered="#{cardBean.viewState eq 'EDITING'}" 
                         value="#{messages['card.page-description-editing']}">
-            <f:param value="#{cardBean.card.readableName}"/>
+            <f:param value="#{cardBean.value.readableName}"/>
         </o:outputFormat>
     </ui:define>
 
@@ -63,7 +63,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox id="inBlocked" 
-                                                 value="#{cardBean.card.blocked}"
+                                                 value="#{cardBean.value.blocked}"
                                                  itemLabel="#{messages['card.form.blocked']}"/>
                     </h3>
                 </div>
@@ -72,7 +72,7 @@
                         <p:outputLabel for="inCardType" 
                                        value="#{messages['card.form.card-type']}: "/>
                         <p:selectOneMenu id="inCardType" 
-                                         value="#{cardBean.card.cardType}"
+                                         value="#{cardBean.value.cardType}"
                                          converter="omnifaces.GenericEnumConverter"
                                          disabled="#{cardBean.viewState eq 'EDITING'}">
                             <p:ajax event="change" 
@@ -92,7 +92,7 @@
                         <p:inputText id="inName" 
                                      maxlength="45"
                                      styleClass="form-control"
-                                     value="#{cardBean.card.name}" />
+                                     value="#{cardBean.value.name}" />
                     </div>
                     <div class="form-group col-md-6">
                         <p:outputLabel for="inOwner" 
@@ -100,7 +100,7 @@
                         <p:inputText id="inOwner" 
                                      maxlength="45"
                                      styleClass="form-control"
-                                     value="#{cardBean.card.owner}" />
+                                     value="#{cardBean.value.owner}" />
                     </div>
                     <div class="form-group col-md-6">
                         <p:outputLabel for="inNumber" 
@@ -108,7 +108,7 @@
                         <p:inputMask id="inNumber"
                                      styleClass="form-control"
                                      mask="9999-9999-9999-9999" 
-                                     value="#{cardBean.card.number}" 
+                                     value="#{cardBean.value.number}" 
                                      disabled="#{cardBean.viewState eq 'EDITING'}"/>
                     </div>
                     <div class="form-group col-xs-3">
@@ -117,7 +117,7 @@
                         <p:inputText id="inFlag" 
                                      maxlength="45"
                                      styleClass="form-control"
-                                     value="#{cardBean.card.flag}" />
+                                     value="#{cardBean.value.flag}" />
                     </div>
                     <div class="form-group col-xs-3">
                         <p:outputLabel for="inCreditLimit" 
@@ -127,8 +127,8 @@
                                         decimalPlaces="2" 
                                         decimalSeparator="," 
                                         thousandSeparator="." 
-                                        value="#{cardBean.card.creditLimit}"
-                                        disabled="#{cardBean.card.cardType ne 'CREDIT'}">
+                                        value="#{cardBean.value.creditLimit}"
+                                        disabled="#{cardBean.value.cardType ne 'CREDIT'}">
                             <f:converter converterId="javax.faces.BigDecimal" />
                         </p:inputNumber>
                     </div>
@@ -138,8 +138,8 @@
                         <p:inputText id="inExpirationDay" 
                                      maxlength="2" 
                                      styleClass="form-control"
-                                     value="#{cardBean.card.expirationDay}" 
-                                     disabled="#{cardBean.card.cardType ne 'CREDIT'}">
+                                     value="#{cardBean.value.expirationDay}" 
+                                     disabled="#{cardBean.value.cardType ne 'CREDIT'}">
                             <p:keyFilter regEx="/[0-9]/i"/>
                         </p:inputText>
                     </div>
@@ -147,9 +147,9 @@
                         <p:outputLabel for="inWallet" 
                                        value="#{messages['card.form.wallet']}: "/>
                         <p:selectOneMenu id="inWallet" 
-                                         value="#{cardBean.card.wallet}"
+                                         value="#{cardBean.value.wallet}"
                                          converter="omnifaces.SelectItemsConverter"
-                                         disabled="#{cardBean.card.cardType ne 'DEBIT'}">
+                                         disabled="#{cardBean.value.cardType ne 'DEBIT'}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
                                           itemLabel="#{messages['card.form.select-one']}" />

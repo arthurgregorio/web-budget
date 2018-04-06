@@ -1,20 +1,27 @@
 package br.com.webbudget.application.controller.tools;
 
-import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.controller.ViewState;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
+import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.security.Group;
+import br.com.webbudget.domain.entities.security.StoreType;
 import br.com.webbudget.domain.entities.security.User;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.domain.services.UserAccountService;
-import java.util.ArrayList;
+import br.eti.arthurgregorio.shiroee.config.ldap.LdapUser;
+import br.eti.arthurgregorio.shiroee.config.ldap.LdapUserProvider;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import lombok.Setter;
+import org.primefaces.model.SortOrder;
 
 /**
  *
@@ -25,32 +32,18 @@ import lombok.Setter;
  */
 @Named
 @ViewScoped
-public class UserBean extends AbstractBean {
+public class UserBean extends FormBean<User> {
 
-    @Getter
-    @Setter
-    private User user;
-
-    @Getter
-    @Setter
-    private String userFilter;
-
-    @Getter
-    private List<User> users;
     @Getter
     private List<Group> groups;
 
-    @Getter
-    @Setter
-    private String filter;
-    @Getter
-    @Setter
-    private Boolean blocked;
-    
     @Inject
     private UserRepository userRepository;
     @Inject
     private GroupRepository groupRepository;
+
+    @Inject
+    private LdapUserProvider ldapUserProvider;
     
     @Inject
     private UserAccountService userAccountService;
@@ -58,9 +51,10 @@ public class UserBean extends AbstractBean {
     /**
      *
      */
-    public void initializeList() {
-        this.filterList();
-        this.viewState = ViewState.LISTING;
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.temporizeHiding(this.getDefaultMessagesComponentId());
     }
 
     /**
@@ -68,134 +62,92 @@ public class UserBean extends AbstractBean {
      * @param id
      * @param viewState
      */
-    public void initializeForm(long id, String viewState) {
-
-        // capturamos o estado da tela 
-        this.viewState = ViewState.valueOf(viewState);
-
-        // cria a lista de usuarios vazia
-        this.users = new ArrayList<>();
-
-        // listamos os grupos
+    @Override
+    public void initialize(long id, ViewState viewState) {
+        this.viewState = viewState;
         this.groups = this.groupRepository.findAllActive();
-        
-        if (id == 0) {
-            this.user = new User();
-        } else {
-            this.user = this.userRepository.findBy(id);
-        }
+        this.value = this.userRepository.findOptionalById(id)
+                .orElseGet(User::new);
+    }
+    
+    /**
+     * 
+     */
+    @Override
+    protected void initializeNavigationManager() {
+        this.navigation.addPage(LIST_PAGE, "listUsers.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formUser.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formUser.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailUser.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailUser.xhtml");
     }
 
     /**
-     *
-     * @param id
-     * @param viewState
+     * 
+     * @param first
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return 
      */
-    public void initializeDetail(long id, String viewState) {
-
-        // capturamos o estado da tela 
-        this.viewState = ViewState.valueOf(viewState);
-
-        // listamos os grupos
-        this.groups = this.groupRepository.findAllActive();
-        this.user = this.userRepository.findBy(id);
-    }
-
-    /**
-     *
-     */
-    public void filterList() {
-        this.updateComponent("usersList");
-    }
-
-    /**
-     * @return o form de inclusao
-     */
-    public String changeToAdd() {
-        return "formUser.xhtml?faces-redirect=true&viewState="
-                + ViewState.ADDING;
-    }
-
-    /**
-     * @param userId
-     * @return
-     */
-    public String changeToEdit(String userId) {
-        return "formUser.xhtml?faces-redirect=true&id="
-                + userId + "&viewState=" + ViewState.EDITING;
-    }
-
-    /**
-     * @param userId
-     * @return
-     */
-    public String changeToDelete(String userId) {
-        return "detailUser.xhtml?faces-redirect=true&id="
-                + userId + "&viewState=" + ViewState.DELETING;
-    }
-
-    /**
-     * @return
-     */
-    public String changeTolist() {
-        return "listUsers.xhtml?faces-redirect=true";
-    }
-
-    /**
-     * Redireciona para a pagina de detalhes do usuario
-     */
-    public void changeToDetail() {
-        this.redirectTo("detailUser.xhtml?faces-redirect=true&id="
-                + this.user.getId() + "&viewState=" + ViewState.DETAILING);
+    @Override
+    public List<User> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.userRepository.findAllBy(this.filter.getValue(), 
+                this.filter.getEntityStatusValue(), first, pageSize);
     }
 
     /**
      *
      */
+    @Override
     public void doSave() {
-        try {
-            this.userAccountService.save(this.user);
-            this.user = new User();
-            this.addInfo(true, "user.saved");
-        } catch (BusinessLogicException ex) {
-            this.addError(true, ex.getMessage(), ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("UserBean#doSave has found erros", ex);
-            this.addError(true, "error.generic-error", ex.getMessage());
-        }
+        this.userAccountService.save(this.value);
+        this.value = new User();
+        this.addInfo(true, "user.saved");
     }
 
     /**
      *
      */
+    @Override
     public void doUpdate() {
-        try {
-            this.userAccountService.update(this.user);
-            this.addInfo(true, "user.updated");
-        } catch (BusinessLogicException ex) {
-            this.addError(true, ex.getMessage(), ex.getParameters());
-        } catch (Exception ex) {
-            this.logger.error("UserBean#doUpdate has found erros", ex);
-            this.addError(true, "error.generic-error", ex.getMessage());
-        }
+        this.userAccountService.update(this.value);
+        this.addInfo(true, "user.updated");
     }
 
     /**
      *
      * @return
      */
+    @Override
     public String doDelete() {
+        this.userAccountService.delete(this.value);
+        this.addInfoAndKeep("user.deleted");
+        return this.changeToListing();
+    }
+    
+    /**
+     *
+     */
+    public void findUserOnLdap() {
 
-        try {
-            this.userAccountService.delete(this.user);
-            return this.changeTolist();
-        } catch (BusinessLogicException ex) {
-            this.addError(true, ex.getMessage(), ex.getParameters());
-            return null;
-        } catch (Exception ex) {
-            this.logger.error("UserBean#doDelete has found erros", ex);
-            this.addError(true, "error.generic-error", ex.getMessage());
-            return null;
-        }
+        final String username = this.value.getUsername();
+
+        final LdapUser userDetails = this.ldapUserProvider
+                .search(username)
+                .orElseThrow(() -> new BusinessLogicException(
+                        "error.user.not-found-ldap", username));
+
+        this.value.setUsername(userDetails.getSAMAccountName());
+        this.value.setEmail(userDetails.getMail());
+        this.value.setName(userDetails.getName());
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public StoreType[] getStoreTypeValues() {
+        return StoreType.values();
     }
 }

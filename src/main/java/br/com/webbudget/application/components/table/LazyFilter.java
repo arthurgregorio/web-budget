@@ -50,7 +50,7 @@ public final class LazyFilter {
     public static LazyFilter initialize() {
         return new LazyFilter();
     }
-    
+
     /**
      * Reseta o filtro para seu estado inicial
      */
@@ -58,7 +58,7 @@ public final class LazyFilter {
         this.value = null;
         this.entityStatus = EntityStatus.UNBLOCKED;
     }
-
+    
     /**
      * Pega o valor do status de entidade a ser buscado
      * 
@@ -69,13 +69,21 @@ public final class LazyFilter {
     }
     
     /**
-     * Enum de tipos de entidades
+     * 
+     * @return 
+     */
+    public EntityStatus[] getEntityStatusValues() {
+        return EntityStatus.values();
+    }
+    
+    /**
+     * 
      */
     public enum EntityStatus {
 
         ALL("entity-status.all", null),
         BLOCKED("entity-status.blocked", Boolean.TRUE),
-        UNBLOCKED("entity-stats.unblocked", Boolean.FALSE);
+        UNBLOCKED("entity-status.unblocked", Boolean.FALSE);
 
         private final Boolean value;
         private final String description;
