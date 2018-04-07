@@ -73,8 +73,8 @@
             <var>breadcrumb</var>
         </resource-bundle>  
         <resource-bundle>  
-            <base-name>i18n.authorizations</base-name>  
-            <var>authorizations</var>
+            <base-name>i18n.permissions</base-name>  
+            <var>permission</var>
         </resource-bundle>  
     </application>
     

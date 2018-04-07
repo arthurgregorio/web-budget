@@ -26,7 +26,7 @@ public class Permissions implements Serializable {
 
     @Getter
     @PermissionGrouper("user")
-    private final String USER_INSERT = "user:insert";
+    private final String USER_INSERT = "user:add";
     @Getter
     @PermissionGrouper("user")
     private final String USER_UPDATE = "user:update";
@@ -42,7 +42,7 @@ public class Permissions implements Serializable {
 
     @Getter
     @PermissionGrouper("group")
-    private final String GROUP_INSERT = "group:insert";
+    private final String GROUP_INSERT = "group:add";
     @Getter
     @PermissionGrouper("group")
     private final String GROUP_UPDATE = "group:update";
@@ -57,10 +57,10 @@ public class Permissions implements Serializable {
     private final String GROUP_ACCESS = "group:access";
     
     @Getter
-    @PermissionGrouper("user")
+    @PermissionGrouper("configuration")
     private final String CONFIGURATION_ACCESS = "configuration:access";
     @Getter
-    @PermissionGrouper("user")
+    @PermissionGrouper("configuration")
     private final String CONFIGURATION_UPDATE = "configuration:update";
 
     @Getter
@@ -71,7 +71,7 @@ public class Permissions implements Serializable {
     private final String CARD_STATISTICS = "card:statistics";
     @Getter
     @PermissionGrouper("card")
-    private final String CARD_INSERT = "card:insert";
+    private final String CARD_INSERT = "card:add";
     @Getter
     @PermissionGrouper("card")
     private final String CARD_UPDATE = "card:update";
@@ -84,7 +84,7 @@ public class Permissions implements Serializable {
     private final String CONTACT_ACCESS = "contact:access";
     @Getter
     @PermissionGrouper("contact")
-    private final String CONTACT_INSERT = "contact:insert";
+    private final String CONTACT_INSERT = "contact:add";
     @Getter
     @PermissionGrouper("contact")
     private final String CONTACT_UPDATE = "contact:update";
@@ -97,7 +97,7 @@ public class Permissions implements Serializable {
     private final String WALLET_ACCESS = "wallet:access";
     @Getter
     @PermissionGrouper("wallet")
-    private final String WALLET_INSERT = "wallet:insert";
+    private final String WALLET_INSERT = "wallet:add";
     @Getter
     @PermissionGrouper("wallet")
     private final String WALLET_UPDATE = "wallet:update";
@@ -113,7 +113,7 @@ public class Permissions implements Serializable {
     private final String COST_CENTER_ACCESS = "cost-center:access";
     @Getter
     @PermissionGrouper("cost-center")
-    private final String COST_CENTER_INSERT = "cost-center:insert";
+    private final String COST_CENTER_INSERT = "cost-center:add";
     @Getter
     @PermissionGrouper("cost-center")
     private final String COST_CENTER_UPDATE = "cost-center:update";
@@ -126,7 +126,7 @@ public class Permissions implements Serializable {
     private final String MOVEMENT_CLASS_ACCESS = "movement-class:access";
     @Getter
     @PermissionGrouper("movement-class")
-    private final String MOVEMENT_CLASS_INSERT = "movement-class:insert";
+    private final String MOVEMENT_CLASS_INSERT = "movement-class:add";
     @Getter
     @PermissionGrouper("movement-class")
     private final String MOVEMENT_CLASS_UPDATE = "movement-class:update";
@@ -139,7 +139,7 @@ public class Permissions implements Serializable {
     private final String MOVEMENT_ACCESS = "movement:access";
     @Getter
     @PermissionGrouper("movement")
-    private final String MOVEMENT_INSERT = "movement:insert";
+    private final String MOVEMENT_INSERT = "movement:add";
     @Getter
     @PermissionGrouper("movement")
     private final String MOVEMENT_UPDATE = "movement:update";
@@ -155,7 +155,7 @@ public class Permissions implements Serializable {
     private final String FIXED_MOVEMENT_ACCESS = "fixed-movement:access";
     @Getter
     @PermissionGrouper("fixed-movement")
-    private final String FIXED_MOVEMENT_INSERT = "fixed-movement:insert";
+    private final String FIXED_MOVEMENT_INSERT = "fixed-movement:add";
     @Getter
     @PermissionGrouper("fixed-movement")
     private final String FIXED_MOVEMENT_UPDATE = "fixed-movement:update";
@@ -194,7 +194,7 @@ public class Permissions implements Serializable {
     private final String FINANCIAL_PERIOD_ACCESS = "financial-period:access";
     @Getter
     @PermissionGrouper("financial-period")
-    private final String FINANCIAL_PERIOD_INSERT = "financial-period:insert";
+    private final String FINANCIAL_PERIOD_INSERT = "financial-period:add";
     @Getter
     @PermissionGrouper("financial-period")
     private final String FINANCIAL_PERIOD_DELETE = "financial-period:delete";
@@ -221,7 +221,7 @@ public class Permissions implements Serializable {
     private final String VEHICLE_ACCESS = "vehicle:access";
     @Getter
     @PermissionGrouper("vehicle")
-    private final String VEHICLE_INSERT = "vehicle:insert";
+    private final String VEHICLE_INSERT = "vehicle:add";
     @Getter
     @PermissionGrouper("vehicle")
     private final String VEHICLE_UPDATE = "vehicle:update";
@@ -234,7 +234,7 @@ public class Permissions implements Serializable {
     private final String ENTRIES_ACCESS = "entries:access";
     @Getter
     @PermissionGrouper("entries")
-    private final String ENTRIES_INSERT = "entries:insert";
+    private final String ENTRIES_INSERT = "entries:add";
     @Getter
     @PermissionGrouper("entries")
     private final String ENTRIES_UPDATE = "entries:update";
@@ -247,7 +247,7 @@ public class Permissions implements Serializable {
     private final String REFUELING_ACCESS = "refueling:access";
     @Getter
     @PermissionGrouper("refueling")
-    private final String REFUELING_INSERT = "refueling:insert";
+    private final String REFUELING_INSERT = "refueling:add";
     @Getter
     @PermissionGrouper("refueling")
     private final String REFUELING_DELETE = "refueling:delete";

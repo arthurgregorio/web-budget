@@ -34,29 +34,34 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{groupBean.viewState eq 'ADDING'}"
-                      value="#{messages['group.page-description-adding']}"/>
-        <o:outputFormat id="pageDescription" 
-                        rendered="#{groupBean.viewState eq 'EDITING'}" 
-                        value="#{messages['group.page-description-editing']}">
-            <f:param value="#{groupBean.value.name}"/>
-        </o:outputFormat>
+        <div jsf:id="pageDescription">
+            <o:outputFormat rendered="#{groupBean.viewState eq 'DETAILING'}" 
+                            value="#{messages['group.page-description-detailing']}">
+                <f:param value="#{groupBean.value.name}"/>
+            </o:outputFormat>
+            <o:outputFormat rendered="#{groupBean.viewState eq 'DELETING'}" 
+                            value="#{messages['group.page-description-deleting']}">
+                <f:param value="#{groupBean.value.name}"/>
+            </o:outputFormat>
+        </div>
     </ui:define>
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['tools']}</a></li>
         <li><a href="listGroups.xhtml">#{breadcrumb['tools.group']}</a></li>
-        <li jsf:rendered="#{groupBean.viewState eq 'ADDING'}" 
-            class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{groupBean.viewState eq 'EDITING'}" 
-            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
+        <li jsf:rendered="#{groupBean.viewState eq 'DETAILING'}" 
+            class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
+        <li jsf:rendered="#{groupBean.viewState eq 'DELETING'}" 
+            class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
     </ui:define>
 
     <ui:define name="content">
         <h:form id="groupForm">
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" />
+                    <p:messages id="messages" closable="true" >
+                        <p:autoUpdate />
+                    </p:messages>
                 </div>
             </div>
             <div class="box">
@@ -114,21 +119,19 @@
                 </div>
 
                 <div class="box-footer align-right">
-                    <p:commandButton update="groupForm"
-                                     value="#{menu['save']}"
-                                     action="#{groupBean.doSave()}"
-                                     styleClass="btn btn-flat btn-success"
-                                     rendered="#{groupBean.viewState eq 'ADDING'}" />
-                    <p:commandButton value="#{menu['update']}"
-                                     action="#{groupBean.doUpdate()}"
-                                     update="groupForm pageDescription"
-                                     styleClass="btn btn-flat btn-success"
-                                     rendered="#{groupBean.viewState eq 'EDITING'}"/>
+                    <h:outputText styleClass="text-red text-bold"
+                                  value="#{menu['delete.confirmation']}"
+                                  rendered="#{groupBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['yes']}"
+                                     action="#{groupBean.doDelete()}" 
+                                     styleClass="btn btn-flat btn-danger" 
+                                     rendered="#{groupBean.viewState eq 'DELETING'}"/>
+                    <p:spacer width="5" />
                     <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
-                                     styleClass="btn btn-flat btn-primary" 
-                                     action="#{groupBean.changeToListing()}"/>
+                                     styleClass="btn btn-flat btn-primary"
+                                     action="#{groupBean.changeToListing()}" 
+                                     value="#{groupBean.viewState eq 'DETAILING' ? menu['back'] : menu['no']}"/>
                 </div>
             </div>
         </h:form>

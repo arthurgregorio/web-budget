@@ -65,7 +65,7 @@ public class AuthenticationBean extends AbstractBean {
             this.authenticator.login(this.credential);
             return "/secured/dashboard.xhtml?faces-redirect=true";
         } catch (AuthenticationException ex) {
-            this.addError(true, "error.authentication-failed");
+            this.addError(true, "error.authentication.failed");
             return null;
         }
     }

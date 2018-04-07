@@ -36,7 +36,6 @@ import javax.faces.convert.FacesConverter;
 public class LocalDateConverter implements Converter { 
 
     /**
-     * Manda o objeto para o bean, convertido em LocalDate
      * 
      * @param context
      * @param component
@@ -45,11 +44,10 @@ public class LocalDateConverter implements Converter {
      */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        return LocalDate.parse(value, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return value != null ? LocalDate.parse(value, DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null;
     }
 
     /**
-     * Manda o objeto para a view, em String
      * 
      * @param context
      * @param component

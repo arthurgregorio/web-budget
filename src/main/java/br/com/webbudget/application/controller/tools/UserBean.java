@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,8 +45,8 @@ import org.primefaces.model.SortOrder;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
- * @since 1.0.0, 09/01/2018
+ * @version 3.0.0
+ * @since 1.0.0, 02/03/2014
  */
 @Named
 @ViewScoped
@@ -83,7 +83,7 @@ public class UserBean extends FormBean<User> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.groups = this.groupRepository.findAllActive();
+        this.groups = this.groupRepository.findAllUnblocked();
         this.value = this.userRepository.findOptionalById(id)
                 .orElseGet(User::new);
     }

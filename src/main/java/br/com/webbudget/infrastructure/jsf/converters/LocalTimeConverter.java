@@ -36,12 +36,10 @@ import javax.faces.convert.FacesConverter;
 public class LocalTimeConverter implements Converter {
 
     /**
-     * Manda o objeto para o bean convertido em LocalTime
      * 
      * @param context
      * @param component
      * @param value
-     * 
      * @return 
      */
     @Override
@@ -50,12 +48,10 @@ public class LocalTimeConverter implements Converter {
     }
 
     /**
-     * Manda o objeto para a view, em String
      * 
      * @param context
      * @param component
      * @param value
-     * 
      * @return 
      */
     @Override
