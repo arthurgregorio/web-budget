@@ -17,21 +17,21 @@
 package br.com.webbudget.domain.entities.entries;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
+import br.com.webbudget.infrastructure.utils.RandomCode;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import static javax.persistence.FetchType.EAGER;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,11 +41,10 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * Classe que mapeia os atributos necessarios para a existencia de um contato
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.2.0, 07/04/2015
  */
 @Entity
@@ -55,11 +54,12 @@ import org.hibernate.validator.constraints.NotBlank;
 public class Contact extends PersistentEntity {
 
     @Getter
-    @Column(name = "code", nullable = false, length = 8, unique = true)
-    private String code;
+    @Column(name = "code", nullable = false, length = 6, unique = true)
+    private final String code;
+    
     @Getter
     @Setter
-    @NotBlank(message = "{contact.validate.name}")
+    @NotBlank(message = "{contact.name}")
     @Column(name = "name", nullable = false, length = 90)
     private String name;
     @Setter
@@ -68,13 +68,12 @@ public class Contact extends PersistentEntity {
     private String document;
     @Setter
     @Getter
-    @Past(message = "{contact.validate.birth-date}")
-    @Temporal(TemporalType.DATE)
     @Column(name = "birth_date")
-    private Date birthDate;
+    @NotNull(message = "{contact.birth-date}")
+    private LocalDate birthDate;
     @Setter
     @Getter
-    @Column(name = "other_informations", length = 255)
+    @Column(name = "other_informations", columnDefinition = "TEXT")
     private String otherInformations;
 
     @Setter
@@ -99,13 +98,13 @@ public class Contact extends PersistentEntity {
     private String neighborhood;
     @Setter
     @Getter
-    @NotBlank(message = "{contact.validate.province}")
     @Column(name = "province", length = 45)
+    @NotBlank(message = "{contact.province}")
     private String province;
     @Setter
     @Getter
-    @NotBlank(message = "{contact.validate.city}")
     @Column(name = "city", length = 45)
+    @NotBlank(message = "{contact.city}")
     private String city;
     @Setter
     @Getter
@@ -114,21 +113,20 @@ public class Contact extends PersistentEntity {
     
     @Getter
     @Setter
-    @Column(name = "blocked")
+    @Column(name = "blocked", nullable = false)
     private boolean blocked;
     
     @Setter
     @Getter
-    @NotNull(message = "{contact.validate.contact-type}")
-    @Enumerated
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "{contact.contact-type}")
     @Column(name = "contact_type", nullable = false)
     private ContactType contactType;
 
     /**
-     * Eager pois ao pesquisarmos um contato os telefones devem vir junto
-     * para compor a view adequadamente
+     * Fetch in a subselect because every time we request a contact the numbers 
+     * needs to be in the object
      */
-    @Getter
     @Setter
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "contact", fetch = EAGER, cascade = REMOVE)
@@ -136,50 +134,24 @@ public class Contact extends PersistentEntity {
     
     @Getter
     @Transient
-    private List<Telephone> deletedTelephones;
+    private final List<Telephone> deletedTelephones;
     
     /**
      * Inicializa o contato
      */
     public Contact() {
-        this.code = this.createContactCode();
+        this.code = RandomCode.alphanumeric(6);
+        
         this.telephones = new ArrayList<>();
         this.deletedTelephones = new ArrayList<>();
     }
-    
-    /**
-     * @return um codigo unico para este contato
-     */
-    private String createContactCode() {
-
-        long decimalNumber = System.nanoTime();
-
-        String generated = "";
-        final String digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        synchronized (this.getClass()) {
-
-            int mod;
-            int authCodeLength = 0;
-
-            while (decimalNumber != 0 && authCodeLength < 5) {
-
-                mod = (int) (decimalNumber % 36);
-                generated = digits.substring(mod, mod + 1) + generated;
-                decimalNumber = decimalNumber / 36;
-                authCodeLength++;
-            }
-        }
-        return generated;
-    }
 
     /**
-     * Valida o documento do contato de acordo com seu tipo
+     * 
+     * @return 
      */
-    public void validateDocument() {
-        if (this.document != null && !this.document.isEmpty()) {
-            this.contactType.validadeDocument(this.document.replace("\\w", ""));
-        }
+    public List<Telephone> getTelephones() {
+        return Collections.unmodifiableList(this.telephones);
     }
     
     /**
@@ -187,6 +159,20 @@ public class Contact extends PersistentEntity {
      */
     public String getDocumentFormated() {
         return this.contactType.formatDocument(this.document);
+    }
+    
+    /**
+     * 
+     */
+    public void clearTelephones() {
+        this.telephones.clear();
+    }
+    
+    /**
+     * Valida o documento do contato de acordo com seu tipo
+     */
+    public void validateDocument() {
+        this.contactType.validateDocument(this.document.replace("\\w", ""));
     }
     
     /**
@@ -214,5 +200,18 @@ public class Contact extends PersistentEntity {
         if (telephone.isSaved()) {
             this.deletedTelephones.add(telephone);
         }
+    }
+
+    /**
+     * 
+     * @param address 
+     */
+    public void setAddress(Address address) {
+        this.zipcode = address.getZipcode();
+        this.street = address.getStreet();
+        this.neighborhood = address.getNeighborhood();
+        this.complement = address.getComplement();
+        this.city = address.getCity();
+        this.province = address.getProvince();
     }
 }

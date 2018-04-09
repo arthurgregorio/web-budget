@@ -17,9 +17,6 @@
 package br.com.webbudget.application.components.chart.donut;
 
 import br.com.webbudget.application.components.chart.AbstractChartModel;
-import com.google.gson.Gson;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Datamodel para os graficos donut do ChatJS
@@ -31,34 +28,34 @@ import java.util.List;
  */
 public class DonutChartModel extends AbstractChartModel {
 
-    private final List<DonutChartDataset> chartDatasets;
-
-    /**
-     * 
-     */
-    public DonutChartModel() {
-        this.chartDatasets = new ArrayList<>();
-    }
-    
-    /**
-     * @param dataset os dados para o grafico
-     */
-    public void addData(DonutChartDataset dataset) {
-        this.chartDatasets.add(dataset);
-    }
-    
-    /**
-     * @return se este grafico contem ou nao dados
-     */
-    public boolean containsData() {
-        return !this.chartDatasets.isEmpty();
-    }
-    
-    /**
-     * @return o JSON representando os dados para o grafico
-     */
-    @Override
-    public String toJson() {
-        return new Gson().toJson(this.chartDatasets);
-    }
+//    private final List<DonutChartDataset> chartDatasets;
+//
+//    /**
+//     * 
+//     */
+//    public DonutChartModel() {
+//        this.chartDatasets = new ArrayList<>();
+//    }
+//    
+//    /**
+//     * @param dataset os dados para o grafico
+//     */
+//    public void addData(DonutChartDataset dataset) {
+//        this.chartDatasets.add(dataset);
+//    }
+//    
+//    /**
+//     * @return se este grafico contem ou nao dados
+//     */
+//    public boolean containsData() {
+//        return !this.chartDatasets.isEmpty();
+//    }
+//    
+//    /**
+//     * @return o JSON representando os dados para o grafico
+//     */
+//    @Override
+//    public String toJson() {
+//        return new Gson().toJson(this.chartDatasets);
+//    }
 }

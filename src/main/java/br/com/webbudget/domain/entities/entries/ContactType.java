@@ -22,13 +22,14 @@ import br.com.caelum.stella.format.Formatter;
 import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.Validator;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Definicao dos tipos de contato
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.2.0, 11/04/2015
  */
 public enum ContactType {
@@ -41,6 +42,7 @@ public enum ContactType {
             new CPFFormatter());
 
     private final String description;
+    
     private final Formatter formatter;
     private final Validator<String> validator;
 
@@ -57,27 +59,29 @@ public enum ContactType {
     }
 
     /**
-     * Valida o documento do contato, se nao for valido lancara uma exception
-     *
-     * @param document o documento a ser validado, sem a pontuacao
+     * 
+     * @param document 
      */
-    public void validadeDocument(String document) {
-        this.validator.assertValid(document);
+    public void validateDocument(String document) {
+        try {
+            this.validator.assertValid(checkNotNull(document));
+        } catch (Exception ex) {
+            throw new BusinessLogicException("error.contact.invalid-document");
+        }
     }
     
     /**
-     * Formata um documento de acordo com o tipo utilizado
      * 
-     * @param document o documento
-     * @return o documento formatado
+     * @param document
+     * @return 
      */
     public String formatDocument(String document) {
-        return document != null && !document.isEmpty() 
-                ? this.formatter.format(document) : document;
+        return this.formatter.format(checkNotNull(document));
     }
 
     /**
-     * @return a string representando este tipo
+     * 
+     * @return 
      */
     @Override
     public String toString() {

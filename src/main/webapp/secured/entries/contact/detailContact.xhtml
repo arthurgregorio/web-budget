@@ -34,22 +34,23 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{contactBean.viewState eq 'ADDING'}"
-                      value="#{messages['contact.page-description-adding']}"/>
-        <o:outputFormat id="pageDescription" 
-                        rendered="#{contactBean.viewState eq 'EDITING'}" 
-                        value="#{messages['contact.page-description-editing']}">
+        <o:outputFormat rendered="#{contactBean.viewState eq 'DETAILING'}" 
+                        value="#{messages['contact.page-description-detailing']}">
+            <f:param value="#{contactBean.value.name}"/>
+        </o:outputFormat>
+        <o:outputFormat rendered="#{contactBean.viewState eq 'DELETING'}" 
+                        value="#{messages['contact.page-description-deleting']}">
             <f:param value="#{contactBean.value.name}"/>
         </o:outputFormat>
     </ui:define>
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['entries']}</a></li>
-        <li><a href="listContacts.xhtml">#{breadcrumb['entries.contact']}</a></li>
-        <li jsf:rendered="#{contactBean.viewState eq 'ADDING'}" 
-            class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{contactBean.viewState eq 'EDITING'}" 
-            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
+        <li><a href="listCards.xhtml">#{breadcrumb['entries.contact']}</a></li>
+        <li jsf:rendered="#{contactBean.viewState eq 'DELETING'}" 
+            class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
+        <li jsf:rendered="#{contactBean.viewState eq 'DETAILING'}" 
+            class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
@@ -234,25 +235,20 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="box-footer align-right">
-                    <p:commandButton update="contactForm"
-                                     process="contactForm"
-                                     value="#{menu['save']}"
-                                     action="#{contactBean.doSave()}"
-                                     styleClass="btn btn-flat btn-success"
-                                     rendered="#{contactBean.viewState eq 'ADDING'}"/>
-                    <p:commandButton process="contactForm"
-                                     value="#{menu['update']}"
-                                     action="#{contactBean.doUpdate()}"
-                                     update="contactForm pageDescription"
-                                     styleClass="btn btn-flat btn-success"
-                                     rendered="#{contactBean.viewState eq 'EDITING'}"/>
+                    <h:outputText styleClass="text-red text-bold"
+                                  value="#{menu['delete.confirmation']}"
+                                  rendered="#{contactBean.viewState eq 'DELETING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['yes']}"
+                                     action="#{contactBean.doDelete()}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     rendered="#{contactBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
                                      styleClass="btn btn-flat btn-primary" 
-                                     action="#{contactBean.changeToListing()}"/>
+                                     action="#{contactBean.changeToListing()}"
+                                     value="#{contactBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
             <wb:blocker target="addressBox"/>

@@ -60,7 +60,7 @@
                 <p:outputLabel for="inTelephone" 
                                value="#{messages['telephone.dialog.number']}: "/>
                 <p:inputMask id="inTelephone"
-                             mask="(999) 9999-9999?9"
+                             mask="(99) 9999-9999?9"
                              styleClass="form-control"
                              value="#{contactBean.telephone.number}"/>
             </div> 
@@ -77,8 +77,8 @@
                 <p:spacer width="10"/>
                 <p:commandButton immediate="true"
                                  value="#{menu['cancel']}"
-                                 styleClass="btn btn-flat btn-default"
-                                 onclick="closeDialog('dialogTelephone')"/>
+                                 styleClass="btn btn-flat btn-primary"
+                                 onclick="PF('dialogTelephone').hide()"/>
 
             </div>
         </div>

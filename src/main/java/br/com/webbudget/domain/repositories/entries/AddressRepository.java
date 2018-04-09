@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,24 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Telephone;
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Repository;
+import br.com.webbudget.domain.entities.entries.Address;
+import feign.Param;
+import feign.RequestLine;
 
 /**
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.2.0, 12/04/2015
+ * @since 1.0.0, 08/04/2018
  */
-@Repository
-public interface ITelephoneRepository extends EntityRepository<Telephone, Long> {
+public interface AddressRepository {
 
+    /**
+     * 
+     * @param zipcode
+     * @return 
+     */
+    @RequestLine("GET /ws/{zipcode}/json/")
+    Address findByZipcode(@Param("zipcode") String zipcode);
 }

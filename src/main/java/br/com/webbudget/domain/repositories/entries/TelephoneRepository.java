@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Contact;
-import org.apache.deltaspike.data.api.EntityRepository;
+import br.com.webbudget.domain.entities.entries.Telephone;
+import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 
 /**
@@ -28,28 +28,6 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 1.2.0, 12/04/2015
  */
 @Repository
-public interface IContactRepository extends EntityRepository<Contact, Long> {
+public interface TelephoneRepository extends DefaultRepository<Telephone> {
 
-//    /**
-//     *
-//     * @param blocked
-//     * @return
-//     */
-//    public List<Contact> listByStatus(Boolean blocked);
-//    
-//    /**
-//     * 
-//     * @param filter
-//     * @return 
-//     */
-//    public List<Contact> listByFilter(String filter, Boolean blocked);
-//    
-//    /**
-//     * 
-//     * @param filter
-//     * @param blocked
-//     * @param pageRequest
-//     * @return 
-//     */
-//    public Page<Contact> listLazilyByFilter(String filter, Boolean blocked, PageRequest pageRequest);
 }

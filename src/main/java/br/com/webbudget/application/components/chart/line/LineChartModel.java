@@ -17,9 +17,6 @@
 package br.com.webbudget.application.components.chart.line;
 
 import br.com.webbudget.application.components.chart.AbstractChartModel;
-import com.google.gson.Gson;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -30,46 +27,46 @@ import java.util.List;
  */
 public class LineChartModel extends AbstractChartModel {
     
-    private final List<String> labels;
-    
-    private final List<LineChartDataset> datasets;
-
-    /**
-     * 
-     */
-    public LineChartModel() {
-        this.labels = new ArrayList<>();
-        this.datasets = new ArrayList<>();
-    }
-
-    /**
-     * @param label um label para as series do grafico
-     */
-    public void addLabel(String label) {
-        this.labels.add(label);
-    }
-    
-    /**
-     * @param chartDataset os datasets do nosso model
-     */
-    public void addDataset(LineChartDataset chartDataset) {
-        this.datasets.add(chartDataset);
-    }
-    
-    /**
-     * @return se todos os datasets forem vazios, este grafico e vazio
-     */
-    public boolean isEmptyChart() {
-        return this.datasets.size() == this.datasets.stream()
-                .filter(LineChartDataset::isEmpty)
-                .count();
-    }
-    
-    /**
-     * @return o JSON representando os dados para o grafico
-     */
-    @Override
-    public String toJson() {
-        return new Gson().toJson(this);
-    }
+//    private final List<String> labels;
+//    
+//    private final List<LineChartDataset> datasets;
+//
+//    /**
+//     * 
+//     */
+//    public LineChartModel() {
+//        this.labels = new ArrayList<>();
+//        this.datasets = new ArrayList<>();
+//    }
+//
+//    /**
+//     * @param label um label para as series do grafico
+//     */
+//    public void addLabel(String label) {
+//        this.labels.add(label);
+//    }
+//    
+//    /**
+//     * @param chartDataset os datasets do nosso model
+//     */
+//    public void addDataset(LineChartDataset chartDataset) {
+//        this.datasets.add(chartDataset);
+//    }
+//    
+//    /**
+//     * @return se todos os datasets forem vazios, este grafico e vazio
+//     */
+//    public boolean isEmptyChart() {
+//        return this.datasets.size() == this.datasets.stream()
+//                .filter(LineChartDataset::isEmpty)
+//                .count();
+//    }
+//    
+//    /**
+//     * @return o JSON representando os dados para o grafico
+//     */
+//    @Override
+//    public String toJson() {
+//        return new Gson().toJson(this);
+//    }
 }

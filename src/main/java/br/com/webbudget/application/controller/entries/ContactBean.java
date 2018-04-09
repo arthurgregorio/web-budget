@@ -16,9 +16,27 @@
  */
 package br.com.webbudget.application.controller.entries;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
+import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.domain.entities.entries.Address;
+import br.com.webbudget.domain.entities.entries.Contact;
+import br.com.webbudget.domain.entities.entries.ContactType;
+import br.com.webbudget.domain.entities.entries.NumberType;
+import br.com.webbudget.domain.entities.entries.Telephone;
+import br.com.webbudget.domain.repositories.entries.ContactRepository;
+import br.com.webbudget.domain.services.ContactService;
+import java.util.List;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
+import lombok.Setter;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller para a view de contatos
@@ -30,230 +48,146 @@ import javax.inject.Named;
  */
 @Named
 @ViewScoped
-public class ContactBean extends AbstractBean {
+public class ContactBean extends FormBean<Contact> {
 
-//    @Getter
-//    @Setter
-//    private String filter;
-//    
-//    @Getter
-//    private Contact contact;
-//    @Getter
-//    private Telephone telephone;
-//    
-//    @Inject
-//    private ContactService contactService;
-//    @Inject
-//    private AddressFinder addressFinderService;
-//
-//    @Getter
-//    private final AbstractLazyModel<Contact> contactsModel;
-//    
-//    /**
-//     * 
-//     */
-//    public ContactBean() {
-//
-//        this.contactsModel = new AbstractLazyModel<Contact>() {
-//            @Override
-//            public List<Contact> load(int first, int pageSize, String sortField, 
-//                    SortOrder sortOrder, Map<String, Object> filters) {
-//                
-//                final PageRequest pageRequest = new PageRequest();
-//                
-//                pageRequest
-//                        .setFirstResult(first)
-//                        .withPageSize(pageSize)
-//                        .sortingBy(sortField, "inclusion")
-//                        .withDirection(sortOrder.name());
-//                
-//                final Page<Contact> page = contactService
-//                        .listContactsLazilyByFilter(filter, null, pageRequest);
-//                
-//                this.setRowCount(page.getTotalPagesInt());
-//                
-//                return page.getContent();
-//            }
-//        };
-//    }
-//    
-//    /**
-//     *
-//     */
-//    public void initializeListing() {
-//        this.viewState = ViewState.LISTING;
-//    }
-//
-//    /**
-//     * @param contactId
-//     */
-//    public void initializeForm(long contactId) {
-//
-//        if (contactId == 0) {
-//            this.viewState = ViewState.ADDING;
-//            this.contact = new Contact();
-//        } else {
-//            this.viewState = ViewState.EDITING;
-//            this.contact = this.contactService.findContactById(contactId);
-//        }
-//    }
-//
-//    /**
-//     * Pesquisa com filtro
-//     */
-//    public void filterList() {
-//        this.updateComponent("contactsList");
-//    }
-//    
-//    /**
-//     * @return
-//     */
-//    public String changeToAdd() {
-//        return "formContact.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToListing() {
-//        return "listContacts.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @param contactId
-//     * @return
-//     */
-//    public String changeToEdit(long contactId) {
-//        return "formContact.xhtml?faces-redirect=true&contactId=" + contactId;
-//    }
-//
-//    /**
-//     * @param contactId
-//     */
-//    public void changeToDelete(long contactId) {
-//        this.contact = this.contactService.findContactById(contactId);
-//        this.updateAndOpenDialog("deleteContactDialog", "dialogDeleteContact");
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String doCancel() {
-//        return "listContacts.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doSave() {
-//
-//        try {
-//            this.contactService.saveContact(this.contact);
-//            this.contact = new Contact();
-//            this.addInfo(true, "contact.saved");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doUpdate() {
-//
-//        try {
-//            this.contact = this.contactService.updateContact(this.contact);
-//            this.addInfo(true, "contact.updated");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doDelete() {
-//
-//        try {
-//            this.contactService.deleteContact(this.contact);
-//            this.addInfo(true, "contact.deleted");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        } finally {
-//            this.updateComponent("contactsList");
-//            this.closeDialog("dialogDeleteContact");
-//        }
-//    }
-//
-//    /**
-//     * Chama o servico de busca dos enderecos e completa o endereco do caboclo
-//     */
-//    public void doAddressFind() {
-//
-////        try {
-////            final Address address = this.addressFinderService
-////                    .findAddressByZipcode(this.contact.getZipcode());
-////
-////            this.contact.setStreet(address.getLogradouro());
-////            this.contact.setComplement(address.getComplemento());
-////            this.contact.setProvince(address.getFullUfName());
-////            this.contact.setCity(address.getLocalidade());
-////            this.contact.setNeighborhood(address.getBairro());
-////
-////            this.updateComponent("addressBox");
-////        } catch (Exception ex) {
-////            this.logger.error(ex.getMessage(), ex);
-////            this.addError(true, "error.contact.find-address-error");
-////        }
-//    }
-//    
-//    /**
-//     * Abre a popup de adicionar telefones
-//     */
-//    public void showTelephoneDialog() {
-//        this.telephone = new Telephone();
-//        this.updateAndOpenDialog("telephoneDialog", "dialogTelephone");
-//    }
-//    
-//    /**
-//     * Adiciona um telefone
-//     */
-//    public void addTelephone() {
-//        this.contact.addTelephone(this.telephone);
-//        this.updateComponent("telephonesList");
-//        this.closeDialog("dialogTelephone");
-//    }
-//    
-//    /**
-//     * Deleta um telefone da lista
-//     * 
-//     * @param telephone o telefone a ser deletado
-//     */
-//    public void deleteTelephone(Telephone telephone) {
-//        this.contact.removeTelephone(telephone);
-//        this.updateComponent("telephonesList");
-//    }
-//
-//    /**
-//     * @return os tipos de contato disponiveis para cadastro
-//     */
-//    public ContactType[] getAvailableContactTypes() {
-//        return ContactType.values();
-//    }
-//    
-//    /**
-//     * @return os tipos de numero de telefone disponiveis
-//     */
-//    public NumberType[] getAvailableNumberTypes() {
-//        return NumberType.values();
-//    }
+    @Getter
+    @Setter
+    private Telephone telephone;
+    
+    @Inject
+    private ContactRepository contactRepository;
+
+    @Inject
+    private ContactService contactService;
+
+    /**
+     *
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.temporizeHiding(this.getDefaultMessagesComponentId());
+    }
+
+    /**
+     *
+     * @param id
+     * @param viewState
+     */
+    @Override
+    public void initialize(long id, ViewState viewState) {
+        this.viewState = viewState;
+        this.value = this.contactRepository.findOptionalById(id)
+                .orElseGet(Contact::new);
+    }
+
+    /**
+     *
+     */
+    @Override
+    protected void initializeNavigationManager() {
+        this.navigation.addPage(LIST_PAGE, "listContacts.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formContact.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formContact.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailContact.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailContact.xhtml");
+    }
+
+    /**
+     *
+     * @param first
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return
+     */
+    @Override
+    public List<Contact> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.contactRepository.findAllBy(this.filter.getValue(),
+                this.filter.getEntityStatusValue(), first, pageSize);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void doSave() {
+        this.contactService.save(this.value);
+        this.value = new Contact();
+        this.addInfo(true, "contact.saved");
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void doUpdate() {
+        this.value = this.contactService.update(this.value);
+        this.addInfo(true, "contact.updated");
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String doDelete() {
+        this.contactService.delete(this.value);
+        this.addInfoAndKeep("contact.deleted");
+        return this.changeToListing();
+    }
+
+    /**
+     * Find the contact address by his brazilian zipcode 
+     */
+    public void searchAddress() {
+
+        final Address address = this.contactService.findAddressBy(
+                this.value.getZipcode());
+
+        this.value.setAddress(address);
+
+        this.updateComponent("addressBox");
+    }
+
+    /**
+     * Show the telephone dialog
+     */
+    public void showTelephoneDialog() {
+        this.telephone = new Telephone();
+        this.updateAndOpenDialog("telephoneDialog", "dialogTelephone");
+    }
+    
+    /**
+     * Add a number to the contact
+     */
+    public void addTelephone() {
+        this.value.addTelephone(this.telephone);
+        this.updateComponent("telephonesList");
+        this.closeDialog("dialogTelephone");
+    }
+    
+    /**
+     * Add the number deleted to the list of numbers to delete from DB
+     * 
+     * @param telephone the number
+     */
+    public void deleteTelephone(Telephone telephone) {
+        this.value.removeTelephone(telephone);
+        this.updateComponent("telephonesList");
+    }
+    
+    /**
+     * @return the list of available contact types
+     */
+    public ContactType[] getAvailableContactTypes() {
+        return ContactType.values();
+    }
+
+    /**
+     * @return the list of available number types
+     */
+    public NumberType[] getAvailableNumberTypes() {
+        return NumberType.values();
+    }
 }

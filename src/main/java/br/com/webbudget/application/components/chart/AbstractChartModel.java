@@ -25,8 +25,8 @@ package br.com.webbudget.application.components.chart;
  */
 public abstract class AbstractChartModel {
 
-    /**
-     * @return os dados do grafico
-     */
-    public abstract String toJson();
+//    /**
+//     * @return os dados do grafico
+//     */
+//    public abstract String toJson();
 }
