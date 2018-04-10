@@ -58,7 +58,7 @@ public interface DefaultRepository<T extends PersistentEntity>
             criteria.eq(this.getBlockedProperty(), blocked);
         }
         
-        this.applyOrder(criteria);
+        this.setOrder(criteria);
                 
         return criteria.createQuery()
                 .setFirstResult(start)
@@ -75,7 +75,7 @@ public interface DefaultRepository<T extends PersistentEntity>
         final Criteria<T, T> criteria = criteria()
                 .eq(this.getBlockedProperty(), false);
         
-        this.applyOrder(criteria);              
+        this.setOrder(criteria);              
 
         return criteria.getResultList();
     }
@@ -84,7 +84,7 @@ public interface DefaultRepository<T extends PersistentEntity>
      * 
      * @param criteria 
      */
-    default void applyOrder(Criteria<T, T> criteria) {
+    default void setOrder(Criteria<T, T> criteria) {
         criteria.orderDesc(PersistentEntity_.createdOn);
     }
     

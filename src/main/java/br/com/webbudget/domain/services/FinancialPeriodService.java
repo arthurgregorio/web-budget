@@ -16,154 +16,88 @@
  */
 package br.com.webbudget.domain.services;
 
+import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.events.PeriodOpened;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.repositories.miscellany.FinancialPeriodRepository;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.0.0, 20/03/2014
  */
 @ApplicationScoped
 public class FinancialPeriodService {
 
-//    @Inject
-//    private IMovementRepository movementRepository;
-//    @Inject
-//    private IFinancialPeriodRepository financialPeriodRepository;
-//    
-//    @Inject
-//    @PeriodOpened
-//    private Event<FinancialPeriod> periodOpenEvent;
-//    
-//    /**
-//     *
-//     * @param financialPeriod
-//     */
-//    @Transactional
-//    public void openPeriod(FinancialPeriod financialPeriod) {
-//
-//        final FinancialPeriod found = this.findPeriodByIdentification(
-//                financialPeriod.getIdentification());
-//
-//        if (found != null && !found.equals(financialPeriod)) {
-//            throw new InternalServiceError("financial-period.validate.duplicated");
-//        }
-//
-//        // validamos se o periodo informado já foi contemplado em outro 
-//        // periodo existente
-//        final List<FinancialPeriod> periods = this.listFinancialPeriods(null);
-//
-//        for (FinancialPeriod fp : periods) {
-//            if (financialPeriod.getStart().compareTo(fp.getEnd()) <= 0) {
-//                throw new InternalServiceError("financial-period.validate.truncated-dates");
-//            }
-//        }
-//        
-//        // se o fim for o mesmo dia ou anterior a data atual, erro!
-//        if (financialPeriod.getEnd().compareTo(LocalDate.now()) < 1) {
-//            throw new InternalServiceError("financial-period.validate.invalid-end");
-//        }
-//
-//        final FinancialPeriod opened = 
-//                this.financialPeriodRepository.save(financialPeriod);
-//        
-//        // disparamos o evento para notificar os interessados
-//        this.periodOpenEvent.fire(opened);
-//    }
-//    
-//    /**
-//     * 
-//     * @param financialPeriod 
-//     */
-//    @Transactional
-//    public void deletePeriod(FinancialPeriod financialPeriod) {
-//        
+    @Inject
+    private FinancialPeriodRepository financialPeriodRepository;
+    
+    @Inject
+    @PeriodOpened
+    private Event<FinancialPeriod> periodOpenEvent;
+    
+    /**
+     *
+     * @param financialPeriod
+     */
+    @Transactional
+    public void save(FinancialPeriod financialPeriod) {
+
+        // check for duplicated financial periods
+        final Optional<FinancialPeriod> found = this.financialPeriodRepository
+                .findOptionalByIdentification(financialPeriod.getIdentification());
+
+        if (found != null) {
+            throw new BusinessLogicException("error.financial-period.duplicated");
+        }
+
+        // check for periods with the same date period of this new one
+        final List<FinancialPeriod> periods = this.financialPeriodRepository
+                .findByStartGtOrEqAndEndLtOrEq(financialPeriod.getStart(), financialPeriod.getEnd());
+
+        for (FinancialPeriod fp : periods) {
+            if (financialPeriod.getStart().compareTo(fp.getEnd()) <= 0) {
+                throw new BusinessLogicException("error.financial-period.truncated-dates");
+            }
+        }
+        
+        // se o fim for o mesmo dia ou anterior a data atual, erro!
+        if (financialPeriod.getEnd().compareTo(LocalDate.now()) < 1) {
+            throw new BusinessLogicException("error.financial-period.invalid-end");
+        }
+
+        final FinancialPeriod opened = 
+                this.financialPeriodRepository.save(financialPeriod);
+        
+        // disparamos o evento para notificar os interessados
+        this.periodOpenEvent.fire(opened);
+    }
+    
+    /**
+     * 
+     * @param financialPeriod 
+     */
+    @Transactional
+    public void delete(FinancialPeriod financialPeriod) {
+        
 //        final List<Movement> movements = this.movementRepository
 //                .listByPeriodAndStateAndType(financialPeriod, null, null);
 //        
 //        // se houver movimentos, lanca o erro
 //        if (movements != null && !movements.isEmpty()) {
-//            throw new InternalServiceError("error.financial-period.has-movements",
+//            throw new BusinessLogicException("error.financial-period.has-movements",
 //                    financialPeriod.getIdentification());
 //        } 
-//        
-//        // nao tem movimentos entao deleta
-//        this.financialPeriodRepository.delete(financialPeriod);
-//    }
-//
-//    /**
-//     *
-//     * @return
-//     */
-//    public FinancialPeriod findActiveFinancialPeriod() {
-//
-//        final List<FinancialPeriod> periods = 
-//                this.financialPeriodRepository.listOpen();
-//
-//        return periods.stream()
-//                .filter(period -> !period.isExpired())
-//                .findFirst()
-//                .orElse(null);
-//    }
-//    
-//    /**
-//     * @return o ultimo fechamento realizado
-//     */
-//    public FinancialPeriod findLatestClosedPeriod() {
-//        return this.financialPeriodRepository.findLatestClosed();
-//    }
-//
-//    /**
-//     *
-//     * @param financialPeriodId
-//     * @return
-//     */
-//    public FinancialPeriod findPeriodById(long financialPeriodId) {
-//        return this.financialPeriodRepository.findById(financialPeriodId, false);
-//    }
-//
-//    /**
-//     *
-//     * @param identification
-//     * @return
-//     */
-//    public FinancialPeriod findPeriodByIdentification(String identification) {
-//        return this.financialPeriodRepository.findByIdentification(identification);
-//    }
-//
-//    /**
-//     *
-//     * @param isClosed
-//     * @return
-//     */
-//    public List<FinancialPeriod> listFinancialPeriods(Boolean isClosed) {
-//        return this.financialPeriodRepository.listAll();
-//    }
-//    
-//    /**
-//     * 
-//     * @param isClosed
-//     * @param pageRequest
-//     * @return 
-//     */
-//    public Page<FinancialPeriod> listFinancialPeriodsLazily(Boolean isClosed, PageRequest pageRequest) {
-//        return this.financialPeriodRepository.listByStatusLazily(isClosed, pageRequest);
-//    }
-//
-//    /**
-//     *
-//     * @return
-//     */
-//    public List<FinancialPeriod> listOpenFinancialPeriods() {
-//        return this.financialPeriodRepository.listOpen();
-//    }
-//    
-//    /**
-//     * @return lista os ultimos seis meses de fechamento
-//     */
-//    public List<FinancialPeriod> listLastSixClosedPeriods() {
-//        return this.financialPeriodRepository.listLastSixClosed();
-//    }
+        
+        this.financialPeriodRepository.attachAndRemove(financialPeriod);
+    }
 }

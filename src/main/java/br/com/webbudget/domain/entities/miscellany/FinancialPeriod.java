@@ -20,7 +20,6 @@ import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -48,33 +47,33 @@ public class FinancialPeriod extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotEmpty(message = "{financial-period.identification}")
     @Column(name = "identification", nullable = false)
+    @NotEmpty(message = "{financial-period.identification}")
     private String identification;
     @Getter
     @Setter
-    @NotNull(message = "{financial-period.credit-goal-empty}")
     @Column(name = "credit_card_goal")
+    @NotNull(message = "{financial-period.credit-goal-empty}")
     private BigDecimal creditCardGoal;
     @Getter
     @Setter
-    @NotNull(message = "{financial-period.expenses-goal-empty}")
     @Column(name = "expenses_goal")
+    @NotNull(message = "{financial-period.expenses-goal-empty}")
     private BigDecimal expensesGoal;
     @Getter
     @Setter
-    @NotNull(message = "{financial-period.revenues-goal-empty}")
     @Column(name = "revenues_goal")
+    @NotNull(message = "{financial-period.revenues-goal-empty}")
     private BigDecimal revenuesGoal;
     @Getter
     @Setter
-    @NotNull(message = "{financial-period.start}")
     @Column(name = "start", nullable = false)
+    @NotNull(message = "{financial-period.start}")
     private LocalDate start;
     @Getter
     @Setter
-    @NotNull(message = "{financial-period.end}")
     @Column(name = "end", nullable = false)
+    @NotNull(message = "{financial-period.end}")
     private LocalDate end;
     @Getter
     @Setter
@@ -82,18 +81,29 @@ public class FinancialPeriod extends PersistentEntity {
     private boolean closed;
 
     @Setter
-    @Getter
     @OneToOne
     @JoinColumn(name = "id_closing")
     private Closing closing;
 
     /**
-     * 
+     *
      */
     public FinancialPeriod() {
         this.expensesGoal = BigDecimal.ZERO;
         this.revenuesGoal = BigDecimal.ZERO;
         this.creditCardGoal = BigDecimal.ZERO;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public Closing getClosing() {
+        if (closing == null) {
+            throw new BusinessLogicException(
+                    "error.financial-period.not-closed", this.identification);
+        }
+        return closing;
     }
 
     /**
@@ -106,78 +116,48 @@ public class FinancialPeriod extends PersistentEntity {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public BigDecimal getAccumulated() {
-        if (this.closed) {
-            return this.closing.getAccumulated();
-        }
-        throw new BusinessLogicException(
-                "error.financial-period.not-closed", this.identification);
+        return this.getClosing().getAccumulated();
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public BigDecimal getBalance() {
-        if (this.closed) {
-            return this.closing.getBalance();
-        }
-        throw new BusinessLogicException(
-                "error.financial-period.not-closed", this.identification);
+        return this.getClosing().getBalance();
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public BigDecimal getExpensesTotal() {
-        if (this.closed) {
-            return this.closing.getExpenses();
-        }
-        throw new BusinessLogicException(
-                "error.financial-period.not-closed", this.identification);
+        return this.getClosing().getExpenses();
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public BigDecimal getRevenuesTotal() {
-        if (this.closed) {
-            return this.closing.getRevenues();
-        }
-        throw new BusinessLogicException(
-                "error.financial-period.not-closed", this.identification);
+        return this.getClosing().getRevenues();
     }
-    
+
     /**
      * @return se este periodo esta ou nao ativo
      */
     public boolean isActive() {
         return !this.isExpired() && !this.isClosed();
     }
-    
-    /**
-     * @return a data inicial em formato string
-     */
-    public String getStartAsString() {
-        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.start);
-    }
-    
-    /**
-     * @return a data de fim em formato string
-     */
-    public String getEndAsString() {
-        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.end);
-    }
-    
+
     /**
      * @return o resultado para o periodo caso ele esteja fechado
      */
     public BigDecimal getResult() {
-        return this.closing != null ? this.closing.getBalance() : BigDecimal.ZERO;
+        return this.getClosing().getBalance();
     }
 }

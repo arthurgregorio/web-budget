@@ -25,7 +25,6 @@ import br.com.webbudget.domain.entities.financial.MovementStateType;
 import br.com.webbudget.domain.events.PeriodClosed;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.miscellany.IClosingRepository;
-import br.com.webbudget.domain.repositories.miscellany.IFinancialPeriodRepository;
 import br.com.webbudget.domain.repositories.financial.IMovementRepository;
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,6 +33,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import br.com.webbudget.domain.repositories.entries.CardRepository;
+import br.com.webbudget.domain.repositories.miscellany.FinancialPeriodRepository;
 
 /**
  * Classe que realiza o processo de fechamento do periodo

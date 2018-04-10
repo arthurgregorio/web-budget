@@ -16,175 +16,123 @@
  */
 package br.com.webbudget.application.controller.miscellany;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
+import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.domain.entities.miscellany.Closing;
+import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.repositories.miscellany.FinancialPeriodRepository;
+import br.com.webbudget.domain.services.FinancialPeriodService;
+import java.util.List;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
+import org.primefaces.model.SortOrder;
 
 /**
- * Controller da view de periodos financeiros
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.0.0, 23/03/2014
  */
 @Named
 @ViewScoped
-public class FinancialPeriodBean extends AbstractBean {
+public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
 
-//    @Getter
-//    private boolean hasOpenPeriod;
-//
-//    @Getter
-//    private Closing closing;
-//    @Getter
-//    private FinancialPeriod financialPeriod;
-//
-//    @Inject
-//    private FinancialPeriodService financialPeriodService;
-//
-//    @Getter
-//    private final AbstractLazyModel<FinancialPeriod> financialPeriodsModel;
-//
-//    /**
-//     * 
-//     */
-//    public FinancialPeriodBean() {
-//
-//        this.financialPeriodsModel = new AbstractLazyModel<FinancialPeriod>() {
-//            @Override
-//            public List<FinancialPeriod> load(int first, int pageSize, String sortField,
-//                    SortOrder sortOrder, Map<String, Object> filters) {
-//
-//                final PageRequest pageRequest = new PageRequest();
-//
-//                pageRequest
-//                        .setFirstResult(first)
-//                        .withPageSize(pageSize)
-//                        .sortingBy(sortField, "inclusion")
-//                        .withDirection(sortOrder.name());
-//
-//                final Page<FinancialPeriod> page = financialPeriodService
-//                        .listFinancialPeriodsLazily(null, pageRequest);
-//
-//                this.setRowCount(page.getTotalPagesInt());
-//
-//                return page.getContent();
-//            }
-//        };
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void initializeListing() {
-//        this.viewState = ViewState.LISTING;
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void initializeForm() {
-//
-//        // diz que pode abrir um periodo
-//        this.hasOpenPeriod = false;
-//
-//        // validamos se tem periodo em aberto
-//        this.validateOpenPeriods();
-//
-//        this.viewState = ViewState.ADDING;
-//        this.financialPeriod = new FinancialPeriod();
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToAdd() {
-//        return "formFinancialPeriod.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @param financialPeriodId
-//     * @return
-//     */
-//    public String changeToDetails(long financialPeriodId) {
-//        return "detailFinancialPeriod.xhtml?faces-redirect=true&periodId=" + financialPeriodId;
-//    }
-//
-//    /**
-//     * @param financialPeriodId
-//     * @return
-//     */
-//    public String changeToClosing(long financialPeriodId) {
-//        return "../closing/closeFinancialPeriod.xhtml?faces-redirect=true&financialPeriodId=" + financialPeriodId;
-//    }
-//
-//    /**
-//     *
-//     * @param periodId
-//     */
-//    public void changeToDelete(long periodId) {
-//        this.financialPeriod = this.financialPeriodService
-//                .findPeriodById(periodId);
-//        this.updateAndOpenDialog("deletePeriodDialog", "dialogDeletePeriod");
-//    }
-//
-//    /**
-//     * Salva o periodo
-//     */
-//    public void doSave() {
-//
-//        try {
-//            this.financialPeriodService.openPeriod(this.financialPeriod);
-//
-//            this.financialPeriod = new FinancialPeriod();
-//
-//            // validamos se tem periodo em aberto
-//            this.validateOpenPeriods();
-//
-//            this.addInfo(true, "financial-period.saved");
-//        } catch (InternalServiceError ex) {
-//            this.logger.error("FinancialPeriodBean#doSave found erros", ex);
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("FinancialPeriodBean#doSave found errors", ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     * Deleta um periodo
-//     */
-//    public void doDelete() {
-//
-//        try {
-//            this.financialPeriodService.deletePeriod(this.financialPeriod);
-//            this.addInfo(true, "financial-period.deleted");
-//        } catch (InternalServiceError ex) {
-//            this.logger.error("FinancialPeriodBean#doDelete found erros", ex);
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error("FinancialPeriodBean#doDelete found errors", ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        } finally {
-//            this.updateComponent("financialPeriodsList");
-//            this.closeDialog("dialogDeletePeriod");
-//        }
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String doCancel() {
-//        return "listFinancialPeriods.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * valida se tem algum periodo em aberto, se houver avisa ao usuario que ja
-//     * tem e se ele tem certeza que quer abrir um novo
-//     */
-//    public void validateOpenPeriods() {
-//
+    @Getter
+    private Closing closing;
+
+    @Inject
+    private FinancialPeriodService financialPeriodService;
+    
+    @Inject
+    private FinancialPeriodRepository financialPeriodRepository;
+
+    /**
+     * 
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.temporizeHiding(this.getDefaultMessagesComponentId());
+    }
+
+    /**
+     * 
+     * @param id
+     * @param viewState 
+     */
+    @Override
+    public void initialize(long id, ViewState viewState) {
+        this.value = this.financialPeriodRepository.findOptionalById(id)
+                .orElseGet(FinancialPeriod::new);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected void initializeNavigationManager() {
+        this.navigation.addPage(LIST_PAGE, "listFinancialPeriods.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formFinancialPeriod.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formFinancialPeriod.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailFinancialPeriod.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailFinancialPeriod.xhtml");
+    }
+
+    /**
+     * 
+     * @param first
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return 
+     */
+    @Override
+    public List<FinancialPeriod> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.financialPeriodRepository.findAllBy(this.filter.getValue(), 
+                this.filter.getEntityStatusValue(), first, pageSize);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void doSave() {
+        this.financialPeriodService.openPeriod(this.value);
+        this.value = new FinancialPeriod();
+        this.validateOpenPeriods();
+        this.addInfo(true, "financial-period.saved");
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void doUpdate() { }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String doDelete() {
+        this.financialPeriodService.deletePeriod(this.value);
+        this.addInfoAndKeep("financial-period.deleted");
+        return this.changeToListing();
+    }
+
+    /**
+     * 
+     */
+    public void validateOpenPeriods() {
+
 //        // validamos se ha algum periodo em aberto
 //        final List<FinancialPeriod> periods
 //                = this.financialPeriodService.listOpenFinancialPeriods();
@@ -196,5 +144,5 @@ public class FinancialPeriodBean extends AbstractBean {
 //                break;
 //            }
 //        }
-//    }
+    }
 }

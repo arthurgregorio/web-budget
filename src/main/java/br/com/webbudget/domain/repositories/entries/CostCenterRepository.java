@@ -67,7 +67,7 @@ public interface CostCenterRepository extends DefaultRepository<CostCenter> {
      * @param criteria 
      */
     @Override
-    public default void applyOrder(Criteria<CostCenter, CostCenter> criteria) {
+    public default void setOrder(Criteria<CostCenter, CostCenter> criteria) {
         criteria.orderAsc(CostCenter_.name);
     }
 }

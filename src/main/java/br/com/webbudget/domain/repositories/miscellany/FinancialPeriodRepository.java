@@ -17,18 +17,57 @@
 package br.com.webbudget.domain.repositories.miscellany;
 
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
-import org.apache.deltaspike.data.api.EntityRepository;
+import br.com.webbudget.domain.entities.miscellany.FinancialPeriod_;
+import br.com.webbudget.domain.repositories.DefaultRepository;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.apache.deltaspike.data.api.Repository;
+import org.apache.deltaspike.data.api.criteria.Criteria;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 3.0.0
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface IFinancialPeriodRepository extends EntityRepository<FinancialPeriod, Long> {
+public interface FinancialPeriodRepository extends DefaultRepository<FinancialPeriod> {
+
+    /**
+     * 
+     * @param identification
+     * @return 
+     */
+    Optional<FinancialPeriod> findOptionalByIdentification(String identification);
+    
+    /**
+     * 
+     * @param start
+     * @param end
+     * @return 
+     */
+    List<FinancialPeriod> findByStartGtOrEqAndEndLtOrEq(LocalDate start, LocalDate end);
+    
+    /**
+     *
+     * @param filter
+     * @return
+     */
+    @Override
+    public default Criteria<FinancialPeriod, FinancialPeriod> getRestrictions(String filter) {
+        return this.criteria().likeIgnoreCase(FinancialPeriod_.identification, filter);
+    }
+
+    /**
+     *
+     * @param criteria
+     */
+    @Override
+    public default void setOrder(Criteria<FinancialPeriod, FinancialPeriod> criteria) {
+        criteria.orderAsc(FinancialPeriod_.id);
+    }
 
 //    /**
 //     * @return 
