@@ -53,8 +53,8 @@
                     <p:defaultCommand target="btSearch"/>
                     <div class="row">
                         <div class="col-xs-2">
-                            <p:selectOneMenu value="#{costCenterBean.filter.entityStatus}"
-                                             converter="omnifaces.GenericEnumConverter">
+                            <p:selectOneMenu converter="omnifaces.GenericEnumConverter"
+                                             value="#{costCenterBean.filter.entityStatus}">
                                 <f:selectItems var="entityStatus"
                                                itemValue="#{entityStatus}"
                                                itemLabel="#{enums[entityStatus]}"
@@ -157,7 +157,7 @@
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
-                                             actionListener="#{costCenterBean.changeToDelete(costCenter.id)}" 
+                                             action="#{costCenterBean.changeToDelete(costCenter.id)}" 
                                              rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_DELETE)}"/>
                         </p:column>
                     </p:dataTable>

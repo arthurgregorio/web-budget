@@ -37,10 +37,9 @@ public interface CostCenterRepository extends DefaultRepository<CostCenter> {
     /**
      * 
      * @param name
-     * @param parent
      * @return 
      */
-    Optional<CostCenter> findOptionalByNameAndParent(String name, CostCenter parent);
+    Optional<CostCenter> findOptionalByName(String name);
     
     /**
      * 

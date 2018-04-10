@@ -102,7 +102,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
      */
     @Override
     public void doSave() {
-        this.classificationService.saveCostCenter(this.value);
+        this.classificationService.save(this.value);
         this.value = new CostCenter();
         this.data = this.costCenterRepository.findAllUnblocked();
         this.addInfo(true, "cost-center.saved");
@@ -113,7 +113,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
      */
     @Override
     public void doUpdate() {
-        this.value = this.classificationService.updateCostCenter(this.value);
+        this.value = this.classificationService.update(this.value);
         this.data = this.costCenterRepository.findAllUnblocked();
         this.addInfo(true, "cost-center.updated");
     }
@@ -124,7 +124,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
      */
     @Override
     public String doDelete() {
-        this.classificationService.deleteCostCenter(this.value);
+        this.classificationService.delete(this.value);
         this.addInfoAndKeep("cost-center.deleted");
         return this.changeToListing();
     }

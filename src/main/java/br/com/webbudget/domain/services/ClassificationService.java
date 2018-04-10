@@ -42,10 +42,10 @@ public class ClassificationService {
      * @param costCenter
      */
     @Transactional
-    public void saveCostCenter(CostCenter costCenter) {
+    public void save(CostCenter costCenter) {
 
         final Optional<CostCenter> found = this.costCenterRepository
-                .findOptionalByNameAndParent(costCenter.getName(), costCenter.getParent());
+                .findOptionalByName(costCenter.getName());
 
         if (found.isPresent()) {
             throw new BusinessLogicException("error.cost-center.duplicated");
@@ -59,14 +59,7 @@ public class ClassificationService {
      * @return
      */
     @Transactional
-    public CostCenter updateCostCenter(CostCenter costCenter) {
-
-        final Optional<CostCenter> found = this.costCenterRepository
-                .findOptionalByNameAndParent(costCenter.getName(), costCenter.getParent());
-
-        if (found.isPresent() && !found.get().equals(costCenter)) {
-            throw new BusinessLogicException("error.cost-center.duplicated");
-        }
+    public CostCenter update(CostCenter costCenter) {
         return this.costCenterRepository.save(costCenter);
     }
 
@@ -75,7 +68,7 @@ public class ClassificationService {
      * @param costCenter
      */
     @Transactional
-    public void deleteCostCenter(CostCenter costCenter) {
+    public void delete(CostCenter costCenter) {
         this.costCenterRepository.attachAndRemove(costCenter);
     }
 }

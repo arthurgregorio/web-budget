@@ -43,8 +43,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table(name = "cost_centers")
-@ToString(callSuper = true, exclude = {"color","totalMovements","percentage"})
-@EqualsAndHashCode(callSuper = true, exclude = {"color","totalMovements","percentage"})
+@ToString(callSuper = true, of = "name")
+@EqualsAndHashCode(callSuper = true, of = "name")
 public class CostCenter extends PersistentEntity {
 
     @Getter
@@ -100,6 +100,14 @@ public class CostCenter extends PersistentEntity {
         this.totalMovements = BigDecimal.ZERO;
         this.revenuesBudget = BigDecimal.ZERO;
         this.expensesBudget = BigDecimal.ZERO;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public String getParentName() {
+        return this.parent != null ? this.parent.getName() : null;
     }
     
     /**
