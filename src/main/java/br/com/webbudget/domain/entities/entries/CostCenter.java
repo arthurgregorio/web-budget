@@ -38,13 +38,13 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0, 28/03/2014
  */
 @Entity
 @Table(name = "cost_centers")
-@ToString(callSuper = true, of = "name")
-@EqualsAndHashCode(callSuper = true, of = "name")
+@ToString(callSuper = true, exclude = {"color","totalMovements","percentage"})
+@EqualsAndHashCode(callSuper = true, exclude = {"color","totalMovements","percentage"})
 public class CostCenter extends PersistentEntity {
 
     @Getter
@@ -73,14 +73,14 @@ public class CostCenter extends PersistentEntity {
     private boolean blocked;
     @Getter
     @Setter
-    @Column(name = "description", length = 255)
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Setter
     @Getter
     @ManyToOne
-    @JoinColumn(name = "id_parent_cost_center")
-    private CostCenter parentCostCenter;
+    @JoinColumn(name = "id_parent")
+    private CostCenter parent;
 
     @Setter
     @Getter
@@ -96,7 +96,6 @@ public class CostCenter extends PersistentEntity {
      */
     public CostCenter() {
         this.color = Color.randomize();
-        
         this.percentage = BigDecimal.ZERO;
         this.totalMovements = BigDecimal.ZERO;
         this.revenuesBudget = BigDecimal.ZERO;

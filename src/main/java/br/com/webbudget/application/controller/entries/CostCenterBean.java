@@ -16,182 +16,116 @@
  */
 package br.com.webbudget.application.controller.entries;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
+import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.domain.entities.entries.CostCenter;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
+import br.com.webbudget.domain.services.ClassificationService;
+import java.util.List;
+import org.primefaces.model.SortOrder;
 
 /**
- * Controller da view de centros de custo
  *
  * @author Arthur Gregorio
  *
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.0.0, 04/03/2014
  */
 @Named
 @ViewScoped
-public class CostCenterBean extends AbstractBean {
+public class CostCenterBean extends FormBean<CostCenter> {
 
-//    @Getter
-//    private CostCenter costCenter;
-//    @Getter
-//    private List<CostCenter> costCenters;
-//
-//    @Inject
-//    private MovementService movementService;
-//    
-//    @Getter
-//    private final AbstractLazyModel<CostCenter> costCentersModel;
-//
-//    /**
-//     * 
-//     */
-//    public CostCenterBean() {
-//        
-//        this.costCentersModel = new AbstractLazyModel<CostCenter>() {
-//            @Override
-//            public List<CostCenter> load(int first, int pageSize, String sortField, 
-//                    SortOrder sortOrder, Map<String, Object> filters) {
-//                
-//                final PageRequest pageRequest = new PageRequest();
-//                
-//                pageRequest
-//                        .setFirstResult(first)
-//                        .withPageSize(pageSize)
-//                        .sortingBy(sortField, "inclusion")
-//                        .withDirection(sortOrder.name());
-//                
-//                final Page<CostCenter> page = movementService.listCostCentersLazily(null, pageRequest);
-//                
-//                this.setRowCount(page.getTotalPagesInt());
-//                
-//                return page.getContent();
-//            }
-//        };
-//    }
-//    
-//    /**
-//     *
-//     */
-//    public void initializeListing() {
-//        this.viewState = ViewState.LISTING;
-//    }
-//
-//    /**
-//     * @param costCenterId
-//     */
-//    public void initializeForm(long costCenterId) {
-//
-//        this.costCenters = this.movementService.listCostCenters(false);
-//
-//        if (costCenterId == 0) {
-//            this.viewState = ViewState.ADDING;
-//            this.costCenter = new CostCenter();
-//        } else {
-//            this.viewState = ViewState.EDITING;
-//            this.costCenter = this.movementService.findCostCenterById(costCenterId);
-//        }
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToAdd() {
-//        return "formCostCenter.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToListing() {
-//        return "listCostCenters.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @param costCenterId
-//     * @return
-//     */
-//    public String changeToEdit(long costCenterId) {
-//        return "formCostCenter.xhtml?faces-redirect=true&costCenterId=" + costCenterId;
-//    }
-//
-//    /**
-//     * @param costCenterId
-//     */
-//    public void changeToDelete(long costCenterId) {
-//        this.costCenter = this.movementService.findCostCenterById(costCenterId);
-//        this.updateAndOpenDialog("deleteCostCenterDialog", "dialogDeleteCostCenter");
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String doCancel() {
-//        return "listCostCenters.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doSave() {
-//
-//        try {
-//            this.movementService.saveCostCenter(this.costCenter);
-//            this.costCenter = new CostCenter();
-//
-//            // busca novamente os centros de custo para atualizar a lista de parentes
-//            this.costCenters = this.movementService.listCostCenters(false);
-//
-//            this.addInfo(true, "cost-center.saved");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doUpdate() {
-//
-//        try {
-//            this.costCenter = this.movementService.updateCostCenter(this.costCenter);
-//            
-//            // busca novamente os centros de custo para atualizar a lista de parentes
-//            this.costCenters = this.movementService.listCostCenters(false);
-//            
-//            this.addInfo(true, "cost-center.updated");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doDelete() {
-//
-//        try {
-//            this.movementService.deleteCostCenter(this.costCenter);
-//            this.addInfo(true, "cost-center.deleted");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            if (this.containsException(ConstraintViolationException.class, ex)) {
-//                this.addError(true, "error.cost-center.integrity-violation", 
-//                        this.costCenter.getName());
-//            } else {
-//                this.logger.error(ex.getMessage(), ex);
-//                this.addError(true, "error.undefined-error", ex.getMessage());
-//            }
-//        } finally {
-//            this.closeDialog("dialogDeleteCostCenter");
-//            this.updateComponent("costCentersList");
-//        }
-//    }
+    @Inject
+    private CostCenterRepository costCenterRepository;
+    
+    @Inject
+    private ClassificationService classificationService;
+    
+    /**
+     * 
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.temporizeHiding(this.getDefaultMessagesComponentId());
+    }
+
+    /**
+     * 
+     * @param id
+     * @param viewState 
+     */
+    @Override
+    public void initialize(long id, ViewState viewState) {
+        this.viewState = viewState;
+        this.data = this.costCenterRepository.findAllUnblocked();
+        this.value = this.costCenterRepository.findOptionalById(id)
+                .orElseGet(CostCenter::new);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected void initializeNavigationManager() {
+        this.navigation.addPage(LIST_PAGE, "listCostCenters.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formCostCenter.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formCostCenter.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailCostCenter.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailCostCenter.xhtml");        
+    }
+
+    /**
+     * 
+     * @param first
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return 
+     */
+    @Override
+    public List<CostCenter> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.costCenterRepository.findAllBy(this.filter.getValue(), 
+                this.filter.getEntityStatusValue(), first, pageSize);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void doSave() {
+        this.classificationService.saveCostCenter(this.value);
+        this.value = new CostCenter();
+        this.data = this.costCenterRepository.findAllUnblocked();
+        this.addInfo(true, "cost-center.saved");
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void doUpdate() {
+        this.value = this.classificationService.updateCostCenter(this.value);
+        this.data = this.costCenterRepository.findAllUnblocked();
+        this.addInfo(true, "cost-center.updated");
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String doDelete() {
+        this.classificationService.deleteCostCenter(this.value);
+        this.addInfoAndKeep("cost-center.deleted");
+        return this.changeToListing();
+    }
 }

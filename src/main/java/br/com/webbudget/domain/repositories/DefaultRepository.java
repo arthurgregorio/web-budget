@@ -42,13 +42,6 @@ public interface DefaultRepository<T extends PersistentEntity>
 
     /**
      * 
-     * @param id
-     * @return 
-     */
-    Optional<T> findOptionalById(Long id);
-    
-    /**
-     * 
      * @param filter
      * @param blocked
      * @param start
@@ -64,9 +57,9 @@ public interface DefaultRepository<T extends PersistentEntity>
         if (blocked != null) {
             criteria.eq(this.getBlockedProperty(), blocked);
         }
-                
-        criteria.orderDesc(PersistentEntity_.createdOn);
         
+        this.applyOrder(criteria);
+                
         return criteria.createQuery()
                 .setFirstResult(start)
                 .setMaxResults(pageSize)
@@ -78,11 +71,29 @@ public interface DefaultRepository<T extends PersistentEntity>
      * @return 
      */
     default List<T> findAllUnblocked() {
-        return criteria()
-                .eq(this.getBlockedProperty(), false)
-                .orderDesc(PersistentEntity_.createdOn)
-                .getResultList();
+        
+        final Criteria<T, T> criteria = criteria()
+                .eq(this.getBlockedProperty(), false);
+        
+        this.applyOrder(criteria);              
+
+        return criteria.getResultList();
     }
+    
+    /**
+     * 
+     * @param criteria 
+     */
+    default void applyOrder(Criteria<T, T> criteria) {
+        criteria.orderDesc(PersistentEntity_.createdOn);
+    }
+    
+    /**
+     * 
+     * @param id
+     * @return 
+     */
+    Optional<T> findOptionalById(Long id);
     
     /**
      * 

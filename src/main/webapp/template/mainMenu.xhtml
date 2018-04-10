@@ -53,7 +53,7 @@
                 </li>
                 <li class="divider"></li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_ACCESS)}">
-                    <p:link href="/main/entries/costCenter/listCostCenters.xhtml">
+                    <p:link href="/secured/entries/costCenter/listCostCenters.xhtml">
                         <i class="fa fa-sitemap"></i> 
                         <span>#{menu['entries.cost-centers']}</span>
                     </p:link>

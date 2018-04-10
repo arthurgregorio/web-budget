@@ -26,10 +26,8 @@
                 xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="costCenters"/>
-
     <f:metadata>
-        <f:viewAction action="#{costCenterBean.initializeForm(param.costCenterId)}"/>
+        <f:viewAction action="#{costCenterBean.initialize(param.id, param.viewState)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -38,11 +36,11 @@
 
     <ui:define name="pageDescription">
         <h:outputText rendered="#{costCenterBean.viewState eq 'ADDING'}"
-                      value="#{messages['cost-center.page-description-including']}"/>
+                      value="#{messages['cost-center.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
                         rendered="#{costCenterBean.viewState eq 'EDITING'}" 
                         value="#{messages['cost-center.page-description-editing']}">
-            <f:param value="#{costCenterBean.costCenter.name}"/>
+            <f:param value="#{costCenterBean.value.name}"/>
         </o:outputFormat>
     </ui:define>
 
@@ -50,30 +48,26 @@
         <li><a href="#">#{breadcrumb['entries']}</a></li>
         <li><a href="listCostCenters.xhtml">#{breadcrumb['entries.cost-centers']}</a></li>
         <li jsf:rendered="#{costCenterBean.viewState eq 'ADDING'}" 
-            class="active"><a href="#">#{breadcrumb['including']}</a></li>
+            class="active"><a href="#">#{breadcrumb['adding']}</a></li>
         <li jsf:rendered="#{costCenterBean.viewState eq 'EDITING'}" 
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
-        
         <h:form id="costCenterForm" prependId="false">
-
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true" />
                 </div>
             </div>
-
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox id="inBlocked" 
-                                                 value="#{costCenterBean.costCenter.blocked}"
+                                                 value="#{costCenterBean.value.blocked}"
                                                  itemLabel="#{messages['cost-center.form.blocked']}"/>
                     </h3>
                 </div>
-
                 <div class="box-body row">
                     <div class="col-md-6 no-padding">
                         <div class="form-group col-md-12">
@@ -82,22 +76,22 @@
                             <p:inputText id="inName" 
                                          maxlength="45"
                                          styleClass="form-control"
-                                         value="#{costCenterBean.costCenter.name}" 
+                                         value="#{costCenterBean.value.name}" 
                                          disabled="#{costCenterBean.viewState eq 'EDITING'}"/>
                         </div>
                         <div class="form-group col-md-12">
                             <p:outputLabel for="inCostCenter" 
                                            value="#{messages['cost-center.form.cost-center']}: "/>
                             <p:selectOneMenu id="inCostCenter" 
-                                             converter="omnifaces.SelectItemsConverter"
-                                             value="#{costCenterBean.costCenter.parentCostCenter}" >
+                                             value="#{costCenterBean.value.parent}" 
+                                             converter="omnifaces.SelectItemsConverter">
                                 <f:selectItem itemValue="#{null}"
                                               noSelectionOption="true"
                                               itemLabel="#{messages['cost-center.form.select-one']}" />
                                 <f:selectItems var="costCenter" 
                                                itemValue="#{costCenter}"
                                                itemLabel="#{costCenter.name}"
-                                               value="#{costCenterBean.costCenters}" /> 
+                                               value="#{costCenterBean.data}" /> 
                             </p:selectOneMenu>
                         </div>
                         <div class="form-group col-md-4">
@@ -108,7 +102,7 @@
                                            decimalPlaces="2" 
                                            decimalSeparator="," 
                                            thousandSeparator="." 
-                                           value="#{costCenterBean.costCenter.revenuesBudget}">
+                                           value="#{costCenterBean.value.revenuesBudget}">
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </p:inputNumber>
                         </div>
@@ -120,7 +114,7 @@
                                            decimalPlaces="2" 
                                            decimalSeparator="," 
                                            thousandSeparator="." 
-                                           value="#{costCenterBean.costCenter.expensesBudget}">
+                                           value="#{costCenterBean.value.expensesBudget}">
                                 <f:converter converterId="javax.faces.BigDecimal" />
                             </p:inputNumber>
                         </div>
@@ -128,7 +122,7 @@
                             <p:outputLabel for="inColor" 
                                            value="#{messages['cost-center.form.color']}: "/>
                             <wb:colorPicker id="inColor"
-                                            color="#{costCenterBean.costCenter.color}"/>
+                                            color="#{costCenterBean.value.color}"/>
                         </div>
                     </div>
                     <div class="col-md-6 no-padding">
@@ -137,10 +131,9 @@
                                            value="#{messages['cost-center.form.description']}: "/>
                             <p:inputTextarea id="inDescription" 
                                              rows="8"
-                                             maxlength="255"
                                              autoResize="true"
                                              styleClass="form-control"
-                                             value="#{costCenterBean.costCenter.description}" />
+                                             value="#{costCenterBean.value.description}" />
                         </div>
                     </div>
                 </div>
@@ -161,8 +154,8 @@
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
-                                     action="#{costCenterBean.doCancel()}"
-                                     styleClass="btn btn-flat btn-default" />
+                                     styleClass="btn btn-flat btn-primary" 
+                                     action="#{costCenterBean.changeToListing()}"/>
                 </div>
             </div>
         </h:form>

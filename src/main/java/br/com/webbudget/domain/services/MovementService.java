@@ -484,50 +484,6 @@ public class MovementService {
 //
 //    /**
 //     *
-//     * @param costCenter
-//     */
-//    @Transactional
-//    public void saveCostCenter(CostCenter costCenter) {
-//
-//        final CostCenter found = this.findCostCenterByNameAndParent(costCenter.getName(),
-//                costCenter.getParentCostCenter());
-//
-//        if (found != null) {
-//            throw new InternalServiceError("error.cost-center.duplicated");
-//        }
-//
-//        this.costCenterRepository.save(costCenter);
-//    }
-//
-//    /**
-//     *
-//     * @param costCenter
-//     * @return
-//     */
-//    @Transactional
-//    public CostCenter updateCostCenter(CostCenter costCenter) {
-//
-//        final CostCenter found = this.findCostCenterByNameAndParent(costCenter.getName(),
-//                costCenter.getParentCostCenter());
-//
-//        if (found != null && !found.equals(costCenter)) {
-//            throw new InternalServiceError("error.cost-center.duplicated");
-//        }
-//
-//        return this.costCenterRepository.save(costCenter);
-//    }
-//
-//    /**
-//     *
-//     * @param costCenter
-//     */
-//    @Transactional
-//    public void deleteCostCenter(CostCenter costCenter) {
-//        this.costCenterRepository.delete(costCenter);
-//    }
-//
-//    /**
-//     *
 //     * @param fixedMovement
 //     * @return
 //     */
