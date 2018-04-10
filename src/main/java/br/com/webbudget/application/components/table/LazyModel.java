@@ -16,7 +16,8 @@
  */
 package br.com.webbudget.application.components.table;
 
-import br.com.webbudget.domain.entities.IPersistentEntity;
+import br.com.webbudget.domain.entities.PersistentEntity;
+import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Map;
 import org.primefaces.model.LazyDataModel;
@@ -34,19 +35,21 @@ import org.primefaces.model.SortOrder;
  * @version 2.0.0
  * @since 2.1.0, 05/09/2015
  */
-public class LazyModel<T extends IPersistentEntity> extends LazyDataModel<T> {
+public class LazyModel<T extends PersistentEntity> extends LazyDataModel<T> {
 
     private final LazyDataProvider<T> provider;
-
+    
     /**
+     * Constructor...
      *
-     * @param provider
+     * @param provider the dataprovider for this model
      */
-    public LazyModel(LazyDataProvider provider) {
-        this.provider = provider;
+    public LazyModel(LazyDataProvider<T> provider) {
+        this.provider = checkNotNull(provider);
     }
 
     /**
+     * {@inheritDoc }
      *
      * @param first
      * @param pageSize
@@ -56,12 +59,11 @@ public class LazyModel<T extends IPersistentEntity> extends LazyDataModel<T> {
      */
     @Override
     public List<T> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
-        final List<T> data = this.provider.load(first, pageSize, multiSortMeta);
-        this.setRowCount(data.size());
-        return data;
+        return this.countAndReturn(this.provider.load(first, pageSize, multiSortMeta));
     }
 
     /**
+     * {@inheritDoc }
      *
      * @param first
      * @param pageSize
@@ -72,13 +74,11 @@ public class LazyModel<T extends IPersistentEntity> extends LazyDataModel<T> {
      */
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
-        final List<T> data = this.provider.load(first, pageSize, sortField, sortOrder);
-        this.setRowCount(data.size());
-        return data;
+        return this.countAndReturn(this.provider.load(first, pageSize, sortField, sortOrder));
     }
 
     /**
-     * @see LazyDataModel#getRowKey(java.lang.Object)
+     * {@inheritDoc }
      *
      * @param object
      * @return
@@ -89,23 +89,27 @@ public class LazyModel<T extends IPersistentEntity> extends LazyDataModel<T> {
     }
 
     /**
-     * @see LazyDataModel#getRowData(java.lang.String)
+     * {@inheritDoc }
      *
      * @param rowKey
      * @return
      */
     @Override
     public T getRowData(String rowKey) {
-        return this.getModelSource().stream()
+        return this.getWrappedData().stream()
                 .filter(object -> object.getId().equals(Long.parseLong(rowKey)))
                 .findFirst()
                 .orElse(null);
     }
-
+    
     /**
-     * @return a lista encapsulada por este model
+     * Count the quantity of rows and return the data
+     * 
+     * @param data the data to be used on the datatable
+     * @return the data to be used on the datatable
      */
-    public List<T> getModelSource() {
-        return (List<T>) this.getWrappedData();
+    private List<T> countAndReturn(List<T> data) {
+        this.setRowCount(data.size());
+        return data;
     }
 }
