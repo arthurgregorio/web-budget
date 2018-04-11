@@ -22,6 +22,8 @@ import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.metamodel.SingularAttribute;
+import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -48,7 +50,11 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
      * @param end
      * @return 
      */
-    List<FinancialPeriod> findByStartGtOrEqAndEndLtOrEq(LocalDate start, LocalDate end);
+    @Query("SELECT count(*) "
+            + "FROM FinancialPeriod fp "
+            + "WHERE fp.start >= ?1 "
+            + " AND fp.end <= ?2")
+    long countOnTheSamePeriod(LocalDate start, LocalDate end);
     
     /**
      *
@@ -60,6 +66,15 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
         return this.criteria().likeIgnoreCase(FinancialPeriod_.identification, filter);
     }
 
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public default SingularAttribute<FinancialPeriod, Boolean> getBlockedProperty() {
+        return FinancialPeriod_.closed;
+    }
+    
     /**
      *
      * @param criteria

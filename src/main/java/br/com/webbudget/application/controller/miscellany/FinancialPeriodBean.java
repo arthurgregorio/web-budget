@@ -70,6 +70,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
      */
     @Override
     public void initialize(long id, ViewState viewState) {
+        this.viewState = viewState;
         this.value = this.financialPeriodRepository.findOptionalById(id)
                 .orElseGet(FinancialPeriod::new);
     }
@@ -105,7 +106,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
      */
     @Override
     public void doSave() {
-        this.financialPeriodService.openPeriod(this.value);
+        this.financialPeriodService.save(this.value);
         this.value = new FinancialPeriod();
         this.validateOpenPeriods();
         this.addInfo(true, "financial-period.saved");
@@ -123,7 +124,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
      */
     @Override
     public String doDelete() {
-        this.financialPeriodService.deletePeriod(this.value);
+        this.financialPeriodService.delete(this.value);
         this.addInfoAndKeep("financial-period.deleted");
         return this.changeToListing();
     }

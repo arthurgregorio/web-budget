@@ -21,12 +21,11 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="financialPeriods"/>
-
     <f:metadata>
-        <f:viewAction action="#{financialPeriodBean.initializeListing()}"/>
+        <f:viewAction action="#{financialPeriodBean.initialize()}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -52,123 +51,162 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h:form id="controlsForm" prependId="false">
-                    <div class="box-tools pull-right">
-                        <p:commandButton immediate="true"
-                                         value="#{menu['new']}"
-                                         styleClass="btn btn-flat btn-info" 
-                                         action="#{financialPeriodBean.changeToAdd()}"
-                                         rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_INSERT)}"/>
+                <h:form id="controlsForm">
+                    <p:defaultCommand target="btSearch"/>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <p:selectOneMenu value="#{financialPeriodBean.filter.entityStatus}"
+                                             converter="omnifaces.GenericEnumConverter">
+                                <f:selectItems var="entityStatus"
+                                               itemValue="#{entityStatus}"
+                                               itemLabel="#{enums[entityStatus]}"
+                                               value="#{financialPeriodBean.filter.entityStatusValues}"/> 
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="input-group">
+                                <p:inputText styleClass="form-control"
+                                             value="#{financialPeriodBean.filter.value}"
+                                             placeholder="#{messages['filter.financial-period']}" />
+                                <div class="input-group-btn">
+                                    <p:commandButton id="btSearch"
+                                                     update="itemsList"
+                                                     value="#{menu['search']}"
+                                                     onstart="PF('blocker').show()"
+                                                     oncomplete="PF('blocker').hide()"
+                                                     styleClass="btn btn-flat btn-primary"/>
+                                    <p:spacer width="10"/>
+                                    <p:commandButton icon="fa fa-trash-o"
+                                                     onstart="PF('blocker').show()"
+                                                     update="itemsList controlsForm"
+                                                     oncomplete="PF('blocker').hide()"
+                                                     title="#{messages['filter.clear']}"
+                                                     styleClass="btn btn-flat btn-danger"
+                                                     actionListener="#{financialPeriodBean.clearFilters()}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="box-tools pull-right">
+                                <p:commandButton immediate="true"
+                                                 value="#{menu['new']}"
+                                                 action="#{financialPeriodBean.changeToAdd()}"
+                                                 styleClass="btn btn-flat btn-primary" 
+                                                 rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_INSERT)}"/>
+                            </div>
+                        </div>
                     </div>
                 </h:form>
             </div>
             <div jsf:id="boxBody" class="box-body">
-                <p:dataTable id="financialPeriodsList" 
-                             rows="15"
-                             lazy="true"
-                             rowHover="true"
-                             paginator="true"
-                             var="financialPeriod"
-                             sortOrder="descending"
-                             paginatorPosition="bottom"
-                             paginatorAlwaysVisible="false"
-                             value="#{financialPeriodBean.financialPeriodsModel}"
-                             emptyMessage="#{messages['financial-period.list.empty']}">
+                <h:form id="itemsList">
+                    <p:dataTable rows="15"
+                                 lazy="true"
+                                 rowHover="true"
+                                 paginator="true"
+                                 rowKey="#{card.id}"
+                                 var="financialPeriod"
+                                 sortOrder="ascending"
+                                 selectionMode="single" 
+                                 paginatorPosition="bottom"
+                                 paginatorAlwaysVisible="false"
+                                 selection="#{financialPeriodBean.value}"
+                                 value="#{financialPeriodBean.dataModel}"
+                                 emptyMessage="#{messages['list.empty']}">
 
-                    <p:column width="10%" 
-                              styleClass="align-center"
-                              headerText="#{messages['financial-period.list.closed']}">
-                        <p:selectBooleanCheckbox disabled="true" 
-                                                 value="#{financialPeriod.closed}" />
-                    </p:column>
-                    <p:column headerText="#{messages['financial-period.list.identification']}">
-                        #{financialPeriod.identification}
-                    </p:column>
-                    <p:column width="12%" 
-                              styleClass="align-center"
-                              headerText="#{messages['financial-period.list.start']}">
-                        <h:outputText value="#{financialPeriod.start}" >
-                            <f:converter converterId="localDateConverter" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column width="12%" 
-                              styleClass="align-center"
-                              headerText="#{messages['financial-period.list.end']}">
-                        <h:outputText value="#{financialPeriod.end}" >
-                            <f:converter converterId="localDateConverter" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column width="12%" 
-                              styleClass="align-center"
-                              headerText="#{messages['financial-period.list.closing-date']}">
-                        <h:outputText rendered="#{financialPeriod.closed eq true}"
-                                      value="#{financialPeriod.closing.closingDate}" >
-                            <f:converter converterId="localDateConverter" />
-                        </h:outputText>
-                        <strong class="text-green"
-                                jsf:rendered="#{financialPeriod.expired eq false 
-                                                and financialPeriod.closed eq false}">
-                                #{messages['financial-period.list.open']}
-                        </strong>
-                        <strong class="text-red"
-                                jsf:rendered="#{financialPeriod.expired eq true 
-                                                and financialPeriod.closed eq false}">
-                                #{messages['financial-period.list.expired']}
-                        </strong>
-                    </p:column>
-                    <p:column width="12%"
-                              styleClass="align-center" 
-                              headerText="#{messages['financial-period.list.result']}">
-                        <h:outputText value="#{financialPeriod.result}"
-                                      styleClass="#{financialPeriod.result.signum() lt 0 
-                                                    ? 'text-red' : 'text-green'}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                        </h:outputText>
-                    </p:column>
+                        <p:ajax event="rowSelect"
+                                listener="#{cardBean.changeToDetail()}" /> 
+                        
+                        <p:column headerText="#{messages['financial-period.list.identification']}">
+                            <p:graphicImage width="18"
+                                            height="18"
+                                            library="webbudget" 
+                                            name="img/ui-green-circle.png" 
+                                            rendered="#{not financialPeriod.closed}"
+                                            title="#{messages['financial-period.list.current']}"/>
+                            <p:graphicImage width="18"
+                                            height="18"
+                                            library="webbudget" 
+                                            name="img/ui-red-circle.png" 
+                                            rendered="#{financialPeriod.closed}"
+                                            title="#{messages['financial-period.list.closed']}"/>
+                            <p:spacer width="5"/>
+                            #{financialPeriod.identification}
+                        </p:column>
+                        <p:column width="12%" 
+                                  styleClass="align-center"
+                                  headerText="#{messages['financial-period.list.start']}">
+                            <h:outputText value="#{financialPeriod.start}" >
+                                <f:converter converterId="localDateConverter" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="12%" 
+                                  styleClass="align-center"
+                                  headerText="#{messages['financial-period.list.end']}">
+                            <h:outputText value="#{financialPeriod.end}" >
+                                <f:converter converterId="localDateConverter" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="12%" 
+                                  styleClass="align-center"
+                                  headerText="#{messages['financial-period.list.closing-date']}">
+                            <h:outputText rendered="#{financialPeriod.closed eq true}"
+                                          value="#{financialPeriod.closing.closingDate}" >
+                                <f:converter converterId="localDateConverter" />
+                            </h:outputText>
+                            <strong class="text-green"
+                                    jsf:rendered="#{financialPeriod.expired eq false 
+                                                    and financialPeriod.closed eq false}">
+                                    #{messages['financial-period.list.open']}
+                            </strong>
+                            <strong class="text-red"
+                                    jsf:rendered="#{financialPeriod.expired eq true 
+                                                    and financialPeriod.closed eq false}">
+                                    #{messages['financial-period.list.expired']}
+                            </strong>
+                        </p:column>
+                        <p:column width="12%"
+                                  styleClass="align-center" 
+                                  headerText="#{messages['financial-period.list.result']}">
+                            <h:outputText value="#{financialPeriod.result}"
+                                          styleClass="#{financialPeriod.result.signum() lt 0 
+                                                        ? 'text-red' : 'text-green'}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column width="15%" 
-                              styleClass="align-center"
-                              headerText="#{menu['actions']}">
-                        <p:commandButton immediate="true"
-                                         icon="fa fa-search"
-                                         title="#{menu['detail']}"
-                                         styleClass="btn btn-flat btn-default"
-                                         action="#{financialPeriodBean.changeToDetails(financialPeriod.id)}"
-                                         rendered="#{userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_DETAILS)}" />
-                        <p:spacer width="10"
-                                  rendered="#{financialPeriod.closed eq false 
-                                              and userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
-                        <p:button icon="fa fa-calculator"
-                                  title="#{menu['finalize']}"
-                                  styleClass="btn btn-flat btn-default"
-                                  href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"
-                                  rendered="#{financialPeriod.closed eq false 
-                                              and userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
-                        <p:spacer width="10" 
-                                  rendered="#{financialPeriod.closed eq false 
-                                              and userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_DELETE)}"/>
-                        <p:commandButton icon="fa fa-remove"
-                                         title="#{menu['delete']}"
-                                         styleClass="btn btn-flat btn-default"
-                                         actionListener="#{financialPeriodBean.changeToDelete(financialPeriod.id)}" 
-                                         rendered="#{financialPeriod.closed eq false 
-                                                     and userSessionBean.hasRole(authorization.FINANCIAL_PERIOD_DELETE)}" />
-                    </p:column>
-                </p:dataTable>
+                        <p:column width="15%" 
+                                  styleClass="align-center"
+                                  headerText="#{menu['actions']}">
+                            <p:commandButton immediate="true"
+                                             icon="fa fa-search"
+                                             title="#{menu['detail']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{financialPeriodBean.changeToDetails(financialPeriod.id)}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DETAILS)}" />
+                            <p:spacer width="10"
+                                      rendered="#{financialPeriod.closed eq false 
+                                                  and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>
+                            <p:button icon="fa fa-calculator"
+                                      title="#{menu['finalize']}"
+                                      styleClass="btn btn-flat btn-default"
+                                      href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"
+                                      rendered="#{financialPeriod.closed eq false 
+                                                  and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>
+                            <p:spacer width="10" 
+                                      rendered="#{financialPeriod.closed eq false 
+                                                  and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}"/>
+                            <p:commandButton icon="fa fa-remove"
+                                             title="#{menu['delete']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{financialPeriodBean.changeToDelete(financialPeriod.id)}" 
+                                             rendered="#{financialPeriod.closed eq false 
+                                                         and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
             </div>
         </div>
-
-        <p:blockUI block="boxBody"
-                   widgetVar="listBlock"
-                   trigger="financialPeriodsList">
-            <p:graphicImage width="32" 
-                            height="32"
-                            library="webbudget" 
-                            name="img/loading.gif" />
-        </p:blockUI>
-    </ui:define>
-
-    <ui:define name="popups">
-        <ui:include src="dialogDeletePeriod.xhtml"/>
+        <wb:blocker target="boxBody"/>
     </ui:define>
 </ui:composition>

@@ -56,18 +56,16 @@ public class FinancialPeriodService {
         final Optional<FinancialPeriod> found = this.financialPeriodRepository
                 .findOptionalByIdentification(financialPeriod.getIdentification());
 
-        if (found != null) {
+        if (found.isPresent()) {
             throw new BusinessLogicException("error.financial-period.duplicated");
         }
 
         // check for periods with the same date period of this new one
-        final List<FinancialPeriod> periods = this.financialPeriodRepository
-                .findByStartGtOrEqAndEndLtOrEq(financialPeriod.getStart(), financialPeriod.getEnd());
+        final long periodCount = this.financialPeriodRepository
+                .countOnTheSamePeriod(financialPeriod.getStart(), financialPeriod.getEnd());
 
-        for (FinancialPeriod fp : periods) {
-            if (financialPeriod.getStart().compareTo(fp.getEnd()) <= 0) {
-                throw new BusinessLogicException("error.financial-period.truncated-dates");
-            }
+        if (periodCount > 0) {
+            throw new BusinessLogicException("error.financial-period.truncated-dates", periodCount);
         }
         
         // se o fim for o mesmo dia ou anterior a data atual, erro!
@@ -78,7 +76,7 @@ public class FinancialPeriodService {
         final FinancialPeriod opened = 
                 this.financialPeriodRepository.save(financialPeriod);
         
-        // disparamos o evento para notificar os interessados
+        // fire a event to notify the listeners
         this.periodOpenEvent.fire(opened);
     }
     

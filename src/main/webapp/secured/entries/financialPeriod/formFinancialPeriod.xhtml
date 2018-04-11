@@ -24,10 +24,8 @@
                 xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="financialPeriods"/>
-
     <f:metadata>
-        <f:viewAction action="#{financialPeriodBean.initializeForm()}"/>
+        <f:viewAction action="#{financialPeriodBean.initialize(param.id, param.viewState)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -35,41 +33,37 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        #{messages['financial-period.page-description-including']}
+        #{messages['financial-period.page-description-adding']}
     </ui:define>
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['miscellany']}</a></li>
         <li><a href="listFinancialPeriods.xhtml">#{breadcrumb['miscellany.financial-period']}</a></li>
-        <li class="active"><a href="#">#{breadcrumb['including']}</a></li>
+        <li class="active"><a href="#">#{breadcrumb['adding']}</a></li>
     </ui:define>
 
     <ui:define name="content">
-
         <h:form id="financialPeriodForm" prependId="false">
-
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true" />
                 </div>
             </div>
-
             <div class="box">
-                <div class="box-header with-border"
+<!--                <div class="box-header with-border"
                      jsf:rendered="#{financialPeriodBean.hasOpenPeriod}">
                     <h3 class="box-title">
                         <span class="fa fa-warning"></span>
                         #{messages['financial-period.already-open']}
                     </h3>
-                </div>
-
+                </div>-->
                 <div class="box-body row">
                     <div class="form-group col-md-4">
                         <p:outputLabel for="inIdentification" 
                                        value="#{messages['financial-period.form.identification']}: "/>
                         <p:inputText id="inIdentification" 
                                      styleClass="form-control"
-                                     value="#{financialPeriodBean.financialPeriod.identification}" />
+                                     value="#{financialPeriodBean.value.identification}" />
                     </div>
                     <div class="form-group col-md-4">
                         <p:outputLabel for="inStart" 
@@ -79,7 +73,7 @@
                                     mask="true"
                                     pattern="dd/MM/yyyy"
                                     converter="localDateConverter"
-                                    value="#{financialPeriodBean.financialPeriod.start}" />
+                                    value="#{financialPeriodBean.value.start}" />
                     </div>
                     <div class="form-group col-md-4">
                         <p:outputLabel for="inEnd" 
@@ -89,7 +83,7 @@
                                     mask="true"
                                     pattern="dd/MM/yyyy"
                                     converter="localDateConverter"
-                                    value="#{financialPeriodBean.financialPeriod.end}" />
+                                    value="#{financialPeriodBean.value.end}" />
                     </div>
                     <div class="form-group col-md-4">
                         <p:outputLabel for="inCreditCardGoal" 
@@ -99,7 +93,7 @@
                                         decimalPlaces="2" 
                                         decimalSeparator="," 
                                         thousandSeparator="." 
-                                        value="#{financialPeriodBean.financialPeriod.creditCardGoal}">
+                                        value="#{financialPeriodBean.value.creditCardGoal}">
                             <f:converter converterId="javax.faces.BigDecimal" />
                         </p:inputNumber>
                     </div>
@@ -111,7 +105,7 @@
                                         decimalPlaces="2" 
                                         decimalSeparator="," 
                                         thousandSeparator="." 
-                                        value="#{financialPeriodBean.financialPeriod.expensesGoal}">
+                                        value="#{financialPeriodBean.value.expensesGoal}">
                             <f:converter converterId="javax.faces.BigDecimal" />
                         </p:inputNumber> 
                     </div>
@@ -123,16 +117,15 @@
                                         decimalPlaces="2" 
                                         decimalSeparator="," 
                                         thousandSeparator="." 
-                                        value="#{financialPeriodBean.financialPeriod.revenuesGoal}">
+                                        value="#{financialPeriodBean.value.revenuesGoal}">
                             <f:converter converterId="javax.faces.BigDecimal" />
                         </p:inputNumber> 
                     </div>
                 </div>
 
                 <div class="box-footer align-right">
-                    <p:commandButton value="#{menu['open']}"
+                    <p:commandButton value="#{menu['save']}"
                                      update="financialPeriodForm"
-                                     process="financialPeriodForm"
                                      styleClass="btn btn-flat btn-success"
                                      actionListener="#{financialPeriodBean.doSave()}"
                                      rendered="#{financialPeriodBean.viewState eq 'ADDING'}"/>
@@ -140,25 +133,9 @@
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
                                      styleClass="btn btn-flat btn-default" 
-                                     action="#{financialPeriodBean.doCancel()}"/>
+                                     action="#{financialPeriodBean.changeToListing()}"/>
                 </div>
             </div>
-
-
-
-
-
-
-
-            <h:panelGroup styleClass="ui-grid-row flat-box"
-                          rendered="">
-                <div class="ui-grid-col-12 ui-messages-warn ui-corner-all ui-messages ui-widget warn-financial-period">
-                    <span class="ui-messages-warn-summary">
-                        
-                    </span>
-                </div>
-            </h:panelGroup>
-
         </h:form>
     </ui:define>
 </ui:composition>

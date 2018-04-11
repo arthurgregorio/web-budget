@@ -66,7 +66,7 @@
                 </li>
                 <li class="divider"></li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_ACCESS)}">
-                    <p:link href="/main/entries/financialPeriod/listFinancialPeriods.xhtml">
+                    <p:link href="/secured/entries/financialPeriod/listFinancialPeriods.xhtml">
                         <i class="fa fa-calendar-o"></i> 
                         <span>#{menu['entries.financial-periods']}</span>
                     </p:link>
