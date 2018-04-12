@@ -17,7 +17,6 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
-import br.com.webbudget.domain.events.PeriodOpened;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.miscellany.FinancialPeriodRepository;
 import java.time.LocalDate;
@@ -27,6 +26,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import br.com.webbudget.domain.events.NewPeriodOpened;
 
 /**
  *
@@ -39,11 +39,11 @@ import javax.transaction.Transactional;
 public class FinancialPeriodService {
 
     @Inject
-    private FinancialPeriodRepository financialPeriodRepository;
+    @NewPeriodOpened
+    private Event<FinancialPeriod> newPeriodOpenedEvent;
     
     @Inject
-    @PeriodOpened
-    private Event<FinancialPeriod> periodOpenEvent;
+    private FinancialPeriodRepository financialPeriodRepository;
     
     /**
      *
@@ -61,14 +61,18 @@ public class FinancialPeriodService {
         }
 
         // check for periods with the same date period of this new one
-        final long periodCount = this.financialPeriodRepository
-                .countOnTheSamePeriod(financialPeriod.getStart(), financialPeriod.getEnd());
+        final List<FinancialPeriod> periods = this.financialPeriodRepository.findByClosed(false);
 
-        if (periodCount > 0) {
-            throw new BusinessLogicException("error.financial-period.truncated-dates", periodCount);
-        }
+        periods.stream().forEach(period -> {
+            
+            if (financialPeriod.getStart().isAfter(period.getStart()) || 
+                    financialPeriod.getEnd().isBefore(period.getEnd())) {
+                throw new BusinessLogicException("error.financial-period.truncated-dates", 
+                        period.getIdentification());
+            }
+        });
         
-        // se o fim for o mesmo dia ou anterior a data atual, erro!
+        // if the end date is in the same or before the current day, error
         if (financialPeriod.getEnd().compareTo(LocalDate.now()) < 1) {
             throw new BusinessLogicException("error.financial-period.invalid-end");
         }
@@ -77,7 +81,7 @@ public class FinancialPeriodService {
                 this.financialPeriodRepository.save(financialPeriod);
         
         // fire a event to notify the listeners
-        this.periodOpenEvent.fire(opened);
+        this.newPeriodOpenedEvent.fire(opened);
     }
     
     /**

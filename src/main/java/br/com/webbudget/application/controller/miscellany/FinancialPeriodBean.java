@@ -131,6 +131,15 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
 
     /**
      * 
+     * @param id
+     * @return 
+     */
+    public String changeToClosing(long id) {
+        return "";
+    }
+    
+    /**
+     * 
      */
     public void validateOpenPeriods() {
 

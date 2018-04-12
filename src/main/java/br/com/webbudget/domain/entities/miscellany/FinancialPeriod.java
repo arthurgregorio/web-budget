@@ -99,7 +99,7 @@ public class FinancialPeriod extends PersistentEntity {
      * @return 
      */
     public Closing getClosing() {
-        if (closing == null) {
+        if (this.closing == null) {
             throw new BusinessLogicException(
                     "error.financial-period.not-closed", this.identification);
         }

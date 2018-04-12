@@ -19,11 +19,9 @@ package br.com.webbudget.domain.repositories.miscellany;
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
-import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -39,22 +37,17 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
 
     /**
      * 
+     * @param isClosed
+     * @return 
+     */
+    List<FinancialPeriod> findByClosed(boolean isClosed);
+    
+    /**
+     * 
      * @param identification
      * @return 
      */
     Optional<FinancialPeriod> findOptionalByIdentification(String identification);
-    
-    /**
-     * 
-     * @param start
-     * @param end
-     * @return 
-     */
-    @Query("SELECT count(*) "
-            + "FROM FinancialPeriod fp "
-            + "WHERE fp.start >= ?1 "
-            + " AND fp.end <= ?2")
-    long countOnTheSamePeriod(LocalDate start, LocalDate end);
     
     /**
      *
@@ -81,45 +74,6 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
      */
     @Override
     public default void setOrder(Criteria<FinancialPeriod, FinancialPeriod> criteria) {
-        criteria.orderAsc(FinancialPeriod_.id);
+        criteria.orderDesc(FinancialPeriod_.start);
     }
-
-//    /**
-//     * @return 
-//     */
-//    public FinancialPeriod findLatestClosed();
-//    
-//    /**
-//     *
-//     * @return
-//     */
-//    public List<FinancialPeriod> listOpen();
-//    
-//
-//    /**
-//     * @return 
-//     */
-//    public List<FinancialPeriod> listLastSixClosed();
-//    
-//    /**
-//     *
-//     * @param isClosed
-//     * @return
-//     */
-//    public List<FinancialPeriod> listByStatus(Boolean isClosed);
-//
-//    /**
-//     *
-//     * @param identification
-//     * @return
-//     */
-//    public FinancialPeriod findByIdentification(String identification);
-//    
-//    /**
-//     * 
-//     * @param isClosed
-//     * @param pageRequest
-//     * @return 
-//     */
-//    public Page<FinancialPeriod> listByStatusLazily(Boolean isClosed, PageRequest pageRequest);
 }
