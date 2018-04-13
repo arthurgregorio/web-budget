@@ -23,10 +23,8 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="financialPeriods"/>
-
     <f:metadata>
-        <f:viewAction action="#{periodDetailBean.initialize(param.periodId)}"/>
+        <f:viewAction action="#{periodDetailBean.initialize(param.periodId, param.viewState)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">

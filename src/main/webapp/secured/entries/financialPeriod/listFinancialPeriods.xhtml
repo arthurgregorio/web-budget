@@ -104,18 +104,18 @@
                                  lazy="true"
                                  rowHover="true"
                                  paginator="true"
-                                 rowKey="#{card.id}"
                                  var="financialPeriod"
                                  sortOrder="ascending"
                                  selectionMode="single" 
                                  paginatorPosition="bottom"
+                                 rowKey="#{financialPeriod.id}"
                                  paginatorAlwaysVisible="false"
                                  selection="#{financialPeriodBean.value}"
                                  value="#{financialPeriodBean.dataModel}"
                                  emptyMessage="#{messages['list.empty']}">
 
                         <p:ajax event="rowSelect"
-                                listener="#{cardBean.changeToDetail()}" /> 
+                                listener="#{financialPeriodBean.changeToDetail()}" /> 
                         
                         <p:column headerText="#{messages['financial-period.list.identification']}">
                             #{financialPeriod.identification}
@@ -165,15 +165,6 @@
                         <p:column width="15%" 
                                   styleClass="align-center"
                                   headerText="#{menu['actions']}">
-                            <p:commandButton immediate="true"
-                                             icon="fa fa-search"
-                                             title="#{menu['detail']}"
-                                             styleClass="btn btn-flat btn-default"
-                                             action="#{financialPeriodBean.changeToDetails(financialPeriod.id)}"
-                                             rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DETAILS)}" />
-                            <p:spacer width="10"
-                                      rendered="#{financialPeriod.closed eq false 
-                                                  and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>
                             <p:button icon="fa fa-calculator"
                                       title="#{menu['finalize']}"
                                       styleClass="btn btn-flat btn-default"

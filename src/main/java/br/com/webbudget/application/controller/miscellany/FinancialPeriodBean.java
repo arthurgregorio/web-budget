@@ -155,4 +155,84 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
 //            }
 //        }
     }
+    
+//    /**
+//     * @param periodId
+//     */
+//    public void initialize(long periodId) {
+//
+//        this.revenueClasses = new ArrayList<>();
+//        this.expensesClasses = new ArrayList<>();
+//        
+//        // pega o periodo e os movimentos
+//        try {
+//            this.period = this.financialPeriodService
+//                    .findPeriodById(periodId);
+//            
+//            final List<Movement> movements = this.movementService
+//                    .listOnlyMovementsByPeriod(this.period);
+//            
+//            this.calculator = new MovementCalculator(movements);
+//            
+//            // carrega as classes
+//            this.loadExpensesByClass();
+//            this.loadRevenuesByClass();
+//            
+//            // monta o grafico por dias
+//            final LineChartModel lineChartModel = 
+//                    this.periodDetailService.bulidDailyChart(this.period);
+//            
+//            this.drawLineChart("dailySummaryChart", lineChartModel);
+//        } catch (Exception ex) {
+//            this.logger.error("Cant fill period {} details",
+//                    this.period.getIdentification(), ex);
+//        }
+//    }
+//    
+//    /**
+//     * @return volta para a listagem de periodos
+//     */
+//    public String doCancel() {
+//        return "listFinancialPeriods.xhtml?faces-redirect=true";
+//    }
+//
+//    /**
+//     * @return procentagem da meta de pagamentos no credito
+//     */
+//    public int getPaidOnCreditPercentage() {
+//        return this.percentageOf(this.calculator.getTotalPaidOnCreditCard(), 
+//                this.period.getCreditCardGoal());
+//    }
+//
+//    /**
+//     * @return porcentagem da meta de despesas
+//     */
+//    public int getExpensesGoalPercentage() {
+//        return this.percentageOf(this.calculator.getExpensesTotal(), 
+//                this.period.getExpensesGoal());
+//    }
+//    
+//    /**
+//     * @return porcentagem da meta de receitas
+//     */
+//    public int getRevenuesGoalPercentage() {
+//        return this.percentageOf(this.calculator.getRevenuesTotal(), 
+//                this.period.getRevenuesGoal());
+//    }
+//
+//    /**
+//     * 
+//     */
+//    private void loadExpensesByClass() {
+//        this.expensesClasses = this.periodDetailService
+//                .fetchTopClassesAndValues(this.period, MovementClassType.OUT);
+//    }
+//    
+//    /**
+//     * 
+//     */
+//    private void loadRevenuesByClass() {
+//        this.revenueClasses = this.periodDetailService
+//                .fetchTopClassesAndValues(this.period, MovementClassType.IN);
+//    }
 }
