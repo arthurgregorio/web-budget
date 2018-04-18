@@ -16,185 +16,131 @@
  */
 package br.com.webbudget.application.controller.entries;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
+import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.domain.entities.entries.CostCenter;
+import br.com.webbudget.domain.entities.entries.MovementClass;
+import br.com.webbudget.domain.entities.entries.MovementClassType;
+import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
+import br.com.webbudget.domain.repositories.entries.MovementClassRepository;
+import br.com.webbudget.domain.services.ClassificationService;
+import java.util.List;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller da view de classes de movimento
  *
  * @author Arthur Gregorio
  *
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.0.0, 04/03/2014
  */
 @Named
 @ViewScoped
-public class MovementClassBean extends AbstractBean {
+public class MovementClassBean extends FormBean<MovementClass> {
 
-//    @Getter
-//    private MovementClass movementClass;
-//
-//    @Getter
-//    private List<CostCenter> costCenters;
-//
-//    @Inject
-//    private MovementService movementService;
-//    
-//    @Getter
-//    private final AbstractLazyModel<MovementClass> MovementClassesModel;
-//
-//    /**
-//     * 
-//     */
-//    public MovementClassBean() {
-//
-//        this.MovementClassesModel = new AbstractLazyModel<MovementClass>() {
-//            @Override
-//            public List<MovementClass> load(int first, int pageSize, String sortField, 
-//                    SortOrder sortOrder, Map<String, Object> filters) {
-//                
-//                final PageRequest pageRequest = new PageRequest();
-//                
-//                pageRequest
-//                        .setFirstResult(first)
-//                        .withPageSize(pageSize)
-//                        .sortingBy(sortField, "inclusion")
-//                        .withDirection(sortOrder.name());
-//                
-//                final Page<MovementClass> page = movementService.listMovementClassesLazily(null, pageRequest);
-//                
-//                this.setRowCount(page.getTotalPagesInt());
-//                
-//                return page.getContent();
-//            }
-//        };
-//    }
-//    
-//    /**
-//     *
-//     */
-//    public void initializeListing() {
-//        this.viewState = ViewState.LISTING;
-//    }
-//
-//    /**
-//     * @param movementClassId
-//     */
-//    public void initializeForm(long movementClassId) {
-//
-//        this.costCenters = this.movementService.listCostCenters(false);
-//
-//        if (movementClassId == 0) {
-//            this.viewState = ViewState.ADDING;
-//            this.movementClass = new MovementClass();
-//        } else {
-//            this.viewState = ViewState.EDITING;
-//            this.movementClass = this.movementService.findMovementClassById(movementClassId);
-//        }
-//    }
-//
-//    /**
-//     * @return o form de inclusao
-//     */
-//    public String changeToAdd() {
-//        return "formMovementClass.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToListing() {
-//        return "formMovementClass.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @param movementClassId
-//     * @return
-//     */
-//    public String changeToEdit(long movementClassId) {
-//        return "formMovementClass.xhtml?faces-redirect=true&movementClassId=" + movementClassId;
-//    }
-//
-//    /**
-//     * @param movementClassId
-//     */
-//    public void changeToDelete(long movementClassId) {
-//        this.movementClass = this.movementService.findMovementClassById(movementClassId);
-//        this.updateAndOpenDialog("deleteMovementClassDialog", "dialogDeleteMovementClass");
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String doCancel() {
-//        return "listMovementClasses.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doSave() {
-//
-//        try {
-//            this.movementService.saveMovementClass(this.movementClass);
-//            this.movementClass = new MovementClass();
-//            this.addInfo(true, "movement-class.saved");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doUpdate() {
-//
-//        try {
-//            this.movementClass = this.movementService.updateMovementClass(this.movementClass);
-//
-//            this.addInfo(true, "movement-class.updated");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doDelete() {
-//
-//        try {
-//            this.movementService.deleteMovementClass(this.movementClass);
-//            this.addInfo(true, "movement-class.deleted");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            if (this.containsException(ConstraintViolationException.class, ex)) {
-//                this.addError(true, "error.movement-class.integrity-violation", 
-//                        this.movementClass.getName());
-//            } else {
-//                this.logger.error(ex.getMessage(), ex);
-//                this.addError(true, "error.undefined-error", ex.getMessage());
-//            }
-//        } finally {
-//            this.updateComponent("movementClassesList");
-//            this.closeDialog("dialogDeleteMovementClass");
-//        }
-//    }
-//
-//    /**
-//     * A lista com os tipos de movimento para preencher a view
-//     *
-//     * @return a lista dos valores do enum
-//     */
-//    public MovementClassType[] getAvailableMovementsTypes() {
-//        return MovementClassType.values();
-//    }
+    @Getter
+    private List<CostCenter> costCenters;
+    
+    @Inject
+    private CostCenterRepository costCenterRepository;
+    @Inject
+    private MovementClassRepository movementClassRepository;
+    
+    @Inject
+    private ClassificationService classificationService;
+
+    /**
+     * 
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.temporizeHiding(this.getDefaultMessagesComponentId());
+    }
+
+    /**
+     * 
+     * @param id
+     * @param viewState 
+     */
+    @Override
+    public void initialize(long id, ViewState viewState) {
+        this.viewState = viewState;
+        this.costCenters = this.costCenterRepository.findAllUnblocked();
+        this.value = this.movementClassRepository.findOptionalById(id)
+                .orElseGet(MovementClass::new);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected void initializeNavigationManager() {
+        this.navigation.addPage(LIST_PAGE, "listMovementClasses.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formMovementClass.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formMovementClass.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailMovementClass.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailMovementClass.xhtml");
+    }
+
+    /**
+     * 
+     * @param first
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return 
+     */
+    @Override
+    public List<MovementClass> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.movementClassRepository.findAllBy(this.filter.getValue(), 
+                this.filter.getEntityStatusValue(), first, pageSize);
+    }
+    
+    /**
+     *
+     */
+    @Override
+    public void doSave() {
+        this.classificationService.save(this.value);
+        this.value = new MovementClass();
+        this.addInfo(true, "movement-class.saved");
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void doUpdate() {
+        this.value = this.classificationService.update(this.value);
+        this.addInfo(true, "movement-class.updated");
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String doDelete() {
+        this.classificationService.delete(this.value);
+        this.addInfoAndKeep("movement-class.deleted");
+        return this.changeToListing();
+    }
+
+    /**
+     * @return the movement class type values
+     */
+    public MovementClassType[] getAvailableMovementsTypes() {
+        return MovementClassType.values();
+    }
 }

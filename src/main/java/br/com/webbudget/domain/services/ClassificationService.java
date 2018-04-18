@@ -17,8 +17,10 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.entries.CostCenter;
+import br.com.webbudget.domain.entities.entries.MovementClass;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
+import br.com.webbudget.domain.repositories.entries.MovementClassRepository;
 import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -36,6 +38,8 @@ public class ClassificationService {
 
     @Inject
     private CostCenterRepository costCenterRepository;
+    @Inject
+    private MovementClassRepository movementClassRepository;
     
     /**
      *
@@ -70,5 +74,33 @@ public class ClassificationService {
     @Transactional
     public void delete(CostCenter costCenter) {
         this.costCenterRepository.attachAndRemove(costCenter);
+    }
+    
+    /**
+     * 
+     * @param movementClass 
+     */
+    @Transactional
+    public void save(MovementClass movementClass) {
+        this.movementClassRepository.save(movementClass);
+    }
+    
+    /**
+     * 
+     * @param movementClass
+     * @return 
+     */
+    @Transactional
+    public MovementClass update(MovementClass movementClass) {
+        return this.movementClassRepository.saveAndFlushAndRefresh(movementClass);
+    }
+    
+    /**
+     * 
+     * @param movementClass 
+     */
+    @Transactional
+    public void delete(MovementClass movementClass) {
+        this.movementClassRepository.attachAndRemove(movementClass);
     }
 }

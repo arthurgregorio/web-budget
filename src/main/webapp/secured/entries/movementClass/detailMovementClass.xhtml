@@ -34,11 +34,12 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{movementClassBean.viewState eq 'ADDING'}"
-                      value="#{messages['movement-class.page-description-adding']}"/>
-        <o:outputFormat id="pageDescription" 
-                        rendered="#{movementClassBean.viewState eq 'EDITING'}" 
-                        value="#{messages['movement-class.page-description-editing']}">
+        <o:outputFormat rendered="#{movementClassBean.viewState eq 'DETAILING'}" 
+                        value="#{messages['movement-class.page-description-detailing']}">
+            <f:param value="#{movementClassBean.value.name}"/>
+        </o:outputFormat>
+        <o:outputFormat rendered="#{movementClassBean.viewState eq 'DELETING'}" 
+                        value="#{messages['movement-class.page-description-deleting']}">
             <f:param value="#{movementClassBean.value.name}"/>
         </o:outputFormat>
     </ui:define>
@@ -46,17 +47,19 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['entries']}</a></li>
         <li><a href="listMovementClasses.xhtml">#{breadcrumb['entries.movement-class']}</a></li>
-        <li jsf:rendered="#{movementClassBean.viewState eq 'ADDING'}" 
-            class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{movementClassBean.viewState eq 'EDITING'}" 
-            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
+        <li jsf:rendered="#{movementClassBean.viewState eq 'DELETING'}" 
+            class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
+        <li jsf:rendered="#{movementClassBean.viewState eq 'DETAILING'}" 
+            class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
         <h:form id="movementClassForm" prependId="false">
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" />
+                    <p:messages id="messages" closable="true" >
+                        <p:autoUpdate />
+                    </p:messages>
                 </div>
             </div>
             <div class="box">
@@ -82,7 +85,7 @@
                         <p:selectOneMenu id="inMovementClassType" 
                                          value="#{movementClassBean.value.movementClassType}"
                                          converter="omnifaces.GenericEnumConverter"
-                                         disabled="#{cardBean.viewState eq 'EDITING'}">
+                                         disabled="#{movementClassBean.viewState eq 'EDITING'}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
                                           itemLabel="#{messages['movement-class.form.select-one']}" />
@@ -121,21 +124,19 @@
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <p:commandButton value="#{menu['save']}"
-                                     update="movementClassForm"
-                                     styleClass="btn btn-flat btn-success"
-                                     action="#{movementClassBean.doSave()}"
-                                     rendered="#{movementClassBean.viewState eq 'ADDING'}"/>
-                    <p:commandButton value="#{menu['update']}"
-                                     styleClass="btn btn-flat btn-success"
-                                     action="#{movementClassBean.doUpdate()}"
-                                     update="movementClassForm pageDescription"
-                                     rendered="#{movementClassBean.viewState eq 'EDITING'}"/>
+                    <h:outputText styleClass="text-red text-bold"
+                                  value="#{menu['delete.confirmation']}"
+                                  rendered="#{movementClassBean.viewState eq 'DELETING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['yes']}"
+                                     action="#{movementClassBean.doDelete()}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     rendered="#{movementClassBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
                                      styleClass="btn btn-flat btn-primary" 
-                                     action="#{movementClassBean.changeToListing()}"/>
+                                     action="#{movementClassBean.changeToListing()}"
+                                     value="#{movementClassBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>

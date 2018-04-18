@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -62,9 +63,9 @@ public class MovementClass extends PersistentEntity {
     private boolean blocked;
     @Getter
     @Setter
-    @Enumerated
-    @NotNull(message = "{movement-class.movement-class-type}")
+    @Enumerated(EnumType.STRING)
     @Column(name = "movement_class_type", nullable = false)
+    @NotNull(message = "{movement-class.movement-class-type}")
     private MovementClassType movementClassType;
 
     @Getter
@@ -85,6 +86,22 @@ public class MovementClass extends PersistentEntity {
     public MovementClass() {
         this.budget = BigDecimal.ZERO;
         this.totalMovements = BigDecimal.ZERO;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean isRevenues() {
+        return this.movementClassType == MovementClassType.IN;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean isExpenses() {
+        return this.movementClassType == MovementClassType.OUT;
     }
     
     /**
