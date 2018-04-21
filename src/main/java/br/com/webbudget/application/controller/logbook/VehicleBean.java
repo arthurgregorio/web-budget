@@ -16,9 +16,26 @@
  */
 package br.com.webbudget.application.controller.logbook;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
+import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.domain.entities.entries.CostCenter;
+import br.com.webbudget.domain.entities.logbook.Vehicle;
+import br.com.webbudget.domain.entities.logbook.VehicleType;
+import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
+import br.com.webbudget.domain.repositories.entries.VehicleRepository;
+import br.com.webbudget.domain.services.ClassificationService;
+import br.com.webbudget.domain.services.LogbookService;
+import java.util.List;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.model.SortOrder;
 
 /**
  * Controller para a view de manutencao dos veiculos do diario de bordo
@@ -30,173 +47,100 @@ import javax.inject.Named;
  */
 @Named
 @ViewScoped
-public class VehicleBean extends AbstractBean {
+public class VehicleBean extends FormBean<Vehicle> {
 
-//    @Getter
-//    private Vehicle vehicle;
-//    
-//    @Getter
-//    private List<Vehicle> vehicles;
-//    @Getter
-//    private List<CostCenter> costCenters;
-//
-//    @Inject
-//    private LogbookService logbookService;
-//    @Inject
-//    private MovementService movementService;
-//
-//    @Getter
-//    private final AbstractLazyModel<Vehicle> vehiclesModel;
-//
-//    /**
-//     *
-//     */
-//    public VehicleBean() {
-//
-//        this.vehiclesModel = new AbstractLazyModel<Vehicle>() {
-//            @Override
-//            public List<Vehicle> load(int first, int pageSize, String sortField,
-//                    SortOrder sortOrder, Map<String, Object> filters) {
-//
-//                final PageRequest pageRequest = new PageRequest();
-//
-//                pageRequest
-//                        .setFirstResult(first)
-//                        .withPageSize(pageSize)
-//                        .sortingBy(sortField, "inclusion")
-//                        .withDirection(sortOrder.name());
-//
-//                final Page<Vehicle> page = 
-//                        logbookService.listVehiclesLazily(null, pageRequest);
-//
-//                this.setRowCount(page.getTotalPagesInt());
-//
-//                return page.getContent();
-//            }
-//        };
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void initializeListing() {
-//        this.viewState = ViewState.LISTING;
-//    }
-//
-//    /**
-//     * @param vehicleId
-//     */
-//    public void initializeForm(long vehicleId) {
-//
-//        this.costCenters = this.movementService.listCostCenters(false);
-//
-//        if (vehicleId == 0) {
-//            this.viewState = ViewState.ADDING;
-//            this.vehicle = new Vehicle();
-//        } else {
-//            this.viewState = ViewState.EDITING;
-//            this.vehicle = this.logbookService.findVehicleById(vehicleId);
-//        }
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToAdd() {
-//        return "formVehicle.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToListing() {
-//        return "listVehicles.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @param vehicleId
-//     * @return
-//     */
-//    public String changeToEdit(long vehicleId) {
-//        return "formVehicle.xhtml?faces-redirect=true&vehicleId=" + vehicleId;
-//    }
-//
-//    /**
-//     * @param vehicleId
-//     */
-//    public void changeToDelete(long vehicleId) {
-//        this.vehicle = this.logbookService.findVehicleById(vehicleId);
-//        this.updateAndOpenDialog("deleteVehicleDialog", "dialogDeleteVehicle");
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String doCancel() {
-//        return "listVehicles.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doSave() {
-//
-//        try {
-//            this.logbookService.saveVehicle(this.vehicle);
-//            this.vehicle = new Vehicle();
-//            this.addInfo(true, "vehicle.saved");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doUpdate() {
-//
-//        try {
-//            this.vehicle = this.logbookService.updateVehicle(this.vehicle);
-//            this.addInfo(true, "vehicle.updated");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doDelete() {
-//
-//        try {
-//            this.logbookService.deleteVehicle(this.vehicle);
-//            this.addInfo(true, "vehicle.deleted");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            if (this.containsException(ConstraintViolationException.class, ex)) {
-//                this.addError(true, "error.vehicle.integrity-violation",
-//                        this.vehicle.getIdentification());
-//            } else {
-//                this.logger.error(ex.getMessage(), ex);
-//                this.addError(true, "error.undefined-error", ex.getMessage());
-//            }
-//        } finally {
-//            this.closeDialog("dialogDeleteVehicle");
-//            this.updateComponent("vehiclesList");
-//        }
-//    }
-//    
-//    /**
-//     * @return os tipos de veiculo para selecao
-//     */
-//    public VehicleType[] getVehicleTypes() {
-//        return VehicleType.values();
-//    }
+    private List<CostCenter> costCenters;
+
+    @Inject
+    private LogbookService logbookService;
+    
+    @Inject
+    private VehicleRepository vehicleRepository;
+    @Inject
+    private CostCenterRepository costCenterRepository;
+
+    /**
+     * 
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.temporizeHiding(this.getDefaultMessagesComponentId());
+    }
+
+    /**
+     * 
+     * @param id
+     * @param viewState 
+     */
+    @Override
+    public void initialize(long id, ViewState viewState) {
+        this.viewState = viewState;
+        this.costCenters = this.costCenterRepository.findAllUnblocked();
+        this.value = this.vehicleRepository.findOptionalById(id)
+                .orElseGet(Vehicle::new);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected void initializeNavigationManager() {
+        this.navigation.addPage(LIST_PAGE, "listVehicles.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formVehicle.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formVehicle.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailVehicle.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailVehicle.xhtml");
+    }
+
+    /**
+     * 
+     * @param first
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return 
+     */
+    @Override
+    public Page<Vehicle> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.vehicleRepository.findAllBy(this.filter.getValue(), 
+                this.filter.getEntityStatusValue(), first, pageSize);
+    }
+    
+    /**
+     *
+     */
+    @Override
+    public void doSave() {
+        this.logbookService.save(this.value);
+        this.value = new Vehicle();
+        this.addInfo(true, "vehicle.saved");
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void doUpdate() {
+        this.value = this.logbookService.update(this.value);
+        this.addInfo(true, "vehicle.updated");
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String doDelete() {
+        this.logbookService.delete(this.value);
+        this.addInfoAndKeep("vehicle.deleted");
+        return this.changeToListing();
+    }
+
+    /**
+     * @return os tipos de veiculo para selecao
+     */
+    public VehicleType[] getVehicleTypes() {
+        return VehicleType.values();
+    }
 }

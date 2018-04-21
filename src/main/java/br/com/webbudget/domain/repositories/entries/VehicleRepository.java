@@ -17,38 +17,42 @@
 package br.com.webbudget.domain.repositories.entries;
 
 import br.com.webbudget.domain.entities.logbook.Vehicle;
-import org.apache.deltaspike.data.api.EntityRepository;
+import br.com.webbudget.domain.entities.logbook.Vehicle_;
+import br.com.webbudget.domain.repositories.DefaultRepository;
+import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
+import org.apache.deltaspike.data.api.criteria.Criteria;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 3.0.0
  * @since 2.3.0, 05/06/2016
  */
 @Repository
-public interface IVehicleRepository extends EntityRepository<Vehicle, Long> {
+public interface VehicleRepository extends DefaultRepository<Vehicle> {
 
-//    /**
-//     * 
-//     * @param vehicle
-//     * @return 
-//     */
-//    public int findLastOdometer(Vehicle vehicle);
-//    
-//    /**
-//     *
-//     * @param isBlocked
-//     * @return
-//     */
-//    public List<Vehicle> listByStatus(Boolean isBlocked);
-//
-//    /**
-//     * 
-//     * @param isBlocked
-//     * @param pageRequest
-//     * @return 
-//     */
-//    public Page<Vehicle> listLazilyByStatus(Boolean isBlocked, PageRequest pageRequest);
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public default SingularAttribute<Vehicle, Boolean> getBlockedProperty() {
+        return Vehicle_.blocked;
+    }
+
+    /**
+     * 
+     * @param filter
+     * @return 
+     */
+    @Override
+    public default Criteria<Vehicle, Vehicle> getRestrictions(String filter) {
+        return criteria()
+                .eqIgnoreCase(Vehicle_.identification, filter)
+                .eqIgnoreCase(Vehicle_.brand, filter)
+                .eqIgnoreCase(Vehicle_.model, filter)
+                .eqIgnoreCase(Vehicle_.licensePlate, filter);
+    }
 }
