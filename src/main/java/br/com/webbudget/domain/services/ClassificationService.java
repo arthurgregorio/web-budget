@@ -18,9 +18,12 @@ package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.entries.CostCenter;
 import br.com.webbudget.domain.entities.entries.MovementClass;
+import br.com.webbudget.domain.entities.entries.MovementClassType;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
 import br.com.webbudget.domain.repositories.entries.MovementClassRepository;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -82,19 +85,39 @@ public class ClassificationService {
      */
     @Transactional
     public void save(MovementClass movementClass) {
+
+        final Optional<MovementClass> found = this.movementClassRepository
+                .findOptionalByNameAndCostCenter_name(movementClass.getName(), 
+                        movementClass.getCostCenter().getName());
+
+        if (found.isPresent()) {
+            throw new BusinessLogicException("error.movement-class.duplicated");
+        }
+
+        this.hasValidBudget(movementClass);
         this.movementClassRepository.save(movementClass);
     }
-    
+
     /**
-     * 
+     *
      * @param movementClass
-     * @return 
+     * @return
      */
     @Transactional
     public MovementClass update(MovementClass movementClass) {
-        return this.movementClassRepository.saveAndFlushAndRefresh(movementClass);
+
+        final Optional<MovementClass> found = this.movementClassRepository
+                .findOptionalByNameAndCostCenter_name(movementClass.getName(), 
+                        movementClass.getCostCenter().getName());
+
+        if (found.isPresent() && !found.get().equals(movementClass)) {
+            throw new BusinessLogicException("error.movement-class.duplicated");
+        }
+
+        this.hasValidBudget(movementClass);
+        return this.movementClassRepository.save(movementClass);
     }
-    
+
     /**
      * 
      * @param movementClass 
@@ -102,5 +125,43 @@ public class ClassificationService {
     @Transactional
     public void delete(MovementClass movementClass) {
         this.movementClassRepository.attachAndRemove(movementClass);
+    }
+    
+    /**
+     * The method to check if the bugdet of the costcenter is available for use
+     *
+     * @param movementClass the class to be validate againts his cost center
+     * @return true if has budget or exception if no budget is found
+     */
+    private boolean hasValidBudget(MovementClass movementClass) {
+
+        final CostCenter costCenter = movementClass.getCostCenter();
+        final MovementClassType classType = movementClass.getMovementClassType();
+
+        if (costCenter.controlBudget(classType)) {
+
+            final List<MovementClass> classes = this.movementClassRepository
+                    .findByMovementClassTypeAndCostCenter(classType, costCenter);
+
+            final BigDecimal consumed = classes.stream()
+                    .filter(mc -> !mc.equals(movementClass))
+                    .map(MovementClass::getBudget)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal available;
+
+            if (classType == MovementClassType.IN) {
+                available = costCenter.getRevenuesBudget().subtract(consumed);
+            } else {
+                available = costCenter.getExpensesBudget().subtract(consumed);
+            }
+
+            // caso o valor disponivel seja menor que o desejado, exception!
+            if (available.compareTo(movementClass.getBudget()) < 0) {
+                final String value = "R$ " + String.format("%10.2f", available);
+                throw new BusinessLogicException("error.movement-class.no-budget", value);
+            }
+        }
+        return true;
     }
 }

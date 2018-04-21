@@ -16,9 +16,13 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
+import br.com.webbudget.domain.entities.entries.CostCenter;
 import br.com.webbudget.domain.entities.entries.MovementClass;
+import br.com.webbudget.domain.entities.entries.MovementClassType;
 import br.com.webbudget.domain.entities.entries.MovementClass_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
+import java.util.List;
+import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
@@ -33,6 +37,22 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 @Repository
 public interface MovementClassRepository extends DefaultRepository<MovementClass> {
 
+    /**
+     * 
+     * @param name
+     * @param costCenterName
+     * @return 
+     */
+    Optional<MovementClass> findOptionalByNameAndCostCenter_name(String name, String costCenterName);
+    
+    /**
+     * 
+     * @param classType
+     * @param costCenter
+     * @return 
+     */
+    List<MovementClass> findByMovementClassTypeAndCostCenter(MovementClassType classType, CostCenter costCenter);
+    
     /**
      * 
      * @return 

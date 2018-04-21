@@ -80,12 +80,12 @@
                         <p:outputLabel for="inMovementClassType" 
                                        value="#{messages['movement-class.form.movement-class-type']}: "/>
                         <p:selectOneMenu id="inMovementClassType" 
-                                         value="#{movementClassBean.value.movementClassType}"
                                          converter="omnifaces.GenericEnumConverter"
-                                         disabled="#{cardBean.viewState eq 'EDITING'}">
+                                         value="#{movementClassBean.value.movementClassType}"
+                                         disabled="#{movementClassBean.viewState eq 'EDITING'}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{messages['movement-class.form.select-one']}" />
+                                          itemLabel="#{messages['select-one']}" />
                             <f:selectItems var="movementClassType"
                                            itemValue="#{movementClassType}"
                                            itemLabel="#{enums[movementClassType]}"
@@ -100,7 +100,7 @@
                                          value="#{movementClassBean.value.costCenter}" >
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{messages['movement-class.form.select-one']}" />
+                                          itemLabel="#{menu['select-one']}" />
                             <f:selectItems var="costCenter" 
                                            itemValue="#{costCenter}"
                                            itemLabel="#{costCenter.name}"
