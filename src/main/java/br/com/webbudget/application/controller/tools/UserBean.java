@@ -22,6 +22,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
 import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.security.Group;
 import br.com.webbudget.domain.entities.security.StoreType;
@@ -109,7 +110,7 @@ public class UserBean extends FormBean<User> {
      * @return 
      */
     @Override
-    public List<User> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+    public Page<User> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.userRepository.findAllBy(this.filter.getValue(), 
                 this.filter.getEntityStatusValue(), first, pageSize);
     }

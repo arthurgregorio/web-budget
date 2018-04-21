@@ -22,6 +22,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
 import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.entries.CostCenter;
 import javax.faces.view.ViewScoped;
@@ -29,7 +30,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
 import br.com.webbudget.domain.services.ClassificationService;
-import java.util.List;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -92,7 +92,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
      * @return 
      */
     @Override
-    public List<CostCenter> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+    public Page<CostCenter> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.costCenterRepository.findAllBy(this.filter.getValue(), 
                 this.filter.getEntityStatusValue(), first, pageSize);
     }

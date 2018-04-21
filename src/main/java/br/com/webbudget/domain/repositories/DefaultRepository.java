@@ -16,14 +16,13 @@
  */
 package br.com.webbudget.domain.repositories;
 
+import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.PersistentEntity_;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.FirstResult;
-import org.apache.deltaspike.data.api.MaxResults;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 import org.apache.deltaspike.data.api.criteria.CriteriaSupport;
 
@@ -48,8 +47,9 @@ public interface DefaultRepository<T extends PersistentEntity>
      * @param pageSize
      * @return 
      */
-    default List<T> findAllBy(String filter, Boolean blocked, 
-            @FirstResult int start, @MaxResults int pageSize) {
+    default Page<T> findAllBy(String filter, Boolean blocked, int start, int pageSize) {
+        
+        final long totalRows = this.countPages(filter, blocked);
         
         final Criteria<T, T> criteria = criteria()
                 .or(this.getRestrictions(filter));
@@ -60,10 +60,12 @@ public interface DefaultRepository<T extends PersistentEntity>
         
         this.setOrder(criteria);
                 
-        return criteria.createQuery()
+        final List<T> data = criteria.createQuery()
                 .setFirstResult(start)
                 .setMaxResults(pageSize)
                 .getResultList();
+        
+        return Page.of(data, totalRows);
     }
 
     /**
@@ -86,6 +88,26 @@ public interface DefaultRepository<T extends PersistentEntity>
      */
     default void setOrder(Criteria<T, T> criteria) {
         criteria.orderDesc(PersistentEntity_.createdOn);
+    }
+    
+    /**
+     * 
+     * @param filter
+     * @param blocked
+     * @return 
+     */
+    default long countPages(String filter, Boolean blocked) {
+        
+        final Criteria<T, T> criteria = criteria()
+                .or(this.getRestrictions(filter));
+        
+        if (blocked != null) {
+            criteria.eq(this.getBlockedProperty(), blocked);
+        }
+        
+        return criteria
+                .select(Long.class, count(PersistentEntity_.id))
+                .getSingleResult();
     }
     
     /**

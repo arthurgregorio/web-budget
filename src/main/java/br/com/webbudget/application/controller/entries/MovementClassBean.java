@@ -22,6 +22,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
 import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.entries.CostCenter;
 import br.com.webbudget.domain.entities.entries.MovementClass;
@@ -102,7 +103,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
      * @return 
      */
     @Override
-    public List<MovementClass> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+    public Page<MovementClass> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.movementClassRepository.findAllBy(this.filter.getValue(), 
                 this.filter.getEntityStatusValue(), first, pageSize);
     }

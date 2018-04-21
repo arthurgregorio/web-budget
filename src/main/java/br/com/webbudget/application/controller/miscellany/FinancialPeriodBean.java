@@ -22,12 +22,12 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
 import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.miscellany.Closing;
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.repositories.miscellany.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.FinancialPeriodService;
-import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -96,7 +96,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
      * @return 
      */
     @Override
-    public List<FinancialPeriod> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+    public Page<FinancialPeriod> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.financialPeriodRepository.findAllBy(this.filter.getValue(), 
                 this.filter.getEntityStatusValue(), first, pageSize);
     }

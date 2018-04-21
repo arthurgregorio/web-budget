@@ -16,8 +16,7 @@
  */
 package br.com.webbudget.application.components.table;
 
-import br.com.webbudget.domain.entities.IPersistentEntity;
-import java.util.Collections;
+import br.com.webbudget.domain.entities.PersistentEntity;
 import java.util.List;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
@@ -31,7 +30,7 @@ import org.primefaces.model.SortOrder;
  * @version 1.0.0
  * @since 3.0.0, 20/03/2018
  */
-public interface LazyDataProvider<T extends IPersistentEntity> {
+public interface LazyDataProvider<T extends PersistentEntity> {
 
     /**
      * 
@@ -40,8 +39,8 @@ public interface LazyDataProvider<T extends IPersistentEntity> {
      * @param sortFields
      * @return 
      */
-    default public List<T> load(int first, int pageSize, List<SortMeta> sortFields) {
-        return Collections.emptyList();
+    default public Page<T> load(int first, int pageSize, List<SortMeta> sortFields) {
+        return Page.empty();
     }
     
     /**
@@ -52,5 +51,5 @@ public interface LazyDataProvider<T extends IPersistentEntity> {
      * @param sortOrder
      * @return 
      */
-    public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder);
+    public Page<T> load(int first, int pageSize, String sortField, SortOrder sortOrder);
 }

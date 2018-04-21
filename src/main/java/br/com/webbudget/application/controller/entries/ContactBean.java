@@ -22,6 +22,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
 import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.entries.Address;
 import br.com.webbudget.domain.entities.entries.Contact;
@@ -30,7 +31,6 @@ import br.com.webbudget.domain.entities.entries.NumberType;
 import br.com.webbudget.domain.entities.entries.Telephone;
 import br.com.webbudget.domain.repositories.entries.ContactRepository;
 import br.com.webbudget.domain.services.ContactService;
-import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -102,7 +102,7 @@ public class ContactBean extends FormBean<Contact> {
      * @return
      */
     @Override
-    public List<Contact> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+    public Page<Contact> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.contactRepository.findAllBy(this.filter.getValue(),
                 this.filter.getEntityStatusValue(), first, pageSize);
     }

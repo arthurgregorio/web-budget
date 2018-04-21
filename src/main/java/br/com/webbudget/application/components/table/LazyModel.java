@@ -59,7 +59,9 @@ public class LazyModel<T extends PersistentEntity> extends LazyDataModel<T> {
      */
     @Override
     public List<T> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
-        return this.countAndReturn(this.provider.load(first, pageSize, multiSortMeta));
+        final Page<T> page = this.provider.load(first, pageSize, multiSortMeta);
+        this.setRowCount(page.getTotalPagesInt());
+        return page.getContent();
     }
 
     /**
@@ -74,7 +76,9 @@ public class LazyModel<T extends PersistentEntity> extends LazyDataModel<T> {
      */
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
-        return this.countAndReturn(this.provider.load(first, pageSize, sortField, sortOrder));
+        final Page<T> page = this.provider.load(first, pageSize, sortField, sortOrder);
+        this.setRowCount(page.getTotalPagesInt());
+        return page.getContent();
     }
 
     /**
@@ -100,16 +104,5 @@ public class LazyModel<T extends PersistentEntity> extends LazyDataModel<T> {
                 .filter(object -> object.getId().equals(Long.parseLong(rowKey)))
                 .findFirst()
                 .orElse(null);
-    }
-    
-    /**
-     * Count the quantity of rows and return the data
-     * 
-     * @param data the data to be used on the datatable
-     * @return the data to be used on the datatable
-     */
-    private List<T> countAndReturn(List<T> data) {
-        this.setRowCount(data.size());
-        return data;
     }
 }

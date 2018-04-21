@@ -22,6 +22,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
 import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.security.Authorization;
 import br.com.webbudget.domain.entities.security.Grant;
@@ -120,7 +121,7 @@ public class GroupBean extends FormBean<Group> {
      * @return 
      */
     @Override
-    public List<Group> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+    public Page<Group> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.groupRepository.findAllBy(this.filter.getValue(), 
                 this.filter.getEntityStatusValue(), first, pageSize);
     }

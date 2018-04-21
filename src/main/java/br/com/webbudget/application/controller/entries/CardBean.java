@@ -18,6 +18,7 @@ package br.com.webbudget.application.controller.entries;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.entries.Card;
 import br.com.webbudget.domain.entities.entries.CardType;
@@ -99,7 +100,7 @@ public class CardBean extends FormBean<Card> {
      * @return
      */
     @Override
-    public List<Card> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+    public Page<Card> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.cardRepository.findAllBy(this.filter.getValue(),
                 this.filter.getEntityStatusValue(), first, pageSize);
     }
