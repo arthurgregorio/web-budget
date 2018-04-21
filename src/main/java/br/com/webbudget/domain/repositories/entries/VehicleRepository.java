@@ -19,6 +19,7 @@ package br.com.webbudget.domain.repositories.entries;
 import br.com.webbudget.domain.entities.logbook.Vehicle;
 import br.com.webbudget.domain.entities.logbook.Vehicle_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
+import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
@@ -33,6 +34,14 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 @Repository
 public interface VehicleRepository extends DefaultRepository<Vehicle> {
 
+    /**
+     * 
+     * @param identification
+     * @param licensePlate
+     * @return 
+     */
+    Optional<Vehicle> findOptionalByLicensePlate(String licensePlate);
+    
     /**
      * 
      * @return 

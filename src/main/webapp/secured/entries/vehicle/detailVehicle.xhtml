@@ -34,11 +34,12 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{vehicleBean.viewState eq 'ADDING'}"
-                      value="#{messages['vehicle.page-description-adding']}"/>
-        <o:outputFormat id="pageDescription" 
-                        rendered="#{vehicleBean.viewState eq 'EDITING'}" 
-                        value="#{messages['vehicle.page-description-editing']}">
+        <o:outputFormat rendered="#{vehicleBean.viewState eq 'DETAILING'}" 
+                        value="#{messages['vehicle.page-description-detailing']}">
+            <f:param value="#{vehicleBean.value.identification}"/>
+        </o:outputFormat>
+        <o:outputFormat rendered="#{vehicleBean.viewState eq 'DELETING'}" 
+                        value="#{messages['vehicle.page-description-deleting']}">
             <f:param value="#{vehicleBean.value.identification}"/>
         </o:outputFormat>
     </ui:define>
@@ -46,17 +47,19 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['entries']}</a></li>
         <li><a href="listVehicles.xhtml">#{breadcrumb['entries.vehicle']}</a></li>
-        <li jsf:rendered="#{vehicleBean.viewState eq 'ADDING'}" 
-            class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{vehicleBean.viewState eq 'EDITING'}" 
-            class="active"><a href="#">#{breadcrumb['editing']}</a></li>
+        <li jsf:rendered="#{vehicleBean.viewState eq 'DELETING'}" 
+            class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
+        <li jsf:rendered="#{vehicleBean.viewState eq 'DETAILING'}" 
+            class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
     <ui:define name="content">
         <h:form id="vehicleForm" prependId="false">
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" />
+                    <p:messages id="messages" closable="true" >
+                        <p:autoUpdate />
+                    </p:messages>
                 </div>
             </div>
             <div class="box">
@@ -174,22 +177,19 @@
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <p:commandButton update="vehicleForm"
-                                     value="#{menu['save']}"
-                                     action="#{vehicleBean.doSave()}"
-                                     styleClass="btn btn-flat btn-success"
-                                     rendered="#{vehicleBean.viewState eq 'ADDING'}"/>
-                    <p:commandButton process="vehicleForm"
-                                     value="#{menu['update']}"
-                                     action="#{vehicleBean.doUpdate()}"
-                                     update="vehicleForm pageDescription"
-                                     styleClass="btn btn-flat btn-success"
-                                     rendered="#{vehicleBean.viewState eq 'EDITING'}"/>
+                    <h:outputText styleClass="text-red text-bold"
+                                  value="#{menu['delete.confirmation']}"
+                                  rendered="#{vehicleBean.viewState eq 'DELETING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['yes']}"
+                                     action="#{vehicleBean.doDelete()}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     rendered="#{vehicleBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
                                      styleClass="btn btn-flat btn-primary" 
-                                     action="#{vehicleBean.changeToListing()}"/>
+                                     action="#{vehicleBean.changeToListing()}"
+                                     value="#{vehicleBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>

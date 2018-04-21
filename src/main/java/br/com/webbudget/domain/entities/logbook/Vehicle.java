@@ -43,8 +43,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table(name = "vehicles")
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true, exclude = {"costCenter", "odometer"})
+@EqualsAndHashCode(callSuper = true, exclude = {"costCenter", "odometer"})
 public class Vehicle extends PersistentEntity {
 
     @Getter
@@ -64,6 +64,7 @@ public class Vehicle extends PersistentEntity {
     private String model;
     @Getter
     @Setter
+    @NotEmpty(message = "{vehicle.license-plate}")
     @Column(name = "license_plate", nullable = false, length = 11)
     private String licensePlate;
     @Getter
@@ -105,9 +106,7 @@ public class Vehicle extends PersistentEntity {
      * 
      */
     public Vehicle() {
-        
         final int year = LocalDate.now().get(ChronoField.YEAR);
-        
         this.modelYear = year;
         this.manufacturingYear = year;
     }

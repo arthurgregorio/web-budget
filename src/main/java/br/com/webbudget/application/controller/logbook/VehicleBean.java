@@ -31,10 +31,12 @@ import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
 import br.com.webbudget.domain.repositories.entries.VehicleRepository;
 import br.com.webbudget.domain.services.ClassificationService;
 import br.com.webbudget.domain.services.LogbookService;
+import br.com.webbudget.domain.services.VehicleService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -49,10 +51,11 @@ import org.primefaces.model.SortOrder;
 @ViewScoped
 public class VehicleBean extends FormBean<Vehicle> {
 
+    @Getter
     private List<CostCenter> costCenters;
 
     @Inject
-    private LogbookService logbookService;
+    private VehicleService vehicleService;
     
     @Inject
     private VehicleRepository vehicleRepository;
@@ -112,7 +115,7 @@ public class VehicleBean extends FormBean<Vehicle> {
      */
     @Override
     public void doSave() {
-        this.logbookService.save(this.value);
+        this.vehicleService.save(this.value);
         this.value = new Vehicle();
         this.addInfo(true, "vehicle.saved");
     }
@@ -122,7 +125,7 @@ public class VehicleBean extends FormBean<Vehicle> {
      */
     @Override
     public void doUpdate() {
-        this.value = this.logbookService.update(this.value);
+        this.value = this.vehicleService.update(this.value);
         this.addInfo(true, "vehicle.updated");
     }
 
@@ -132,7 +135,7 @@ public class VehicleBean extends FormBean<Vehicle> {
      */
     @Override
     public String doDelete() {
-        this.logbookService.delete(this.value);
+        this.vehicleService.delete(this.value);
         this.addInfoAndKeep("vehicle.deleted");
         return this.changeToListing();
     }

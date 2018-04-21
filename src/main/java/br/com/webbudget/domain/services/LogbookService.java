@@ -49,34 +49,6 @@ public class LogbookService {
 //
 //    /**
 //     *
-//     * @param vehicle
-//     */
-//    @Transactional
-//    public void saveVehicle(Vehicle vehicle) {
-//        this.vehicleRepository.save(vehicle);
-//    }
-//
-//    /**
-//     *
-//     * @param vehicle
-//     * @return
-//     */
-//    @Transactional
-//    public Vehicle updateVehicle(Vehicle vehicle) {
-//        return this.vehicleRepository.save(vehicle);
-//    }
-//
-//    /**
-//     *
-//     * @param vehicle
-//     */
-//    @Transactional
-//    public void deleteVehicle(Vehicle vehicle) {
-//        this.vehicleRepository.delete(vehicle);
-//    }
-//
-//    /**
-//     *
 //     * @param entry
 //     */
 //    @Transactional
