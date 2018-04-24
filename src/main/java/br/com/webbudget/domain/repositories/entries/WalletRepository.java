@@ -38,11 +38,10 @@ public interface WalletRepository extends DefaultRepository<Wallet> {
     /**
      * 
      * @param name
-     * @param bank
      * @param walletType
      * @return 
      */
-    Optional<Wallet> findOptionalByNameAndBankAndWalletType(String name, String bank, WalletType walletType);
+    Optional<Wallet> findOptionalByNameAndWalletType(String name, WalletType walletType);
     
     /**
      * 

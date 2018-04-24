@@ -19,9 +19,10 @@ package br.com.webbudget.domain.services;
 import br.com.webbudget.domain.entities.entries.Wallet;
 import br.com.webbudget.domain.entities.entries.WalletBalance;
 import br.com.webbudget.domain.entities.entries.WalletBalanceType;
+import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.entries.WalletRepository;
-import br.com.webbudget.domain.services.misc.BalanceBuilder;
+import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -29,6 +30,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import br.com.webbudget.domain.repositories.entries.WalletBalanceRepository;
 import java.util.Optional;
+import javax.enterprise.event.Observes;
 
 /**
  * Serice para manutencao dos processos relacionados a carteiras e saldos 
@@ -54,8 +56,7 @@ public class WalletService {
     public void save(Wallet wallet) {
 
         final Optional<Wallet> found = this.walletRepository
-                .findOptionalByNameAndBankAndWalletType(wallet.getName(), 
-                        wallet.getBank(), wallet.getWalletType());
+                .findOptionalByNameAndWalletType(wallet.getName(), wallet.getWalletType());
 
         if (found.isPresent()) {
             throw new BusinessLogicException("error.wallet.duplicated");
@@ -67,7 +68,7 @@ public class WalletService {
         // saldo informado pelo usuario no momento da criacao
         if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
 
-            final BalanceBuilder builder = new BalanceBuilder();
+            final WalletBalanceBuilder builder = new WalletBalanceBuilder();
             
             builder.forWallet(wallet)
                     .withOldBalance(BigDecimal.ZERO)
@@ -87,10 +88,10 @@ public class WalletService {
     @Transactional
     public Wallet update(Wallet wallet) {
 
-        final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(),
-                wallet.getBank(), wallet.getWalletType());
+        final Optional<Wallet> found = this.walletRepository
+                .findOptionalByNameAndWalletType(wallet.getName(), wallet.getWalletType());
 
-        if (found != null && !found.equals(wallet)) {
+        if (found.isPresent() && !found.get().equals(wallet)) {
             throw new BusinessLogicException("error.wallet.duplicated");
         }
 
@@ -103,20 +104,7 @@ public class WalletService {
      */
     @Transactional
     public void delete(Wallet wallet) {
-
-        // checa se a carteira nao tem saldo menor ou maior que zero
-        // se houve, dispara o erro, comente carteiras zeradas sao deletaveis
-        if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-            throw new BusinessLogicException("error.wallet.has-balance");
-        }
-
-        final List<WalletBalance> balaces = this.listBalances(wallet);
-
-        balaces.stream().forEach((balance) -> {
-            this.walletBalanceRepository.delete(balance);
-        });
-
-        this.walletRepository.delete(wallet);
+        this.walletRepository.attachAndRemove(wallet);
     }
 
 //    /**
@@ -191,29 +179,36 @@ public class WalletService {
 //        this.updateBalance(builder);
 //    }
 //
-//    /**
-//     * Metodo que escuta por eventos de edicao do saldo das carteiras e entao
-//     * ao receber uma chamada, atualiza o saldo e grava o historico de saldo
-//     * 
-//     * OBS: todas as atualizacoes de saldo dentro do sistema DEVEM seguir o 
-//     * fluxo de evento chegando ate este metodo
-//     * 
-//     * @param builder o builder para contrucao do saldo
-//     */
-//    @Transactional
-//    public void updateBalance(@Observes @UpdateBalance BalanceBuilder builder) {
-//       
-//        final WalletBalance walletBalance = builder.build();
-//        
-//        final Wallet wallet = walletBalance.getTargetWallet();
-//        
-//        // seta o saldo na carteira
-//        wallet.setBalance(walletBalance.getActualBalance());
-//
-//        // salva carteira
-//        this.walletRepository.save(wallet);
-//
-//        // salva o saldo
-//        this.walletBalanceRepository.save(walletBalance);
-//    }
+    /**
+     * 
+     * @param builder 
+     */
+    @Transactional
+    public void updateWalletBalance(WalletBalanceBuilder builder) {
+       
+        final WalletBalance walletBalance = builder.build();
+        
+        final Wallet target = walletBalance.getTargetWallet();
+        
+        // set the actual balance in the target
+        target.setBalance(walletBalance.getActualBalance());
+
+        // update
+        this.walletRepository.save(target);
+
+        // save the new balance history
+        this.walletBalanceRepository.save(walletBalance);
+    }
+    
+    /**
+     * This method listen to events on {@link UpdateBalance} and call the 
+     * method to update the balance based on the build received as parameter
+     * 
+     * @param builder the balance builder
+     */
+    @Transactional
+    public void onWalletBalanceChange(@Observes @UpdateBalance WalletBalanceBuilder builder) {
+        
+        // TODO catch the event, validate and call the update 
+    }
 }

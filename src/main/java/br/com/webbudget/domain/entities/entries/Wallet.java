@@ -20,6 +20,7 @@ import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.financial.Payment;
 import java.math.BigDecimal;
 import java.util.List;
+import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -89,7 +90,7 @@ public class Wallet extends PersistentEntity {
     @Getter
     @OneToMany(mappedBy = "wallet")
     private List<Payment> payments;
-
+    
     @Getter
     @Setter
     @Transient
@@ -99,7 +100,7 @@ public class Wallet extends PersistentEntity {
     @Transient
     @NotNull(message = "{wallet.adjustment-value}")
     private BigDecimal adjustmentValue;
-
+    
     /**
      *
      */
@@ -130,15 +131,12 @@ public class Wallet extends PersistentEntity {
     public boolean isBalanceNegative() {
         return this.balance.signum() < 0;
     }
-    
+
     /**
-     *
-     * @return
+     * 
+     * @return 
      */
-    public String getFriendlyName() {
-        if (this.walletType == WalletType.BANK_ACCOUNT) {
-            return this.name + " - " + this.bank;
-        }
-        return this.name;
+    public boolean isEmpty() {
+        return this.balance == BigDecimal.ZERO;
     }
 }

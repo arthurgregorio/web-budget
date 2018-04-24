@@ -52,8 +52,8 @@ public class WalletBalance extends PersistentEntity {
     private BigDecimal oldBalance;
     @Getter
     @Setter
-    @NotNull(message = "{wallet-balance.movemented-value}")
     @Column(name = "movemented_value", nullable = false)
+    @NotNull(message = "{wallet-balance.movemented-value}")
     private BigDecimal movementedValue;
     @Getter
     @Setter
@@ -61,7 +61,7 @@ public class WalletBalance extends PersistentEntity {
     private String movementCode;
     @Getter
     @Setter
-    @Column(name = "reason", length = 150)
+    @Column(name = "reason", columnDefinition = "TEXT")
     private String reason;
     @Getter
     @Setter
@@ -71,14 +71,14 @@ public class WalletBalance extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{wallet-balance.null-target}")
     @JoinColumn(name = "id_target_wallet")
+    @NotNull(message = "{wallet-balance.null-target}")
     private Wallet targetWallet;
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{wallet-balance.null-source}")
     @JoinColumn(name = "id_source_wallet")
+    @NotNull(message = "{wallet-balance.null-source}")
     private Wallet sourceWallet;
 
     /**
