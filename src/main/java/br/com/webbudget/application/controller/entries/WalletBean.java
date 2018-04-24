@@ -16,185 +16,116 @@
  */
 package br.com.webbudget.application.controller.entries;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
+import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.domain.entities.entries.Wallet;
+import br.com.webbudget.domain.entities.entries.WalletType;
+import br.com.webbudget.domain.repositories.entries.WalletRepository;
+import br.com.webbudget.domain.services.WalletService;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.model.SortOrder;
 
 /**
- * Controller para a view do manutencao de carteiras
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.0.0, 04/03/2014
  */
 @Named
 @ViewScoped
-public class WalletBean extends AbstractBean {
+public class WalletBean extends FormBean<Wallet> {
 
-//    @Getter
-//    @Setter
-//    private WalletBalance selectedBalance;
-//    
-//    @Getter
-//    private Wallet wallet;
-//
-//    @Getter
-//    private List<WalletBalance> walletBalances;
-//
-//    @Inject
-//    private WalletService walletService;
-//    @Inject
-//    private MovementService movementService;
-//
-//    @Getter
-//    private final AbstractLazyModel<Wallet> walletsModel;
-//
-//    /**
-//     * 
-//     */
-//    public WalletBean() {
-//        
-//        this.walletsModel = new AbstractLazyModel<Wallet>() {
-//            @Override
-//            public List<Wallet> load(int first, int pageSize, String sortField, 
-//                    SortOrder sortOrder, Map<String, Object> filters) {
-//                
-//                final PageRequest pageRequest = new PageRequest();
-//                
-//                pageRequest
-//                        .setFirstResult(first)
-//                        .withPageSize(pageSize)
-//                        .sortingBy(sortField, "inclusion")
-//                        .withDirection(sortOrder.name());
-//                
-//                final Page<Wallet> page = walletService.listWalletsLazily(null, pageRequest);
-//                
-//                this.setRowCount(page.getTotalPagesInt());
-//                
-//                return page.getContent();
-//            }
-//        };
-//    }
-//    
-//    /**
-//     *
-//     */
-//    public void initializeListing() {
-//        this.viewState = ViewState.LISTING;
-//    }
-//
-//    /**
-//     * @param walletId
-//     */
-//    public void initializeForm(long walletId) {
-//
-//        if (walletId == 0) {
-//            this.viewState = ViewState.ADDING;
-//            this.wallet = new Wallet();
-//        } else {
-//            this.viewState = ViewState.EDITING;
-//            this.wallet = this.walletService.findWalletById(walletId);
-//        }
-//    }
-//
-//    /**
-//     * @param walletId
-//     */
-//    public void initializeAdjustment(long walletId) {
-//        this.wallet = this.walletService.findWalletById(walletId);
-//    }
-//    
-//    /**
-//     * 
-//     * @param walletId 
-//     */
-//    public void initializeBalanceHistoric(long walletId) {
-//        this.wallet = this.walletService.findWalletById(walletId);
-//        this.walletBalances = this.walletService.listBalances(this.wallet);
-//    }
-//
-//    /**
-//     * @return o form de inclusao
-//     */
-//    public String changeToAdd() {
-//        return "formWallet.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToListing() {
-//        return "listWallets.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @param walletId
-//     * @return
-//     */
-//    public String changeToEdit(long walletId) {
-//        return "formWallet.xhtml?faces-redirect=true&walletId=" + walletId;
-//    }
-//
-//    /**
-//     * @param walletId
-//     * @return
-//     */
-//    public String changeToAdjustment(long walletId) {
-//        return "formAdjustment.xhtml?faces-redirect=true&walletId=" + walletId;
-//    }
-//    
-//    /**
-//     * 
-//     * @param walletId
-//     * @return 
-//     */
-//    public String changeToBalanceHistoric(long walletId) {
-//        return "balanceHistory.xhtml?faces-redirect=true&walletId=" + walletId;
-//    }
-//    
-//    /**
-//     * 
-//     * @param movementCode
-//     * @return 
-//     */
-//    public String changeToDetailMovement(String movementCode) {
-//        final Movement movement = this.movementService.findMovementByCode(movementCode);
-//        return "/main/financial/movement/period/formMovement.xhtml?faces-redirect=true&movementId="
-//                + movement.getId() + "&viewState=" + ViewState.DETAILING;
-//    }
-//
-//    /**
-//     * @param walletId
-//     */
-//    public void changeToDelete(long walletId) {
-//        this.wallet = this.walletService.findWalletById(walletId);
-//        this.updateAndOpenDialog("deleteWalletDialog", "dialogDeleteWallet");
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String doCancel() {
-//        return "listWallets.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doSave() {
-//        try {
-//            this.walletService.saveWallet(this.wallet);
-//            this.wallet = new Wallet();
-//            this.addInfo(true, "wallet.saved");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
+    @Inject
+    private WalletService walletService;
+    
+    @Inject
+    private WalletRepository walletRepository;
+
+    /**
+     * 
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.temporizeHiding(this.getDefaultMessagesComponentId());
+    }
+
+    /**
+     * 
+     * @param id
+     * @param viewState 
+     */
+    @Override
+    public void initialize(long id, ViewState viewState) {
+       this.viewState = viewState;
+       
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected void initializeNavigationManager() {
+        this.navigation.addPage(LIST_PAGE, "listWallets.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formWallet.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formWallet.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailWallet.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailWallet.xhtml");
+    }
+
+    /**
+     * 
+     * @param first
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return 
+     */
+    @Override
+    public Page<Wallet> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.walletRepository.findAllBy(this.filter.getValue(), 
+                this.filter.getEntityStatusValue(), first, pageSize);
+    }
+    
+    /**
+     *
+     */
+    @Override
+    public void doSave() {
+        this.walletService.save(this.value);
+        this.value = new Wallet();
+        this.addInfo(true, "wallet.saved");
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void doUpdate() {
+        this.value = this.walletService.update(this.value);
+        this.addInfo(true, "wallet.updated");
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String doDelete() {
+        this.walletService.delete(this.value);
+        this.addInfoAndKeep("wallet.deleted");
+        return this.changeToListing();
+    }
+
 //    /**
 //     *
 //     */
@@ -209,48 +140,6 @@ public class WalletBean extends AbstractBean {
 //            this.addError(true, "error.undefined-error", ex.getMessage());
 //        } 
 //    }
-//
-//    /**
-//     *
-//     */
-//    public void doUpdate() {
-//
-//        try {
-//            this.wallet = this.walletService.updateWallet(this.wallet);
-//
-//            this.addInfo(true, "wallet.updated");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doDelete() {
-//
-//        try {
-//            this.walletService.deleteWallet(this.wallet);
-//            this.addInfo(true, "wallet.deleted");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            if (this.containsException(ConstraintViolationException.class, ex)) {
-//                this.addError(true, "error.wallet.integrity-violation", 
-//                        this.wallet.getFriendlyName());
-//            } else {
-//                this.logger.error(ex.getMessage(), ex);
-//                this.addError(true, "error.undefined-error", ex.getMessage());
-//            }
-//        } finally {
-//            this.updateComponent("walletsList");
-//            this.closeDialog("dialogDeleteWallet");
-//        }
-//    }
-//    
 //    /**
 //     * Monta uma lista somente com os saldos daquela data especifica
 //     * 
@@ -277,11 +166,11 @@ public class WalletBean extends AbstractBean {
 //        });
 //        return grouped;
 //    }
-//    
-//    /**
-//     * @return os tipos de carteira disponiveis para cadastro
-//     */
-//    public WalletType[] getAvailableWalletTypes() {
-//        return WalletType.values();
-//    }
+    
+    /**
+     * @return os tipos de carteira disponiveis para cadastro
+     */
+    public WalletType[] getWalletTypes() {
+        return WalletType.values();
+    }
 }

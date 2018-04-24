@@ -17,10 +17,13 @@
 package br.com.webbudget.domain.repositories.entries;
 
 import br.com.webbudget.domain.entities.entries.Wallet;
+import br.com.webbudget.domain.entities.entries.WalletType;
 import br.com.webbudget.domain.entities.entries.Wallet_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
+import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
+import org.apache.deltaspike.data.api.criteria.Criteria;
 
 /**
  *
@@ -32,6 +35,27 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface WalletRepository extends DefaultRepository<Wallet> {
 
+    /**
+     * 
+     * @param name
+     * @param bank
+     * @param walletType
+     * @return 
+     */
+    Optional<Wallet> findOptionalByNameAndBankAndWalletType(String name, String bank, WalletType walletType);
+    
+    /**
+     * 
+     * @param filter
+     * @return 
+     */
+    @Override
+    public default Criteria<Wallet, Wallet> getRestrictions(String filter) {
+        return criteria()
+                .eqIgnoreCase(Wallet_.bank, filter)
+                .eqIgnoreCase(Wallet_.name, filter);
+    }
+    
     /**
      * 
      * @return 

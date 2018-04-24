@@ -16,7 +16,19 @@
  */
 package br.com.webbudget.domain.services;
 
+import br.com.webbudget.domain.entities.entries.Wallet;
+import br.com.webbudget.domain.entities.entries.WalletBalance;
+import br.com.webbudget.domain.entities.entries.WalletBalanceType;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.repositories.entries.WalletRepository;
+import br.com.webbudget.domain.services.misc.BalanceBuilder;
+import java.math.BigDecimal;
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import br.com.webbudget.domain.repositories.entries.WalletBalanceRepository;
+import java.util.Optional;
 
 /**
  * Serice para manutencao dos processos relacionados a carteiras e saldos 
@@ -29,83 +41,84 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class WalletService {
 
-//    @Inject
-//    private IWalletRepository walletRepository;
-//    @Inject
-//    private IWalletBalanceRepository walletBalanceRepository;
-//
-//    /**
-//     *
-//     * @param wallet
-//     */
-//    @Transactional
-//    public void saveWallet(Wallet wallet) {
-//
-//        final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(),
-//                wallet.getBank(), wallet.getWalletType());
-//
-//        if (found != null) {
-//            throw new InternalServiceError("error.wallet.duplicated");
-//        }
-//
-//        wallet = this.walletRepository.save(wallet);
-//
-//        // se a carteira teve um saldo inicial != 0, entao ajustamos ela para o
-//        // saldo informado pelo usuario no momento da criacao
-//        if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-//
-//            final BalanceBuilder builder = new BalanceBuilder();
-//            
-//            builder.forWallet(wallet)
-//                    .withOldBalance(BigDecimal.ZERO)
-//                    .withActualBalance(wallet.getBalance())
-//                    .withMovementedValue(wallet.getBalance())
-//                    .andType(WalletBalanceType.ADJUSTMENT);
-//
+    @Inject
+    private WalletRepository walletRepository;
+    @Inject
+    private WalletBalanceRepository walletBalanceRepository;
+
+    /**
+     *
+     * @param wallet
+     */
+    @Transactional
+    public void save(Wallet wallet) {
+
+        final Optional<Wallet> found = this.walletRepository
+                .findOptionalByNameAndBankAndWalletType(wallet.getName(), 
+                        wallet.getBank(), wallet.getWalletType());
+
+        if (found.isPresent()) {
+            throw new BusinessLogicException("error.wallet.duplicated");
+        }
+
+        wallet = this.walletRepository.save(wallet);
+
+        // se a carteira teve um saldo inicial != 0, entao ajustamos ela para o
+        // saldo informado pelo usuario no momento da criacao
+        if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
+
+            final BalanceBuilder builder = new BalanceBuilder();
+            
+            builder.forWallet(wallet)
+                    .withOldBalance(BigDecimal.ZERO)
+                    .withActualBalance(wallet.getBalance())
+                    .withMovementedValue(wallet.getBalance())
+                    .andType(WalletBalanceType.ADJUSTMENT);
+
 //            this.updateBalance(builder);
-//        }
-//    }
-//
-//    /**
-//     *
-//     * @param wallet
-//     * @return
-//     */
-//    @Transactional
-//    public Wallet updateWallet(Wallet wallet) {
-//
-//        final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(),
-//                wallet.getBank(), wallet.getWalletType());
-//
-//        if (found != null && !found.equals(wallet)) {
-//            throw new InternalServiceError("error.wallet.duplicated");
-//        }
-//
-//        return this.walletRepository.save(wallet);
-//    }
-//
-//    /**
-//     *
-//     * @param wallet
-//     */
-//    @Transactional
-//    public void deleteWallet(Wallet wallet) {
-//
-//        // checa se a carteira nao tem saldo menor ou maior que zero
-//        // se houve, dispara o erro, comente carteiras zeradas sao deletaveis
-//        if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-//            throw new InternalServiceError("error.wallet.has-balance");
-//        }
-//
-//        final List<WalletBalance> balaces = this.listBalances(wallet);
-//
-//        balaces.stream().forEach((balance) -> {
-//            this.walletBalanceRepository.delete(balance);
-//        });
-//
-//        this.walletRepository.delete(wallet);
-//    }
-//
+        }
+    }
+
+    /**
+     *
+     * @param wallet
+     * @return
+     */
+    @Transactional
+    public Wallet update(Wallet wallet) {
+
+        final Wallet found = this.findWalletByNameAndBankAndType(wallet.getName(),
+                wallet.getBank(), wallet.getWalletType());
+
+        if (found != null && !found.equals(wallet)) {
+            throw new BusinessLogicException("error.wallet.duplicated");
+        }
+
+        return this.walletRepository.save(wallet);
+    }
+
+    /**
+     *
+     * @param wallet
+     */
+    @Transactional
+    public void delete(Wallet wallet) {
+
+        // checa se a carteira nao tem saldo menor ou maior que zero
+        // se houve, dispara o erro, comente carteiras zeradas sao deletaveis
+        if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
+            throw new BusinessLogicException("error.wallet.has-balance");
+        }
+
+        final List<WalletBalance> balaces = this.listBalances(wallet);
+
+        balaces.stream().forEach((balance) -> {
+            this.walletBalanceRepository.delete(balance);
+        });
+
+        this.walletRepository.delete(wallet);
+    }
+
 //    /**
 //     *
 //     * @param walletBalance
@@ -114,7 +127,7 @@ public class WalletService {
 //    public void transfer(WalletBalance walletBalance) {
 //
 //        if (walletBalance.getSourceWallet().equals(walletBalance.getTargetWallet())) {
-//            throw new InternalServiceError("error.transfer.same-wallet");
+//            throw new BusinessLogicException("error.transfer.same-wallet");
 //        }
 //
 //        // atualizamos o destino
@@ -202,63 +215,5 @@ public class WalletService {
 //
 //        // salva o saldo
 //        this.walletBalanceRepository.save(walletBalance);
-//    }
-//    
-//    /**
-//     *
-//     * @param walletId
-//     * @return
-//     */
-//    public Wallet findWalletById(long walletId) {
-//        return this.walletRepository.findById(walletId, false);
-//    }
-//
-//    /**
-//     *
-//     * @param name
-//     * @param bank
-//     * @param walletType
-//     * @return
-//     */
-//    public Wallet findWalletByNameAndBankAndType(String name, String bank, WalletType walletType) {
-//        return this.walletRepository.findByNameAndBankAndType(name, bank, walletType);
-//    }
-//
-//    /**
-//     * 
-//     * @param isBlocked
-//     * @param pageRequest
-//     * @return 
-//     */
-//    public Page<Wallet> listWalletsLazily(Boolean isBlocked, PageRequest pageRequest) {
-//        return this.walletRepository.listLazilyByStatus(isBlocked, pageRequest);
-//    }
-//    
-//    /**
-//     *S
-//     * @param isBlocked
-//     * @return
-//     */
-//    public List<Wallet> listWallets(Boolean isBlocked) {
-//        return this.walletRepository.listByStatus(isBlocked);
-//    }
-//    
-//    /**
-//     * 
-//     * @param wallet
-//     * @return 
-//     */
-//    public List<WalletBalance> listBalances(Wallet wallet) {
-//        return this.walletBalanceRepository.listByWallet(null, wallet);
-//    }
-//    
-//    /**
-//     *
-//     * @param source
-//     * @param target
-//     * @return
-//     */
-//    public List<WalletBalance> listTransferences(Wallet source, Wallet target) {
-//        return this.walletBalanceRepository.listByWallet(source, target, WalletBalanceType.TRANSFERENCE);
 //    }
 }

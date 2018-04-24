@@ -16,43 +16,40 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Wallet;
 import br.com.webbudget.domain.entities.entries.WalletBalance;
-import br.com.webbudget.domain.entities.entries.WalletBalanceType;
-import java.util.List;
-import org.apache.deltaspike.data.api.EntityRepository;
+import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface IWalletBalanceRepository extends EntityRepository<WalletBalance, Long> {
+public interface WalletBalanceRepository extends DefaultRepository<WalletBalance> {
 
-    /**
-     *
-     * @param wallet
-     * @return
-     */
-    public WalletBalance findLastWalletBalance(Wallet wallet);
-
-    /**
-     *
-     * @param type
-     * @return
-     */
-    public List<WalletBalance> listByType(WalletBalanceType type);
-
-    /**
-     *
-     * @param source
-     * @param target
-     * @param types
-     * @return
-     */
-    public List<WalletBalance> listByWallet(Wallet source, Wallet target, WalletBalanceType... types);
+//    /**
+//     *
+//     * @param wallet
+//     * @return
+//     */
+//    public WalletBalance findLastWalletBalance(Wallet wallet);
+//
+//    /**
+//     *
+//     * @param type
+//     * @return
+//     */
+//    public List<WalletBalance> listByType(WalletBalanceType type);
+//
+//    /**
+//     *
+//     * @param source
+//     * @param target
+//     * @param types
+//     * @return
+//     */
+//    public List<WalletBalance> listByWallet(Wallet source, Wallet target, WalletBalanceType... types);
 }
