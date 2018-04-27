@@ -25,8 +25,8 @@ package br.com.webbudget.domain.entities.entries;
  */
 public enum WalletType {
 
-    PERSONAL("wallet.personal"),
-    BANK_ACCOUNT("wallet.bank-account");
+    PERSONAL("wallet-type.personal"),
+    BANK_ACCOUNT("wallet-type.bank-account");
 
     private final String description;
 

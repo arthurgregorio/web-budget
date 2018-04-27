@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,20 +17,17 @@
 package br.com.webbudget.domain.entities.entries;
 
 /**
+ * The enum with the possible financial movements of the wallet
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
- * @since 1.0.0, 03/04/2014
+ * @version 1.0.0
+ * @since 3.0.0, 26/04/2018
  */
-public enum WalletBalanceType {
+public enum BalanceType {
 
-    PAYMENT("wallet-balance.payment"),
-    REVENUE("wallet-balance.revenue"), 
-    ADJUSTMENT("wallet-balance.adjustment"),
-    TRANSFERENCE("wallet-balance.transference"),
-    BALANCE_RETURN("wallet-balance.balance-return"),
-    TRANSFER_ADJUSTMENT("wallet-balance.transfer-adjustment");
+    DEBIT("wallet-balance-type.debit"),
+    CREDIT("wallet-balance-type.credit");
 
     private final String description;
 
@@ -38,7 +35,7 @@ public enum WalletBalanceType {
      *
      * @param description
      */
-    private WalletBalanceType(String description) {
+    private BalanceType(String description) {
         this.description = description;
     }
 

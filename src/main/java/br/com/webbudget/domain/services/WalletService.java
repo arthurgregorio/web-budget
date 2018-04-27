@@ -18,13 +18,12 @@ package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.entries.Wallet;
 import br.com.webbudget.domain.entities.entries.WalletBalance;
-import br.com.webbudget.domain.entities.entries.WalletBalanceType;
+import br.com.webbudget.domain.entities.entries.BalanceType;
 import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.entries.WalletRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
 import java.math.BigDecimal;
-import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -33,7 +32,7 @@ import java.util.Optional;
 import javax.enterprise.event.Observes;
 
 /**
- * Serice para manutencao dos processos relacionados a carteiras e saldos 
+ * Serice para manutencao dos processos relacionados a carteiras e saldos
  *
  * @author Arthur Gregorio
  *
@@ -64,20 +63,13 @@ public class WalletService {
 
         wallet = this.walletRepository.save(wallet);
 
-        // se a carteira teve um saldo inicial != 0, entao ajustamos ela para o
-        // saldo informado pelo usuario no momento da criacao
-        if (wallet.getBalance().compareTo(BigDecimal.ZERO) != 0) {
+        final WalletBalanceBuilder builder = WalletBalanceBuilder.getInstance();
 
-            final WalletBalanceBuilder builder = new WalletBalanceBuilder();
-            
-            builder.forWallet(wallet)
-                    .withOldBalance(BigDecimal.ZERO)
-                    .withActualBalance(wallet.getBalance())
-                    .withMovementedValue(wallet.getBalance())
-                    .andType(WalletBalanceType.ADJUSTMENT);
+        builder.to(wallet)
+                .withValue(wallet.getActualBalance())
+                .withType(BalanceType.CREDIT);
 
-//            this.updateBalance(builder);
-        }
+        this.updateWalletBalance(builder);
     }
 
     /**
@@ -178,37 +170,32 @@ public class WalletService {
 //        
 //        this.updateBalance(builder);
 //    }
-//
+    
     /**
-     * 
-     * @param builder 
+     * Update the {@link WalletBalance} for a given wallet
+     *
+     * @param builder the builder with the balance historic
      */
     @Transactional
     public void updateWalletBalance(WalletBalanceBuilder builder) {
-       
-        final WalletBalance walletBalance = builder.build();
-        
-        final Wallet target = walletBalance.getTargetWallet();
-        
-        // set the actual balance in the target
-        target.setBalance(walletBalance.getActualBalance());
 
-        // update
-        this.walletRepository.save(target);
+        final WalletBalance walletBalance = builder.build();
+
+        // update the actual balance on the wallet
+        this.walletRepository.save(walletBalance.getWallet());
 
         // save the new balance history
         this.walletBalanceRepository.save(walletBalance);
     }
-    
+
     /**
-     * This method listen to events on {@link UpdateBalance} and call the 
-     * method to update the balance based on the build received as parameter
-     * 
+     * This method listen to events on {@link UpdateBalance} and call the method
+     * to update the balance based on the build received as parameter
+     *
      * @param builder the balance builder
      */
     @Transactional
     public void onWalletBalanceChange(@Observes @UpdateBalance WalletBalanceBuilder builder) {
-        
-        // TODO catch the event, validate and call the update 
+        this.updateWalletBalance(builder);
     }
 }

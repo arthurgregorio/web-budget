@@ -17,13 +17,9 @@
 package br.com.webbudget.domain.entities.entries;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.entities.financial.Payment;
 import java.math.BigDecimal;
-import java.util.List;
-import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -74,8 +70,8 @@ public class Wallet extends PersistentEntity {
     @Getter
     @Setter
     @NotNull(message = "{wallet.balance}")
-    @Column(name = "balance", nullable = false)
-    private BigDecimal balance;
+    @Column(name = "actual_balance", nullable = false)
+    private BigDecimal actualBalance;
     @Getter
     @Setter
     @Column(name = "blocked")
@@ -86,10 +82,6 @@ public class Wallet extends PersistentEntity {
     @NotNull(message = "{wallet.wallet-type}")
     @Column(name = "wallet_type", nullable = false)
     private WalletType walletType;
-
-    @Getter
-    @OneToMany(mappedBy = "wallet")
-    private List<Payment> payments;
     
     @Getter
     @Setter
@@ -105,7 +97,8 @@ public class Wallet extends PersistentEntity {
      *
      */
     public Wallet() {
-        this.balance = BigDecimal.ZERO;
+        this.actualBalance = BigDecimal.ZERO;
+        this.adjustmentValue = BigDecimal.ZERO;
     }
 
     /**
@@ -129,7 +122,7 @@ public class Wallet extends PersistentEntity {
      * @return se o saldo da carteira esta ou nao negativo
      */
     public boolean isBalanceNegative() {
-        return this.balance.signum() < 0;
+        return this.actualBalance.signum() < 0;
     }
 
     /**
@@ -137,6 +130,6 @@ public class Wallet extends PersistentEntity {
      * @return 
      */
     public boolean isEmpty() {
-        return this.balance == BigDecimal.ZERO;
+        return this.actualBalance == BigDecimal.ZERO;
     }
 }

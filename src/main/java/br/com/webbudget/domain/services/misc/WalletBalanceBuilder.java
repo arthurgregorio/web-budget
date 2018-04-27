@@ -18,7 +18,7 @@ package br.com.webbudget.domain.services.misc;
 
 import br.com.webbudget.domain.entities.entries.Wallet;
 import br.com.webbudget.domain.entities.entries.WalletBalance;
-import br.com.webbudget.domain.entities.entries.WalletBalanceType;
+import br.com.webbudget.domain.entities.entries.BalanceType;
 import java.math.BigDecimal;
 
 /**
@@ -32,8 +32,6 @@ public final class WalletBalanceBuilder {
 
     private final WalletBalance walletBalance;
 
-    // TODO make balance builder understand the old and the balance automatically
-    
     /**
      * 
      */
@@ -43,36 +41,28 @@ public final class WalletBalanceBuilder {
     
     /**
      * 
-     * @return 
+     * @return this builder
      */
     public static WalletBalanceBuilder getInstance() {
         return new WalletBalanceBuilder();
     }
     
     /**
+     * Set the wallet to be the target of the transaction
      * 
-     * @param wallet
-     * @return 
+     * @param target the target wallet
+     * @return this builder
      */
-    public WalletBalanceBuilder to(Wallet wallet) {
-        this.walletBalance.setTargetWallet(wallet);
+    public WalletBalanceBuilder to(Wallet target) {
+        this.walletBalance.setWallet(target);
         return this;
     }
     
     /**
+     * The value movemented by this builder
      * 
-     * @param wallet
-     * @return 
-     */
-    public WalletBalanceBuilder from(Wallet wallet) {
-        this.walletBalance.setSourceWallet(wallet);
-        return this;
-    }
-    
-    /**
-     * 
-     * @param value
-     * @return 
+     * @param value the value to be credited or debited from the wallets
+     * @return this builder
      */
     public WalletBalanceBuilder withValue(BigDecimal value) {
         this.walletBalance.setMovementedValue(value);
@@ -82,7 +72,7 @@ public final class WalletBalanceBuilder {
     /**
      * 
      * @param reason
-     * @return 
+     * @return this builder
      */
     public WalletBalanceBuilder withReason(String reason) {
         this.walletBalance.setReason(reason);
@@ -91,18 +81,18 @@ public final class WalletBalanceBuilder {
     
     /**
      * 
-     * @param walletBalanceType
-     * @return 
+     * @param balanceType
+     * @return this builder
      */
-    public WalletBalanceBuilder andType(WalletBalanceType walletBalanceType) {
-        this.walletBalance.setWalletBalanceType(walletBalanceType);
+    public WalletBalanceBuilder withType(BalanceType balanceType) {
+        this.walletBalance.setBalanceType(balanceType);
         return this;
     }
     
     /**
      * 
      * @param movementCode
-     * @return 
+     * @return this builder
      */
     public WalletBalanceBuilder forMovement(String movementCode) {
         this.walletBalance.setMovementCode(movementCode);
@@ -110,10 +100,12 @@ public final class WalletBalanceBuilder {
     }
     
     /**
+     * Build the balance
      * 
-     * @return 
+     * @return the builded {@link WalletBalance} for the wallet
      */
     public WalletBalance build() {
+        this.walletBalance.processBalances();
         return this.walletBalance;
     }
 }

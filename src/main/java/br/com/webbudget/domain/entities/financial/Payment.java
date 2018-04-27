@@ -84,8 +84,7 @@ public class Payment extends PersistentEntity {
      *
      */
     public Payment() {
-        this.code = RandomCode.alphanumeric(5);
-
+        this.code = RandomCode.alphanumeric(6);
         this.paymentDate = LocalDate.now();
         this.paymentMethodType = PaymentMethodType.IN_CASH;
     }

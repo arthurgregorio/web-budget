@@ -65,68 +65,27 @@ public class WalletBalance extends PersistentEntity {
     private String reason;
     @Getter
     @Setter
-    @Column(name = "wallet_balance_type", nullable = false)
-    private WalletBalanceType walletBalanceType;
+    @Column(name = "balance_type", nullable = false)
+    private BalanceType balanceType;
     
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "id_target_wallet")
     @NotNull(message = "{wallet-balance.null-target}")
-    private Wallet targetWallet;
-    @Getter
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_source_wallet")
-    @NotNull(message = "{wallet-balance.null-source}")
-    private Wallet sourceWallet;
+    @JoinColumn(name = "id_wallet", nullable = false)
+    private Wallet wallet;
 
     /**
-     * @return se o saldo do destino esta ou nao negativo
+     * 
      */
-    public boolean isTargetBalanceNegative() {
-        return this.getTargetBalance().signum() < 0;
-    }
-    
-    /**
-     * @return se o saldo da origem esta ou nao negativo
-     */
-    public boolean isSourceBalanceNegative() {
-        return this.getSourceBalance().signum() < 0;
-    }
-    
-    /**
-     * @return se o saldo atual eh negativo
-     */
-    public boolean isActualBalanceNegative() {
-        return this.getActualBalance().signum() < 0;
-    }
-    
-    /**
-     * @return se o saldo anterior era negativo
-     */
-    public boolean isOldBalanceNegative() {
-        return this.oldBalance.signum() < 0;
-    }
-
-    /**
-     * @return se o valor movimento eh negativo ou nao
-     */
-    public boolean isMovementedValueNegative() {
-        return this.movementedValue.signum() < 0;
-    }
-    
-    /**
-     * @return 
-     */
-    public BigDecimal getTargetBalance() {
-        return this.targetWallet != null ? this.targetWallet.getBalance() : BigDecimal.ZERO;
-    }
-    
-    /**
-     * @return 
-     */
-    public BigDecimal getSourceBalance() {
-        return this.sourceWallet != null ? this.sourceWallet.getBalance() : BigDecimal.ZERO;
+    public void processBalances() {
+        
+        // calculate the actual and the old balance
+        this.oldBalance = this.wallet.getActualBalance();
+        this.actualBalance = (this.wallet.getActualBalance()
+                .add(this.movementedValue));
+        
+        // update the target wallet balance
+        this.wallet.setActualBalance(this.actualBalance);
     }
 }
