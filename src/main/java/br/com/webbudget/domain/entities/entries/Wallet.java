@@ -20,6 +20,8 @@ import br.com.webbudget.domain.entities.PersistentEntity;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -79,6 +81,7 @@ public class Wallet extends PersistentEntity {
 
     @Getter
     @Setter
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "{wallet.wallet-type}")
     @Column(name = "wallet_type", nullable = false)
     private WalletType walletType;
@@ -99,6 +102,14 @@ public class Wallet extends PersistentEntity {
     public Wallet() {
         this.actualBalance = BigDecimal.ZERO;
         this.adjustmentValue = BigDecimal.ZERO;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public String getDescription() {
+        return this.walletType == WalletType.BANK_ACCOUNT ? this.name + " - " + this.bank : this.name;
     }
 
     /**

@@ -23,7 +23,6 @@ import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.entries.WalletRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
-import java.math.BigDecimal;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;

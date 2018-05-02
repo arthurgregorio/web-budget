@@ -88,10 +88,12 @@ public interface DefaultRepository<T extends PersistentEntity>
     }
 
     /**
+     * Count the rows in the query to use it as pagecount on the pagination 
+     * process
      * 
-     * @param filter
-     * @param blocked
-     * @return 
+     * @param filter the filter to be applied on the count 
+     * @param blocked blocked or not filter
+     * @return the total pages
      */
     default int countPages(String filter, Boolean blocked) {
         
@@ -103,8 +105,9 @@ public interface DefaultRepository<T extends PersistentEntity>
         }
         
         return criteria
-                .select(Integer.class, count(PersistentEntity_.id))
-                .getSingleResult();
+                .select(Long.class, count(PersistentEntity_.id))
+                .getSingleResult()
+                .intValue();
     }
     
     /**

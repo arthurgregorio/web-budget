@@ -20,6 +20,8 @@ import br.com.webbudget.domain.entities.PersistentEntity;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -65,13 +67,14 @@ public class WalletBalance extends PersistentEntity {
     private String reason;
     @Getter
     @Setter
+    @Enumerated(EnumType.STRING)
     @Column(name = "balance_type", nullable = false)
     private BalanceType balanceType;
     
     @Getter
     @Setter
     @ManyToOne
-    @NotNull(message = "{wallet-balance.null-target}")
+    @NotNull(message = "{wallet-balance.null-wallet}")
     @JoinColumn(name = "id_wallet", nullable = false)
     private Wallet wallet;
 
