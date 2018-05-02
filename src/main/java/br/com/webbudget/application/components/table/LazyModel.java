@@ -25,10 +25,9 @@ import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
 /**
- * LazyDataModel generico para uso nas datatables do sistema. Como ele podemos
- * definir a carga de um datatable on-demand
+ * This abstraction when used enable lazy loading on primefaces datatable
  *
- * @param <T> o tipo deste model
+ * @param <T> the type of this datamodel
  *
  * @author Arthur Gregorio
  *
@@ -60,7 +59,7 @@ public class LazyModel<T extends PersistentEntity> extends LazyDataModel<T> {
     @Override
     public List<T> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
         final Page<T> page = this.provider.load(first, pageSize, multiSortMeta);
-        this.setRowCount(page.getTotalPagesInt());
+        this.setRowCount(page.getTotalPages());
         return page.getContent();
     }
 
@@ -77,7 +76,7 @@ public class LazyModel<T extends PersistentEntity> extends LazyDataModel<T> {
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         final Page<T> page = this.provider.load(first, pageSize, sortField, sortOrder);
-        this.setRowCount(page.getTotalPagesInt());
+        this.setRowCount(page.getTotalPages());
         return page.getContent();
     }
 

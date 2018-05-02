@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,23 +29,22 @@ import lombok.Getter;
 public class BusinessLogicException extends RuntimeException {
 
     @Getter
-    private Object[] parameters;
+    protected Object[] parameters;
 
     /**
-     * Construtor default
+     * Constructor...
      * 
-     * @param message a mensagem de erro
+     * @param message the message to describe the error
      */
     public BusinessLogicException(String message) {
         super(message);
     }
 
     /**
-     * Construtor para criar um erro e ainda receber os parametros extras para 
-     * serem exibidos como detalhes na view
-     *
-     * @param message a mensagem de erro
-     * @param parameters os parametros do erro
+     * Constructor...
+     * 
+     * @param message the message to describe the error
+     * @param parameters the parameters to fill in the message
      */
     public BusinessLogicException(String message, Object... parameters) {
         super(message);
@@ -53,12 +52,11 @@ public class BusinessLogicException extends RuntimeException {
     }
 
     /**
-     * Construtor para criar um erro e ainda receber os parametros extras para 
-     * serem exibidos como detalhes na view
-     *
-     * @param message a mensagem de erro
-     * @param throwable o detalhamento do erro
-     * @param parameters os parametros do erro
+     * Constructor...
+     * 
+     * @param message the message to describe the error
+     * @param throwable the instance of the exception to compose the stack
+     * @param parameters the parameters to fill in the message
      */
     public BusinessLogicException(String message, Throwable throwable, Object... parameters) {
         super(message, throwable);

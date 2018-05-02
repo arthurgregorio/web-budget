@@ -67,7 +67,7 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean
      */
     public FormBean() {
         this.dataModel = new LazyModel<>(this);
-        this.filter = LazyFilter.initialize();
+        this.filter = LazyFilter.getInstance();
         this.navigation = NavigationManager.getInstance();
 
         this.initializeNavigationManager();

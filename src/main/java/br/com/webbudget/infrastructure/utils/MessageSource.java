@@ -16,13 +16,14 @@
  */
 package br.com.webbudget.infrastructure.utils;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.ResourceBundle;
 import javax.faces.context.FacesContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ * This is a helper class to obtain the i18n messages through the given key
  *
  * @author Arthur Gregorio
  *
@@ -47,13 +48,14 @@ public final class MessageSource {
     }
     
     /**
+     * Give a key and get the message, if the key exists
      * 
-     * @param key
-     * @return 
+     * @param key the i18n key
+     * @return the message
      */
     public static String get(String key) {
         
-        if (MESSAGES.containsKey(key)) {
+        if (MESSAGES.containsKey(checkNotNull(key))) {
             return MESSAGES.getString(key);
         }
         

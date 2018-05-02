@@ -23,8 +23,9 @@ import javax.faces.context.FacesContext;
 import lombok.Getter;
 
 /**
- * Gerenciador de navegacao para facilitar os redirects e a navegacao entre 
- * as paginas da aplicacao
+ * This class holds a mechanism to make the navigation though the pages more 
+ * easy if you are working with default CRUD operations and a padronized way of
+ * building the pages
  *
  * @author Arthur Gregorio
  *
@@ -36,44 +37,42 @@ public final class NavigationManager {
     private final Map<PageType, String> pages;
 
     /**
-     * Construtor...
+     * Private constructor to prevent misuse
      */
     private NavigationManager() {
         this.pages = new HashMap<>();
     }
     
     /**
-     * Cria um novo navegador de paginas
+     * Get the new instance for the page navigator
      * 
-     * @return uma nova instancia do navegador
+     * @return the navigation manager
      */
     public static NavigationManager getInstance() {
         return new NavigationManager();
     }
 
     /**
-     * Adiciona as paginas no mapa de paginas
+     * Add a page to the domain of the manager
      * 
-     * @param pageType o tipo da pagina adicionada
-     * @param page a pagina a ser ligada ao tipo
-     * @return se uma pagina ja associada a um tipo for adicionada, retorna a 
-     * pagina associada
+     * @param pageType the {@link PageType} of the page to be add
+     * @param page the string outcome of the page
+     * @return if the current value to add is linked to other page, return it 
      */
     public String addPage(PageType pageType, String page) {
         return this.pages.putIfAbsent(pageType, page);
     }
     
     /**
-     * Navega para uma determinada pagina via navegacao implicita do JSF atraves
-     * da action de um componente de acao
+     * Navigate to the specified page with the given parameters
      * 
-     * @param page a pagina a ser redirecionada 
-     * @param parameters os parametros para serem usados
-     * @return o outcome da pagina
+     * @param pageType the {@link PageType} to navigate to
+     * @param parameters the list of parameters to use on the outcome rule
+     * @return the outcome rule to with the values
      */
-    public String to(PageType page, Parameter... parameters) {
+    public String to(PageType pageType, Parameter... parameters) {
         
-        final String root = this.pages.get(page);
+        final String root = this.pages.get(pageType);
         
         final StringBuilder builder = new StringBuilder(root);
         
@@ -83,21 +82,20 @@ public final class NavigationManager {
             builder.append(parameter);
         }
         
-        builder.append(Parameter.of("viewState", page.getViewState()));
+        builder.append(Parameter.of("viewState", pageType.getViewState()));
         
         return builder.toString();
     }
     
     /**
-     * Navega para uma determinada pagina via navegacao explicita do JSF atraves
-     * de um redirect pelo contexto
+     * Make a redirect throug the external context to the given page
      * 
-     * @param page a pagina a ser redirecionada 
-     * @param parameters os parametros para serem usados
+     * @param pageType the {@link PageType} to go
+     * @param parameters the parameters to use on the redirect
      */
-    public void redirect(PageType page, Parameter... parameters) {
+    public void redirect(PageType pageType, Parameter... parameters) {
        
-        final String url = this.to(page, parameters);
+        final String url = this.to(pageType, parameters);
         
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect(url);
@@ -108,7 +106,7 @@ public final class NavigationManager {
     }
     
     /**
-     * 
+     * The enum to hold the possible values of pages types
      */
     public enum PageType {
         
@@ -122,8 +120,9 @@ public final class NavigationManager {
         private final ViewState viewState;
 
         /**
+         * Each type need's to be linked with one {@link ViewState}
          * 
-         * @param viewState 
+         * @param viewState the {@link ViewState} of the give parameter
          */
         private PageType(ViewState viewState) {
             this.viewState = viewState;
@@ -131,7 +130,7 @@ public final class NavigationManager {
     }
     
     /**
-     * 
+     * The object to hold and construct the paramter values
      */
     public static class Parameter {
 
@@ -141,9 +140,10 @@ public final class NavigationManager {
         private final Object value;
 
         /**
+         * Private constructor to prevent misuse
          * 
-         * @param name
-         * @param value 
+         * @param name the name of the parameter
+         * @param value the value of the parameter
          */
         private Parameter(String name, Object value) {
             this.name = name;
@@ -151,18 +151,18 @@ public final class NavigationManager {
         }
 
         /**
+         * Constructor...
          * 
-         * @param name
-         * @param value
-         * @return 
+         * @param name the name of the parameter
+         * @param value the value of the parameter
+         * @return the parameter object
          */
         public static Parameter of(String name, Object value) {
             return new Parameter(name, value);
         }
         
         /**
-         * 
-         * @return 
+         * @return the value in the format of a URL parameter
          */
         @Override
         public String toString() {

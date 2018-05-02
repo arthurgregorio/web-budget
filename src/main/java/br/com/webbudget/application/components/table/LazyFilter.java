@@ -20,6 +20,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * This filter implementation is a helper class to help the lazy loading feature
+ * of the datatables 
  *
  * @author Arthur Gregorio
  *
@@ -36,23 +38,23 @@ public final class LazyFilter {
     public EntityStatus entityStatus;
 
     /**
-     * Construtor...
+     * Private constructor to prevent misuse 
      */
     private LazyFilter() {
        this.entityStatus = EntityStatus.UNBLOCKED; 
     }
     
     /**
-     * Inicializa um novo filtro
+     * This replace the default construtor to build istances of this filter
      * 
-     * @return a instancia do filtro
+     * @return a instance of this filter
      */
-    public static LazyFilter initialize() {
+    public static LazyFilter getInstance() {
         return new LazyFilter();
     }
 
     /**
-     * Reseta o filtro para seu estado inicial
+     * Clear the filter internal parameters
      */
     public void clear() {
         this.value = null;
@@ -60,24 +62,24 @@ public final class LazyFilter {
     }
     
     /**
-     * Pega o valor do status de entidade a ser buscado
+     * The status value, if the entity to be queried is blocked, unblocked or 
+     * if all entities will returned
      * 
-     * @return o valor que queremos buscar para o status da entidade
+     * @return the status value
      */
     public Boolean getEntityStatusValue() {
         return entityStatus.value();
     }
     
     /**
-     * 
-     * @return 
+     * @return the values to be used on the selection box of the status
      */
     public EntityStatus[] getEntityStatusValues() {
         return EntityStatus.values();
     }
     
     /**
-     * 
+     * The enum representation of the possible entity status
      */
     public enum EntityStatus {
 
@@ -89,9 +91,10 @@ public final class LazyFilter {
         private final String description;
 
         /**
+         * Constructor...
          *
-         * @param description
-         * @param value
+         * @param description the i18n description
+         * @param value the value
          */
         private EntityStatus(String description, Boolean value) {
             this.value = value;
@@ -99,7 +102,8 @@ public final class LazyFilter {
         }
 
         /**
-         *
+         * {@inheritDoc }
+         * 
          * @return
          */
         @Override
@@ -108,8 +112,7 @@ public final class LazyFilter {
         }
 
         /**
-         *
-         * @return
+         * @return the value of the current enum instance
          */
         public Boolean value() {
             return this.value;

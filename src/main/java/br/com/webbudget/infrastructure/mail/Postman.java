@@ -26,6 +26,7 @@ import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
 /**
+ * This class has one job: send e-mails
  *
  * @author Arthur Gregorio
  *
@@ -39,26 +40,26 @@ public class Postman {
     private Session mailSession;
     
     /**
-     * Escuta por eventos de envio de e-mail
+     * Listem for e-mail requests through CDI events and send the message
      * 
-     * @param mailMessage a mensagem a ser enviada
-     * @throws Exception caso haja problemas, dispara exception
+     * @param mailMessage the message to send
+     * @throws Exception if any problem occur in the process
      */
     public void send(@Observes MailMessage mailMessage) throws Exception {
        
         final MimeMessage message = new MimeMessage(this.mailSession);
 
-        // header da mensagem
+        // message header
         message.setFrom(mailMessage.getFrom());
         message.setSubject(mailMessage.getTitle());
         message.setRecipients(Message.RecipientType.TO, mailMessage.getAddressees());
         message.setRecipients(Message.RecipientType.CC, mailMessage.getCcs());
         
-        // a mensagem
+        // message body
         message.setText(mailMessage.getContent(), "UTF-8", "html");
         message.setSentDate(new Date());
 
-        // envia
+        // send
         Transport.send(message);
     }
 }

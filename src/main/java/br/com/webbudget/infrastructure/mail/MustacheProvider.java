@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Simple content provider that use Mustache as template processor
  *
  * @author Arthur Gregorio
  *
@@ -39,8 +40,9 @@ public class MustacheProvider implements MailContentProvider {
     private final Map<String, Object> data;
     
     /**
+     * Constructor
      * 
-     * @param template 
+     * @param template the template file name inside src/java/resources/mail
      */
     public MustacheProvider(String template) {
         
@@ -51,15 +53,17 @@ public class MustacheProvider implements MailContentProvider {
     }
     
     /**
+     * Add some content to the provider
      * 
-     * @param key
-     * @param value 
+     * @param key the key to use on the template
+     * @param value the value to retrieve through the key in the template
      */
     public void addContent(String key, Object value) {
         this.data.put(key, value);
     }
 
     /**
+     * {@inheritDoc }
      * 
      * @return 
      */

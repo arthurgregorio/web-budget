@@ -20,7 +20,8 @@ import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 
 /**
- *
+ * Simple facade to define how a mail message looks like
+ * 
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -29,38 +30,32 @@ import javax.mail.internet.InternetAddress;
 public interface MailMessage {
 
     /**
-     * 
-     * @return 
+     * @return the title
      */
     public String getTitle();
     
     /**
-     * 
-     * @return 
+     * @return the content
      */
     public String getContent();
     
     /**
-     * 
-     * @return 
+     * @return the from {@link InternetAddress}
      */
     public Address getFrom();
     
     /**
-     * 
-     * @return 
+     * @return the replay to {@link InternetAddress}
      */
     public Address getReplyTo();
     
     /**
-     * 
-     * @return 
+     * @return the list of addressees of this message
      */
-    public InternetAddress[] getAddressees();
+    public Address[] getAddressees();
     
     /**
-     * 
-     * @return 
+     * @return the list of 'with-copy' for this message
      */
-    public InternetAddress[] getCcs();
+    public Address[] getCcs();
 }

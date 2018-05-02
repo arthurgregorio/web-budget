@@ -17,10 +17,10 @@
 package br.com.webbudget.application.components.table;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import java.util.ArrayList;
+import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import lombok.Getter;
 
 /**
  *
@@ -33,75 +33,40 @@ import java.util.Optional;
  */
 public class Page<T extends PersistentEntity> {
 
-    public Optional<List<T>> optionalContent;
-    public Optional<Long> optionalTotalPages;
+    @Getter
+    public final List<T> content;
+    @Getter
+    public final int totalPages;
 
     /**
+     * Create a new page
      * 
-     * @param content
-     * @param totalPages 
+     * @param content the content
+     * @param totalPages the total of possible pages
      */
-    private Page(List<T> content, Long totalPages) {
-        this.optionalContent = Optional.of(content);
-        this.optionalTotalPages = Optional.of(totalPages);
+    private Page(List<T> content, int totalPages) {
+        this.content = checkNotNull(content);
+        this.totalPages = totalPages;
     }
     
     /**
+     * Create a page with empty content 
      * 
-     * @return 
+     * @return the empty page
      */
     public static Page empty() {
-        return new Page<>(Collections.emptyList(), 0L);
+        return new Page<>(Collections.emptyList(), 0);
     }
     
     /**
+     * Create a new page of a given content and with the count of total pages
      * 
-     * @param <V>
-     * @param content
-     * @param totalPages
-     * @return 
+     * @param <V> the generic type of the page
+     * @param content the content
+     * @param totalPages the total count of pages
+     * @return the page with the given content
      */
-    public static <V extends PersistentEntity> Page<V> of(List<V> content, Long totalPages) {
+    public static <V extends PersistentEntity> Page<V> of(List<V> content, int totalPages) {
         return new Page<>(content, totalPages);
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    public List<T> getContent() {
-        return this.optionalContent.orElse(new ArrayList<>());
-    }
-
-    /**
-     * 
-     * @param content 
-     */
-    public void setContent(List<T> content) {
-        this.optionalContent = Optional.of(content);
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    public Long getTotalPages() {
-        return this.optionalTotalPages.orElse(0L);
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    public int getTotalPagesInt() {
-        return this.optionalTotalPages.orElse(0L).intValue();
-    }
-
-    /**
-     * 
-     * @param totalPages 
-     */
-    public void setTotalPages(Long totalPages) {
-        this.optionalTotalPages = Optional.of(totalPages);
     }
 }
