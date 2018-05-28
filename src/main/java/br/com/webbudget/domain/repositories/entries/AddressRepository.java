@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Address;
+import br.com.webbudget.domain.entities.registration.Address;
 import feign.Param;
 import feign.RequestLine;
 

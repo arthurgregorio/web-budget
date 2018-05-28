@@ -20,9 +20,9 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
-import br.com.webbudget.domain.entities.entries.Card;
-import br.com.webbudget.domain.entities.entries.CardType;
-import br.com.webbudget.domain.entities.entries.Wallet;
+import br.com.webbudget.domain.entities.registration.Card;
+import br.com.webbudget.domain.entities.registration.CardType;
+import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.entries.CardRepository;
 import br.com.webbudget.domain.repositories.entries.WalletRepository;
 import br.com.webbudget.domain.services.CardService;

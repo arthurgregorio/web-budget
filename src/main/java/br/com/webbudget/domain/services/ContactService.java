@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.entries.Address;
-import br.com.webbudget.domain.entities.entries.Contact;
-import br.com.webbudget.domain.entities.entries.Telephone;
+import br.com.webbudget.domain.entities.registration.Address;
+import br.com.webbudget.domain.entities.registration.Contact;
+import br.com.webbudget.domain.entities.registration.Telephone;
 import br.com.webbudget.domain.repositories.entries.AddressRepository;
 import br.com.webbudget.domain.repositories.entries.ContactRepository;
 import br.com.webbudget.domain.repositories.financial.IMovementRepository;

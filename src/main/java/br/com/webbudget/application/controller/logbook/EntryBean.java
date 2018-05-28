@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.logbook;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.entities.entries.MovementClass;
+import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.logbook.Entry;
 import br.com.webbudget.domain.entities.logbook.EntryType;
 import br.com.webbudget.domain.entities.logbook.Vehicle;

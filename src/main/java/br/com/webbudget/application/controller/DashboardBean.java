@@ -23,7 +23,7 @@ import br.com.webbudget.domain.services.misc.MovementCalculator;
 import br.com.webbudget.application.components.chart.line.LineChartDatasetBuilder;
 import br.com.webbudget.application.components.chart.line.LineChartModel;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.entities.entries.MovementClassType;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.services.FinancialPeriodService;
 import br.com.webbudget.domain.services.MovementService;
 import br.com.webbudget.domain.services.PeriodDetailService;

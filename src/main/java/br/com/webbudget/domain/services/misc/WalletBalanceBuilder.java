@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.services.misc;
 
-import br.com.webbudget.domain.entities.entries.Wallet;
-import br.com.webbudget.domain.entities.entries.WalletBalance;
-import br.com.webbudget.domain.entities.entries.BalanceType;
+import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.registration.BalanceType;
 import java.math.BigDecimal;
 
 /**

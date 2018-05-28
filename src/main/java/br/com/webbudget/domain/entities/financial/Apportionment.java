@@ -18,9 +18,9 @@ package br.com.webbudget.domain.entities.financial;
 
 import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.domain.entities.entries.MovementClass;
-import br.com.webbudget.domain.entities.entries.MovementClassType;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.MovementClass;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import java.math.BigDecimal;
 import javax.persistence.Column;

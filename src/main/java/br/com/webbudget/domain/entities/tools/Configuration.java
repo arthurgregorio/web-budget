@@ -17,8 +17,8 @@
 package br.com.webbudget.domain.entities.tools;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.domain.entities.entries.MovementClass;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.MovementClass;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Telephone;
+import br.com.webbudget.domain.entities.registration.Telephone;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 

@@ -24,9 +24,9 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
-import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.domain.entities.entries.MovementClass;
-import br.com.webbudget.domain.entities.entries.MovementClassType;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.MovementClass;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
 import br.com.webbudget.domain.repositories.entries.MovementClassRepository;
 import br.com.webbudget.domain.services.ClassificationService;

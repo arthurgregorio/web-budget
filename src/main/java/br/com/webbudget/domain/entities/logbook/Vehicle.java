@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.logbook;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.entities.entries.CostCenter;
+import br.com.webbudget.domain.entities.registration.CostCenter;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import javax.persistence.Column;

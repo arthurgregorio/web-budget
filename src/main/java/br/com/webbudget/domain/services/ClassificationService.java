@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.domain.entities.entries.MovementClass;
-import br.com.webbudget.domain.entities.entries.MovementClassType;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.MovementClass;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
 import br.com.webbudget.domain.repositories.entries.MovementClassRepository;

@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.WalletBalance;
+import br.com.webbudget.domain.entities.registration.WalletBalance;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 

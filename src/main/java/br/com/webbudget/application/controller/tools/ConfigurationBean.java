@@ -17,8 +17,8 @@
 package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.domain.entities.entries.MovementClass;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.tools.Configuration;
 import br.com.webbudget.domain.services.ConfigurationService;
 import br.com.webbudget.domain.services.MovementService;

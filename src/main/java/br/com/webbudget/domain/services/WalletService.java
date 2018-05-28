@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.entries.Wallet;
-import br.com.webbudget.domain.entities.entries.WalletBalance;
-import br.com.webbudget.domain.entities.entries.BalanceType;
+import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.registration.BalanceType;
 import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.entries.WalletRepository;

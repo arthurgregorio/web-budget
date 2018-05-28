@@ -24,11 +24,11 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
-import br.com.webbudget.domain.entities.entries.Address;
-import br.com.webbudget.domain.entities.entries.Contact;
-import br.com.webbudget.domain.entities.entries.ContactType;
-import br.com.webbudget.domain.entities.entries.NumberType;
-import br.com.webbudget.domain.entities.entries.Telephone;
+import br.com.webbudget.domain.entities.registration.Address;
+import br.com.webbudget.domain.entities.registration.Contact;
+import br.com.webbudget.domain.entities.registration.ContactType;
+import br.com.webbudget.domain.entities.registration.NumberType;
+import br.com.webbudget.domain.entities.registration.Telephone;
 import br.com.webbudget.domain.repositories.entries.ContactRepository;
 import br.com.webbudget.domain.services.ContactService;
 import javax.faces.view.ViewScoped;

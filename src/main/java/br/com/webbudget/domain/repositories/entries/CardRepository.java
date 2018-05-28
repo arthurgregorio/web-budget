@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Card;
-import br.com.webbudget.domain.entities.entries.CardType;
-import br.com.webbudget.domain.entities.entries.Card_;
+import br.com.webbudget.domain.entities.registration.Card;
+import br.com.webbudget.domain.entities.registration.CardType;
+import br.com.webbudget.domain.entities.registration.Card_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;

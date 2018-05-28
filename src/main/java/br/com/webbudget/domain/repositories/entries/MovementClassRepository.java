@@ -16,10 +16,10 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.domain.entities.entries.MovementClass;
-import br.com.webbudget.domain.entities.entries.MovementClassType;
-import br.com.webbudget.domain.entities.entries.MovementClass_;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.MovementClass;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
+import br.com.webbudget.domain.entities.registration.MovementClass_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.util.List;
 import java.util.Optional;

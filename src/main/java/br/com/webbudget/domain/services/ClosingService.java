@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.services.misc.MovementCalculator;
-import br.com.webbudget.domain.entities.entries.Card;
+import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.miscellany.Closing;
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.entities.financial.Movement;

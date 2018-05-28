@@ -20,7 +20,7 @@ import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.entities.financial.FixedMovement;
 import br.com.webbudget.domain.entities.financial.Movement;
-import br.com.webbudget.domain.entities.entries.MovementClass;
+import br.com.webbudget.domain.entities.registration.MovementClass;
 import java.math.BigDecimal;
 import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;

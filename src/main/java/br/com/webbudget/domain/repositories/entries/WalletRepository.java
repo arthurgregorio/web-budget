@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Wallet;
-import br.com.webbudget.domain.entities.entries.WalletType;
-import br.com.webbudget.domain.entities.entries.Wallet_;
+import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.entities.registration.WalletType;
+import br.com.webbudget.domain.entities.registration.Wallet_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;

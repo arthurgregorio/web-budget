@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.CardInvoice;
+import br.com.webbudget.domain.entities.registration.CardInvoice;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 

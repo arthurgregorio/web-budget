@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.services.misc;
 
-import br.com.webbudget.domain.entities.entries.Card;
-import br.com.webbudget.domain.entities.entries.CardInvoice;
+import br.com.webbudget.domain.entities.registration.Card;
+import br.com.webbudget.domain.entities.registration.CardInvoice;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.Contact;
-import br.com.webbudget.domain.entities.entries.Contact_;
+import br.com.webbudget.domain.entities.registration.Contact;
+import br.com.webbudget.domain.entities.registration.Contact_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;

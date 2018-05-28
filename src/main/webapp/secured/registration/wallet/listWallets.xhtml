@@ -1,0 +1,171 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
+                template="/template/mainTemplate.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{walletBean.initialize()}"/>
+    </f:metadata>
+
+    <ui:define name="pageTitle">
+        #{messages['wallet.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['wallet.page-description']}
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li><a href="#">#{breadcrumb['registration']}</a></li>
+        <li class="active"><a href="listWallets.xhtml">#{breadcrumb['registration.wallets']}</a></li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <p:messages id="messages" closable="true" />
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h:form id="controlsForm">
+                    <p:defaultCommand target="btSearch"/>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <p:selectOneMenu value="#{walletBean.filter.entityStatus}"
+                                             converter="omnifaces.GenericEnumConverter">
+                                <f:selectItems var="entityStatus"
+                                               itemValue="#{entityStatus}"
+                                               itemLabel="#{enums[entityStatus]}"
+                                               value="#{walletBean.filter.entityStatusValues}"/> 
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="input-group">
+                                <p:inputText styleClass="form-control"
+                                             value="#{walletBean.filter.value}"
+                                             placeholder="#{messages['filter.card']}" />
+                                <div class="input-group-btn">
+                                    <p:commandButton id="btSearch"
+                                                     update="itemsList"
+                                                     value="#{menu['search']}"
+                                                     onstart="PF('blocker').show()"
+                                                     oncomplete="PF('blocker').hide()"
+                                                     styleClass="btn btn-flat btn-primary"/>
+                                    <p:spacer width="10"/>
+                                    <p:commandButton icon="fa fa-trash-o"
+                                                     onstart="PF('blocker').show()"
+                                                     update="itemsList controlsForm"
+                                                     oncomplete="PF('blocker').hide()"
+                                                     title="#{messages['filter.clear']}"
+                                                     styleClass="btn btn-flat btn-danger"
+                                                     actionListener="#{walletBean.clearFilters()}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="box-tools pull-right">
+                                <p:commandButton immediate="true"
+                                                 value="#{menu['new']}"
+                                                 action="#{walletBean.changeToAdd()}"
+                                                 styleClass="btn btn-flat btn-primary" 
+                                                 rendered="#{userSessionBean.isPermitted(permissions.WALLET_INSERT)}"/>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+            <div jsf:id="boxBody" class="box-body">
+                <h:form id="itemsList">
+                    <p:dataTable rows="15"
+                                 lazy="true"
+                                 var="wallet"
+                                 rowHover="true"
+                                 paginator="true"
+                                 rowKey="#{wallet.id}"
+                                 sortOrder="ascending"
+                                 selectionMode="single" 
+                                 paginatorPosition="bottom"
+                                 paginatorAlwaysVisible="false"
+                                 selection="#{walletBean.value}"
+                                 value="#{walletBean.dataModel}"
+                                 emptyMessage="#{messages['list.empty']}">
+
+                        <p:ajax event="rowSelect"
+                                listener="#{walletBean.changeToDetail()}" /> 
+
+                        <p:column headerText="#{messages['card.list.name']}">
+                            <p:graphicImage width="18"
+                                            height="18"
+                                            library="webbudget" 
+                                            name="img/ui-icon-active.png" 
+                                            rendered="#{not wallet.blocked}"
+                                            title="#{messages['list.active']}"/>
+                            <p:graphicImage width="18"
+                                            height="18"
+                                            library="webbudget" 
+                                            rendered="#{wallet.blocked}"
+                                            name="img/ui-icon-blocked.png" 
+                                            title="#{messages['list.blocked']}"/>
+                            <p:spacer width="5"/>
+                            #{wallet.description}
+                        </p:column>
+                        <p:column width="12%" 
+                                  styleClass="align-center"
+                                  headerText="#{messages['wallet.list.balance']}">
+                            <ui:include src="balancePanel.xhtml"/>
+                        </p:column>
+                        <p:column width="15%" 
+                                  styleClass="align-center"
+                                  headerText="#{messages['wallet.list.type']}">
+                            #{enums[wallet.walletType]}
+                        </p:column>
+                        <p:column width="18%" 
+                                  styleClass="align-center"
+                                  headerText="#{menu['actions']}">
+                            <p:commandButton icon="fa fa-wrench"
+                                             title="#{menu['balance-adjust']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{walletBean.changeToAdjustment(wallet.id)}" 
+                                             rendered="#{userSessionBean.isPermitted(permissions.WALLET_ADJUST_BALANCE)}"/>
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="fa fa-edit"
+                                             title="#{menu['edit']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{walletBean.changeToEdit(wallet.id)}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="fa fa-remove"
+                                             title="#{menu['delete']}"
+                                             styleClass="btn btn-flat btn-danger"
+                                             actionListener="#{walletBean.changeToDelete(wallet.id)}" 
+                                             rendered="#{userSessionBean.isPermitted(permissions.WALLET_DELETE)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </div>
+            <wb:blocker target="boxBody"/>
+        </div>
+    </ui:define>
+</ui:composition>

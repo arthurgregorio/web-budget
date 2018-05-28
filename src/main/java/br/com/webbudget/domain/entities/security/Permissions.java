@@ -230,17 +230,17 @@ public class Permissions implements Serializable {
     private final String VEHICLE_DELETE = "vehicle:delete";
     
     @Getter
-    @PermissionGrouper("entries")
-    private final String ENTRIES_ACCESS = "entries:access";
+    @PermissionGrouper("records")
+    private final String RECORDS_ACCESS = "records:access";
     @Getter
-    @PermissionGrouper("entries")
-    private final String ENTRIES_INSERT = "entries:add";
+    @PermissionGrouper("records")
+    private final String RECORDS_INSERT = "records:add";
     @Getter
-    @PermissionGrouper("entries")
-    private final String ENTRIES_UPDATE = "entries:update";
+    @PermissionGrouper("records")
+    private final String RECORDS_UPDATE = "records:update";
     @Getter
-    @PermissionGrouper("entries")
-    private final String ENTRIES_DELETE = "entries:delete";
+    @PermissionGrouper("records")
+    private final String RECORDS_DELETE = "records:delete";
     
     @Getter
     @PermissionGrouper("refueling")

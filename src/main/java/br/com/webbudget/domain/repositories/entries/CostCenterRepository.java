@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.repositories.entries;
 
-import br.com.webbudget.domain.entities.entries.CostCenter;
-import br.com.webbudget.domain.entities.entries.CostCenter_;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.CostCenter_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
