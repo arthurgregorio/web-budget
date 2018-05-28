@@ -58,7 +58,7 @@ public interface DefaultRepository<T extends PersistentEntity>
      * and {@link #getBlockedProperty()}
      * 
      * @param filter the string filter to use
-     * @param blocked the object status of the entity, null means all states
+     * @param blocked the object status of the entity, null means any states
      * @param start the start page
      * @param pageSize the size of the page
      * @return the list of objects found

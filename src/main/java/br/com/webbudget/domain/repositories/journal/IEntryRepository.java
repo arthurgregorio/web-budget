@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.logbook;
+package br.com.webbudget.domain.repositories.journal;
 
-import br.com.webbudget.domain.entities.logbook.Fuel;
+import br.com.webbudget.domain.entities.journal.Entry;
+import br.com.webbudget.domain.entities.registration.Vehicle;
+import java.util.List;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -28,6 +30,27 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 2.3.0, 05/06/2016
  */
 @Repository
-public interface IFuelRepository extends EntityRepository<Fuel, Long> {
+public interface IEntryRepository extends EntityRepository<Entry, Long> {
 
+    /**
+     * 
+     * @param code
+     * @return 
+     */
+    public Entry findByMovementCode(String code);
+    
+    /**
+     *
+     * @param vehicle
+     * @return
+     */
+    public List<Entry> listByVehicle(Vehicle vehicle);
+
+    /**
+     * 
+     * @param vehicle
+     * @param filter
+     * @return 
+     */
+    public List<Entry> listByVehicleAndFilter(Vehicle vehicle, String filter);
 }

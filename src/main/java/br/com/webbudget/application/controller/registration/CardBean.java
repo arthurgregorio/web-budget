@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.controller.entries;
+package br.com.webbudget.application.controller.registration;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 import br.com.webbudget.application.components.ViewState;

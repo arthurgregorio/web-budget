@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entities.logbook;
+package br.com.webbudget.domain.entities.journal;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import java.math.BigDecimal;
@@ -95,5 +95,12 @@ public class Fuel extends PersistentEntity {
     public boolean isInvalid() {
         return this.liters == null && this.liters == BigDecimal.ZERO 
                 && this.valuePerLiter == null && this.valuePerLiter == BigDecimal.ZERO;
+    }
+    
+    /**
+     * @return 
+     */
+    public boolean isNotValid() {
+        return !this.isInvalid();
     }
 }

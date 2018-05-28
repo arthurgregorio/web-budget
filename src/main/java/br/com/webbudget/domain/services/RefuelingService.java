@@ -16,10 +16,9 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.registration.Vehicle;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.entries.VehicleRepository;
-import java.util.Optional;
+import br.com.webbudget.domain.entities.journal.Refueling;
+import br.com.webbudget.domain.repositories.journal.FuelRepository;
+import br.com.webbudget.domain.repositories.journal.RefuelingRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -29,47 +28,33 @@ import javax.transaction.Transactional;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 20/04/2018
+ * @since 3.0.0, 27/05/2018
  */
 @ApplicationScoped
-public class VehicleService {
+public class RefuelingService {
 
     @Inject
-    private VehicleRepository vehicleRepository;
+    private FuelRepository fuelRepository;
+    @Inject
+    private RefuelingRepository refuelingRepository;
     
     /**
-     *
-     * @param vehicle
+     * 
+     * @param refueling 
      */
     @Transactional
-    public void save(Vehicle vehicle) {
+    public void save(Refueling refueling) {
         
-        final Optional<Vehicle> found = this.vehicleRepository
-                .findOptionalByLicensePlate(vehicle.getLicensePlate());
-        
-        if (found.isPresent()) {
-            throw new BusinessLogicException("error.vehicle.duplicated");
-        }
-        
-        this.vehicleRepository.save(vehicle);
+        // TODO after save, call movement service to create a movement 
     }
 
     /**
-     *
-     * @param vehicle
-     * @return
+     * 
+     * @param refueling 
      */
     @Transactional
-    public Vehicle update(Vehicle vehicle) {
-        return this.vehicleRepository.save(vehicle);
-    }
-
-    /**
-     *
-     * @param vehicle
-     */
-    @Transactional
-    public void delete(Vehicle vehicle) {
-        this.vehicleRepository.attachAndRemove(vehicle);
+    public void delete(Refueling refueling) {
+        
+        // TODO revert the financial launch for this refueling
     }
 }

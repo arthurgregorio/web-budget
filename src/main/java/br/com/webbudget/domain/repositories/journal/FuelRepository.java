@@ -14,38 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entities.logbook;
+package br.com.webbudget.domain.repositories.journal;
+
+import br.com.webbudget.domain.entities.journal.Fuel;
+import br.com.webbudget.domain.repositories.DefaultRepository;
+import org.apache.deltaspike.data.api.Repository;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
- * @since 2.3.0, 15/05/2014
+ * @version 2.0.0
+ * @since 2.3.0, 05/06/2016
  */
-public enum VehicleType {
-
-    OTHER("vehicle-type.other"),
-    BACKUP_CAR("vehicle-type.backup-car"),
-    PRIVATE_CAR("vehicle-type.private-car"),
-    COMPANY_CAR("vehicle-type.company-car");
-
-    private final String description;
-
-    /**
-     *
-     * @param description
-     */
-    private VehicleType(String description) {
-        this.description = description;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String toString() {
-        return this.description;
-    }
-}
+@Repository
+public interface FuelRepository extends DefaultRepository<Fuel> { }

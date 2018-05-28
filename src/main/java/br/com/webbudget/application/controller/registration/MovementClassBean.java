@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.controller.entries;
+package br.com.webbudget.application.controller.registration;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
 import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
@@ -25,14 +25,20 @@ import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.MovementClass;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
+import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
+import br.com.webbudget.domain.repositories.entries.MovementClassRepository;
+import br.com.webbudget.domain.services.ClassificationService;
+import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
-import br.com.webbudget.domain.services.ClassificationService;
+import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
 /**
+ * Controller da view de classes de movimento
  *
  * @author Arthur Gregorio
  *
@@ -41,14 +47,19 @@ import org.primefaces.model.SortOrder;
  */
 @Named
 @ViewScoped
-public class CostCenterBean extends FormBean<CostCenter> {
+public class MovementClassBean extends FormBean<MovementClass> {
 
+    @Getter
+    private List<CostCenter> costCenters;
+    
     @Inject
     private CostCenterRepository costCenterRepository;
+    @Inject
+    private MovementClassRepository movementClassRepository;
     
     @Inject
     private ClassificationService classificationService;
-    
+
     /**
      * 
      */
@@ -66,9 +77,9 @@ public class CostCenterBean extends FormBean<CostCenter> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.data = this.costCenterRepository.findAllUnblocked();
-        this.value = this.costCenterRepository.findOptionalById(id)
-                .orElseGet(CostCenter::new);
+        this.costCenters = this.costCenterRepository.findAllUnblocked();
+        this.value = this.movementClassRepository.findOptionalById(id)
+                .orElseGet(MovementClass::new);
     }
 
     /**
@@ -76,11 +87,11 @@ public class CostCenterBean extends FormBean<CostCenter> {
      */
     @Override
     protected void initializeNavigationManager() {
-        this.navigation.addPage(LIST_PAGE, "listCostCenters.xhtml");
-        this.navigation.addPage(ADD_PAGE, "formCostCenter.xhtml");
-        this.navigation.addPage(UPDATE_PAGE, "formCostCenter.xhtml");
-        this.navigation.addPage(DETAIL_PAGE, "detailCostCenter.xhtml");
-        this.navigation.addPage(DELETE_PAGE, "detailCostCenter.xhtml");        
+        this.navigation.addPage(LIST_PAGE, "listMovementClasses.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formMovementClass.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formMovementClass.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailMovementClass.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailMovementClass.xhtml");
     }
 
     /**
@@ -92,20 +103,19 @@ public class CostCenterBean extends FormBean<CostCenter> {
      * @return 
      */
     @Override
-    public Page<CostCenter> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.costCenterRepository.findAllBy(this.filter.getValue(), 
+    public Page<MovementClass> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.movementClassRepository.findAllBy(this.filter.getValue(), 
                 this.filter.getEntityStatusValue(), first, pageSize);
     }
-
+    
     /**
      *
      */
     @Override
     public void doSave() {
         this.classificationService.save(this.value);
-        this.value = new CostCenter();
-        this.data = this.costCenterRepository.findAllUnblocked();
-        this.addInfo(true, "cost-center.saved");
+        this.value = new MovementClass();
+        this.addInfo(true, "movement-class.saved");
     }
 
     /**
@@ -114,8 +124,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     @Override
     public void doUpdate() {
         this.value = this.classificationService.update(this.value);
-        this.data = this.costCenterRepository.findAllUnblocked();
-        this.addInfo(true, "cost-center.updated");
+        this.addInfo(true, "movement-class.updated");
     }
 
     /**
@@ -125,7 +134,14 @@ public class CostCenterBean extends FormBean<CostCenter> {
     @Override
     public String doDelete() {
         this.classificationService.delete(this.value);
-        this.addInfoAndKeep("cost-center.deleted");
+        this.addInfoAndKeep("movement-class.deleted");
         return this.changeToListing();
+    }
+
+    /**
+     * @return the movement class type values
+     */
+    public MovementClassType[] getAvailableMovementsTypes() {
+        return MovementClassType.values();
     }
 }

@@ -38,7 +38,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
-        <li class="active"><a href="listFinancialPeriods.xhtml">#{breadcrumb['miscellany.financial-period']}</a></li>
+        <li class="active"><a href="listFinancialPeriods.xhtml">#{breadcrumb['registration.financial-period']}</a></li>
     </ui:define>
 
     <ui:define name="content">
@@ -116,7 +116,15 @@
                                 listener="#{financialPeriodBean.changeToDetail()}" /> 
                         
                         <p:column headerText="#{messages['financial-period.list.identification']}">
-                            #{financialPeriod.identification}
+                            #{financialPeriod.identification} - 
+                            <strong class="text-green"
+                                    jsf:rendered="#{not financialPeriod.expired and not financialPeriod.closed}">
+                                    #{messages['financial-period.list.open']}
+                            </strong>
+                            <strong class="text-red"
+                                    jsf:rendered="#{financialPeriod.expired eq true and not financialPeriod.closed}">
+                                    #{messages['financial-period.list.expired']}
+                            </strong>
                         </p:column>
                         <p:column width="12%" 
                                   styleClass="align-center"
@@ -139,14 +147,8 @@
                                           value="#{financialPeriod.closing.closingDate}" >
                                 <f:converter converterId="localDateConverter" />
                             </h:outputText>
-                            <strong class="text-green"
-                                    jsf:rendered="#{financialPeriod.expired eq false and financialPeriod.closed eq false}">
-                                    #{messages['financial-period.list.open']}
-                            </strong>
-                            <strong class="text-red"
-                                    jsf:rendered="#{financialPeriod.expired eq true and financialPeriod.closed eq false}">
-                                    #{messages['financial-period.list.expired']}
-                            </strong>
+                            <h:outputText value="#{messages['no-data']}"
+                                          rendered="#{not financialPeriod.closed}"/>
                         </p:column>
                         <p:column width="12%"
                                   styleClass="align-center" 
@@ -167,16 +169,16 @@
                                       title="#{menu['finalize']}"
                                       styleClass="btn btn-flat btn-default"
                                       href="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"
-                                      rendered="#{financialPeriod.closed eq false 
+                                      rendered="#{not financialPeriod.closed
                                                   and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>
                             <p:spacer width="10" 
-                                      rendered="#{financialPeriod.closed eq false 
+                                      rendered="#{not financialPeriod.closed 
                                                   and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}"/>
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
                                              action="#{financialPeriodBean.changeToDelete(financialPeriod.id)}" 
-                                             rendered="#{financialPeriod.closed eq false 
+                                             rendered="#{not financialPeriod.closed
                                                          and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}" />
                         </p:column>
                     </p:dataTable>

@@ -16,186 +16,158 @@
  */
 package br.com.webbudget.application.controller.logbook;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
+import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
+import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.domain.entities.journal.FuelType;
+import br.com.webbudget.domain.entities.journal.Refueling;
+import br.com.webbudget.domain.entities.registration.Vehicle;
+import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.MovementClass;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
+import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
+import br.com.webbudget.domain.repositories.entries.MovementClassRepository;
+import br.com.webbudget.domain.repositories.journal.RefuelingRepository;
+import br.com.webbudget.domain.services.FinancialPeriodService;
+import br.com.webbudget.domain.services.RefuelingService;
+import java.util.List;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
+import lombok.Setter;
+import org.primefaces.model.SortOrder;
 
 /**
- * Controller responsavel pela view de abastecimento no diario de bordo
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 2.3.0, 27/06/2016
  */
 @Named
 @ViewScoped
-public class RefuelingBean extends AbstractBean {
+public class RefuelingBean extends FormBean<Refueling> {
 
-//    @Getter
-//    @Setter
-//    private Refueling refueling;
-//
-//    @Getter
-//    private List<Vehicle> vehicles;
-//    @Getter
-//    private List<Refueling> refuelings;
-//    @Getter
-//    private List<FinancialPeriod> openPeriods;
-//    @Getter
-//    private List<MovementClass> movementClasses;
-//
-//    @Inject
-//    private LogbookService logbookService;
-//    @Inject
-//    private MovementService movementService;
-//    @Inject
-//    private FinancialPeriodService periodService;
-//
-//    @Getter
-//    private final AbstractLazyModel<Refueling> refuelingsModel;
-//
-//    /**
-//     * Inicializa o tablemodel 
-//     */
-//    public RefuelingBean() {
-//
-//        this.refuelingsModel = new AbstractLazyModel<Refueling>() {
-//            @Override
-//            public List<Refueling> load(int first, int pageSize, String sortField,
-//                    SortOrder sortOrder, Map<String, Object> filters) {
-//
-//                final PageRequest pageRequest = new PageRequest();
-//
-//                pageRequest
-//                        .setFirstResult(first)
-//                        .withPageSize(pageSize)
-//                        .sortingBy(sortField, "inclusion")
-//                        .withDirection(sortOrder.name());
-//
-//                final Page<Refueling> page
-//                        = logbookService.listRefuelingsLazily(null, pageRequest);
-//
-//                this.setRowCount(page.getTotalPagesInt());
-//
-//                return page.getContent();
-//            }
-//        };
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void initializeListing() {
-//        this.viewState = ViewState.LISTING;
-//    }
-//
-//    /**
-//     * 
-//     * @param refuelingId
-//     * @param viewState 
-//     */
-//    public void initializeForm(long refuelingId, String viewState) {
-//
-//        this.viewState = ViewState.valueOf(viewState);
-//        
-//        // pegamos os periodos financeiros em aberto
-//        this.openPeriods = this.periodService.listOpenFinancialPeriods();
-//        
-//        // lista os veiculos disponiveis
-//        this.vehicles = this.logbookService.listVehicles(false);
-//
-//        if (refuelingId != 0 && this.viewState == ViewState.DETAILING) { 
-//            this.refueling = this.logbookService.findRefuelingById(refuelingId);
-//        } else {
-//            this.refueling = new Refueling();
-//        }
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToAdd() {
-//        return "formRefueling.xhtml?faces-redirect=true"
-//                + "&viewState=" + ViewState.ADDING;
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String changeToListing() {
-//        return "listRefuelings.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * 
-//     */
-//    public void changeToDetail() {
-//        this.redirectTo("formRefueling.xhtml?faces-redirect=true&refuelingId="
-//                + this.refueling.getId() + "&viewState=" + ViewState.DETAILING);
-//    }
-//
-//    /**
-//     * @param refuelingId
-//     */
-//    public void changeToDelete(long refuelingId) {
-//        this.refueling = this.logbookService.findRefuelingById(refuelingId);
-//        this.updateAndOpenDialog("deleteRefuelingDialog", "dialogDeleteRefueling");
-//    }
-//
-//    /**
-//     * @return
-//     */
-//    public String doCancel() {
-//        return "listRefuelings.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doSave() {
-//        try {
-//            this.logbookService.saveRefueling(this.refueling);
-//            this.refueling = new Refueling();
-//            this.addInfo(true, "refueling.saved");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     */
-//    public void doDelete() {
-//        try {
-//            this.logbookService.deleteRefueling(this.refueling);
-//            this.addInfo(true, "refueling.deleted");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), true, ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        } finally {
-//            this.closeDialog("dialogDeleteRefueling");
-//            this.updateComponent("refuelingsList");
-//        }
-//    }
-//
-//    /**
-//     * Quando um veiculo eh selecionado, carregamos aqui as classes do CC 
-//     */
-//    public void onVehicleSelect() {
-//        this.movementClasses = this.movementService.listMovementClassesByCostCenterAndType(
-//                this.refueling.getCostCenter(), MovementClassType.OUT);
-//    }
-//    
-//    /**
-//     * @return os tipos de combustivel disponiveis para selecao
-//     */
-//    public FuelType[] getFuelTypes() {
-//        return FuelType.values();
-//    }
+    @Getter
+    @Setter
+    private Refueling refueling;
+
+    @Getter
+    private List<Vehicle> vehicles;
+    @Getter
+    private List<Refueling> refuelings;
+    @Getter
+    private List<FinancialPeriod> openPeriods;
+    @Getter
+    private List<MovementClass> movementClasses;
+
+    @Inject
+    private RefuelingService refuelingService;
+    @Inject
+    private FinancialPeriodService periodService;
+    
+    @Inject
+    private RefuelingRepository refuelingRepository;
+    @Inject
+    private MovementClassRepository movementClassRepository;
+
+    /**
+     * 
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.temporizeHiding(this.getDefaultMessagesComponentId());
+    }
+
+    /**
+     * 
+     * @param id
+     * @param viewState 
+     */
+    @Override
+    public void initialize(long id, ViewState viewState) {
+        this.viewState = viewState;
+        this.refuelingRepository.findOptionalById(id)
+                .orElseGet(Refueling::new);
+    }
+    
+    /**
+     * 
+     */
+    @Override
+    protected void initializeNavigationManager() {
+        this.navigation.addPage(LIST_PAGE, "listRefuelings.xhtml");
+        this.navigation.addPage(ADD_PAGE, "formRefueling.xhtml");
+        this.navigation.addPage(UPDATE_PAGE, "formRefueling.xhtml");
+        this.navigation.addPage(DETAIL_PAGE, "detailRefueling.xhtml");
+        this.navigation.addPage(DELETE_PAGE, "detailRefueling.xhtml");
+    }
+    
+    /**
+     * FIXME the search for refuelings is not working well... fix this later 
+     * before the release of v3.0
+     * 
+     * @param first
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return 
+     */
+    @Override
+    public Page<Refueling> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        return this.refuelingRepository.findAllBy(this.filter.getValue(), null, 
+                first, pageSize);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void doSave() {
+        this.refuelingService.save(this.refueling);
+        this.refueling = new Refueling();
+        this.addInfo(true, "refueling.saved");
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void doUpdate() {
+        // No update for refueling, if you saved wrong, delete and try again
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String doDelete() {
+        this.refuelingService.delete(this.refueling);
+        this.addInfoAndKeep("refueling.deleted");
+        return this.changeToListing();
+    }
+
+    /**
+     * When vehicle is selected, show the cost center linked
+     */
+    public void onVehicleSelect() {
+        this.movementClasses = this.movementClassRepository
+                .findByMovementClassTypeAndCostCenter(
+                        MovementClassType.OUT, this.refueling.getCostCenter());
+    }
+    
+    /**
+     * @return the fuel types
+     */
+    public FuelType[] getFuelTypes() {
+        return FuelType.values();
+    }
 }

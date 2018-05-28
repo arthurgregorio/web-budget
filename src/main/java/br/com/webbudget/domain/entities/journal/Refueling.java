@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entities.logbook;
+package br.com.webbudget.domain.entities.journal;
 
+import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.CostCenter;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -213,12 +215,11 @@ public class Refueling extends PersistentEntity {
         boolean valid = this.fuels != null && !this.fuels.isEmpty();
         
         if (valid) {
-            final Fuel fuel = this.fuels
+            valid = this.fuels
                     .stream()
-                    .filter(Fuel::isInvalid)
-                    .findAny()
-                    .orElse(null);
-            valid = (fuel == null);
+                    .filter(Fuel::isNotValid)
+                    .collect(Collectors.toList())
+                    .isEmpty();
         }
         return valid;
     }

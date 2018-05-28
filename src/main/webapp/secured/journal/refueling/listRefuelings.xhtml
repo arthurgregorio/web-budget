@@ -21,12 +21,11 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="refuelings"/>
-
     <f:metadata>
-        <f:viewAction action="#{refuelingBean.initializeListing()}"/>
+        <f:viewAction action="#{refuelingBean.initialize()}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -38,53 +37,78 @@
     </ui:define>
 
     <ui:define name="breadcrumb">
-        <li><a href="#">#{breadcrumb['logbook']}</a></li>
+        <li><a href="#">#{breadcrumb['journal']}</a></li>
         <li class="active">
             <a href="listVehicles.xhtml">
-                #{breadcrumb['logbook.refueling']}
+                #{breadcrumb['journal.refueling']}
             </a>
         </li>
     </ui:define>
 
     <ui:define name="content">
-
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <p:messages id="messages" closable="true" />
             </div>
         </div>
-
         <div class="box">
             <div class="box-header with-border">
-                <h:form id="controlsForm" prependId="false">
-                    <div class="box-tools pull-right">
-                        <p:commandButton immediate="true"
-                                         value="#{menu['new']}"
-                                         styleClass="btn btn-flat btn-info" 
-                                         action="#{refuelingBean.changeToAdd()}"
-                                         rendered="#{userSessionBean.hasRole(authorization.REFUELING_INSERT)}"/>
+                <h:form id="controlsForm">
+                    <p:defaultCommand target="btSearch"/>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="input-group">
+                                <p:inputText styleClass="form-control"
+                                             value="#{refuelingBean.filter.value}"
+                                             placeholder="#{messages['filter.refueling']}" />
+                                <div class="input-group-btn">
+                                    <p:commandButton id="btSearch"
+                                                     update="itemsList"
+                                                     value="#{menu['search']}"
+                                                     onstart="PF('blocker').show()"
+                                                     oncomplete="PF('blocker').hide()"
+                                                     styleClass="btn btn-flat btn-primary"/>
+                                    <p:spacer width="10"/>
+                                    <p:commandButton icon="fa fa-trash-o"
+                                                     onstart="PF('blocker').show()"
+                                                     update="itemsList controlsForm"
+                                                     oncomplete="PF('blocker').hide()"
+                                                     title="#{messages['filter.clear']}"
+                                                     styleClass="btn btn-flat btn-danger"
+                                                     actionListener="#{refuelingBean.clearFilters()}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="box-tools pull-right">
+                                <p:commandButton immediate="true"
+                                                 value="#{menu['new']}"
+                                                 action="#{refuelingBean.changeToAdd()}"
+                                                 styleClass="btn btn-flat btn-primary" 
+                                                 rendered="#{userSessionBean.isPermitted(permissions.REFUELING_INSERT)}"/>
+                            </div>
+                        </div>
                     </div>
                 </h:form>
             </div>
             <div jsf:id="boxBody" class="box-body">
-                <h:form prependId="false">
-                    <p:dataTable id="refuelingsList" 
-                                 rows="15"
+                <h:form id="itemsList">
+                    <p:dataTable rows="15"
                                  lazy="true"
                                  rowHover="true"
                                  var="refueling"
                                  paginator="true"
-                                 selectionMode="single"
-                                 sortOrder="descending"
+                                 sortOrder="ascending"
+                                 selectionMode="single" 
                                  rowKey="#{refueling.id}"
                                  paginatorPosition="bottom"
                                  paginatorAlwaysVisible="false"
-                                 selection="#{refuelingBean.refueling}"
-                                 value="#{refuelingBean.refuelingsModel}"
+                                 selection="#{refuelingBean.value}"
+                                 value="#{refuelingBean.dataModel}"
                                  emptyMessage="#{messages['list.empty']}">
 
-                        <p:ajax event="rowSelect" 
-                                listener="#{refuelingBean.changeToDetail()}" />
+                        <p:ajax event="rowSelect"
+                                listener="#{refuelingBean.changeToDetail()}" /> 
 
                         <p:column headerText="#{messages['refueling.list.vehicle']}">
                             #{refueling.vehicleIdentification}
@@ -127,32 +151,19 @@
                                 #{messages['refueling.partial']}
                             </span>
                         </p:column>
-
                         <p:column width="15%" 
                                   styleClass="align-center"
                                   headerText="#{menu['actions']}">
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
-                                             styleClass="btn btn-flat btn-default"
+                                             styleClass="btn btn-flat btn-danger"
                                              actionListener="#{refuelingBean.changeToDelete(refueling.id)}" 
-                                             rendered="#{userSessionBean.hasRole(authorization.REFUELING_DELETE)}"/>
+                                             rendered="#{userSessionBean.isPermitted(permissions.REFUELING_DELETE)}"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>
             </div>
         </div>
-
-        <p:blockUI block="boxBody"
-                   trigger="refuelingsList"
-                   widgetVar="listBlock">
-            <p:graphicImage width="32" 
-                            height="32"
-                            library="webbudget" 
-                            name="img/loading.gif" />
-        </p:blockUI>
-    </ui:define>
-    `
-    <ui:define name="popups">
-        <ui:include src="dialogDeleteRefueling.xhtml"/>
+        <wb:blocker target="boxBody" />
     </ui:define>
 </ui:composition>

@@ -14,11 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.logbook;
+package br.com.webbudget.domain.repositories.journal;
 
-import br.com.webbudget.domain.entities.logbook.Refueling;
-import org.apache.deltaspike.data.api.EntityRepository;
+import br.com.webbudget.domain.entities.journal.Refueling;
+import br.com.webbudget.domain.entities.journal.Refueling_;
+import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
+import org.apache.deltaspike.data.api.criteria.Criteria;
 
 /**
  *
@@ -28,8 +30,29 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 2.3.0, 05/06/2016
  */
 @Repository
-public interface IRefuelingRepository extends EntityRepository<Refueling, Long> {
+public interface RefuelingRepository extends DefaultRepository<Refueling> {
 
+    /**
+     * 
+     * @param criteria 
+     */
+    @Override
+    default void setOrder(Criteria<Refueling, Refueling> criteria) {
+        criteria.orderDesc(Refueling_.eventDate);
+    }
+    
+    /**
+     * 
+     * @param filter
+     * @return 
+     */
+    @Override
+    default Criteria<Refueling, Refueling> getRestrictions(String filter) {
+        return criteria()
+                .likeIgnoreCase(Refueling_.place, filter)
+                .likeIgnoreCase(Refueling_.movementCode, filter);
+    }    
+    
 //    /**
 //     * 
 //     * @param refueling
@@ -64,12 +87,4 @@ public interface IRefuelingRepository extends EntityRepository<Refueling, Long> 
 //     * @return 
 //     */
 //    public List<Refueling> findUnaccountedsForVehicle(Vehicle vehicle);
-//    
-//    /**
-//     * 
-//     * @param filter
-//     * @param pageRequest
-//     * @return 
-//     */
-//    public Page<Refueling> listLazily(String filter, PageRequest pageRequest);
 }

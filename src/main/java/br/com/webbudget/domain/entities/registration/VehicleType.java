@@ -14,43 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.logbook;
-
-import br.com.webbudget.domain.entities.logbook.Entry;
-import br.com.webbudget.domain.entities.logbook.Vehicle;
-import java.util.List;
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Repository;
+package br.com.webbudget.domain.entities.registration;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
- * @since 2.3.0, 05/06/2016
+ * @version 1.0.0
+ * @since 2.3.0, 15/05/2014
  */
-@Repository
-public interface IEntryRepository extends EntityRepository<Entry, Long> {
+public enum VehicleType {
 
-    /**
-     * 
-     * @param code
-     * @return 
-     */
-    public Entry findByMovementCode(String code);
-    
+    OTHER("vehicle-type.other"),
+    BACKUP_CAR("vehicle-type.backup-car"),
+    PRIVATE_CAR("vehicle-type.private-car"),
+    COMPANY_CAR("vehicle-type.company-car");
+
+    private final String description;
+
     /**
      *
-     * @param vehicle
-     * @return
+     * @param description
      */
-    public List<Entry> listByVehicle(Vehicle vehicle);
+    private VehicleType(String description) {
+        this.description = description;
+    }
 
     /**
-     * 
-     * @param vehicle
-     * @param filter
-     * @return 
+     *
+     * @return
      */
-    public List<Entry> listByVehicleAndFilter(Vehicle vehicle, String filter);
+    @Override
+    public String toString() {
+        return this.description;
+    }
 }

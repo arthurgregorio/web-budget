@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.controller.logbook;
+package br.com.webbudget.application.controller.registration;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
 import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
@@ -25,12 +25,10 @@ import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
-import br.com.webbudget.domain.entities.logbook.Vehicle;
-import br.com.webbudget.domain.entities.logbook.VehicleType;
+import br.com.webbudget.domain.entities.registration.Vehicle;
+import br.com.webbudget.domain.entities.registration.VehicleType;
 import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
 import br.com.webbudget.domain.repositories.entries.VehicleRepository;
-import br.com.webbudget.domain.services.ClassificationService;
-import br.com.webbudget.domain.services.LogbookService;
 import br.com.webbudget.domain.services.VehicleService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -44,7 +42,7 @@ import org.primefaces.model.SortOrder;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 2.3.0, 09/05/2016
  */
 @Named
