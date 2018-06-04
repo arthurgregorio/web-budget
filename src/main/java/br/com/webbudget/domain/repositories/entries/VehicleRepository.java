@@ -21,6 +21,7 @@ import br.com.webbudget.domain.entities.registration.Vehicle_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
+import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -40,6 +41,14 @@ public interface VehicleRepository extends DefaultRepository<Vehicle> {
      * @return 
      */
     Optional<Vehicle> findOptionalByLicensePlate(String licensePlate);
+    
+    /**
+     * 
+     * @param id
+     * @return 
+     */
+    @Query("SELECT MAX(ve.odometer) FROM Vehicle ve WHERE ve.id = ?1")
+    long findLastOdometer(long id);
     
     /**
      * 

@@ -30,17 +30,16 @@ import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
 import br.com.webbudget.domain.repositories.entries.MovementClassRepository;
+import br.com.webbudget.domain.repositories.entries.VehicleRepository;
 import br.com.webbudget.domain.repositories.journal.RefuelingRepository;
-import br.com.webbudget.domain.services.FinancialPeriodService;
+import br.com.webbudget.domain.repositories.miscellany.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.RefuelingService;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
-import lombok.Setter;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -55,27 +54,25 @@ import org.primefaces.model.SortOrder;
 public class RefuelingBean extends FormBean<Refueling> {
 
     @Getter
-    @Setter
-    private Refueling refueling;
-
-    @Getter
     private List<Vehicle> vehicles;
     @Getter
     private List<Refueling> refuelings;
     @Getter
-    private List<FinancialPeriod> openPeriods;
-    @Getter
     private List<MovementClass> movementClasses;
+    @Getter
+    private List<FinancialPeriod> financialPeriods;
 
     @Inject
     private RefuelingService refuelingService;
-    @Inject
-    private FinancialPeriodService periodService;
     
+    @Inject
+    private VehicleRepository vehicleRepository;
     @Inject
     private RefuelingRepository refuelingRepository;
     @Inject
     private MovementClassRepository movementClassRepository;
+    @Inject
+    private FinancialPeriodRepository financialPeriodRepository;
 
     /**
      * 
@@ -94,7 +91,12 @@ public class RefuelingBean extends FormBean<Refueling> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.refuelingRepository.findOptionalById(id)
+        
+        this.vehicles = this.vehicleRepository.findAllUnblocked();
+        this.financialPeriods = this.financialPeriodRepository
+                .findByClosed(false);
+        
+        this.value = this.refuelingRepository.findOptionalById(id)
                 .orElseGet(Refueling::new);
     }
     
@@ -111,8 +113,6 @@ public class RefuelingBean extends FormBean<Refueling> {
     }
     
     /**
-     * FIXME the search for refuelings is not working well... fix this later 
-     * before the release of v3.0
      * 
      * @param first
      * @param pageSize
@@ -122,6 +122,7 @@ public class RefuelingBean extends FormBean<Refueling> {
      */
     @Override
     public Page<Refueling> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
+        // FIXME the search for refuelings is not working well... fix this later before the release of v3.0
         return this.refuelingRepository.findAllBy(this.filter.getValue(), null, 
                 first, pageSize);
     }
@@ -131,8 +132,8 @@ public class RefuelingBean extends FormBean<Refueling> {
      */
     @Override
     public void doSave() {
-        this.refuelingService.save(this.refueling);
-        this.refueling = new Refueling();
+        this.refuelingService.save(this.value);
+        this.value = new Refueling();
         this.addInfo(true, "refueling.saved");
     }
 
@@ -150,7 +151,7 @@ public class RefuelingBean extends FormBean<Refueling> {
      */
     @Override
     public String doDelete() {
-        this.refuelingService.delete(this.refueling);
+        this.refuelingService.delete(this.value);
         this.addInfoAndKeep("refueling.deleted");
         return this.changeToListing();
     }
@@ -161,7 +162,7 @@ public class RefuelingBean extends FormBean<Refueling> {
     public void onVehicleSelect() {
         this.movementClasses = this.movementClassRepository
                 .findByMovementClassTypeAndCostCenter(
-                        MovementClassType.OUT, this.refueling.getCostCenter());
+                        MovementClassType.OUT, this.value.getCostCenter());
     }
     
     /**

@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.CascadeType.PERSIST;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import static javax.persistence.FetchType.EAGER;
@@ -44,8 +45,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 /**
  * Classe que representa o abastecimento de um veiculo
@@ -84,11 +83,11 @@ public class Refueling extends PersistentEntity {
     @Setter
     @Min(value = 1, message = "{refueling.odometer}")
     @Column(name = "odometer", nullable = false)
-    private int odometer;
+    private long odometer;
     @Getter
     @Setter
     @Column(name = "distance", nullable = false)
-    private int distance;
+    private long distance;
     @Getter
     @Setter
     @Column(name = "average_consumption")
@@ -138,8 +137,7 @@ public class Refueling extends PersistentEntity {
     @NotNull(message = "{refueling.financial-period}")
     private FinancialPeriod financialPeriod;
 
-    @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "refueling", fetch = EAGER, cascade = REMOVE)
+    @OneToMany(mappedBy = "refueling", fetch = EAGER, cascade = {PERSIST, REMOVE})
     private List<Fuel> fuels;
     
     /**
@@ -217,7 +215,7 @@ public class Refueling extends PersistentEntity {
         if (valid) {
             valid = this.fuels
                     .stream()
-                    .filter(Fuel::isNotValid)
+                    .filter(Fuel::isInvalid)
                     .collect(Collectors.toList())
                     .isEmpty();
         }
@@ -264,7 +262,7 @@ public class Refueling extends PersistentEntity {
      * @param totalDistance o total de distancia percorrida
      * @param liters a quantidade total de litros
      */
-    public void calculateAverageComsumption(int totalDistance, BigDecimal liters) {
+    public void calculateAverageComsumption(long totalDistance, BigDecimal liters) {
         if (!this.firstRefueling && totalDistance > 0) {
             this.averageConsumption = 
                     new BigDecimal(totalDistance / liters.doubleValue());
@@ -300,7 +298,7 @@ public class Refueling extends PersistentEntity {
      * 
      * @param lastOdometer o ultimo odometro registrado por um abastecimento
      */
-    public void calculateDistance(int lastOdometer) {
+    public void calculateDistance(long lastOdometer) {
         this.distance = this.firstRefueling ? 0 : this.odometer - lastOdometer;
     }
 }

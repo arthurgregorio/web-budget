@@ -96,11 +96,4 @@ public class Fuel extends PersistentEntity {
         return this.liters == null && this.liters == BigDecimal.ZERO 
                 && this.valuePerLiter == null && this.valuePerLiter == BigDecimal.ZERO;
     }
-    
-    /**
-     * @return 
-     */
-    public boolean isNotValid() {
-        return !this.isInvalid();
-    }
 }

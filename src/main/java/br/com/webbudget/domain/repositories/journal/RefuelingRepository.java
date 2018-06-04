@@ -18,7 +18,10 @@ package br.com.webbudget.domain.repositories.journal;
 
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.journal.Refueling_;
+import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.repositories.DefaultRepository;
+import java.util.List;
+import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -32,6 +35,37 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 @Repository
 public interface RefuelingRepository extends DefaultRepository<Refueling> {
 
+    /**
+     * 
+     * @param movementCode
+     * @return 
+     */
+    List<Refueling> findByAccountedBy(String movementCode);
+    
+    /**
+     * 
+     * @param vehicle 
+     * @return 
+     */
+    @Query("FROM Refueling re WHERE re.accounted = false AND re.vehicle = ?1")
+    List<Refueling> findUnaccountedsByVehicle(Vehicle vehicle);
+    
+    /**
+     * 
+     * @param vehicle 
+     * @return 
+     */
+    @Query("SELECT MAX(re.odometer) FROM Refueling re WHERE re.vehicle = ?1")
+    long findLastOdometerByVehicle(Vehicle vehicle);
+    
+    /**
+     * 
+     * @param vehicle
+     * @return 
+     */
+    @Query("FROM Refueling re WHERE re.id = (SELECT MAX(re.id) FROM Refueling re WHERE re.vehicle = ?1)")
+    Refueling findLastByVehicle(Vehicle vehicle);
+    
     /**
      * 
      * @param criteria 
@@ -51,40 +85,5 @@ public interface RefuelingRepository extends DefaultRepository<Refueling> {
         return criteria()
                 .likeIgnoreCase(Refueling_.place, filter)
                 .likeIgnoreCase(Refueling_.movementCode, filter);
-    }    
-    
-//    /**
-//     * 
-//     * @param refueling
-//     * @return 
-//     */
-//    public boolean isLast(Refueling refueling);
-//    
-//    /**
-//     * 
-//     * @param code
-//     * @return 
-//     */
-//    public Refueling findByMovementCode(String code);
-//
-//    /**
-//     * 
-//     * @param code
-//     * @return 
-//     */
-//    public List<Refueling> listAccountedsBy(String code);
-//    
-//    /**
-//     * 
-//     * @param vehicle
-//     * @return 
-//     */
-//    public int findLastOdometerForVehicle(Vehicle vehicle);
-//    
-//    /**
-//     * 
-//     * @param vehicle
-//     * @return 
-//     */
-//    public List<Refueling> findUnaccountedsForVehicle(Vehicle vehicle);
+    }
 }

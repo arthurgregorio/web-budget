@@ -17,7 +17,6 @@
 package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.entities.registration.CostCenter;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import javax.persistence.Column;
@@ -78,7 +77,7 @@ public class Vehicle extends PersistentEntity {
     @Getter
     @Setter
     @Column(name = "odometer", length = 11)
-    private int odometer;
+    private long odometer;
     @Getter
     @Setter
     @Column(name = "fuel_capacity", length = 4)
