@@ -62,7 +62,7 @@ public class Fuel extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "id_refueling")
+    @JoinColumn(name = "id_refueling", nullable = false)
     private Refueling refueling;
     
     /**
@@ -72,6 +72,15 @@ public class Fuel extends PersistentEntity {
         this.liters = BigDecimal.ZERO;
         this.fuelType = FuelType.GASOLINE;
         this.valuePerLiter = BigDecimal.ZERO;
+    }
+    
+    /**
+     * 
+     * @param refueling 
+     */
+    public Fuel(Refueling refueling) {
+        this();
+        this.refueling = refueling;
     }
     
     /**

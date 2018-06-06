@@ -98,6 +98,11 @@ public class RefuelingBean extends FormBean<Refueling> {
         
         this.value = this.refuelingRepository.findOptionalById(id)
                 .orElseGet(Refueling::new);
+        
+        // if detailing or deleting, list the classes to fill up the field
+        if (this.viewState != ViewState.ADDING) {
+            this.onVehicleSelect();
+        }
     }
     
     /**

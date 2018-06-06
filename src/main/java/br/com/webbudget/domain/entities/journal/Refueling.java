@@ -137,7 +137,8 @@ public class Refueling extends PersistentEntity {
     @NotNull(message = "{refueling.financial-period}")
     private FinancialPeriod financialPeriod;
 
-    @OneToMany(mappedBy = "refueling", fetch = EAGER, cascade = {PERSIST, REMOVE})
+    @OneToMany(mappedBy = "refueling", orphanRemoval = true, 
+            fetch = EAGER, cascade = {PERSIST, REMOVE})
     private List<Fuel> fuels;
     
     /**
@@ -170,7 +171,7 @@ public class Refueling extends PersistentEntity {
      * Adiciona um novo combustivel a este abastecimento
      */
     public void addFuel() {
-        this.fuels.add(new Fuel());
+        this.fuels.add(new Fuel(this));
         this.totalize();
     }
 

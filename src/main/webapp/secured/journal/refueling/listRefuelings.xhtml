@@ -157,7 +157,7 @@
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
-                                             actionListener="#{refuelingBean.changeToDelete(refueling.id)}" 
+                                             action="#{refuelingBean.changeToDelete(refueling.id)}" 
                                              rendered="#{userSessionBean.isPermitted(permissions.REFUELING_DELETE)}"/>
                         </p:column>
                     </p:dataTable>
