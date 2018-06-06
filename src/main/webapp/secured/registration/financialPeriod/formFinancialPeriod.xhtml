@@ -37,8 +37,8 @@
     </ui:define>
 
     <ui:define name="breadcrumb">
-        <li><a href="#">#{breadcrumb['miscellany']}</a></li>
-        <li><a href="listFinancialPeriods.xhtml">#{breadcrumb['miscellany.financial-period']}</a></li>
+        <li><a href="#">#{breadcrumb['registration']}</a></li>
+        <li><a href="listFinancialPeriods.xhtml">#{breadcrumb['registration.financial-period']}</a></li>
         <li class="active"><a href="#">#{breadcrumb['adding']}</a></li>
     </ui:define>
 
@@ -132,7 +132,7 @@
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
-                                     styleClass="btn btn-flat btn-default" 
+                                     styleClass="btn btn-flat btn-primary" 
                                      action="#{financialPeriodBean.changeToListing()}"/>
                 </div>
             </div>
