@@ -15,6 +15,6 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<jboss-web xmlns="http://www.jboss.com/xml/ns/javaee">
+<jboss-web xmlns="http://www.jboss.com/xml/ns/javaee" version="8.0">
     <context-root/>
 </jboss-web>

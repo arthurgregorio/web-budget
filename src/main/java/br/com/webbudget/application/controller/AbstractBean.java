@@ -38,7 +38,7 @@ public abstract class AbstractBean implements Serializable {
     protected Logger logger;
 
     @Inject
-    protected FacesContext facesContext;
+    private FacesContext facesContext;
     @Inject
     protected RequestContext requestContext;
 
