@@ -10,7 +10,7 @@ Para saber mais, acesse a página oficial do projeto em [http://webbudget.com.br
 
 ### Se você quer apenas testar o sistema:
 
-Utilize a imagem docker! Mais informações de como sobre ela e como realizar o deploy podem ser [encontradas aqui](https://github.com/arthurgregorio/web-budget-docker).
+Utilize a imagem docker! Mais informações sobre como realizar o deploy podem ser [encontradas aqui](https://github.com/arthurgregorio/web-budget-docker).
 
 ## If you are not from Brazil:
 
