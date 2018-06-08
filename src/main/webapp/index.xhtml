@@ -83,8 +83,7 @@
                                            actionListener="#{recoverPasswordBean.showRecoverPassDialog()}"/>
                         </div>
                         <div class="col-xs-4">
-                            <button type="submit" 
-                                    jsf:update="@form"
+                            <button jsf:update="@form"
                                     jsf:process="@form"
                                     class="btn btn-primary btn-block btn-flat"
                                     jsf:action="#{authenticationBean.doLogin()}" >
