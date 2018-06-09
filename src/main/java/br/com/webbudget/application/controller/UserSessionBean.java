@@ -21,14 +21,18 @@ import br.com.webbudget.domain.repositories.tools.UserRepository;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import br.com.webbudget.infrastructure.cdi.qualifiers.PrincipalUsername;
 import lombok.Getter;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
 
 /**
+ * The controller of the user session. This class hold a session for the user and his authorization data
  *
  * @author Arthur Gregorio
  *
@@ -44,63 +48,67 @@ public class UserSessionBean implements Serializable {
 
     @Inject
     private UserRepository userRepository;
-    
+
     /**
-     * 
+     * Initialize the session
      */
     @PostConstruct
     protected void initialize() {
-        
+
         final String principalUsername = String.valueOf(
                 this.getSubject().getPrincipal());
-        
+
         this.principal = this.userRepository
                 .findOptionalByUsername(principalUsername)
                 .orElseThrow(() -> new AuthenticationException(String.format(
-                        "User %s not found", principalUsername)));
+                        "User %s has no local user", principalUsername)));
     }
-        
+
     /**
-     * 
-     * @return 
+     * @return if the current session of the user is valid or not
      */
     public boolean isValid() {
         final Subject subject = this.getSubject();
         return subject.isAuthenticated() && subject.getPrincipal() != null;
     }
-    
+
     /**
-     * 
-     * @param role
-     * @return 
+     * To check if the given role is permitted to the current user
+     *
+     * @param role the role to be tested
+     * @return true if is permitted, false otherwise
      */
     public boolean hasRole(String role) {
         return this.getSubject().hasRole(role);
     }
-    
+
     /**
-     * 
-     * @param permission
-     * @return 
+     * To check if the given permission is granted to the current user
+     *
+     * @param permission the permission to be tested
+     * @return true if is granted, false otherwise
      */
     public boolean isPermitted(String permission) {
         return this.getSubject().isPermitted(permission);
     }
 
     /**
-     * 
-     * @return 
-     */
-    public String getMenuStyle() {
-        return "skin-black";
-    }
-    
-    /**
-     * 
-     * @return 
+     * @return return the current {@link Subject} of the application
      */
     private Subject getSubject() {
         return SecurityUtils.getSubject();
+    }
+
+    /**
+     * Simple producer to make the user object of the current principal available
+     * to other functionalities of the system, like the audit mechanism
+     *
+     * @return the current principal user object
+     */
+    @Produces
+    @PrincipalUsername
+    User producePrincipal() {
+        return this.principal;
     }
 }
 

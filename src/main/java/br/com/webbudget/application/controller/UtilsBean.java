@@ -27,6 +27,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * Utilities controller to provide common functionalities to all the pages in the application
  * 
  * @author Arthur Gregorio
  *
@@ -41,7 +42,7 @@ public class UtilsBean {
     private FacesContext facesContext;
     
     /**
-     * @return a base URL da aplicacao
+     * @return the application base URL
      */
     public String getBaseURL() {
         
@@ -54,16 +55,16 @@ public class UtilsBean {
     }
     
     /**
-     * @return a data atual formatada em string
+     * @return the actual date in String format
      */
     public String getActualDate() {
         return DateTimeFormatter
                 .ofPattern("dd/MM/yyyy")
                 .format(LocalDate.now());
     }
-    
+
     /**
-     * @return a data e hora atual em formato string
+     * @return the actual date and time on String format
      */
     public String getActualDateTime() {
         return DateTimeFormatter
@@ -72,7 +73,7 @@ public class UtilsBean {
     }
     
     /**
-     * @return o canal para push das notificacoes de mensagens
+     * @return the default channel to push new messages notifications
      */
     public String getMessagesChannel() {
         
@@ -92,18 +93,16 @@ public class UtilsBean {
     }
 
     /**
-     * 
-     * @return 
+     * @return the application version from the configurations
      */
-    public String getCurrentVersion() {
+    public String getApplicationVersion() {
         return Configurations.get("application.version");
     }
-    
+
     /**
-     * 
-     * @return 
+     * @return the current year for the copyright text
      */
-    public int getCurrentYear() {
-        return LocalDate.now().getYear();
+    public String getCurrentYear() {
+        return DateTimeFormatter.ofPattern("yyyy").format(LocalDate.now());
     }
 }

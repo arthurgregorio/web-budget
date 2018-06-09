@@ -21,16 +21,17 @@ import java.io.Serializable;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.omnifaces.util.Messages;
+import javax.faces.context.Flash;
 import org.primefaces.PrimeFaces;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 /**
+ * The base bean of the controllers of this application, this class contains all the basic methods to the controllers
  *
  * @author Arthur Gregorio
  *
  * @version 2.0.0
- * @since 1.0.0, 28/03/2018
+ * @since 1.0.0, 04/03/2014
  */
 public abstract class AbstractBean implements Serializable {
 
@@ -38,33 +39,31 @@ public abstract class AbstractBean implements Serializable {
     protected Logger logger;
 
     @Inject
-    private FacesContext facesContext;
-    @Inject
-    protected RequestContext requestContext;
+    protected FacesContext facesContext;
 
     /**
-     * @return o nome do componente default de mensagens da view
+     * @return the name of the default messages component, by default is <code>messages</code>
      */
     protected String getDefaultMessagesComponentId() {
         return "messages";
     }
 
     /**
-     * Traduz uma mensagem pelo bundle da aplicacao
+     * Method to translate i18n keys to the corresponding text
      *
-     * @param message a chave da mensagem original
-     * @return o texto
+     * @param i18nKey the i18n key
+     * @return the i18nKey
      */
-    protected String translate(String message) {
-        return MessageSource.get(message);
+    protected String translate(String i18nKey) {
+        return MessageSource.get(i18nKey);
     }
 
     /**
-     * Adiciona uma mensagem de informacao na tela
+     * Add a info message to the {@link FacesContext}
      *
-     * @param message a mensagem
-     * @param parameters os parametros da mensagem
-     * @param updateDefault se devemos ou nao atualizar o componente default
+     * @param message the text of the message or the i18n key
+     * @param parameters to be used in the message
+     * @param updateDefault if the main message component needs to be updated
      */
     protected void addInfo(boolean updateDefault, String message, Object... parameters) {
         Messages.addInfo(null, this.translate(message), parameters);
@@ -74,11 +73,10 @@ public abstract class AbstractBean implements Serializable {
     }
 
     /**
-     * Adiciona a mensagem para o escopo flash fazendo com que elea fique viva
-     * por um tempo maior
-     * 
-     * @param message a mensagem
-     * @param parameters os parametros da mensagem
+     * Add a info message to the {@link FacesContext} in the {@link Flash} scope
+     *
+     * @param message the text of the message or the i18n key
+     * @param parameters to be used in the message
      */
     protected void addInfoAndKeep(String message, Object... parameters) {
         Messages.addInfo(null, this.translate(message), parameters);
@@ -86,11 +84,11 @@ public abstract class AbstractBean implements Serializable {
     }
 
     /**
-     * Adiciona uma mensagem de erro na tela
+     * Add a error message to the {@link FacesContext}
      *
-     * @param message a mensagem
-     * @param parameters os parametros da mensagem
-     * @param updateDefault se devemos ou nao atualizar o componente default
+     * @param message the text of the message or the i18n key
+     * @param parameters to be used in the message
+     * @param updateDefault if the main message component needs to be updated
      */
     protected void addError(boolean updateDefault, String message, Object... parameters) {
         Messages.addError(null, this.translate(message), parameters);
@@ -100,19 +98,19 @@ public abstract class AbstractBean implements Serializable {
     }
 
     /**
-     * Apenas abre uma dialog pelo seu widgetvar
+     * Convenience method to open dialogs
      *
-     * @param widgetVar o widgetvar para abri-la
+     * @param widgetVar the name of the dialog to be opened
      */
     protected void openDialog(String widgetVar) {
         this.executeScript("PF('" + widgetVar + "').show()");
     }
 
     /**
-     * Dado o id de um dialog, atualiza a mesma e depois abre pelo widgetvar
+     * Same as {@link #openDialog(String)} but before open it, a update by the component ID is performed
      *
-     * @param id o id da dialog para atualiza-la
-     * @param widgetVar o widgetvar para abri-la
+     * @param id the dialog component id
+     * @param widgetVar the name of the dialog to be opened
      */
     protected void updateAndOpenDialog(String id, String widgetVar) {
         this.updateComponent(id);
@@ -120,45 +118,43 @@ public abstract class AbstractBean implements Serializable {
     }
 
     /**
-     * Fecha uma dialog aberta previamente
+     * Convenience method to close dialogs
      *
-     * @param widgetVar o widgetvar da dialog
+     * @param widgetVar the name of the dialog to close
      */
     protected void closeDialog(String widgetVar) {
         this.executeScript("PF('" + widgetVar + "').hide()");
     }
 
     /**
-     * Caso o nome do componente default de mensagens tenha sido setado, este
-     * metodo invocado apos adicionar mensagens faz com que ele seja atualizado
-     * automaticamente
+     * Update the default messages component
      */
     protected void updateDefaultMessages() {
         this.temporizeHiding(this.getDefaultMessagesComponentId());
     }
 
     /**
-     * Dado um componente, atualiza o mesmo e depois temporiza o seu fechamento
+     * Method to put a timer in and after the time expires, hide the component
      *
-     * @param componentId o id do componente
+     * @param componentId the component id
      */
     protected void temporizeHiding(String componentId) {
         this.executeScript("setTimeout(\"$(\'#" + componentId + "\').slideUp(300)\", 8000)");
     }
 
     /**
-     * Atualiza um componente pelo seu id no contexto atual
+     * Convenience method to update one component by the client id
      *
-     * @param componentId o id do componente
+     * @param componentId the id of the component
      */
     protected void updateComponent(String componentId) {
         PrimeFaces.current().ajax().update(componentId);
     }
 
     /**
-     * Executa um JavaScript na pagina pelo FacesContext atual
+     * Convenience method to execute scripts on the front-end
      *
-     * @param script o script a ser executado
+     * @param script the script to be executed
      */
     protected void executeScript(String script) {
         PrimeFaces.current().executeScript(script);

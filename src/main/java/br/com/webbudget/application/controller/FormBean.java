@@ -34,15 +34,21 @@ import lombok.Setter;
 import org.primefaces.model.LazyDataModel;
 
 /**
+ * The abstract form controller, this class hold all the commom functionalities
+ * that a single form will have.
  *
- * @param <T>
+ * This class already implement the lazy loadin support for primefaces with
+ * the implementation of the {@link LazyDataProvider}
+ *
+ * @param <T> the type to be manipulated with this controller, needs to be a
+ * class of the domain model child of the {@link PersistentEntity}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 28/03/2018
  */
-public abstract class FormBean<T extends PersistentEntity> extends AbstractBean 
+public abstract class FormBean<T extends PersistentEntity> extends AbstractBean
         implements LazyDataProvider<T> {
 
     @Getter
@@ -63,10 +69,12 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean
     protected final NavigationManager navigation;
 
     /**
-     *
+     * Create the bean and initialize the default data
      */
     public FormBean() {
+
         this.dataModel = new LazyModel<>(this);
+
         this.filter = LazyFilter.getInstance();
         this.navigation = NavigationManager.getInstance();
 
@@ -83,7 +91,7 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean
      * @param id
      * @param viewState
      */
-    public abstract void initialize(long id, ViewState viewState);
+    public abstract void initialize(long id, String viewState);
 
     /**
      *
@@ -107,7 +115,7 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean
     public void initialize() {
         this.viewState = ViewState.LISTING;
     }
-    
+
     /**
      *
      */

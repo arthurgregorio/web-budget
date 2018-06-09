@@ -25,8 +25,7 @@ import lombok.Getter;
 import org.apache.shiro.authc.AuthenticationException;
 
 /**
- * Bean que controla a autenticacao no sistema, por ele invocamos o gerenciador
- * de autenticacao para que o usuario possa realizar acesso ao sistema
+ * Bean to control the authentication process
  *
  * @author Arthur Gregorio
  *
@@ -44,8 +43,9 @@ public class AuthenticationBean extends AbstractBean {
     private Authenticator authenticator;
     
     /**
-     * 
-     * @return 
+     * Initializer method
+     *
+     * @return if login is needed, return empty. If not return the outcome to the dashboard page
      */
     public String initialize() {
         if (this.authenticator.authenticationIsNeeded()) {
@@ -57,8 +57,9 @@ public class AuthenticationBean extends AbstractBean {
     }
     
     /**
+     * Start the login process
      *
-     * @return
+     * @return the login success page
      */
     public String doLogin() {
         try {
@@ -71,8 +72,9 @@ public class AuthenticationBean extends AbstractBean {
     }
     
     /**
+     * Start the logout process
      * 
-     * @return 
+     * @return the logout success page
      */
     public String doLogout() {
         this.authenticator.logout();
