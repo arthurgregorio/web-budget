@@ -91,7 +91,7 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean
      * @param id
      * @param viewState
      */
-    public abstract void initialize(long id, String viewState);
+    public abstract void initialize(long id, ViewState viewState);
 
     /**
      *
