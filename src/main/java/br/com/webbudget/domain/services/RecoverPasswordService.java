@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.security.StoreType;
-import br.com.webbudget.domain.entities.security.User;
+import br.com.webbudget.domain.entities.tools.StoreType;
+import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.mail.SimpleMailMessage;
 import br.com.webbudget.domain.repositories.tools.UserRepository;

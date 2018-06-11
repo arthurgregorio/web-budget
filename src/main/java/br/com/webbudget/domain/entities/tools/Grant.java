@@ -1,4 +1,4 @@
-package br.com.webbudget.domain.entities.security;
+package br.com.webbudget.domain.entities.tools;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import javax.persistence.Entity;

@@ -18,7 +18,7 @@ package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.entries.VehicleRepository;
+import br.com.webbudget.domain.repositories.registration.VehicleRepository;
 import br.com.webbudget.domain.repositories.journal.RefuelingRepository;
 import java.math.BigDecimal;
 import java.util.List;

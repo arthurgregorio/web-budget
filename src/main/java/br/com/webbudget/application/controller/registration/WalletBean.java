@@ -26,7 +26,7 @@ import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.registration.WalletType;
-import br.com.webbudget.domain.repositories.entries.WalletRepository;
+import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.WalletService;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

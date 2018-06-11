@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.financial;
 
 import br.com.webbudget.infrastructure.utils.RandomCode;
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import java.time.LocalDate;
 import static javax.persistence.CascadeType.REMOVE;

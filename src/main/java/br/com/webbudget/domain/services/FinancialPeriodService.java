@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.miscellany.FinancialPeriodRepository;
+import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;

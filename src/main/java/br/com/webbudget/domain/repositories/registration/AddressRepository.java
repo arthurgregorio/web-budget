@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,39 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entities.journal;
+package br.com.webbudget.domain.repositories.registration;
+
+import br.com.webbudget.domain.entities.registration.Address;
+import feign.Param;
+import feign.RequestLine;
 
 /**
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.3.0, 15/05/2014
+ * @since 1.0.0, 08/04/2018
  */
-public enum EntryType {
-
-    TAXES("entry-type.taxes"),
-    OTHERS("entry-type.others"),
-    SERVICES("entry-type.services"),
-    REFUELING("entry-type.refueling"),
-    MAINTENANCES("entry-type.maintenances");
-
-    private final String description;
+public interface AddressRepository {
 
     /**
-     *
-     * @param description
+     * 
+     * @param zipcode
+     * @return 
      */
-    private EntryType(String description) {
-        this.description = description;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String toString() {
-        return this.description;
-    }
+    @RequestLine("GET /ws/{zipcode}/json/")
+    Address findByZipcode(@Param("zipcode") String zipcode);
 }

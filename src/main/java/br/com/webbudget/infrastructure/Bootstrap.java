@@ -16,11 +16,11 @@
  */
 package br.com.webbudget.infrastructure;
 
-import br.com.webbudget.domain.entities.security.Authorization;
-import br.com.webbudget.domain.entities.security.Grant;
-import br.com.webbudget.domain.entities.security.Group;
-import br.com.webbudget.domain.entities.security.Permissions;
-import br.com.webbudget.domain.entities.security.User;
+import br.com.webbudget.domain.entities.tools.Authorization;
+import br.com.webbudget.domain.entities.tools.Grant;
+import br.com.webbudget.domain.entities.tools.Group;
+import br.com.webbudget.domain.entities.tools.Permissions;
+import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GrantRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;

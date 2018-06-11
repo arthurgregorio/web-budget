@@ -16,13 +16,14 @@
  */
 package br.com.webbudget.infrastructure.cdi;
 
-import br.com.webbudget.domain.repositories.entries.AddressRepository;
+import br.com.webbudget.domain.repositories.registration.AddressRepository;
 import br.com.webbudget.infrastructure.feign.FeignClientFactory;
 import static br.com.webbudget.infrastructure.feign.FeignClientFactory.DefaultTarget.ZIPCODE_SERVICE_URI;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
 /**
+ * Feign client producer to enable injection of the REST client
  *
  * @author Arthur Gregorio
  *
@@ -33,8 +34,9 @@ import javax.enterprise.inject.Produces;
 public class FeignClientProducer {
 
     /**
+     * Produce the {@link AddressRepository} REST client to access ViaCEP services
      * 
-     * @return 
+     * @return the {@link AddressRepository} client
      */
     @Produces
     @ApplicationScoped

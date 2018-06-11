@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.domain.entities.security.User;
+import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.services.UserAccountService;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

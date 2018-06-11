@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Arthur Gregorio, AG.Software
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,14 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.entries;
+package br.com.webbudget.domain.repositories.registration;
 
-import br.com.webbudget.domain.entities.registration.Vehicle;
-import br.com.webbudget.domain.entities.registration.Vehicle_;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.CostCenter_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
-import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -30,33 +29,25 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
  * @author Arthur Gregorio
  *
  * @version 3.0.0
- * @since 2.3.0, 05/06/2016
+ * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface VehicleRepository extends DefaultRepository<Vehicle> {
+public interface CostCenterRepository extends DefaultRepository<CostCenter> {
 
     /**
      * 
-     * @param licensePlate
+     * @param name
      * @return 
      */
-    Optional<Vehicle> findOptionalByLicensePlate(String licensePlate);
-    
-    /**
-     * 
-     * @param id
-     * @return 
-     */
-    @Query("SELECT MAX(ve.odometer) FROM Vehicle ve WHERE ve.id = ?1")
-    long findLastOdometer(long id);
+    Optional<CostCenter> findOptionalByName(String name);
     
     /**
      * 
      * @return 
      */
     @Override
-    public default SingularAttribute<Vehicle, Boolean> getBlockedProperty() {
-        return Vehicle_.blocked;
+    public default SingularAttribute<CostCenter, Boolean> getBlockedProperty() {
+        return CostCenter_.blocked;
     }
 
     /**
@@ -65,11 +56,18 @@ public interface VehicleRepository extends DefaultRepository<Vehicle> {
      * @return 
      */
     @Override
-    public default Criteria<Vehicle, Vehicle> getRestrictions(String filter) {
-        return criteria()
-                .eqIgnoreCase(Vehicle_.identification, filter)
-                .eqIgnoreCase(Vehicle_.brand, filter)
-                .eqIgnoreCase(Vehicle_.model, filter)
-                .eqIgnoreCase(Vehicle_.licensePlate, filter);
+    public default Criteria<CostCenter, CostCenter> getRestrictions(String filter) {
+        return this.criteria()
+                .likeIgnoreCase(CostCenter_.description, filter)
+                .likeIgnoreCase(CostCenter_.name, filter);
+    }
+
+    /**
+     * 
+     * @param criteria 
+     */
+    @Override
+    public default void setOrder(Criteria<CostCenter, CostCenter> criteria) {
+        criteria.orderAsc(CostCenter_.name);
     }
 }

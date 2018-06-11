@@ -28,7 +28,7 @@ import br.com.webbudget.domain.entities.registration.CostCenter;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import br.com.webbudget.domain.repositories.entries.CostCenterRepository;
+import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.services.ClassificationService;
 import org.primefaces.model.SortOrder;
 

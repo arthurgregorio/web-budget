@@ -18,7 +18,7 @@ package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.entries.VehicleRepository;
+import br.com.webbudget.domain.repositories.registration.VehicleRepository;
 import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

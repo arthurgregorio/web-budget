@@ -14,20 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.entries;
+package br.com.webbudget.domain.repositories.registration;
 
-import br.com.webbudget.domain.entities.registration.Telephone;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.entities.registration.CardInvoice;
+import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
 /**
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
- * @since 1.2.0, 12/04/2015
+ * @version 1.0.0
+ * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface TelephoneRepository extends DefaultRepository<Telephone> {
+public interface ICardInvoiceRepository extends EntityRepository<CardInvoice, Long> {
 
+//    /**
+//     * 
+//     * @param card
+//     * @return 
+//     */
+//    public List<CardInvoice> listByCard(Card card);
+//    
+//    /**
+//     *
+//     * @param movement
+//     * @return
+//     */
+//    public CardInvoice findByMovement(Movement movement);
+//    
+//    /**
+//     * 
+//     * @param card
+//     * @param pageRequest
+//     * @return 
+//     */
+//    public Page<CardInvoice> listByCard(Card card, PageRequest pageRequest);
 }

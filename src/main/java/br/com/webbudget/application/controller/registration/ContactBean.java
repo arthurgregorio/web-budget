@@ -29,7 +29,7 @@ import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.ContactType;
 import br.com.webbudget.domain.entities.registration.NumberType;
 import br.com.webbudget.domain.entities.registration.Telephone;
-import br.com.webbudget.domain.repositories.entries.ContactRepository;
+import br.com.webbudget.domain.repositories.registration.ContactRepository;
 import br.com.webbudget.domain.services.ContactService;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

@@ -24,10 +24,10 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
-import br.com.webbudget.domain.entities.security.Authorization;
-import br.com.webbudget.domain.entities.security.Grant;
-import br.com.webbudget.domain.entities.security.Group;
-import br.com.webbudget.domain.entities.security.Permissions;
+import br.com.webbudget.domain.entities.tools.Authorization;
+import br.com.webbudget.domain.entities.tools.Grant;
+import br.com.webbudget.domain.entities.tools.Group;
+import br.com.webbudget.domain.entities.tools.Permissions;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.services.UserAccountService;
 import java.util.ArrayList;

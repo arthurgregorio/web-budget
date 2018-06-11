@@ -1,7 +1,7 @@
 package br.com.webbudget.domain.repositories.tools;
 
-import br.com.webbudget.domain.entities.security.StoreType;
-import br.com.webbudget.domain.entities.security.User;
+import br.com.webbudget.domain.entities.tools.StoreType;
+import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.entities.security.User_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.util.Optional;

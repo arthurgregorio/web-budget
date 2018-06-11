@@ -18,7 +18,7 @@ package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.entries.CardRepository;
+import br.com.webbudget.domain.repositories.registration.CardRepository;
 import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

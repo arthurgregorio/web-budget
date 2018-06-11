@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.repositories.financial;
 
 import br.com.webbudget.domain.entities.financial.Apportionment;
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.financial.FixedMovement;
 import br.com.webbudget.domain.entities.financial.Movement;
 import br.com.webbudget.domain.entities.registration.MovementClass;

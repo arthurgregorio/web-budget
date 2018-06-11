@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.infrastructure.shiro;
 
-import br.com.webbudget.domain.entities.security.Permissions;
+import br.com.webbudget.domain.entities.tools.Permissions;
 import br.eti.arthurgregorio.shiroee.config.HttpSecurityConfiguration;
 import br.eti.arthurgregorio.shiroee.config.http.HttpSecurityBuilder;
 import br.eti.arthurgregorio.shiroee.config.http.PermissionHttpSecurityBuilder;

@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.entries;
+package br.com.webbudget.domain.repositories.registration;
 
-import br.com.webbudget.domain.entities.registration.CostCenter;
-import br.com.webbudget.domain.entities.registration.MovementClass;
-import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.entities.registration.MovementClass_;
+import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.entities.registration.WalletType;
+import br.com.webbudget.domain.entities.registration.Wallet_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
-import java.util.List;
 import java.util.Optional;
 import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
@@ -35,41 +33,43 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface MovementClassRepository extends DefaultRepository<MovementClass> {
+public interface WalletRepository extends DefaultRepository<Wallet> {
 
     /**
      * 
      * @param name
-     * @param costCenterName
+     * @param walletType
      * @return 
      */
-    Optional<MovementClass> findOptionalByNameAndCostCenter_name(String name, String costCenterName);
+    Optional<Wallet> findOptionalByNameAndWalletType(String name, WalletType walletType);
     
-    /**
-     * 
-     * @param classType
-     * @param costCenter
-     * @return 
-     */
-    List<MovementClass> findByMovementClassTypeAndCostCenter(MovementClassType classType, CostCenter costCenter);
-    
-    /**
-     * 
-     * @return 
-     */
-    @Override
-    public default SingularAttribute<MovementClass, Boolean> getBlockedProperty() {
-        return MovementClass_.blocked;
-    }
-
     /**
      * 
      * @param filter
      * @return 
      */
     @Override
-    public default Criteria<MovementClass, MovementClass> getRestrictions(String filter) {
-       return criteria()
-                .likeIgnoreCase(MovementClass_.name, filter); 
+    public default Criteria<Wallet, Wallet> getRestrictions(String filter) {
+        return criteria()
+                .eqIgnoreCase(Wallet_.bank, filter)
+                .eqIgnoreCase(Wallet_.name, filter);
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public default SingularAttribute<Wallet, Boolean> getBlockedProperty() {
+        return Wallet_.blocked;
+    }
+    
+//    /**
+//     *
+//     * @param name
+//     * @param bank
+//     * @param walletType
+//     * @return
+//     */
+//    public Wallet findByNameAndBankAndType(String name, String bank, WalletType walletType);
 }

@@ -1,6 +1,6 @@
 package br.com.webbudget.domain.repositories.tools;
 
-import br.com.webbudget.domain.entities.security.Group;
+import br.com.webbudget.domain.entities.tools.Group;
 import br.com.webbudget.domain.entities.security.Group_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.util.Optional;

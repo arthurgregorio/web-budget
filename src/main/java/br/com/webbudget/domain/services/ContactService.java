@@ -19,14 +19,14 @@ package br.com.webbudget.domain.services;
 import br.com.webbudget.domain.entities.registration.Address;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.Telephone;
-import br.com.webbudget.domain.repositories.entries.AddressRepository;
-import br.com.webbudget.domain.repositories.entries.ContactRepository;
+import br.com.webbudget.domain.repositories.registration.AddressRepository;
+import br.com.webbudget.domain.repositories.registration.ContactRepository;
 import br.com.webbudget.domain.repositories.financial.IMovementRepository;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import br.com.webbudget.domain.repositories.entries.TelephoneRepository;
+import br.com.webbudget.domain.repositories.registration.TelephoneRepository;
 
 /**
  * Service responsavel pro todos os processos relacionados aos contatos

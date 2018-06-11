@@ -1,6 +1,6 @@
 package br.com.webbudget.domain.repositories.tools;
 
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;

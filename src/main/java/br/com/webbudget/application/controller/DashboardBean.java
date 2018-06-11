@@ -16,25 +16,8 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.components.chart.donut.DonutChartModel;
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
-import br.com.webbudget.domain.entities.financial.Movement;
-import br.com.webbudget.domain.services.misc.MovementCalculator;
-import br.com.webbudget.application.components.chart.line.LineChartDatasetBuilder;
-import br.com.webbudget.application.components.chart.line.LineChartModel;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.services.FinancialPeriodService;
-import br.com.webbudget.domain.services.MovementService;
-import br.com.webbudget.domain.services.PeriodDetailService;
-import br.com.webbudget.infrastructure.utils.Configurations;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
 
 /**
  * Mbean utilizado na dashboard do sistema, por ele carregamos os graficos da

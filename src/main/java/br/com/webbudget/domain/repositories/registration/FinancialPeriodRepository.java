@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.miscellany;
+package br.com.webbudget.domain.repositories.registration;
 
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.miscellany.FinancialPeriod_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import java.util.List;

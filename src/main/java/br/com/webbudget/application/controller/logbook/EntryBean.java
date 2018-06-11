@@ -17,24 +17,9 @@
 package br.com.webbudget.application.controller.logbook;
 
 import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.entities.registration.MovementClass;
-import br.com.webbudget.domain.entities.journal.Entry;
-import br.com.webbudget.domain.entities.journal.EntryType;
-import br.com.webbudget.domain.entities.registration.Vehicle;
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
-import br.com.webbudget.domain.services.FinancialPeriodService;
-import br.com.webbudget.domain.services.LogbookService;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Controller para a view de ocorrencias do diario de bordo
@@ -59,7 +44,7 @@ public class EntryBean extends AbstractBean {
 //    private Entry entry;
 //
 //    @Getter
-//    private List<Entry> entries;
+//    private List<Entry> registration;
 //    @Getter
 //    private List<Vehicle> vehicles;
 //    @Getter
@@ -115,7 +100,7 @@ public class EntryBean extends AbstractBean {
 //     */
 //    public void filterList() {
 //        try {
-//            this.entries = this.logbookService
+//            this.registration = this.logbookService
 //                    .listEntriesByVehicleAndFilter(this.vehicle, this.filter);
 //        } catch (InternalServiceError ex) {
 //            this.addError(true, ex.getMessage(), ex.getParameters());
@@ -179,7 +164,7 @@ public class EntryBean extends AbstractBean {
 //    public void doDelete() {
 //        try {
 //            this.logbookService.deleteEntry(this.entry);
-//            this.entries = this.logbookService
+//            this.registration = this.logbookService
 //                    .listEntriesByVehicle(this.vehicle);
 //            this.addInfo(true, "entry.deleted");
 //        } catch (InternalServiceError ex) {
@@ -200,7 +185,7 @@ public class EntryBean extends AbstractBean {
 //     * @return a lista com os itens para a data indicada
 //     */
 //    public List<Entry> entriesByEventDate(LocalDate eventDate) {
-//        return this.entries.stream()
+//        return this.registration.stream()
 //                .filter(e -> e.getEventDate().equals(eventDate))
 //                .sorted((e1, e2) -> e2.getInclusion().compareTo(e1.getInclusion()))
 //                .collect(Collectors.toList());
@@ -213,7 +198,7 @@ public class EntryBean extends AbstractBean {
 //
 //        final List<LocalDate> grouped = new ArrayList<>();
 //
-//        this.entries.stream().forEach(e -> {
+//        this.registration.stream().forEach(e -> {
 //            if (!grouped.contains(e.getEventDate())) {
 //                grouped.add(e.getEventDate());
 //            }

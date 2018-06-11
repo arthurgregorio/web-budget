@@ -21,12 +21,12 @@ import br.com.webbudget.domain.entities.registration.WalletBalance;
 import br.com.webbudget.domain.entities.registration.BalanceType;
 import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.entries.WalletRepository;
+import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import br.com.webbudget.domain.repositories.entries.WalletBalanceRepository;
+import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import java.util.Optional;
 import javax.enterprise.event.Observes;
 

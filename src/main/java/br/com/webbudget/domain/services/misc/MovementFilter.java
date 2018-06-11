@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.services.misc;
 
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.financial.MovementStateType;
 import br.com.webbudget.domain.entities.financial.MovementType;

@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.services.misc;
 
 import br.com.webbudget.domain.entities.financial.Apportionment;
-import br.com.webbudget.domain.entities.miscellany.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.financial.Movement;
 import java.math.BigDecimal;
 import java.time.LocalDate;

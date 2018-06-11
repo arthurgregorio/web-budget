@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.domain.entities.security.User;
+import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
