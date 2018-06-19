@@ -40,7 +40,7 @@ public class Postman {
     private Session mailSession;
     
     /**
-     * Listem for e-mail requests through CDI events and send the message
+     * Listen for e-mail requests through CDI events and send the message
      * 
      * @param mailMessage the message to send
      * @throws Exception if any problem occur in the process
