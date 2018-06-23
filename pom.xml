@@ -258,6 +258,8 @@
             <properties>
                 <application.version>${project.version}-ALPHA</application.version>
                 <jsf.stage>Development</jsf.stage>
+                <orm.enable-statistics>true</orm.enable-statistics>
+                <orm.show-sql>true</orm.show-sql>
                 <ldap.enabled>false</ldap.enabled>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
@@ -270,6 +272,8 @@
             <properties>
                 <application.version>${project.version}-BETA</application.version>
                 <jsf.stage>SystemTest</jsf.stage>
+                <orm.enable-statistics>true</orm.enable-statistics>
+                <orm.show-sql>true</orm.show-sql>
                 <ldap.enabled>false</ldap.enabled>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
@@ -282,6 +286,8 @@
             <properties>
                 <application.version>${project.version}</application.version>
                 <jsf.stage>Production</jsf.stage>
+                <orm.enable-statistics>false</orm.enable-statistics>
+                <orm.show-sql>false</orm.show-sql>
                 <ldap.enabled>false</ldap.enabled>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>

@@ -32,8 +32,8 @@
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.connection.autocommit" value="false"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB102Dialect"/>
-            <property name="hibernate.show_sql" value="false"/> <!--disable for production-->
-            <property name="hibernate.generate_statistics" value="true"/> <!--disable for production-->
+            <property name="hibernate.show_sql" value="${orm.show-sql}"/> <!--disable for production-->
+            <property name="hibernate.generate_statistics" value="${orm.enable-statistics}"/> <!--disable for production-->
 
             <!--tell wildfly to use hibernate version 5.2.x-->
             <property name="jboss.as.jpa.providerModule" value="org.hibernate:5.2" />
