@@ -16,33 +16,29 @@
  */
 package br.com.webbudget.domain.entities;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
- * Classe base para indicar que se trata de uma entidade, nela temos os atributos
- * basicos para que a classe possa ser persistente.
+ * The default implementation of a entity in the application.
+ *
+ * Every entity should extend this class to have the default behaviors of a
+ * JPA entity
  *
  * @author Arthur Gregorio
  *
- * @version 3.0.0
+ * @version 4.0.0
  * @since 1.0.0, 06/10/2013
  */
 @ToString
 @MappedSuperclass
+@NoArgsConstructor
 @EqualsAndHashCode
-@EntityListeners(PersistentEntityListener.class)
 public abstract class PersistentEntity implements IPersistentEntity<Long>, Serializable {
 
     @Id
@@ -51,49 +47,20 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     @Column(name = "id", unique = true, updatable = false)
     private Long id;
 
-    @Getter
-    @Setter
-    @Column(name = "created_on", nullable = false)
-    private LocalDateTime createdOn;
-    @Getter
-    @Setter
-    @Column(name = "modified_on")
-    private LocalDateTime modifiedOn;
-    
-    @Getter
-    @Setter
-    @Column(name = "created_by", length = 45, nullable = false)
-    private String createdBy;
-    @Getter
-    @Setter
-    @Column(name = "modified_by", length = 45)
-    private String modifiedBy;
-
-    /**
-     * Metodo de auxilio para validacao da classe de entidade
-     */
-    public void validate() {
-        throw new IllegalStateException("Validate method not implemented yet");
-    }
-    
     /**
      * {@inheritDoc }
-     * 
+     *
      * @return
      */
     @Override
     public boolean isSaved() {
         return this.id != null && this.id != 0;
     }
-    
+
     /**
-     * Faz o parse da data de inclusao para {@link String}
-     * 
-     * @return a data de inclusao em formato string dd/MM/yyyy HH:mm
+     * Method to help the validation process of some entity, if you want to validate his state before any operation
+     * just override this method and put the logic here.
      */
-    public String getInclusionAsString() {
-        return DateTimeFormatter
-                .ofPattern("dd/MM/yyyy HH:mm")
-                .format(this.createdOn);
-    }
+    @Override
+    public void validate() { }
 }

@@ -17,6 +17,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
+
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -27,6 +29,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  * @since 1.0.0, 06/12/2017
  */
 @Entity
+@Audited
 @Table(name = "users")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

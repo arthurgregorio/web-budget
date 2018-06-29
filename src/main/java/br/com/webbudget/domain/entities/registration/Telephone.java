@@ -28,6 +28,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -38,6 +39,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since 1.2.0, 19/04/2015
  */
 @Entity
+@Audited
 @Table(name = "telephones")
 @ToString(callSuper = true, exclude = "contact")
 @EqualsAndHashCode(callSuper = true, exclude = "contact")

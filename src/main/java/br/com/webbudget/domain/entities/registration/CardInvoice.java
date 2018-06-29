@@ -34,6 +34,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -43,6 +44,7 @@ import lombok.ToString;
  * @since 1.0.0, 01/05/2014
  */
 @Entity
+@Audited
 @Table(name = "card_invoices")
 @ToString(callSuper = true, of = {"identification", "total"})
 @EqualsAndHashCode(callSuper = true, of = {"identification", "total"})

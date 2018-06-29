@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -41,6 +42,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @since 1.0.0, 03/04/2014
  */
 @Entity
+@Audited
 @NoArgsConstructor
 @Table(name = "cards")
 @ToString(callSuper = true, of = {"number", "cardType"})

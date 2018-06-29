@@ -29,8 +29,7 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://webbudget.com.br/</url>
     <description>
-        A free and open-source financial control to manage small business or 
-        your personal life
+        Free and open-source system to control your personal finances or of your small business
     </description>
 
     <licenses>
@@ -53,7 +52,7 @@
     </properties>
     
     <dependencies>
-        <!--Jee8-->
+        <!--jee-7-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -173,11 +172,17 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>5.2.17.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
             <version>5.2.17.Final</version>
         </dependency>
 
-        <!--utilidades-->
+        <!--utilities-->
         <dependency>
             <groupId>br.com.caelum.stella</groupId>
             <artifactId>caelum-stella-core</artifactId>
@@ -233,7 +238,7 @@
             <version>3.9.1</version>
         </dependency> 
         
-        <!--apache shiro-->
+        <!--shiro-ee-->
         <dependency>
             <groupId>br.eti.arthurgregorio</groupId>
             <artifactId>shiro-ee</artifactId>

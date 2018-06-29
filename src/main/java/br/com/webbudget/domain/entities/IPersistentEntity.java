@@ -19,41 +19,34 @@ package br.com.webbudget.domain.entities;
 import java.io.Serializable;
 
 /**
- * Interface que define os metodos minimos que uma entidade deve possuir para
- * ser considerada uma entitdade valida na regra de negocios deste sistema
+ * The basic entity definition for all the classes in the application
  *
- * @param <T> qualquer coisa que seja serializavel
+ * @param <T> the type of
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 4.0.0
  * @since 1.0.0, 06/10/2013
  */
 public interface IPersistentEntity<T extends Serializable> {
 
     /**
-     * Define que toda as entidades devem ter um getter para o ID
-     * 
-     * @return o ID da entidade
+     * @return the ID of the entity
      */
     T getId();
 
     /**
-     * Metodo de utilidade para determinar o estado da entidade
-     * 
-     * @return se a entidade foi salva ou nao
+     * @return if the entity is saved or not
      */
     boolean isSaved();
-    
+
     /**
-     * Metodo para validar as entidades do sistema 
+     * helper method to call validation on the entity
      */
-    public void validate();
-    
+    void validate();
+
     /**
-     * Metodo de conveniencia para utilizacao em streams com method reference
-     * 
-     * @return se a entidade ja foi ou nao salva
+     * @return ther inverse of {@link #isSaved()}
      */
     default boolean isNotSaved() {
         return !this.isSaved();

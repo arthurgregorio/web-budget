@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -18,6 +19,7 @@ import lombok.ToString;
  * @since 1.0.0, 26/12/2017
  */
 @Entity
+@Audited
 @ToString
 @NoArgsConstructor
 @Table(name = "authorizations")

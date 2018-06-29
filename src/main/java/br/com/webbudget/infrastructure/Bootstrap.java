@@ -93,7 +93,6 @@ public class Bootstrap {
                             .getFunctionality(), authorization.getPermission());
 
             if (!optionalAuthz.isPresent()) {
-                authorization.setCreatedBy("system");
                 this.authorizationRepository.save(authorization);
             }
         });
@@ -108,7 +107,6 @@ public class Bootstrap {
                 .findOptionalByName("Administradores")
                 .orElseGet(() -> {
                     final Group newOne = new Group("Administradores");
-                    newOne.setCreatedBy("system");
                     return newOne;
                 });
 
@@ -122,10 +120,7 @@ public class Bootstrap {
                     = this.authorizationRepository.findAll();
 
             authorizations.stream().forEach(authorization -> {
-
                 final Grant grant = new Grant(group, authorization);
-                grant.setCreatedBy("system");
-
                 this.grantRepository.save(grant);
             });
         }
@@ -153,8 +148,7 @@ public class Bootstrap {
             user.setEmail("contato@webbudget.com.br");
             user.setUsername("admin");
             user.setPassword(this.passwordEncoder.encryptPassword("admin"));
-            user.setCreatedBy("system");
-            
+
             user.setGroup(group);
 
             this.userRepository.save(user);

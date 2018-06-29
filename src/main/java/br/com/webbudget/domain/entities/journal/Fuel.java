@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 /**
  * Classe que representa o combustivel utilizado no abastecimento
@@ -39,6 +40,7 @@ import lombok.ToString;
  * @since 2.3.0, 23/07/2016
  */
 @Entity
+@Audited
 @Table(name = "fuels")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

@@ -46,6 +46,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -56,6 +57,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @since 1.0.0, 04/03/2014
  */
 @Entity
+@Audited
 @Table(name = "movements")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")

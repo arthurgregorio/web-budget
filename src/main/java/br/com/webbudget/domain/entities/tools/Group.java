@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -28,6 +29,7 @@ import lombok.ToString;
  * @since 1.0.0, 26/12/2017
  */
 @Entity
+@Audited
 @Table(name = "groups")
 @ToString(exclude = {"parent", "grants"})
 @EqualsAndHashCode(callSuper = true, exclude = {"parent"})

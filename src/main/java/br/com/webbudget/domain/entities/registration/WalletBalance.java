@@ -30,6 +30,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -39,6 +40,7 @@ import lombok.ToString;
  * @since 1.0.0, 20/05/2014
  */
 @Entity
+@Audited
 @ToString(callSuper = true)
 @Table(name = "wallet_balances")
 @EqualsAndHashCode(callSuper = true)

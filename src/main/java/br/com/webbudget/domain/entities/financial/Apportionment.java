@@ -33,6 +33,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -42,6 +43,7 @@ import lombok.ToString;
  * @since 1.0.0, 02/02/2015
  */
 @Entity
+@Audited
 @Table(name = "apportionments")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")

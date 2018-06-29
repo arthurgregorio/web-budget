@@ -45,6 +45,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 /**
  * Classe que representa o abastecimento de um veiculo
@@ -55,6 +56,7 @@ import lombok.ToString;
  * @since 2.3.0, 27/06/2016
  */
 @Entity
+@Audited
 @Table(name = "refuelings")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

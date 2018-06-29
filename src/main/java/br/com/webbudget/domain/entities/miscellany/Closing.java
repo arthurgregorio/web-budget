@@ -28,6 +28,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -37,6 +38,7 @@ import lombok.ToString;
  * @since 1.0.0, 09/04/2014
  */
 @Entity
+@Audited
 @Table(name = "closings")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")

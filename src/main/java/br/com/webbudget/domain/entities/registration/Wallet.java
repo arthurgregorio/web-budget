@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -39,6 +40,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @since 1.0.0, 12/03/2014
  */
 @Entity
+@Audited
 @Table(name = "wallets")
 @ToString(callSuper = true, of = {"name", "walletType"})
 @EqualsAndHashCode(callSuper = true, of = {"name", "walletType"})

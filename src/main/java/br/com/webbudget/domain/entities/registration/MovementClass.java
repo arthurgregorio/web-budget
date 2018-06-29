@@ -32,6 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -42,6 +43,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @since 1.0.0, 04/03/2014
  */
 @Entity
+@Audited
 @Table(name = "movement_classes")
 @ToString(callSuper = true, of = "name")
 @EqualsAndHashCode(callSuper = true, of = "name")
