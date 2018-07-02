@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 /**
@@ -31,6 +32,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @Table(name = "groups")
+@AuditTable(value = "audit_groups")
 @ToString(exclude = {"parent", "grants"})
 @EqualsAndHashCode(callSuper = true, exclude = {"parent"})
 public class Group extends PersistentEntity {

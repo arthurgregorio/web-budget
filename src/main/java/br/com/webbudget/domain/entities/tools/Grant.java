@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 /**
@@ -24,6 +25,7 @@ import org.hibernate.envers.Audited;
 @ToString
 @NoArgsConstructor
 @Table(name = "grants")
+@AuditTable(value = "audit_grants")
 @EqualsAndHashCode(callSuper = true)
 public class Grant extends PersistentEntity {
 

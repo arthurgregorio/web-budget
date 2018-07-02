@@ -123,7 +123,7 @@ public class LogbookService {
 //
 //    /**
 //     * Quando um movimento for deletado este evento escurtara por uma possivel
-//     * delecao de um evento vinculado com um registro do logbook
+//     * delecao de um evento vinculado com um registro do journal
 //     *
 //     * @param code o codigo do movimento
 //     */

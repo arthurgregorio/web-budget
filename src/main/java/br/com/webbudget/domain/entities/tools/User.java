@@ -17,6 +17,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -32,6 +33,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @Audited
 @Table(name = "users")
 @ToString(callSuper = true)
+@AuditTable(value = "audit_users")
 @EqualsAndHashCode(callSuper = true)
 public class User extends PersistentEntity implements UserDetails {
 

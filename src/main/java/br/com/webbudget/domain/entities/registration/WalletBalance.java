@@ -30,6 +30,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 /**
@@ -44,6 +45,7 @@ import org.hibernate.envers.Audited;
 @ToString(callSuper = true)
 @Table(name = "wallet_balances")
 @EqualsAndHashCode(callSuper = true)
+@AuditTable(value = "audit_wallet_balances")
 public class WalletBalance extends PersistentEntity {
 
     @Getter

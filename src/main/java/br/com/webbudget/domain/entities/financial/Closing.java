@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package br.com.webbudget.domain.entities.miscellany;
+package br.com.webbudget.domain.entities.financial;
 
 import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.com.webbudget.domain.entities.PersistentEntity;
@@ -28,6 +28,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 /**
@@ -40,6 +41,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @Table(name = "closings")
+@AuditTable(value = "audit_closings")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")
 public class Closing extends PersistentEntity {

@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -44,6 +45,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Audited
 @Table(name = "vehicles")
+@AuditTable(value = "audit_vehicles")
 @ToString(callSuper = true, exclude = {"costCenter", "odometer"})
 @EqualsAndHashCode(callSuper = true, exclude = {"costCenter", "odometer"})
 public class Vehicle extends PersistentEntity {

@@ -33,6 +33,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 /**
@@ -46,6 +47,7 @@ import org.hibernate.envers.Audited;
 @Audited
 @Table(name = "apportionments")
 @ToString(callSuper = true, of = "code")
+@AuditTable(value = "audit_apportionments")
 @EqualsAndHashCode(callSuper = true, of = "code")
 public class Apportionment extends PersistentEntity {
 

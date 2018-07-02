@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.miscellany;
+package br.com.webbudget.domain.repositories.financial;
 
-import br.com.webbudget.domain.entities.miscellany.Closing;
+import br.com.webbudget.domain.entities.financial.Closing;
 import java.math.BigDecimal;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;

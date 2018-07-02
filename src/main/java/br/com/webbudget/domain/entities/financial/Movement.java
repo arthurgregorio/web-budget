@@ -46,6 +46,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -59,6 +60,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Audited
 @Table(name = "movements")
+@AuditTable(value = "audit_movements")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")
 public class Movement extends PersistentEntity {

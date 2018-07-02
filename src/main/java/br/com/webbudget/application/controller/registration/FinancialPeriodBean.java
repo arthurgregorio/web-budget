@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.controller.miscellany;
+package br.com.webbudget.application.controller.registration;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
 import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
@@ -24,7 +24,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
-import br.com.webbudget.domain.entities.miscellany.Closing;
+import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.FinancialPeriodService;

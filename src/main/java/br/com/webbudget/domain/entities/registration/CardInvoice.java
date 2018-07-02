@@ -34,6 +34,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 /**
@@ -46,6 +47,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @Table(name = "card_invoices")
+@AuditTable(value = "audit_card_invoices")
 @ToString(callSuper = true, of = {"identification", "total"})
 @EqualsAndHashCode(callSuper = true, of = {"identification", "total"})
 public class CardInvoice extends PersistentEntity {

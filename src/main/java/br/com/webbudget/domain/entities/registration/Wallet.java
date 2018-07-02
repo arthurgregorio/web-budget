@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -42,6 +43,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Audited
 @Table(name = "wallets")
+@AuditTable(value = "audit_wallets")
 @ToString(callSuper = true, of = {"name", "walletType"})
 @EqualsAndHashCode(callSuper = true, of = {"name", "walletType"})
 public class Wallet extends PersistentEntity {

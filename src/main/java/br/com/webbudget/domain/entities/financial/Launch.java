@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 /**
@@ -46,6 +47,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @Table(name = "launches")
+@AuditTable(value = "audit_launches")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")
 public class Launch extends PersistentEntity {

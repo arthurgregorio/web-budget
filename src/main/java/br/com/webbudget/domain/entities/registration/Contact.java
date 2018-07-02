@@ -38,6 +38,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -51,6 +52,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Entity
 @Audited
 @Table(name = "contacts")
+@AuditTable(value = "audit_contacts")
 @ToString(callSuper = true, of = "code")
 @EqualsAndHashCode(callSuper = true, of = "code")
 public class Contact extends PersistentEntity {

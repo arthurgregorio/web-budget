@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.entities.miscellany.Closing;
+import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -44,6 +45,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Audited
 @Table(name = "financial_periods")
+@AuditTable(value = "audit_financial_periods")
 @ToString(callSuper = true, of = "identification")
 @EqualsAndHashCode(callSuper = true, of = "identification")
 public class FinancialPeriod extends PersistentEntity {

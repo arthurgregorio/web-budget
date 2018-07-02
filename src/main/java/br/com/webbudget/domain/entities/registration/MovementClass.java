@@ -32,6 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -46,6 +47,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Audited
 @Table(name = "movement_classes")
 @ToString(callSuper = true, of = "name")
+@AuditTable(value = "audit_movement_classes")
 @EqualsAndHashCode(callSuper = true, of = "name")
 public class MovementClass extends PersistentEntity {
 
