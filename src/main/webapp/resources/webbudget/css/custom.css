@@ -14,11 +14,6 @@
     background-image: none !important;
 }
 
-/* customizacao dos itens do menu */
-li.dropdown > a {
-    border: none !important;
-}
-
 /* customizacao do componente de mensagem */ 
 .ui-messages > div {
     padding: 15px;

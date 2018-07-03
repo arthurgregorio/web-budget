@@ -16,136 +16,139 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <ul class="nav navbar-nav">
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['registration']} <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['registration']} <span class="caret" /></a>
             <ul class="dropdown-menu" role="menu">
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_ACCESS)}">
                     <p:link href="/secured/registration/card/listCards.xhtml">
-                        <i class="fa fa-credit-card"></i> 
+                        <i class="fa fa-credit-card" />
                         <span>#{menu['registration.cards']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.VEHICLE_ACCESS)}">
                     <p:link href="/secured/registration/vehicle/listVehicles.xhtml">
-                        <i class="fa fa-car"></i> 
+                        <i class="fa fa-car" />
                         <span>#{menu['registration.vehicles']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.WALLET_ACCESS)}">
                     <p:link href="/secured/registration/wallet/listWallets.xhtml">
-                        <i class="fa fa-bank"></i> 
+                        <i class="fa fa-bank" />
                         <span>#{menu['registration.wallets']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CONTACT_ACCESS)}">
                     <p:link href="/secured/registration/contact/listContacts.xhtml">
-                        <i class="fa fa-fax"></i> 
+                        <i class="fa fa-fax" />
                         <span>#{menu['registration.contacts']}</span>
                     </p:link>
                 </li>
-                <li class="divider"></li>
+                <li class="divider" />
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_ACCESS)}">
                     <p:link href="/secured/registration/costCenter/listCostCenters.xhtml">
-                        <i class="fa fa-sitemap"></i> 
+                        <i class="fa fa-sitemap" />
                         <span>#{menu['registration.cost-centers']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_ACCESS)}">
                     <p:link href="/secured/registration/movementClass/listMovementClasses.xhtml">
-                        <i class="fa fa-list"></i> 
+                        <i class="fa fa-list" />
                         <span>#{menu['registration.movement-classes']}</span>
                     </p:link>
                 </li>
-                <li class="divider"></li>
+                <li class="divider" />
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_ACCESS)}">
                     <p:link href="/secured/registration/financialPeriod/listFinancialPeriods.xhtml">
-                        <i class="fa fa-calendar-o"></i> 
+                        <i class="fa fa-calendar-o" />
                         <span>#{menu['registration.financial-periods']}</span>
                     </p:link>
                 </li>
             </ul>
         </li>
+
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['journal']} <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['journal']} <span class="caret" /></a>
             <ul class="dropdown-menu" role="menu">
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.RECORDS_ACCESS)}">
                     <p:link href="/main/journal/entries/listItems.xhtml">
-                        <i class="fa fa-pencil"></i> 
+                        <i class="fa fa-pencil" />
                         <span>#{menu['journal.records']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.REFUELING_ACCESS)}">
                     <p:link href="/secured/journal/refueling/listRefuelings.xhtml">
-                        <i class="fa fa-refresh"></i> 
-                        <span>#{menu['journal.refueling']}</span>
+                        <i class="fa fa-refresh" />
+                        <span>#{menu['journal.refuelings']}</span>
                     </p:link>
                 </li>
             </ul>
         </li>
+
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['movements']} <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">
-                    <p:link href="/main/movement/fixed/listFixedMovements.xhtml">
-                        <i class="fa fa-circle"></i> 
-                        #{menu['movements.fixed']}
-                    </p:link>
-                </li>
-                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_ACCESS)}">
-                    <p:link href="/main/movement/period/listMovements.xhtml">
-                        <i class="fa fa-circle-o"></i> 
-                        #{menu['movements.period']}
-                    </p:link>
-                </li>
-                <li class="divider"></li>
-                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_ACCESS)}">
-                    <p:link href="/main/movement/cardInvoice/cardInvoiceView.xhtml">
-                        <i class="fa fa-credit-card"></i> 
-                        #{menu['movements.card-invoice']}
-                    </p:link>
-                </li>
-                <li class="divider"></li>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['financial']} <span class="caret" /></a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CLOSING_ACCESS)}">
                     <p:link href="/main/movement/closing/closeFinancialPeriod.xhtml">
-                        <i class="fa fa-calculator"></i> 
-                        <span>#{menu['movements.closing']}</span>
+                        <i class="fa fa-calculator" />
+                        #{menu['financial.closings']}
                     </p:link>
                 </li>
-                <li class="divider"></li>
+                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_ACCESS)}">
+                    <p:link href="/main/movement/cardInvoice/cardInvoiceView.xhtml">
+                        <i class="fa fa-credit-card" />
+                        #{menu['financial.card-invoices']}
+                    </p:link>
+                </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.BALANCE_TRANSFERENCE_ACCESS)}">
                     <p:link href="/main/movement/transference/walletTransference.xhtml">
-                        <i class="fa fa-exchange"></i> 
-                        <span>#{menu['movements.transferences']}</span>
+                        <i class="fa fa-exchange" />
+                        #{menu['financial.transferences']}
                     </p:link>
+                </li>
+                <li class="divider" />
+                <li class="dropdown-submenu">
+                    <a href="#"><i class="fa fa-money" /> #{menu['financial.movement']} <span class="caret" /></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">
+                            <p:link href="/main/movement/fixed/listFixedMovements.xhtml">
+                                <i class="fa fa-circle" />
+                                #{menu['financial.movements.fixed']}
+                            </p:link>
+                        </li>
+                        <li jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_ACCESS)}">
+                            <p:link href="/main/movement/period/listMovements.xhtml">
+                                <i class="fa fa-circle-o" />
+                                #{menu['financial.movements.period']}
+                            </p:link>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </li>
+
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['tools']} <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['tools']} <span class="caret" /></a>
             <ul class="dropdown-menu" role="menu">
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.USER_ACCESS)}">
                     <p:link href="/secured/tools/user/listUsers.xhtml">
-                        <i class="fa fa-user-plus"></i>
+                        <i class="fa fa-user-plus" />
                         <span>#{menu['tools.users']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.GROUP_ACCESS)}">
                     <p:link href="/secured/tools/group/listGroups.xhtml">
-                        <i class="fa fa-group"></i> 
+                        <i class="fa fa-group" />
                         <span>#{menu['tools.groups']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CONFIGURATION_ACCESS)}">
                     <p:link href="/main/tools/configuration/configurations.xhtml">
-                        <i class="fa fa-gears"></i> 
+                        <i class="fa fa-gears" />
                         <span>#{menu['tools.configurations']}</span>
                     </p:link>
                 </li>
