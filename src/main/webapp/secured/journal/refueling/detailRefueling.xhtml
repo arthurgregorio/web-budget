@@ -45,7 +45,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['journal']}</a></li>
-        <li><a href="listCards.xhtml">#{breadcrumb['journal.refueling']}</a></li>
+        <li><a href="listCards.xhtml">#{breadcrumb['journal.refuelings']}</a></li>
         <li jsf:rendered="#{refuelingBean.viewState eq 'DELETING'}" 
             class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
         <li jsf:rendered="#{refuelingBean.viewState eq 'DETAILING'}" 

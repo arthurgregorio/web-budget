@@ -53,8 +53,8 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['financial']}</a></li>
-        <li><a href="#">#{breadcrumb['financial.movement']}</a></li>
-        <li><a href="listFixedMovements.xhtml">#{breadcrumb['financial.movement.fixed']}</a></li>
+        <li><a href="#">#{breadcrumb['financial.movements']}</a></li>
+        <li><a href="listFixedMovements.xhtml">#{breadcrumb['financial.movements.fixed']}</a></li>
         <li jsf:rendered="#{fixedMovementBean.viewState eq 'ADDING'}" 
             class="active"><a href="#">#{breadcrumb['including']}</a></li>
         <li jsf:rendered="#{fixedMovementBean.viewState eq 'EDITING'}" 

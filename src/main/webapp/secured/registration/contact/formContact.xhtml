@@ -45,7 +45,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
-        <li><a href="listContacts.xhtml">#{breadcrumb['registration.contact']}</a></li>
+        <li><a href="listContacts.xhtml">#{breadcrumb['registration.contacts']}</a></li>
         <li jsf:rendered="#{contactBean.viewState eq 'ADDING'}" 
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
         <li jsf:rendered="#{contactBean.viewState eq 'EDITING'}" 

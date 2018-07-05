@@ -98,21 +98,21 @@
                         #{menu['financial.closings']}
                     </p:link>
                 </li>
-                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_ACCESS)}">
-                    <p:link href="/main/movement/cardInvoice/cardInvoiceView.xhtml">
-                        <i class="fa fa-credit-card" />
-                        #{menu['financial.card-invoices']}
-                    </p:link>
-                </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.BALANCE_TRANSFERENCE_ACCESS)}">
                     <p:link href="/main/movement/transference/walletTransference.xhtml">
                         <i class="fa fa-exchange" />
                         #{menu['financial.transferences']}
                     </p:link>
                 </li>
+                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_ACCESS)}">
+                    <p:link href="/main/movement/cardInvoice/cardInvoiceView.xhtml">
+                        <i class="fa fa-credit-card" />
+                        #{menu['financial.card-invoices']}
+                    </p:link>
+                </li>
                 <li class="divider" />
                 <li class="dropdown-submenu">
-                    <a href="#"><i class="fa fa-money" /> #{menu['financial.movement']} <span class="caret" /></a>
+                    <a href="#"><i class="fa fa-money" /> #{menu['financial.movements']} <span class="caret" /></a>
                     <ul class="dropdown-menu" role="menu">
                         <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">
                             <p:link href="/main/movement/fixed/listFixedMovements.xhtml">

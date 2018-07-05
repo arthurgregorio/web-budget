@@ -38,7 +38,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
-        <li class="active"><a href="listFinancialPeriods.xhtml">#{breadcrumb['registration.financial-period']}</a></li>
+        <li class="active"><a href="listFinancialPeriods.xhtml">#{breadcrumb['registration.financial-periods']}</a></li>
     </ui:define>
 
     <ui:define name="content">
@@ -52,15 +52,6 @@
                 <h:form id="controlsForm">
                     <p:defaultCommand target="btSearch"/>
                     <div class="row">
-                        <div class="col-xs-2">
-                            <p:selectOneMenu value="#{financialPeriodBean.filter.entityStatus}"
-                                             converter="omnifaces.GenericEnumConverter">
-                                <f:selectItems var="entityStatus"
-                                               itemValue="#{entityStatus}"
-                                               itemLabel="#{enums[entityStatus]}"
-                                               value="#{financialPeriodBean.filter.entityStatusValues}"/> 
-                            </p:selectOneMenu>
-                        </div>
                         <div class="col-xs-4">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
@@ -84,7 +75,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-xs-8">
                             <div class="box-tools pull-right">
                                 <p:commandButton immediate="true"
                                                  value="#{menu['new']}"

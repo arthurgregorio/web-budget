@@ -17,17 +17,22 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com"
-             xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.zeroturnaround.com"
+             xsi:schemaLocation="http://www.zeroturnaround.com http://update.zeroturnaround.com/jrebel/rebel-2_1.xsd">
     
     <!-- -Xms128m -Xmx256m -Dwebbudget.root= -->
     
     <classpath>
-        <dir name="${webbudget.root}/target/classes"/>
+        <dirset dir="${webbudget.root}">
+            <include name="**/target/classes"/>
+            <include name="**/src/main/resources"/>
+        </dirset>
     </classpath>
     <web>
         <link target="/">
             <dir name="${webbudget.root}/src/main/webapp"/>
+            <dir name="${webbudget.root}/src/main/resources"/>
         </link>
     </web>  
 </application>

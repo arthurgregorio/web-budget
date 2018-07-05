@@ -22,7 +22,6 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
@@ -45,7 +44,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
-        <li><a href="listMovementClasses.xhtml">#{breadcrumb['registration.movement-class']}</a></li>
+        <li><a href="listMovementClasses.xhtml">#{breadcrumb['registration.movement-classes']}</a></li>
         <li jsf:rendered="#{movementClassBean.viewState eq 'ADDING'}" 
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
         <li jsf:rendered="#{movementClassBean.viewState eq 'EDITING'}" 
@@ -85,7 +84,7 @@
                                          disabled="#{movementClassBean.viewState eq 'EDITING'}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{messages['select-one']}" />
+                                          itemLabel="#{menu['select-one']}" />
                             <f:selectItems var="movementClassType"
                                            itemValue="#{movementClassType}"
                                            itemLabel="#{enums[movementClassType]}"
