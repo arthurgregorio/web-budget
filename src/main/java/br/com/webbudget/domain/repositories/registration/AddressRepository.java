@@ -17,10 +17,12 @@
 package br.com.webbudget.domain.repositories.registration;
 
 import br.com.webbudget.domain.entities.registration.Address;
+import br.com.webbudget.domain.entities.registration.Contact;
 import feign.Param;
 import feign.RequestLine;
 
 /**
+ * The rest repository for the {@link Address} of the {@link Contact}
  *
  * @author Arthur Gregorio
  *
@@ -30,9 +32,10 @@ import feign.RequestLine;
 public interface AddressRepository {
 
     /**
-     * 
-     * @param zipcode
-     * @return 
+     * Find the {@link Address} of a contact by invoking a REST service on the Viacep.com
+     *
+     * @param zipcode the zip code to find the CEP
+     * @return the {@link Address} of this zip code
      */
     @RequestLine("GET /ws/{zipcode}/json/")
     Address findByZipcode(@Param("zipcode") String zipcode);

@@ -17,17 +17,8 @@
 package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.application.components.Color;
-import br.com.webbudget.infrastructure.jpa.ColorConverter;
 import br.com.webbudget.domain.entities.PersistentEntity;
-import java.math.BigDecimal;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import br.com.webbudget.infrastructure.jpa.ColorConverter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +27,12 @@ import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+
 /**
+ * The representation of a cost center in the application
  *
  * @author Arthur Gregorio
  *
@@ -96,7 +92,7 @@ public class CostCenter extends PersistentEntity {
     private BigDecimal totalMovements;
 
     /**
-     *
+     * Default constructor
      */
     public CostCenter() {
         this.color = Color.randomize();
@@ -107,17 +103,19 @@ public class CostCenter extends PersistentEntity {
     }
     
     /**
-     * 
-     * @return 
+     * Get the parent cost center name
+     *
+     * @return the name of the parent cost center
      */
     public String getParentName() {
         return this.parent != null ? this.parent.getName() : null;
     }
     
     /**
-     * @param classType a direcao do tipo de classe que estamos checando se
-     * controla o valor de orcamento
-     * @return true se houver orcamento para controlar, false se nao
+     * Method used to check if this cost center control the budget by the type of a {@link MovementClass}
+     *
+     * @param classType the {@link MovementClassType} to determine which budget we should consume
+     * @return <code>true</code> for a cost center that control budget or <code>false</code> otherwise
      */
     public boolean controlBudget(MovementClassType classType) {
         if (classType == MovementClassType.IN) {

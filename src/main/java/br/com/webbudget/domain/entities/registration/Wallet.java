@@ -34,6 +34,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
+ * The representation of a wallet in the application
  *
  * @author Arthur Gregorio
  *
@@ -100,7 +101,7 @@ public class Wallet extends PersistentEntity {
     private BigDecimal adjustmentValue;
     
     /**
-     *
+     * Default constructor
      */
     public Wallet() {
         this.actualBalance = BigDecimal.ZERO;
@@ -108,18 +109,20 @@ public class Wallet extends PersistentEntity {
     }
     
     /**
+     * Create a better description to this wallet using the bank account information if is available
      * 
-     * @return 
+     * @return the description of this wallet
      */
     public String getDescription() {
         return this.walletType == WalletType.BANK_ACCOUNT ? this.name + " - " + this.bank : this.name;
     }
 
     /**
+     * The bank account of this wallet
      *
-     * @return
+     * @return the {@link String} with the bank account information of this wallet
      */
-    public String getAccountFormatted() {
+    public String getAccountFormatted() { // FIXME verify
 
         final StringBuilder builder = new StringBuilder();
 
@@ -133,17 +136,20 @@ public class Wallet extends PersistentEntity {
     }
 
     /**
-     * @return se o saldo da carteira esta ou nao negativo
+     * To check if the balance of this wallet is nagative
+     *
+     * @return <code>true</code> for negative balance, <code>false</code> otherwise
      */
     public boolean isBalanceNegative() {
         return this.actualBalance.signum() < 0;
     }
 
     /**
+     * To check if the wallet is empty, it means balance = 0
      * 
-     * @return 
+     * @return <code>true</code> for empty wallet, <code>false</code> otherwise
      */
-    public boolean isEmpty() {
+    public boolean isEmpty() { // FIXME refactor
         return this.actualBalance == BigDecimal.ZERO;
     }
 }

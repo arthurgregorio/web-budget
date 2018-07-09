@@ -24,6 +24,7 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 /**
+ * The {@link Contact} repository
  *
  * @author Arthur Gregorio
  *
@@ -34,21 +35,23 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 public interface ContactRepository extends DefaultRepository<Contact> {
 
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
     @Override
-    public default SingularAttribute<Contact, Boolean> getBlockedProperty() {
+    default SingularAttribute<Contact, Boolean> getBlockedProperty() {
         return Contact_.blocked;
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param filter
      * @return 
      */
     @Override
-    public default Criteria<Contact, Contact> getRestrictions(String filter) {
+    default Criteria<Contact, Contact> getRestrictions(String filter) {
        return criteria()
                .likeIgnoreCase(Contact_.name, filter)
                .likeIgnoreCase(Contact_.email, filter)

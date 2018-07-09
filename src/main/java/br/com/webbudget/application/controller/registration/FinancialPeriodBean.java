@@ -16,25 +16,22 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
-import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.FinancialPeriodService;
+import org.primefaces.model.SortOrder;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
-import org.primefaces.model.SortOrder;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
 /**
+ * The {@link FinancialPeriod} maintenance routine controller
  *
  * @author Arthur Gregorio
  *
@@ -45,9 +42,6 @@ import org.primefaces.model.SortOrder;
 @ViewScoped
 public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
 
-    @Getter
-    private Closing closing;
-
     @Inject
     private FinancialPeriodService financialPeriodService;
     
@@ -55,7 +49,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     private FinancialPeriodRepository financialPeriodRepository;
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -64,6 +58,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param id
      * @param viewState 
@@ -76,7 +71,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -88,6 +83,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param first
      * @param pageSize
@@ -102,7 +98,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
@@ -113,12 +109,13 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() { }
 
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
@@ -130,16 +127,17 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     }
 
     /**
-     * 
-     * @param id
-     * @return 
+     * Helper method to navigate to the closing page of the selected {@link FinancialPeriod}
+     *
+     * @param id the id of the selected
+     * @return the closing page to redirect
      */
     public String changeToClosing(long id) {
         return "";
     }
     
     /**
-     * 
+     * FIXME check if the notice for open periods are showing on the financial period form
      */
     public void validateOpenPeriods() {
 
@@ -155,84 +153,4 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
 //            }
 //        }
     }
-    
-//    /**
-//     * @param periodId
-//     */
-//    public void initialize(long periodId) {
-//
-//        this.revenueClasses = new ArrayList<>();
-//        this.expensesClasses = new ArrayList<>();
-//        
-//        // pega o periodo e os movimentos
-//        try {
-//            this.period = this.financialPeriodService
-//                    .findPeriodById(periodId);
-//            
-//            final List<Movement> movements = this.movementService
-//                    .listOnlyMovementsByPeriod(this.period);
-//            
-//            this.calculator = new MovementCalculator(movements);
-//            
-//            // carrega as classes
-//            this.loadExpensesByClass();
-//            this.loadRevenuesByClass();
-//            
-//            // monta o grafico por dias
-//            final LineChartModel lineChartModel = 
-//                    this.periodDetailService.bulidDailyChart(this.period);
-//            
-//            this.drawLineChart("dailySummaryChart", lineChartModel);
-//        } catch (Exception ex) {
-//            this.logger.error("Cant fill period {} details",
-//                    this.period.getIdentification(), ex);
-//        }
-//    }
-//    
-//    /**
-//     * @return volta para a listagem de periodos
-//     */
-//    public String doCancel() {
-//        return "listFinancialPeriods.xhtml?faces-redirect=true";
-//    }
-//
-//    /**
-//     * @return procentagem da meta de pagamentos no credito
-//     */
-//    public int getPaidOnCreditPercentage() {
-//        return this.percentageOf(this.calculator.getTotalPaidOnCreditCard(), 
-//                this.period.getCreditCardGoal());
-//    }
-//
-//    /**
-//     * @return porcentagem da meta de despesas
-//     */
-//    public int getExpensesGoalPercentage() {
-//        return this.percentageOf(this.calculator.getExpensesTotal(), 
-//                this.period.getExpensesGoal());
-//    }
-//    
-//    /**
-//     * @return porcentagem da meta de receitas
-//     */
-//    public int getRevenuesGoalPercentage() {
-//        return this.percentageOf(this.calculator.getRevenuesTotal(), 
-//                this.period.getRevenuesGoal());
-//    }
-//
-//    /**
-//     * 
-//     */
-//    private void loadExpensesByClass() {
-//        this.expensesClasses = this.periodDetailService
-//                .fetchTopClassesAndValues(this.period, MovementClassType.OUT);
-//    }
-//    
-//    /**
-//     * 
-//     */
-//    private void loadRevenuesByClass() {
-//        this.revenueClasses = this.periodDetailService
-//                .fetchTopClassesAndValues(this.period, MovementClassType.IN);
-//    }
 }

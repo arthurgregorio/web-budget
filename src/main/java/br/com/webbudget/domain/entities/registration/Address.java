@@ -19,13 +19,15 @@ package br.com.webbudget.domain.entities.registration;
 import br.com.webbudget.infrastructure.feign.ProvinceDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.io.Serializable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
+ * The representation of the address of a {@link Contact}
  *
  * @author Arthur Gregorio
  *

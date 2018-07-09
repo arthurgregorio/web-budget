@@ -21,6 +21,7 @@ import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 
 /**
+ * The {@link Telephone} repository
  *
  * @author Arthur Gregorio
  *

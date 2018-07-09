@@ -22,14 +22,19 @@ import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 /**
+ * The service responsible by all the business logic involving the {@link MovementClass} and {@link CostCenter} classes
+ *
+ * This classes are part of the classification feature of the application, classes and cost centers enable the user to
+ * classify the movements and control where the money is being spent or earned
  *
  * @author Arthur Gregorio
  *
@@ -45,8 +50,9 @@ public class ClassificationService {
     private MovementClassRepository movementClassRepository;
     
     /**
+     * Use this method to persist a {@link CostCenter}
      *
-     * @param costCenter
+     * @param costCenter the {@link CostCenter} to persist
      */
     @Transactional
     public void save(CostCenter costCenter) {
@@ -61,9 +67,10 @@ public class ClassificationService {
     }
 
     /**
+     * Use this method to update a persisted {@link CostCenter}
      *
-     * @param costCenter
-     * @return
+     * @param costCenter the {@link CostCenter} to be updated
+     * @return the updated {@link CostCenter}
      */
     @Transactional
     public CostCenter update(CostCenter costCenter) {
@@ -71,8 +78,9 @@ public class ClassificationService {
     }
 
     /**
+     * Use this method to delete a persisted {@link CostCenter}
      *
-     * @param costCenter
+     * @param costCenter the {@link CostCenter} to be deleted
      */
     @Transactional
     public void delete(CostCenter costCenter) {
@@ -80,8 +88,9 @@ public class ClassificationService {
     }
     
     /**
+     * Use this method to persist a {@link MovementClass}
      * 
-     * @param movementClass 
+     * @param movementClass the {@link MovementClass} to be persisted
      */
     @Transactional
     public void save(MovementClass movementClass) {
@@ -99,9 +108,10 @@ public class ClassificationService {
     }
 
     /**
+     * Use this method to update a persisted {@link MovementClass}
      *
-     * @param movementClass
-     * @return
+     * @param movementClass the {@link MovementClass} to be updated
+     * @return the updated {@link MovementClass}
      */
     @Transactional
     public MovementClass update(MovementClass movementClass) {
@@ -119,8 +129,9 @@ public class ClassificationService {
     }
 
     /**
+     * Use this method to delete a persisted {@link MovementClass}
      * 
-     * @param movementClass 
+     * @param movementClass the {@link MovementClass} to be deleted
      */
     @Transactional
     public void delete(MovementClass movementClass) {
@@ -128,10 +139,10 @@ public class ClassificationService {
     }
     
     /**
-     * The method to check if the bugdet of the costcenter is available for use
+     * The method to check if the budget of the {@link CostCenter} is available for use
      *
-     * @param movementClass the class to be validate againts his cost center
-     * @return true if has budget or exception if no budget is found
+     * @param movementClass the {@link MovementClass} to be validate with the {@link CostCenter}
+     * @return <code>true</code> if has budget or exception if no budget was found
      */
     private boolean hasValidBudget(MovementClass movementClass) {
 
@@ -156,7 +167,7 @@ public class ClassificationService {
                 available = costCenter.getExpensesBudget().subtract(consumed);
             }
 
-            // caso o valor disponivel seja menor que o desejado, exception!
+            // if the desired value is lower than the available, throw a exception
             if (available.compareTo(movementClass.getBudget()) < 0) {
                 final String value = "R$ " + String.format("%10.2f", available);
                 throw new BusinessLogicException("error.movement-class.no-budget", value);

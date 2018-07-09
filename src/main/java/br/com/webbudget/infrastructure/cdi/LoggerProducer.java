@@ -16,16 +16,15 @@
  */
 package br.com.webbudget.infrastructure.cdi;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
+
 /**
- * Produto que gera os objetos de para fins de log do sistema, cada classe 
- * que ncessitar de um logger pode requisitar a injecao via CDI
+ * The logger object producer
  *
  * @author Arthur Gregorio
  *
@@ -36,13 +35,13 @@ import org.slf4j.LoggerFactory;
 public class LoggerProducer {
 
     /**
-     * Produz um objeto de logger para quem solicitar via {@link Inject}
-     * 
-     * @param injectionPoint o ponto de injecao onde o logger sera inserido
-     * @return o objeto org.slf4j.Logger para a classe solcitante
+     * The producer of the logger object
+     *
+     * @param injectionPoint the injection point for class dicovery
+     * @return the logger object
      */
     @Produces
-    Logger produceLogger(InjectionPoint injectionPoint) {
+    Logger produce(InjectionPoint injectionPoint) {
         return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
     }
 }

@@ -18,20 +18,6 @@ package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.infrastructure.utils.RandomCode;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import static javax.persistence.CascadeType.REMOVE;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import static javax.persistence.FetchType.EAGER;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,7 +28,18 @@ import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
+
 /**
+ * The representation of a contact in the application
  *
  * @author Arthur Gregorio
  *
@@ -141,7 +138,7 @@ public class Contact extends PersistentEntity {
     private final List<Telephone> deletedTelephones;
     
     /**
-     * Inicializa o contato
+     * Default constructor
      */
     public Contact() {
         this.code = RandomCode.alphanumeric(6);
@@ -151,45 +148,50 @@ public class Contact extends PersistentEntity {
     }
 
     /**
+     * Get the {@link Telephone} of the contact
      * 
-     * @return 
+     * @return a {@link List} of {@link Telephone} for this contact
      */
     public List<Telephone> getTelephones() {
         return Collections.unmodifiableList(this.telephones);
     }
     
     /**
-     * @return o documento do contato formatado
+     * Format and return the document of this contact
+     *
+     * @return the contact document formatted
      */
     public String getDocumentFormated() {
         return this.contactType.formatDocument(this.document);
     }
     
     /**
-     * 
+     * Remove all the {@link Telephone} of this contact
      */
     public void clearTelephones() {
         this.telephones.clear();
     }
     
     /**
-     * Valida o documento do contato de acordo com seu tipo
+     * Validate the contact document by the document type defined by the {@link ContactType} enum
      */
     public void validateDocument() {
         this.contactType.validateDocument(this.document.replace("\\w", ""));
     }
     
     /**
+     * Add a new {@link Telephone} to this contact
      * 
-     * @param telephone 
+     * @param telephone the {@link Telephone} to add
      */
     public void addTelephone(Telephone telephone) {
         this.telephones.add(telephone);
     }
 
     /**
+     * Remove a {@link Telephone} of this contact
      *
-     * @param telephone
+     * @param telephone the {@link Telephone} to remove
      */
     public void removeTelephone(Telephone telephone) {
         this.telephones.remove(telephone);
@@ -197,8 +199,9 @@ public class Contact extends PersistentEntity {
     }
 
     /**
+     * Add a already persisted {@link Telephone} to the deletion list
      * 
-     * @param telephone 
+     * @param telephone the {@link Telephone} to be add to the deletion list
      */
     private void addDeletedTelephone(Telephone telephone) {
         if (telephone.isSaved()) {
@@ -207,8 +210,9 @@ public class Contact extends PersistentEntity {
     }
 
     /**
+     * For a given {@link Address} this method set all the values in the correct fields of the contact
      * 
-     * @param address 
+     * @param address the {@link Address} to be set to this contact
      */
     public void setAddress(Address address) {
         this.zipcode = address.getZipcode();

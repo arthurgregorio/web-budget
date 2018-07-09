@@ -16,17 +16,16 @@
  */
 package br.com.webbudget.infrastructure.jsf.converters;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
- * Converter para manter a compatibilidade dos componentes hora do primefaces
- * com o java.time.LocalTime do Java 8
- * 
+ * Simple JSF converter to provide {@link LocalTime} support to the UI
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -36,23 +35,25 @@ import javax.faces.convert.FacesConverter;
 public class LocalTimeConverter implements Converter {
 
     /**
-     * 
+     * {@inheritDoc }
+     *
      * @param context
      * @param component
      * @param value
-     * @return 
+     * @return
      */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        return value != null ? LocalTime.parse(value, DateTimeFormatter.ofPattern("HH:mm")) : null;
+        return value == null ? null : LocalTime.parse(value, DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     /**
-     * 
+     * {@inheritDoc }
+     *
      * @param context
      * @param component
      * @param value
-     * @return 
+     * @return
      */
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {

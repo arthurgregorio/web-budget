@@ -16,16 +16,19 @@
  */
 package br.com.webbudget.infrastructure.jsf.primefaces;
 
-import java.io.IOException;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import org.primefaces.component.inputnumber.InputNumber;
 import org.primefaces.component.inputnumber.InputNumberRenderer;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.context.RequestContext;
 import org.primefaces.util.HTML;
 
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import java.io.IOException;
+
 /**
+ * FIXME refactor this
+ *
  * Customizacao da renderer do inputNumber para acertar sua classe CSS no 
  * layout da aplicacao
  * 

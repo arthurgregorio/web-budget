@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.entities.registration;
 
 /**
+ * The enum with the possible types of a {@link Vehicle}
  *
  * @author Arthur Gregorio
  *
@@ -33,14 +34,16 @@ public enum VehicleType {
     private final String description;
 
     /**
+     * Default constructor
      *
-     * @param description
+     * @param description the description for this enum, also is the i18n key
      */
-    private VehicleType(String description) {
+    VehicleType(String description) {
         this.description = description;
     }
 
     /**
+     * {@inheritDoc}
      *
      * @return
      */

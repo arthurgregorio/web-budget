@@ -25,32 +25,34 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
 /**
- * Producer de entitymanagers para os recursos do projeto
+ * The {@link EntityManager} producer of the application
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 1.0.0
  * @since 2.0.0, 21/05/2015
  */
 @ApplicationScoped
 public class EntityManagerProducer {
 
     @PersistenceUnit
-    private EntityManagerFactory ctbFactory;
+    private EntityManagerFactory entityManagerFactory;
 
     /**
+     * Produce a new instance of the {@link EntityManager} by calling the {@link EntityManagerFactory}
      *
-     * @return
+     * @return the {@link EntityManager} to be injected
      */
     @Produces
     @RequestScoped
-    EntityManager create() {
-        return this.ctbFactory.createEntityManager();
+    EntityManager produce() {
+        return this.entityManagerFactory.createEntityManager();
     }
 
     /**
+     * Dispose method to close the instances of an open {@link EntityManager}
      *
-     * @param entityManager
+     * @param entityManager the {@link EntityManager} to be closed
      */
     void close(@Disposes EntityManager entityManager) {
         if (entityManager.isOpen()) {

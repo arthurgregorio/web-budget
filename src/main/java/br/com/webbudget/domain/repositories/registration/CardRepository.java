@@ -20,12 +20,14 @@ import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Card_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
-import java.util.Optional;
-import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
+import javax.persistence.metamodel.SingularAttribute;
+import java.util.Optional;
+
 /**
+ * The {@link Card} repository
  *
  * @author Arthur Gregorio
  *
@@ -36,14 +38,16 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 public interface CardRepository extends DefaultRepository<Card> {
 
     /**
-     * 
-     * @param number
-     * @param type
-     * @return 
+     * Find a {@link Card} by the number or type
+     *
+     * @param number the number of the card
+     * @param type the type of the card defined by the {@link CardType} enum
+     * @return an {@link Optional} of the card
      */
     Optional<Card> findOptionalByNumberAndCardType(String number, CardType type);
     
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
@@ -53,7 +57,8 @@ public interface CardRepository extends DefaultRepository<Card> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
+     *
      * @param filter
      * @return 
      */

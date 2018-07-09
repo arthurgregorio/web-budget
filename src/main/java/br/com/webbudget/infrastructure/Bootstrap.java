@@ -35,6 +35,8 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 /**
+ * FIXME add migrations
+ * FIXME create JavaDoc
  *
  * @author Arthur Gregorio
  *

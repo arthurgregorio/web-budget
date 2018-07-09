@@ -22,7 +22,7 @@ package br.com.webbudget.infrastructure.mail;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 03/04/2018
+ * @since 3.0.0, 03/04/2018
  */
 public interface MailContentProvider {
 

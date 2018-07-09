@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.registration;
 
 /**
- * The enum with the possible financial movements of the wallet
+ * The enum with the possible directions of a {@link WalletBalance}
  *
  * @author Arthur Gregorio
  *
@@ -32,14 +32,16 @@ public enum BalanceType {
     private final String description;
 
     /**
+     * Default constructor
      *
-     * @param description
+     * @param description the description for this enum, also is the i18n key
      */
-    private BalanceType(String description) {
+    BalanceType(String description) {
         this.description = description;
     }
 
     /**
+     * {@inheritDoc}
      *
      * @return
      */

@@ -21,6 +21,7 @@ import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 
 /**
+ * The {@link WalletBalance} repository
  *
  * @author Arthur Gregorio
  *
@@ -30,26 +31,4 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface WalletBalanceRepository extends DefaultRepository<WalletBalance> {
 
-//    /**
-//     *
-//     * @param wallet
-//     * @return
-//     */
-//    public WalletBalance findLastWalletBalance(Wallet wallet);
-//
-//    /**
-//     *
-//     * @param type
-//     * @return
-//     */
-//    public List<WalletBalance> listByType(WalletBalanceType type);
-//
-//    /**
-//     *
-//     * @param source
-//     * @param target
-//     * @param types
-//     * @return
-//     */
-//    public List<WalletBalance> listByWallet(Wallet source, Wallet target, WalletBalanceType... types);
 }

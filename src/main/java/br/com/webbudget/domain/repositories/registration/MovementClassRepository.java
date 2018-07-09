@@ -21,13 +21,15 @@ import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.registration.MovementClass_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
-import java.util.List;
-import java.util.Optional;
-import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
+import javax.persistence.metamodel.SingularAttribute;
+import java.util.List;
+import java.util.Optional;
+
 /**
+ * The {@link MovementClass} repository
  *
  * @author Arthur Gregorio
  *
@@ -38,37 +40,41 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 public interface MovementClassRepository extends DefaultRepository<MovementClass> {
 
     /**
+     * Find a {@link MovementClass} by the name and cost center name
      * 
-     * @param name
-     * @param costCenterName
-     * @return 
+     * @param name the name of the movement class
+     * @param costCenterName the name of the cost center
+     * @return a {@link Optional} of {@link MovementClass}
      */
     Optional<MovementClass> findOptionalByNameAndCostCenter_name(String name, String costCenterName);
     
     /**
+     * Find a {@link MovementClass} by the type and the cost center id
      * 
-     * @param classType
-     * @param costCenter
-     * @return 
+     * @param classType the {@link MovementClassType} enum type
+     * @param costCenter the {@link CostCenter}
+     * @return a {@link List} of {@link MovementClass}
      */
     List<MovementClass> findByMovementClassTypeAndCostCenter(MovementClassType classType, CostCenter costCenter);
     
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
     @Override
-    public default SingularAttribute<MovementClass, Boolean> getBlockedProperty() {
+    default SingularAttribute<MovementClass, Boolean> getBlockedProperty() {
         return MovementClass_.blocked;
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param filter
      * @return 
      */
     @Override
-    public default Criteria<MovementClass, MovementClass> getRestrictions(String filter) {
+    default Criteria<MovementClass, MovementClass> getRestrictions(String filter) {
        return criteria()
                 .likeIgnoreCase(MovementClass_.name, filter); 
     }

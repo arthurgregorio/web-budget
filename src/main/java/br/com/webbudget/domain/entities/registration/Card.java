@@ -18,24 +18,16 @@ package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import java.math.BigDecimal;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+
 /**
+ * The representation of a card in the application
  *
  * @author Arthur Gregorio
  *
@@ -97,7 +89,7 @@ public class Card extends PersistentEntity {
     private Wallet wallet;
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void validate() throws BusinessLogicException {
@@ -107,9 +99,9 @@ public class Card extends PersistentEntity {
     }
     
     /**
-     * Um nome mais legivel para o cartao:
+     * A way more elegant to see the name of a card
      *
-     * @return nome + 4 ultimos digitos do cartao + bandeira
+     * @return the more aesthetic name of this card
      */
     public String getReadableName() {
 
@@ -118,7 +110,6 @@ public class Card extends PersistentEntity {
         builder.append(this.name);
         builder.append(" - ");
 
-        // fix #31
         if (this.number.length() > 3) {
             builder.append(this.number.substring(this.number.length() - 4,
                     this.number.length()));
@@ -133,11 +124,11 @@ public class Card extends PersistentEntity {
     }
 
     /**
-     * Retorna o numero do cartao escondendo alguns caracteres
+     * This method provide a secure way to display the number of the card
      *
-     * @return o numero do catao
+     * @return the first and last four numbers of the card
      */
-    public String getSecuredNumber() {
+    public String getSecureNumber() { // FIXME check if this is used
 
         final StringBuilder secured = new StringBuilder();
 
@@ -158,16 +149,20 @@ public class Card extends PersistentEntity {
     }
     
     /**
-     * @return se temos um cartao de credito
+     * Use this method to check if the card is a credit card or not
+     *
+     * @return <code>true</code> for credit card, <code>false</code> otherwise
      */
     public boolean isCreditCard() {
         return this.cardType == CardType.CREDIT;
-    }
+    } // FIXME check if this is used
     
     /**
-     * @return se temos um cartao de debito
+     * Use this method to check if the card is a debit card or not
+     *
+     * @return <code>true</code> for debit card, <code>false</code> otherwise
      */
     public boolean isDebitCard() {
         return this.cardType == CardType.DEBIT;
-    }
+    } // FIXME check if this is used
 }

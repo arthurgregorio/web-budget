@@ -16,14 +16,15 @@
  */
 package br.com.webbudget.infrastructure.cdi;
 
+import org.primefaces.context.RequestContext;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
 
 /**
- * Produtor de contextos do sistema
+ * The faces resources producer
  *
  * @author Arthur Gregorio
  *
@@ -31,12 +32,12 @@ import org.primefaces.context.RequestContext;
  * @since 2.0.0, 21/05/2015
  */
 @ApplicationScoped
-public class FacesContextProducer {
+public class FacesResourcesProducer {
 
     /**
-     * Produz um contexto valido do {@link RequestContext}
+     * Produce a instance of the Primefaces {@link RequestContext}
      *
-     * @return um {@link RequestContext} valido
+     * @return the {@link RequestContext} instance for injection
      */
     @Produces
     @RequestScoped
@@ -45,9 +46,9 @@ public class FacesContextProducer {
     }
 
     /**
-     * Produz um contexto valido do {@link FacesContext}
+     * Produce a instance of the JSF {@link FacesContext}
      *
-     * @return um {@link FacesContext} valido
+     * @return the {@link FacesContext} instance for injection
      */
     @Produces
     @RequestScoped

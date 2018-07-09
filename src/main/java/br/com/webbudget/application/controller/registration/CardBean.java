@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
@@ -26,15 +25,18 @@ import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.CardService;
-import java.util.List;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
+
 /**
- * Controller para a view do manutencao dos cartoes de credito
+ * The {@link Card} maintenance routine controller
  *
  * @author Arthur Gregorio
  *
@@ -57,7 +59,7 @@ public class CardBean extends FormBean<Card> {
     private WalletRepository walletRepository;
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -66,7 +68,8 @@ public class CardBean extends FormBean<Card> {
     }
     
     /**
-     * 
+     * {@inheritDoc}
+     *
      * @param id
      * @param viewState 
      */
@@ -79,7 +82,7 @@ public class CardBean extends FormBean<Card> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -106,16 +109,17 @@ public class CardBean extends FormBean<Card> {
     }
 
     /**
+     * Send the user to the card statistics page
      *
-     * @param id
-     * @return
+     * @param id the id of the card to show statistics
+     * @return the navigation case
      */
     public String changeToStatistics(long id) {
         return "";
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
@@ -125,7 +129,7 @@ public class CardBean extends FormBean<Card> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() {
@@ -134,6 +138,7 @@ public class CardBean extends FormBean<Card> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
@@ -145,7 +150,9 @@ public class CardBean extends FormBean<Card> {
     }
 
     /**
-     * @return a lista de tipos validos para cartoes
+     * Helper method to get the types defined in the {@link CardType} enum
+     *
+     * @return array of types from {@link CardType}
      */
     public CardType[] getCardTypes() {
         return CardType.values();

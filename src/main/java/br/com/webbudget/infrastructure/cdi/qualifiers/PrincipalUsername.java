@@ -9,8 +9,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Injection qualifier to mark the field to receive the current principal
- * username
+ * Injection qualifier to mark the field to receive the current principal username
  *
  * @author Arthur Gregorio
  *

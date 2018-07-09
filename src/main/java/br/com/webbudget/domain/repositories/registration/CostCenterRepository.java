@@ -19,12 +19,14 @@ package br.com.webbudget.domain.repositories.registration;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.CostCenter_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
-import java.util.Optional;
-import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
+import javax.persistence.metamodel.SingularAttribute;
+import java.util.Optional;
+
 /**
+ * The {@link CostCenter} repository
  *
  * @author Arthur Gregorio
  *
@@ -35,39 +37,43 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 public interface CostCenterRepository extends DefaultRepository<CostCenter> {
 
     /**
+     * Find a {@link CostCenter} by the name
      * 
-     * @param name
-     * @return 
+     * @param name the of the {@link CostCenter} to find
+     * @return an {@link Optional} of the {@link CostCenter}
      */
     Optional<CostCenter> findOptionalByName(String name);
     
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
     @Override
-    public default SingularAttribute<CostCenter, Boolean> getBlockedProperty() {
+    default SingularAttribute<CostCenter, Boolean> getBlockedProperty() {
         return CostCenter_.blocked;
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param filter
      * @return 
      */
     @Override
-    public default Criteria<CostCenter, CostCenter> getRestrictions(String filter) {
+    default Criteria<CostCenter, CostCenter> getRestrictions(String filter) {
         return this.criteria()
                 .likeIgnoreCase(CostCenter_.description, filter)
                 .likeIgnoreCase(CostCenter_.name, filter);
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param criteria 
      */
     @Override
-    public default void setOrder(Criteria<CostCenter, CostCenter> criteria) {
+    default void setOrder(Criteria<CostCenter, CostCenter> criteria) {
         criteria.orderAsc(CostCenter_.name);
     }
 }

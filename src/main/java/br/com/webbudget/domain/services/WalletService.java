@@ -31,7 +31,7 @@ import java.util.Optional;
 import javax.enterprise.event.Observes;
 
 /**
- * Serice para manutencao dos processos relacionados a carteiras e saldos
+ * The service responsible for the business operations with {@link Wallet}
  *
  * @author Arthur Gregorio
  *
@@ -47,8 +47,9 @@ public class WalletService {
     private WalletBalanceRepository walletBalanceRepository;
 
     /**
+     * Use this method to persist a {@link Wallet}
      *
-     * @param wallet
+     * @param wallet the {@link Wallet} to be persisted
      */
     @Transactional
     public void save(Wallet wallet) {
@@ -72,9 +73,10 @@ public class WalletService {
     }
 
     /**
+     * Use this method to update a persisted {@link Wallet}
      *
-     * @param wallet
-     * @return
+     * @param wallet the {@link Wallet} to be updated
+     * @return the update {@link Wallet}
      */
     @Transactional
     public Wallet update(Wallet wallet) {
@@ -90,85 +92,14 @@ public class WalletService {
     }
 
     /**
+     * Use this method to delete a persisted {@link Wallet}
      *
-     * @param wallet
+     * @param wallet the {@link Wallet} to be deleted
      */
     @Transactional
     public void delete(Wallet wallet) {
         this.walletRepository.attachAndRemove(wallet);
     }
-
-//    /**
-//     *
-//     * @param walletBalance
-//     */
-//    @Transactional
-//    public void transfer(WalletBalance walletBalance) {
-//
-//        if (walletBalance.getSourceWallet().equals(walletBalance.getTargetWallet())) {
-//            throw new BusinessLogicException("error.transfer.same-wallet");
-//        }
-//
-//        // atualizamos o destino
-//        final BalanceBuilder builderTarget = new BalanceBuilder();
-//        
-//        final Wallet target = walletBalance.getTargetWallet();
-//        
-//        final BigDecimal targetOldBalance = target.getBalance();
-//        final BigDecimal targetNewBalance = 
-//                targetOldBalance.add(walletBalance.getMovementedValue());
-//
-//        builderTarget.forWallet(target)
-//                .fromWallet(walletBalance.getSourceWallet())
-//                .withOldBalance(targetOldBalance)
-//                .withActualBalance(targetNewBalance)
-//                .withMovementedValue(walletBalance.getMovementedValue())
-//                .byTheReason(walletBalance.getReason())
-//                .andType(WalletBalanceType.TRANSFERENCE);
-//        
-//        this.updateBalance(builderTarget);
-//
-//        // atualizamos a origem
-//        final BalanceBuilder builderSource = new BalanceBuilder();
-//        
-//        final Wallet source = walletBalance.getSourceWallet();
-//        
-//        final BigDecimal sourceOldBalance = source.getBalance();
-//        final BigDecimal sourceNewBalance = 
-//                sourceOldBalance.subtract(walletBalance.getMovementedValue());
-//
-//        builderSource.forWallet(source)
-//                .withOldBalance(sourceOldBalance)
-//                .withActualBalance(sourceNewBalance)
-//                .withMovementedValue(walletBalance.getMovementedValue())
-//                .andType(WalletBalanceType.TRANSFER_ADJUSTMENT);
-//        
-//        this.updateBalance(builderSource);
-//    }
-//
-//    /**
-//     * Chamada para ajuste do saldo da carteira
-//     * 
-//     * @param wallet a carteira a ser ajustada, dentro dela os dados do ajuste
-//     */
-//    @Transactional
-//    public void adjustBalance(Wallet wallet) {
-//
-//        // atualizamos o novo saldo
-//        final BigDecimal oldBalance = wallet.getBalance();
-//        final BigDecimal newBalance = oldBalance.add(wallet.getAdjustmentValue());
-//        
-//        final BalanceBuilder builder = new BalanceBuilder();
-//
-//        builder.forWallet(wallet)
-//                .withOldBalance(oldBalance)
-//                .withActualBalance(newBalance)
-//                .withMovementedValue(wallet.getAdjustmentValue())
-//                .byTheReason(wallet.getReason())
-//                .andType(WalletBalanceType.ADJUSTMENT);
-//        
-//        this.updateBalance(builder);
-//    }
     
     /**
      * Update the {@link WalletBalance} for a given wallet
@@ -189,9 +120,9 @@ public class WalletService {
 
     /**
      * This method listen to events on {@link UpdateBalance} and call the method
-     * to update the balance based on the build received as parameter
+     * to update the balance based on the builder received as a parameter
      *
-     * @param builder the balance builder
+     * @param builder the {@link WalletBalanceBuilder}
      */
     @Transactional
     public void onWalletBalanceChange(@Observes @UpdateBalance WalletBalanceBuilder builder) {

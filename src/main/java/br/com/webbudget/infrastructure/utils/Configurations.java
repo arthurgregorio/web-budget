@@ -23,6 +23,8 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * FIXME refactor this JavaDoc
+ *
  * Classe utilitaria para uso em alguns pontos da aplicacao sem a necessidade de
  * ficar repetindo alguns codigos tais como pegar configuracoes ou a URL base da
  * aplicacaao para uso em alguma template

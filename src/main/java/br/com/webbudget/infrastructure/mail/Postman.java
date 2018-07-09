@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.infrastructure.mail;
 
-import java.util.Date;
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -24,6 +23,7 @@ import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
+import java.util.Date;
 
 /**
  * This class has one job: send e-mails

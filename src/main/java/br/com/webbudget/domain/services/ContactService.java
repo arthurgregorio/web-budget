@@ -19,17 +19,18 @@ package br.com.webbudget.domain.services;
 import br.com.webbudget.domain.entities.registration.Address;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.Telephone;
+import br.com.webbudget.domain.repositories.financial.IMovementRepository;
 import br.com.webbudget.domain.repositories.registration.AddressRepository;
 import br.com.webbudget.domain.repositories.registration.ContactRepository;
-import br.com.webbudget.domain.repositories.financial.IMovementRepository;
-import java.util.List;
+import br.com.webbudget.domain.repositories.registration.TelephoneRepository;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import br.com.webbudget.domain.repositories.registration.TelephoneRepository;
+import java.util.List;
 
 /**
- * Service responsavel pro todos os processos relacionados aos contatos
+ * Service responsible by all the business logic operations involving the {@link Contact}
  *
  * @author Arthur Gregorio
  *
@@ -40,18 +41,14 @@ import br.com.webbudget.domain.repositories.registration.TelephoneRepository;
 public class ContactService {
 
     @Inject
-    private AddressRepository addressRepository;
-    
-    @Inject
     private ContactRepository contactRepository;
-    @Inject
-    private IMovementRepository movementRepository;
     @Inject
     private TelephoneRepository telephoneRepository;
     
     /**
+     * Use this method to persist a {@link Contact}
      * 
-     * @param contact 
+     * @param contact the {@link Contact} to be persisted
      */
     @Transactional
     public void save(Contact contact) {
@@ -69,9 +66,10 @@ public class ContactService {
     }
 
     /**
+     * Use this method to update a persisted {@link Contact}
      * 
-     * @param contact
-     * @return 
+     * @param contact the {@link Contact} to be updated
+     * @return the updated {@link Contact}
      */
     @Transactional
     public Contact update(Contact contact) {
@@ -99,12 +97,14 @@ public class ContactService {
     }
 
     /**
+     * Use this method to delete a persisted {@link Contact}
      * 
-     * @param contact 
+     * @param contact the {@link Contact} to be deleted
      */
     @Transactional
     public void delete(Contact contact) {
-        
+
+        // FIXME when we can save movements again, fix this to check on the contact deletion
 //        final List<Movement> movements = 
 //                this.movementRepository.listByContact(contact);
 //        
@@ -114,14 +114,5 @@ public class ContactService {
 //        }
         
         this.contactRepository.attachAndRemove(contact);
-    }
-    
-    /**
-     * 
-     * @param zipcode
-     * @return 
-     */
-    public Address findAddressBy(String zipcode) {
-        return this.addressRepository.findByZipcode(zipcode);
     }
 }

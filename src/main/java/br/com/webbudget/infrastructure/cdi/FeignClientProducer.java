@@ -23,7 +23,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
 /**
- * Feign client producer to enable injection of the REST client
+ * Feign client producer to enable injection of the feign REST client
  *
  * @author Arthur Gregorio
  *

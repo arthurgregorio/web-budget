@@ -16,23 +16,22 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.services.ClassificationService;
 import org.primefaces.model.SortOrder;
 
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
+
 /**
+ * The {@link CostCenter} maintenance routine controller
  *
  * @author Arthur Gregorio
  *
@@ -50,7 +49,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     private ClassificationService classificationService;
     
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -59,6 +58,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param id
      * @param viewState 
@@ -72,7 +72,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -84,6 +84,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param first
      * @param pageSize
@@ -98,7 +99,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
@@ -109,7 +110,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() {
@@ -119,6 +120,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */

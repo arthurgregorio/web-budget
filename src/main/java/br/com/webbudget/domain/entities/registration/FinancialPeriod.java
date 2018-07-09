@@ -36,6 +36,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
+ * The representation of a financial period in the application
  *
  * @author Arthur Gregorio
  *
@@ -91,7 +92,7 @@ public class FinancialPeriod extends PersistentEntity {
     private Closing closing;
 
     /**
-     *
+     * Default constructor
      */
     public FinancialPeriod() {
         this.expensesGoal = BigDecimal.ZERO;
@@ -100,8 +101,9 @@ public class FinancialPeriod extends PersistentEntity {
     }
 
     /**
+     * If the period is closed, this method should return the {@link Closing} data
      * 
-     * @return 
+     * @return the {@link Closing} data of this period
      */
     public Closing getClosing() {
         if (this.closing == null) {
@@ -112,57 +114,56 @@ public class FinancialPeriod extends PersistentEntity {
     }
 
     /**
-     * Se o periodo ja expirou ou nao
+     * Method to check if the period is expired or not
      *
-     * @return
+     * @return <code>true</code> for expired, <code>false</code> for non expired
      */
     public boolean isExpired() {
         return LocalDate.now().compareTo(this.end) > 0;
     }
 
     /**
+     * The total accumulated by the past periods until the end of this period
      *
-     * @return
+     * @return the total
      */
     public BigDecimal getAccumulated() {
         return this.getClosing().getAccumulated();
     }
 
     /**
+     * The final balance of this period
      *
-     * @return
+     * @return the final balance value
      */
     public BigDecimal getBalance() {
         return this.getClosing().getBalance();
     }
 
     /**
+     * The total of expenses in this period
      *
-     * @return
+     * @return the total
      */
     public BigDecimal getExpensesTotal() {
         return this.getClosing().getExpenses();
     }
 
     /**
+     * The total of revenues in this period
      *
-     * @return
+     * @return the total
      */
     public BigDecimal getRevenuesTotal() {
         return this.getClosing().getRevenues();
     }
 
     /**
-     * @return se este periodo esta ou nao ativo
+     * Method to check if this period is active or not
+     *
+     * @return if this period is active or not with with <code>true</code> or <code>false</code> respectively
      */
     public boolean isActive() {
         return !this.isExpired() && !this.isClosed();
-    }
-
-    /**
-     * @return o resultado para o periodo caso ele esteja fechado
-     */
-    public BigDecimal getResult() {
-        return this.getClosing().getBalance();
     }
 }

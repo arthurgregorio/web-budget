@@ -37,6 +37,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
+ * The representation of a movement class in the application
  *
  * @author Arthur Gregorio
  *
@@ -85,7 +86,7 @@ public class MovementClass extends PersistentEntity {
     private BigDecimal totalMovements;
 
     /**
-     * 
+     * Default constructor
      */
     public MovementClass() {
         this.budget = BigDecimal.ZERO;
@@ -93,16 +94,18 @@ public class MovementClass extends PersistentEntity {
     }
     
     /**
-     * 
-     * @return 
+     * To check if is a revenue class
+     *
+     * @return <code>true</code> for revenue class, <code>false</code> otherwise
      */
     public boolean isRevenues() {
         return this.movementClassType == MovementClassType.IN;
     }
     
     /**
+     * To check if is a expenses class
      * 
-     * @return 
+     * @return <code>true</code> for expenses class, <code>false</code> otherwise
      */
     public boolean isExpenses() {
         return this.movementClassType == MovementClassType.OUT;
@@ -113,11 +116,12 @@ public class MovementClass extends PersistentEntity {
      */
     public boolean isOverBudget() {
         return this.totalMovements.compareTo(this.budget) >= 0;
-    }
+    } // FIXME refactor
     
     /**
-     * @return a porcentagem que o consumo desta classe representa no total 
-     * do orcamento
+     * Method used in the UI to draw the graphic to show the user how many percents of the class budget is already used
+     *
+     * @return the budget consume percentage
      */
     public int budgetCompletionPercentage() {
         
@@ -125,11 +129,10 @@ public class MovementClass extends PersistentEntity {
         
         if (this.isOverBudget()) {
             return 100;
-        } else if (this.budget != BigDecimal.ZERO) {
+        } else if (this.budget.equals(BigDecimal.ZERO)) {
             percentage = this.totalMovements.multiply(new BigDecimal(100))
                             .divide(this.budget, 2, RoundingMode.HALF_UP);
         }
-        
         return percentage.intValue() > 100 ? 100 : percentage.intValue();
     }
 }

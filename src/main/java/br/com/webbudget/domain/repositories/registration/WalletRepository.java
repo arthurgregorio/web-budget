@@ -26,6 +26,7 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 /**
+ * The {@link Wallet} repository
  *
  * @author Arthur Gregorio
  *
@@ -36,40 +37,34 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 public interface WalletRepository extends DefaultRepository<Wallet> {
 
     /**
+     * Use this method to search for a wallet by the name and type
      * 
-     * @param name
-     * @param walletType
-     * @return 
+     * @param name the name of the wallet
+     * @param walletType the type of the wallet defined by the {@link WalletType} enum
+     * @return an {@link Optional} of the wallet
      */
     Optional<Wallet> findOptionalByNameAndWalletType(String name, WalletType walletType);
     
     /**
+     * {@inheritDoc}
      * 
      * @param filter
      * @return 
      */
     @Override
-    public default Criteria<Wallet, Wallet> getRestrictions(String filter) {
+    default Criteria<Wallet, Wallet> getRestrictions(String filter) {
         return criteria()
                 .eqIgnoreCase(Wallet_.bank, filter)
                 .eqIgnoreCase(Wallet_.name, filter);
     }
     
     /**
-     * 
+     * {@inheritDoc}
+     *
      * @return 
      */
     @Override
-    public default SingularAttribute<Wallet, Boolean> getBlockedProperty() {
+    default SingularAttribute<Wallet, Boolean> getBlockedProperty() {
         return Wallet_.blocked;
     }
-    
-//    /**
-//     *
-//     * @param name
-//     * @param bank
-//     * @param walletType
-//     * @return
-//     */
-//    public Wallet findByNameAndBankAndType(String name, String bank, WalletType walletType);
 }

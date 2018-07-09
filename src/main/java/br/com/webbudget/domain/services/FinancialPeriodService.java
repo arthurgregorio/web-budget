@@ -17,18 +17,20 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.events.NewPeriodOpened;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import br.com.webbudget.domain.events.NewPeriodOpened;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 /**
+ * The service responsible for the business operations with the {@link FinancialPeriod}
  *
  * @author Arthur Gregorio
  *
@@ -46,8 +48,9 @@ public class FinancialPeriodService {
     private FinancialPeriodRepository financialPeriodRepository;
     
     /**
+     * Use this method to persist a {@link FinancialPeriod}
      *
-     * @param financialPeriod
+     * @param financialPeriod the {@link FinancialPeriod} to be persisted
      */
     @Transactional
     public void save(FinancialPeriod financialPeriod) {
@@ -63,9 +66,8 @@ public class FinancialPeriodService {
         // check for periods with the same date period of this new one
         final List<FinancialPeriod> periods = this.financialPeriodRepository.findByClosed(false);
 
-        periods.stream().forEach(period -> {
-            
-            if (financialPeriod.getStart().isAfter(period.getStart()) || 
+        periods.forEach(period -> {
+            if (financialPeriod.getStart().isAfter(period.getStart()) ||
                     financialPeriod.getEnd().isBefore(period.getEnd())) {
                 throw new BusinessLogicException("error.financial-period.truncated-dates", 
                         period.getIdentification());
@@ -85,12 +87,15 @@ public class FinancialPeriodService {
     }
     
     /**
-     * 
-     * @param financialPeriod 
+     * Use this method to delete a persisted {@link FinancialPeriod}
+     *
+     * @param financialPeriod the {@link FinancialPeriod} to be deleted
      */
     @Transactional
     public void delete(FinancialPeriod financialPeriod) {
-        
+
+        // FIXME when we can persist movements, put this to work again
+
 //        final List<Movement> movements = this.movementRepository
 //                .listByPeriodAndStateAndType(financialPeriod, null, null);
 //        

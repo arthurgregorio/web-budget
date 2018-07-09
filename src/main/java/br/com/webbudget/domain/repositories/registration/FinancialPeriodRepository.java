@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * The {@link FinancialPeriod} repository
  *
  * @author Arthur Gregorio
  *
@@ -37,44 +38,49 @@ import java.util.Optional;
 public interface FinancialPeriodRepository extends DefaultRepository<FinancialPeriod> {
 
     /**
+     * List all {@link FinancialPeriod} by the closing status
      * 
-     * @param isClosed
-     * @return 
+     * @param isClosed <code>true</code> for closed periods or <code>false</code> for open periods
+     * @return a {@link List} of {@link FinancialPeriod}
      */
     List<FinancialPeriod> findByClosed(boolean isClosed);
     
     /**
+     * Find a {@link FinancialPeriod} by the identification
      * 
-     * @param identification
-     * @return 
+     * @param identification the identification of the {@link FinancialPeriod} to search
+     * @return an {@link Optional} of the {@link FinancialPeriod}
      */
     Optional<FinancialPeriod> findOptionalByIdentification(String identification);
     
     /**
+     * {@inheritDoc}
      *
      * @param filter
      * @return
      */
     @Override
-    public default Criteria<FinancialPeriod, FinancialPeriod> getRestrictions(String filter) {
+    default Criteria<FinancialPeriod, FinancialPeriod> getRestrictions(String filter) {
         return this.criteria().likeIgnoreCase(FinancialPeriod_.identification, filter);
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
     @Override
-    public default SingularAttribute<FinancialPeriod, Boolean> getBlockedProperty() {
+    default SingularAttribute<FinancialPeriod, Boolean> getBlockedProperty() {
         return FinancialPeriod_.closed;
     }
     
     /**
+     * {@inheritDoc}
      *
      * @param criteria
      */
     @Override
-    public default void setOrder(Criteria<FinancialPeriod, FinancialPeriod> criteria) {
+    default void setOrder(Criteria<FinancialPeriod, FinancialPeriod> criteria) {
         criteria.orderDesc(FinancialPeriod_.start);
     }
 }

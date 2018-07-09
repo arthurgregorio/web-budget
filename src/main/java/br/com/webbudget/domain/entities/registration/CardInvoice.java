@@ -18,18 +18,7 @@ package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.financial.Movement;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,7 +26,15 @@ import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
+ * The representation of a card invoice in the application
  *
  * @author Arthur Gregorio
  *
@@ -80,42 +77,16 @@ public class CardInvoice extends PersistentEntity {
     private List<Movement> movements;
 
     /**
-     *
+     * Default constructor
      */
     public CardInvoice() {
         this.movements = new ArrayList<>();
     }
 
     /**
-     * @return um codigo aleatorio para identificar esta fatura
-     */
-    private String createInvoiceCode() {
-
-        long decimalNumber = System.nanoTime();
-
-        String generated = "";
-        final String digits = "0123456789";
-
-        synchronized (this.getClass()) {
-
-            int mod;
-            int authCodeLength = 0;
-
-            while (decimalNumber != 0 && authCodeLength < 5) {
-
-                mod = (int) (decimalNumber % 10);
-                generated = digits.substring(mod, mod + 1) + generated;
-                decimalNumber = decimalNumber / 10;
-                authCodeLength++;
-            }
-        }
-        return generated;
-    }
-
-    /**
-     * O set do cartao e a criacao da identifacacao da fatura
+     * Setter for the {@link Card} and also the method to create the invoice unique code
      *
-     * @param card o cartao
+     * @param card the {@link Card} to be set in this invoice
      */
     public void setCard(Card card) {
         this.card = card;
@@ -125,14 +96,16 @@ public class CardInvoice extends PersistentEntity {
 
             builder.append(card.getName());
             builder.append(" - ");
-            builder.append(this.createInvoiceCode());
+            builder.append(RandomCode.numeric(6));
 
             this.identification = builder.toString();
         }
     }
 
     /**
-     * @param movements os movimentos da fatura
+     * Setter method for the {@link Movement} of the invoice
+     *
+     * @param movements the list of invoice {@link Movement}
      */
     public void setMovements(List<Movement> movements) {
         this.movements = movements;
@@ -140,20 +113,22 @@ public class CardInvoice extends PersistentEntity {
     }
 
     /**
-     * Gera o total da fatura
+     * Method to calculate the total of the invoice
      *
-     * @return o valor total da fatura com base nos movimentos pagos nela
+     * @return the sum of all the {@link Movement} for this invoice
      */
-    public BigDecimal calculateTotal() {
+    public BigDecimal calculateTotal() { // FIXME verify utility
         return this.movements.stream()
                 .map(Movement::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     /**
-     * @return a data para vencimento da fatura do cartao
+     * Method to determine by the {@link Card} the due date of this invoice
+     *
+     * @return the due date provided by the {@link Card} or the last day of the current {@link FinancialPeriod}
      */
-    public LocalDate getInvoiceDueDate() {
+    public LocalDate getInvoiceDueDate() { // FIXME verify utility
 
         int dueDate = this.card.getExpirationDay();
 
@@ -167,32 +142,40 @@ public class CardInvoice extends PersistentEntity {
     }
 
     /**
-     * @return se nossa fatura tem ou nao movimentos
+     * Method to check if the invoice contains {@link Movement}
+     *
+     * @return <code>true</code> if has, <code>false</code> if not
      */
     public boolean hasMovements() {
         return !this.movements.isEmpty();
-    }
+    } // FIXME verify utility
     
     /**
-     * @return se esta fatura e ou nao pagavel
+     * Method to check if the invoice can be payd
+     *
+     * @return <code>true</code> if can be, <code>false</code> otherwise
      */
-    public boolean isPayable() {
+    public boolean isPayable() { // FIXME verify utility
         return this.hasMovements() 
                 && this.movement != null && this.movement.isPaid();
     }
 
     /**
-     * @return a data de inicio do periodo
+     * Method to get the start day of the invoice
+     *
+     * @return the start day of the invoice
      */
-    public String getInvoicePeriodStart() {
+    public String getInvoicePeriodStart() { // FIXME verify utility
         return DateTimeFormatter.ofPattern("dd/MM/yyyy")
                 .format(this.financialPeriod.getStart());
     }
 
     /**
-     * @return a data de fim do periodo
+     * Method to get the last day of the invoice
+     *
+     * @return the last day of the invoice
      */
-    public String getInvoicePeriodEnd() {
+    public String getInvoicePeriodEnd() { // FIXME verify utility
         return DateTimeFormatter.ofPattern("dd/MM/yyyy")
                 .format(this.financialPeriod.getEnd());
     }

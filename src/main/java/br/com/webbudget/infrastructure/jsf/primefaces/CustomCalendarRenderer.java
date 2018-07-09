@@ -16,15 +16,18 @@
  */
 package br.com.webbudget.infrastructure.jsf.primefaces;
 
-import java.io.IOException;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.calendar.CalendarRenderer;
 import org.primefaces.context.RequestContext;
 import org.primefaces.util.HTML;
 
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import java.io.IOException;
+
 /**
+ * FIXME refactor this
+ *
  * Renderizador customizado para o calendar dentro da aplicacao
  *
  * @author Arthur Gregorio

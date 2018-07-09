@@ -38,7 +38,7 @@ import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
 /**
- * Controller para a view de manutencao dos veiculos do diario de bordo
+ * The {@link Vehicle} maintenance routine controller
  *
  * @author Arthur Gregorio
  *
@@ -61,7 +61,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     private CostCenterRepository costCenterRepository;
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -70,7 +70,8 @@ public class VehicleBean extends FormBean<Vehicle> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
+     *
      * @param id
      * @param viewState 
      */
@@ -83,7 +84,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -95,7 +96,8 @@ public class VehicleBean extends FormBean<Vehicle> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
+     *
      * @param first
      * @param pageSize
      * @param sortField
@@ -109,7 +111,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     }
     
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
@@ -119,7 +121,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() {
@@ -128,6 +130,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     }
 
     /**
+     * {@inheritDoc}
      *
      * @return
      */
@@ -139,7 +142,9 @@ public class VehicleBean extends FormBean<Vehicle> {
     }
 
     /**
-     * @return os tipos de veiculo para selecao
+     * Helper method to get the types defined in the {@link VehicleType} enum
+     *
+     * @return an array of types from {@link VehicleType}
      */
     public VehicleType[] getVehicleTypes() {
         return VehicleType.values();

@@ -23,9 +23,11 @@ import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.Validator;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * The enum with the possible types of a {@link Contact}
  *
  * @author Arthur Gregorio
  *
@@ -47,20 +49,22 @@ public enum ContactType {
     private final Validator<String> validator;
 
     /**
+     * Default constructor
      * 
-     * @param description
-     * @param validator
-     * @param formatter 
+     * @param description the description for this enum, also is the i18n key
+     * @param validator the validator
+     * @param formatter the formatter
      */
-    private ContactType(String description, Validator<String> validator, Formatter formatter) {
+    ContactType(String description, Validator<String> validator, Formatter formatter) {
         this.formatter = formatter;
         this.validator = validator;
         this.description = description;
     }
 
     /**
+     * Validate the document of the {@link Contact} by the type
      * 
-     * @param document 
+     * @param document the document to be validated
      */
     public void validateDocument(String document) {
         try {
@@ -71,15 +75,17 @@ public enum ContactType {
     }
     
     /**
-     * 
-     * @param document
-     * @return 
+     * Format the document by the type of the {@link Contact}
+     *
+     * @param document the document to be formatted
+     * @return the formatted document {@link String}
      */
     public String formatDocument(String document) {
         return this.formatter.format(checkNotNull(document));
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */

@@ -36,19 +36,18 @@
                         <span>#{menu['registration.vehicles']}</span>
                     </p:link>
                 </li>
-                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.WALLET_ACCESS)}">
-                    <p:link href="/secured/registration/wallet/listWallets.xhtml">
-                        <i class="fa fa-bank" />
-                        <span>#{menu['registration.wallets']}</span>
-                    </p:link>
-                </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CONTACT_ACCESS)}">
                     <p:link href="/secured/registration/contact/listContacts.xhtml">
                         <i class="fa fa-fax" />
                         <span>#{menu['registration.contacts']}</span>
                     </p:link>
                 </li>
-                <li class="divider" />
+                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.WALLET_ACCESS)}">
+                    <p:link href="/secured/registration/wallet/listWallets.xhtml">
+                        <i class="fa fa-bank" />
+                        <span>#{menu['registration.wallets']}</span>
+                    </p:link>
+                </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_ACCESS)}">
                     <p:link href="/secured/registration/costCenter/listCostCenters.xhtml">
                         <i class="fa fa-sitemap" />
@@ -61,7 +60,6 @@
                         <span>#{menu['registration.movement-classes']}</span>
                     </p:link>
                 </li>
-                <li class="divider" />
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_ACCESS)}">
                     <p:link href="/secured/registration/financialPeriod/listFinancialPeriods.xhtml">
                         <i class="fa fa-calendar-o" />

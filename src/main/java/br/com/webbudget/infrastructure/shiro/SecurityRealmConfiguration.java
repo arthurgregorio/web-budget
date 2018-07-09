@@ -34,6 +34,10 @@ import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.realm.Realm;
 
 /**
+ * The main security configuration of this application.
+ *
+ * With this class we configure the realms, the data providers and the cache storage for authentication and
+ * authorization with Apache Shiro
  *
  * @author Arthur Gregorio
  *
@@ -53,7 +57,7 @@ public class SecurityRealmConfiguration implements RealmConfiguration {
     private UserAccountService userAccountService;
 
     /**
-     * 
+     * Initialize the configuration with the default values
      */
     @PostConstruct
     protected void initialize() {
@@ -69,7 +73,8 @@ public class SecurityRealmConfiguration implements RealmConfiguration {
     }
     
     /**
-     * 
+     * {@inheritDoc}
+     *
      * @return 
      */
     @Override
@@ -78,8 +83,8 @@ public class SecurityRealmConfiguration implements RealmConfiguration {
     }    
     
     /**
-     * 
-     * @return 
+     * Configure a realm to be used with JDBC a connection to provide the data for authentication and authorization
+     * processes
      */
     private void configureJdbcRealm() {
 
@@ -92,8 +97,8 @@ public class SecurityRealmConfiguration implements RealmConfiguration {
     }
     
     /**
-     * 
-     * @return 
+     * Configure a realm to be used with a LDAP/AD connection to provide the data for authentication and authorization
+     * processes
      */
     private void configureLdapRealm() {
                 

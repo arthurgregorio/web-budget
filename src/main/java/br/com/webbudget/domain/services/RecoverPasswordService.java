@@ -26,14 +26,17 @@ import br.com.webbudget.infrastructure.mail.MailMessage;
 import br.com.webbudget.infrastructure.mail.MustacheProvider;
 import br.com.webbudget.infrastructure.utils.MessageSource;
 import br.com.webbudget.infrastructure.utils.RandomCode;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
+ * The service responsible for all the operations about the password recovery
+ * process
  *
  * @author Arthur Gregorio
  *
@@ -50,8 +53,9 @@ public class RecoverPasswordService {
     private Event<MailMessage> mailSender;
 
     /**
+     * Recover the password and send a e-mail to the user
      *
-     * @param email
+     * @param email the e-mail address of the user to recover and notify
      */
     @Transactional
     public void recover(String email) {
@@ -82,19 +86,20 @@ public class RecoverPasswordService {
     }
 
     /**
-     * 
-     * @param user
-     * @param newPassword
-     * @return 
+     * Construct the content of the e-mail message
+     *
+     * @param user the user
+     * @param newPassword the new password
+     * @return the content provider with the content
      */
     private MailContentProvider buildContent(User user, String newPassword) {
-       
-        final MustacheProvider provider = 
+
+        final MustacheProvider provider =
                 new MustacheProvider("recover-password.mustache");
 
         final String date = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm")
                 .format(LocalDateTime.now());
-        
+
         provider.addContent("title", MessageSource.get("recover-password.email.title"));
         provider.addContent("detail", MessageSource.get("recover-password.email.detail"));
         provider.addContent("on", MessageSource.get("recover-password.email.on"));
@@ -102,7 +107,7 @@ public class RecoverPasswordService {
         provider.addContent("username", user.getUsername());
         provider.addContent("message", MessageSource.get("recover-password.email.message"));
         provider.addContent("newPassword", newPassword);
-        
+
         return provider;
     }
 }

@@ -24,30 +24,27 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 /**
+ * The implementation of the {@link HttpSecurityConfiguration} for this project
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 06/03/2018
+ * @since 1.0.0, 06/03/2018
  */
 @ApplicationScoped
 public class PathSecurityConfiguration implements HttpSecurityConfiguration {
 
-    @Inject
-    private Permissions permissions;
-    
     /**
-     * 
-     * @return 
+     * @return the HTTP security configurations for the application path's
      */
     @Override
-    public HttpSecurityBuilder configureHttpSecurity() {
-        
+    public HttpSecurityBuilder configureHttpSecurity() { // TODO add all the secured paths to here
+
         final HttpSecurityBuilder builder = new PermissionHttpSecurityBuilder();
-        
-        builder.add("/secured/tools/user/**", this.permissions.getUSER_ACCESS(), true)
-                .add("/secured/tools/group/**", this.permissions.getGROUP_ACCESS(), true);
-        
+
+        builder.add("/secured/tools/users/**", "user:access", true)
+                .add("/secured/tools/groups/**", "group:access", true);
+
         return builder;
-    }    
+    }
 }

@@ -28,6 +28,7 @@ import feign.jackson.JacksonEncoder;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * FIXME create JavaDoc
  *
  * @author Arthur Gregorio
  *

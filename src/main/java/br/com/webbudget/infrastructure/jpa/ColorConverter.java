@@ -20,6 +20,8 @@ import br.com.webbudget.application.components.Color;
 import javax.persistence.AttributeConverter;
 
 /**
+ * A simple JPA converter to use in conjunction of {@link Color} for persistent
+ * purpose
  *
  * @author Arthur Gregorio
  *
@@ -29,9 +31,10 @@ import javax.persistence.AttributeConverter;
 public class ColorConverter implements AttributeConverter<Color, String>{
 
     /**
-     * 
+     * {@inheritDoc }
+     *
      * @param attribute
-     * @return 
+     * @return
      */
     @Override
     public String convertToDatabaseColumn(Color attribute) {
@@ -39,9 +42,10 @@ public class ColorConverter implements AttributeConverter<Color, String>{
     }
 
     /**
-     * 
+     * {@inheritDoc }
+     *
      * @param dbData
-     * @return 
+     * @return
      */
     @Override
     public Color convertToEntityAttribute(String dbData) {

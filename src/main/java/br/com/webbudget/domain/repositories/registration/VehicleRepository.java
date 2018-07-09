@@ -19,13 +19,15 @@ package br.com.webbudget.domain.repositories.registration;
 import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.entities.registration.Vehicle_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
-import java.util.Optional;
-import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
+import javax.persistence.metamodel.SingularAttribute;
+import java.util.Optional;
+
 /**
+ * The {@link Vehicle} repository
  *
  * @author Arthur Gregorio
  *
@@ -36,36 +38,40 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 public interface VehicleRepository extends DefaultRepository<Vehicle> {
 
     /**
-     * 
-     * @param licensePlate
-     * @return 
+     * Use this method to find a vehicle by the license plate
+     *
+     * @param licensePlate the license plate of the vehicle to find
+     * @return an {@link Optional} of the {@link Vehicle}
      */
     Optional<Vehicle> findOptionalByLicensePlate(String licensePlate);
     
     /**
+     * Method to find by the last registered odometer for a given {@link Vehicle}
      * 
-     * @param id
-     * @return 
+     * @param vehicleId the id of the {@link Vehicle} to find the odometer
+     * @return the value of the last odometer
      */
     @Query("SELECT MAX(ve.odometer) FROM Vehicle ve WHERE ve.id = ?1")
-    long findLastOdometer(long id);
+    long findLastOdometer(long vehicleId);
     
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
     @Override
-    public default SingularAttribute<Vehicle, Boolean> getBlockedProperty() {
+    default SingularAttribute<Vehicle, Boolean> getBlockedProperty() {
         return Vehicle_.blocked;
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param filter
      * @return 
      */
     @Override
-    public default Criteria<Vehicle, Vehicle> getRestrictions(String filter) {
+    default Criteria<Vehicle, Vehicle> getRestrictions(String filter) {
         return criteria()
                 .eqIgnoreCase(Vehicle_.identification, filter)
                 .eqIgnoreCase(Vehicle_.brand, filter)

@@ -23,6 +23,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
+ * Simple JSF converter for {@link Color} objects used in the UI
  * 
  * @author Arthur Gregorio
  *
@@ -33,6 +34,7 @@ import javax.faces.convert.FacesConverter;
 public class RgbColorConverter implements Converter { 
 
     /**
+     * {@inheritDoc}
      * 
      * @param context
      * @param component
@@ -45,6 +47,7 @@ public class RgbColorConverter implements Converter {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param context
      * @param component

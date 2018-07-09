@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.entities.registration;
 
 /**
+ * The enum with the possible types of a {@link MovementClass}
  *
  * @author Arthur Gregorio
  *
@@ -31,14 +32,16 @@ public enum MovementClassType {
     private final String description;
 
     /**
+     * Default constructor
      *
-     * @param description
+     * @param description the description for this enum, also is the i18n key
      */
-    private MovementClassType(String description) {
+    MovementClassType(String description) {
         this.description = description;
     }
 
     /**
+     * {@inheritDoc}
      *
      * @return
      */

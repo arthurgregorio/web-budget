@@ -16,34 +16,29 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
-import br.com.webbudget.domain.entities.registration.Address;
-import br.com.webbudget.domain.entities.registration.Contact;
-import br.com.webbudget.domain.entities.registration.ContactType;
-import br.com.webbudget.domain.entities.registration.NumberType;
-import br.com.webbudget.domain.entities.registration.Telephone;
+import br.com.webbudget.domain.entities.registration.*;
+import br.com.webbudget.domain.repositories.registration.AddressRepository;
 import br.com.webbudget.domain.repositories.registration.ContactRepository;
 import br.com.webbudget.domain.services.ContactService;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.SortOrder;
 
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
+
 /**
- * Controller para a view de contatos
+ * The {@link Contact} maintenance routine controller
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 1.3.0
  * @since 1.2.0, 12/04/2015
  */
 @Named
@@ -56,12 +51,14 @@ public class ContactBean extends FormBean<Contact> {
     
     @Inject
     private ContactRepository contactRepository;
+    @Inject
+    private AddressRepository addressRepository;
 
     @Inject
     private ContactService contactService;
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -70,6 +67,7 @@ public class ContactBean extends FormBean<Contact> {
     }
 
     /**
+     * {@inheritDoc}
      *
      * @param id
      * @param viewState
@@ -82,7 +80,7 @@ public class ContactBean extends FormBean<Contact> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -94,6 +92,7 @@ public class ContactBean extends FormBean<Contact> {
     }
 
     /**
+     * {@inheritDoc}
      *
      * @param first
      * @param pageSize
@@ -108,7 +107,7 @@ public class ContactBean extends FormBean<Contact> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
@@ -118,7 +117,7 @@ public class ContactBean extends FormBean<Contact> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() {
@@ -127,6 +126,7 @@ public class ContactBean extends FormBean<Contact> {
     }
 
     /**
+     * {@inheritDoc}
      *
      * @return
      */
@@ -138,11 +138,11 @@ public class ContactBean extends FormBean<Contact> {
     }
 
     /**
-     * Find the contact address by his brazilian zipcode 
+     * Find the contact address by his brazilian zip code
      */
     public void searchAddress() {
 
-        final Address address = this.contactService.findAddressBy(
+        final Address address = this.addressRepository.findByZipcode(
                 this.value.getZipcode());
 
         this.value.setAddress(address);
@@ -178,16 +178,20 @@ public class ContactBean extends FormBean<Contact> {
     }
     
     /**
-     * @return the list of available contact types
+     * Method to list the possible types of an {@link Contact}
+     *
+     * @return an array with the values of {@link ContactType} enum
      */
-    public ContactType[] getAvailableContactTypes() {
+    public ContactType[] getContactTypes() {
         return ContactType.values();
     }
 
     /**
-     * @return the list of available number types
+     * Method to list the possible types of an {@link Telephone}
+     *
+     * @return an array with the values of {@link NumberType} enum
      */
-    public NumberType[] getAvailableNumberTypes() {
+    public NumberType[] getNumberTypes() {
         return NumberType.values();
     }
 }

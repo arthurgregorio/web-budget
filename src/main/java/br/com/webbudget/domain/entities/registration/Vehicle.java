@@ -17,16 +17,6 @@
 package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +25,13 @@ import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+
 /**
+ * The representation of a vehicle in the application
  *
  * @author Arthur Gregorio
  *
@@ -106,7 +102,7 @@ public class Vehicle extends PersistentEntity {
     private CostCenter costCenter;
 
     /**
-     * 
+     * Default constructor
      */
     public Vehicle() {
         final int year = LocalDate.now().get(ChronoField.YEAR);

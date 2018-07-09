@@ -34,6 +34,7 @@ import javax.inject.Named;
 import org.primefaces.model.SortOrder;
 
 /**
+ * The {@link Wallet} maintenance routine controller
  *
  * @author Arthur Gregorio
  *
@@ -51,7 +52,7 @@ public class WalletBean extends FormBean<Wallet> {
     private WalletRepository walletRepository;
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -60,7 +61,8 @@ public class WalletBean extends FormBean<Wallet> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
+     *
      * @param id
      * @param viewState 
      */
@@ -72,7 +74,7 @@ public class WalletBean extends FormBean<Wallet> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -84,6 +86,7 @@ public class WalletBean extends FormBean<Wallet> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param first
      * @param pageSize
@@ -98,7 +101,7 @@ public class WalletBean extends FormBean<Wallet> {
     }
     
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
@@ -108,7 +111,7 @@ public class WalletBean extends FormBean<Wallet> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() {
@@ -117,7 +120,8 @@ public class WalletBean extends FormBean<Wallet> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
+     *
      * @return 
      */
     @Override
@@ -126,50 +130,11 @@ public class WalletBean extends FormBean<Wallet> {
         this.addInfoAndKeep("wallet.deleted");
         return this.changeToListing();
     }
-
-//    /**
-//     *
-//     */
-//    public void doAdjustment() {
-//        try {
-//            this.walletService.adjustBalance(this.wallet);
-//            this.updateAndOpenDialog("confirmAdjustmentDialog", "dialogConfirmAdjustment");
-//        } catch (InternalServiceError ex) {
-//            this.addError(true, ex.getMessage(), ex.getParameters());
-//        } catch (Exception ex) {
-//            this.logger.error(ex.getMessage(), ex);
-//            this.addError(true, "error.undefined-error", ex.getMessage());
-//        } 
-//    }
-//    /**
-//     * Monta uma lista somente com os saldos daquela data especifica
-//     * 
-//     * @param inclusion a data de inclusao
-//     * @return a lista de saldos daquela data
-//     */
-//    public List<WalletBalance> balancesByInclusion(LocalDate inclusion) {
-//        return this.walletBalances.stream()
-//                .filter(balance -> balance.getInclusion().toLocalDate().equals(inclusion))
-//                .collect(Collectors.toList());
-//    }
-//    
-//    /**
-//     * @return os saldos agrupados por data
-//     */
-//    public List<LocalDate> groupBalancesByInclusion() {
-//        
-//        final List<LocalDate> grouped = new ArrayList<>();
-//        
-//        this.walletBalances.stream().forEach(balance -> {
-//            if (!grouped.contains(balance.getInclusion().toLocalDate())) {
-//                grouped.add(balance.getInclusion().toLocalDate());
-//            }
-//        });
-//        return grouped;
-//    }
     
     /**
-     * @return os tipos de carteira disponiveis para cadastro
+     * Helper method to get the types defined in the {@link WalletType} enum
+     *
+     * @return an array of types from {@link WalletType}
      */
     public WalletType[] getWalletTypes() {
         return WalletType.values();

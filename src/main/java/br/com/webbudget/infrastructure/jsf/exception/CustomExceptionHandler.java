@@ -18,7 +18,12 @@ package br.com.webbudget.infrastructure.jsf.exception;
 
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.infrastructure.utils.MessageSource;
-import java.util.Iterator;
+import org.hibernate.exception.ConstraintViolationException;
+import org.omnifaces.config.WebXml;
+import org.omnifaces.util.Exceptions;
+import org.omnifaces.util.Messages;
+import org.primefaces.PrimeFaces;
+
 import javax.ejb.EJBException;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
@@ -27,21 +32,16 @@ import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.PhaseId;
-import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
-import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION_TYPE;
-import static javax.servlet.RequestDispatcher.ERROR_MESSAGE;
-import static javax.servlet.RequestDispatcher.ERROR_REQUEST_URI;
-import static javax.servlet.RequestDispatcher.ERROR_STATUS_CODE;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.RollbackException;
-import org.hibernate.exception.ConstraintViolationException;
-import org.omnifaces.config.WebXml;
-import org.omnifaces.util.Exceptions;
-import org.omnifaces.util.Messages;
-import org.primefaces.PrimeFaces;
+import java.util.Iterator;
+
+import static javax.servlet.RequestDispatcher.*;
 
 /**
+ * The customized {@link ExceptionHandlerWrapper} to make the handling of
+ * exceptions more easy for the managed beans
  *
  * @author Arthur Gregorio
  *
@@ -53,14 +53,16 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
     private final ExceptionHandler wrapped;
 
     /**
+     * Constructor...
      *
-     * @param exceptionHandler
+     * @param exceptionHandler the wrapped handler
      */
     public CustomExceptionHandler(ExceptionHandler exceptionHandler) {
         this.wrapped = exceptionHandler;
     }
 
     /**
+     * {@inheritDoc }
      *
      * @return
      */
@@ -70,6 +72,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
     }
 
     /**
+     * {@inheritDoc }
      *
      * @throws FacesException
      */
@@ -81,8 +84,14 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
     }
 
     /**
+     * Method to handle the generic exception and take a decision of witch
+     * step to take after identify the type of the exception.
      *
-     * @param context
+     * For {@link BusinessLogicException} or {@link ConstraintViolationException}
+     * display a simple message on the UI, if unknown exception is given, call
+     * the error page configured in the web.xml
+     *
+     * @param context the faces context to use on the handling process
      */
     private void handleException(FacesContext context) {
 
@@ -107,20 +116,21 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
                 return;
             }
 
-            // direct to the error page if the exceptions is not in the 
-            // application model 
+            // direct to the error page if the exceptions is not in the
+            // application model
             goToErrorPage(context, rootCause);
         }
     }
 
     /**
+     * Send to the error page
      *
-     * @param context
-     * @param ex
+     * @param context the context
+     * @param ex the exception to fill the details
      */
     private void goToErrorPage(FacesContext context, Throwable ex) {
 
-        final HttpServletRequest request = (HttpServletRequest) 
+        final HttpServletRequest request = (HttpServletRequest)
                 context.getExternalContext().getRequest();
 
         request.setAttribute(ERROR_EXCEPTION + "_stacktrace", ex);
@@ -138,14 +148,15 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 
         context.getApplication().getNavigationHandler()
                 .handleNavigation(context, null, errorPage);
-        
+
         context.renderResponse();
     }
 
     /**
+     * Find in the web.xml the path to the error page
      *
-     * @param exception
-     * @return
+     * @param exception the exception type to check
+     * @return the page
      */
     private String getErroPage(Throwable exception) {
 
@@ -156,9 +167,10 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
     }
 
     /**
+     * Handle the {@link BusinessLogicException}
      *
-     * @param context
-     * @param ex
+     * @param context the context
+     * @param ex the exception to fill the details
      */
     private void handleBusinessException(FacesContext context, BusinessLogicException ex) {
 
@@ -167,19 +179,20 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
         }
 
         final String i18nMessage = MessageSource.get(ex.getMessage());
-        
-        Messages.add(FacesMessage.SEVERITY_ERROR, null, 
+
+        Messages.add(FacesMessage.SEVERITY_ERROR, null,
                 i18nMessage, ex.getParameters());
 
         context.renderResponse();
-        
+
         this.temporizeHiding();
     }
-    
+
     /**
-     * 
-     * @param context
-     * @param ex 
+     * Handle the {@link ConstraintViolationException}
+     *
+     * @param context the context
+     * @param ex the exception to fill the details
      */
     private void handleConstraintViolationException(FacesContext context, RollbackException ex) {
 
@@ -187,16 +200,16 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
             throw new FacesException(ex);
         }
 
-        Messages.add(FacesMessage.SEVERITY_ERROR, null, 
+        Messages.add(FacesMessage.SEVERITY_ERROR, null,
                 MessageSource.get("error.core.constraint-violation"));
 
         context.renderResponse();
-        
+
         this.temporizeHiding();
     }
-    
+
     /**
-     * After display the message, hide the message box
+     * After display the message, temporize the hiding of the message box
      */
     private void temporizeHiding() {
         PrimeFaces.current().executeScript("setTimeout(\"$(\'#messages\').slideUp(300)\", 8000)");

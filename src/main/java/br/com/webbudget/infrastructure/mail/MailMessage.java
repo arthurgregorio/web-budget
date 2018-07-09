@@ -25,7 +25,7 @@ import javax.mail.internet.InternetAddress;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 02/04/2018
+ * @since 3.0.0, 02/04/2018
  */
 public interface MailMessage {
 

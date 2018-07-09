@@ -20,6 +20,7 @@ import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ import java.util.Map;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 03/04/2018
+ * @since 3.0.0, 03/04/2018
  */
 public class MustacheProvider implements MailContentProvider {
 

@@ -25,11 +25,12 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
+ * The service responsible for the business operations with the {@link Vehicle}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 20/04/2018
+ * @since 2.3.0, 16/05/2016
  */
 @ApplicationScoped
 public class VehicleService {
@@ -38,8 +39,9 @@ public class VehicleService {
     private VehicleRepository vehicleRepository;
     
     /**
+     * Use this method to persist a {@link Vehicle}
      *
-     * @param vehicle
+     * @param vehicle the {@link Vehicle} to persist
      */
     @Transactional
     public void save(Vehicle vehicle) {
@@ -55,9 +57,10 @@ public class VehicleService {
     }
 
     /**
+     * Use this method to update a persisted {@link Vehicle}
      *
-     * @param vehicle
-     * @return
+     * @param vehicle the {@link Vehicle} to be update
+     * @return the updated {@link Vehicle}
      */
     @Transactional
     public Vehicle update(Vehicle vehicle) {
@@ -65,8 +68,9 @@ public class VehicleService {
     }
 
     /**
+     * Use this method to delete a persisted {@link Vehicle}
      *
-     * @param vehicle
+     * @param vehicle the {@link Vehicle} to be deleted
      */
     @Transactional
     public void delete(Vehicle vehicle) {

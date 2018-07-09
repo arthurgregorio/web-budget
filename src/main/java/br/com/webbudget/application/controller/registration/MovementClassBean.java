@@ -16,11 +16,6 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
@@ -30,15 +25,18 @@ import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
 import br.com.webbudget.domain.services.ClassificationService;
-import java.util.List;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
+
 /**
- * Controller da view de classes de movimento
+ * The {@link MovementClass} maintenance routine controller
  *
  * @author Arthur Gregorio
  *
@@ -61,7 +59,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     private ClassificationService classificationService;
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -70,6 +68,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param id
      * @param viewState 
@@ -83,7 +82,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -95,6 +94,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param first
      * @param pageSize
@@ -109,7 +109,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     }
     
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
@@ -119,7 +119,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() {
@@ -128,6 +128,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
@@ -139,9 +140,11 @@ public class MovementClassBean extends FormBean<MovementClass> {
     }
 
     /**
-     * @return the movement class type values
+     * Method to list the possible types of a {@link MovementClass}
+     *
+     * @return an array with the values of the {@link MovementClassType} enum
      */
-    public MovementClassType[] getAvailableMovementsTypes() {
+    public MovementClassType[] getMovementClassTypes() {
         return MovementClassType.values();
     }
 }
