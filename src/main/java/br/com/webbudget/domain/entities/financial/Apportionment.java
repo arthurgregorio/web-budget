@@ -111,14 +111,14 @@ public class Apportionment extends PersistentEntity {
      * @return se este e um rateio de receita
      */
     public boolean isForRevenues() {
-        return this.movementClass.getMovementClassType() == MovementClassType.IN;
+        return this.movementClass.getMovementClassType() == MovementClassType.REVENUE;
     }
     
     /**
      * @return se este e um rateio de despesa
      */
     public boolean isForExpenses() {
-        return this.movementClass.getMovementClassType() == MovementClassType.OUT;
+        return this.movementClass.getMovementClassType() == MovementClassType.EXPENSE;
     }
     
     /**

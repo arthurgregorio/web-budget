@@ -154,11 +154,11 @@
                                          disabled="#{cardBean.value.cardType ne 'DEBIT'}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{messages['card.form.select-one']}" />
+                                          itemLabel="#{menu['select-one']}" />
                             <f:selectItems var="wallet"
                                            itemValue="#{wallet}"
                                            value="#{cardBean.wallets}"
-                                           itemLabel="#{wallet.friendlyName}"/>
+                                           itemLabel="#{wallet.description}"/>
                         </p:selectOneMenu>
                     </div>
                 </div>

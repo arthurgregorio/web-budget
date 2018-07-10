@@ -118,7 +118,7 @@ public class CostCenter extends PersistentEntity {
      * @return <code>true</code> for a cost center that control budget or <code>false</code> otherwise
      */
     public boolean controlBudget(MovementClassType classType) {
-        if (classType == MovementClassType.IN) {
+        if (classType == MovementClassType.REVENUE) {
             return this.revenuesBudget.compareTo(BigDecimal.ZERO) > 0;
         } else {
             return this.expensesBudget.compareTo(BigDecimal.ZERO) > 0;

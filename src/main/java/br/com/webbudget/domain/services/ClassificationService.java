@@ -161,7 +161,7 @@ public class ClassificationService {
 
             BigDecimal available;
 
-            if (classType == MovementClassType.IN) {
+            if (classType == MovementClassType.REVENUE) {
                 available = costCenter.getRevenuesBudget().subtract(consumed);
             } else {
                 available = costCenter.getExpensesBudget().subtract(consumed);

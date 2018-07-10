@@ -167,7 +167,7 @@ public class RefuelingBean extends FormBean<Refueling> {
     public void onVehicleSelect() {
         this.movementClasses = this.movementClassRepository
                 .findByMovementClassTypeAndCostCenter(
-                        MovementClassType.OUT, this.value.getCostCenter());
+                        MovementClassType.EXPENSE, this.value.getCostCenter());
     }
     
     /**

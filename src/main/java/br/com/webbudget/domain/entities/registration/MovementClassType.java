@@ -21,13 +21,13 @@ package br.com.webbudget.domain.entities.registration;
  *
  * @author Arthur Gregorio
  *
- * @version 1.1.0
+ * @version 2.0.0
  * @since 1.0.0, 13/03/2014
  */
 public enum MovementClassType {
 
-    IN("movement-class-type.in"),
-    OUT("movement-class-type.out");
+    REVENUE("movement-class-type.revenue"),
+    EXPENSE("movement-class-type.expense");
 
     private final String description;
 

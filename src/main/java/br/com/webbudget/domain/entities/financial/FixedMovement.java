@@ -165,8 +165,8 @@ public class FixedMovement extends PersistentEntity {
             final MovementClassType apportionmentDirection
                     = apportionment.getMovementClass().getMovementClassType();
 
-            if ((direction == MovementClassType.IN && apportionmentDirection == MovementClassType.OUT)
-                    || (direction == MovementClassType.OUT && apportionmentDirection == MovementClassType.IN)) {
+            if ((direction == MovementClassType.REVENUE && apportionmentDirection == MovementClassType.EXPENSE)
+                    || (direction == MovementClassType.EXPENSE && apportionmentDirection == MovementClassType.REVENUE)) {
                 throw new BusinessLogicException("error.apportionment.mix-of-classes");
             }
         }

@@ -159,7 +159,7 @@
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
-                                             actionListener="#{walletBean.changeToDelete(wallet.id)}" 
+                                             action="#{walletBean.changeToDelete(wallet.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.WALLET_DELETE)}"/>
                         </p:column>
                     </p:dataTable>

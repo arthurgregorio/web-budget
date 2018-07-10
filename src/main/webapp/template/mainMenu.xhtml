@@ -44,7 +44,7 @@
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.WALLET_ACCESS)}">
                     <p:link href="/secured/registration/wallet/listWallets.xhtml">
-                        <i class="fa fa-bank" />
+                        <i class="fa fa-suitcase" />
                         <span>#{menu['registration.wallets']}</span>
                     </p:link>
                 </li>
@@ -54,16 +54,16 @@
                         <span>#{menu['registration.cost-centers']}</span>
                     </p:link>
                 </li>
-                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_ACCESS)}">
-                    <p:link href="/secured/registration/movementClass/listMovementClasses.xhtml">
-                        <i class="fa fa-list" />
-                        <span>#{menu['registration.movement-classes']}</span>
-                    </p:link>
-                </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_ACCESS)}">
                     <p:link href="/secured/registration/financialPeriod/listFinancialPeriods.xhtml">
                         <i class="fa fa-calendar-o" />
                         <span>#{menu['registration.financial-periods']}</span>
+                    </p:link>
+                </li>
+                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_ACCESS)}">
+                    <p:link href="/secured/registration/movementClass/listMovementClasses.xhtml">
+                        <i class="fa fa-list" />
+                        <span>#{menu['registration.movement-classes']}</span>
                     </p:link>
                 </li>
             </ul>

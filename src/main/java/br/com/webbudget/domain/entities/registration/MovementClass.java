@@ -99,7 +99,7 @@ public class MovementClass extends PersistentEntity {
      * @return <code>true</code> for revenue class, <code>false</code> otherwise
      */
     public boolean isRevenues() {
-        return this.movementClassType == MovementClassType.IN;
+        return this.movementClassType == MovementClassType.REVENUE;
     }
     
     /**
@@ -108,16 +108,18 @@ public class MovementClass extends PersistentEntity {
      * @return <code>true</code> for expenses class, <code>false</code> otherwise
      */
     public boolean isExpenses() {
-        return this.movementClassType == MovementClassType.OUT;
+        return this.movementClassType == MovementClassType.EXPENSE;
     }
     
     /**
-     * @return se o orcamento desta classe ja estourou ou nao
+     * Method to check if the budget of this class is over the maximum value
+     *
+     * @return <code>true</code> if the budget is over the maximum, <code>false</code> otherwise
      */
     public boolean isOverBudget() {
         return this.totalMovements.compareTo(this.budget) >= 0;
-    } // FIXME refactor
-    
+    }
+
     /**
      * Method used in the UI to draw the graphic to show the user how many percents of the class budget is already used
      *
