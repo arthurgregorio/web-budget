@@ -16,11 +16,6 @@
  */
 package br.com.webbudget.application.controller.tools;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
@@ -30,25 +25,29 @@ import br.com.webbudget.domain.entities.tools.Group;
 import br.com.webbudget.domain.entities.tools.Permissions;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.services.UserAccountService;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.TreeNode;
 
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
+
 /**
+ * The {@link Group} maintenance routine controller
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
- * @since 2.0.0, 22/07/2015
+ * @version 2.0.0
+ * @since 2.0.0, 22/07/2017
  */
 @Named
 @ViewScoped
@@ -70,7 +69,7 @@ public class GroupBean extends FormBean<Group> {
     private UserAccountService userAccountService;
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -79,6 +78,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
+     * {@inheritDoc}
      *
      * @param id
      * @param viewState
@@ -101,7 +101,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -113,6 +113,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param first
      * @param pageSize
@@ -127,7 +128,7 @@ public class GroupBean extends FormBean<Group> {
     }
     
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
@@ -138,7 +139,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() {
@@ -147,6 +148,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
+     * {@inheritDoc}
      *
      * @return
      */
@@ -158,10 +160,9 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Converte a lista de items selecionados em uma lista de autorizacoes do
-     * sistema para que sejam gravados no banco de dados
+     * Convert all the select items in the UI and transform this in a simple {@link List} of {@link Authorization}
      *
-     * @return a lista de autorizacoes
+     * @return the {@link Authorization} list is on the way
      */
     private List<Authorization> parseAuthorizations() {
 
@@ -183,7 +184,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Cria o model para arvore de permissoes
+     * Create the model to the tree
      */
     private void createAuthorizationsTree() {
 
@@ -213,8 +214,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Metodo que tira a selecao dos nodes, utilizamos ele para nao ter que
-     * chamar novamente a construcao da tela o que tornaria a execucao lenta
+     * Remove all the previous selected items
      */
     private void unselectAuthorizations() {
 
@@ -232,7 +232,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Selecione os nodes de acordo com o grupo carregado
+     * Method to organize the tree
      */
     private void selectAuthorizations() {
 
@@ -267,12 +267,10 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Metodo criado para evitar repetir as internacionalizacoes das permissoes
-     * e internacionalizar sem perder a capacidade de montagem das mesmas no
-     * momento de transformar de String para Authorization
+     * Method to translate the enums on the UI
      *
-     * @param nodeDescription a descricao do node
-     * @return a parte internacionalizavel descartando a parte repetida
+     * @param nodeDescription the current identification node description
+     * @return only the i18n part of the text
      */
     public String split(String nodeDescription) {
         final String splited[] = nodeDescription.split(":");

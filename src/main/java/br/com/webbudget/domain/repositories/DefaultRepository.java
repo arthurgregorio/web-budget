@@ -19,13 +19,15 @@ package br.com.webbudget.domain.repositories;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.PersistentEntity_;
-import java.util.List;
-import java.util.Optional;
-import javax.persistence.metamodel.SingularAttribute;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 import org.apache.deltaspike.data.api.criteria.CriteriaSupport;
+
+import javax.persistence.metamodel.SingularAttribute;
+import java.util.List;
+import java.util.Optional;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * The default implementation of a repository in the application

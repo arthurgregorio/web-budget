@@ -11,6 +11,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import java.util.Optional;
 
 /**
+ * The {@link User} repository
  *
  * @author Arthur Gregorio
  *
@@ -21,35 +22,32 @@ import java.util.Optional;
 public interface UserRepository extends DefaultRepository<User> {
 
     /**
+     * Find an {@link User} by the email address
      * 
-     * @param id
-     * @return 
-     */
-    Optional<User> findOptionalById(long id);
-    
-    /**
-     * 
-     * @param email
-     * @return 
+     * @param email the {@link User} email address to find
+     * @return an {@link Optional} of the {@link User}
      */
     Optional<User> findOptionalByEmail(String email);
     
     /**
+     * Find an {@link User} by the email address and the {@link StoreType}
      * 
-     * @param email
-     * @param storeType
-     * @return 
+     * @param email the {@link User} email address to find
+     * @param storeType the enum value of {@link StoreType}
+     * @return an {@link Optional} of the {@link User}
      */
     Optional<User> findOptionalByEmailAndStoreType(String email, StoreType storeType);
     
     /**
+     * Find an {@link User} by the username
      * 
-     * @param username
-     * @return 
+     * @param username the username to find the {@link User} object
+     * @return an {@link Optional} of the {@link User}
      */
     Optional<User> findOptionalByUsername(String username);
     
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
@@ -59,6 +57,7 @@ public interface UserRepository extends DefaultRepository<User> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param filter
      * @return 

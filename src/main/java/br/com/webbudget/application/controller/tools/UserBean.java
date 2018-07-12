@@ -16,11 +16,6 @@
  */
 package br.com.webbudget.application.controller.tools;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
@@ -34,15 +29,19 @@ import br.com.webbudget.domain.services.UserAccountService;
 import br.com.webbudget.infrastructure.utils.Configurations;
 import br.eti.arthurgregorio.shiroee.config.ldap.LdapUser;
 import br.eti.arthurgregorio.shiroee.config.ldap.LdapUserProvider;
-import java.util.List;
+import lombok.Getter;
+import org.primefaces.model.SortOrder;
+
 import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
-import org.primefaces.model.SortOrder;
+import java.util.List;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
 /**
+ * The {@link User} maintenance routine controller
  *
  * @author Arthur Gregorio
  *
@@ -68,7 +67,7 @@ public class UserBean extends FormBean<User> {
     private Instance<LdapUserProvider> ldapUserProviderInstance;
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -77,6 +76,7 @@ public class UserBean extends FormBean<User> {
     }
 
     /**
+     * {@inheritDoc}
      *
      * @param id
      * @param viewState
@@ -90,7 +90,7 @@ public class UserBean extends FormBean<User> {
     }
     
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -102,6 +102,7 @@ public class UserBean extends FormBean<User> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param first
      * @param pageSize
@@ -116,7 +117,7 @@ public class UserBean extends FormBean<User> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
@@ -126,7 +127,7 @@ public class UserBean extends FormBean<User> {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() {
@@ -135,6 +136,7 @@ public class UserBean extends FormBean<User> {
     }
 
     /**
+     * {@inheritDoc}
      *
      * @return
      */
@@ -146,7 +148,7 @@ public class UserBean extends FormBean<User> {
     }
     
     /**
-     *
+     * Method to find a given user on the LDAP/AD directory
      */
     public void findUserOnLdap() {
 
@@ -163,8 +165,10 @@ public class UserBean extends FormBean<User> {
     }
     
     /**
+     * Internal method to check if we have a LDAP/AD authentication enable and provide the {@link LdapUserProvider}
+     * for user search and authentication
      * 
-     * @return 
+     * @return the {@link LdapUserProvider} configured to be used with ShiroEE (apache shiro)
      */
     private LdapUserProvider getLdapUserProvider() {
         
@@ -178,10 +182,11 @@ public class UserBean extends FormBean<User> {
     }
     
     /**
+     * Get the possible values for the storage place of an {@link User}
      * 
-     * @return 
+     * @return an array with {@link StoreType} values
      */
-    public StoreType[] getStoreTypeValues() {
+    public StoreType[] getStoreTypes() {
         return StoreType.values();
     }
 }

@@ -17,11 +17,7 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.application.controller.ProfileBean.PasswordChangeDTO;
-import br.com.webbudget.domain.entities.tools.Authorization;
-import br.com.webbudget.domain.entities.tools.Grant;
-import br.com.webbudget.domain.entities.tools.Group;
-import br.com.webbudget.domain.entities.tools.StoreType;
-import br.com.webbudget.domain.entities.tools.User;
+import br.com.webbudget.domain.entities.tools.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GrantRepository;
@@ -30,20 +26,22 @@ import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetailsProvider;
-import java.util.List;
-import java.util.Optional;
+import org.apache.shiro.SecurityUtils;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import org.apache.shiro.SecurityUtils;
+import java.util.List;
+import java.util.Optional;
 
 /**
- * The user account service
+ * The service to manage all the operations of the {@link User} account control and the {@link Group}, {@link Grant} or
+ * {@link Authorization} of the application
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
- * @since 1.0.0, 27/12/2017
+ * @version 2.0.0
+ * @since 2.0.0, 27/12/2017
  */
 @ApplicationScoped
 public class UserAccountService implements UserDetailsProvider {
@@ -61,9 +59,10 @@ public class UserAccountService implements UserDetailsProvider {
     private AuthorizationRepository authorizationRepository;
 
     /**
+     * Persist a new {@link User}
      *
-     * @param user
-     * @return
+     * @param user the {@link User} to be persisted
+     * @return the persisted {@link User}
      */
     @Transactional
     public User save(User user) {
@@ -100,8 +99,9 @@ public class UserAccountService implements UserDetailsProvider {
     }
 
     /**
+     * Update an already persisted {@link User}
      *
-     * @param user
+     * @param user the {@link User} to be updated
      */
     @Transactional
     public void update(User user) {
@@ -115,7 +115,7 @@ public class UserAccountService implements UserDetailsProvider {
             final User found = userOptional.get();
 
             if (!found.getUsername().equals(user.getUsername())) {
-                throw new BusinessLogicException("user.email-duplicated");
+                throw new BusinessLogicException("error.user.email-duplicated");
             }
         }
 
@@ -126,7 +126,7 @@ public class UserAccountService implements UserDetailsProvider {
 
                 // check if passwords match
                 if (!user.isPasswordValid()) {
-                    throw new BusinessLogicException("user.password-not-match");
+                    throw new BusinessLogicException("error.user.password-not-match-or-invalid");
                 }
 
                 // crypt the user password
@@ -143,8 +143,9 @@ public class UserAccountService implements UserDetailsProvider {
     }
 
     /**
+     * Delete a persisted {@link User}
      *
-     * @param user
+     * @param user the {@link User} to be deleted
      */
     @Transactional
     public void delete(User user) {
@@ -154,21 +155,22 @@ public class UserAccountService implements UserDetailsProvider {
 
         // prevent to delete you own user
         if (principal.equals(user.getUsername())) {
-            throw new BusinessLogicException("user.delete-principal");
+            throw new BusinessLogicException("error.user.delete-principal");
         }
 
         // prevent to delete the main admin
         if (user.isAdministrator()) {
-            throw new BusinessLogicException("user.delete-administrator");
+            throw new BusinessLogicException("error.user.delete-administrator");
         }
 
         this.userRepository.attachAndRemove(user);
     }
 
     /**
+     * Use this method to change the password of a given {@link User}
      *
-     * @param passwordChangeDTO
-     * @param user
+     * @param passwordChangeDTO the {@link PasswordChangeDTO} with the new values
+     * @param user the {@link User} to be updated
      */
     @Transactional
     public void changePasswordForCurrentUser(PasswordChangeDTO passwordChangeDTO, User user) {
@@ -177,16 +179,11 @@ public class UserAccountService implements UserDetailsProvider {
                 passwordChangeDTO.getActualPassword(), user.getPassword());
 
         if (actualMatch) {
-
             if (passwordChangeDTO.isNewPassMatching()) {
-
                 final String newPass = this.passwordEncoder.encryptPassword(
                         passwordChangeDTO.getNewPassword());
-
                 user.setPassword(newPass);
-
                 this.userRepository.saveAndFlushAndRefresh(user);
-
                 return;
             }
             throw new BusinessLogicException("profile.new-pass-not-match");
@@ -195,9 +192,10 @@ public class UserAccountService implements UserDetailsProvider {
     }
 
     /**
+     * Persist a new {@link Group}
      *
-     * @param group
-     * @return
+     * @param group the {@link Group} to be persisted
+     * @return the persisted {@link Group}
      */
     @Transactional
     public Group save(Group group) {
@@ -205,9 +203,10 @@ public class UserAccountService implements UserDetailsProvider {
     }
 
     /**
+     * Persist a new {@link Group} along with his {@link Authorization}
      *
-     * @param group
-     * @param authorizations
+     * @param group the {@link Group}
+     * @param authorizations the list of {@link Authorization} of this group
      */
     @Transactional
     public void save(Group group, List<Authorization> authorizations) {
@@ -223,8 +222,9 @@ public class UserAccountService implements UserDetailsProvider {
     }
 
     /**
+     * Update an already persisted {@link Group}
      *
-     * @param group
+     * @param group the {@link Group} to be updated
      */
     @Transactional
     public void update(Group group) {
@@ -232,9 +232,10 @@ public class UserAccountService implements UserDetailsProvider {
     }
 
     /**
+     * Update an already persisted {@link Group} and his {@link Authorization}
      *
-     * @param group
-     * @param authorizations
+     * @param group the {@link Group} to be update
+     * @param authorizations the new {@link List} of {@link Authorization} of this {@link Group}
      */
     @Transactional
     public void update(Group group, List<Authorization> authorizations) {
@@ -258,68 +259,29 @@ public class UserAccountService implements UserDetailsProvider {
     }
 
     /**
+     * Delete an already persisted {@link Group}
      *
-     * @param group
+     * @param group the {@link Group} to be deleted
      */
     @Transactional
     public void delete(Group group) {
 
-        // prevent to delete the main admin
+        // prevent to delete the main admin group
         if (group.isAdministratorsGroup()) {
-            throw new BusinessLogicException("group.delete-administrator");
+            throw new BusinessLogicException("error.group.delete-administrator");
         }
-
         this.groupRepository.attachAndRemove(group);
     }
 
     /**
+     * Find the {@link UserDetails} of a given username from an {@link User}
      *
-     * @param authorization
-     */
-    @Transactional
-    public void save(Authorization authorization) {
-        this.authorizationRepository.saveAndFlush(authorization);
-    }
-
-    /**
-     *
-     * @param grant
-     * @return
-     */
-    @Transactional
-    public Grant save(Grant grant) {
-        return this.grantRepository.save(grant);
-    }
-
-    /**
-     *
-     * @param grant
-     */
-    @Transactional
-    public void update(Grant grant) {
-        this.grantRepository.saveAndFlushAndRefresh(grant);
-    }
-
-    /**
-     *
-     * @param grant
-     */
-    @Transactional
-    public void remove(Grant grant) {
-        this.grantRepository.attachAndRemove(grant);
-    }
-
-    /**
-     *
-     * @param username
-     * @return
+     * @param username the username to search for the details
+     * @return an {@link Optional} of the {@link UserDetails} for the username
      */
     @Override
     public Optional<UserDetails> findUserDetailsByUsername(String username) {
-
-        final Optional<User> user =
-                this.userRepository.findOptionalByUsername(username);
-
+        final Optional<User> user = this.userRepository.findOptionalByUsername(username);
         return Optional.ofNullable(user.orElse(null));
     }
 }

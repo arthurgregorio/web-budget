@@ -10,6 +10,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import java.util.Optional;
 
 /**
+ * The {@link Group} repository
  *
  * @author Arthur Gregorio
  *
@@ -20,13 +21,15 @@ import java.util.Optional;
 public interface GroupRepository extends DefaultRepository<Group> {
 
     /**
+     * Fin a {@link Group} by the name
      * 
-     * @param name
-     * @return 
+     * @param name the name of the {@link Group} to search
+     * @return an {@link Optional} of the {@link Group}
      */
     Optional<Group> findOptionalByName(String name);
     
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
@@ -36,6 +39,7 @@ public interface GroupRepository extends DefaultRepository<Group> {
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @param filter
      * @return 
