@@ -123,4 +123,12 @@ public class Group extends PersistentEntity {
                     .map(Authorization::getFullPermission)
                     .collect(Collectors.toSet());
     }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isAdministratorsGroup() {
+        return this.name.equals("Administradores");
+    }
 }

@@ -26,6 +26,7 @@ import br.com.webbudget.infrastructure.mail.MailMessage;
 import br.com.webbudget.infrastructure.mail.MustacheProvider;
 import br.com.webbudget.infrastructure.utils.MessageSource;
 import br.com.webbudget.infrastructure.utils.RandomCode;
+import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -50,6 +51,9 @@ public class RecoverPasswordService {
     private UserRepository userRepository;
 
     @Inject
+    private PasswordEncoder passwordEncoder;
+
+    @Inject
     private Event<MailMessage> mailSender;
 
     /**
@@ -67,7 +71,7 @@ public class RecoverPasswordService {
 
         final String newPassword = RandomCode.alphanumeric(8);
 
-        user.setPassword(newPassword);
+        user.setPassword(this.passwordEncoder.encryptPassword(newPassword));
 
         this.userRepository.saveAndFlushAndRefresh(user);
 
