@@ -72,7 +72,7 @@ public class RecoverPasswordService {
         this.userRepository.saveAndFlushAndRefresh(user);
 
         final MailMessage mailMessage = SimpleMailMessage.getBuilder()
-                .from("no-reply@pti.org.br")
+                .from("no-reply@webbudget.com.br")
                 .to(user.getEmail())
                 .withTitle(MessageSource.get("recover-password.email.title"))
                 .withContent(this.buildContent(user, newPassword))
@@ -95,14 +95,14 @@ public class RecoverPasswordService {
     private MailContentProvider buildContent(User user, String newPassword) {
 
         final MustacheProvider provider =
-                new MustacheProvider("recover-password.mustache");
+                new MustacheProvider("recoverPassword.mustache");
 
         final String date = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm")
                 .format(LocalDateTime.now());
 
         provider.addContent("title", MessageSource.get("recover-password.email.title"));
         provider.addContent("detail", MessageSource.get("recover-password.email.detail"));
-        provider.addContent("on", MessageSource.get("recover-password.email.on"));
+        provider.addContent("greetings", MessageSource.get("recover-password.email.greetings"));
         provider.addContent("requestDate", date);
         provider.addContent("username", user.getUsername());
         provider.addContent("message", MessageSource.get("recover-password.email.message"));
