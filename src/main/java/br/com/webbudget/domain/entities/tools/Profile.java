@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,51 +17,46 @@
 package br.com.webbudget.domain.entities.tools;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
- * This is the class responsible to create the link between a {@link Group} and a {@link Authorization}
+ * The {@link User} profile, this class hold the individual {@link User} preferences
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.0.0, 26/05/2015
+ * @since 3.0.0, 16/07/2018
  */
 @Entity
 @Audited
-@ToString
-@NoArgsConstructor
-@Table(name = "grants")
-@AuditTable(value = "audit_grants")
+@Table(name = "profiles")
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Grant extends PersistentEntity {
+@AuditTable(value = "audit_profiles")
+public class Profile extends PersistentEntity {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_group", nullable = false)
-    private Group group;
+    @Column(name = "active_theme", nullable = false, length = 45)
+    private String activeTheme;
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_authorization", nullable = false)
-    private Authorization authorization;
+    @Column(name = "show_wallet_balances", nullable = false)
+    private boolean showWalletBalances;
 
     /**
      * Constructor
-     * 
-     * @param group the {@link Group} to receive this grant
-     * @param authorization the {@link Authorization} to link with the {@link Group}
      */
-    public Grant(Group group, Authorization authorization) {
-        this.group = group;
-        this.authorization = authorization;
+    public Profile() {
+        this.activeTheme = "skin-black";
+        this.showWalletBalances = true;
     }
 }
+

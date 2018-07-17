@@ -21,17 +21,15 @@ import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.LazyDataProvider;
 import br.com.webbudget.application.components.table.LazyFilter;
 import br.com.webbudget.application.components.table.LazyModel;
-import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.Parameter.of;
 import br.com.webbudget.domain.entities.PersistentEntity;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.LazyDataModel;
+
+import java.util.List;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.NavigationManager.Parameter.of;
 
 /**
  * The abstract form controller, this class hold all the commom functionalities

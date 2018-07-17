@@ -17,11 +17,12 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.domain.services.RecoverPasswordService;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * The controller of the recover password process

@@ -17,14 +17,15 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.infrastructure.utils.Configurations;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Utilities controller to provide common functionalities to all the pages in the application

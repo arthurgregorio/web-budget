@@ -17,13 +17,14 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.infrastructure.utils.MessageSource;
-import java.io.Serializable;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import org.omnifaces.util.Messages;
-import javax.faces.context.Flash;
 import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
+
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
+import javax.inject.Inject;
+import java.io.Serializable;
 
 /**
  * The base bean of the controllers of this application, this class contains all the basic methods to the controllers

@@ -18,11 +18,12 @@ package br.com.webbudget.application.controller;
 
 import br.eti.arthurgregorio.shiroee.auth.Authenticator;
 import br.eti.arthurgregorio.shiroee.auth.Credential;
+import lombok.Getter;
+import org.apache.shiro.authc.AuthenticationException;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
-import org.apache.shiro.authc.AuthenticationException;
 
 /**
  * Bean to control the authentication process

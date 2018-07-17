@@ -1,24 +1,38 @@
+/*
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package br.com.webbudget.domain.entities.tools;
 
+import lombok.Getter;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 import java.io.Serializable;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
-import lombok.Getter;
 
 /**
+ * This class represents the possible permissions of this system
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 12/01/2018
+ * @since 2.0.0, 26/05/2015
  */
 @Named
 @ApplicationScoped
@@ -253,41 +267,38 @@ public class Permissions implements Serializable {
     private final String REFUELING_DELETE = "refueling:delete";
 
     /**
-     * @return a lista de permissoes em formato de autorizacao
+     * Method to process this class with reflection and build a list of {@link Authorization} to be used in the
+     * {@link Group} creation form
+     *
+     * @return the {@link List} of the possible {@link Authorization}
      */
     public List<Authorization> toAuthorizationList() {
 
         final List<Authorization> authorizations = new ArrayList<>();
 
-        // pega todos os campos da classe
+        // get all the fields of the class
         for (Field field : this.getClass().getDeclaredFields()) {
 
-            // define acessivel
             field.setAccessible(true);
 
             try {
-                // pega o valor do agrupador
-                final PermissionGrouper grouper = field
-                        .getAnnotation(PermissionGrouper.class);
+                final PermissionGrouper grouper = field.getAnnotation(PermissionGrouper.class);
 
-                // pega o valor do campo
-                final String permission
-                        = String.valueOf(field.get(Permissions.this));
+                final String permission = String.valueOf(field.get(Permissions.this));
 
                 final String functionality = grouper.value();
 
-                // agrupa na lista 
-                authorizations.add(
-                        new Authorization(functionality,
-                                permission.replace(functionality + ":", "")));
+                authorizations.add(new Authorization(functionality,
+                        permission.replace(functionality + ":", "")));
             } catch (IllegalAccessException ex) {
+                throw new IllegalStateException("Can't parse the authorizations with reflection! Contact the administrator.");
             }
         }
         return authorizations;
     }
     
     /**
-     * 
+     * The grouper annotation to mark all the fields of this class by which functionality belongs to
      */
     @Documented
     @Target(ElementType.FIELD)
@@ -295,8 +306,9 @@ public class Permissions implements Serializable {
     private @interface PermissionGrouper {
 
         /**
-         * 
-         * @return 
+         * The value of this annotation is the functionality
+         *
+         * @return the functionality
          */
         String value() default "";
     }

@@ -18,18 +18,18 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
-import java.io.Serializable;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import br.com.webbudget.infrastructure.cdi.qualifiers.PrincipalUsername;
 import lombok.Getter;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * The controller of the user session. This class hold a session for the user and his authorization data

@@ -1,20 +1,22 @@
+/*
+ * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package br.com.webbudget.domain.entities.tools;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import static javax.persistence.CascadeType.REMOVE;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import static javax.persistence.FetchType.EAGER;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,12 +24,24 @@ import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
+
 /**
+ * This class represents a group of {@link Authorization} for a collection of {@link User}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 26/12/2017
+ * @since 2.0.0, 26/05/2015
  */
 @Entity
 @Audited
@@ -57,7 +71,7 @@ public class Group extends PersistentEntity {
     private final List<Grant> grants;
     
     /**
-     * 
+     * Constructor
      */
     public Group() { 
         this.blocked = false;
@@ -65,8 +79,9 @@ public class Group extends PersistentEntity {
     }
 
     /**
+     * Constructor
      * 
-     * @param name 
+     * @param name the name of the group
      */
     public Group(String name) {
         this();
@@ -74,9 +89,10 @@ public class Group extends PersistentEntity {
     }
     
     /**
-     * 
-     * @param name
-     * @param parent 
+     * Constructor
+     *
+     * @param name the name of the group
+     * @param parent the parent group of this group
      */
     public Group(String name, Group parent) {
         this();
@@ -85,23 +101,9 @@ public class Group extends PersistentEntity {
     }
     
     /**
-     * 
-     * @param grant 
-     */
-    public void addRole(Grant grant) {
-        this.grants.add(grant);
-    }
-    
-    /**
-     * 
-     * @param grants 
-     */
-    public void addRoles(List<Grant> grants) {
-        this.grants.addAll(grants);
-    }
-
-    /**
-     * @return os grants do grupo e seu superior
+     * Return the {@link Grant} of this group and inherit the {@link Grant} of the parent group
+     *
+     * @return list of this group {@link Grant}
      */
     public List<Grant> getGrants() {
         
@@ -110,12 +112,14 @@ public class Group extends PersistentEntity {
         if (this.parent != null) {
             groupGrants.addAll(this.parent.getGrants());
         }
-        
         return Collections.unmodifiableList(groupGrants);
     }
 
     /**
-     * @return as permissoes deste grupo e seu superior
+     * Same as the {@link #getGrants()} but this one return the already processed permission {@link String} instead of
+     * the {@link Grant}. This is a helper method.
+     *
+     * @return a {@link String} {@link Set} of the permissions
      */
     public Set<String> getPermissions() {
         return this.getGrants().stream()
@@ -125,8 +129,9 @@ public class Group extends PersistentEntity {
     }
 
     /**
+     * Method used to check if this group is the default admin
      *
-     * @return
+     * @return <code>true</code> or <code>false</code>
      */
     public boolean isAdministratorsGroup() {
         return this.name.equals("Administradores");

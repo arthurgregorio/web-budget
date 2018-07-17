@@ -14,20 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.controller;
+package br.com.webbudget.application.controller.tools;
 
+import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.application.controller.UserSessionBean;
 import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.services.UserAccountService;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 /**
- * The bean to control all the user preferences in their profile
+ * Bean to be used as controller of the user profile
  *
  * @author Arthur Gregorio
  *
@@ -65,7 +68,7 @@ public class ProfileBean extends AbstractBean {
     /**
      * Open the change password popup
      */
-    public void showChangePasswordPopup() {
+    public void showChangePasswordDialog() {
         this.passwordChangeDTO = new PasswordChangeDTO();
         this.updateAndOpenDialog("changePasswordDialog", "dialogChangePassword");
     }

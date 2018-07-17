@@ -19,16 +19,13 @@ package br.com.webbudget.domain.entities.tools;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.MovementClass;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Classe responsavel pela representacao das configuracoes do sitema no banco
@@ -37,7 +34,7 @@ import lombok.ToString;
  * @author Arthur Gregorio
  *
  * @version 1.1.0
- * @since 1.0.0, 15/02/2015
+ * @since 2.0.0, 15/02/2015
  */
 @Entity
 @ToString(callSuper = true)
@@ -45,11 +42,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class Configuration extends PersistentEntity {
 
-    @Getter
-    @Setter
-    @Column(name = "show_wallet_balances", nullable = false)
-    private boolean showWalletBalances;
-    
     @Getter
     @Setter
     @OneToOne
@@ -63,13 +55,6 @@ public class Configuration extends PersistentEntity {
     @NotNull(message = "{configuration.invoice-movement-class}")
     private MovementClass invoiceDefaultMovementClass;
 
-    /**
-     * Inicializa os atributos
-     */
-    public Configuration() {
-        this.showWalletBalances = false;
-    }
-    
     /**
      * @return se esta configuracao eh valida para uso na geracao de faturas
      * dos cartoes de credito

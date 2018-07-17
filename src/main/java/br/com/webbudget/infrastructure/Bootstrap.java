@@ -41,7 +41,7 @@ import org.slf4j.Logger;
  * @author Arthur Gregorio
  *
  * @version 2.0.0
- * @since 1.0.0, 27/12/2017
+ * @since 3.0.0, 27/12/2017
  */
 @Startup
 @Singleton
