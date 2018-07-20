@@ -18,6 +18,8 @@ package br.com.webbudget.application.controller.tools;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.controller.UserSessionBean;
+import br.com.webbudget.domain.entities.tools.Profile;
+import br.com.webbudget.domain.entities.tools.ThemeType;
 import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.services.UserAccountService;
 import lombok.Getter;
@@ -42,6 +44,9 @@ import javax.inject.Named;
 @ViewScoped
 public class ProfileBean extends AbstractBean {
 
+    @Getter
+    private Profile profile;
+
     @Inject
     private UserSessionBean userSessionBean;
 
@@ -50,6 +55,13 @@ public class ProfileBean extends AbstractBean {
 
     @Getter
     private PasswordChangeDTO passwordChangeDTO;
+
+    /**
+     * Initialize this bean with the current user preferences
+     */
+    public void initialize() {
+        this.profile = this.userSessionBean.getPrincipal().getProfile();
+    }
 
     /**
      * Start the password changing process
@@ -71,6 +83,15 @@ public class ProfileBean extends AbstractBean {
     public void showChangePasswordDialog() {
         this.passwordChangeDTO = new PasswordChangeDTO();
         this.updateAndOpenDialog("changePasswordDialog", "dialogChangePassword");
+    }
+
+    /**
+     * Use this method to get a list of the themes to be selected
+     *
+     * @return an array with all the possible themes defined in the {@link ThemeType} enum
+     */
+    public ThemeType[] getThemeTypes() {
+        return ThemeType.values();
     }
 
     /**

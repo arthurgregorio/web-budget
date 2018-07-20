@@ -44,8 +44,9 @@ public class Profile extends PersistentEntity {
 
     @Getter
     @Setter
+    @Enumerated(EnumType.STRING)
     @Column(name = "active_theme", nullable = false, length = 45)
-    private String activeTheme;
+    private ThemeType activeTheme;
     @Getter
     @Setter
     @Column(name = "show_wallet_balances", nullable = false)
@@ -55,7 +56,7 @@ public class Profile extends PersistentEntity {
      * Constructor
      */
     public Profile() {
-        this.activeTheme = "skin-black";
+        this.activeTheme = ThemeType.BLACK;
         this.showWalletBalances = true;
     }
 }

@@ -24,7 +24,7 @@
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
-        <f:viewAction action="#{userBean.initialize()}"/>
+        <f:viewAction action="#{profileBean.initialize()}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -81,8 +81,26 @@
                         <div class="box-header with-border">
                             <b>#{messages['profile.system-preferences']}</b>
                         </div>
-                        <div class="box-body">
-
+                        <div class="box-body row">
+                            <div class="form-group col-md-6">
+                                <p:selectBooleanCheckbox value="#{profileBean.profile.showWalletBalances}"
+                                                         itemLabel="#{messages['profile.preferences.show-wallet-balances']}"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inThemeType"
+                                               value="#{messages['profile.preferences.theme']}"/>
+                                <p:selectOneMenu id="inThemeType"
+                                                 converter="omnifaces.GenericEnumConverter"
+                                                 value="#{profileBean.profile.activeTheme}">
+                                    <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
+                                                  itemLabel="#{menu['select-one']}" />
+                                    <f:selectItems var="themeType"
+                                                   itemValue="#{themeType}"
+                                                   itemLabel="#{enums[themeType]}"
+                                                   value="#{profileBean.themeTypes}"/>
+                                </p:selectOneMenu>
+                            </div>
                         </div>
                         <div class="box-footer align-right">
                             <p:commandButton value="#{menu['save']}"

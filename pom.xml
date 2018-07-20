@@ -270,6 +270,7 @@
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
                 <ldap.user>CN=binduser,OU=Aplicacoes,DC=arthurgregorio,DC=eti,DC=br</ldap.user>
                 <ldap.password>minha-senha</ldap.password>
+                <project.root>${basedir}</project.root>
             </properties>
         </profile>
         <profile>
