@@ -1,6 +1,6 @@
-# webBudget
-
 [![Join the chat at https://gitter.im/web-budget/Lobby](https://badges.gitter.im/web-budget/Lobby.svg)](https://gitter.im/web-budget/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+# webBudget
 
 Bem vindo or Welcome!
 
