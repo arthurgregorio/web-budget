@@ -138,7 +138,7 @@ public interface DefaultRepository<T extends PersistentEntity>
     }
 
     /**
-     * This method shoud be implemented if the user needs to use the generic 
+     * This method should be implemented if the user needs to use the generic
      * type search with the {@link #findAllBy(java.lang.String, java.lang.Boolean, int, int)}
      * method
      * 
@@ -152,7 +152,7 @@ public interface DefaultRepository<T extends PersistentEntity>
     }
     
     /**
-     * This method shoud be implemented if the user needs to use the generic 
+     * This method should be implemented if the user needs to use the generic
      * type search with the {@link #findAllBy(java.lang.String, java.lang.Boolean, int, int)}
      * method
      * 
