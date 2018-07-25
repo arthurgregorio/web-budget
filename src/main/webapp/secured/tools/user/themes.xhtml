@@ -1,0 +1,185 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-blue')}">
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 7px; background: #367fa9;'/>
+                <span class='bg-light-blue' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Blue</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-black')}">
+            <div style='box-shadow: 0 0 2px rgba(0,0,0,0.1)' class='clearfix'>
+                <span style='display:block; width: 20%; float: left; height: 7px; background: #fefefe;'/>
+                <span style='display:block; width: 80%; float: left; height: 7px; background: #fefefe;'/>
+            </div>
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 20px; background: #222;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Black</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-purple')}">
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-purple-active'/>
+                <span class='bg-purple' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Purple</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-green')}">
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-green-active'/>
+                <span class='bg-green' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Green</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-red')}">
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-red-active'/>
+                <span class='bg-red' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div><span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Red</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-yellow')}">
+            <div><span style='display:block; width: 20%; float: left; height: 7px;' class='bg-yellow-active'/>
+                <span class='bg-yellow' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div><span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Yellow</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-blue-light')}">
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 7px; background: #367fa9;'/>
+                <span class='bg-light-blue' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div><span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Blue Light</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-black-light')}">
+            <div style='box-shadow: 0 0 2px rgba(0,0,0,0.1)' class='clearfix'>
+                <span style='display:block; width: 20%; float: left; height: 7px; background: #fefefe;'/>
+                <span style='display:block; width: 80%; float: left; height: 7px; background: #fefefe;'/>
+            </div>
+            <div><span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Black Light</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-purple-light')}">
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-purple-active'/>
+                <span class='bg-purple' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div><span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Purple Light</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-green-light')}">
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-green-active'/>
+                <span class='bg-green' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Green Light</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-red-light')}">
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-red-active'/>
+                <span class='bg-red' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Red Light</p>
+    </div>
+    <div class="col-sm-2 form-group">
+        <p:commandLink class='clearfix full-opacity-hover theme-selector'
+                       actionListener="#{profileBean.changeTheme('skin-yellow-light')}">
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-yellow-active'/>
+                <span class='bg-yellow' style='display:block; width: 80%; float: left; height: 7px;'/>
+            </div>
+            <div>
+                <span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
+                <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+            </div>
+        </p:commandLink>
+        <p class='text-center no-margin'>Yellow Light</p>
+    </div>
+</ui:composition>

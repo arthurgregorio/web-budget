@@ -66,7 +66,7 @@
                                 <b>#{messages['profile.store-type']}</b> <a class="pull-right">#{enums[userSessionBean.principal.storeType]}</a>
                             </li>
                             <li class="list-group-item">
-                                <b>#{messages['profile.active-theme']}</b> <a class="pull-right">#{userSessionBean.principal.profile.activeTheme}</a>
+                                <b>#{messages['profile.active-theme']}</b> <a class="pull-right">#{enums[userSessionBean.principal.profile.activeTheme]}</a>
                             </li>
                         </ul>
                         <p:commandButton styleClass="btn btn-primary btn-block"
@@ -75,37 +75,37 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-4">
                 <h:form prependId="false">
                     <div class="box">
                         <div class="box-header with-border">
                             <b>#{messages['profile.system-preferences']}</b>
                         </div>
                         <div class="box-body row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-12">
                                 <p:selectBooleanCheckbox value="#{profileBean.profile.showWalletBalances}"
                                                          itemLabel="#{messages['profile.preferences.show-wallet-balances']}"/>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <p:outputLabel for="inThemeType"
-                                               value="#{messages['profile.preferences.theme']}"/>
-                                <p:selectOneMenu id="inThemeType"
-                                                 converter="omnifaces.GenericEnumConverter"
-                                                 value="#{profileBean.profile.activeTheme}">
-                                    <f:selectItem itemValue="#{null}"
-                                                  noSelectionOption="true"
-                                                  itemLabel="#{menu['select-one']}" />
-                                    <f:selectItems var="themeType"
-                                                   itemValue="#{themeType}"
-                                                   itemLabel="#{enums[themeType]}"
-                                                   value="#{profileBean.themeTypes}"/>
-                                </p:selectOneMenu>
                             </div>
                         </div>
                         <div class="box-footer align-right">
                             <p:commandButton value="#{menu['save']}"
-                                             styleClass="btn btn-flat btn-success"
-                                             actionListener="#{profileBean.showChangePasswordDialog()}" />
+                                             styleClass="btn btn-flat btn-success" />
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+            <div class="col-sm-4">
+                <h:form prependId="false">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <b>#{messages['profile.themes']}</b>
+                        </div>
+                        <div class="box-body row">
+                            <ui:include src="themes.xhtml"/>
+                        </div>
+                        <div class="box-footer align-right">
+                            <p:commandButton value="#{menu['save']}"
+                                             styleClass="btn btn-flat btn-success" />
                         </div>
                     </div>
                 </h:form>

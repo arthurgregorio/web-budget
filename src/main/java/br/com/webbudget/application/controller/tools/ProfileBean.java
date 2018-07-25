@@ -64,6 +64,15 @@ public class ProfileBean extends AbstractBean {
     }
 
     /**
+     * Method used to dynamically change the user interface theme
+     *
+     * @param theme the selected theme
+     */
+    public void changeTheme(String theme) {
+        // TODO fazer o theme ser salvo e alterado ao clicar sobre na selecao do menu
+    }
+
+    /**
      * Start the password changing process
      */
     public void changePassword() {
