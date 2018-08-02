@@ -52,8 +52,8 @@ public interface CardRepository extends DefaultRepository<Card> {
      * @return 
      */
     @Override
-    default SingularAttribute<Card, Boolean> getBlockedProperty() {
-        return Card_.blocked;
+    default SingularAttribute<Card, Boolean> getEntityStateProperty() {
+        return Card_.active;
     }
 
     /**

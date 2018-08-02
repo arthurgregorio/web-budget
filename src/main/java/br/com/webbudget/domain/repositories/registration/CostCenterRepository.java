@@ -50,8 +50,8 @@ public interface CostCenterRepository extends DefaultRepository<CostCenter> {
      * @return 
      */
     @Override
-    default SingularAttribute<CostCenter, Boolean> getBlockedProperty() {
-        return CostCenter_.blocked;
+    default SingularAttribute<CostCenter, Boolean> getEntityStateProperty() {
+        return CostCenter_.active;
     }
 
     /**

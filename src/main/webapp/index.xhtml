@@ -34,7 +34,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:img/favicon.ico']}"/>
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:images/favicon.ico']}"/>
 
         <h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css"/>
         <h:outputStylesheet library="adminlte" name="css/adminlte.min.css"/>
@@ -55,7 +55,7 @@
                 </a>
             </div>
             <div class="login-box-body">
-                <p class="login-box-msg">#{messages['login.welcome-message']}</p>
+                <p class="login-box-msg">#{messages['login.welcome']}</p>
                 <h:form id="loginForm" prependId="false">
                     <p:messages id="messages" closable="true"/>
                     <div class="form-group has-feedback">
@@ -79,7 +79,7 @@
                     <div class="row">
                         <div class="col-xs-8" style="padding-top: 10px;">
                             <p:commandLink process="@this"
-                                           value="#{menu['recover-password']}"
+                                           value="#{messages['login.recover-password']}"
                                            actionListener="#{recoverPasswordBean.showRecoverPassDialog()}"/>
                         </div>
                         <div class="col-xs-4">

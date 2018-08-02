@@ -41,7 +41,7 @@ public class LazyModel<T extends PersistentEntity> extends LazyDataModel<T> {
     /**
      * Constructor...
      *
-     * @param provider the dataprovider for this model
+     * @param provider the data provider for this model
      */
     public LazyModel(LazyDataProvider<T> provider) {
         this.provider = checkNotNull(provider);

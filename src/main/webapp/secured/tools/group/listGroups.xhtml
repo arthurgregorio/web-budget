@@ -116,24 +116,24 @@
                                 listener="#{groupBean.changeToDetail()}" /> 
 
                         <p:column headerText="#{messages['group.list.name']}">
-                            <p:graphicImage width="18"
-                                            height="18"
-                                            library="webbudget" 
-                                            name="img/ui-icon-active.png" 
-                                            rendered="#{not group.blocked}"
+                            <p:graphicImage width="24"
+                                            height="32"
+                                            library="webbudget"
+                                            name="images/inactive.png"
+                                            rendered="#{not group.active}"
+                                            title="#{messages['list.inactive']}"/>
+                            <p:graphicImage width="24"
+                                            height="32"
+                                            library="webbudget"
+                                            name="images/active.png"
+                                            rendered="#{group.active}"
                                             title="#{messages['list.active']}"/>
-                            <p:graphicImage width="18"
-                                            height="18"
-                                            library="webbudget" 
-                                            rendered="#{group.blocked}"
-                                            name="img/ui-icon-blocked.png" 
-                                            title="#{messages['list.blocked']}"/>
                             #{group.name}
                         </p:column>
 
                         <p:column width="15%" 
                                   styleClass="align-center"
-                                  headerText="#{menu['actions']}">
+                                  headerText="#{menu['list.actions']}">
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"

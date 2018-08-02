@@ -49,6 +49,10 @@ public class Profile extends PersistentEntity {
     private ThemeType activeTheme;
     @Getter
     @Setter
+    @Column(name = "dark_sidebar", nullable = false)
+    private boolean userDarkSidebar;
+    @Getter
+    @Setter
     @Column(name = "show_wallet_balances", nullable = false)
     private boolean showWalletBalances;
 

@@ -17,17 +17,6 @@
 package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +24,11 @@ import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * The representation of a movement class in the application
@@ -64,8 +58,8 @@ public class MovementClass extends PersistentEntity {
     private BigDecimal budget;
     @Getter
     @Setter
-    @Column(name = "blocked")
-    private boolean blocked;
+    @Column(name = "active", nullable = false)
+    private boolean active;
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
@@ -89,6 +83,7 @@ public class MovementClass extends PersistentEntity {
      * Default constructor
      */
     public MovementClass() {
+        this.active = true;
         this.budget = BigDecimal.ZERO;
         this.totalMovements = BigDecimal.ZERO;
     }

@@ -111,11 +111,10 @@ public class Contact extends PersistentEntity {
     @Getter
     @Column(name = "email", length = 90)
     private String email;
-    
     @Getter
     @Setter
-    @Column(name = "blocked", nullable = false)
-    private boolean blocked;
+    @Column(name = "active", nullable = false)
+    private boolean active;
     
     @Setter
     @Getter
@@ -141,8 +140,8 @@ public class Contact extends PersistentEntity {
      * Default constructor
      */
     public Contact() {
+        this.active = true;
         this.code = RandomCode.alphanumeric(6);
-        
         this.telephones = new ArrayList<>();
         this.deletedTelephones = new ArrayList<>();
     }

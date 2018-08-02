@@ -69,9 +69,8 @@ public class User extends PersistentEntity implements UserDetails {
     private String password;
     @Getter
     @Setter
-    @NotNull(message = "{user.blocked}")
-    @Column(name = "blocked", nullable = false)
-    private boolean blocked;
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
     @Getter
     @Setter
@@ -101,11 +100,21 @@ public class User extends PersistentEntity implements UserDetails {
      * Constructor
      */
     public User() {
+        this.active = true;
         this.profile = new Profile();
         this.storeType = StoreType.LOCAL;
     }
-    
+
     /**
+     * To indicate if the user is blocked or not
+     *
+     * @return <code>true</code> for blocked accounts <code>false</code> otherwise
+     */
+    @Override
+    public boolean isBlocked() {
+        return !this.isActive();
+    }
+/**
      * Method to check if this user is a bind account used only to host the basic data enable the LDAP/AD authentication
      * process
      *

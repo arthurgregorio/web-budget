@@ -76,7 +76,7 @@ public class CardBean extends FormBean<Card> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.wallets = this.walletRepository.findAllUnblocked();
+        this.wallets = this.walletRepository.findAllActive();
         this.value = this.cardRepository.findOptionalById(id)
                 .orElseGet(Card::new);
     }

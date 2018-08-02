@@ -29,6 +29,14 @@
         <f:viewAction action="#{costCenterBean.initialize(param.id, param.viewState)}"/>
     </f:metadata>
 
+    <ui:define name="head">
+        <h:outputStylesheet library="minicolors" name="css/jquery.minicolors.css"/>
+    </ui:define>
+
+    <ui:define name="scripts">
+        <h:outputScript library="minicolors" name="js/jquery.minicolors.js"/>
+    </ui:define>
+
     <ui:define name="pageTitle">
         #{messages['cost-center.page-title']}
     </ui:define>

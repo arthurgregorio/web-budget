@@ -20,10 +20,11 @@ import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.registration.WalletType;
 import br.com.webbudget.domain.entities.registration.Wallet_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
-import java.util.Optional;
-import javax.persistence.metamodel.SingularAttribute;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
+
+import javax.persistence.metamodel.SingularAttribute;
+import java.util.Optional;
 
 /**
  * The {@link Wallet} repository
@@ -64,7 +65,7 @@ public interface WalletRepository extends DefaultRepository<Wallet> {
      * @return 
      */
     @Override
-    default SingularAttribute<Wallet, Boolean> getBlockedProperty() {
-        return Wallet_.blocked;
+    default SingularAttribute<Wallet, Boolean> getEntityStateProperty() {
+        return Wallet_.active;
     }
 }

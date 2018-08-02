@@ -16,16 +16,16 @@
  */
 package br.com.webbudget.application.components;
 
+import lombok.Getter;
+
+import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.faces.context.FacesContext;
-import lombok.Getter;
 
 /**
- * This class holds a mechanism to make the navigation though the pages more 
- * easy if you are working with default CRUD operations and a padronized way of
- * building the pages
+ * This class holds a mechanism to make the navigation though the pages more easy if you are working with default
+ * CRUD operations and a default way of building pages
  *
  * @author Arthur Gregorio
  *
@@ -100,8 +100,7 @@ public final class NavigationManager {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect(url);
         } catch (IOException ex) {
-            throw new RuntimeException(String.format(
-                    "Can't rendirect to url %s", url));
+            throw new RuntimeException(String.format("Can't redirect to url %s", url));
         }
     }
     
@@ -124,7 +123,7 @@ public final class NavigationManager {
          * 
          * @param viewState the {@link ViewState} of the give parameter
          */
-        private PageType(ViewState viewState) {
+        PageType(ViewState viewState) {
             this.viewState = viewState;
         }
     }

@@ -84,7 +84,7 @@ public class UserBean extends FormBean<User> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.groups = this.groupRepository.findAllUnblocked();
+        this.groups = this.groupRepository.findAllActive();
         this.value = this.userRepository.findOptionalById(id)
                 .orElseGet(User::new);
     }

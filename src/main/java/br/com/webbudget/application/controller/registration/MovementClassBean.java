@@ -76,7 +76,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.costCenters = this.costCenterRepository.findAllUnblocked();
+        this.costCenters = this.costCenterRepository.findAllActive();
         this.value = this.movementClassRepository.findOptionalById(id)
                 .orElseGet(MovementClass::new);
     }

@@ -60,8 +60,8 @@ public interface VehicleRepository extends DefaultRepository<Vehicle> {
      * @return 
      */
     @Override
-    default SingularAttribute<Vehicle, Boolean> getBlockedProperty() {
-        return Vehicle_.blocked;
+    default SingularAttribute<Vehicle, Boolean> getEntityStateProperty() {
+        return Vehicle_.active;
     }
 
     /**

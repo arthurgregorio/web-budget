@@ -42,13 +42,11 @@
     </ui:define>
 
     <ui:define name="content">
-
         <div class="row">
             <div class="col-sm-12">
                 <p:messages id="messages" closable="true" />
             </div>
         </div>
-
         <div class="box">
             <div class="box-header with-border">
                 <h:form id="controlsForm">
@@ -78,9 +76,9 @@
                                     <p:spacer width="10"/>
                                     <p:commandButton icon="fa fa-trash-o"
                                                      onstart="PF('blocker').show()"
+                                                     title="#{menu['filter-clear']}"
                                                      update="itemsList controlsForm"
                                                      oncomplete="PF('blocker').hide()"
-                                                     title="#{messages['filter.clear']}"
                                                      styleClass="btn btn-flat btn-danger"
                                                      actionListener="#{userBean.clearFilters()}"/>
                                 </div>
@@ -118,18 +116,18 @@
                                 listener="#{userBean.changeToDetail()}" /> 
 
                         <p:column headerText="#{messages['user.list.name']}">
-                            <p:graphicImage width="18"
-                                            height="18"
-                                            library="webbudget" 
-                                            name="img/ui-icon-active.png" 
-                                            rendered="#{not user.blocked}"
+                            <p:graphicImage width="24"
+                                            height="32"
+                                            library="webbudget"
+                                            name="images/inactive.png"
+                                            rendered="#{not user.active}"
+                                            title="#{messages['list.inactive']}"/>
+                            <p:graphicImage width="24"
+                                            height="32"
+                                            library="webbudget"
+                                            name="images/active.png"
+                                            rendered="#{user.active}"
                                             title="#{messages['list.active']}"/>
-                            <p:graphicImage width="18"
-                                            height="18"
-                                            library="webbudget" 
-                                            rendered="#{user.blocked}"
-                                            name="img/ui-icon-blocked.png" 
-                                            title="#{messages['list.blocked']}"/>
                             <p:spacer width="5"/>
                             #{user.name}
                         </p:column>
@@ -141,7 +139,7 @@
 
                         <p:column width="15%" 
                                   styleClass="align-center"
-                                  headerText="#{menu['actions']}">
+                                  headerText="#{menu['list.actions']}">
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"

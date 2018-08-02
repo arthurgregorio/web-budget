@@ -1,20 +1,214 @@
 @charset "utf-8";
 
 /* 
-    Todas as customizacoes do primefaces vao estar neste arquivo
+    All the Primefaces and adminLTE customizations
 
     Author     : Arthur Gregorio
     Created on : 26/10/2015
 */
 
-/* customizacao da apreentacao do texto dos botoes */
+/*dropdown menu for bootstrap*/
+.dropdown-submenu {
+    position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+.dropdown-submenu.pull-left {
+    float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+
+/*font face and logo font settings*/
+@font-face {
+    font-family: 'ReklameScript';
+    font-style: normal;
+    font-weight: normal;
+    src: local('ReklameScript'), url("#{resource['webbudget:font/ReklameScript.otf']}") format('truetype');
+}
+
+.wb-font {
+    font-family: 'ReklameScript', serif !important;
+}
+.wb-logo-prefix {
+    color: #007fff;
+}
+.wb-logo-sufix {
+    color: black;
+}
+
+/*theme selection block*/
+.skin-block {
+    float:left; 
+    width: 33.33333%; 
+    padding: 5px;
+}
+.skin-logo {
+    display:block; 
+    width: 20%; 
+    float: left; 
+    height: 7px; 
+}
+
+/*permission tree adjustments*/
+.ui-tree {
+    border: none;
+}
+.ui-treenode-label {
+    position: relative;
+    left: 3px;
+}
+.ui-tree-toggler {
+    position: relative !important;
+}
+span.ui-chkbox-icon {
+    bottom: 2px;
+    right: 1px;
+}
+
+/*remove all rounded corners*/
+.form-control {
+    border-radius: 0 !important;
+}
+
+/*remove the red background when validation is performed*/
+label.ui-state-error {
+    background: none !important;
+}
+
+/*remove the black line in the column header*/
+th[role="columnheader"].ui-state-default {
+    border-color: #ccc !important;
+}
+
+/*remove the asterisk on required field labels*/
+.ui-outputlabel-rfi {
+    display: none;
+}
+
+/*the buttons customizations*/
 .ui-button {
     height: 34px;
+    border-radius: 0 !important;
     text-shadow: none !important;
     background-image: none !important;
 }
+.btn-default {
+    background-color: #f4f4f4 !important;
+    color: #444 !important;
+    border-color: #ddd !important;
+}
+.btn-default:hover,
+.btn-default:active,
+.btn-default.hover {
+    background-color: #e7e7e7 !important;
+}
+.btn-primary {
+    color: white !important;
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important;
+}
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary.hover {
+    background-color: #367fa9 !important;
+}
+.btn-success {
+    color: white !important;
+    background-color: #00a65a !important;
+    border-color: #008d4c !important;
+}
+.btn-success:hover,
+.btn-success:active,
+.btn-success.hover {
+    background-color: #008d4c !important;
+}
+.btn-info {
+    color: white !important;
+    background-color: #00c0ef !important;
+    border-color: #00acd6 !important;
+}
+.btn-info:hover,
+.btn-info:active,
+.btn-info.hover {
+    background-color: #00acd6 !important;
+}
+.btn-danger {
+    color: white !important;
+    background-color: #dd4b39 !important;
+    border-color: #d73925 !important;
+}
+.btn-danger:hover,
+.btn-danger:active,
+.btn-danger.hover {
+    background-color: #d73925 !important;
+}
+.btn-warning {
+    color: white !important;
+    background-color: #f39c12 !important;
+    border-color: #e08e0b !important;
+}
+.btn-warning:hover,
+.btn-warning:active,
+.btn-warning.hover {
+    background-color: #e08e0b !important;
+}
 
-/* customizacao do componente de mensagem */ 
+/*gravatar customizations*/
+.dropdown-toggle > img {
+    float: left;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-top: -2px;
+}
+@media (max-width: 767px) {
+    .dropdown-toggle > img {
+        float: none;
+        margin-right: 0;
+        margin-top: -8px;
+        line-height: 10px;
+    }
+}
+
+/*selectonemenu bootstrap customization*/
+.ui-selectonemenu {
+    height: 34px;
+    min-width: 130px !important;
+    display: block !important;
+    position: relative !important;
+    border-color: #d2d6de !important;
+    border-radius: 0 !important;
+}
+.ui-selectonemenu-trigger {
+    width: 30px !important;
+    padding: 3px 6px !important;
+    border-radius: 0 !important;
+}
+.ui-selectonemenu-label {
+    padding: 6px !important;
+}
+
+/*messaging component customization */
 .ui-messages > div {
     padding: 15px;
     margin-bottom: 15px;
@@ -48,95 +242,4 @@
 .ui-messages-info-summary {
     margin-left: 0 !important;
     font-weight: 600 !important;
-}
-
-/* corrige a opacidade dos checkboxes das grids */
-.ui-chkbox .ui-state-disabled {
-    opacity: initial !important;
-}
-
-/* remove uma linha preta escrota da header das tabelas */
-th[role="columnheader"].ui-state-default {
-    border-color: #ccc !important;
-}
-
-/* corrige a borda do paginador das datatables */
-div.ui-paginator {
-    border: 1px solid #dddddd !important; 
-    border-top: 0px !important;
-}
-
-/* corrige a borda da summary row */
-.ui-datatable-summaryrow {
-    border: 1px solid #dddddd !important; 
-}
-
-/* posicionamento do check nos checkboxes de datatable */ 
-span.ui-icon-check {
-    position: relative;
-    right: 1px;
-    bottom: 1px;
-}
-span.ui-icon-minus {
-    position: relative;
-    right: 1px;
-    bottom: 2px;
-}
-
-/* corrige a exibicao do selectonemenu */
-.ui-selectonemenu {
-    height: 34px;
-    min-width: 130px !important;
-    display: block !important;
-    position: relative !important;
-    border-color: #d2d6de !important;
-    border-radius: 0 !important;
-}
-.ui-selectonemenu-trigger {
-    width: 30px !important;
-    padding: 3px 6px !important;
-    border-radius: 0 !important;
-}
-.ui-selectonemenu-label {
-    padding: 6px !important;
-}
-
-/* customizacao dos paineis */
-.ui-panel {
-    padding: 0 !important;
-    border: none !important;
-}
-.ui-panel .ui-panel-content {
-    padding: 0 !important;
-}
-
-/* remove aquele asterisco porco dos forms */
-.ui-outputlabel-rfi {
-    display: none;
-}
-
-/* tira aquele fundo vermelho do label na hr da validacao */
-label.ui-state-error {
-    background: none !important;
-}
-
-/* corrige o label dos treenodes da arvore de permissoes */
-.ui-treenode-label {
-    position: relative;
-    left: 3px;
-}
-.ui-tree-toggler {
-    position: relative !important;
-}
-
-/* customizacao do scroller */
-.ui-datascroller-content {
-    background: none !important;
-    border: none !important;
-    padding: 0px !important;
-}
-
-/* corrige o CSS no seletor da datatables */
-th > div > div.ui-chkbox-box {
-    position: inherit;
 }

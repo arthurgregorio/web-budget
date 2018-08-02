@@ -40,8 +40,8 @@ public interface ContactRepository extends DefaultRepository<Contact> {
      * @return 
      */
     @Override
-    default SingularAttribute<Contact, Boolean> getBlockedProperty() {
-        return Contact_.blocked;
+    default SingularAttribute<Contact, Boolean> getEntityStateProperty() {
+        return Contact_.active;
     }
 
     /**

@@ -63,8 +63,8 @@ public interface MovementClassRepository extends DefaultRepository<MovementClass
      * @return 
      */
     @Override
-    default SingularAttribute<MovementClass, Boolean> getBlockedProperty() {
-        return MovementClass_.blocked;
+    default SingularAttribute<MovementClass, Boolean> getEntityStateProperty() {
+        return MovementClass_.active;
     }
 
     /**

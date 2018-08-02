@@ -34,8 +34,8 @@ public interface GroupRepository extends DefaultRepository<Group> {
      * @return 
      */
     @Override
-    default SingularAttribute<Group, Boolean> getBlockedProperty() {
-        return Group_.blocked;
+    default SingularAttribute<Group, Boolean> getEntityStateProperty() {
+        return Group_.active;
     }
 
     /**

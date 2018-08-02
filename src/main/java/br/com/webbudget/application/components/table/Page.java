@@ -17,14 +17,17 @@
 package br.com.webbudget.application.components.table;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import static com.google.common.base.Preconditions.checkNotNull;
-import java.util.Collections;
-import java.util.List;
 import lombok.Getter;
 
+import java.util.Collections;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
+ * This class represents a page of data from the database
  *
- * @param <T>
+ * @param <T> the type the page data
  * 
  * @author Arthur Gregorio
  *

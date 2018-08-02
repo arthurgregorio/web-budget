@@ -52,8 +52,8 @@ public interface UserRepository extends DefaultRepository<User> {
      * @return 
      */
     @Override
-    default SingularAttribute<User, Boolean> getBlockedProperty() {
-        return User_.blocked;
+    default SingularAttribute<User, Boolean> getEntityStateProperty() {
+        return User_.active;
     }
 
     /**

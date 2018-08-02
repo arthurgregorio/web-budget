@@ -58,8 +58,8 @@ public class Group extends PersistentEntity {
     private String name;
     @Getter
     @Setter
-    @Column(name = "blocked", nullable = false)
-    private boolean blocked;
+    @Column(name = "active", nullable = false)
+    private boolean active;
     
     @Getter
     @Setter
@@ -74,7 +74,7 @@ public class Group extends PersistentEntity {
      * Constructor
      */
     public Group() { 
-        this.blocked = false;
+        this.active = true;
         this.grants = Collections.emptyList();
     }
 

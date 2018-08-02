@@ -84,8 +84,8 @@ public class Vehicle extends PersistentEntity {
     private int fuelCapacity;
     @Getter
     @Setter
-    @Column(name = "blocked")
-    private boolean blocked;
+    @Column(name = "active", nullable = false)
+    private boolean active;
     
     @Getter
     @Setter
@@ -105,6 +105,7 @@ public class Vehicle extends PersistentEntity {
      * Default constructor
      */
     public Vehicle() {
+        this.active = true;
         final int year = LocalDate.now().get(ChronoField.YEAR);
         this.modelYear = year;
         this.manufacturingYear = year;

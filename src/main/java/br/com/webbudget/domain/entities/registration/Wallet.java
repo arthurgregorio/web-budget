@@ -17,14 +17,6 @@
 package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import java.math.BigDecimal;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +24,10 @@ import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * The representation of a wallet in the application
@@ -80,8 +76,8 @@ public class Wallet extends PersistentEntity {
     private BigDecimal actualBalance;
     @Getter
     @Setter
-    @Column(name = "blocked")
-    private boolean blocked;
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
     @Getter
     @Setter
@@ -104,6 +100,7 @@ public class Wallet extends PersistentEntity {
      * Default constructor
      */
     public Wallet() {
+        this.active = true;
         this.actualBalance = BigDecimal.ZERO;
         this.adjustmentValue = BigDecimal.ZERO;
     }

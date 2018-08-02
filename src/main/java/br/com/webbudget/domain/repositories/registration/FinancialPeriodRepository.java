@@ -70,7 +70,7 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
      * @return 
      */
     @Override
-    default SingularAttribute<FinancialPeriod, Boolean> getBlockedProperty() {
+    default SingularAttribute<FinancialPeriod, Boolean> getEntityStateProperty() {
         return FinancialPeriod_.closed;
     }
     

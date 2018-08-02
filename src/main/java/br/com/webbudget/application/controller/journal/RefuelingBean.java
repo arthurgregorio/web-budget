@@ -16,31 +16,29 @@
  */
 package br.com.webbudget.application.controller.journal;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.journal.FuelType;
 import br.com.webbudget.domain.entities.journal.Refueling;
-import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
-import br.com.webbudget.domain.repositories.registration.VehicleRepository;
+import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.repositories.journal.RefuelingRepository;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
+import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
+import br.com.webbudget.domain.repositories.registration.VehicleRepository;
 import br.com.webbudget.domain.services.RefuelingService;
-import java.util.List;
+import lombok.Getter;
+import org.primefaces.model.SortOrder;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
-import org.primefaces.model.SortOrder;
+import java.util.List;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
 /**
  *
@@ -92,7 +90,7 @@ public class RefuelingBean extends FormBean<Refueling> {
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         
-        this.vehicles = this.vehicleRepository.findAllUnblocked();
+        this.vehicles = this.vehicleRepository.findAllActive();
         this.financialPeriods = this.financialPeriodRepository
                 .findByClosed(false);
         

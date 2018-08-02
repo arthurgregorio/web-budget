@@ -36,7 +36,6 @@ import java.math.BigDecimal;
  */
 @Entity
 @Audited
-@NoArgsConstructor
 @Table(name = "cards")
 @AuditTable(value = "audit_cards")
 @ToString(callSuper = true, of = {"number", "cardType"})
@@ -73,8 +72,8 @@ public class Card extends PersistentEntity {
     private String owner;
     @Getter
     @Setter
-    @Column(name = "blocked")
-    private boolean blocked;
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
     @Getter
     @Setter
@@ -87,6 +86,13 @@ public class Card extends PersistentEntity {
     @ManyToOne
     @JoinColumn(name = "id_wallet")
     private Wallet wallet;
+
+    /**
+     * Default constructor
+     */
+    public Card() {
+        this.active = true;
+    }
 
     /**
      * {@inheritDoc}

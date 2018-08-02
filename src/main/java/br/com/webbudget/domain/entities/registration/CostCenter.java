@@ -69,12 +69,12 @@ public class CostCenter extends PersistentEntity {
     private BigDecimal revenuesBudget;
     @Getter
     @Setter
-    @Column(name = "blocked")
-    private boolean blocked;
-    @Getter
-    @Setter
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+    @Getter
+    @Setter
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
     @Setter
     @Getter
@@ -95,6 +95,7 @@ public class CostCenter extends PersistentEntity {
      * Default constructor
      */
     public CostCenter() {
+        this.active = true;
         this.color = Color.randomize();
         this.percentage = BigDecimal.ZERO;
         this.totalMovements = BigDecimal.ZERO;

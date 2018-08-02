@@ -88,7 +88,7 @@ public class GroupBean extends FormBean<Group> {
         
         this.viewState = viewState;
         
-        this.data = this.groupRepository.findAllUnblocked();
+        this.data = this.groupRepository.findAllActive();
 
         this.createAuthorizationsTree();
 

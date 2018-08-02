@@ -66,10 +66,16 @@ public class ProfileBean extends AbstractBean {
     /**
      * Method used to dynamically change the user interface theme
      *
-     * @param theme the selected theme
+     * @param themeType the selected theme
      */
-    public void changeTheme(String theme) {
-        // TODO fazer o theme ser salvo e alterado ao clicar sobre na selecao do menu
+    public void changeTheme(ThemeType themeType) {
+
+        // replace the theme for the new one
+        this.executeScript("$(\"body\").removeClass('"+ this.profile.getActiveTheme().getValue() + "')");
+        this.executeScript("$(\"body\").addClass('" + themeType.getValue() + "')");
+
+        // update the user profile with the theme
+        // TODO update here
     }
 
     /**
@@ -79,8 +85,7 @@ public class ProfileBean extends AbstractBean {
 
         final User principal = this.userSessionBean.getPrincipal();
 
-        this.userAccountService.changePasswordForCurrentUser(
-                this.passwordChangeDTO, principal);
+        this.userAccountService.changePasswordForCurrentUser(this.passwordChangeDTO, principal);
 
         this.passwordChangeDTO = new PasswordChangeDTO();
         this.addInfo(true, "profile.password-changed");
@@ -92,15 +97,6 @@ public class ProfileBean extends AbstractBean {
     public void showChangePasswordDialog() {
         this.passwordChangeDTO = new PasswordChangeDTO();
         this.updateAndOpenDialog("changePasswordDialog", "dialogChangePassword");
-    }
-
-    /**
-     * Use this method to get a list of the themes to be selected
-     *
-     * @return an array with all the possible themes defined in the {@link ThemeType} enum
-     */
-    public ThemeType[] getThemeTypes() {
-        return ThemeType.values();
     }
 
     /**

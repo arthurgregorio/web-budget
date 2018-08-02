@@ -78,7 +78,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.costCenters = this.costCenterRepository.findAllUnblocked();
+        this.costCenters = this.costCenterRepository.findAllActive();
         this.value = this.vehicleRepository.findOptionalById(id)
                 .orElseGet(Vehicle::new);
     }

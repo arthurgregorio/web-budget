@@ -36,13 +36,11 @@
 
         <title>webBudget</title>
 
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:img/favicon.ico']}"/>
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:images/favicon.ico']}"/>
 
         <h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css"/>
         <h:outputStylesheet library="adminlte" name="css/adminlte.min.css"/>
         <h:outputStylesheet library="adminlte" name="css/all-skins.min.css"/>
-        <!--<h:outputStylesheet library="ionicons" name="css/ionicons.min.css"/>-->
-        <h:outputStylesheet library="minicolors" name="css/jquery.minicolors.css"/>
         <h:outputStylesheet library="webbudget" name="css/custom.css"/>
         <h:outputStylesheet library="webbudget" name="css/common.css"/>
 
@@ -68,14 +66,13 @@
                             </span>
                         </a>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                            <i class="fa fa-bars"></i>
+                            <i class="fa fa-bars"/>
                         </button>
                     </div>
 
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ui:include src="/template/mainMenu.xhtml"/>
                     </div>
-
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
                             <!--                            <li jsf:id="userMessagesBox" class="dropdown messages-menu">
@@ -163,9 +160,7 @@
                                     <li class="user-footer">
                                         <h:form>
                                             <div class="pull-left">
-                                                <p:commandLink value="#{menu['profile']}"
-                                                               styleClass="btn btn-flat btn-primary" 
-                                                               action="/secured/tools/user/myProfile.xhtml?faces-redirect=true"/>
+
                                             </div>
                                             <div class="pull-right">
                                                 <a class="btn btn-flat btn-danger" href="/logout">#{menu['logout']}</a>
@@ -173,6 +168,9 @@
                                         </h:form>
                                     </li>
                                 </ul>
+                            </li>
+                            <li>
+                                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"/></a>
                             </li>
                         </ul>
                     </div>
@@ -188,7 +186,7 @@
                     <ol class="breadcrumb">
                         <li>
                             <p:link href="/main/dashboard.xhtml">
-                                <i class="fa fa-home"></i>
+                                <i class="fa fa-home"/>
                                 Home
                             </p:link>
                         </li>
@@ -209,6 +207,7 @@
                     <strong>#{utilsBean.applicationVersion}</strong>
                 </div>
             </footer>
+            <ui:include src="sidebar.xhtml"/>
         </div>
 
         <ui:insert name="popups" />
@@ -222,10 +221,10 @@
             };
         </script>
 
-        <h:outputScript library="bootstrap" name="js/bootstrap.min.js"/>
+        <h:outputScript library="bootstrap" name="js/bootstrap.min.js" />
         <h:outputScript library="adminlte" name="js/adminlte.min.js"/>
         <h:outputScript library="primefaces" name="primefaces-locale.js" />
-        <h:outputScript library="minicolors" name="js/jquery.minicolors.js"/>
-        <!--<h:outputScript library="webbudget" name="js/chart.min.js"/>-->
+
+        <ui:insert name="scripts" />
     </h:body>
 </html>
