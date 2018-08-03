@@ -106,7 +106,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
         this.classificationService.save(this.value);
         this.value = new CostCenter();
         this.data = this.costCenterRepository.findAllActive();
-        this.addInfo(true, "cost-center.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
@@ -116,7 +116,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     public void doUpdate() {
         this.value = this.classificationService.update(this.value);
         this.data = this.costCenterRepository.findAllActive();
-        this.addInfo(true, "cost-center.updated");
+        this.addInfo(true, "updated");
     }
 
     /**
@@ -127,7 +127,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     @Override
     public String doDelete() {
         this.classificationService.delete(this.value);
-        this.addInfoAndKeep("cost-center.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
 }

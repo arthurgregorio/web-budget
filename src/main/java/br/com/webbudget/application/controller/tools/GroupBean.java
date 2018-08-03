@@ -135,7 +135,7 @@ public class GroupBean extends FormBean<Group> {
         this.userAccountService.save(this.value, this.parseAuthorizations());
         this.value = new Group();
         this.unselectAuthorizations();
-        this.addInfo(true, "group.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
@@ -144,7 +144,7 @@ public class GroupBean extends FormBean<Group> {
     @Override
     public void doUpdate() {
         this.userAccountService.update(this.value, this.parseAuthorizations());
-        this.addInfo(true, "group.updated");
+        this.addInfo(true, "updated");
     }
 
     /**
@@ -155,7 +155,7 @@ public class GroupBean extends FormBean<Group> {
     @Override
     public String doDelete() {
         this.userAccountService.delete(this.value);
-        this.addInfoAndKeep("group.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
 

@@ -117,7 +117,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     public void doSave() {
         this.vehicleService.save(this.value);
         this.value = new Vehicle();
-        this.addInfo(true, "vehicle.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
@@ -126,7 +126,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     @Override
     public void doUpdate() {
         this.value = this.vehicleService.update(this.value);
-        this.addInfo(true, "vehicle.updated");
+        this.addInfo(true, "updated");
     }
 
     /**
@@ -137,7 +137,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     @Override
     public String doDelete() {
         this.vehicleService.delete(this.value);
-        this.addInfoAndKeep("vehicle.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
 

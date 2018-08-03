@@ -46,7 +46,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
-        <li><a href="listCards.xhtml">#{breadcrumb['registration.contacts']}</a></li>
+        <li><a href="listContacts.xhtml">#{breadcrumb['registration.contacts']}</a></li>
         <li jsf:rendered="#{contactBean.viewState eq 'DELETING'}" 
             class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
         <li jsf:rendered="#{contactBean.viewState eq 'DETAILING'}" 
@@ -65,8 +65,8 @@
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">
-                        <p:selectBooleanCheckbox value="#{contactBean.value.blocked}"
-                                                 itemLabel="#{messages['contact.form.blocked']}"/>
+                        <p:selectBooleanCheckbox value="#{contactBean.value.active}"
+                                                 itemLabel="#{messages['form.active']}"/>
                     </h3>
                 </div>
                 <div class="box-body row">
@@ -145,7 +145,9 @@
                                                      onstart="PF('blocker').show()"
                                                      oncomplete="PF('blocker').hide()"
                                                      styleClass="btn btn-flat btn-primary"
-                                                     actionListener="#{contactBean.searchAddress()}"/>
+                                                     actionListener="#{contactBean.searchAddress()}"
+                                                     disabled="#{contactBean.viewState eq 'DETAILING'
+                                                                or contactBean.viewState eq 'DELETING'}"/>/>
                                 </div>
                             </div>
                         </div>
@@ -205,7 +207,9 @@
                                 <p:commandButton immediate="true"
                                                  value="#{menu['add']}"
                                                  styleClass="btn btn-flat btn-primary"
-                                                 action="#{contactBean.showTelephoneDialog()}"/>
+                                                 action="#{contactBean.showTelephoneDialog()}"
+                                                 disabled="#{contactBean.viewState eq 'DETAILING'
+                                                                or contactBean.viewState eq 'DELETING'}"/>
                             </div>
                             <p:dataTable id="telephonesList" 
                                          rows="5"
@@ -217,21 +221,23 @@
                                          value="#{contactBean.value.telephones}"
                                          emptyMessage="#{messages['list.empty']}">
                                 <p:column styleClass="align-center"
-                                          headerText="#{messages['telephone.number']}">
+                                          headerText="#{messages['telephone.list.number']}">
                                     #{telephone.number}
                                 </p:column>
                                 <p:column styleClass="align-center"
-                                          headerText="#{messages['telephone.type']}">
+                                          headerText="#{messages['telephone.list.type']}">
                                     #{enums[telephone.numberType]}
                                 </p:column>
                                 <p:column width="10%" 
                                           styleClass="align-center"
-                                          headerText="#{menu['actions']}">
+                                          headerText="#{messages['list.actions']}">
                                     <p:commandButton immediate="true"
                                                      icon="fa fa-trash-o"
                                                      title="#{menu['delete']}"
                                                      styleClass="btn btn-flat btn-danger"
-                                                     actionListener="#{contactBean.deleteTelephone(telephone)}" />
+                                                     actionListener="#{contactBean.deleteTelephone(telephone)}"
+                                                     disabled="#{contactBean.viewState eq 'DETAILING'
+                                                                or contactBean.viewState eq 'DELETING'}"/>
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -239,7 +245,7 @@
                 </div>
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
-                                  value="#{menu['delete.confirmation']}"
+                                  value="#{messages['info.delete-confirmation']}"
                                   rendered="#{contactBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton value="#{menu['yes']}"

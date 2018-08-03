@@ -115,7 +115,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     public void doSave() {
         this.classificationService.save(this.value);
         this.value = new MovementClass();
-        this.addInfo(true, "movement-class.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
@@ -124,7 +124,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     @Override
     public void doUpdate() {
         this.value = this.classificationService.update(this.value);
-        this.addInfo(true, "movement-class.updated");
+        this.addInfo(true, "updated");
     }
 
     /**
@@ -135,7 +135,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     @Override
     public String doDelete() {
         this.classificationService.delete(this.value);
-        this.addInfoAndKeep("movement-class.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
 

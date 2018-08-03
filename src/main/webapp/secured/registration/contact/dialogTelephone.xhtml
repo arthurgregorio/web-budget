@@ -42,7 +42,7 @@
         <div class="row">
             <div class="col-md-12 form-group">
                 <p:outputLabel for="inNumberType" 
-                               value="#{messages['telephone.dialog.type']}: "/>
+                               value="#{messages['telephone.form.type']}: "/>
                 <p:selectOneMenu id="inNumberType" 
                                  converter="omnifaces.GenericEnumConverter"
                                  value="#{contactBean.telephone.numberType}" >
@@ -57,7 +57,7 @@
             </div>
             <div class="col-md-12 form-group">
                 <p:outputLabel for="inTelephone" 
-                               value="#{messages['telephone.dialog.number']}: "/>
+                               value="#{messages['telephone.form.number']}: "/>
                 <p:inputMask id="inTelephone"
                              mask="(99) 9999-9999?9"
                              styleClass="form-control"

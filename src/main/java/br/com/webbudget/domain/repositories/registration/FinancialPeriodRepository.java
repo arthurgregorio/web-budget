@@ -63,16 +63,6 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
     default Criteria<FinancialPeriod, FinancialPeriod> getRestrictions(String filter) {
         return this.criteria().likeIgnoreCase(FinancialPeriod_.identification, filter);
     }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @return 
-     */
-    @Override
-    default SingularAttribute<FinancialPeriod, Boolean> getEntityStateProperty() {
-        return FinancialPeriod_.closed;
-    }
     
     /**
      * {@inheritDoc}

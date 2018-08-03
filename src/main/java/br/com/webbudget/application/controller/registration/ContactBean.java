@@ -113,7 +113,7 @@ public class ContactBean extends FormBean<Contact> {
     public void doSave() {
         this.contactService.save(this.value);
         this.value = new Contact();
-        this.addInfo(true, "contact.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
@@ -122,7 +122,7 @@ public class ContactBean extends FormBean<Contact> {
     @Override
     public void doUpdate() {
         this.value = this.contactService.update(this.value);
-        this.addInfo(true, "contact.updated");
+        this.addInfo(true, "updated");
     }
 
     /**
@@ -133,7 +133,7 @@ public class ContactBean extends FormBean<Contact> {
     @Override
     public String doDelete() {
         this.contactService.delete(this.value);
-        this.addInfoAndKeep("contact.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
 

@@ -62,8 +62,8 @@
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">
-                        <p:selectBooleanCheckbox value="#{contactBean.value.blocked}"
-                                                 itemLabel="#{messages['contact.form.blocked']}"/>
+                        <p:selectBooleanCheckbox value="#{contactBean.value.active}"
+                                                 itemLabel="#{messages['form.active']}"/>
                     </h3>
                 </div>
                 <div class="box-body row">
@@ -200,7 +200,7 @@
                              class="col-sm-12">
                             <div class="align-right" style="margin-bottom: 10px">
                                 <p:commandButton immediate="true"
-                                                 value="#{menu['add']}"
+                                                 value="#{menu['new']}"
                                                  styleClass="btn btn-flat btn-primary"
                                                  action="#{contactBean.showTelephoneDialog()}"/>
                             </div>
@@ -214,16 +214,16 @@
                                          value="#{contactBean.value.telephones}"
                                          emptyMessage="#{messages['list.empty']}">
                                 <p:column styleClass="align-center"
-                                          headerText="#{messages['telephone.number']}">
+                                          headerText="#{messages['telephone.list.number']}">
                                     #{telephone.number}
                                 </p:column>
                                 <p:column styleClass="align-center"
-                                          headerText="#{messages['telephone.type']}">
+                                          headerText="#{messages['telephone.list.type']}">
                                     #{enums[telephone.numberType]}
                                 </p:column>
                                 <p:column width="10%" 
                                           styleClass="align-center"
-                                          headerText="#{menu['actions']}">
+                                          headerText="#{messages['list.actions']}">
                                     <p:commandButton immediate="true"
                                                      icon="fa fa-trash-o"
                                                      title="#{menu['delete']}"

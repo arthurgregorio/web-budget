@@ -105,7 +105,7 @@ public class WalletBean extends FormBean<Wallet> {
     public void doSave() {
         this.walletService.save(this.value);
         this.value = new Wallet();
-        this.addInfo(true, "wallet.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
@@ -114,7 +114,7 @@ public class WalletBean extends FormBean<Wallet> {
     @Override
     public void doUpdate() {
         this.value = this.walletService.update(this.value);
-        this.addInfo(true, "wallet.updated");
+        this.addInfo(true, "updated");
     }
 
     /**
@@ -125,7 +125,7 @@ public class WalletBean extends FormBean<Wallet> {
     @Override
     public String doDelete() {
         this.walletService.delete(this.value);
-        this.addInfoAndKeep("wallet.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
     

@@ -123,7 +123,7 @@ public class UserBean extends FormBean<User> {
     public void doSave() {
         this.userAccountService.save(this.value);
         this.value = new User();
-        this.addInfo(true, "user.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
@@ -132,7 +132,7 @@ public class UserBean extends FormBean<User> {
     @Override
     public void doUpdate() {
         this.userAccountService.update(this.value);
-        this.addInfo(true, "user.updated");
+        this.addInfo(true, "updated");
     }
 
     /**
@@ -143,7 +143,7 @@ public class UserBean extends FormBean<User> {
     @Override
     public String doDelete() {
         this.userAccountService.delete(this.value);
-        this.addInfoAndKeep("user.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
     

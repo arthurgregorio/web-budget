@@ -76,9 +76,9 @@
                                     <p:spacer width="10"/>
                                     <p:commandButton icon="fa fa-trash-o"
                                                      onstart="PF('blocker').show()"
+                                                     title="#{menu['filter-clear']}"
                                                      update="itemsList controlsForm"
                                                      oncomplete="PF('blocker').hide()"
-                                                     title="#{messages['filter.clear']}"
                                                      styleClass="btn btn-flat btn-danger"
                                                      actionListener="#{movementClassBean.clearFilters()}"/>
                                 </div>
@@ -99,14 +99,14 @@
             <div jsf:id="boxBody" class="box-body">
                 <h:form id="itemsList">
                     <p:dataTable rows="15"
-                                 var="movementClass"
                                  lazy="true"
                                  rowHover="true"
                                  paginator="true"
-                                 rowKey="#{movementClass.id}"
+                                 var="movementClass"
                                  sortOrder="ascending"
-                                 selectionMode="single" 
+                                 selectionMode="single"
                                  paginatorPosition="bottom"
+                                 rowKey="#{movementClass.id}"
                                  selection="#{movementClassBean.value}"
                                  value="#{movementClassBean.dataModel}"
                                  paginatorAlwaysVisible="false"
@@ -116,29 +116,29 @@
                                 listener="#{movementClassBean.changeToDetail()}" /> 
 
                         <p:column headerText="#{messages['movement-class.list.name']}">
-                            <p:graphicImage width="18"
-                                            height="18"
-                                            library="webbudget" 
-                                            name="img/ui-icon-active.png" 
-                                            title="#{messages['list.active']}"
-                                            rendered="#{not movementClass.blocked}"/>
-                            <p:graphicImage width="18"
-                                            height="18"
-                                            library="webbudget" 
-                                            name="img/ui-icon-blocked.png" 
-                                            rendered="#{movementClass.blocked}"
-                                            title="#{messages['list.blocked']}"/>
+                            <p:graphicImage width="24"
+                                            height="24"
+                                            library="webbudget"
+                                            name="images/inactive.png"
+                                            title="#{messages['list.inactive']}"
+                                            rendered="#{not movementClass.active}"/>
+                            <p:graphicImage width="24"
+                                            height="24"
+                                            library="webbudget"
+                                            name="images/active.png"
+                                            rendered="#{movementClass.active}"
+                                            title="#{messages['list.active']}"/>
                             <p:spacer width="5"/>
-                            <p:graphicImage width="18"
-                                            height="18"
+                            <p:graphicImage width="24"
+                                            height="24"
                                             library="webbudget" 
-                                            name="img/ui-icon-minus.png" 
+                                            name="images/minus.png"
                                             rendered="#{movementClass.expenses}"
                                             title="#{messages['movement-class.list.expenses']}"/>
-                            <p:graphicImage width="18"
-                                            height="18"
+                            <p:graphicImage width="24"
+                                            height="24"
                                             library="webbudget" 
-                                            name="img/ui-icon-plus.png" 
+                                            name="images/plus.png"
                                             rendered="#{movementClass.revenues}"
                                             title="#{messages['movement-class.list.revenues']}"/>
                             <p:spacer width="5"/>
@@ -158,7 +158,7 @@
                         </p:column>
                         <p:column width="15%" 
                                   styleClass="align-center"
-                                  headerText="#{menu['actions']}">
+                                  headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
@@ -174,7 +174,7 @@
                     </p:dataTable>
                 </h:form>
             </div>
-            <wb:blocker target="boxBody"/>
         </div>
+        <wb:blocker target="boxBody"/>
     </ui:define>
 </ui:composition>

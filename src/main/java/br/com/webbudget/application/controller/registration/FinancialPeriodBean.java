@@ -94,7 +94,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     @Override
     public Page<FinancialPeriod> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.financialPeriodRepository.findAllBy(this.filter.getValue(), 
-                this.filter.getEntityStatusValue(), first, pageSize);
+                this.filter.getEntityStatusValue(), first, pageSize); // FIXME verificar pq os FP nao estao sendo carregados
     }
 
     /**
@@ -105,7 +105,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
         this.financialPeriodService.save(this.value);
         this.value = new FinancialPeriod();
         this.validateOpenPeriods();
-        this.addInfo(true, "financial-period.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
@@ -122,7 +122,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     @Override
     public String doDelete() {
         this.financialPeriodService.delete(this.value);
-        this.addInfoAndKeep("financial-period.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
 

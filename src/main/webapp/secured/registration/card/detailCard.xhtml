@@ -65,8 +65,8 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox id="inBlocked" 
-                                                 value="#{cardBean.value.blocked}"
-                                                 itemLabel="#{messages['card.form.blocked']}"/>
+                                                 value="#{cardBean.value.active}"
+                                                 itemLabel="#{messages['form.active']}"/>
                     </h3>
                 </div>
                 <div class="box-body row">
@@ -164,8 +164,8 @@
                 </div>
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
-                                  value="#{menu['delete.confirmation']}"
-                                  rendered="#{cardBean.viewState eq 'DELETING'}"/>
+                                  rendered="#{cardBean.viewState eq 'DELETING'}"
+                                  value="#{messages['info.delete-confirmation']}"/>
                     <p:spacer width="10"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{cardBean.doDelete()}"

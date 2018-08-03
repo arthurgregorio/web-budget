@@ -29,6 +29,14 @@
         <f:viewAction action="#{costCenterBean.initialize(param.id, param.viewState)}"/>
     </f:metadata>
 
+    <ui:define name="head">
+        <h:outputStylesheet library="minicolors" name="css/jquery.minicolors.css"/>
+    </ui:define>
+
+    <ui:define name="scripts">
+        <h:outputScript library="minicolors" name="js/jquery.minicolors.js"/>
+    </ui:define>
+
     <ui:define name="pageTitle">
         #{messages['cost-center.page-title']}
     </ui:define>
@@ -66,8 +74,8 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox id="inBlocked" 
-                                                 value="#{costCenterBean.value.blocked}"
-                                                 itemLabel="#{messages['cost-center.form.blocked']}"/>
+                                                 value="#{costCenterBean.value.active}"
+                                                 itemLabel="#{messages['form.active']}"/>
                     </h3>
                 </div>
                 <div class="box-body row">
@@ -141,7 +149,7 @@
                 </div>
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
-                                  value="#{menu['delete.confirmation']}"
+                                  value="#{messages['info.delete-confirmation']}"
                                   rendered="#{costCenterBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="10"/>
                     <p:commandButton value="#{menu['yes']}"

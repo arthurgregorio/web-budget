@@ -125,7 +125,7 @@ public class CardBean extends FormBean<Card> {
     public void doSave() {
         this.cardService.save(this.value);
         this.value = new Card();
-        this.addInfo(true, "card.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
@@ -134,7 +134,7 @@ public class CardBean extends FormBean<Card> {
     @Override
     public void doUpdate() {
         this.value = this.cardService.update(this.value);
-        this.addInfo(true, "card.updated");
+        this.addInfo(true, "updated");
     }
 
     /**
@@ -145,7 +145,7 @@ public class CardBean extends FormBean<Card> {
     @Override
     public String doDelete() {
         this.cardService.delete(this.value);
-        this.addInfoAndKeep("card.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
 
