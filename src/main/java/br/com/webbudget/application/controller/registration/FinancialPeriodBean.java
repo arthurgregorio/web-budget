@@ -94,7 +94,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     @Override
     public Page<FinancialPeriod> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.financialPeriodRepository.findAllBy(this.filter.getValue(), 
-                this.filter.getEntityStatusValue(), first, pageSize); // FIXME verificar pq os FP nao estao sendo carregados
+                null, first, pageSize);
     }
 
     /**

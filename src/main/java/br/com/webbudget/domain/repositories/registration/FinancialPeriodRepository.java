@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.registration;
 
+import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
@@ -25,6 +26,8 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 import javax.persistence.metamodel.SingularAttribute;
 import java.util.List;
 import java.util.Optional;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * The {@link FinancialPeriod} repository
@@ -52,7 +55,7 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
      * @return an {@link Optional} of the {@link FinancialPeriod}
      */
     Optional<FinancialPeriod> findOptionalByIdentification(String identification);
-    
+
     /**
      * {@inheritDoc}
      *
@@ -63,7 +66,17 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
     default Criteria<FinancialPeriod, FinancialPeriod> getRestrictions(String filter) {
         return this.criteria().likeIgnoreCase(FinancialPeriod_.identification, filter);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return
+     */
+    @Override
+    default SingularAttribute<FinancialPeriod, Boolean> getEntityStateProperty() {
+        return FinancialPeriod_.closed;
+    }
+
     /**
      * {@inheritDoc}
      *

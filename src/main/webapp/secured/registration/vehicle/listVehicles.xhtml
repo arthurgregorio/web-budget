@@ -102,7 +102,6 @@
             </div>
             <div jsf:id="boxBody" class="box-body">
                 <h:form id="itemsList">
-                    
                     <p:dataTable rows="15"
                                  lazy="true"
                                  var="vehicle"
@@ -156,8 +155,7 @@
                                   headerText="#{messages['vehicle.list.license-plate']}">
                             #{vehicle.licensePlate}
                         </p:column>
-
-                        <p:column width="15%" 
+                        <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-edit"

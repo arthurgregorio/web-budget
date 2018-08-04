@@ -97,15 +97,13 @@ public interface DefaultRepository<T extends PersistentEntity> extends EntityRep
      */
     default int countPages(String filter, Boolean active) {
 
-        final Criteria<T, T> criteria = criteria()
-                .or(this.getRestrictions(filter));
+        final Criteria<T, T> criteria = criteria().or(this.getRestrictions(filter));
 
         if (active != null) {
             criteria.eq(this.getEntityStateProperty(), active);
         }
 
-        return criteria
-                .select(Long.class, count(PersistentEntity_.id))
+        return criteria.select(Long.class, count(PersistentEntity_.id))
                 .getSingleResult()
                 .intValue();
     }

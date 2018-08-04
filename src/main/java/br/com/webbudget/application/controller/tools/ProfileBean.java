@@ -27,6 +27,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -40,7 +41,6 @@ import javax.inject.Named;
  * @since 3.0.0, 28/03/2018
  */
 @Named
-@ToString
 @ViewScoped
 public class ProfileBean extends AbstractBean {
 
@@ -59,6 +59,7 @@ public class ProfileBean extends AbstractBean {
     /**
      * Initialize this bean with the current user preferences
      */
+    @PostConstruct
     public void initialize() {
         this.profile = this.userSessionBean.getPrincipal().getProfile();
     }
