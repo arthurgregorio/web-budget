@@ -18,6 +18,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     
@@ -104,7 +105,6 @@
                             </p:commandLink>
                             <p class='text-center no-margin'>#{enums[theme.PURPLE]}</p>
                         </li>
-
                         <li class="skin-block">
                             <p:commandLink immediate="true"
                                            class='clearfix full-opacity-hover theme-selector'
@@ -146,93 +146,6 @@
                                 </div>
                             </p:commandLink>
                             <p class='text-center no-margin'>#{enums[theme.YELLOW]}</p>
-                        </li>
-                        <li class="skin-block">
-                            <p:commandLink immediate="true"
-                                           class='clearfix full-opacity-hover theme-selector'
-                                           actionListener="#{profileBean.changeTheme(theme.BLUE_LIGHT)}">
-                                <div>
-                                    <span style='display:block; width: 20%; float: left; height: 7px; background: #367fa9;'/>
-                                    <span class='bg-light-blue' style='display:block; width: 80%; float: left; height: 7px;'/>
-                                </div>
-                                <div><span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
-                                    <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
-                                </div>
-                            </p:commandLink>
-                            <p class='text-center no-margin'>#{enums[theme.BLUE_LIGHT]}</p>
-                        </li>
-                        <li class="skin-block">
-                            <p:commandLink immediate="true"
-                                           class='clearfix full-opacity-hover theme-selector'
-                                           actionListener="#{profileBean.changeTheme(theme.BLACK_LIGHT)}">
-                                <div style='box-shadow: 0 0 2px rgba(0,0,0,0.1)' class='clearfix'>
-                                    <span style='display:block; width: 20%; float: left; height: 7px; background: #fefefe;'/>
-                                    <span style='display:block; width: 80%; float: left; height: 7px; background: #fefefe;'/>
-                                </div>
-                                <div><span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
-                                    <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
-                                </div>
-                            </p:commandLink>
-                            <p class='text-center no-margin'>#{enums[theme.BLACK_LIGHT]}</p>
-                        </li>
-                        <li class="skin-block">
-                            <p:commandLink immediate="true"
-                                           class='clearfix full-opacity-hover theme-selector'
-                                           actionListener="#{profileBean.changeTheme(theme.PURPLE_LIGHT)}">
-                                <div>
-                                    <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-purple-active'/>
-                                    <span class='bg-purple' style='display:block; width: 80%; float: left; height: 7px;'/>
-                                </div>
-                                <div><span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
-                                    <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
-                                </div>
-                            </p:commandLink>
-                            <p class='text-center no-margin'>#{enums[theme.PURPLE_LIGHT]}</p>
-                        </li>
-                        <li class="skin-block">
-                            <p:commandLink immediate="true"
-                                           class='clearfix full-opacity-hover theme-selector'
-                                           actionListener="#{profileBean.changeTheme(theme.GREEN_LIGHT)}">
-                                <div>
-                                    <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-green-active'/>
-                                    <span class='bg-green' style='display:block; width: 80%; float: left; height: 7px;'/>
-                                </div>
-                                <div>
-                                    <span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
-                                    <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
-                                </div>
-                            </p:commandLink>
-                            <p class='text-center no-margin'>#{enums[theme.GREEN_LIGHT]}</p>
-                        </li>
-                        <li class="skin-block">
-                            <p:commandLink immediate="true"
-                                           class='clearfix full-opacity-hover theme-selector'
-                                           actionListener="#{profileBean.changeTheme(theme.RED_LIGHT)}">
-                                <div>
-                                    <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-red-active'/>
-                                    <span class='bg-red' style='display:block; width: 80%; float: left; height: 7px;'/>
-                                </div>
-                                <div>
-                                    <span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
-                                    <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
-                                </div>
-                            </p:commandLink>
-                            <p class='text-center no-margin'>#{enums[theme.RED_LIGHT]}</p>
-                        </li>
-                        <li class="skin-block">
-                            <p:commandLink immediate="true"
-                                           class='clearfix full-opacity-hover theme-selector'
-                                           actionListener="#{profileBean.changeTheme(theme.YELLOW_LIGHT)}">
-                                <div>
-                                    <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-yellow-active'/>
-                                    <span class='bg-yellow' style='display:block; width: 80%; float: left; height: 7px;'/>
-                                </div>
-                                <div>
-                                    <span style='display:block; width: 20%; float: left; height: 20px; background: #f9fafc;'/>
-                                    <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
-                                </div>
-                            </p:commandLink>
-                            <p class='text-center no-margin'>#{enums[theme.YELLOW_LIGHT]}</p>
                         </li>
                     </ul>
                 </h:form>

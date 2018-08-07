@@ -31,12 +31,12 @@ import java.util.List;
  */
 public enum ThemeType {
 
-    BLACK("theme-type.black", "skin-black"), BLACK_LIGHT("theme-type.black-light", "skin-black-light"),
-    BLUE("theme-type.blue", "skin-blue"), BLUE_LIGHT("theme-type.blue-light", "skin-blue-light"),
-    GREEN("theme-type.green", "skin-green"), GREEN_LIGHT("theme-type.green-light", "skin-green-light"),
-    PURPLE("theme-type.purple", "skin-purple"), PURPLE_LIGHT("theme-type.purple-light", "skin-purple-light"),
-    RED("theme-type.red", "skin-red"), RED_LIGHT("theme-type.red-light", "skin-red-light"),
-    YELLOW("theme-type.yellow", "skin-yellow"), YELLOW_LIGHT("theme-type.yellow-light", "skin-yellow-light");
+    BLACK("theme-type.black", "skin-black"),
+    BLUE("theme-type.blue", "skin-blue"),
+    GREEN("theme-type.green", "skin-green"),
+    PURPLE("theme-type.purple", "skin-purple"),
+    RED("theme-type.red", "skin-red"),
+    YELLOW("theme-type.yellow", "skin-yellow");
 
     @Getter
     private final String value;

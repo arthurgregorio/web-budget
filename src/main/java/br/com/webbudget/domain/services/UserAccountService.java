@@ -19,10 +19,7 @@ package br.com.webbudget.domain.services;
 import br.com.webbudget.application.controller.tools.ProfileBean.PasswordChangeDTO;
 import br.com.webbudget.domain.entities.tools.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
-import br.com.webbudget.domain.repositories.tools.GrantRepository;
-import br.com.webbudget.domain.repositories.tools.GroupRepository;
-import br.com.webbudget.domain.repositories.tools.UserRepository;
+import br.com.webbudget.domain.repositories.tools.*;
 import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetailsProvider;
@@ -55,6 +52,8 @@ public class UserAccountService implements UserDetailsProvider {
     private GrantRepository grantRepository;
     @Inject
     private GroupRepository groupRepository;
+    @Inject
+    private ProfileRepository profileRepository;
     @Inject
     private AuthorizationRepository authorizationRepository;
 
@@ -271,6 +270,17 @@ public class UserAccountService implements UserDetailsProvider {
             throw new BusinessLogicException("error.group.delete-administrator");
         }
         this.groupRepository.attachAndRemove(group);
+    }
+
+    /**
+     * Update the {@link User} {@link Profile}
+     *
+     * @param profile the {@link Profile} to be updated
+     * @return the update {@link Profile}
+     */
+    @Transactional
+    public Profile updateUserProfile(Profile profile) {
+        return this.profileRepository.saveAndFlushAndRefresh(profile);
     }
 
     /**

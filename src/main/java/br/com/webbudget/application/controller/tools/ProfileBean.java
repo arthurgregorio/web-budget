@@ -75,8 +75,18 @@ public class ProfileBean extends AbstractBean {
         this.executeScript("$(\"body\").removeClass('"+ this.profile.getActiveTheme().getValue() + "')");
         this.executeScript("$(\"body\").addClass('" + themeType.getValue() + "')");
 
-        // update the user profile with the theme
-        // TODO update here
+        // update the user profile with the theme and save
+        this.profile.setActiveTheme(themeType);
+        this.profile = this.userAccountService.updateUserProfile(this.profile);
+    }
+
+    /**
+     * Use this method to get the current theme of the user preferences
+     *
+     * @return the current selected theme
+     */
+    public String getCurrentTheme() {
+        return this.profile.getActiveTheme().getValue();
     }
 
     /**
