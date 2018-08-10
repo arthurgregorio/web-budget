@@ -263,7 +263,7 @@
             <properties>
                 <application.version>${project.version}-ALPHA</application.version>
                 <jsf.stage>Development</jsf.stage>
-                <orm.enable-statistics>true</orm.enable-statistics>
+                <orm.enable-statistics>false</orm.enable-statistics>
                 <orm.show-sql>true</orm.show-sql>
                 <ldap.enabled>false</ldap.enabled>
                 <ldap.url>ldap://localhost</ldap.url>

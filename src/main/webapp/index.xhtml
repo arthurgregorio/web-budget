@@ -38,6 +38,7 @@
 
         <h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css"/>
         <h:outputStylesheet library="adminlte" name="css/adminlte.min.css"/>
+        <h:outputStylesheet library="pace" name="css/theme.css"/>
         <h:outputStylesheet library="webbudget" name="css/common.css"/>
         <h:outputStylesheet library="webbudget" name="css/custom.css"/>
     </h:head>
@@ -97,7 +98,8 @@
         
         <ui:include src="dialogRecoverPassword.xhtml"/>
 
-        <h:outputScript library="bootstrap" name="js/bootstrap.min.js"/>
-        <h:outputScript library="adminlte" name="js/adminlte.min.js"/>        
+        <h:outputScript library="bootstrap" name="js/bootstrap.min.js" target="head"/>
+        <h:outputScript library="adminlte" name="js/adminlte.min.js" target="head"/>
+        <h:outputScript library="pace" name="js/pace.min.js" target="head"/>
     </h:body>
 </html>

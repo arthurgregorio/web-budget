@@ -18,14 +18,13 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    
+
     <p:importEnum var="theme"
                   type="br.com.webbudget.domain.entities.tools.ThemeType" />
 
-    <aside class="control-sidebar control-sidebar-dark">
+    <aside class="control-sidebar #{profileBean.profile.userDarkSidebar ? 'control-sidebar-dark': 'control-sidebar-light'}">
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
             <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"/></a></li>
             <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"/></a></li>
@@ -40,7 +39,7 @@
                                    class="pull-right"
                                    data-sidebarskin="toggle"
                                    jsf:value="#{profileBean.profile.userDarkSidebar}"/>
-                            #{messages['profile.appearance.toggle-sidebar']}
+                            #{messages['profile.appearance.toggle-sidebar']} <!-- FIXME processar isso para salvar no profile! -->
                         </label>
                         <p>
                             #{messages['profile.appearance.toggle-sidebar-tip']}

@@ -172,7 +172,7 @@ public class UserAccountService implements UserDetailsProvider {
      * @param user the {@link User} to be updated
      */
     @Transactional
-    public void changePasswordForCurrentUser(PasswordChangeDTO passwordChangeDTO, User user) {
+    public void changePassword(PasswordChangeDTO passwordChangeDTO, User user) {
 
         final boolean actualMatch = this.passwordEncoder.passwordsMatch(
                 passwordChangeDTO.getActualPassword(), user.getPassword());

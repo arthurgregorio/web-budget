@@ -41,6 +41,7 @@
         <h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css"/>
         <h:outputStylesheet library="adminlte" name="css/adminlte.min.css"/>
         <h:outputStylesheet library="adminlte" name="css/all-skins.min.css"/>
+        <h:outputStylesheet library="pace" name="css/theme.css"/>
         <h:outputStylesheet library="webbudget" name="css/custom.css"/>
         <h:outputStylesheet library="webbudget" name="css/common.css"/>
 
@@ -221,9 +222,11 @@
             };
         </script>
 
-        <h:outputScript library="bootstrap" name="js/bootstrap.min.js" />
-        <h:outputScript library="adminlte" name="js/adminlte.min.js"/>
-        <h:outputScript library="primefaces" name="primefaces-locale.js" />
+        <h:outputScript library="bootstrap" name="js/bootstrap.min.js" target="head"/>
+        <h:outputScript library="adminlte" name="js/adminlte.min.js" target="head"/>
+        <h:outputScript library="pace" name="js/pace.min.js" target="head"/>
+        <h:outputScript library="primefaces" name="primefaces-locale.js" target="head"/>
+        <h:outputScript library="webbudget" name="js/application.js" target="head"/>
 
         <ui:insert name="scripts" />
     </h:body>

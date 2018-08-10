@@ -64,6 +64,15 @@ public enum ThemeType {
     }
 
     /**
+     * Get only the color name of the skin
+     *
+     * @return the color name
+     */
+    public String getColorName() {
+        return this.value.replace("skin-", "");
+    }
+
+    /**
      * This method is used to parse a theme from his value to his type
      *
      * @param value the value of the theme

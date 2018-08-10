@@ -71,9 +71,8 @@ public class ProfileBean extends AbstractBean {
      */
     public void changeTheme(ThemeType themeType) {
 
-        // replace the theme for the new one
-        this.executeScript("$(\"body\").removeClass('"+ this.profile.getActiveTheme().getValue() + "')");
-        this.executeScript("$(\"body\").addClass('" + themeType.getValue() + "')");
+        // replace the old theme
+        this.executeScript("changeSkin('" + themeType.getValue() + "')");
 
         // update the user profile with the theme and save
         this.profile.setActiveTheme(themeType);
@@ -90,13 +89,23 @@ public class ProfileBean extends AbstractBean {
     }
 
     /**
+     * Return the current theme color name
+     *
+     * @return the color name
+     */
+    public String getCurrentThemeColorName() {
+        return this.profile.getActiveTheme().getColorName();
+    }
+
+
+    /**
      * Start the password changing process
      */
     public void changePassword() {
 
         final User principal = this.userSessionBean.getPrincipal();
 
-        this.userAccountService.changePasswordForCurrentUser(this.passwordChangeDTO, principal);
+        this.userAccountService.changePassword(this.passwordChangeDTO, principal);
 
         this.passwordChangeDTO = new PasswordChangeDTO();
         this.addInfo(true, "profile.password-changed");
