@@ -60,8 +60,9 @@ public class Profile extends PersistentEntity {
      * Constructor
      */
     public Profile() {
-        this.activeTheme = ThemeType.BLACK;
+        this.userDarkSidebar = true;
         this.showWalletBalances = true;
+        this.activeTheme = ThemeType.BLACK;
     }
 }
 

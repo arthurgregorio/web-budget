@@ -6,6 +6,25 @@
     Author     : Arthur Gregorio
     Created on : 26/10/2015
 */
+/*custom box border colors*/
+.box.box-blue {
+    border-top-color: #3c8dbc;
+}
+.box.box-black {
+    border-top-color: #444;
+}
+.box.box-purple {
+    border-top-color: #605ca8;
+}
+.box.box-red {
+    border-top-color: #dd4b39;
+}
+.box.box-yellow {
+    border-top-color: #f39c12;
+}
+.box.box-green {
+    border-top-color: #00a65a;
+}
 
 /*dropdown menu for bootstrap*/
 .dropdown-submenu {

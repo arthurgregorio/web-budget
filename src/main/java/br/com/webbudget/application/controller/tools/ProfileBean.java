@@ -65,18 +65,20 @@ public class ProfileBean extends AbstractBean {
     }
 
     /**
+     * Update the user profile
+     */
+    public void updateProfile() {
+        this.profile = this.userAccountService.updateUserProfile(this.profile);
+    }
+
+    /**
      * Method used to dynamically change the user interface theme
      *
      * @param themeType the selected theme
      */
     public void changeTheme(ThemeType themeType) {
-
-        // replace the old theme
-        this.executeScript("changeSkin('" + themeType.getValue() + "')");
-
-        // update the user profile with the theme and save
         this.profile.setActiveTheme(themeType);
-        this.profile = this.userAccountService.updateUserProfile(this.profile);
+        this.executeScript("changeSkin('" + this.profile.getActiveTheme().getValue() + "')");
     }
 
     /**

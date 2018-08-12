@@ -39,7 +39,7 @@
                                    class="pull-right"
                                    data-sidebarskin="toggle"
                                    jsf:value="#{profileBean.profile.userDarkSidebar}"/>
-                            #{messages['profile.appearance.toggle-sidebar']} <!-- FIXME processar isso para salvar no profile! -->
+                            #{messages['profile.appearance.toggle-sidebar']}
                         </label>
                         <p>
                             #{messages['profile.appearance.toggle-sidebar-tip']}
@@ -147,6 +147,13 @@
                             <p class='text-center no-margin'>#{enums[theme.YELLOW]}</p>
                         </li>
                     </ul>
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading pull-right" style="padding-top: 20px">
+                            <p:commandButton value="#{menu['save']}"
+                                             styleClass="btn btn-flat btn-primary"
+                                             actionListener="#{profileBean.updateProfile()}"/>
+                        </label>
+                    </div>
                 </h:form>
             </div>
             <div class="tab-pane" id="control-sidebar-home-tab" />
