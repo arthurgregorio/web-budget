@@ -47,7 +47,7 @@
                 <p:messages id="messages" closable="true" />
             </div>
         </div>
-        <div class="box">
+        <div class="box box-#{profileBean.currentThemeColorName}">
             <div class="box-header with-border">
                 <h:form id="controlsForm" prependId="false">
                     <p:defaultCommand target="btSearch"/>
@@ -116,14 +116,14 @@
                                     listener="#{contactBean.changeToDetail()}" /> 
 
                             <p:column headerText="#{messages['contact.list.name']}">
-                                <p:graphicImage width="24"
-                                                height="24"
+                                <p:graphicImage width="20"
+                                                height="20"
                                                 library="webbudget"
                                                 name="images/inactive.png"
                                                 rendered="#{not contact.active}"
                                                 title="#{messages['list.inactive']}"/>
-                                <p:graphicImage width="24"
-                                                height="24"
+                                <p:graphicImage width="20"
+                                                height="20"
                                                 library="webbudget"
                                                 name="images/active.png"
                                                 rendered="#{contact.active}"

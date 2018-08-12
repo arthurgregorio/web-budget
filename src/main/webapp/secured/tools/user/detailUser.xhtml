@@ -63,14 +63,13 @@
                     </p:messages>
                 </div>
             </div>
-            <div class="box">
+            <div class="box box-#{profileBean.currentThemeColorName}">
                 <div class="box-header with-border">
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox value="#{userBean.value.active}"
                                                  itemLabel="#{messages['form.active']}"/>
                     </h3>
                 </div>
-
                 <div class="box-body row">
                     <div class="col-md-12">
                         <div class="row">
@@ -156,7 +155,6 @@
                         </p:selectOneMenu>
                     </div>
                 </div>
-
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
                                   value="#{messages['info.delete-confirmation']}"

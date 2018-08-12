@@ -47,7 +47,7 @@
                 <p:messages id="messages" closable="true" />
             </div>
         </div>
-        <div class="box">
+        <div class="box box-#{profileBean.currentThemeColorName}">
             <div class="box-header with-border">
                 <h:form id="controlsForm">
                     <p:defaultCommand target="btSearch"/>
@@ -116,27 +116,27 @@
                                 listener="#{movementClassBean.changeToDetail()}" /> 
 
                         <p:column headerText="#{messages['movement-class.list.name']}">
-                            <p:graphicImage width="24"
-                                            height="24"
+                            <p:graphicImage width="20"
+                                            height="20"
                                             library="webbudget"
                                             name="images/inactive.png"
                                             title="#{messages['list.inactive']}"
                                             rendered="#{not movementClass.active}"/>
-                            <p:graphicImage width="24"
-                                            height="24"
+                            <p:graphicImage width="20"
+                                            height="20"
                                             library="webbudget"
                                             name="images/active.png"
                                             rendered="#{movementClass.active}"
                                             title="#{messages['list.active']}"/>
                             <p:spacer width="5"/>
-                            <p:graphicImage width="24"
-                                            height="24"
+                            <p:graphicImage width="20"
+                                            height="20"
                                             library="webbudget" 
                                             name="images/minus.png"
                                             rendered="#{movementClass.expenses}"
                                             title="#{messages['movement-class.list.expenses']}"/>
-                            <p:graphicImage width="24"
-                                            height="24"
+                            <p:graphicImage width="20"
+                                            height="20"
                                             library="webbudget" 
                                             name="images/plus.png"
                                             rendered="#{movementClass.revenues}"
