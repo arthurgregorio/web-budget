@@ -20,9 +20,11 @@
      xmlns:h="http://xmlns.jcp.org/jsf/html"
      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <p:commandLink rendered="#{profileBean.profile.showWalletBalances}"
-                   action="#{walletBean.changeToBalanceHistoric(wallet.id)}"
-                   styleClass="#{wallet.balanceNegative ? 'text-red' : 'text-green'}">
+    <span class="info-box-text">#{wallet.description}</span>
+    <span class="info-box-number">
+        <p:commandLink rendered="#{profileBean.profile.showWalletBalances}"
+                       action="#{walletBean.changeToBalanceHistoric(wallet.id)}"
+                       styleClass="#{wallet.balanceNegative ? 'text-red' : 'text-green'}">
         <h:outputText rendered="#{wallet.active}"
                       value="R$ #{wallet.actualBalance}">
             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
@@ -30,11 +32,18 @@
         <h:outputText style="color: black;"
                       value="#{messages['no-data']}"
                       rendered="#{not wallet.active}"/>
-    </p:commandLink>
+        </p:commandLink>
+        <p:commandButton icon="fa fa-eye"
+                         title="#{menu['show']}"
+                         styleClass="btn btn-flat btn-default"
+                         rendered="#{not profileBean.profile.showWalletBalances}"
+                         action="#{walletBean.changeToBalanceHistoric(wallet.id)}"/>
+    </span>
+    <div class="progress">
+        <div class="progress-bar" style="width: 100%"/>
+    </div>
+    <span class="progress-description">
 
-    <p:commandLink rendered="#{not profileBean.profile.showWalletBalances}"
-                   action="#{walletBean.changeToBalanceHistoric(wallet.id)}">
-        #{menu['show']}
-    </p:commandLink>
+    </span>
 </div>
 

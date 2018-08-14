@@ -6,6 +6,28 @@
     Author     : Arthur Gregorio
     Created on : 26/10/2015
 */
+
+/*wallets data grid customization*/
+#itemsList\:walletsGrid_content {
+    border: none;
+}
+#walletsGrid_content {
+    border: none;
+    background: none;
+    margin: 0 -.5em;
+}
+#walletsGrid_content.ui-datagrid-content-empty {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 70px;
+}
+
+/*custom label for the wallet status*/
+.wallet-status-label {
+    position: relative;
+    top: 8px;
+}
+
 /*custom box border colors*/
 .box.box-blue {
     border-top-color: #3c8dbc;
