@@ -29,6 +29,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static br.com.webbudget.application.components.NavigationManager.Parameter;
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
 /**
@@ -128,7 +129,27 @@ public class WalletBean extends FormBean<Wallet> {
         this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
-    
+
+    /**
+     * Method to navigate to the balance history page
+     *
+     * @param walletId the wallet to show the balance history
+     * @return the navigation rule
+     */
+    public String changeToBalanceHistory(long walletId) {
+        return this.navigation.to("balanceHistoric.xhtml", Parameter.of("id", walletId));
+    }
+
+    /**
+     * Method to navigate to the balance adjustment page
+     *
+     * @param walletId the wallet to have your balance adjusted
+     * @return the navigation rule
+     */
+    public String changeToBalanceAdjustment(long walletId) {
+        return this.navigation.to("balanceAdjustment.xhtml", Parameter.of("id", walletId));
+    }
+
     /**
      * Helper method to get the types defined in the {@link WalletType} enum
      *

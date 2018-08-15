@@ -112,28 +112,28 @@
                     value="#{walletBean.dataModel}"
                     emptyMessage="#{messages['list.empty']}">
 
-            <div class="box #{wallet.active ? 'box-green' : 'box-red'}">
+            <div class="box box-#{profileBean.currentThemeColorName}">
                 <div class="box-header with-border" style="text-align: center">
                     <h3 class="box-title">#{wallet.description}</h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-12">
-                            #{messages['wallet.list.type']}:
-                            <div class="box-tools pull-right">
-                                #{enums[wallet.walletType]}
-                            </div>
-                        </div>
-                        <div class="col-md-12">
                             #{messages['wallet.list.balance']}
                             <div class="box-tools pull-right">
                                 <p:commandLink rendered="#{profileBean.profile.showWalletBalances}"
-                                               action="#{walletBean.changeToBalanceHistoric(wallet.id)}"
+                                               action="#{walletBean.changeToBalanceHistory(wallet.id)}"
                                                styleClass="#{wallet.balanceNegative ? 'text-red' : 'text-green'}">
                                     <h:outputText value="R$ #{wallet.actualBalance}">
                                         <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                     </h:outputText>
                                 </p:commandLink>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            #{messages['wallet.list.type']}
+                            <div class="box-tools pull-right">
+                                #{enums[wallet.walletType]}
                             </div>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                         <p:commandButton icon="fa fa-wrench"
                                          title="#{menu['balance-adjust']}"
                                          styleClass="btn btn-flat btn-default"
-                                         action="#{walletBean.changeToAdjustment(wallet.id)}"
+                                         action="#{walletBean.changeToBalanceAdjustment(wallet.id)}"
                                          rendered="#{userSessionBean.isPermitted(permissions.WALLET_ADJUST_BALANCE)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton icon="fa fa-edit"

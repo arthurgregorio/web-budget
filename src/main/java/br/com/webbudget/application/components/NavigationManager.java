@@ -71,19 +71,39 @@ public final class NavigationManager {
      * @return the outcome rule to with the values
      */
     public String to(PageType pageType, Parameter... parameters) {
-        
+
         final String root = this.pages.get(pageType);
-        
+
         final StringBuilder builder = new StringBuilder(root);
-        
+
         builder.append("?faces-redirect=true");
-        
+
         for (Parameter parameter : parameters) {
             builder.append(parameter);
         }
-        
+
         builder.append(Parameter.of("viewState", pageType.getViewState()));
-        
+
+        return builder.toString();
+    }
+
+    /**
+     * Navigate to page specified in the paramters of this method with the parameters passed in the call
+     *
+     * @param page the page to navigate
+     * @param parameters the parameters to be used
+     * @return the navigation rule
+     */
+    public String to(String page, Parameter... parameters) {
+
+        final StringBuilder builder = new StringBuilder(page);
+
+        builder.append("?faces-redirect=true");
+
+        for (Parameter parameter : parameters) {
+            builder.append(parameter);
+        }
+
         return builder.toString();
     }
     
