@@ -22,13 +22,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import feign.Feign;
-import static feign.Logger.Level.FULL;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import org.apache.commons.lang3.StringUtils;
 
+import static feign.Logger.Level.FULL;
+
 /**
- * FIXME create JavaDoc
+ * This class represents a generic REST client to be used with FEIGN
  *
  * @author Arthur Gregorio
  *
@@ -37,25 +38,32 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class FeignClientFactory {
 
+    private static FeignClientFactory INSTANCE;
+
     /**
-     * 
+     * Private to protect the object creation process
      */
     private FeignClientFactory() { }
 
     /**
+     * Get the actual instance of the client factory
      *
-     * @return
+     * @return a instance of this class configured to be used with feign
      */
     public static FeignClientFactory getInstance() {
-        return new FeignClientFactory();
+        if (INSTANCE == null) {
+            INSTANCE = new FeignClientFactory();
+        }
+        return INSTANCE;
     }
 
     /**
+     * Build a new client for a given URL
      *
-     * @param <T>
-     * @param clazz
-     * @param targetUri
-     * @return
+     * @param <T> the type of this result object
+     * @param clazz a class of the client implementation
+     * @param targetUri the URL to be used
+     * @return the feign client
      */
     public <T> T build(Class<T> clazz, String targetUri) {
         return getDefaults()
@@ -63,22 +71,24 @@ public final class FeignClientFactory {
     }
 
     /**
+     * Build a new client for a given URL
      *
-     * @param <T>
-     * @param clazz
-     * @param targetUri
-     * @return
+     * @param <T> the type of this result object
+     * @param clazz a class of the client implementation
+     * @param defaultTarget the URL to be used, but this time using the enum {@link DefaultTarget}
+     * @return the feign client
      */
-    public <T> T build(Class<T> clazz, DefaultTarget targetUri) {
+    public <T> T build(Class<T> clazz, DefaultTarget defaultTarget) {
         return getDefaults()
-                .target(clazz, targetUri.build());
+                .target(clazz, defaultTarget.build());
     }
 
     /**
+     * Get the default values of this factory
      *
-     * @return
+     * @return the feign builder to create the clients
      */
-    protected Feign.Builder getDefaults() {
+    private Feign.Builder getDefaults() {
         return Feign.builder()
                 .logLevel(FULL)
                 .decode404()
@@ -87,8 +97,9 @@ public final class FeignClientFactory {
     }
 
     /**
+     * Method to configure the Jackson JSON mappers
      * 
-     * @return 
+     * @return jakcson {@link ObjectMapper} for JSON objects
      */
     private ObjectMapper configureMapper() {
         return new ObjectMapper()
@@ -98,7 +109,7 @@ public final class FeignClientFactory {
     }
 
     /**
-     *
+     * This is a default enum to allocate the base URL of some services
      */
     public enum DefaultTarget {
 
@@ -108,18 +119,20 @@ public final class FeignClientFactory {
         private final String uriPath;
 
         /**
+         * Constructor...
          *
-         * @param uriConfig
-         * @param uriPath
+         * @param uriConfig the URI configuration key to search in the parametrized bundles
+         * @param uriPath the path to be used with this URL
          */
-        private DefaultTarget(String uriConfig, String uriPath) {
+        DefaultTarget(String uriConfig, String uriPath) {
             this.uriConfig = uriConfig;
             this.uriPath = uriPath;
         }
 
         /**
+         * Build the new URI
          *
-         * @return
+         * @return the new URI
          */
         public String build() {
             final String uri = Configurations.get(this.uriConfig);

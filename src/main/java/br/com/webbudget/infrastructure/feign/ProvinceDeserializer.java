@@ -23,7 +23,8 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
 
 /**
- * FIXME create JavaDoc
+ * This class is responsible of the logic to translate the province coming from the ViaCEP webservice to a readable
+ * province to be used on the contact registration form
  *
  * @author Arthur Gregorio
  *
@@ -33,6 +34,7 @@ import java.io.IOException;
 public class ProvinceDeserializer extends JsonDeserializer<String> {
 
     /**
+     * {@inheritDoc}
      *
      * @param parser
      * @param context
@@ -47,12 +49,13 @@ public class ProvinceDeserializer extends JsonDeserializer<String> {
     }
 
     /**
+     * Method to convert the abbreviated value of the province to the real name
      *
-     * @param federativeUnit
-     * @return
+     * @param federateUnit the unit (abbreviated) name
+     * @return the full province name
      */
-    private String findState(String federativeUnit) {
-        switch (federativeUnit) {
+    private String findState(String federateUnit) {
+        switch (federateUnit) {
             case "AC":
                 return "Acre";
             case "AL":
