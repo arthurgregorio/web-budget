@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- *  Simple JSF converter to provide {@link LocalDate} support to the UI
+ * Simple JSF converter to provide {@link LocalDate} support to the UI
  *
  * @author Arthur Gregorio
  *
