@@ -16,12 +16,11 @@
  */
 package br.com.webbudget.infrastructure.shiro;
 
-import br.com.webbudget.domain.entities.tools.Permissions;
 import br.eti.arthurgregorio.shiroee.config.HttpSecurityConfiguration;
 import br.eti.arthurgregorio.shiroee.config.http.HttpSecurityBuilder;
 import br.eti.arthurgregorio.shiroee.config.http.PermissionHttpSecurityBuilder;
+
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 /**
  * The implementation of the {@link HttpSecurityConfiguration} for this project
@@ -29,7 +28,7 @@ import javax.inject.Inject;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 06/03/2018
+ * @since 3.0.0, 06/03/2018
  */
 @ApplicationScoped
 public class PathSecurityConfiguration implements HttpSecurityConfiguration {
