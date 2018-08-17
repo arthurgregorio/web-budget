@@ -19,14 +19,15 @@ package br.com.webbudget.domain.mail;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.infrastructure.mail.MailContentProvider;
 import br.com.webbudget.infrastructure.mail.MailMessage;
-import java.util.ArrayList;
-import java.util.List;
-import javax.mail.Address;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.mail.Address;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
