@@ -18,17 +18,12 @@ package br.com.webbudget.infrastructure.jsf.primefaces;
 
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.calendar.CalendarRenderer;
-import org.primefaces.context.RequestContext;
-import org.primefaces.util.HTML;
 
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 
 /**
- * FIXME refactor this
- *
- * Renderizador customizado para o calendar dentro da aplicacao
+ * Customization for bootstrap 3 compatibility in the {@link Calendar} component
  *
  * @author Arthur Gregorio
  *
@@ -37,71 +32,24 @@ import java.io.IOException;
  */
 public class CustomCalendarRenderer extends CalendarRenderer {
 
-    private static final String CUSTOM_CLASSES = "form-control";
-
     /**
-     * Novamente mesma treta do CustomInputNumberRenderer so que para o calendar
-     * 
+     * {@inheritDoc}
+     *
      * @param context
      * @param calendar
      * @param id
      * @param value
      * @param popup
-     * 
      * @throws IOException
      */
     @Override
-    protected void encodeInput(FacesContext context, Calendar calendar, 
-            String id, String value, boolean popup) throws IOException {
+    protected void encodeInput(FacesContext context, Calendar calendar, String id, String value, boolean popup)
+            throws IOException {
 
-        ResponseWriter writer = context.getResponseWriter();
-        String type = popup ? "text" : "hidden";
-        String labelledBy = calendar.getLabelledBy();
+        final String styleClass = calendar.getInputStyleClass() + " form-control";
 
-        writer.startElement("input", null);
-        writer.writeAttribute("id", id, null);
-        writer.writeAttribute("name", id, null);
-        writer.writeAttribute("type", type, null);
+        calendar.setInputStyleClass(styleClass);
 
-        if (calendar.isRequired()) {
-            writer.writeAttribute("aria-required", "true", null);
-        }
-
-        if (!isValueBlank(value)) {
-            writer.writeAttribute("value", value, null);
-        }
-
-        if (popup) {
-            String inputStyleClass = Calendar.INPUT_STYLE_CLASS + " " + CUSTOM_CLASSES;
-            if (calendar.isDisabled()) {
-                inputStyleClass = inputStyleClass + " ui-state-disabled";
-            }
-            if (!calendar.isValid()) {
-                inputStyleClass = inputStyleClass + " ui-state-error";
-            }
-
-            writer.writeAttribute("class", inputStyleClass, null);
-
-            if (calendar.isReadonly() || calendar.isReadonlyInput()) {
-                writer.writeAttribute("readonly", "readonly", null);
-            }
-            if (calendar.isDisabled()) {
-                writer.writeAttribute("disabled", "disabled", null);
-            }
-
-            renderPassThruAttributes(context, calendar, HTML.INPUT_TEXT_ATTRS_WITHOUT_EVENTS);
-            renderDomEvents(context, calendar, HTML.INPUT_TEXT_EVENTS);
-        }
-
-        if (labelledBy != null) {
-            writer.writeAttribute("aria-labelledby", labelledBy, null);
-        }
-
-        if (RequestContext.getCurrentInstance().getApplicationContext()
-                .getConfig().isClientSideValidationEnabled()) {
-            renderValidationMetadata(context, calendar);
-        }
-
-        writer.endElement("input");
+        super.encodeInput(context, calendar, id, value, popup);
     }
 }
