@@ -16,9 +16,12 @@
  */
 package br.com.webbudget.domain.repositories.registration;
 
+import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.registration.WalletBalance;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
+
+import java.util.List;
 
 /**
  * The {@link WalletBalance} repository
@@ -31,4 +34,11 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface WalletBalanceRepository extends DefaultRepository<WalletBalance> {
 
+    /**
+     * Method to find all the {@link WalletBalance} of the given {@link Wallet}
+     *
+     * @param walletId the id of the {@link Wallet} to search
+     * @return the list of {@link WalletBalance} for this wallet
+     */
+    List<WalletBalance> findByWallet_id(long walletId);
 }

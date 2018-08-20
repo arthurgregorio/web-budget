@@ -16,19 +16,22 @@
  */
 package br.com.webbudget.domain.services;
 
+import br.com.webbudget.domain.entities.registration.ReasonType;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.registration.WalletBalance;
-import br.com.webbudget.domain.entities.registration.BalanceType;
 import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
+
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
-import javax.enterprise.event.Observes;
 
 /**
  * The service responsible for the business operations with {@link Wallet}
@@ -61,13 +64,20 @@ public class WalletService {
             throw new BusinessLogicException("error.wallet.duplicated");
         }
 
+        // get the actual balance
+        final BigDecimal actualBalance = wallet.getActualBalance();
+
+        // set it to zero before save the wallet
+        wallet.setActualBalance(BigDecimal.ZERO);
+
         wallet = this.walletRepository.save(wallet);
 
+        // now put the balance by the standard way, with the builder
         final WalletBalanceBuilder builder = WalletBalanceBuilder.getInstance();
 
         builder.to(wallet)
-                .withValue(wallet.getActualBalance())
-                .withType(BalanceType.CREDIT);
+                .value(actualBalance)
+                .withReason(ReasonType.ADJUSTMENT);
 
         this.updateWalletBalance(builder);
     }
@@ -98,6 +108,13 @@ public class WalletService {
      */
     @Transactional
     public void delete(Wallet wallet) {
+
+        final List<WalletBalance> balances = this.walletBalanceRepository.findByWallet_id(wallet.getId());
+
+        balances.forEach(balance -> {
+            this.walletBalanceRepository.removeAndFlush(balance);
+        });
+
         this.walletRepository.attachAndRemove(wallet);
     }
     

@@ -63,14 +63,14 @@ public class LogbookService {
 //        if (entry.isFinancial()) {
 //            // cria o movimento
 //            final MovementBuilder builder = new MovementBuilder()
-//                    .withValue(entry.getCost())
+//                    .value(entry.getCost())
 //                    .onDueDate(entry.getEventDate())
 //                    .describedBy(entry.getTitle())
 //                    .inThePeriodOf(entry.getFinancialPeriod())
 //                    .dividedAmong(new ApportionmentBuilder()
 //                            .onCostCenter(entry.getCostCenter())
 //                            .withMovementClass(entry.getMovementClass())
-//                            .withValue(entry.getCost()));
+//                            .value(entry.getCost()));
 //
 //            entry.setMovementCode(builder.getMovementCode());
 //

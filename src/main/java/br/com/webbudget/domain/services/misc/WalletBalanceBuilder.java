@@ -16,12 +16,16 @@
  */
 package br.com.webbudget.domain.services.misc;
 
+import br.com.webbudget.domain.entities.registration.BalanceType;
+import br.com.webbudget.domain.entities.registration.ReasonType;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.registration.WalletBalance;
-import br.com.webbudget.domain.entities.registration.BalanceType;
+
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
+ * Builder to work with the {@link WalletBalance}
  * 
  * @author Arthur Gregorio
  *
@@ -33,13 +37,15 @@ public final class WalletBalanceBuilder {
     private final WalletBalance walletBalance;
 
     /**
-     * 
+     * Private constructor to force working with the {@link #getInstance()} method
      */
     private WalletBalanceBuilder() {
         this.walletBalance = new WalletBalance();
+        this.walletBalance.setMovementDate(LocalDate.now());
     }
     
     /**
+     * Get a new instance of the builder
      * 
      * @return this builder
      */
@@ -59,43 +65,65 @@ public final class WalletBalanceBuilder {
     }
     
     /**
-     * The value movemented by this builder
+     * The movement value
      * 
      * @param value the value to be credited or debited from the wallets
      * @return this builder
      */
-    public WalletBalanceBuilder withValue(BigDecimal value) {
+    public WalletBalanceBuilder value(BigDecimal value) {
+
+        // determine which type of financial movementation we are doing
+        if (value.signum() < 0) {
+            this.walletBalance.setBalanceType(BalanceType.DEBIT);
+        } else {
+            this.walletBalance.setBalanceType(BalanceType.CREDIT);
+        }
+
         this.walletBalance.setMovementedValue(value);
         return this;
     }
     
     /**
+     * The observations for this balance
      * 
-     * @param reason
+     * @param observations the observations
      * @return this builder
      */
-    public WalletBalanceBuilder withReason(String reason) {
-        this.walletBalance.setReason(reason);
+    public WalletBalanceBuilder withObservations(String observations) {
+        this.walletBalance.setObservations(observations);
         return this;
     }
     
     /**
+     * Indicate this balance is linked with some movement
      * 
-     * @param balanceType
-     * @return this builder
-     */
-    public WalletBalanceBuilder withType(BalanceType balanceType) {
-        this.walletBalance.setBalanceType(balanceType);
-        return this;
-    }
-    
-    /**
-     * 
-     * @param movementCode
+     * @param movementCode the movement code
      * @return this builder
      */
     public WalletBalanceBuilder forMovement(String movementCode) {
         this.walletBalance.setMovementCode(movementCode);
+        return this;
+    }
+
+    /**
+     * Indicate the movement date of this balance
+     *
+     * @param movementDate the movement date
+     * @return this builder
+     */
+    public WalletBalanceBuilder withMovementDate(LocalDate movementDate) {
+        this.walletBalance.setMovementDate(movementDate);
+        return this;
+    }
+
+    /**
+     * Add the reason to be doing this manipulation of the balance
+     *
+     * @param reason the reason
+     * @return this builder
+     */
+    public WalletBalanceBuilder withReason(ReasonType reason) {
+        this.walletBalance.setReasonType(reason);
         return this;
     }
     

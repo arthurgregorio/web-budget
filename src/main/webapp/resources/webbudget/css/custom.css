@@ -7,24 +7,22 @@
     Created on : 26/10/2015
 */
 
-/*remove the rounding conners of the calendar*/
-.ui-datepicker-calendar a.ui-state-default {
-    border-radius: 0;
+/*font face and logo font settings*/
+@font-face {
+    font-family: 'ReklameScript';
+    font-style: normal;
+    font-weight: normal;
+    src: local('ReklameScript'), url("#{resource['webbudget:font/ReklameScript.otf']}") format('truetype');
 }
 
-/*wallets data grid customization*/
-#itemsList\:walletsGrid_content {
-    border: none;
+.wb-font {
+    font-family: 'ReklameScript', serif !important;
 }
-#walletsGrid_content {
-    border: none;
-    background: none;
-    margin: 0 -.5em;
+.wb-logo-prefix {
+    color: #007fff;
 }
-#walletsGrid_content.ui-datagrid-content-empty {
-    text-align: center;
-    font-size: 18px;
-    margin-top: 70px;
+.wb-logo-sufix {
+    color: black;
 }
 
 /*custom label for the wallet status*/
@@ -51,6 +49,18 @@
 }
 .box.box-green {
     border-top-color: #00a65a;
+}
+
+/*empty box component*/
+.box-empty {
+    background: none !important;
+    border-top: 0 !important;
+    box-shadow: none !important;
+}
+
+/*remove all rounded corners*/
+.form-control {
+    border-radius: 0 !important;
 }
 
 /*dropdown menu for bootstrap*/
@@ -83,24 +93,6 @@
     border-radius: 6px 0 6px 6px;
 }
 
-/*font face and logo font settings*/
-@font-face {
-    font-family: 'ReklameScript';
-    font-style: normal;
-    font-weight: normal;
-    src: local('ReklameScript'), url("#{resource['webbudget:font/ReklameScript.otf']}") format('truetype');
-}
-
-.wb-font {
-    font-family: 'ReklameScript', serif !important;
-}
-.wb-logo-prefix {
-    color: #007fff;
-}
-.wb-logo-sufix {
-    color: black;
-}
-
 /*theme selection block*/
 .skin-block {
     float:left; 
@@ -112,6 +104,33 @@
     width: 20%; 
     float: left; 
     height: 7px; 
+}
+
+/*remove the rounding conners of the calendar*/
+.ui-datepicker-calendar a.ui-state-default {
+    border-radius: 0;
+}
+
+/*wallets data grid customization*/
+#itemsList\:walletsGrid_content {
+    border: none;
+}
+#walletsGrid_content {
+    border: none;
+    background: none;
+    margin: 0 -.5em;
+}
+#walletsGrid_content.ui-datagrid-content-empty {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 70px;
+}
+
+/*datascroller customization*/
+.ui-datascroller-content {
+    background: none !important;
+    border: none !important;
+    padding: 0px !important;
 }
 
 /*permission tree adjustments*/
@@ -128,11 +147,6 @@
 span.ui-chkbox-icon {
     bottom: 2px;
     right: 1px;
-}
-
-/*remove all rounded corners*/
-.form-control {
-    border-radius: 0 !important;
 }
 
 /*remove the red background when validation is performed*/
@@ -288,4 +302,54 @@ th[role="columnheader"].ui-state-default {
 .ui-messages-info-summary {
     margin-left: 0 !important;
     font-weight: 600 !important;
+}
+
+/*back to top button*/
+.cd-top {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    position: fixed;
+    bottom: 40px;
+    right: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    text-indent: 100%;
+    white-space: nowrap;
+    background: rgba(232, 98, 86, 0.8) url("#{resource['webbudget:images/cd-top-arrow.svg']}") no-repeat center 50%;
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition: opacity .3s 0s, visibility 0s .3s;
+    -moz-transition: opacity .3s 0s, visibility 0s .3s;
+    transition: opacity .3s 0s, visibility 0s .3s;
+}
+.cd-top.cd-is-visible, .cd-top.cd-fade-out, .no-touch .cd-top:hover {
+    -webkit-transition: opacity .3s 0s, visibility 0s 0s;
+    -moz-transition: opacity .3s 0s, visibility 0s 0s;
+    transition: opacity .3s 0s, visibility 0s 0s;
+}
+.cd-top.cd-is-visible {
+    visibility: visible;
+    opacity: 1;
+}
+.cd-top.cd-fade-out {
+    opacity: .5;
+}
+.no-touch .cd-top:hover {
+    background-color: #e86256;
+    opacity: 1;
+}
+@media only screen and (min-width: 768px) {
+    .cd-top {
+        right: 20px;
+        bottom: 20px;
+    }
+}
+@media only screen and (min-width: 1024px) {
+    .cd-top {
+        height: 60px;
+        width: 60px;
+        right: 30px;
+        bottom: 30px;
+    }
 }

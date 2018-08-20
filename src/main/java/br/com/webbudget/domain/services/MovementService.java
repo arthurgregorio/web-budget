@@ -463,7 +463,7 @@ public class MovementService {
 //                    final MovementBuilder movementBuilder = new MovementBuilder();
 //
 //                    movementBuilder
-//                            .withValue(fixedMovement.getValue())
+//                            .value(fixedMovement.getValue())
 //                            .onDueDate(period.getEnd())
 //                            .describedBy(fixedMovement.getDescription())
 //                            .inThePeriodOf(period)

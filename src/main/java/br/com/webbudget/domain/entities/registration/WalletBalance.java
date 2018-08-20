@@ -27,6 +27,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * The representation of a wallet balance in the application
@@ -63,13 +64,23 @@ public class WalletBalance extends PersistentEntity {
     private String movementCode;
     @Getter
     @Setter
-    @Column(name = "reason", columnDefinition = "TEXT")
-    private String reason;
+    @Column(name = "observations", length = 255)
+    private String observations;
+    @Getter
+    @Setter
+    @Column(name = "movement_date", nullable = false)
+    private LocalDate movementDate;
+
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "balance_type", nullable = false)
     private BalanceType balanceType;
+    @Getter
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(name = "reason_type", nullable = false)
+    private ReasonType reasonType;
     
     @Getter
     @Setter
@@ -92,5 +103,29 @@ public class WalletBalance extends PersistentEntity {
         
         // update the target wallet balance
         this.wallet.setActualBalance(this.actualBalance);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isOldBalanceNegative() {
+        return this.oldBalance.signum() < 0;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isActualBalanceNegative() {
+        return this.actualBalance.signum() < 0;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isMovementedValueNegative() {
+        return this.movementedValue.signum() < 0;
     }
 }
