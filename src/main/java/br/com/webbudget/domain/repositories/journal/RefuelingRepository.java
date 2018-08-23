@@ -20,10 +20,13 @@ import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.journal.Refueling_;
 import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.repositories.DefaultRepository;
-import java.util.List;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.OptionalLong;
 
 /**
  *
@@ -48,7 +51,7 @@ public interface RefuelingRepository extends DefaultRepository<Refueling> {
      * @return 
      */
     @Query("FROM Refueling re WHERE re.accounted = false AND re.vehicle = ?1")
-    List<Refueling> findUnaccountedsByVehicle(Vehicle vehicle);
+    List<Refueling> findUnaccountedByVehicle(Vehicle vehicle);
     
     /**
      * 
@@ -56,7 +59,7 @@ public interface RefuelingRepository extends DefaultRepository<Refueling> {
      * @return 
      */
     @Query("SELECT MAX(re.odometer) FROM Refueling re WHERE re.vehicle = ?1")
-    long findLastOdometerByVehicle(Vehicle vehicle);
+    Optional<Long> findLastOdometerByVehicle(Vehicle vehicle);
     
     /**
      * 

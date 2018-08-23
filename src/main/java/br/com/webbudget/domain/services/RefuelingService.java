@@ -28,9 +28,7 @@ import javax.transaction.Transactional;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
- * The refuling service
- * 
- * This service is responsible to work with the business logic of the refulings
+ * The {@link Refueling} service, all the logic related to this entity need to be here
  *
  * @author Arthur Gregorio
  *
@@ -46,8 +44,9 @@ public class RefuelingService {
     private RefuelingRepository refuelingRepository;
     
     /**
+     * Method to save the {@link Refueling}
      * 
-     * @param refueling 
+     * @param refueling the {@link Refueling} to be saved
      */
     @Transactional
     public void save(Refueling refueling) {
@@ -57,22 +56,23 @@ public class RefuelingService {
         }
         
         // get the last odometer to calculate the distance traveled
-        long lastOdometer = this.refuelingRepository
-                .findLastOdometerByVehicle(refueling.getVehicle());
+        final Long lastOdometer = this.refuelingRepository
+                .findLastOdometerByVehicle(refueling.getVehicle())
+                .orElse(0L);
         
         // calculate the distance
         refueling.setFirstRefueling(lastOdometer == 0);
         refueling.calculateDistance(lastOdometer);
         
-        // get the unacounted refuelings 
+        // get a list of unaccounted refueling
         final List<Refueling> unaccounteds = this.refuelingRepository
-                .findUnaccountedsByVehicle(refueling.getVehicle());
+                .findUnaccountedByVehicle(refueling.getVehicle());
 
-        // if its not a full tank, dont calculate the performance, if is full 
-        // tank star the process for performance calculation
+        // if its not a full tank, don't calculate the performance, if is full
+        // tank start the process for performance calculation
         if (refueling.isFullTank()) {
 
-            // calculate the last odometer by the unacounted refulings or with
+            // calculate the last odometer by the unaccounted refueling or with
             // the last full tank refueling
             if (!unaccounteds.isEmpty()) {
                 final long totalDistance = unaccounteds.
@@ -86,14 +86,14 @@ public class RefuelingService {
                         .reduce(BigDecimal.ZERO, BigDecimal::add)
                         .add(refueling.getLiters());
 
-                // adiciona os litros atuais e manda calcular a media
+                // put the unaccounted litters and calculate
                 refueling.calculateAverageComsumption(totalDistance, liters);
             } else {
                 refueling.calculateAverageComsumption();
             }
 
             // set the unaccounted to accounted and save
-            unaccounteds.stream().forEach(unaccounted -> {
+            unaccounteds.forEach(unaccounted -> {
                 unaccounted.setAccounted(true);
                 unaccounted.setAccountedBy(refueling.getCode());
                 this.refuelingRepository.save(unaccounted);
@@ -105,7 +105,7 @@ public class RefuelingService {
             refueling.setAccounted(false);
         }
 
-        // finaly, save the refueling
+        // finally, save the refueling
         this.refuelingRepository.save(refueling);
 
         final long vehicleOdometer = this.vehicleRepository
@@ -121,8 +121,9 @@ public class RefuelingService {
     }
 
     /**
+     * Use this method to delete a {@link Refueling}
      * 
-     * @param refueling 
+     * @param refueling the {@link Refueling} to be deleted
      */
     @Transactional
     public void delete(Refueling refueling) {
@@ -135,17 +136,17 @@ public class RefuelingService {
             throw new BusinessLogicException("error.refueling.not-last");
         }
 
-        // list the accounted refulings by this refuling to change his status   
+        // list the accounted refuelings by this refueling to change his status
         final List<Refueling> accounteds = this.refuelingRepository
                 .findByAccountedBy(refueling.getCode());
 
-        accounteds.stream().forEach(accounted -> {
+        accounteds.forEach(accounted -> {
             accounted.setAccounted(false);
             accounted.setAccountedBy(null);
             this.refuelingRepository.save(refueling);
         });
 
-        // delete the refuling
+        // delete the refueling
         this.refuelingRepository.attachAndRemove(refueling);
 
         // fire the event to delete the movement linked to this refueling

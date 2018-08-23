@@ -104,7 +104,7 @@ public class Payment extends PersistentEntity {
     public LocalDate getCreditCardInvoiceDueDate(FinancialPeriod period) {
 
         if (this.card == null) {
-            throw new BusinessLogicException("movement.validate.payment-not-credit-card");
+            throw new BusinessLogicException("movement.execute.payment-not-credit-card");
         }
 
         final int expiration = this.card.getExpirationDay();

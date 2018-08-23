@@ -73,7 +73,7 @@
                                                      onstart="PF('blocker').show()"
                                                      update="itemsList controlsForm"
                                                      oncomplete="PF('blocker').hide()"
-                                                     title="#{messages['filter.clear']}"
+                                                     title="#{menu['filter-clear']}"
                                                      styleClass="btn btn-flat btn-danger"
                                                      actionListener="#{refuelingBean.clearFilters()}"/>
                                 </div>
@@ -153,7 +153,7 @@
                         </p:column>
                         <p:column width="15%" 
                                   styleClass="align-center"
-                                  headerText="#{menu['actions']}">
+                                  headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-remove"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"

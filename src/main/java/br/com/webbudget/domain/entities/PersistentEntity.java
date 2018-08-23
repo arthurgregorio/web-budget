@@ -58,7 +58,7 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     }
 
     /**
-     * Method to help the validation process of some entity, if you want to validate his state before any operation
+     * Method to help the validation process of some entity, if you want to execute his state before any operation
      * just override this method and put the logic here.
      */
     @Override

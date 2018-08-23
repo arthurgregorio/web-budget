@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
-import br.com.webbudget.infrastructure.cdi.qualifiers.PrincipalUsername;
+import br.com.webbudget.infrastructure.cdi.qualifiers.AuthenticatedUser;
 import lombok.Getter;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -106,7 +106,7 @@ public class UserSessionBean implements Serializable {
      * @return the current principal user object
      */
     @Produces
-    @PrincipalUsername
+    @AuthenticatedUser
     User producePrincipal() {
         return this.principal;
     }

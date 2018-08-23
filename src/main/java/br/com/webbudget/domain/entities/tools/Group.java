@@ -136,4 +136,13 @@ public class Group extends PersistentEntity {
     public boolean isAdministratorsGroup() {
         return this.name.equals("Administradores");
     }
+
+    /**
+     * Method to check if this is the default administrators group
+     *
+     * @return <code>true</code> if is and <code>false</code> otherwise
+     */
+    public boolean isAdministrator() {
+        return this.name.equals("Administradores");
+    }
 }

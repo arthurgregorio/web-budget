@@ -141,7 +141,7 @@ public class ClassificationService {
     /**
      * The method to check if the budget of the {@link CostCenter} is available for use
      *
-     * @param movementClass the {@link MovementClass} to be validate with the {@link CostCenter}
+     * @param movementClass the {@link MovementClass} to be execute with the {@link CostCenter}
      * @return <code>true</code> if has budget or exception if no budget was found
      */
     private boolean hasValidBudget(MovementClass movementClass) {
