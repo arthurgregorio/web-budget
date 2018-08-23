@@ -121,7 +121,8 @@
                         <div class="col-md-12">
                             #{messages['wallet.list.balance']}
                             <div class="box-tools pull-right">
-                                <p:commandLink rendered="#{profileBean.profile.showWalletBalances}"
+                                <p:commandLink immediate="true"
+                                               rendered="#{profileBean.profile.showWalletBalances}"
                                                action="#{walletBean.changeToBalanceHistory(wallet.id)}"
                                                styleClass="#{wallet.balanceNegative ? 'text-red' : 'text-green'}">
                                     <h:outputText value="R$ #{wallet.actualBalance}">

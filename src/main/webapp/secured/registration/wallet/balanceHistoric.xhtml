@@ -87,15 +87,18 @@
                                                 <f:converter converterId="localDateConverter"/>
                                             </h:outputText>
                                         </span>
-                                        <h3 class="timeline-header"
-                                            jsf:rendered="#{balance.balanceType eq 'CREDIT'}">
+                                        <h3 class="timeline-header">
                                             <h:outputText styleClass="text-green text-bold"
-                                                          value="#{enums[balance.balanceType]}"/>
-                                        </h3>
-                                        <h3 class="timeline-header"
-                                            jsf:rendered="#{balance.balanceType eq 'DEBIT'}">
+                                                          value="#{enums[balance.balanceType]}"
+                                                          rendered="#{balance.balanceType eq 'CREDIT'}"/>
                                             <h:outputText styleClass="text-red text-bold"
-                                                          value="#{enums[balance.balanceType]}"/>
+                                                          value="#{enums[balance.balanceType]}"
+                                                          rendered="#{balance.balanceType eq 'DEBIT'}"/>
+                                            <p:spacer width="10"/>
+                                            <span class="label label-info" jsf:rendered="#{balance.reasonType eq 'ADJUSTMENT'}">#{enums[balance.reasonType]}</span>
+                                            <span class="label label-warning" jsf:rendered="#{balance.reasonType eq 'TRANSFERENCE'}">#{enums[balance.reasonType]}</span>
+                                            <span class="label label-success" jsf:rendered="#{balance.reasonType eq 'REVENUE'}">#{enums[balance.reasonType]}</span>
+                                            <span class="label label-danger" jsf:rendered="#{balance.reasonType eq 'EXPENSE'}">#{enums[balance.reasonType]}</span>
                                         </h3>
                                         <div class="timeline-body">
                                             <div class="row">
@@ -130,8 +133,7 @@
                                                  jsf:rendered="#{not empty balance.observations}">
                                                 <div class="col-sm-12">
                                                     <p:outputLabel value="#{messages['balance-historic.observations']}"/>
-                                                    <br/>
-                                                    #{balance.observations}
+                                                    <h4>#{balance.observations}</h4>
                                                 </div>
                                             </div>
                                         </div>

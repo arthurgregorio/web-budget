@@ -85,24 +85,13 @@ public class Wallet extends PersistentEntity {
     @NotNull(message = "{wallet.wallet-type}")
     @Column(name = "wallet_type", nullable = false)
     private WalletType walletType;
-    
-    @Getter
-    @Setter
-    @Transient
-    private String reason;
-    @Getter
-    @Setter
-    @Transient
-    @NotNull(message = "{wallet.adjustment-value}")
-    private BigDecimal adjustmentValue;
-    
+
     /**
      * Default constructor
      */
     public Wallet() {
         this.active = true;
         this.actualBalance = BigDecimal.ZERO;
-        this.adjustmentValue = BigDecimal.ZERO;
     }
     
     /**

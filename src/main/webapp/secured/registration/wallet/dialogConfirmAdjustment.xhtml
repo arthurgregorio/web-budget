@@ -24,23 +24,23 @@
           resizable="false" 
           closeOnEscape="true"
           widgetVar="dialogConfirmAdjustment" 
-          header="#{messages['adjustment.dialog.title']}">
+          header="#{messages['balance-adjustment.dialog.title']}">
 
     <div class="row">
         <div class="col-sm-12">
             <h4>
                 <o:outputFormat escape="false"
-                                value="#{messages['adjustment.confirmation']}">
-                    <f:param value="#{walletBean.wallet.friendlyName}"/>
+                                value="#{messages['balance-adjustment.confirmation-message']}">
+                    <f:param value="#{balanceAdjustmentBean.wallet.description}"/>
                 </o:outputFormat>
             </h4>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-12 align-center">
-            <p:commandButton value="#{menu['back']}" 
-                             action="#{walletBean.doCancel()}"
-                             styleClass="btn btn-flat btn-default" />
+            <p:commandButton value="#{menu['ok']}"
+                             styleClass="btn btn-flat btn-primary"
+                             action="#{walletBean.changeToListing()}"/>
         </div>
     </div>
 </p:dialog>

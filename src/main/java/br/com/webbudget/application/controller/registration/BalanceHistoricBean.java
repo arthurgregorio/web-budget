@@ -73,6 +73,7 @@ public class BalanceHistoricBean extends AbstractBean {
                 .sorted(Comparator.comparing(WalletBalance::getMovementDate))
                 .map(WalletBalance::getMovementDate)
                 .distinct()
+                .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
     }
 

@@ -25,6 +25,12 @@
     color: black;
 }
 
+/*labels adjustments*/
+.label {
+    top: -2px;
+    position: relative;
+}
+
 /*custom label for the wallet status*/
 .wallet-status-label {
     position: relative;

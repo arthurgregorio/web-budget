@@ -117,6 +117,25 @@ public class WalletService {
 
         this.walletRepository.attachAndRemove(wallet);
     }
+
+    /**
+     * Build the new wallet balance and call the method to update it
+     *
+     * @param wallet the wallet to be updated
+     * @param value the value to be adjusted
+     * @param observations the justification of adjustment to be placed as observation
+     */
+    @Transactional
+    public void adjustBalance(Wallet wallet, BigDecimal value, String observations) {
+
+        final WalletBalanceBuilder builder = WalletBalanceBuilder.getInstance()
+                .to(wallet)
+                .value(value)
+                .withReason(ReasonType.ADJUSTMENT)
+                .withObservations(observations);
+
+        this.updateWalletBalance(builder);
+    }
     
     /**
      * Update the {@link WalletBalance} for a given wallet
