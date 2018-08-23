@@ -20,12 +20,17 @@ import br.com.webbudget.application.controller.tools.ProfileBean.PasswordChangeD
 import br.com.webbudget.domain.entities.tools.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.*;
+import br.com.webbudget.domain.validators.group.GroupDeletingValidator;
+import br.com.webbudget.domain.validators.user.UserDeletingValidator;
+import br.com.webbudget.domain.validators.user.UserSavingValidator;
+import br.com.webbudget.domain.validators.user.UserUpdatingValidator;
 import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetailsProvider;
-import org.apache.shiro.SecurityUtils;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -57,6 +62,20 @@ public class UserAccountService implements UserDetailsProvider {
     @Inject
     private AuthorizationRepository authorizationRepository;
 
+    @Any
+    @Inject
+    private Instance<UserSavingValidator> userSavingValidators;
+    @Any
+    @Inject
+    private Instance<UserUpdatingValidator> userUpdatingValidators;
+    @Any
+    @Inject
+    private Instance<UserDeletingValidator> userDeletingValidators;
+
+    @Any
+    @Inject
+    private Instance<GroupDeletingValidator> groupDeletingValidators;
+
     /**
      * Persist a new {@link User}
      *
@@ -65,35 +84,9 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public User save(User user) {
-
-        // validate the email
-        final Optional<User> emailOptional = this.userRepository
-                .findOptionalByEmail(user.getEmail());
-
-        if (emailOptional.isPresent()) {
-            throw new BusinessLogicException("user.email-duplicated");
-        }
-
-        // validate the username
-        final Optional<User> usernameOptional = this.userRepository
-                .findOptionalByUsername(user.getUsername());
-
-        if (usernameOptional.isPresent()) {
-            throw new BusinessLogicException("user.username-duplicated");
-        }
-
-        // if the user is local...
-        if (user.getStoreType() == StoreType.LOCAL) {
-
-            if (!user.isPasswordValid()) {
-                throw new BusinessLogicException("user.password-not-match-or-invalid");
-            }
-
-            user.setPassword(this.passwordEncoder
-                    .encryptPassword(user.getPassword()));
-        }
-
-        // save
+        this.userSavingValidators.forEach(validator -> {
+            validator.validate(user);
+        });
         return this.userRepository.save(user);
     }
 
@@ -104,40 +97,9 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public void update(User user) {
-
-        // validate the email
-        final Optional<User> userOptional = this.userRepository
-                .findOptionalByEmail(user.getEmail());
-
-        if (userOptional.isPresent()) {
-
-            final User found = userOptional.get();
-
-            if (!found.getUsername().equals(user.getUsername())) {
-                throw new BusinessLogicException("error.user.email-duplicated");
-            }
-        }
-
-        // if the user is local...
-        if (user.getStoreType() == StoreType.LOCAL) {
-
-            if (user.hasChangedPasswords()) {
-
-                // check if passwords match
-                if (!user.isPasswordValid()) {
-                    throw new BusinessLogicException("error.user.password-not-match-or-invalid");
-                }
-
-                // crypt the user password
-                user.setPassword(this.passwordEncoder.encryptPassword(
-                        user.getPassword()));
-            } else {
-                final Optional<User> actualUser = this.userRepository
-                        .findOptionalByUsername(user.getUsername());
-                user.setPassword(actualUser.get().getPassword());
-            }
-        }
-
+        this.userUpdatingValidators.forEach(validator -> {
+            validator.validate(user);
+        });
         this.userRepository.saveAndFlushAndRefresh(user);
     }
 
@@ -148,20 +110,9 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public void delete(User user) {
-
-        final String principal = String.valueOf(SecurityUtils
-                .getSubject().getPrincipal());
-
-        // prevent to delete you own user
-        if (principal.equals(user.getUsername())) {
-            throw new BusinessLogicException("error.user.delete-principal");
-        }
-
-        // prevent to delete the main admin
-        if (user.isAdministrator()) {
-            throw new BusinessLogicException("error.user.delete-administrator");
-        }
-
+        this.userDeletingValidators.forEach(validator -> {
+            validator.validate(user);
+        });
         this.userRepository.attachAndRemove(user);
     }
 
@@ -209,10 +160,8 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public void save(Group group, List<Authorization> authorizations) {
-
         this.groupRepository.save(group);
-
-        authorizations.stream().forEach(authz -> {
+        authorizations.forEach(authz -> {
             Authorization authorization = this.authorizationRepository
                     .findOptionalByFunctionalityAndPermission(authz.getFunctionality(), authz.getPermission())
                     .get();
@@ -264,11 +213,9 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public void delete(Group group) {
-
-        // prevent to delete the main admin group
-        if (group.isAdministratorsGroup()) {
-            throw new BusinessLogicException("error.group.delete-administrator");
-        }
+        this.groupDeletingValidators.forEach(validator -> {
+            validator.validate(group);
+        });
         this.groupRepository.attachAndRemove(group);
     }
 

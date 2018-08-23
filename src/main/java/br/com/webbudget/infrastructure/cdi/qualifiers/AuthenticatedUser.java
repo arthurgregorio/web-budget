@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2017 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,24 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.services.validators;
+package br.com.webbudget.infrastructure.cdi.qualifiers;
 
-import br.com.webbudget.domain.entities.PersistentEntity;
+import javax.inject.Qualifier;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- *
- * @param <T>
+ * Injection qualifier to mark the field to receive the current principal username
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 09/08/2018
+ * @since 3.0.0, 13/12/2017
  */
-public interface BusinessValidator<T extends PersistentEntity> {
-
-    /**
-     *
-     * @param value
-     */
-    void validate(T value);
-}
+@Qualifier
+@Documented
+@Retention(RUNTIME)
+@Target({METHOD, FIELD, PARAMETER, TYPE})
+public @interface AuthenticatedUser { }
