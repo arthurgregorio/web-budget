@@ -14,42 +14,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infrastructure;
+package br.com.webbudget.infrastructure.initializer;
 
-import br.com.webbudget.domain.entities.tools.Authorization;
-import br.com.webbudget.domain.entities.tools.Grant;
-import br.com.webbudget.domain.entities.tools.Group;
-import br.com.webbudget.domain.entities.tools.Permissions;
-import br.com.webbudget.domain.entities.tools.User;
+import br.com.webbudget.domain.entities.tools.*;
 import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GrantRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
-import java.util.List;
-import java.util.Optional;
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.inject.Inject;
+import org.apache.deltaspike.core.api.exclude.Exclude;
+import org.apache.deltaspike.core.api.projectstage.ProjectStage.Production;
 import org.slf4j.Logger;
 
+import javax.annotation.Resource;
+import javax.ejb.EJBException;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.transaction.UserTransaction;
+import java.util.List;
+import java.util.Optional;
+
+import static org.apache.deltaspike.core.api.projectstage.ProjectStage.SystemTest;
+
 /**
- * FIXME add migrations
- * FIXME create JavaDoc
+ * The development {@link EnvironmentInitializer}
+ * 
+ * Create the default data to the app and is meant to be used only in development, for production initialization use the
+ * {@link ProductionInitializer} with Migration from Flyway
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 1.0.0
  * @since 3.0.0, 27/12/2017
  */
-@Startup
-@Singleton
-public class Bootstrap {
+@RequestScoped
+@Exclude(ifProjectStage = {Production.class, SystemTest.class})
+public class DevelopmentInitializer implements EnvironmentInitializer {
 
     @Inject
     private Logger logger;
-
+    
     @Inject
     private Permissions permissions;
 
@@ -65,23 +69,37 @@ public class Bootstrap {
     @Inject
     private PasswordEncoder passwordEncoder;
 
+    @Resource
+    private UserTransaction transaction;
+    
     /**
-     *
+     * {@inheritDoc }
      */
-    @PostConstruct
-    protected void initialize() {
-
-        this.logger.info("Bootstraping application....");
-
-        this.createAuthorizations();
-        this.createDefaultGroup();
-        this.createDefaultUser();
-
-        this.logger.info("Bootstraping finished...");
+    @Override
+    public void initialize() {
+        
+        this.logger.warn("Initializing application in development mode");
+        
+        try {
+            this.transaction.begin();
+            
+            this.createAuthorizations();
+            this.createDefaultGroup();
+            this.createDefaultUser();
+            
+            this.transaction.commit();
+        } catch (Exception commitException) {
+            try {
+                this.transaction.rollback();
+            } catch (Exception rollbackException) {
+                throw new EJBException(rollbackException);
+            }
+            throw new EJBException(commitException);
+        }
     }
-
+    
     /**
-     * Salva no banco as autorizacoes do sistema
+     * Synch the authorizations with the database
      */
     private void createAuthorizations() {
 
@@ -101,16 +119,13 @@ public class Bootstrap {
     }
 
     /**
-     * Cria o grupo default do sistema
+     * Create the default user group
      */
     private void createDefaultGroup() {
 
         final Group group = this.groupRepository
                 .findOptionalByName("Administradores")
-                .orElseGet(() -> {
-                    final Group newOne = new Group("Administradores");
-                    return newOne;
-                });
+                .orElseGet(() -> new Group("Administradores"));
 
         if (!group.isSaved()) {
 
@@ -122,18 +137,17 @@ public class Bootstrap {
                     = this.authorizationRepository.findAll();
 
             authorizations.stream().forEach(authorization -> {
-                final Grant grant = new Grant(group, authorization);
-                this.grantRepository.save(grant);
+                this.grantRepository.save(new Grant(group, authorization));
             });
         }
     }
 
     /**
-     * Cria o usuario default do sistema
+     * Create the default user of the system
      */
     private void createDefaultUser() {
 
-        final Optional<User> optionalUser = 
+        final Optional<User> optionalUser =
                 this.userRepository.findOptionalByUsername("admin");
 
         if (!optionalUser.isPresent()) {
@@ -150,7 +164,7 @@ public class Bootstrap {
             user.setEmail("contato@webbudget.com.br");
             user.setUsername("admin");
             user.setPassword(this.passwordEncoder.encryptPassword("admin"));
-
+            
             user.setGroup(group);
 
             this.userRepository.save(user);

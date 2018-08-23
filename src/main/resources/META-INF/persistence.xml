@@ -25,15 +25,11 @@
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <properties>
-            <!--disable bean validation on jpa save or update -->
-            <property name="javax.persistence.validation.mode" value="none"/>
-
             <!--hibernate properties-->
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="${orm.show_sql}"/>
+            <property name="hibernate.hbm2ddl.auto" value="${orm.ddl_auto}"/>
             <property name="hibernate.connection.autocommit" value="false"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB102Dialect"/>
-            <property name="hibernate.show_sql" value="${orm.show-sql}"/> <!--disable for production-->
-            <property name="hibernate.generate_statistics" value="${orm.enable-statistics}"/> <!--disable for production-->
 
             <!--tell wildfly to use hibernate version 5.2.x-->
             <property name="jboss.as.jpa.providerModule" value="org.hibernate:5.2" />

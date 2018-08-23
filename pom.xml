@@ -182,6 +182,13 @@
             <version>5.2.17.Final</version>
         </dependency>
 
+        <!--flyway-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>5.0.7</version>
+        </dependency>
+
         <!--utilities-->
         <dependency>
             <groupId>br.com.caelum.stella</groupId>
@@ -262,9 +269,10 @@
             </activation>
             <properties>
                 <application.version>${project.version}-ALPHA</application.version>
-                <jsf.stage>Development</jsf.stage>
-                <orm.enable-statistics>false</orm.enable-statistics>
-                <orm.show-sql>true</orm.show-sql>
+                <skip.tests>true</skip.tests>
+                <project.stage>Development</project.stage>
+                <orm.show_sql>true</orm.show_sql>
+                <orm.ddl_auto>update</orm.ddl_auto>
                 <ldap.enabled>false</ldap.enabled>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
@@ -277,9 +285,10 @@
             <id>BETA</id>
             <properties>
                 <application.version>${project.version}-BETA</application.version>
-                <jsf.stage>SystemTest</jsf.stage>
-                <orm.enable-statistics>true</orm.enable-statistics>
-                <orm.show-sql>true</orm.show-sql>
+                <skip.tests>false</skip.tests>
+                <project.stage>SystemTest</project.stage>
+                <orm.show_sql>true</orm.show_sql>
+                <orm.ddl_auto>none</orm.ddl_auto>
                 <ldap.enabled>false</ldap.enabled>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
@@ -290,10 +299,11 @@
         <profile>
             <id>RELEASE</id>
             <properties>
-                <application.version>${project.version}</application.version>
-                <jsf.stage>Production</jsf.stage>
-                <orm.enable-statistics>false</orm.enable-statistics>
-                <orm.show-sql>false</orm.show-sql>
+                <application.version>${project.version}-RELEASE</application.version>
+                <skip.tests>false</skip.tests>
+                <project.stage>Production</project.stage>
+                <orm.show_sql>false</orm.show_sql>
+                <orm.ddl_auto>none</orm.ddl_auto>
                 <ldap.enabled>false</ldap.enabled>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
