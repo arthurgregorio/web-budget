@@ -16,12 +16,23 @@
  */
 package br.com.webbudget.domain.entities.journal;
 
+import br.com.webbudget.domain.entities.PersistentEntity;
+import br.com.webbudget.domain.entities.financial.Movement;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.infrastructure.utils.RandomCode;
-import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.entities.registration.CostCenter;
-import br.com.webbudget.domain.entities.registration.MovementClass;
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -30,26 +41,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import static javax.persistence.CascadeType.REMOVE;
+
 import static javax.persistence.CascadeType.PERSIST;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.EAGER;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
 
 /**
- * Classe que representa o abastecimento de um veiculo
+ * The representation of a {@link Vehicle} refueling
  *
  * @author Arthur Gregorio
  *
@@ -141,12 +139,11 @@ public class Refueling extends PersistentEntity {
     @NotNull(message = "{refueling.financial-period}")
     private FinancialPeriod financialPeriod;
 
-    @OneToMany(mappedBy = "refueling", orphanRemoval = true, 
-            fetch = EAGER, cascade = {PERSIST, REMOVE})
+    @OneToMany(mappedBy = "refueling", orphanRemoval = true, fetch = EAGER, cascade = {PERSIST, REMOVE})
     private List<Fuel> fuels;
     
     /**
-     *
+     * Default constructor
      */
     public Refueling() {
         
@@ -165,87 +162,90 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
-     * @return uma lista nao modificavel dos combustiveis
+     * Get a unmodifiable list of {@link Fuel}
+     *
+     * @return unmodifiable list of {@link Fuel}
      */
     public List<Fuel> getFuels() {
         return Collections.unmodifiableList(this.fuels);
     }
 
     /**
-     * Adiciona um novo combustivel a este abastecimento
+     * Add a {@link Fuel} to the list of {@link Fuel}
      */
     public void addFuel() {
         this.fuels.add(new Fuel(this));
-        this.totalize();
+        this.totalsFuels();
     }
 
     /**
-     * Deleta um combustivel da lista de combustiveis
+     * Delete a {@link Fuel} from the {@link Fuel} list
      *
-     * @param fuel o combustivel
+     * @param fuel to be deleted
      */
     public void deleteFuel(Fuel fuel) {
         this.fuels.remove(fuel);
-        this.totalize();
+        this.totalsFuels();
     }
 
     /**
-     * @return a identificacao do veiculo vinculado ao registro
+     * Get the {@link Vehicle} identification
+     *
+     * @return the {@link Vehicle} identification
      */
     public String getVehicleIdentification() {
         return this.vehicle.getIdentification();
     }
 
     /**
-     * @return se temos ou nao uma entrada financeira valida
+     * Helper method to check if this {@link Refueling} is ok for a {@link Movement} inclusion
+     *
+     * @return <code>true</code> or <code>false</code> for a valid or invalid financial {@link Refueling}
      */
     public boolean isFinancialValid() {
         return this.movementClass != null && this.getCost() != null;
     }
 
     /**
-     * @return o centro de custo do veiculo vinculado ao registro
+     * Get the {@link Vehicle} {@link CostCenter}
+     *
+     * @return the {@link Vehicle} {@link CostCenter}
      */
     public CostCenter getCostCenter() {
         return this.getVehicle().getCostCenter();
     }
     
     /**
-     * @return se temos ou nao combustiveis
+     * This is a helper method to check if the {@link Fuel} is ok the there are at least one informed
+     *
+     * @return <code>true</code> or <code>false</code> for a valid or invalid list of {@link Fuel}
      */
     public boolean isFuelsValid() {
-        
-        boolean valid = this.fuels != null && !this.fuels.isEmpty();
-        
-        if (valid) {
-            valid = this.fuels
-                    .stream()
-                    .filter(Fuel::isInvalid)
-                    .collect(Collectors.toList())
-                    .isEmpty();
-        }
-        return valid;
+        return this.fuels.stream()
+                .filter(Fuel::isInvalid)
+                .collect(Collectors.toList())
+                .isEmpty();
     }
 
     /**
-     * Totaliza os valores referentes aos combustiveis
+     * Totals the values of the fuels based on the total in liters multiplied by the cost by liter
      */
-    public void totalize() {
+    public void totalsFuels() {
         
-        // calcula o total em reais 
+        // calculate the total cost
         this.cost = this.fuels
                 .stream()
                 .map(Fuel::getCost)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         
-        // calcula o total em litros abastecido
+        // calculate the total of liters stocked
         this.liters = this.fuels
                 .stream()
                 .map(Fuel::getLiters)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         
-        // calcula o custo por litro
-        if (this.cost != BigDecimal.ZERO && this.liters != BigDecimal.ZERO) {
+        // calculate the cost per liter
+        if (!this.cost.equals(BigDecimal.ZERO) && !this.liters.equals(BigDecimal.ZERO)) {
             this.costPerLiter = this.cost.divide(this.liters, RoundingMode.CEILING);
         } else {
             this.costPerLiter = BigDecimal.ZERO;
@@ -253,21 +253,20 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
-     * Metodo utilizado para calcular a media de consumo baseado na distancia
-     * do abastecimento atual
+     * Same as the {@link #calculateAverageConsumption(long, BigDecimal)} but this method use the internal values of
+     * this {@link Refueling}
      */
-    public void calculateAverageComsumption() {
-        this.calculateAverageComsumption(this.distance, this.liters);
+    public void calculateAverageConsumption() {
+        this.calculateAverageConsumption(this.distance, this.liters);
     }
     
     /**
-     * Metodo utilizado para calcular a media de consumo ate o abastecimento 
-     * quando temos abastecimentos anteriores em estado parcial, sem media
+     * Use this method to calculate the average consumption of the fuel using the total travelled distance
      * 
-     * @param totalDistance o total de distancia percorrida
-     * @param liters a quantidade total de litros
+     * @param totalDistance the total distance travelled
+     * @param liters total of fuel liters spent
      */
-    public void calculateAverageComsumption(long totalDistance, BigDecimal liters) {
+    public void calculateAverageConsumption(long totalDistance, BigDecimal liters) {
         if (!this.firstRefueling && totalDistance > 0) {
             this.averageConsumption = 
                     new BigDecimal(totalDistance / liters.doubleValue());
@@ -275,9 +274,11 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
-     * @return a descricao para o movimento
+     * This method build a simples {@link Movement} description based on the {@link Refueling} content
+     *
+     * @return the {@link Movement} description
      */
-    public String createMovementDescription() {
+    public String getMovementDescription() {
         
         final StringBuilder builder = new StringBuilder();
         
@@ -292,16 +293,16 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
-     * Atualiza o odometro do veiculo vinculado de acordo com o odometro atual
+     * Use this method to update the vehicle odometer with the value of this refueling
      */
     public void updateVehicleOdometer() {
         this.vehicle.setOdometer(this.odometer);
     }
 
     /**
-     * Calcula a distancia percorrida pelo ultimo odometro infomado
+     * Calculate the distance from the current odometer and the last one
      * 
-     * @param lastOdometer o ultimo odometro registrado por um abastecimento
+     * @param lastOdometer the last odometer registered
      */
     public void calculateDistance(long lastOdometer) {
         this.distance = this.firstRefueling ? 0 : this.odometer - lastOdometer;

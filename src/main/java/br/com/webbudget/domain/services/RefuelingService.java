@@ -18,13 +18,15 @@ package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.registration.VehicleRepository;
 import br.com.webbudget.domain.repositories.journal.RefuelingRepository;
-import java.math.BigDecimal;
-import java.util.List;
+import br.com.webbudget.domain.repositories.registration.VehicleRepository;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.List;
+
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -87,9 +89,9 @@ public class RefuelingService {
                         .add(refueling.getLiters());
 
                 // put the unaccounted litters and calculate
-                refueling.calculateAverageComsumption(totalDistance, liters);
+                refueling.calculateAverageConsumption(totalDistance, liters);
             } else {
-                refueling.calculateAverageComsumption();
+                refueling.calculateAverageConsumption();
             }
 
             // set the unaccounted to accounted and save
@@ -138,7 +140,7 @@ public class RefuelingService {
 
         // list the accounted refuelings by this refueling to change his status
         final List<Refueling> accounteds = this.refuelingRepository
-                .findByAccountedBy(refueling.getCode());
+                .findByMovementCode(refueling.getCode());
 
         accounteds.forEach(accounted -> {
             accounted.setAccounted(false);

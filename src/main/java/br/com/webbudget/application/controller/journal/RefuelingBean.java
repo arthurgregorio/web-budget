@@ -41,6 +41,7 @@ import java.util.List;
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
 /**
+ * The of the {@link Refueling} view
  *
  * @author Arthur Gregorio
  *
@@ -53,8 +54,6 @@ public class RefuelingBean extends FormBean<Refueling> {
 
     @Getter
     private List<Vehicle> vehicles;
-    @Getter
-    private List<Refueling> refuelings;
     @Getter
     private List<MovementClass> movementClasses;
     @Getter
@@ -73,7 +72,7 @@ public class RefuelingBean extends FormBean<Refueling> {
     private FinancialPeriodRepository financialPeriodRepository;
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void initialize() {
@@ -82,8 +81,9 @@ public class RefuelingBean extends FormBean<Refueling> {
     }
 
     /**
+     * {@inheritDoc}
      * 
-     * @param id
+     * @param
      * @param viewState 
      */
     @Override
@@ -104,7 +104,7 @@ public class RefuelingBean extends FormBean<Refueling> {
     }
     
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     protected void initializeNavigationManager() {
@@ -116,6 +116,7 @@ public class RefuelingBean extends FormBean<Refueling> {
     }
     
     /**
+     * {@inheritDoc}
      * 
      * @param first
      * @param pageSize
@@ -126,50 +127,51 @@ public class RefuelingBean extends FormBean<Refueling> {
     @Override
     public Page<Refueling> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         // FIXME the search for refuelings is not working well... fix this later before the release of v3.0
-        return this.refuelingRepository.findAllBy(this.filter.getValue(), null, 
-                first, pageSize);
+        return this.refuelingRepository.findAllBy(this.filter.getValue(), null, first, pageSize);
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void doSave() {
         this.refuelingService.save(this.value);
         this.value = new Refueling();
-        this.addInfo(true, "refueling.saved");
+        this.addInfo(true, "saved");
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void doUpdate() {
-        // No update for refueling, if you saved wrong, delete and try again
+        // No update for refueling, if you saved wrong, delete it and try again
     }
 
     /**
+     * {@inheritDoc}
      * 
      * @return 
      */
     @Override
     public String doDelete() {
         this.refuelingService.delete(this.value);
-        this.addInfoAndKeep("refueling.deleted");
+        this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
 
     /**
-     * When vehicle is selected, show the cost center linked
+     * When vehicle is selected, show the cost center linked to it
      */
     public void onVehicleSelect() {
         this.movementClasses = this.movementClassRepository
-                .findByMovementClassTypeAndCostCenter(
-                        MovementClassType.EXPENSE, this.value.getCostCenter());
+                .findByMovementClassTypeAndCostCenter(MovementClassType.EXPENSE, this.value.getCostCenter());
     }
     
     /**
-     * @return the fuel types
+     * Use this method to list all the types of fuel
+     *
+     * @return a list of {@link FuelType}
      */
     public FuelType[] getFuelTypes() {
         return FuelType.values();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2013 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.repositories.registration;
 
-import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
@@ -26,8 +25,6 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 import javax.persistence.metamodel.SingularAttribute;
 import java.util.List;
 import java.util.Optional;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * The {@link FinancialPeriod} repository

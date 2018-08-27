@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.journal;
 
+import br.com.webbudget.domain.entities.financial.Movement;
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.journal.Refueling_;
 import br.com.webbudget.domain.entities.registration.Vehicle;
@@ -26,9 +27,9 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 
 /**
+ * The {@link Refueling} repository
  *
  * @author Arthur Gregorio
  *
@@ -39,46 +40,53 @@ import java.util.OptionalLong;
 public interface RefuelingRepository extends DefaultRepository<Refueling> {
 
     /**
+     * Use this method to find all {@link Refueling} linked to a {@link Movement}
      * 
-     * @param movementCode
-     * @return 
+     * @param movementCode the movement code to find the {@link Refueling}
+     * @return a list of {@link Refueling}
      */
-    List<Refueling> findByAccountedBy(String movementCode);
+    List<Refueling> findByMovementCode(String movementCode);
     
     /**
+     * Use this method to find all the {@link Refueling} not accounted by any other {@link Refueling}
      * 
-     * @param vehicle 
-     * @return 
+     * @param vehicle the {@link Vehicle} to search the {@link Refueling}
+     * @return the list of unaccounted {@link Refueling}
      */
     @Query("FROM Refueling re WHERE re.accounted = false AND re.vehicle = ?1")
     List<Refueling> findUnaccountedByVehicle(Vehicle vehicle);
     
     /**
+     * This method is used to find the last {@link Refueling} odometer from a {@link Vehicle}
      * 
-     * @param vehicle 
-     * @return 
+     * @param vehicle the {@link Vehicle} to find the last odometer
+     * @return the last odometer
      */
     @Query("SELECT MAX(re.odometer) FROM Refueling re WHERE re.vehicle = ?1")
     Optional<Long> findLastOdometerByVehicle(Vehicle vehicle);
     
     /**
+     * Find the last {@link Refueling} of a given {@link Vehicle}
      * 
-     * @param vehicle
-     * @return 
+     * @param vehicle the {@link Vehicle} to find the {@link Refueling}
+     * @return the {@link Refueling}
      */
     @Query("FROM Refueling re WHERE re.id = (SELECT MAX(re.id) FROM Refueling re WHERE re.vehicle = ?1)")
     Refueling findLastByVehicle(Vehicle vehicle);
     
     /**
+     * {@inheritDoc}
      * 
      * @param criteria 
      */
     @Override
     default void setOrder(Criteria<Refueling, Refueling> criteria) {
-        criteria.orderDesc(Refueling_.eventDate);
+        criteria.orderDesc(Refueling_.eventDate)
+                .orderDesc(Refueling_.id);
     }
     
     /**
+     * {@inheritDoc}
      * 
      * @param filter
      * @return 
