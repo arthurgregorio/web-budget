@@ -82,7 +82,7 @@
                                                      oncomplete="PF('listBlock').hide()"
                                                      styleClass="btn btn-flat btn-warning"/>
                                     <p:spacer width="10"/>
-                                    <p:commandButton icon="fa fa-trash-o"
+                                    <p:commandButton icon="fa fa-eraser"
                                                      update="movementsList"
                                                      onstart="PF('listBlock').show()"
                                                      oncomplete="PF('listBlock').hide()"
@@ -203,7 +203,7 @@
                                              action="#{movementBean.changeToEdit(movement.id)}"/>
                             <p:spacer width="10" 
                                       rendered="#{movement.editable eq true}"/>
-                            <p:commandButton icon="fa fa-remove"
+                            <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-default" 
                                              rendered="#{movement.deletable eq true 

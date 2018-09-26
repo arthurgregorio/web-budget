@@ -27,11 +27,11 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
     <h:head>
-        <meta charset="utf-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <meta http-equiv="refresh" content="${request.session.maxInactiveInterval};url=/index.xhtml"/>
         <title>webBudget</title>
 
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="mobile-web-app-capable" content="yes"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:images/favicon.ico']}"/>
@@ -41,6 +41,11 @@
         <h:outputStylesheet library="pace" name="css/theme.css"/>
         <h:outputStylesheet library="webbudget" name="css/common.css"/>
         <h:outputStylesheet library="webbudget" name="css/custom.css"/>
+
+        <link rel="stylesheet"
+              crossorigin="anonymous"
+              href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+              integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" />
     </h:head>
 
     <h:body styleClass="hold-transition login-page">

@@ -65,7 +65,7 @@
                                                      oncomplete="PF('blocker').hide()"
                                                      styleClass="btn btn-flat btn-primary"/>
                                     <p:spacer width="10"/>
-                                    <p:commandButton icon="fa fa-trash-o"
+                                    <p:commandButton icon="fa fa-trash"
                                                      onstart="PF('blocker').show()"
                                                      title="#{menu['filter-clear']}"
                                                      update="itemsList controlsForm"
@@ -165,7 +165,7 @@
                             <p:spacer width="10" 
                                       rendered="#{not financialPeriod.closed 
                                                   and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}"/>
-                            <p:commandButton icon="fa fa-remove"
+                            <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
                                              action="#{financialPeriodBean.changeToDelete(financialPeriod.id)}" 

@@ -29,12 +29,14 @@
       xmlns:pe="http://primefaces.org/ui/extensions">
 
     <h:head>
+        <title>webBudget</title>
+
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="mobile-web-app-capable" content="yes"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-        <meta http-equiv="refresh" content="${request.session.maxInactiveInterval};url=/logout"/>
 
-        <title>webBudget</title>
+        <meta http-equiv="refresh" content="#{request.session.maxInactiveInterval};url=/logout"/>
 
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:images/favicon.ico']}"/>
 
@@ -44,6 +46,11 @@
         <h:outputStylesheet library="pace" name="css/theme.css"/>
         <h:outputStylesheet library="webbudget" name="css/custom.css"/>
         <h:outputStylesheet library="webbudget" name="css/common.css"/>
+
+        <link rel="stylesheet"
+              crossorigin="anonymous"
+              href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+              integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" />
 
         <ui:insert name="head" />
     </h:head>
@@ -171,7 +178,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"/></a>
+                                <a href="#" data-toggle="control-sidebar"><i class="fa fa-cogs"/></a>
                             </li>
                         </ul>
                     </div>

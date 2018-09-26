@@ -44,19 +44,19 @@
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.WALLET_ACCESS)}">
                     <p:link outcome="/secured/registration/wallet/listWallets.xhtml">
-                        <i class="fa fa-suitcase" />
+                        <i class="fa fa-wallet" />
                         <span>#{menu['registration.wallets']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_ACCESS)}">
                     <p:link outcome="/secured/registration/costCenter/listCostCenters.xhtml">
-                        <i class="fa fa-sitemap" />
+                        <i class="fa fa-tags" />
                         <span>#{menu['registration.cost-centers']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_ACCESS)}">
                     <p:link outcome="/secured/registration/financialPeriod/listFinancialPeriods.xhtml">
-                        <i class="fa fa-calendar-o" />
+                        <i class="fa fa-calendar-alt" />
                         <span>#{menu['registration.financial-periods']}</span>
                     </p:link>
                 </li>
@@ -80,7 +80,7 @@
                 <!--</li>-->
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.REFUELING_ACCESS)}">
                     <p:link outcome="/secured/journal/refueling/listRefuelings.xhtml">
-                        <i class="fa fa-refresh" />
+                        <i class="fa fa-gas-pump" />
                         <span>#{menu['journal.refuelings']}</span>
                     </p:link>
                 </li>
@@ -140,7 +140,7 @@
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.GROUP_ACCESS)}">
                     <p:link outcome="/secured/tools/group/listGroups.xhtml">
-                        <i class="fa fa-group" />
+                        <i class="fa fa-users" />
                         <span>#{menu['tools.groups']}</span>
                     </p:link>
                 </li>
