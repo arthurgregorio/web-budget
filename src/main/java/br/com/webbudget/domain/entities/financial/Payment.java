@@ -16,27 +16,26 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
-import br.com.webbudget.infrastructure.utils.RandomCode;
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.registration.Card;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
 
 /**
  *
@@ -47,10 +46,10 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-@Table(name = "payments")
-@AuditTable(value = "audit_payments")
-@ToString(callSuper = true, of = "code")
-@EqualsAndHashCode(callSuper = true, of = "code")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "payments", schema = FINANCIAL)
+@AuditTable(value = "payments", schema = FINANCIAL_AUDIT)
 public class Payment extends PersistentEntity {
 
     @Getter
@@ -151,13 +150,13 @@ public class Payment extends PersistentEntity {
     /**
      * Valida se o desconto aqui inserido e menor que o valor do movimento 
      * que estamos pagando por este pagamento
-     * 
+     *
      * @param value o valor do movimento para comparacao
      */
     public void validateDiscount(BigDecimal value) {
-       if (this.discount != null && this.discount.compareTo(value) >= 0) {
-           throw new BusinessLogicException("error.payment.invalid-discount");
-       }
+        if (this.discount != null && this.discount.compareTo(value) >= 0) {
+            throw new BusinessLogicException("error.payment.invalid-discount");
+        }
     }
 
     /**

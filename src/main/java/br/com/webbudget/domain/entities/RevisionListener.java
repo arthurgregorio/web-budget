@@ -48,7 +48,7 @@ public class RevisionListener implements org.hibernate.envers.RevisionListener {
         try {
             return String.valueOf(SecurityUtils.getSubject().getPrincipal());
         } catch (Exception ex) {
-            return "unknow";
+            return "unknown";
         }
     }
 }

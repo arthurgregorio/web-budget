@@ -23,11 +23,14 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
 
 /**
  * The representation of a wallet in the application
@@ -39,15 +42,15 @@ import java.math.BigDecimal;
  */
 @Entity
 @Audited
-@Table(name = "wallets")
-@AuditTable(value = "audit_wallets")
-@ToString(callSuper = true, of = {"name", "walletType"})
-@EqualsAndHashCode(callSuper = true, of = {"name", "walletType"})
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "wallets", schema = REGISTRATION)
+@AuditTable(value = "wallets", schema = REGISTRATION_AUDIT)
 public class Wallet extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotEmpty(message = "{wallet.name}")
+    @NotBlank(message = "{wallet.name}")
     @Column(name = "name", nullable = false, length = 45)
     private String name;
     @Getter
@@ -93,10 +96,10 @@ public class Wallet extends PersistentEntity {
         this.active = true;
         this.actualBalance = BigDecimal.ZERO;
     }
-    
+
     /**
      * Create a better description to this wallet using the bank account information if is available
-     * 
+     *
      * @return the description of this wallet
      */
     public String getDescription() {
@@ -132,7 +135,7 @@ public class Wallet extends PersistentEntity {
 
     /**
      * To check if the wallet is empty, it means balance = 0
-     * 
+     *
      * @return <code>true</code> for empty wallet, <code>false</code> otherwise
      */
     public boolean isEmpty() { // FIXME refactor

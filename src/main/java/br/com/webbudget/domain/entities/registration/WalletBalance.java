@@ -29,6 +29,9 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
+
 /**
  * The representation of a wallet balance in the application
  *
@@ -40,9 +43,9 @@ import java.time.LocalDate;
 @Entity
 @Audited
 @ToString(callSuper = true)
-@Table(name = "wallet_balances")
 @EqualsAndHashCode(callSuper = true)
-@AuditTable(value = "audit_wallet_balances")
+@Table(name = "wallet_balances", schema = REGISTRATION)
+@AuditTable(value = "wallet_balances", schema = REGISTRATION_AUDIT)
 public class WalletBalance extends PersistentEntity {
 
     @Getter

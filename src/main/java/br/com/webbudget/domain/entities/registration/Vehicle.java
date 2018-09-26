@@ -23,12 +23,15 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
 
 /**
  * The representation of a vehicle in the application
@@ -40,30 +43,30 @@ import java.time.temporal.ChronoField;
  */
 @Entity
 @Audited
-@Table(name = "vehicles")
-@AuditTable(value = "audit_vehicles")
-@ToString(callSuper = true, exclude = {"costCenter", "odometer"})
-@EqualsAndHashCode(callSuper = true, exclude = {"costCenter", "odometer"})
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "vehicles", schema = REGISTRATION)
+@AuditTable(value = "vehicles", schema = REGISTRATION_AUDIT)
 public class Vehicle extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotEmpty(message = "{vehicle.identification}")
+    @NotBlank(message = "{vehicle.identification}")
     @Column(name = "identification", nullable = false, length = 90)
     private String identification;
     @Getter
     @Setter
-    @NotEmpty(message = "{vehicle.brand}")
+    @NotBlank(message = "{vehicle.brand}")
     @Column(name = "brand", nullable = false, length = 90)
     private String brand;
     @Getter
     @Setter
-    @NotEmpty(message = "{vehicle.model}")
+    @NotBlank(message = "{vehicle.model}")
     @Column(name = "model", nullable = false, length = 90)
     private String model;
     @Getter
     @Setter
-    @NotEmpty(message = "{vehicle.license-plate}")
+    @NotBlank(message = "{vehicle.license-plate}")
     @Column(name = "license_plate", nullable = false, length = 11)
     private String licensePlate;
     @Getter
@@ -86,14 +89,14 @@ public class Vehicle extends PersistentEntity {
     @Setter
     @Column(name = "active", nullable = false)
     private boolean active;
-    
+
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{vehicle.vehicle-type}")
     @Column(name = "vehicle_type", nullable = false)
     private VehicleType vehicleType;
-    
+
     @Getter
     @Setter
     @ManyToOne

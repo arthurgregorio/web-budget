@@ -31,6 +31,9 @@ import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
+
 /**
  *
  * @author Arthur Gregorio
@@ -40,10 +43,10 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-@Table(name = "closings")
-@AuditTable(value = "audit_closings")
-@ToString(callSuper = true, of = "code")
-@EqualsAndHashCode(callSuper = true, of = "code")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "closings", schema = FINANCIAL)
+@AuditTable(value = "closings", schema = FINANCIAL_AUDIT)
 public class Closing extends PersistentEntity {
 
     @Getter

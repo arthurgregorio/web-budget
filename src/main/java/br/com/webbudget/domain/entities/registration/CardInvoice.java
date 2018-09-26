@@ -33,6 +33,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
+
 /**
  * The representation of a card invoice in the application
  *
@@ -43,10 +46,10 @@ import java.util.List;
  */
 @Entity
 @Audited
-@Table(name = "card_invoices")
-@AuditTable(value = "audit_card_invoices")
-@ToString(callSuper = true, of = {"identification", "total"})
-@EqualsAndHashCode(callSuper = true, of = {"identification", "total"})
+@ToString(callSuper = true, exclude = "movements")
+@Table(name = "card_invoices", schema = REGISTRATION)
+@EqualsAndHashCode(callSuper = true, exclude = "movements")
+@AuditTable(value = "card_invoices", schema = REGISTRATION_AUDIT)
 public class CardInvoice extends PersistentEntity {
 
     @Getter
@@ -149,14 +152,14 @@ public class CardInvoice extends PersistentEntity {
     public boolean hasMovements() {
         return !this.movements.isEmpty();
     } // FIXME verify utility
-    
+
     /**
      * Method to check if the invoice can be payd
      *
      * @return <code>true</code> if can be, <code>false</code> otherwise
      */
     public boolean isPayable() { // FIXME verify utility
-        return this.hasMovements() 
+        return this.hasMovements()
                 && this.movement != null && this.movement.isPaid();
     }
 

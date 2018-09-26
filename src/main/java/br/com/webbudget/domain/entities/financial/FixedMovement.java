@@ -16,23 +16,10 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
-import br.com.webbudget.infrastructure.utils.RandomCode;
-import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.PersistentEntity;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import static javax.persistence.CascadeType.REMOVE;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import static javax.persistence.FetchType.EAGER;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +28,19 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * A entidade que representa nosso movimento fixo
@@ -53,10 +52,10 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Audited
-@Table(name = "fixed_movements")
-@ToString(callSuper = true, of = "code")
-@AuditTable(value = "audit_fixed_movements")
-@EqualsAndHashCode(callSuper = true, of = "code")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "fixed_movements", schema = FINANCIAL)
+@AuditTable(value = "fixed_movements", schema = FINANCIAL_AUDIT)
 public class FixedMovement extends PersistentEntity {
 
     @Getter
@@ -64,12 +63,12 @@ public class FixedMovement extends PersistentEntity {
     private String code;
     @Getter
     @Setter
-    @NotEmpty(message = "{fixed-movement.identification}")
+    @NotBlank(message = "{fixed-movement.identification}")
     @Column(name = "identification", nullable = false, length = 45)
     private String identification;
     @Getter
     @Setter
-    @NotEmpty(message = "{fixed-movement.description}")
+    @NotBlank(message = "{fixed-movement.description}")
     @Column(name = "description", nullable = false, length = 255)
     private String description;
     @Getter
@@ -172,7 +171,7 @@ public class FixedMovement extends PersistentEntity {
         }
 
         // impossivel ter um rateio com valor igual a zero
-        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0 || 
+        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0 ||
                 apportionment.getValue().compareTo(this.value) > 0) {
             throw new BusinessLogicException("error.apportionment.invalid-value");
         }
@@ -184,7 +183,7 @@ public class FixedMovement extends PersistentEntity {
      * Remove um rateio pelo seu codigo, caso nao localize o mesmo dispara uma 
      * exception para informor ao usuario que nao podera fazer nada pois sera
      * um problema do sistema...
-     * 
+     *
      * LOL WHAT!?
      *
      * @param code o codigo
@@ -230,7 +229,7 @@ public class FixedMovement extends PersistentEntity {
     public boolean hasValueToDivide() {
         return this.getApportionmentsTotal().compareTo(this.value) == 0;
     }
-    
+
     /**
      * Realiza a validacao dos rateios do movimento fixo
      */

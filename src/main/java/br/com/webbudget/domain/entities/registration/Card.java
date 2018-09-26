@@ -18,13 +18,19 @@ package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
 
 /**
  * The representation of a card in the application
@@ -36,25 +42,25 @@ import java.math.BigDecimal;
  */
 @Entity
 @Audited
-@Table(name = "cards")
-@AuditTable(value = "audit_cards")
-@ToString(callSuper = true, of = {"number", "cardType"})
-@EqualsAndHashCode(callSuper = true, of = {"number", "cardType"})
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "cards", schema = REGISTRATION)
+@AuditTable(value = "cards", schema = REGISTRATION_AUDIT)
 public class Card extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotEmpty(message = "{card.name}")
+    @NotBlank(message = "{card.name}")
     @Column(name = "name", nullable = false, length = 45)
     private String name;
     @Getter
     @Setter
-    @NotEmpty(message = "{card.number}")
+    @NotBlank(message = "{card.number}")
     @Column(name = "number", nullable = false, length = 45)
     private String number;
     @Getter
     @Setter
-    @NotEmpty(message = "{card.flag}")
+    @NotBlank(message = "{card.flag}")
     @Column(name = "flag", nullable = false, length = 45)
     private String flag;
     @Getter
@@ -67,7 +73,7 @@ public class Card extends PersistentEntity {
     private Integer expirationDay;
     @Getter
     @Setter
-    @NotEmpty(message = "{card.owner}")
+    @NotBlank(message = "{card.owner}")
     @Column(name = "owner", nullable = false, length = 45)
     private String owner;
     @Getter
@@ -103,7 +109,7 @@ public class Card extends PersistentEntity {
             throw new BusinessLogicException("error.card.no-debit-wallet");
         }
     }
-    
+
     /**
      * A way more elegant to see the name of a card
      *
@@ -153,7 +159,7 @@ public class Card extends PersistentEntity {
 
         return secured.toString();
     }
-    
+
     /**
      * Use this method to check if the card is a credit card or not
      *
@@ -162,7 +168,7 @@ public class Card extends PersistentEntity {
     public boolean isCreditCard() {
         return this.cardType == CardType.CREDIT;
     } // FIXME check if this is used
-    
+
     /**
      * Use this method to check if the card is a debit card or not
      *

@@ -26,6 +26,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS_AUDIT;
+
 /**
  * This is the class responsible to create the link between a {@link Group} and a {@link Authorization}
  *
@@ -38,9 +41,9 @@ import javax.persistence.Table;
 @Audited
 @ToString
 @NoArgsConstructor
-@Table(name = "grants")
-@AuditTable(value = "audit_grants")
 @EqualsAndHashCode(callSuper = true)
+@Table(name = "grants", schema = TOOLS)
+@AuditTable(value = "grants", schema = TOOLS_AUDIT)
 public class Grant extends PersistentEntity {
 
     @Getter

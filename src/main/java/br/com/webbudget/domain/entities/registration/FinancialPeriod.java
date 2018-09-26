@@ -19,21 +19,21 @@ package br.com.webbudget.domain.entities.registration;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
 
 /**
  * The representation of a financial period in the application
@@ -45,16 +45,16 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Audited
-@Table(name = "financial_periods")
-@AuditTable(value = "audit_financial_periods")
-@ToString(callSuper = true, of = "identification")
-@EqualsAndHashCode(callSuper = true, of = "identification")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "financial_periods", schema = REGISTRATION)
+@AuditTable(value = "financial_periods", schema = REGISTRATION_AUDIT)
 public class FinancialPeriod extends PersistentEntity {
 
     @Getter
     @Setter
     @Column(name = "identification", nullable = false)
-    @NotEmpty(message = "{financial-period.identification}")
+    @NotBlank(message = "{financial-period.identification}")
     private String identification;
     @Getter
     @Setter
@@ -73,12 +73,12 @@ public class FinancialPeriod extends PersistentEntity {
     private BigDecimal revenuesGoal;
     @Getter
     @Setter
-    @Column(name = "start", nullable = false)
+    @Column(name = "start_date", nullable = false)
     @NotNull(message = "{financial-period.start}")
     private LocalDate start;
     @Getter
     @Setter
-    @Column(name = "end", nullable = false)
+    @Column(name = "end_date", nullable = false)
     @NotNull(message = "{financial-period.end}")
     private LocalDate end;
     @Getter
@@ -102,15 +102,14 @@ public class FinancialPeriod extends PersistentEntity {
 
     /**
      * If the period is closed, this method should return the {@link Closing} data
-     * 
+     *
      * @return the {@link Closing} data of this period
      */
     public Closing getClosing() {
         if (this.closing == null) {
-            throw new BusinessLogicException(
-                    "error.financial-period.not-closed", this.identification);
+            throw new BusinessLogicException("error.financial-period.not-closed", this.identification);
         }
-        return closing;
+        return this.closing;
     }
 
     /**

@@ -20,6 +20,9 @@ import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import java.time.LocalDate;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
 import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,10 +49,10 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-@Table(name = "launches")
-@AuditTable(value = "audit_launches")
-@ToString(callSuper = true, of = "code")
-@EqualsAndHashCode(callSuper = true, of = "code")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "launches", schema = FINANCIAL)
+@AuditTable(value = "launches", schema = FINANCIAL_AUDIT)
 public class Launch extends PersistentEntity {
     
     @Getter

@@ -23,10 +23,13 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
 
 /**
  * The representation of a telephone in the application
@@ -38,10 +41,10 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Audited
-@Table(name = "telephones")
-@AuditTable(value = "audit_telephones")
-@ToString(callSuper = true, exclude = "contact")
-@EqualsAndHashCode(callSuper = true, exclude = "contact")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "telephones", schema = REGISTRATION)
+@AuditTable(value = "telephones", schema = REGISTRATION_AUDIT)
 public class Telephone extends PersistentEntity {
 
     @Getter
@@ -55,7 +58,7 @@ public class Telephone extends PersistentEntity {
     @Enumerated
     @Column(name = "number_type", nullable = false)
     private NumberType numberType;
-    
+
     @Getter
     @Setter
     @ManyToOne

@@ -16,30 +16,10 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
-import br.com.webbudget.infrastructure.utils.RandomCode;
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import br.com.webbudget.domain.entities.registration.CostCenter;
-import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.entities.registration.CardInvoice;
+import br.com.webbudget.domain.entities.registration.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import static javax.persistence.CascadeType.REMOVE;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import static javax.persistence.FetchType.EAGER;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,7 +28,19 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  *
@@ -59,10 +51,10 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Audited
-@Table(name = "movements")
-@AuditTable(value = "audit_movements")
-@ToString(callSuper = true, of = "code")
-@EqualsAndHashCode(callSuper = true, of = "code")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "movements", schema = FINANCIAL)
+@AuditTable(value = "movements", schema = FINANCIAL_AUDIT)
 public class Movement extends PersistentEntity {
 
     @Getter
@@ -74,7 +66,7 @@ public class Movement extends PersistentEntity {
     private BigDecimal value;
     @Getter
     @Setter
-    @NotEmpty(message = "{movement.description}")
+    @NotBlank(message = "{movement.description}")
     @Column(name = "description", nullable = false, length = 255)
     private String description;
     @Getter
@@ -238,10 +230,10 @@ public class Movement extends PersistentEntity {
     public BigDecimal getValue() {
         if (this.payment != null && this.payment.hasDiscount()) {
             return this.value.subtract(this.payment.getDiscount());
-        } 
+        }
         return value;
     }
-    
+
     /**
      * @return retorna o valor original deste movimento, sem descontos
      */
@@ -287,7 +279,7 @@ public class Movement extends PersistentEntity {
         return this.isExpense() && this.payment.getPaymentMethodType()
                 == PaymentMethodType.CREDIT_CARD;
     }
-    
+
     /**
      * @return se este movimento foi pago em cartao de debito
      */
@@ -302,7 +294,7 @@ public class Movement extends PersistentEntity {
     public boolean isCardInvoice() {
         return this.movementType == MovementType.CARD_INVOICE;
     }
-    
+
     /**
      * @return se este movimento nao eh uma fatura de cartao
      */
@@ -448,7 +440,7 @@ public class Movement extends PersistentEntity {
     public boolean isMultiApportionment() {
         return this.apportionments.size() > 1;
     }
-    
+
     /**
      * Valida o pagamento deste movimento
      */
@@ -457,14 +449,14 @@ public class Movement extends PersistentEntity {
         // movimentos com multiplos rateios nao sao passiveis de desconto
         if (this.payment.hasDiscount() && this.isMultiApportionment()) {
             throw new BusinessLogicException("error.payment.discount-app-multi");
-        } 
-        
+        }
+
         // valida as formas de pagamento informadas
         this.payment.validatePaymentMethod();
-        
+
         // valida o valor do desconto
         this.payment.validateDiscount(this.value);
-        
+
         // aplica o desconto nos rateios caso tenha
         this.apportionments.forEach(a -> {
             a.setValue(this.getValue());

@@ -30,6 +30,8 @@ import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS_AUDIT;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -42,10 +44,10 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 @Entity
 @Audited
-@Table(name = "users")
 @ToString(callSuper = true)
-@AuditTable(value = "audit_users")
 @EqualsAndHashCode(callSuper = true)
+@Table(name = "users", schema = TOOLS)
+@AuditTable(value = "users", schema = TOOLS_AUDIT)
 public class User extends PersistentEntity implements UserDetails {
 
     @Getter

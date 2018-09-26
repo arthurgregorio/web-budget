@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS_AUDIT;
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.EAGER;
 
@@ -45,10 +47,10 @@ import static javax.persistence.FetchType.EAGER;
  */
 @Entity
 @Audited
-@Table(name = "groups")
-@AuditTable(value = "audit_groups")
-@ToString(exclude = {"parent", "grants"})
-@EqualsAndHashCode(callSuper = true, exclude = {"parent"})
+@ToString(exclude = "grants")
+@Table(name = "groups", schema = TOOLS)
+@AuditTable(value = "groups", schema = TOOLS_AUDIT)
+@EqualsAndHashCode(callSuper = true, exclude = "grants")
 public class Group extends PersistentEntity {
 
     @Getter

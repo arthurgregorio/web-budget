@@ -26,15 +26,17 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.EAGER;
 
@@ -48,19 +50,19 @@ import static javax.persistence.FetchType.EAGER;
  */
 @Entity
 @Audited
-@Table(name = "contacts")
-@AuditTable(value = "audit_contacts")
-@ToString(callSuper = true, of = "code")
-@EqualsAndHashCode(callSuper = true, of = "code")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "contacts", schema = REGISTRATION)
+@AuditTable(value = "contacts", schema = REGISTRATION_AUDIT)
 public class Contact extends PersistentEntity {
 
     @Getter
     @Column(name = "code", nullable = false, length = 6, unique = true)
     private final String code;
-    
+
     @Getter
     @Setter
-    @NotBlank(message = "{contact.name}")
+    @javax.validation.constraints.NotBlank(message = "{contact.name}")
     @Column(name = "name", nullable = false, length = 90)
     private String name;
     @Setter
@@ -115,7 +117,7 @@ public class Contact extends PersistentEntity {
     @Setter
     @Column(name = "active", nullable = false)
     private boolean active;
-    
+
     @Setter
     @Getter
     @Enumerated(EnumType.STRING)
@@ -131,11 +133,11 @@ public class Contact extends PersistentEntity {
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "contact", fetch = EAGER, cascade = REMOVE)
     private List<Telephone> telephones;
-    
+
     @Getter
     @Transient
     private final List<Telephone> deletedTelephones;
-    
+
     /**
      * Default constructor
      */
@@ -148,13 +150,13 @@ public class Contact extends PersistentEntity {
 
     /**
      * Get the {@link Telephone} of the contact
-     * 
+     *
      * @return a {@link List} of {@link Telephone} for this contact
      */
     public List<Telephone> getTelephones() {
         return Collections.unmodifiableList(this.telephones);
     }
-    
+
     /**
      * Format and return the document of this contact
      *
@@ -163,24 +165,24 @@ public class Contact extends PersistentEntity {
     public String getDocumentFormated() {
         return this.contactType.formatDocument(this.document);
     }
-    
+
     /**
      * Remove all the {@link Telephone} of this contact
      */
     public void clearTelephones() {
         this.telephones.clear();
     }
-    
+
     /**
      * Validate the contact document by the document type defined by the {@link ContactType} enum
      */
     public void validateDocument() {
         this.contactType.validateDocument(this.document.replace("\\w", ""));
     }
-    
+
     /**
      * Add a new {@link Telephone} to this contact
-     * 
+     *
      * @param telephone the {@link Telephone} to add
      */
     public void addTelephone(Telephone telephone) {
@@ -199,7 +201,7 @@ public class Contact extends PersistentEntity {
 
     /**
      * Add a already persisted {@link Telephone} to the deletion list
-     * 
+     *
      * @param telephone the {@link Telephone} to be add to the deletion list
      */
     private void addDeletedTelephone(Telephone telephone) {
@@ -210,7 +212,7 @@ public class Contact extends PersistentEntity {
 
     /**
      * For a given {@link Address} this method set all the values in the correct fields of the contact
-     * 
+     *
      * @param address the {@link Address} to be set to this contact
      */
     public void setAddress(Address address) {

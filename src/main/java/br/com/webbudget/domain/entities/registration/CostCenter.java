@@ -25,11 +25,14 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
 
 /**
  * The representation of a cost center in the application
@@ -41,15 +44,15 @@ import java.math.BigDecimal;
  */
 @Entity
 @Audited
-@Table(name = "cost_centers")
-@ToString(callSuper = true, of = "name")
-@AuditTable(value = "audit_cost_centers")
-@EqualsAndHashCode(callSuper = true, of = "name")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "cost_centers", schema = REGISTRATION)
+@AuditTable(value = "cost_centers", schema = REGISTRATION_AUDIT)
 public class CostCenter extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotEmpty(message = "{cost-center.name}")
+    @NotBlank(message = "{cost-center.name}")
     @Column(name = "name", nullable = false, length = 90)
     private String name;
     @Getter
@@ -102,7 +105,7 @@ public class CostCenter extends PersistentEntity {
         this.revenuesBudget = BigDecimal.ZERO;
         this.expensesBudget = BigDecimal.ZERO;
     }
-    
+
     /**
      * Get the parent cost center name
      *
@@ -111,7 +114,7 @@ public class CostCenter extends PersistentEntity {
     public String getParentName() {
         return this.parent != null ? this.parent.getName() : null;
     }
-    
+
     /**
      * Method used to check if this cost center control the budget by the type of a {@link MovementClass}
      *

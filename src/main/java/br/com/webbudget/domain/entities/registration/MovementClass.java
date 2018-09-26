@@ -23,12 +23,15 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
 
 /**
  * The representation of a movement class in the application
@@ -40,15 +43,15 @@ import java.math.RoundingMode;
  */
 @Entity
 @Audited
-@Table(name = "movement_classes")
-@ToString(callSuper = true, of = "name")
-@AuditTable(value = "audit_movement_classes")
-@EqualsAndHashCode(callSuper = true, of = "name")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "movement_classes", schema = REGISTRATION)
+@AuditTable(value = "movement_classes", schema = REGISTRATION_AUDIT)
 public class MovementClass extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotEmpty(message = "{movement-class.name}")
+    @NotBlank(message = "{movement-class.name}")
     @Column(name = "name", nullable = false, length = 45)
     private String name;
     @Getter
@@ -87,7 +90,7 @@ public class MovementClass extends PersistentEntity {
         this.budget = BigDecimal.ZERO;
         this.totalMovements = BigDecimal.ZERO;
     }
-    
+
     /**
      * To check if is a revenue class
      *
@@ -96,16 +99,16 @@ public class MovementClass extends PersistentEntity {
     public boolean isRevenues() {
         return this.movementClassType == MovementClassType.REVENUE;
     }
-    
+
     /**
      * To check if is a expenses class
-     * 
+     *
      * @return <code>true</code> for expenses class, <code>false</code> otherwise
      */
     public boolean isExpenses() {
         return this.movementClassType == MovementClassType.EXPENSE;
     }
-    
+
     /**
      * Method to check if the budget of this class is over the maximum value
      *
@@ -121,14 +124,14 @@ public class MovementClass extends PersistentEntity {
      * @return the budget consume percentage
      */
     public int budgetCompletionPercentage() {
-        
+
         BigDecimal percentage = BigDecimal.ZERO;
-        
+
         if (this.isOverBudget()) {
             return 100;
         } else if (this.budget.equals(BigDecimal.ZERO)) {
             percentage = this.totalMovements.multiply(new BigDecimal(100))
-                            .divide(this.budget, 2, RoundingMode.HALF_UP);
+                    .divide(this.budget, 2, RoundingMode.HALF_UP);
         }
         return percentage.intValue() > 100 ? 100 : percentage.intValue();
     }

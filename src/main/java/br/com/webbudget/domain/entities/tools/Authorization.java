@@ -25,6 +25,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS_AUDIT;
+
 /**
  * This class represents a authorization for a single functionality, this is also commonly part of a {@link Grant} for
  * a {@link Group} that have {@link User} linked to
@@ -38,11 +41,11 @@ import javax.persistence.Table;
 @Audited
 @ToString
 @NoArgsConstructor
-@Table(name = "authorizations")
 @EqualsAndHashCode(callSuper = true)
-@AuditTable(value = "audit_authorizations")
+@Table(name = "authorizations", schema = TOOLS)
+@AuditTable(value = "authorizations", schema = TOOLS_AUDIT)
 public class Authorization extends PersistentEntity {
-    
+
     @Getter
     @Setter
     @Column(name = "functionality", nullable = false, length = 90)
@@ -54,7 +57,7 @@ public class Authorization extends PersistentEntity {
 
     /**
      * Constructor
-     * 
+     *
      * @param functionality the functionality of the authorization
      * @param permission the permission of the functionality
      */
@@ -71,10 +74,10 @@ public class Authorization extends PersistentEntity {
     public String getFullPermission() {
         return this.functionality + ":" + this.permission;
     }
-    
+
     /**
      * Check if this authorization is for this functionality
-     * 
+     *
      * @param functionality the functionality to test
      * @return <code>true</code> or <code>false</code>
      */
@@ -89,7 +92,7 @@ public class Authorization extends PersistentEntity {
      * @return <code>true</code> or <code>false</code>
      */
     public boolean isPermission(String permission) {
-        return permission != null && (this.permission.equals(permission) 
+        return permission != null && (this.permission.equals(permission)
                 || this.getFullPermission().equals(permission));
     }
 }

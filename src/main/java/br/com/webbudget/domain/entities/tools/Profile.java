@@ -26,6 +26,9 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.TOOLS_AUDIT;
+
 /**
  * The {@link User} profile, this class hold the individual {@link User} preferences
  *
@@ -36,10 +39,10 @@ import javax.persistence.*;
  */
 @Entity
 @Audited
-@Table(name = "profiles")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@AuditTable(value = "audit_profiles")
+@Table(name = "profiles", schema = TOOLS)
+@AuditTable(value = "profiles", schema = TOOLS_AUDIT)
 public class Profile extends PersistentEntity {
 
     @Getter

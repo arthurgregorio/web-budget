@@ -42,6 +42,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.JOURNAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.JOURNAL_AUDIT;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.EAGER;
@@ -56,10 +58,10 @@ import static javax.persistence.FetchType.EAGER;
  */
 @Entity
 @Audited
-@Table(name = "refuelings")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@AuditTable(value = "audit_refuelings")
+@Table(name = "refuelings", schema = JOURNAL)
+@AuditTable(value = "refuelings", schema = JOURNAL_AUDIT)
 public class Refueling extends PersistentEntity {
 
     @Getter
@@ -141,23 +143,23 @@ public class Refueling extends PersistentEntity {
 
     @OneToMany(mappedBy = "refueling", orphanRemoval = true, fetch = EAGER, cascade = {PERSIST, REMOVE})
     private List<Fuel> fuels;
-    
+
     /**
      * Default constructor
      */
     public Refueling() {
-        
+
         this.code = RandomCode.alphanumeric(6);
-        
+
         this.fullTank = true;
         this.accounted = false;
-        
+
         this.eventDate = LocalDate.now();
-        
+
         this.cost = BigDecimal.ZERO;
         this.liters = BigDecimal.ZERO;
         this.costPerLiter = BigDecimal.ZERO;
-        
+
         this.fuels = new ArrayList<>();
     }
 
@@ -214,7 +216,7 @@ public class Refueling extends PersistentEntity {
     public CostCenter getCostCenter() {
         return this.getVehicle().getCostCenter();
     }
-    
+
     /**
      * This is a helper method to check if the {@link Fuel} is ok the there are at least one informed
      *
@@ -231,19 +233,19 @@ public class Refueling extends PersistentEntity {
      * Totals the values of the fuels based on the total in liters multiplied by the cost by liter
      */
     public void totalsFuels() {
-        
+
         // calculate the total cost
         this.cost = this.fuels
                 .stream()
                 .map(Fuel::getCost)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
+
         // calculate the total of liters stocked
         this.liters = this.fuels
                 .stream()
                 .map(Fuel::getLiters)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
+
         // calculate the cost per liter
         if (!this.cost.equals(BigDecimal.ZERO) && !this.liters.equals(BigDecimal.ZERO)) {
             this.costPerLiter = this.cost.divide(this.liters, RoundingMode.CEILING);
@@ -259,16 +261,16 @@ public class Refueling extends PersistentEntity {
     public void calculateAverageConsumption() {
         this.calculateAverageConsumption(this.distance, this.liters);
     }
-    
+
     /**
      * Use this method to calculate the average consumption of the fuel using the total travelled distance
-     * 
+     *
      * @param totalDistance the total distance travelled
      * @param liters total of fuel liters spent
      */
     public void calculateAverageConsumption(long totalDistance, BigDecimal liters) {
         if (!this.firstRefueling && totalDistance > 0) {
-            this.averageConsumption = 
+            this.averageConsumption =
                     new BigDecimal(totalDistance / liters.doubleValue());
         }
     }
@@ -279,16 +281,16 @@ public class Refueling extends PersistentEntity {
      * @return the {@link Movement} description
      */
     public String getMovementDescription() {
-        
+
         final StringBuilder builder = new StringBuilder();
-        
+
         builder.append(this.vehicle.getIdentification());
         builder.append(" - ");
         builder.append(this.movementClass.getName());
         builder.append(",  ");
         builder.append(NumberFormat.getNumberInstance().format(this.liters));
         builder.append("lts");
-        
+
         return builder.toString();
     }
 
@@ -301,7 +303,7 @@ public class Refueling extends PersistentEntity {
 
     /**
      * Calculate the distance from the current odometer and the last one
-     * 
+     *
      * @param lastOdometer the last odometer registered
      */
     public void calculateDistance(long lastOdometer) {

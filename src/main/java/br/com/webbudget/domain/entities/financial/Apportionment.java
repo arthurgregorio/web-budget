@@ -16,25 +16,24 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
-import br.com.webbudget.infrastructure.utils.RandomCode;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.entities.PersistentEntity;
-import java.math.BigDecimal;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 
 /**
  *
@@ -45,10 +44,10 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-@Table(name = "apportionments")
-@ToString(callSuper = true, of = "code")
-@AuditTable(value = "audit_apportionments")
-@EqualsAndHashCode(callSuper = true, of = "code")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "apportionments", schema = FINANCIAL)
+@AuditTable(value = "apportionments", schema = FINANCIAL)
 public class Apportionment extends PersistentEntity {
 
     @Getter
@@ -89,12 +88,12 @@ public class Apportionment extends PersistentEntity {
     public Apportionment() {
         this.code = RandomCode.alphanumeric(5);
     }
-    
+
     /**
-     * 
+     *
      * @param costCenter
      * @param movementClass
-     * @param value 
+     * @param value
      */
     public Apportionment(CostCenter costCenter, MovementClass movementClass, BigDecimal value) {
         this();
@@ -113,25 +112,25 @@ public class Apportionment extends PersistentEntity {
     public boolean isForRevenues() {
         return this.movementClass.getMovementClassType() == MovementClassType.REVENUE;
     }
-    
+
     /**
      * @return se este e um rateio de despesa
      */
     public boolean isForExpenses() {
         return this.movementClass.getMovementClassType() == MovementClassType.EXPENSE;
     }
-    
+
     /**
      * @return uma copia deste reateio com um novo codigo
      */
     public Apportionment copy() {
-        
+
         final Apportionment apportionment = new Apportionment();
-        
+
         apportionment.setValue(this.value);
         apportionment.setCostCenter(this.costCenter);
         apportionment.setMovementClass(this.movementClass);
-        
+
         return apportionment;
     }
 }
