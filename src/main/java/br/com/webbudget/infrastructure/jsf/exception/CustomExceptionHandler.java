@@ -50,25 +50,13 @@ import static javax.servlet.RequestDispatcher.*;
  */
 public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 
-    private final ExceptionHandler wrapped;
-
     /**
      * Constructor...
      *
      * @param exceptionHandler the wrapped handler
      */
-    public CustomExceptionHandler(ExceptionHandler exceptionHandler) {
-        this.wrapped = exceptionHandler;
-    }
-
-    /**
-     * {@inheritDoc }
-     *
-     * @return
-     */
-    @Override
-    public ExceptionHandler getWrapped() {
-        return wrapped;
+    CustomExceptionHandler(ExceptionHandler exceptionHandler) {
+        super(exceptionHandler);
     }
 
     /**
@@ -80,7 +68,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
     public void handle() throws FacesException {
         final FacesContext context = FacesContext.getCurrentInstance();
         handleException(context);
-        this.wrapped.handle();
+        this.getWrapped().handle();
     }
 
     /**
@@ -163,7 +151,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
         if (exception instanceof EJBException && exception.getCause() != null) {
             exception = exception.getCause();
         }
-        return WebXml.INSTANCE.findErrorPageLocation(exception);
+        return WebXml.instance().findErrorPageLocation(exception);
     }
 
     /**

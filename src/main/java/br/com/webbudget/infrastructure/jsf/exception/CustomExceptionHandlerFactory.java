@@ -30,15 +30,13 @@ import javax.faces.context.ExceptionHandlerFactory;
  */
 public class CustomExceptionHandlerFactory extends ExceptionHandlerFactory {
 
-    private final ExceptionHandlerFactory parent;
-
     /**
-     * Constructor...
+     * {@inheritDoc}
      *
-     * @param parent the parent factory
+     * @param wrapped
      */
-    public CustomExceptionHandlerFactory(ExceptionHandlerFactory parent) {
-        this.parent = parent;
+    public CustomExceptionHandlerFactory(ExceptionHandlerFactory wrapped) {
+        super(wrapped);
     }
 
     /**
@@ -48,6 +46,6 @@ public class CustomExceptionHandlerFactory extends ExceptionHandlerFactory {
      */
     @Override
     public ExceptionHandler getExceptionHandler() {
-        return new CustomExceptionHandler(this.parent.getExceptionHandler());
+        return new CustomExceptionHandler(this.getWrapped().getExceptionHandler());
     }
 }

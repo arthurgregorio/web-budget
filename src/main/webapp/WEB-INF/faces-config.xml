@@ -1,33 +1,33 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
   Copyright (C) 2015 Arthur Gregorio, AG.Software
- 
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
-              version="2.2">
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
+              version="2.3">
 
     <factory>
         <exception-handler-factory>
             br.com.webbudget.infrastructure.jsf.exception.CustomExceptionHandlerFactory
         </exception-handler-factory>
     </factory>
-    
+
     <render-kit>
         <renderer>
             <component-family>org.primefaces.component</component-family>
@@ -40,44 +40,44 @@
             <renderer-class>br.com.webbudget.infrastructure.jsf.primefaces.CustomCalendarRenderer</renderer-class>
         </renderer>
     </render-kit>
-    
+
     <application>
         <!-- configuracao da locale -->
-        <locale-config>  
-            <default-locale>pt_BR</default-locale>  
+        <locale-config>
+            <default-locale>pt_BR</default-locale>
             <supported-locale>pt_BR</supported-locale>
             <supported-locale>en_US</supported-locale>
-        </locale-config>  
-        
+        </locale-config>
+
         <!-- mensagens de validacao -->
-        <resource-bundle>  
-            <base-name>ValidationMessages</base-name>  
+        <resource-bundle>
+            <base-name>ValidationMessages</base-name>
             <var>validation</var>
-        </resource-bundle>  
-        
+        </resource-bundle>
+
         <!-- bundle -->
-        <resource-bundle>  
-            <base-name>i18n.enums</base-name>  
+        <resource-bundle>
+            <base-name>i18n.enums</base-name>
             <var>enums</var>
-        </resource-bundle>  
-        <resource-bundle>  
-            <base-name>i18n.messages</base-name>  
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>i18n.messages</base-name>
             <var>messages</var>
-        </resource-bundle>  
-        <resource-bundle>  
-            <base-name>i18n.menu</base-name>  
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>i18n.menu</base-name>
             <var>menu</var>
-        </resource-bundle>  
-        <resource-bundle>  
-            <base-name>i18n.breadcrumb</base-name>  
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>i18n.breadcrumb</base-name>
             <var>breadcrumb</var>
-        </resource-bundle>  
-        <resource-bundle>  
-            <base-name>i18n.permissions</base-name>  
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>i18n.permissions</base-name>
             <var>permission</var>
-        </resource-bundle>  
+        </resource-bundle>
     </application>
-    
+
     <faces-config-extension>
         <facelets-processing>
             <file-extension>.xhtml</file-extension>

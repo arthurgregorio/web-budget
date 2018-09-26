@@ -24,13 +24,12 @@ import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.services.UserAccountService;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.constraints.NotBlank;
 
 /**
  * Bean to be used as controller of the user profile

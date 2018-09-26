@@ -19,10 +19,10 @@
 
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-         version="3.1">
-    
-    <!-- servlet mapping do JSF -->    
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <!--jsf servlet mapping-->
     <servlet>
         <servlet-name>FacesServlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -33,7 +33,7 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
     
-    <!-- exception filter -->
+    <!--exception filter-->
     <filter>
         <filter-name>FacesExceptionFilter</filter-name>
         <filter-class>org.omnifaces.filter.FacesExceptionFilter</filter-class>
@@ -43,11 +43,8 @@
         <servlet-name>FacesServlet</servlet-name>
     </filter-mapping>
     
-    <!-- 
-        Descomente estas linhas se voce quiser que o sistema rode apenas com
-        HTTPS, nao esqueca do redirect no wildfly 
-    -->    
-<!--    <security-constraint>
+    <!--this configuration force the application server to redirect the requests through https protocol    -->
+    <security-constraint>
         <web-resource-collection>
             <web-resource-name>App</web-resource-name>
             <url-pattern>/*</url-pattern>
@@ -55,9 +52,9 @@
         <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
-    </security-constraint> -->
+    </security-constraint>
 
-    <!-- para comprimir o tamanho das repostas usando gzip -->
+    <!--compression for http requests and responses-->
     <filter>
         <filter-name>gzipResponseFilter</filter-name>
         <filter-class>org.omnifaces.filter.GzipResponseFilter</filter-class>
@@ -69,17 +66,15 @@
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 
-    <!-- o nome do arquivo de welcome do server -->
+    <!--web configurations-->
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
-    
-    <!-- tempo de sessao -->
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
     
-    <!-- paginas de erro -->
+    <!--the error pages-->
     <error-page>  
         <error-code>401</error-code>
         <location>/error/401.xhtml</location>
@@ -97,21 +92,17 @@
         <location>/error/500.xhtml</location>  
     </error-page>
     
-    <!-- configuracoes do primefaces -->
+    <!--primefaces configurations-->
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>bootstrap</param-value>
-    </context-param>
-    <context-param>
-        <param-name>primefaces.FONT_AWESOME</param-name>
-        <param-value>true</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.TRANSFORM_METADATA</param-name>
         <param-value>true</param-value>
     </context-param>
 
-    <!-- parametros do contexto --> 
+    <!--mojarra context parameters-->
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Production</param-value>
@@ -140,8 +131,8 @@
         <param-name>javax.faces.FACELETS_BUFFER_SIZE</param-name>
         <param-value>65535</param-value> 
     </context-param>
-    
-    <!-- tipos mime -->
+
+    <!--mime types-->
     <mime-mapping>
         <extension>ico</extension>
         <mime-type>image/x-icon</mime-type>
