@@ -71,42 +71,9 @@
                 </div>
                 <div class="box-body row">
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inIdentification" 
-                                       value="#{messages['vehicle.form.identification']}: "/>
-                        <p:inputText id="inIdentification" 
-                                     maxlength="90"
-                                     styleClass="form-control"
-                                     value="#{vehicleBean.value.identification}" />
-                    </div>
-                    <div class="form-group col-md-3">
-                        <p:outputLabel for="inLicencePlate" 
-                                       value="#{messages['vehicle.form.license-plate']}: "/>
-                        <p:inputText id="inLicencePlate" 
-                                     maxlength="11"
-                                     styleClass="form-control"
-                                     value="#{vehicleBean.value.licensePlate}" 
-                                     disabled="#{vehicleBean.viewState eq 'EDITING'}"/>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <p:outputLabel for="inBrand" 
-                                       value="#{messages['vehicle.form.brand']}: "/>
-                        <p:inputText id="inBrand" 
-                                     maxlength="90"
-                                     styleClass="form-control"
-                                     value="#{vehicleBean.value.brand}" />
-                    </div>
-                    <div class="form-group col-md-3">
-                        <p:outputLabel for="inModel" 
-                                       value="#{messages['vehicle.form.model']}: "/>
-                        <p:inputText id="inModel" 
-                                     maxlength="90"
-                                     styleClass="form-control"
-                                     value="#{vehicleBean.value.model}" />
-                    </div>
-                    <div class="form-group col-md-3">
-                        <p:outputLabel for="inVehicleType" 
+                        <p:outputLabel for="inVehicleType"
                                        value="#{messages['vehicle.form.vehycle-type']}: "/>
-                        <p:selectOneMenu id="inVehicleType" 
+                        <p:selectOneMenu id="inVehicleType"
                                          value="#{vehicleBean.value.vehicleType}"
                                          converter="omnifaces.GenericEnumConverter">
                             <f:selectItem itemValue="#{null}"
@@ -115,59 +82,92 @@
                             <f:selectItems var="vehicleType"
                                            itemValue="#{vehicleType}"
                                            itemLabel="#{enums[vehicleType]}"
-                                           value="#{vehicleBean.vehicleTypes}"/> 
+                                           value="#{vehicleBean.vehicleTypes}"/>
                         </p:selectOneMenu>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inCostCenter" 
+                        <p:outputLabel for="inIdentification"
+                                       value="#{messages['vehicle.form.identification']}: "/>
+                        <p:inputText id="inIdentification"
+                                     maxlength="90"
+                                     styleClass="form-control"
+                                     value="#{vehicleBean.value.identification}" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inBrand"
+                                       value="#{messages['vehicle.form.brand']}: "/>
+                        <p:inputText id="inBrand"
+                                     maxlength="90"
+                                     styleClass="form-control"
+                                     value="#{vehicleBean.value.brand}" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <p:outputLabel for="inModel"
+                                       value="#{messages['vehicle.form.model']}: "/>
+                        <p:inputText id="inModel"
+                                     maxlength="90"
+                                     styleClass="form-control"
+                                     value="#{vehicleBean.value.model}" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <p:outputLabel for="inCostCenter"
                                        value="#{messages['vehicle.form.cost-center']}: "/>
-                        <p:selectOneMenu id="inCostCenter" 
-                                         value="#{vehicleBean.value.costCenter}" 
+                        <p:selectOneMenu id="inCostCenter"
+                                         value="#{vehicleBean.value.costCenter}"
                                          converter="omnifaces.SelectItemsConverter">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
                                           itemLabel="#{menu['select-one']}" />
-                            <f:selectItems var="costCenter" 
+                            <f:selectItems var="costCenter"
                                            itemValue="#{costCenter}"
                                            itemLabel="#{costCenter.name}"
-                                           value="#{vehicleBean.costCenters}" /> 
+                                           value="#{vehicleBean.costCenters}" />
                         </p:selectOneMenu>
                     </div>
-                    <div class="form-group col-md-3">
-                        <p:outputLabel for="inYearModel" 
+                    <div class="form-group col-md-2">
+                        <p:outputLabel for="inLicencePlate"
+                                       value="#{messages['vehicle.form.license-plate']}: "/>
+                        <p:inputText id="inLicencePlate"
+                                     maxlength="11"
+                                     styleClass="form-control"
+                                     value="#{vehicleBean.value.licensePlate}"
+                                     disabled="#{vehicleBean.viewState eq 'EDITING'}"/>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <p:outputLabel for="inYearModel"
                                        value="#{messages['vehicle.form.year-model']}: "/>
-                        <p:inputText id="inYearModel" 
+                        <p:inputText id="inYearModel"
                                      maxlength="4"
                                      styleClass="form-control"
                                      value="#{vehicleBean.value.modelYear}" >
                             <p:keyFilter mask="num"/>
                         </p:inputText>
                     </div>
-                    <div class="form-group col-md-3">
-                        <p:outputLabel for="inManufacturingYear" 
+                    <div class="form-group col-md-2">
+                        <p:outputLabel for="inManufacturingYear"
                                        value="#{messages['vehicle.form.manufacturing-year']}: "/>
-                        <p:inputText id="inManufacturingYear" 
+                        <p:inputText id="inManufacturingYear"
                                      maxlength="4"
                                      styleClass="form-control"
                                      value="#{vehicleBean.value.manufacturingYear}" >
                             <p:keyFilter mask="num"/>
                         </p:inputText>
                     </div>
-                    <div class="form-group col-md-3">
-                        <p:outputLabel for="inOdometer" 
+                    <div class="form-group col-md-2">
+                        <p:outputLabel for="inOdometer"
                                        value="#{messages['vehicle.form.odometer']}: "/>
-                        <p:inputText id="inOdometer" 
+                        <p:inputText id="inOdometer"
                                      maxlength="10"
                                      styleClass="form-control"
-                                     value="#{vehicleBean.value.odometer}" 
+                                     value="#{vehicleBean.value.odometer}"
                                      disabled="#{vehicleBean.viewState eq 'EDITING'}">
                             <p:keyFilter mask="num"/>
                         </p:inputText>
                     </div>
-                    <div class="form-group col-md-3">
-                        <p:outputLabel for="inFuelCapcity" 
+                    <div class="form-group col-md-2">
+                        <p:outputLabel for="inFuelCapcity"
                                        value="#{messages['vehicle.form.fuel-capacity']}: "/>
-                        <p:inputText id="inFuelCapcity" 
+                        <p:inputText id="inFuelCapcity"
                                      maxlength="4"
                                      styleClass="form-control"
                                      value="#{vehicleBean.value.fuelCapacity}" >

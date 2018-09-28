@@ -16,11 +16,6 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.ADD_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DELETE_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.DETAIL_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.LIST_PAGE;
-import static br.com.webbudget.application.components.NavigationManager.PageType.UPDATE_PAGE;
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
@@ -29,13 +24,19 @@ import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.entities.registration.VehicleType;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.VehicleRepository;
-import br.com.webbudget.domain.services.VehicleService;
-import java.util.List;
+import br.com.webbudget.domain.validators.registration.vehicle.VehicleSavingValidator;
+import lombok.Getter;
+import org.primefaces.model.SortOrder;
+
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
-import org.primefaces.model.SortOrder;
+import javax.transaction.Transactional;
+import java.util.List;
+
+import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
 /**
  * The {@link Vehicle} maintenance routine controller
@@ -53,12 +54,13 @@ public class VehicleBean extends FormBean<Vehicle> {
     private List<CostCenter> costCenters;
 
     @Inject
-    private VehicleService vehicleService;
-    
-    @Inject
     private VehicleRepository vehicleRepository;
     @Inject
     private CostCenterRepository costCenterRepository;
+
+    @Any
+    @Inject
+    private Instance<VehicleSavingValidator> savingValidators;
 
     /**
      * {@inheritDoc}
@@ -73,14 +75,13 @@ public class VehicleBean extends FormBean<Vehicle> {
      * {@inheritDoc}
      *
      * @param id
-     * @param viewState 
+     * @param viewState
      */
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.costCenters = this.costCenterRepository.findAllActive();
-        this.value = this.vehicleRepository.findOptionalById(id)
-                .orElseGet(Vehicle::new);
+        this.value = this.vehicleRepository.findOptionalById(id).orElseGet(Vehicle::new);
     }
 
     /**
@@ -102,20 +103,22 @@ public class VehicleBean extends FormBean<Vehicle> {
      * @param pageSize
      * @param sortField
      * @param sortOrder
-     * @return 
+     * @return
      */
     @Override
     public Page<Vehicle> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.vehicleRepository.findAllBy(this.filter.getValue(), 
+        return this.vehicleRepository.findAllBy(this.filter.getValue(),
                 this.filter.getEntityStatusValue(), first, pageSize);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public void doSave() {
-        this.vehicleService.save(this.value);
+        this.savingValidators.forEach(validator -> validator.validate(this.value));
+        this.vehicleRepository.save(this.value);
         this.value = new Vehicle();
         this.addInfo(true, "saved");
     }
@@ -124,8 +127,9 @@ public class VehicleBean extends FormBean<Vehicle> {
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public void doUpdate() {
-        this.value = this.vehicleService.update(this.value);
+        this.value = this.vehicleRepository.saveAndFlushAndRefresh(this.value);
         this.addInfo(true, "updated");
     }
 
@@ -135,8 +139,9 @@ public class VehicleBean extends FormBean<Vehicle> {
      * @return
      */
     @Override
+    @Transactional
     public String doDelete() {
-        this.vehicleService.delete(this.value);
+        this.vehicleRepository.attachAndRemove(this.value);
         this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }

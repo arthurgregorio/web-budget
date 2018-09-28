@@ -44,10 +44,10 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_
  */
 @Entity
 @Audited
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "cost_centers", schema = REGISTRATION)
 @AuditTable(value = "cost_centers", schema = REGISTRATION_AUDIT)
+@ToString(callSuper = true, exclude = {"percentage", "totalMovements"})
+@EqualsAndHashCode(callSuper = true, exclude = {"percentage", "totalMovements"})
 public class CostCenter extends PersistentEntity {
 
     @Getter

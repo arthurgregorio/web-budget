@@ -14,18 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.validators.registration.card;
+package br.com.webbudget.domain.validators.registration.vehicle;
 
-import br.com.webbudget.domain.entities.registration.Card;
+import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.registration.CardRepository;
+import br.com.webbudget.domain.repositories.registration.VehicleRepository;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.util.Optional;
 
 /**
- * The {@link Card} duplication validator
+ * The {@link Vehicle} license plate validator
  *
  * @author Arthur Gregorio
  *
@@ -33,10 +32,10 @@ import java.util.Optional;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class CardDuplicatesValidator implements CardSavingValidator, CardUpdatingValidator {
+public class LicensePlateValidator implements VehicleSavingValidator {
 
     @Inject
-    private CardRepository cardRepository;
+    private VehicleRepository vehicleRepository;
 
     /**
      * {@inheritDoc}
@@ -44,13 +43,8 @@ public class CardDuplicatesValidator implements CardSavingValidator, CardUpdatin
      * @param value
      */
     @Override
-    public void validate(Card value) {
-
-        final Optional<Card> found = this.cardRepository.findOptionalByNumberAndCardType(
-                value.getNumber(), value.getCardType());
-
-        if (found.isPresent() && !found.get().equals(value)) {
-            throw BusinessLogicException.create("error.card.duplicated");
-        }
+    public void validate(Vehicle value) {
+        this.vehicleRepository.findOptionalByLicensePlate(value.getLicensePlate())
+                .ifPresent(vehicle -> BusinessLogicException.create("error.vehicle.duplicated"));
     }
 }

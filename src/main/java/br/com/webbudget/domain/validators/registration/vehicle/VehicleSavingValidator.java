@@ -14,37 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.validators.registration.card;
+package br.com.webbudget.domain.validators.registration.vehicle;
 
-import br.com.webbudget.domain.entities.registration.Card;
-import br.com.webbudget.domain.entities.registration.CardType;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
-
-import javax.enterprise.context.Dependent;
+import br.com.webbudget.domain.entities.registration.Vehicle;
+import br.com.webbudget.domain.validators.BusinessValidator;
 
 /**
- * The {@link CardType} validator
+ * {@link Vehicle} validator facade for save actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 27/09/2018
  */
-@Dependent
-public class CardTypeValidator implements CardSavingValidator, CardUpdatingValidator {
-
-    /**
-     * {@inheritDoc }
-     *
-     * @param value the value to work with
-     */
-    @Override
-    public void validate(Card value) {
-
-        final CardType cardType = value.getCardType();
-
-        if (cardType == CardType.DEBIT && value.getWallet() == null) {
-            throw BusinessLogicException.create("error.card.no-wallet");
-        }
-    }
-}
+public interface VehicleSavingValidator extends BusinessValidator<Vehicle> { }
