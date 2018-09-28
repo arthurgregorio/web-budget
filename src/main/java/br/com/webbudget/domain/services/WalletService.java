@@ -24,11 +24,16 @@ import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
+import br.com.webbudget.domain.validators.registration.wallet.WalletSavingValidator;
+import br.com.webbudget.domain.validators.registration.wallet.WalletUpdatingValidator;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.xml.validation.Validator;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +54,13 @@ public class WalletService {
     @Inject
     private WalletBalanceRepository walletBalanceRepository;
 
+    @Any
+    @Inject
+    private Instance<WalletSavingValidator> savingValidators;
+    @Any
+    @Inject
+    private Instance<WalletUpdatingValidator> updatingValidators;
+
     /**
      * Use this method to persist a {@link Wallet}
      *
@@ -57,12 +69,7 @@ public class WalletService {
     @Transactional
     public void save(Wallet wallet) {
 
-        final Optional<Wallet> found = this.walletRepository
-                .findOptionalByNameAndWalletType(wallet.getName(), wallet.getWalletType());
-
-        if (found.isPresent()) {
-            throw new BusinessLogicException("error.wallet.duplicated");
-        }
+        this.savingValidators.forEach(validator -> validator.validate(wallet));
 
         // get the actual balance
         final BigDecimal actualBalance = wallet.getActualBalance();
@@ -70,12 +77,12 @@ public class WalletService {
         // set it to zero before save the wallet
         wallet.setActualBalance(BigDecimal.ZERO);
 
-        wallet = this.walletRepository.save(wallet);
+        final Wallet saved = this.walletRepository.save(wallet);
 
         // now put the balance by the standard way, with the builder
         final WalletBalanceBuilder builder = WalletBalanceBuilder.getInstance();
 
-        builder.to(wallet)
+        builder.to(saved)
                 .value(actualBalance)
                 .withReason(ReasonType.ADJUSTMENT);
 
@@ -90,14 +97,7 @@ public class WalletService {
      */
     @Transactional
     public Wallet update(Wallet wallet) {
-
-        final Optional<Wallet> found = this.walletRepository
-                .findOptionalByNameAndWalletType(wallet.getName(), wallet.getWalletType());
-
-        if (found.isPresent() && !found.get().equals(wallet)) {
-            throw new BusinessLogicException("error.wallet.duplicated");
-        }
-
+        this.updatingValidators.forEach(validator -> validator.validate(wallet));
         return this.walletRepository.save(wallet);
     }
 
@@ -111,9 +111,7 @@ public class WalletService {
 
         final List<WalletBalance> balances = this.walletBalanceRepository.findByWallet_id(wallet.getId());
 
-        balances.forEach(balance -> {
-            this.walletBalanceRepository.removeAndFlush(balance);
-        });
+        balances.forEach(balance -> this.walletBalanceRepository.removeAndFlush(balance));
 
         this.walletRepository.attachAndRemove(wallet);
     }

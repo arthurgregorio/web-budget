@@ -29,8 +29,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static br.com.webbudget.application.components.NavigationManager.Parameter;
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.NavigationManager.Parameter;
 
 /**
  * The {@link Wallet} maintenance routine controller
@@ -46,7 +46,7 @@ public class WalletBean extends FormBean<Wallet> {
 
     @Inject
     private WalletService walletService;
-    
+
     @Inject
     private WalletRepository walletRepository;
 
@@ -63,13 +63,12 @@ public class WalletBean extends FormBean<Wallet> {
      * {@inheritDoc}
      *
      * @param id
-     * @param viewState 
+     * @param viewState
      */
     @Override
     public void initialize(long id, ViewState viewState) {
-       this.viewState = viewState;
-       this.value = this.walletRepository.findOptionalById(id)
-                .orElseGet(Wallet::new);
+        this.viewState = viewState;
+        this.value = this.walletRepository.findOptionalById(id).orElseGet(Wallet::new);
     }
 
     /**
@@ -86,19 +85,19 @@ public class WalletBean extends FormBean<Wallet> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param first
      * @param pageSize
      * @param sortField
      * @param sortOrder
-     * @return 
+     * @return
      */
     @Override
     public Page<Wallet> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.walletRepository.findAllBy(this.filter.getValue(), 
+        return this.walletRepository.findAllBy(this.filter.getValue(),
                 this.filter.getEntityStatusValue(), first, pageSize);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -121,7 +120,7 @@ public class WalletBean extends FormBean<Wallet> {
     /**
      * {@inheritDoc}
      *
-     * @return 
+     * @return
      */
     @Override
     public String doDelete() {
