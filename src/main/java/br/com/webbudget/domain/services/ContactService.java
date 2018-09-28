@@ -16,11 +16,8 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.registration.Address;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.Telephone;
-import br.com.webbudget.domain.repositories.financial.IMovementRepository;
-import br.com.webbudget.domain.repositories.registration.AddressRepository;
 import br.com.webbudget.domain.repositories.registration.ContactRepository;
 import br.com.webbudget.domain.repositories.registration.TelephoneRepository;
 
@@ -44,17 +41,17 @@ public class ContactService {
     private ContactRepository contactRepository;
     @Inject
     private TelephoneRepository telephoneRepository;
-    
+
     /**
      * Use this method to persist a {@link Contact}
-     * 
+     *
      * @param contact the {@link Contact} to be persisted
      */
     @Transactional
     public void save(Contact contact) {
 
         contact.validateDocument();
-        
+
         final List<Telephone> telephones = contact.getTelephones();
 
         final Contact saved = this.contactRepository.save(contact);
@@ -67,7 +64,7 @@ public class ContactService {
 
     /**
      * Use this method to update a persisted {@link Contact}
-     * 
+     *
      * @param contact the {@link Contact} to be updated
      * @return the updated {@link Contact}
      */
@@ -75,30 +72,30 @@ public class ContactService {
     public Contact update(Contact contact) {
 
         contact.validateDocument();
-        
+
         // delete the old numbers
         contact.getDeletedTelephones().forEach(telephone -> {
             this.telephoneRepository.attachAndRemove(telephone);
         });
-        
+
         // get the new ones and save the contact to save the numbers
         final List<Telephone> telephones = contact.getTelephones();
-        
+
         final Contact saved = this.contactRepository.saveAndFlushAndRefresh(contact);
-        
+
         telephones.forEach(telephone -> {
             telephone.setContact(saved);
             this.telephoneRepository.saveAndFlush(telephone);
         });
 
         this.contactRepository.refresh(saved);
-        
+
         return saved;
     }
 
     /**
      * Use this method to delete a persisted {@link Contact}
-     * 
+     *
      * @param contact the {@link Contact} to be deleted
      */
     @Transactional
@@ -112,7 +109,7 @@ public class ContactService {
 //        if (!movements.isEmpty()) {
 //            throw new BusinessLogicException("error.contact.has-movements");
 //        }
-        
+
         this.contactRepository.attachAndRemove(contact);
     }
 }

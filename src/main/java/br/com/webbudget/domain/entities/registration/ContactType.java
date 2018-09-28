@@ -23,8 +23,7 @@ import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.Validator;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The enum with the possible types of a {@link Contact}
@@ -36,12 +35,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public enum ContactType {
 
-    LEGAL("contact-type.legal", 
-            new CNPJValidator(false), 
-            new CNPJFormatter()),
-    PERSONAL("contact-type.personal", 
-            new CPFValidator(false), 
-            new CPFFormatter());
+    LEGAL("contact-type.legal", new CNPJValidator(false), new CNPJFormatter()),
+    PERSONAL("contact-type.personal", new CPFValidator(false), new CPFFormatter());
 
     private final String description;
     
@@ -68,9 +63,9 @@ public enum ContactType {
      */
     public void validateDocument(String document) {
         try {
-            this.validator.assertValid(checkNotNull(document));
+            this.validator.assertValid(document.replace("\\w", ""));
         } catch (Exception ex) {
-            throw new BusinessLogicException("error.contact.invalid-document");
+            throw BusinessLogicException.create("error.contact.invalid-document");
         }
     }
     
@@ -81,7 +76,7 @@ public enum ContactType {
      * @return the formatted document {@link String}
      */
     public String formatDocument(String document) {
-        return this.formatter.format(checkNotNull(document));
+        return StringUtils.isNotBlank(document) ? this.formatter.format(document) : "";
     }
 
     /**

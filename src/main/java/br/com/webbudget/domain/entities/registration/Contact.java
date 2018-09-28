@@ -22,8 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -38,7 +37,6 @@ import java.util.List;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
 import static javax.persistence.CascadeType.REMOVE;
-import static javax.persistence.FetchType.EAGER;
 
 /**
  * The representation of a contact in the application
@@ -54,6 +52,7 @@ import static javax.persistence.FetchType.EAGER;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "contacts", schema = REGISTRATION)
 @AuditTable(value = "contacts", schema = REGISTRATION_AUDIT)
+@NamedEntityGraph(name = "Contact.withTelephones", attributeNodes = @NamedAttributeNode(value = "telephones"))
 public class Contact extends PersistentEntity {
 
     @Getter
@@ -62,7 +61,7 @@ public class Contact extends PersistentEntity {
 
     @Getter
     @Setter
-    @javax.validation.constraints.NotBlank(message = "{contact.name}")
+    @NotBlank(message = "{contact.name}")
     @Column(name = "name", nullable = false, length = 90)
     private String name;
     @Setter
@@ -72,12 +71,11 @@ public class Contact extends PersistentEntity {
     @Setter
     @Getter
     @Column(name = "birth_date")
-    @NotNull(message = "{contact.birth-date}")
     private LocalDate birthDate;
     @Setter
     @Getter
-    @Column(name = "other_informations", columnDefinition = "TEXT")
-    private String otherInformations;
+    @Column(name = "other_information", columnDefinition = "TEXT")
+    private String otherInformation;
 
     @Setter
     @Getter
@@ -125,13 +123,8 @@ public class Contact extends PersistentEntity {
     @Column(name = "contact_type", nullable = false)
     private ContactType contactType;
 
-    /**
-     * Fetch in a subselect because every time we request a contact the numbers 
-     * needs to be in the object
-     */
     @Setter
-    @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "contact", fetch = EAGER, cascade = REMOVE)
+    @OneToMany(mappedBy = "contact", cascade = REMOVE)
     private List<Telephone> telephones;
 
     @Getter
@@ -162,22 +155,17 @@ public class Contact extends PersistentEntity {
      *
      * @return the contact document formatted
      */
-    public String getDocumentFormated() {
+    public String getDocumentFormatted() {
         return this.contactType.formatDocument(this.document);
-    }
-
-    /**
-     * Remove all the {@link Telephone} of this contact
-     */
-    public void clearTelephones() {
-        this.telephones.clear();
     }
 
     /**
      * Validate the contact document by the document type defined by the {@link ContactType} enum
      */
     public void validateDocument() {
-        this.contactType.validateDocument(this.document.replace("\\w", ""));
+        if (StringUtils.isNotBlank(this.document)) {
+            this.contactType.validateDocument(this.document);
+        }
     }
 
     /**

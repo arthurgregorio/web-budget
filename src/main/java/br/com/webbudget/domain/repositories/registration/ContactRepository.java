@@ -19,9 +19,12 @@ package br.com.webbudget.domain.repositories.registration;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.Contact_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
-import javax.persistence.metamodel.SingularAttribute;
+import org.apache.deltaspike.data.api.EntityGraph;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
+
+import javax.persistence.metamodel.SingularAttribute;
+import java.util.Optional;
 
 /**
  * The {@link Contact} repository
@@ -35,9 +38,19 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 public interface ContactRepository extends DefaultRepository<Contact> {
 
     /**
+     * {@inheritDoc }
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    @EntityGraph(value = "Contact.withTelephones")
+    Optional<Contact> findOptionalById(Long id);
+
+    /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     default SingularAttribute<Contact, Boolean> getEntityStateProperty() {
@@ -46,15 +59,15 @@ public interface ContactRepository extends DefaultRepository<Contact> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param filter
-     * @return 
+     * @return
      */
     @Override
     default Criteria<Contact, Contact> getRestrictions(String filter) {
-       return criteria()
-               .likeIgnoreCase(Contact_.name, filter)
-               .likeIgnoreCase(Contact_.email, filter)
-               .likeIgnoreCase(Contact_.document, filter);
+        return criteria()
+                .likeIgnoreCase(Contact_.name, filter)
+                .likeIgnoreCase(Contact_.email, filter)
+                .likeIgnoreCase(Contact_.document, filter);
     }
 }
