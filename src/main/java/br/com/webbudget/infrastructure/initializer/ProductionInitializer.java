@@ -31,7 +31,7 @@ import static org.apache.deltaspike.core.api.projectstage.ProjectStage.Developme
 
 /**
  * The Production {@link EnvironmentInitializer}
- * 
+ *
  * This one use database migrations strategy provided by FlywayDB
  *
  * @author Arthur Gregorio
@@ -45,40 +45,39 @@ public class ProductionInitializer implements EnvironmentInitializer {
 
     @Inject
     private Logger logger;
-    
+
     @Resource(lookup = "java:/datasources/webBudgetDS")
     private DataSource dataSource;
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     public void initialize() {
-        
+
         this.logger.warn("Initializing application in production mode");
 
         checkNotNull(this.dataSource, "No datasource found for migrations");
- 
+
         final Flyway flyway = new Flyway();
-        
+
         flyway.setDataSource(this.dataSource);
-        
+
         flyway.setLocations("db/migration");
         flyway.setBaselineOnMigrate(true);
-        
+
         final MigrationInfo migrationInfo = flyway.info().current();
- 
+
         if (migrationInfo == null) {
             this.logger.info("No existing database at the actual datasource");
-        }
-        else {
-            this.logger.info("Found a database with the version: {}", migrationInfo.getVersion() 
+        } else {
+            this.logger.info("Found a database with the version: {}", migrationInfo.getVersion()
                     + " : " + migrationInfo.getDescription());
         }
-        
+
         flyway.migrate();
 
-        this.logger.info("Successfully migrated to database version: {}", 
+        this.logger.info("Successfully migrated to database version: {}",
                 flyway.info().current().getVersion());
     }
 }

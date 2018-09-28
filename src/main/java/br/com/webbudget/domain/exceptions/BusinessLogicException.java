@@ -19,7 +19,7 @@ package br.com.webbudget.domain.exceptions;
 import lombok.Getter;
 
 /**
- * Classe para encapsular as exceptions da aplicacao
+ * This class represents all the business exceptions of the application
  *
  * @author Arthur Gregorio
  *
@@ -29,11 +29,11 @@ import lombok.Getter;
 public class BusinessLogicException extends RuntimeException {
 
     @Getter
-    protected Object[] parameters;
+    private Object[] parameters;
 
     /**
      * Constructor...
-     * 
+     *
      * @param message the message to describe the error
      */
     public BusinessLogicException(String message) {
@@ -42,7 +42,7 @@ public class BusinessLogicException extends RuntimeException {
 
     /**
      * Constructor...
-     * 
+     *
      * @param message the message to describe the error
      * @param parameters the parameters to fill in the message
      */
@@ -53,7 +53,7 @@ public class BusinessLogicException extends RuntimeException {
 
     /**
      * Constructor...
-     * 
+     *
      * @param message the message to describe the error
      * @param throwable the instance of the exception to compose the stack
      * @param parameters the parameters to fill in the message
@@ -61,5 +61,38 @@ public class BusinessLogicException extends RuntimeException {
     public BusinessLogicException(String message, Throwable throwable, Object... parameters) {
         super(message, throwable);
         this.parameters = parameters;
+    }
+
+    /**
+     * Create a new instance of this exception
+     *
+     * @param message the message to be used
+     * @return this exception
+     */
+    public static BusinessLogicException create(String message) {
+        return new BusinessLogicException(message);
+    }
+
+    /**
+     * Create a new instance of this exception
+     *
+     * @param message the message to be used
+     * @param parameters the parameters to be passed to the message
+     * @return this exception
+     */
+    public static BusinessLogicException create(String message, Object... parameters) {
+        return new BusinessLogicException(message, parameters);
+    }
+
+    /**
+     * Create a new instance of this exception
+     *
+     * @param message the message to be used
+     * @param throwable the {@link Throwable} of this exception
+     * @param parameters the parameters to be passed to the message
+     * @return this exception
+     */
+    public static BusinessLogicException create(String message, Throwable throwable, Object... parameters) {
+        return new BusinessLogicException(message, throwable, parameters);
     }
 }

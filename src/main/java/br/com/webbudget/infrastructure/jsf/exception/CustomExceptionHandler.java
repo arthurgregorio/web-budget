@@ -72,19 +72,17 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
     }
 
     /**
-     * Method to handle the generic exception and take a decision of witch
-     * step to take after identify the type of the exception.
+     * Method to handle the generic exception and take a decision of witch step to take after identify the type of the
+     * exception.
      *
-     * For {@link BusinessLogicException} or {@link ConstraintViolationException}
-     * display a simple message on the UI, if unknown exception is given, call
-     * the error page configured in the web.xml
+     * For {@link BusinessLogicException} or {@link ConstraintViolationException} display a simple message on the UI,
+     * if unknown exception is given, call the error page configured in the web.xml
      *
      * @param context the faces context to use on the handling process
      */
     private void handleException(FacesContext context) {
 
-        final Iterator<ExceptionQueuedEvent> unhandled
-                = getUnhandledExceptionQueuedEvents().iterator();
+        final Iterator<ExceptionQueuedEvent> unhandled = getUnhandledExceptionQueuedEvents().iterator();
 
         if (unhandled.hasNext()) {
 
@@ -104,8 +102,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
                 return;
             }
 
-            // direct to the error page if the exceptions is not in the
-            // application model
+            // if is not a model exception, go to the generic error page
             goToErrorPage(context, rootCause);
         }
     }
@@ -132,7 +129,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
         request.setAttribute(ERROR_REQUEST_URI, request.getHeader("Referer"));
         request.setAttribute(ERROR_STATUS_CODE, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
-        final String errorPage = getErroPage(ex);
+        final String errorPage = getErrorPage(ex);
 
         context.getApplication().getNavigationHandler()
                 .handleNavigation(context, null, errorPage);
@@ -146,7 +143,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
      * @param exception the exception type to check
      * @return the page
      */
-    private String getErroPage(Throwable exception) {
+    private String getErrorPage(Throwable exception) {
 
         if (exception instanceof EJBException && exception.getCause() != null) {
             exception = exception.getCause();
@@ -168,8 +165,8 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 
         final String i18nMessage = MessageSource.get(ex.getMessage());
 
-        Messages.add(FacesMessage.SEVERITY_ERROR, null,
-                i18nMessage, ex.getParameters());
+        this.clearMessages(context);
+        Messages.add(FacesMessage.SEVERITY_ERROR, null, i18nMessage, ex.getParameters());
 
         context.renderResponse();
 
@@ -188,12 +185,27 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
             throw new FacesException(ex);
         }
 
-        Messages.add(FacesMessage.SEVERITY_ERROR, null,
-                MessageSource.get("error.core.constraint-violation"));
+        this.clearMessages(context);
+        Messages.add(FacesMessage.SEVERITY_ERROR, null, MessageSource.get("error.core.constraint-violation"));
 
         context.renderResponse();
 
         this.temporizeHiding();
+    }
+
+    /**
+     * Clear the messages component on the user screen
+     *
+     * @param context the view context to be used
+     */
+    private void clearMessages(FacesContext context) {
+
+        final Iterator<FacesMessage> messages = context.getMessages();
+
+        while (messages.hasNext()) {
+            messages.next();
+            messages.remove();
+        }
     }
 
     /**

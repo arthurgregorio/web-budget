@@ -37,25 +37,25 @@ import java.util.Map;
 public class MustacheProvider implements MailContentProvider {
 
     private final Mustache mustache;
-    
+
     private final Map<String, Object> data;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param template the template file name inside src/java/resources/mail
      */
     public MustacheProvider(String template) {
-        
+
         this.data = new HashMap<>();
-        
+
         final MustacheFactory factory = new DefaultMustacheFactory();
         this.mustache = factory.compile("/mail/" + template);
     }
-    
+
     /**
      * Add some content to the provider
-     * 
+     *
      * @param key the key to use on the template
      * @param value the value to retrieve through the key in the template
      */
@@ -65,21 +65,20 @@ public class MustacheProvider implements MailContentProvider {
 
     /**
      * {@inheritDoc }
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String getContent() {
-        
+
         final StringWriter writer = new StringWriter();
-        
+
         try {
-            this.mustache.execute(writer, this.data)
-                .flush();
+            this.mustache.execute(writer, this.data).flush();
         } catch (IOException ex) {
-            throw new BusinessLogicException("error.core.email-content-error", ex);
+            throw BusinessLogicException.create("error.email.content-error", ex);
         }
-        
+
         return writer.toString();
     }
 }

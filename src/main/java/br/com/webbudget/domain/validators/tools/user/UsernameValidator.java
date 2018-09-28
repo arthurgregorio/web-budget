@@ -14,18 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.validators.user;
+package br.com.webbudget.domain.validators.tools.user;
 
 import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.domain.validators.BusinessValidator;
-import br.com.webbudget.infrastructure.cdi.qualifiers.AuthenticatedUser;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import java.util.Optional;
 
 /**
- * {@link BusinessValidator} to validte if you are deleting the admin
+ * {@link BusinessValidator} for the username validation logic
  *
  * @author Arthur Gregorio
  *
@@ -33,12 +34,11 @@ import javax.inject.Inject;
  * @since 3.0.0, 09/08/2018
  */
 @Dependent
-public class DeleteAdminUserValidator implements UserDeletingValidator {
+public class UsernameValidator implements UserSavingValidator {
 
     @Inject
-    @AuthenticatedUser
-    private User principal;
-    
+    private UserRepository userRepository;
+
     /**
      * {@inheritDoc }
      *
@@ -46,17 +46,12 @@ public class DeleteAdminUserValidator implements UserDeletingValidator {
      */
     @Override
     public void validate(User value) {
-        
-        final String principalUsername = this.principal.getUsername();
-        
-        // prevent to delete you own user 
-        if (principalUsername.equals(value.getUsername())) {
-            throw new BusinessLogicException("error.user.delete-principal");
-        }
-        
-        // prevent to delete the main admin
-        if (value.isAdministrator()) {
-            throw new BusinessLogicException("error.user.delete-administrator");
+
+        final Optional<User> usernameOptional = this.userRepository
+                .findOptionalByUsername(value.getUsername());
+
+        if (usernameOptional.isPresent()) {
+            throw BusinessLogicException.create("error.user.username-duplicated");
         }
     }
 }

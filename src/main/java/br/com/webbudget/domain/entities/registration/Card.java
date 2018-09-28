@@ -17,7 +17,6 @@
 package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,10 +41,10 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_
  */
 @Entity
 @Audited
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "cards", schema = REGISTRATION)
+@ToString(callSuper = true, of = {"number", "cardType"})
 @AuditTable(value = "cards", schema = REGISTRATION_AUDIT)
+@EqualsAndHashCode(callSuper = true, of = {"number", "cardType"})
 public class Card extends PersistentEntity {
 
     @Getter
@@ -98,16 +97,6 @@ public class Card extends PersistentEntity {
      */
     public Card() {
         this.active = true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void validate() throws BusinessLogicException {
-        if (this.cardType == CardType.DEBIT && this.wallet == null) {
-            throw new BusinessLogicException("error.card.no-debit-wallet");
-        }
     }
 
     /**

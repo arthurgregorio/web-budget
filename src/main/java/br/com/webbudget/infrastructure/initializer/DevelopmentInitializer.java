@@ -38,7 +38,7 @@ import static org.apache.deltaspike.core.api.projectstage.ProjectStage.SystemTes
 
 /**
  * The development {@link EnvironmentInitializer}
- * 
+ *
  * Create the default data to the app and is meant to be used only in development, for production initialization use the
  * {@link ProductionInitializer} with Migration from Flyway
  *
@@ -53,7 +53,7 @@ public class DevelopmentInitializer implements EnvironmentInitializer {
 
     @Inject
     private Logger logger;
-    
+
     @Inject
     private Permissions permissions;
 
@@ -65,28 +65,28 @@ public class DevelopmentInitializer implements EnvironmentInitializer {
     private GroupRepository groupRepository;
     @Inject
     private AuthorizationRepository authorizationRepository;
-    
+
     @Inject
     private PasswordEncoder passwordEncoder;
 
     @Resource
     private UserTransaction transaction;
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     public void initialize() {
-        
+
         this.logger.warn("Initializing application in development mode");
-        
+
         try {
             this.transaction.begin();
-            
+
             this.createAuthorizations();
             this.createDefaultGroup();
             this.createDefaultUser();
-            
+
             this.transaction.commit();
         } catch (Exception commitException) {
             try {
@@ -97,16 +97,16 @@ public class DevelopmentInitializer implements EnvironmentInitializer {
             throw new EJBException(commitException);
         }
     }
-    
+
     /**
-     * Synch the authorizations with the database
+     * Sync the authorizations with the database
      */
     private void createAuthorizations() {
 
         final List<Authorization> authorizations
                 = this.permissions.toAuthorizationList();
 
-        authorizations.stream().forEach(authorization -> {
+        authorizations.forEach(authorization -> {
 
             final Optional<Authorization> optionalAuthz = this.authorizationRepository
                     .findOptionalByFunctionalityAndPermission(authorization
@@ -136,14 +136,14 @@ public class DevelopmentInitializer implements EnvironmentInitializer {
             final List<Authorization> authorizations
                     = this.authorizationRepository.findAll();
 
-            authorizations.stream().forEach(authorization -> {
+            authorizations.forEach(authorization -> {
                 this.grantRepository.save(new Grant(group, authorization));
             });
         }
     }
 
     /**
-     * Create the default user of the system
+     * Create the default system user
      */
     private void createDefaultUser() {
 
@@ -151,20 +151,20 @@ public class DevelopmentInitializer implements EnvironmentInitializer {
                 this.userRepository.findOptionalByUsername("admin");
 
         if (!optionalUser.isPresent()) {
-            
+
             this.logger.info("Creating default user");
 
             final Group group = this.groupRepository
                     .findOptionalByName("Administradores")
-                    .get();
-            
+                    .orElseThrow(() -> new IllegalStateException("Can't find the Administrators group"));
+
             final User user = new User();
-            
+
             user.setName("Administrador");
             user.setEmail("contato@webbudget.com.br");
             user.setUsername("admin");
             user.setPassword(this.passwordEncoder.encryptPassword("admin"));
-            
+
             user.setGroup(group);
 
             this.userRepository.save(user);

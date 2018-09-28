@@ -14,17 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.validators.user;
+package br.com.webbudget.domain.validators.registration.card;
 
-import br.com.webbudget.domain.entities.tools.User;
+import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.validators.BusinessValidator;
 
 /**
- * {@link User} validator facade for save actions
+ * {@link Card} validator facade for save actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 09/08/2018
+ * @since 3.0.0, 27/09/2018
  */
-public interface UserSavingValidator extends BusinessValidator<User> { }
+public interface CardSavingValidator extends BusinessValidator<Card> { }

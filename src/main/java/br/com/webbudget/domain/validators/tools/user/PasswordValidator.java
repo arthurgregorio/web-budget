@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.validators.user;
+package br.com.webbudget.domain.validators.tools.user;
 
 import br.com.webbudget.domain.entities.tools.StoreType;
 import br.com.webbudget.domain.entities.tools.User;
@@ -70,7 +70,7 @@ public class PasswordValidator implements UserSavingValidator, UserUpdatingValid
 
         if (value.hasChangedPasswords()) {
             if (!value.isPasswordValid()) {
-                throw new BusinessLogicException("error.user.password-not-match");
+                throw BusinessLogicException.create("error.user.password-not-match");
             }
             value.setPassword(this.cryptPassword(value.getPassword()));
         } else {
@@ -79,11 +79,11 @@ public class PasswordValidator implements UserSavingValidator, UserUpdatingValid
     }
 
     /**
-     * Vaslidate the user password for unsaved users
+     * Validate the user password for unsaved users
      */
     private void validateUnsavedUserPassword(User value) {
         if (!value.isPasswordValid()) {
-            throw new BusinessLogicException("error.user.password-not-match");
+            throw BusinessLogicException.create("error.user.password-not-match");
         }
         value.setPassword(this.passwordEncoder.encryptPassword(value.getPassword()));
     }

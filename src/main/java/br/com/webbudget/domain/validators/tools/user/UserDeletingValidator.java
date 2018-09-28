@@ -14,34 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.validators.group;
+package br.com.webbudget.domain.validators.tools.user;
 
-import br.com.webbudget.domain.entities.tools.Group;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.entities.tools.User;
 import br.com.webbudget.domain.validators.BusinessValidator;
 
-import javax.enterprise.context.Dependent;
-
 /**
- * {@link BusinessValidator} to validate if you are deleting the admin group
+ * {@link User} validator facade for delete actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 09/08/2018
  */
-@Dependent
-public class DeleteAdminGroupValidator implements GroupDeletingValidator {
-
-    /**
-     * {@inheritDoc }
-     *
-     * @param value
-     */
-    @Override
-    public void validate(Group value) {
-        if (value.isAdministrator()) {
-            throw new BusinessLogicException("error.group.delete-administrator");
-        }        
-    }
-}
+public interface UserDeletingValidator extends BusinessValidator<User> { }

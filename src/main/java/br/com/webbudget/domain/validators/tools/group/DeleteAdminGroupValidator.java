@@ -14,19 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.validators.user;
+package br.com.webbudget.domain.validators.tools.group;
 
-import br.com.webbudget.domain.entities.tools.User;
+import br.com.webbudget.domain.entities.tools.Group;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.domain.validators.BusinessValidator;
 
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
-import java.util.Optional;
 
 /**
- * {@link BusinessValidator} for the user e-mail validation logic
+ * {@link BusinessValidator} to validate if you are deleting the admin group
  *
  * @author Arthur Gregorio
  *
@@ -34,29 +31,17 @@ import java.util.Optional;
  * @since 3.0.0, 09/08/2018
  */
 @Dependent
-public class UserMailValidator implements UserSavingValidator, UserUpdatingValidator {
-
-    @Inject
-    private UserRepository userRepository;
+public class DeleteAdminGroupValidator implements GroupDeletingValidator {
 
     /**
      * {@inheritDoc }
-     * 
-     * @param value 
+     *
+     * @param value
      */
     @Override
-    public void validate(User value) {
-        
-        final Optional<User> userOptional = this.userRepository
-                .findOptionalByEmail(value.getEmail());
-        
-        if (userOptional.isPresent()) {
-            
-            final User found = userOptional.get();
-            
-            if (!found.getUsername().equals(value.getUsername())) {
-                throw new BusinessLogicException("error.user.email-duplicated");
-            }
+    public void validate(Group value) {
+        if (value.isAdministrator()) {
+            throw BusinessLogicException.create("error.group.delete-administrator");
         }
     }
 }

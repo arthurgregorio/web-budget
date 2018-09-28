@@ -24,13 +24,17 @@ import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
-import br.com.webbudget.domain.services.CardService;
+import br.com.webbudget.domain.validators.registration.card.CardSavingValidator;
+import br.com.webbudget.domain.validators.registration.card.CardUpdatingValidator;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
@@ -51,12 +55,16 @@ public class CardBean extends FormBean<Card> {
     private List<Wallet> wallets;
 
     @Inject
-    private CardService cardService;
-
-    @Inject
     private CardRepository cardRepository;
     @Inject
     private WalletRepository walletRepository;
+
+    @Any
+    @Inject
+    private Instance<CardSavingValidator> savingValidators;
+    @Any
+    @Inject
+    private Instance<CardUpdatingValidator> updatingValidators;
 
     /**
      * {@inheritDoc}
@@ -66,19 +74,18 @@ public class CardBean extends FormBean<Card> {
         super.initialize();
         this.temporizeHiding(this.getDefaultMessagesComponentId());
     }
-    
+
     /**
      * {@inheritDoc}
      *
      * @param id
-     * @param viewState 
+     * @param viewState
      */
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.wallets = this.walletRepository.findAllActive();
-        this.value = this.cardRepository.findOptionalById(id)
-                .orElseGet(Card::new);
+        this.value = this.cardRepository.findOptionalById(id).orElseGet(Card::new);
     }
 
     /**
@@ -104,8 +111,7 @@ public class CardBean extends FormBean<Card> {
      */
     @Override
     public Page<Card> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.cardRepository.findAllBy(this.filter.getValue(),
-                this.filter.getEntityStatusValue(), first, pageSize);
+        return this.cardRepository.findAllBy(this.filter.getValue(), this.filter.getEntityStatusValue(), first, pageSize);
     }
 
     /**
@@ -122,8 +128,10 @@ public class CardBean extends FormBean<Card> {
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public void doSave() {
-        this.cardService.save(this.value);
+        this.savingValidators.forEach(validator -> validator.validate(this.value));
+        this.cardRepository.save(this.value);
         this.value = new Card();
         this.addInfo(true, "saved");
     }
@@ -132,19 +140,22 @@ public class CardBean extends FormBean<Card> {
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public void doUpdate() {
-        this.value = this.cardService.update(this.value);
+        this.updatingValidators.forEach(validator -> validator.validate(this.value));
+        this.value = this.cardRepository.saveAndFlushAndRefresh(this.value);
         this.addInfo(true, "updated");
     }
 
     /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
+    @Transactional
     public String doDelete() {
-        this.cardService.delete(this.value);
+        this.cardRepository.attachAndRemove(this.value);
         this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
