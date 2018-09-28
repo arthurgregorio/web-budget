@@ -18,7 +18,6 @@ package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.financial.Closing;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -86,6 +85,7 @@ public class FinancialPeriod extends PersistentEntity {
     @Column(name = "closed")
     private boolean closed;
 
+    @Getter
     @Setter
     @OneToOne
     @JoinColumn(name = "id_closing")
@@ -98,18 +98,6 @@ public class FinancialPeriod extends PersistentEntity {
         this.expensesGoal = BigDecimal.ZERO;
         this.revenuesGoal = BigDecimal.ZERO;
         this.creditCardGoal = BigDecimal.ZERO;
-    }
-
-    /**
-     * If the period is closed, this method should return the {@link Closing} data
-     *
-     * @return the {@link Closing} data of this period
-     */
-    public Closing getClosing() {
-        if (this.closing == null) {
-            throw new BusinessLogicException("error.financial-period.not-closed", this.identification);
-        }
-        return this.closing;
     }
 
     /**
@@ -127,7 +115,7 @@ public class FinancialPeriod extends PersistentEntity {
      * @return the total
      */
     public BigDecimal getAccumulated() {
-        return this.getClosing().getAccumulated();
+        return this.closing.getAccumulated();
     }
 
     /**
@@ -136,7 +124,7 @@ public class FinancialPeriod extends PersistentEntity {
      * @return the final balance value
      */
     public BigDecimal getBalance() {
-        return this.getClosing().getBalance();
+        return this.closing.getBalance();
     }
 
     /**
@@ -145,7 +133,7 @@ public class FinancialPeriod extends PersistentEntity {
      * @return the total
      */
     public BigDecimal getExpensesTotal() {
-        return this.getClosing().getExpenses();
+        return this.closing.getExpenses();
     }
 
     /**
@@ -154,7 +142,7 @@ public class FinancialPeriod extends PersistentEntity {
      * @return the total
      */
     public BigDecimal getRevenuesTotal() {
-        return this.getClosing().getRevenues();
+        return this.closing.getRevenues();
     }
 
     /**

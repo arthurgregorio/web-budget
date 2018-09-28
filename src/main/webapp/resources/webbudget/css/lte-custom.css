@@ -7,12 +7,6 @@
     Created on : 26/09/2018
 */
 
-/*labels adjustments*/
-.label {
-    top: -2px;
-    position: relative;
-}
-
 /*custom box border colors*/
 .box.box-blue {
     border-top-color: #3c8dbc;
