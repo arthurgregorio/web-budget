@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.validators.registration.card;
 
 import br.com.webbudget.domain.entities.registration.Card;
+import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 
@@ -45,12 +46,45 @@ public class CardDuplicatesValidator implements CardSavingValidator, CardUpdatin
      */
     @Override
     public void validate(Card value) {
+        if (value.isSaved()) {
+            this.validateSaved(value);
+        } else {
+            this.validateNotSaved(value);
+        }
+    }
 
-        final Optional<Card> found = this.cardRepository.findOptionalByNumberAndCardType(
-                value.getNumber(), value.getCardType());
+    /**
+     * If the {@link Card} is not saved, don't compare the found with the one to be validated
+     *
+     * @param value the value to be evaluated
+     */
+    private void validateNotSaved(Card value) {
+        final Optional<Card> found = this.find(value.getNumber(), value.getCardType());
+        found.ifPresent(movementClass -> {
+            throw BusinessLogicException.create("error.card.duplicated");
+        });
+    }
 
-        if (found.isPresent() && !found.get().equals(value)) {
+    /**
+     * If the {@link Card} is saved, compare the found with the one to be validated
+     *
+     * @param value the value to be evaluated
+     */
+    private void validateSaved(Card value) {
+        final Optional<Card> found = this.find(value.getNumber(), value.getCardType());
+        if (found.isPresent() && found.get().equals(value)) {
             throw BusinessLogicException.create("error.card.duplicated");
         }
+    }
+
+    /**
+     * Find the value on the database to compare with the one to be validated
+     *
+     * @param number the number of the {@link Card}
+     * @param cardType the {@link CardType} of the {@link Card}
+     * @return a {@link Optional} of the {@link Card}
+     */
+    private Optional<Card> find(String number, CardType cardType) {
+        return this.cardRepository.findOptionalByNumberAndCardType(number, cardType);
     }
 }

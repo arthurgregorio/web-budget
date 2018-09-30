@@ -24,13 +24,17 @@ import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
-import br.com.webbudget.domain.services.ClassificationService;
+import br.com.webbudget.domain.validators.registration.movementclass.MovementClassSavingValidator;
+import br.com.webbudget.domain.validators.registration.movementclass.MovementClassUpdatingValidator;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
@@ -49,14 +53,18 @@ public class MovementClassBean extends FormBean<MovementClass> {
 
     @Getter
     private List<CostCenter> costCenters;
-    
+
     @Inject
     private CostCenterRepository costCenterRepository;
     @Inject
     private MovementClassRepository movementClassRepository;
-    
+
+    @Any
     @Inject
-    private ClassificationService classificationService;
+    private Instance<MovementClassSavingValidator> savingValidators;
+    @Any
+    @Inject
+    private Instance<MovementClassUpdatingValidator> updatingValidators;
 
     /**
      * {@inheritDoc}
@@ -69,9 +77,9 @@ public class MovementClassBean extends FormBean<MovementClass> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param id
-     * @param viewState 
+     * @param viewState
      */
     @Override
     public void initialize(long id, ViewState viewState) {
@@ -95,25 +103,26 @@ public class MovementClassBean extends FormBean<MovementClass> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param first
      * @param pageSize
      * @param sortField
      * @param sortOrder
-     * @return 
+     * @return
      */
     @Override
     public Page<MovementClass> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.movementClassRepository.findAllBy(this.filter.getValue(), 
-                this.filter.getEntityStatusValue(), first, pageSize);
+        return this.movementClassRepository.findAllBy(this.filter.getValue(), this.filter.getEntityStatusValue(), first, pageSize);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public void doSave() {
-        this.classificationService.save(this.value);
+        this.savingValidators.forEach(validator -> validator.validate(this.value));
+        this.movementClassRepository.save(this.value);
         this.value = new MovementClass();
         this.addInfo(true, "saved");
     }
@@ -122,19 +131,22 @@ public class MovementClassBean extends FormBean<MovementClass> {
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public void doUpdate() {
-        this.value = this.classificationService.update(this.value);
+        this.updatingValidators.forEach(validator -> validator.validate(this.value));
+        this.value = this.movementClassRepository.saveAndFlushAndRefresh(this.value);
         this.addInfo(true, "updated");
     }
 
     /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
+    @Transactional
     public String doDelete() {
-        this.classificationService.delete(this.value);
+        this.movementClassRepository.attachAndRemove(this.value);
         this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }

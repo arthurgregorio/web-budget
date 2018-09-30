@@ -41,10 +41,10 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_
  */
 @Entity
 @Audited
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "cards", schema = REGISTRATION)
-@ToString(callSuper = true, of = {"number", "cardType"})
 @AuditTable(value = "cards", schema = REGISTRATION_AUDIT)
-@EqualsAndHashCode(callSuper = true, of = {"number", "cardType"})
 public class Card extends PersistentEntity {
 
     @Getter

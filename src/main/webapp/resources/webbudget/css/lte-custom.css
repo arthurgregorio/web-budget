@@ -39,6 +39,12 @@
     border-radius: 0 !important;
 }
 
+/*badge text inside timeline*/
+.timeline-header span.label {
+    top: -2px;
+    position: relative;
+}
+
 /*dropdown menu for bootstrap*/
 .dropdown-submenu {
     position: relative;

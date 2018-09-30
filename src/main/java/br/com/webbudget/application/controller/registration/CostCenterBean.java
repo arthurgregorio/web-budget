@@ -21,12 +21,15 @@ import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
-import br.com.webbudget.domain.services.ClassificationService;
+import br.com.webbudget.domain.validators.registration.costcenter.CostCenterSavingValidator;
 import org.primefaces.model.SortOrder;
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
@@ -45,8 +48,9 @@ public class CostCenterBean extends FormBean<CostCenter> {
     @Inject
     private CostCenterRepository costCenterRepository;
     
+    @Any
     @Inject
-    private ClassificationService classificationService;
+    private Instance<CostCenterSavingValidator> savingValidators;
     
     /**
      * {@inheritDoc}
@@ -67,8 +71,7 @@ public class CostCenterBean extends FormBean<CostCenter> {
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.data = this.costCenterRepository.findAllActive();
-        this.value = this.costCenterRepository.findOptionalById(id)
-                .orElseGet(CostCenter::new);
+        this.value = this.costCenterRepository.findOptionalById(id).orElseGet(CostCenter::new);
     }
 
     /**
@@ -94,16 +97,17 @@ public class CostCenterBean extends FormBean<CostCenter> {
      */
     @Override
     public Page<CostCenter> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.costCenterRepository.findAllBy(this.filter.getValue(), 
-                this.filter.getEntityStatusValue(), first, pageSize);
+        return this.costCenterRepository.findAllBy(this.filter.getValue(), this.filter.getEntityStatusValue(), first, pageSize);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public void doSave() {
-        this.classificationService.save(this.value);
+        this.savingValidators.forEach(validator -> validator.validate(this.value));
+        this.costCenterRepository.save(this.value);
         this.value = new CostCenter();
         this.data = this.costCenterRepository.findAllActive();
         this.addInfo(true, "saved");
@@ -113,8 +117,9 @@ public class CostCenterBean extends FormBean<CostCenter> {
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public void doUpdate() {
-        this.value = this.classificationService.update(this.value);
+        this.value = this.costCenterRepository.saveAndFlushAndRefresh(this.value);
         this.data = this.costCenterRepository.findAllActive();
         this.addInfo(true, "updated");
     }
@@ -125,8 +130,9 @@ public class CostCenterBean extends FormBean<CostCenter> {
      * @return 
      */
     @Override
+    @Transactional
     public String doDelete() {
-        this.classificationService.delete(this.value);
+        this.costCenterRepository.attachAndRemove(this.value);
         this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }

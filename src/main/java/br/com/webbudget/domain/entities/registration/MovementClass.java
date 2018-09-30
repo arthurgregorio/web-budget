@@ -43,9 +43,9 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_
  */
 @Entity
 @Audited
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true, exclude = "totalMovements")
 @Table(name = "movement_classes", schema = REGISTRATION)
+@EqualsAndHashCode(callSuper = true, exclude = "totalMovements")
 @AuditTable(value = "movement_classes", schema = REGISTRATION_AUDIT)
 public class MovementClass extends PersistentEntity {
 
