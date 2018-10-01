@@ -59,12 +59,12 @@ public class UserBean extends FormBean<User> {
     private UserRepository userRepository;
     @Inject
     private GroupRepository groupRepository;
-    
+
     @Inject
     private UserAccountService userAccountService;
-    
+
     @Inject
-    private Instance<LdapUserProvider> ldapUserProviderInstance;
+    private LdapUserProvider ldapUserProvider;
 
     /**
      * {@inheritDoc}
@@ -85,10 +85,9 @@ public class UserBean extends FormBean<User> {
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.groups = this.groupRepository.findAllActive();
-        this.value = this.userRepository.findOptionalById(id)
-                .orElseGet(User::new);
+        this.value = this.userRepository.findOptionalById(id).orElseGet(User::new);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -103,17 +102,16 @@ public class UserBean extends FormBean<User> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param first
      * @param pageSize
      * @param sortField
      * @param sortOrder
-     * @return 
+     * @return
      */
     @Override
     public Page<User> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.userRepository.findAllBy(this.filter.getValue(), 
-                this.filter.getEntityStatusValue(), first, pageSize);
+        return this.userRepository.findAllBy(this.filter.getValue(), this.filter.getEntityStatusValue(), first, pageSize);
     }
 
     /**
@@ -146,44 +144,34 @@ public class UserBean extends FormBean<User> {
         this.addInfoAndKeep("deleted");
         return this.changeToListing();
     }
-    
+
     /**
      * Method to find a given user on the LDAP/AD directory
      */
     public void findUserOnLdap() {
 
+        final boolean ldapEnable = Configurations.getAsBoolean("ldap.enabled");
+
+        if (!ldapEnable) {
+            throw new IllegalStateException("error.user.ldap-not-enabled");
+        }
+
         final String username = this.value.getUsername();
 
-        final LdapUser userDetails = this.getLdapUserProvider()
+        final LdapUser userDetails = this.ldapUserProvider
                 .search(username)
-                .orElseThrow(() -> new BusinessLogicException(
-                        "error.user.not-found-ldap", username));
+                .orElseThrow(() -> new BusinessLogicException("error.user.not-found-ldap", username));
 
         this.value.setUsername(userDetails.getSAMAccountName());
         this.value.setEmail(userDetails.getMail());
         this.value.setName(userDetails.getName());
+
+
     }
-    
-    /**
-     * Internal method to check if we have a LDAP/AD authentication enable and provide the {@link LdapUserProvider}
-     * for user search and authentication
-     * 
-     * @return the {@link LdapUserProvider} configured to be used with ShiroEE (apache shiro)
-     */
-    private LdapUserProvider getLdapUserProvider() {
-        
-        final boolean ldapEnabled = Boolean.valueOf(
-                Configurations.get("ldap.enabled"));
-        
-        if (ldapEnabled && !this.ldapUserProviderInstance.isUnsatisfied()) {
-            return this.ldapUserProviderInstance.get();
-        }
-        throw new BusinessLogicException("error.user.no-ldap-provider");
-    }
-    
+
     /**
      * Get the possible values for the storage place of an {@link User}
-     * 
+     *
      * @return an array with {@link StoreType} values
      */
     public StoreType[] getStoreTypes() {
