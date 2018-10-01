@@ -16,18 +16,14 @@
  */
 package br.com.webbudget.infrastructure.utils;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import java.util.MissingResourceException;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
- * FIXME refactor this JavaDoc
- *
- * Classe utilitaria para uso em alguns pontos da aplicacao sem a necessidade de
- * ficar repetindo alguns codigos tais como pegar configuracoes ou a URL base da
- * aplicacaao para uso em alguma template
+ * This is a utility class to help the process of get some configurations on the system properties file
  *
  * @author Arthur Gregorio
  *
@@ -37,36 +33,55 @@ import javax.servlet.http.HttpServletRequest;
 public final class Configurations {
 
     private static final ResourceBundle CONFIG_PROPERTIES;
-    
+
     static {
         CONFIG_PROPERTIES = ResourceBundle.getBundle("application");
     }
-    
+
     /**
-     * Busca no bundle de configuracoes da aplicacao uma determinada chave para
-     * uma configuracao
+     * Search in the configuration source for a key and retrieve his value, as {@link String}
      *
-     * @param configuration a chave da qual queremos a configuracao
-     * @return a configuracao para a chave informada
+     * @param configuration the configuration to search his value
+     * @return the value for this configuration
      */
     public static String get(String configuration) {
         try {
-            return CONFIG_PROPERTIES.getString(configuration);
+            return CONFIG_PROPERTIES.getString(Objects.requireNonNull(configuration));
         } catch (MissingResourceException ex) {
             return null;
         }
     }
 
     /**
-     * Constroi a URL base da aplicacao
+     * Same as {@link #get(String)} but return the value as {@link Boolean}
      *
-     * @return a URL base da aplicaco + contexto
+     * @param configuration the configuration to search his value
+     * @return the value for this configuration
      */
-    public static String baseURL() {
+    public static boolean getAsBoolean(String configuration) {
+        return Boolean.valueOf(Objects.requireNonNull(get(configuration)));
+    }
+
+    /**
+     * Same as {@link #get(String)} but return the value as {@link Integer}
+     *
+     * @param configuration the configuration to search his value
+     * @return the value for this configuration
+     */
+    public static int getAsInteger(String configuration) {
+        return Integer.valueOf(Objects.requireNonNull(get(configuration)));
+    }
+
+    /**
+     * Retrieve the base URL of the application
+     *
+     * @return the base URL
+     */
+    public static String getBaseURL() {
 
         final FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        final HttpServletRequest request = (HttpServletRequest) 
+        final HttpServletRequest request = (HttpServletRequest)
                 facesContext.getExternalContext().getRequest();
 
         final StringBuilder builder = new StringBuilder();
@@ -77,17 +92,5 @@ public final class Configurations {
         builder.append(request.getContextPath());
 
         return builder.toString();
-    }
-
-    /**
-     * Checa em que estagio do projeto estamos, as opcoes sao as definidas no
-     * enum {@link ProjectStage}
-     *
-     * @param stage o estagio do projeto
-     * @return se estamos usando ele ou nao
-     */
-    public static boolean isRunningStage(ProjectStage stage) {
-        return FacesContext.getCurrentInstance()
-                .isProjectStage(stage);
     }
 }
