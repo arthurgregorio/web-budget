@@ -16,239 +16,137 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
-        <f:viewAction action="#{periodDetailBean.initialize(param.periodId, param.viewState)}"/>
+        <f:viewAction action="#{financialPeriodBean.initialize(param.id, param.viewState)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
-        #{periodDetailBean.period.identification}
+        #{messages['card.page-title']}
     </ui:define>
 
     <ui:define name="pageDescription">
-        #{messages['period-detail.page-description']}
+        <o:outputFormat rendered="#{financialPeriodBean.viewState eq 'DETAILING'}"
+                        value="#{messages['financial-period.page-description-detailing']}">
+            <f:param value="#{financialPeriodBean.value.identification}"/>
+        </o:outputFormat>
+        <o:outputFormat rendered="#{financialPeriodBean.viewState eq 'DELETING'}"
+                        value="#{messages['financial-period.page-description-deleting']}">
+            <f:param value="#{financialPeriodBean.value.identification}"/>
+        </o:outputFormat>
     </ui:define>
 
     <ui:define name="breadcrumb">
-        <li><a href="#">#{breadcrumb['miscellany']}</a></li>
-        <li><a href="listFinancialPeriods.xhtml">#{breadcrumb['miscellany.financial-period']}</a></li>
-        <li class="active"><a href="#">#{breadcrumb['miscellany.financial-period.details']}</a></li>
+        <li><a href="#">#{breadcrumb['registration']}</a></li>
+        <li><a href="listFinancialPeriods.xhtml">#{breadcrumb['registration.financial-periods']}</a></li>
+        <li class="active"
+            jsf:rendered="#{financialPeriodBean.viewState eq 'DELETING'}">
+            <a href="#">#{breadcrumb['deleting']}</a>
+        </li>
+        <li class="active"
+            jsf:rendered="#{financialPeriodBean.viewState eq 'DETAILING'}">
+            <a href="#">#{breadcrumb['detailing']}</a>
+        </li>
     </ui:define>
 
     <ui:define name="content">
-
-        <div class="row">
-            <div class="col-sm-12">
-                <p:messages id="messages" closable="true" />
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">  
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">#{messages['period-detail.daily-summary']}</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="chart">
-                            <canvas id="dailySummaryChart" style="height: 250px;"></canvas>
-                        </div>
-                    </div>
-                    <div class="box-footer">
-                        <div class="row">
-                            <div class="col-sm-4 col-xs-6">
-                                <div class="description-block border-right">
-                                    <h5 class="description-header text-green">
-                                        <h:outputText value="#{periodDetailBean.calculator.revenuesTotal}" >
-                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                        </h:outputText>
-                                    </h5>
-                                    <span class="description-text">#{messages['period-detail.revenues']}</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-6">
-                                <div class="description-block border-right">
-                                    <h5 class="description-header text-red">
-                                        <h:outputText value="#{periodDetailBean.calculator.expensesTotal}" >
-                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                        </h:outputText>
-                                    </h5>
-                                    <span class="description-text">#{messages['period-detail.expenses']}</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-6">
-                                <div class="description-block border-right">
-                                    <h5 class="description-header #{periodDetailBean.calculator.balance.signum() 
-                                                                    lt 0 ? 'text-red' : 'text-green'}">
-                                        <h:outputText value="#{periodDetailBean.calculator.balance}" >
-                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                        </h:outputText>
-                                    </h5>
-                                    <span class="description-text">#{messages['period-detail.balance']}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <h:form id="cardForm" prependId="false">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p:messages id="messages" closable="true" >
+                        <p:autoUpdate />
+                    </p:messages>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-
-            </div>
-            <div class="col-md-6">
-
-            </div>
-        </div>
-        
-        
-        <!--<div class="box box-success">
-            <div class="box-header with-border">
-                <h3 class="box-title">#{messages['period-detail.cost-centers-revenues']}</h3>
-            </div>
-            <div class="box-body">
-                <div class="col-sm-12 align-center"
-                     jsf:rendered="#{empty periodDetailBean.revenueClasses}">
-                    <h4>#{messages['period-detail.no-data']}</h4>
-                </div>
-                <ui:repeat var="movementClass" 
-                           value="#{periodDetailBean.revenueClasses}"
-                           rendered="#{not empty periodDetailBean.revenueClasses}">
-                    <div class="progress-group">
-                        <span class="progress-text">#{movementClass.costCenter.name} / #{movementClass.name}</span>
-                        <span class="progress-number">
-                            <h:outputText styleClass="text-bold"
-                                          value="#{movementClass.totalMovements}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText> 
-                            /
-                            <h:outputText value="#{movementClass.budget}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </span>
-                        <div class="progress sm">
-                            <div style="width: #{movementClass.budgetCompletionPercentage()}%"
-                                 class="progress-bar progress-bar-striped #{movementClass.overBudget ? 'progress-bar-green' : ''}">
-                            </div>
-                        </div>
+            <div class="box box-#{profileBean.currentThemeColorName}">
+                <div class="box-body row">
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inIdentification"
+                                       value="#{messages['financial-period.form.identification']}: "/>
+                        <p:inputText id="inIdentification"
+                                     styleClass="form-control"
+                                     value="#{financialPeriodBean.value.identification}" />
                     </div>
-                </ui:repeat>
-            </div>
-        </div>
-        <div class="box box-danger">
-            <div class="box-header with-border">
-                <h3 class="box-title">#{messages['period-detail.cost-centers-expenses']}</h3>
-            </div>
-            <div class="box-body">
-                <div class="col-sm-12 align-center"
-                     jsf:rendered="#{empty periodDetailBean.expensesClasses}">
-                    <h4>#{messages['period-detail.no-data']}</h4>
-                </div>
-                <ui:repeat var="movementClass" 
-                           value="#{periodDetailBean.expensesClasses}"
-                           rendered="#{not empty periodDetailBean.expensesClasses}">
-                    <div class="progress-group">
-                        <span class="progress-text">#{movementClass.costCenter.name} / #{movementClass.name}</span>
-                        <span class="progress-number">
-                            <h:outputText styleClass="text-bold"
-                                          value="#{movementClass.totalMovements}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText> 
-                            /
-                            <h:outputText value="#{movementClass.budget}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </span>
-                        <div class="progress sm">
-                            <div style="width: #{movementClass.budgetCompletionPercentage()}%"
-                                 class="progress-bar progress-bar-striped #{movementClass.overBudget ? 'progress-bar-red' : ''}" >
-                            </div>
-                        </div>
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inStart"
+                                       value="#{messages['financial-period.form.start']}: "/>
+                        <p:calendar id="inStart"
+                                    size="10"
+                                    mask="true"
+                                    pattern="dd/MM/yyyy"
+                                    converter="localDateConverter"
+                                    value="#{financialPeriodBean.value.start}" />
                     </div>
-                </ui:repeat>
-            </div>
-        </div>-->
-
-        <!--<div class="row">
-            <div class="col-sm-4">
-                <div class="info-box">
-                    <span class="info-box-icon bg-teal"><i class="ion ion-card"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">#{messages['period-detail.credit-goal']}</span>
-                        <span class="info-box-number">
-                            <h:outputText value="#{periodDetailBean.calculator.totalPaidOnCreditCard}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                            </h:outputText>
-                        </span>
-                        <div class="progress">
-                            <div class="progress-bar bg-teal" 
-                                 style="width: #{periodDetailBean.paidOnCreditPercentage}%">
-                            </div>
-                        </div>
-                        <span class="progress-description">
-        #{messages['period-detail.goal']}:
-        <h:outputText value="#{periodDetailBean.period.creditCardGoal}" >
-            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-        </h:outputText>
-    </span>
-            </div>
-            </div>
-            </div>
-            <div class="col-sm-4">
-            <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="ion ion-arrow-graph-down-right"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">#{messages['period-detail.expenses-goal']}</span>
-                <span class="info-box-number">
-                    <h:outputText value="#{periodDetailBean.calculator.expensesTotal}" >
-                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                    </h:outputText>
-                </span>
-                <div class="progress">
-                    <div class="progress-bar bg-red" 
-                         style="width: #{periodDetailBean.expensesGoalPercentage}%"></div>
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inEnd"
+                                       value="#{messages['financial-period.form.end']}: "/>
+                        <p:calendar id="inEnd"
+                                    size="10"
+                                    mask="true"
+                                    pattern="dd/MM/yyyy"
+                                    converter="localDateConverter"
+                                    value="#{financialPeriodBean.value.end}" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inCreditCardGoal"
+                                       value="#{messages['financial-period.form.credit-goal']}: "/>
+                        <p:inputNumber id="inCreditCardGoal"
+                                       symbol="R$ "
+                                       decimalPlaces="2"
+                                       decimalSeparator=","
+                                       thousandSeparator="."
+                                       value="#{financialPeriodBean.value.creditCardGoal}">
+                            <f:converter converterId="javax.faces.BigDecimal" />
+                        </p:inputNumber>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inExpensesGoal"
+                                       value="#{messages['financial-period.form.expenses-goal']}: "/>
+                        <p:inputNumber id="inExpensesGoal"
+                                       symbol="R$ "
+                                       decimalPlaces="2"
+                                       decimalSeparator=","
+                                       thousandSeparator="."
+                                       value="#{financialPeriodBean.value.expensesGoal}">
+                            <f:converter converterId="javax.faces.BigDecimal" />
+                        </p:inputNumber>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inRevenuesGoal"
+                                       value="#{messages['financial-period.form.revenues-goal']}: "/>
+                        <p:inputNumber id="inRevenuesGoal"
+                                       symbol="R$ "
+                                       decimalPlaces="2"
+                                       decimalSeparator=","
+                                       thousandSeparator="."
+                                       value="#{financialPeriodBean.value.revenuesGoal}">
+                            <f:converter converterId="javax.faces.BigDecimal" />
+                        </p:inputNumber>
+                    </div>
                 </div>
-                <span class="progress-description">
-                    #{messages['period-detail.goal']}:
-                    <h:outputText value="#{periodDetailBean.period.expensesGoal}" >
-                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                    </h:outputText>
-                </span>
-            </div>
-            </div>
-            </div>
-            <div class="col-sm-4">
-            <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="ion ion-arrow-graph-up-right"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">#{messages['period-detail.revenues-goal']}</span>
-                <span class="info-box-number">
-                    <h:outputText value="#{periodDetailBean.calculator.revenuesTotal}" >
-                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                    </h:outputText>
-                </span>
-                <div class="progress">
-                    <div class="progress-bar bg-green" 
-                         style="width: #{periodDetailBean.revenuesGoalPercentage}%"></div>
+                <div class="box-footer align-right">
+                    <h:outputText styleClass="text-red text-bold"
+                                  rendered="#{financialPeriodBean.viewState eq 'DELETING'}"
+                                  value="#{messages['info.delete-confirmation']}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="#{menu['yes']}"
+                                     action="#{financialPeriodBean.doDelete()}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     rendered="#{financialPeriodBean.viewState eq 'DELETING'}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton immediate="true"
+                                     styleClass="btn btn-flat btn-primary"
+                                     action="#{financialPeriodBean.changeToListing()}"
+                                     value="#{financialPeriodBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
                 </div>
-                <span class="progress-description">
-                    #{messages['period-detail.goal']}:
-                    <h:outputText value="#{periodDetailBean.period.revenuesGoal}" >
-                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                    </h:outputText>
-                </span>
             </div>
-            </div>
-            </div>
-            </div>-->
-        
-        
-        
-        
+        </h:form>
     </ui:define>
 </ui:composition>

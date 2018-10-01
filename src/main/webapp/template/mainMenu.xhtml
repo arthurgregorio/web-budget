@@ -132,16 +132,16 @@
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['tools']} <span class="caret" /></a>
             <ul class="dropdown-menu" role="menu">
-                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.USER_ACCESS)}">
-                    <p:link outcome="/secured/tools/user/listUsers.xhtml">
-                        <i class="fa fa-user-plus" />
-                        <span>#{menu['tools.users']}</span>
-                    </p:link>
-                </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.GROUP_ACCESS)}">
                     <p:link outcome="/secured/tools/group/listGroups.xhtml">
                         <i class="fa fa-users" />
                         <span>#{menu['tools.groups']}</span>
+                    </p:link>
+                </li>
+                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.USER_ACCESS)}">
+                    <p:link outcome="/secured/tools/user/listUsers.xhtml">
+                        <i class="fa fa-user-plus" />
+                        <span>#{menu['tools.users']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CONFIGURATION_ACCESS)}">

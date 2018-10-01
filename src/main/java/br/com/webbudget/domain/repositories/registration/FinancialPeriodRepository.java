@@ -19,10 +19,12 @@ package br.com.webbudget.domain.repositories.registration;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
+import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,13 +40,25 @@ import java.util.Optional;
 public interface FinancialPeriodRepository extends DefaultRepository<FinancialPeriod> {
 
     /**
+     * Method used to validate if the dates give are within other periods
+     *
+     * @param start the date to start
+     * @param end the date to end
+     * @return total of periods within the dates
+     */
+    @Query("SELECT count(*) FROM FinancialPeriod fp " +
+            "WHERE (?1 BETWEEN fp.start AND fp.end) " +
+            "OR (?2 BETWEEN fp.start AND fp.end)")
+    Long validatePeriodDates(LocalDate start, LocalDate end);
+
+    /**
      * List all {@link FinancialPeriod} by the closing status
      * 
      * @param isClosed <code>true</code> for closed periods or <code>false</code> for open periods
      * @return a {@link List} of {@link FinancialPeriod}
      */
     List<FinancialPeriod> findByClosed(boolean isClosed);
-    
+
     /**
      * Find a {@link FinancialPeriod} by the identification
      * 

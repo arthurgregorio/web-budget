@@ -22,16 +22,19 @@ import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.FinancialPeriodService;
+import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import java.util.List;
+
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
 /**
- * The {@link FinancialPeriod} maintenance routine controller
+ * The {@link FinancialPeriod} controller
  *
  * @author Arthur Gregorio
  *
@@ -42,9 +45,12 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 @ViewScoped
 public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
 
+    @Getter
+    private boolean hasOpenPeriod;
+
     @Inject
     private FinancialPeriodService financialPeriodService;
-    
+
     @Inject
     private FinancialPeriodRepository financialPeriodRepository;
 
@@ -59,15 +65,15 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param id
-     * @param viewState 
+     * @param viewState
      */
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.value = this.financialPeriodRepository.findOptionalById(id)
-                .orElseGet(FinancialPeriod::new);
+        this.value = this.financialPeriodRepository.findOptionalById(id).orElseGet(FinancialPeriod::new);
+        this.checkForOpenPeriods();
     }
 
     /**
@@ -84,17 +90,16 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param first
      * @param pageSize
      * @param sortField
      * @param sortOrder
-     * @return 
+     * @return
      */
     @Override
     public Page<FinancialPeriod> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.financialPeriodRepository.findAllBy(this.filter.getValue(), 
-                null, first, pageSize);
+        return this.financialPeriodRepository.findAllBy(this.filter.getValue(), null, first, pageSize);
     }
 
     /**
@@ -104,7 +109,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     public void doSave() {
         this.financialPeriodService.save(this.value);
         this.value = new FinancialPeriod();
-        this.validateOpenPeriods();
+        this.checkForOpenPeriods();
         this.addInfo(true, "saved");
     }
 
@@ -112,12 +117,14 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
      * {@inheritDoc}
      */
     @Override
-    public void doUpdate() { }
+    public void doUpdate() {
+        // financial period can't be updated
+    }
 
     /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String doDelete() {
@@ -129,28 +136,18 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     /**
      * Helper method to navigate to the closing page of the selected {@link FinancialPeriod}
      *
-     * @param id the id of the selected
+     * @param financialPeriodId the id of the selected {@link FinancialPeriod}
      * @return the closing page to redirect
      */
-    public String changeToClosing(long id) {
-        return "";
+    public String changeToClosing(long financialPeriodId) {
+        return ""; // FIXME put the right URL for redirect action here
     }
-    
-    /**
-     * FIXME check if the notice for open periods are showing on the financial period form
-     */
-    public void validateOpenPeriods() {
 
-//        // validamos se ha algum periodo em aberto
-//        final List<FinancialPeriod> periods
-//                = this.financialPeriodService.listOpenFinancialPeriods();
-//
-//        for (FinancialPeriod open : periods) {
-//            if (open != null && (!open.isClosed() || !open.isExpired())) {
-//                // se ja houver aberto, nega o que foi dito antes
-//                this.hasOpenPeriod = true;
-//                break;
-//            }
-//        }
+    /**
+     * This method is called in the form initialization to check if we already have an open {@link FinancialPeriod}
+     */
+    private void checkForOpenPeriods() {
+        final List<FinancialPeriod> periods = this.financialPeriodRepository.findByClosed(false);
+        this.hasOpenPeriod = periods.size() > 0;
     }
 }

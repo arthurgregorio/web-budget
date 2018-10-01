@@ -18,16 +18,16 @@ package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.events.NewPeriodOpened;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
+import br.com.webbudget.domain.validators.registration.financialperiod.FinancialPeriodSavingValidator;
+import br.com.webbudget.domain.validators.registration.financialperiod.FinancialPeriodUpdatingValidator;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * The service responsible for the business operations with the {@link FinancialPeriod}
@@ -41,12 +41,19 @@ import java.util.Optional;
 public class FinancialPeriodService {
 
     @Inject
+    private FinancialPeriodRepository financialPeriodRepository;
+
+    @Inject
     @NewPeriodOpened
     private Event<FinancialPeriod> newPeriodOpenedEvent;
-    
+
+    @Any
     @Inject
-    private FinancialPeriodRepository financialPeriodRepository;
-    
+    private Instance<FinancialPeriodSavingValidator> savingValidators;
+    @Any
+    @Inject
+    private Instance<FinancialPeriodUpdatingValidator> updatingValidators;
+
     /**
      * Use this method to persist a {@link FinancialPeriod}
      *
@@ -55,37 +62,12 @@ public class FinancialPeriodService {
     @Transactional
     public void save(FinancialPeriod financialPeriod) {
 
-        // check for duplicated financial periods
-        final Optional<FinancialPeriod> found = this.financialPeriodRepository
-                .findOptionalByIdentification(financialPeriod.getIdentification());
+        this.savingValidators.forEach(validator -> validator.validate(financialPeriod));
 
-        if (found.isPresent()) {
-            throw new BusinessLogicException("error.financial-period.duplicated");
-        }
-
-        // check for periods with the same date period of this new one
-        final List<FinancialPeriod> periods = this.financialPeriodRepository.findByClosed(false);
-
-        periods.forEach(period -> {
-            if (financialPeriod.getStart().isAfter(period.getStart()) ||
-                    financialPeriod.getEnd().isBefore(period.getEnd())) {
-                throw new BusinessLogicException("error.financial-period.truncated-dates", 
-                        period.getIdentification());
-            }
-        });
-        
-        // if the end date is in the same or before the current day, error
-        if (financialPeriod.getEnd().compareTo(LocalDate.now()) < 1) {
-            throw new BusinessLogicException("error.financial-period.invalid-end");
-        }
-
-        final FinancialPeriod opened = 
-                this.financialPeriodRepository.save(financialPeriod);
-        
         // fire a event to notify the listeners
-        this.newPeriodOpenedEvent.fire(opened);
+        this.newPeriodOpenedEvent.fire(this.financialPeriodRepository.save(financialPeriod));
     }
-    
+
     /**
      * Use this method to delete a persisted {@link FinancialPeriod}
      *
@@ -104,7 +86,7 @@ public class FinancialPeriodService {
 //            throw new BusinessLogicException("error.financial-period.has-movements",
 //                    financialPeriod.getIdentification());
 //        } 
-        
+
         this.financialPeriodRepository.attachAndRemove(financialPeriod);
     }
 }
