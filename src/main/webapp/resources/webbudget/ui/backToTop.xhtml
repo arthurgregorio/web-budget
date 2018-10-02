@@ -25,31 +25,46 @@
     </c:interface>
 
     <c:implementation>
-        <script type="text/javascript">
-            $(document).ready(function ($) {
-                var offset = 300,
-                        offset_opacity = 1200,
-                        scroll_top_duration = 700,
-                        $back_to_top = $('.cd-top');
 
+        <style type="text/css">
+            .back-to-top {
+                cursor: pointer;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                display:none;
+            }
+        </style>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
                 $(window).scroll(function () {
-                    ($(this).scrollTop() > offset)
-                            ? $back_to_top.addClass('cd-is-visible')
-                            : $back_to_top.removeClass('cd-is-visible cd-fade-out');
-                    if ($(this).scrollTop() > offset_opacity) {
-                        $back_to_top.addClass('cd-fade-out');
+                    if ($(this).scrollTop() > 50) {
+                        $('#back-to-top').fadeIn();
+                    } else {
+                        $('#back-to-top').fadeOut();
                     }
                 });
-
-                $back_to_top.on('click', function (event) {
-                    event.preventDefault();
+                // scroll body to 0px on click
+                $('#back-to-top').click(function () {
+                    $('#back-to-top').tooltip('hide');
                     $('body,html').animate({
                         scrollTop: 0
-                    }, scroll_top_duration);
+                    }, 800);
+                    return false;
                 });
+                $('#back-to-top').tooltip('show');
             });
         </script>
-        
-        <a href="#0" class="cd-top">Top</a>
+
+        <a id="back-to-top"
+           href="#"
+           role="button"
+           data-toggle="tooltip"
+           data-placement="left"
+           title="#{menu['back-to-top']}"
+           class="btn btn-primary btn-lg back-to-top">
+            <span class="glyphicon glyphicon-chevron-up"/>
+        </a>
     </c:implementation>
 </html>
