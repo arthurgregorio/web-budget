@@ -90,7 +90,7 @@
                                                  value="#{menu['new']}"
                                                  action="#{contactBean.changeToAdd()}"
                                                  styleClass="btn btn-flat btn-primary" 
-                                                 rendered="#{userSessionBean.isPermitted(permissions.CONTACT_INSERT)}"/>
+                                                 rendered="#{userSessionBean.isPermitted(permissions.CONTACT_ADD)}"/>
                             </div>
                         </div>
                     </div>
@@ -113,7 +113,8 @@
                                      emptyMessage="#{messages['list.empty']}">
 
                             <p:ajax event="rowSelect"
-                                    listener="#{contactBean.changeToDetail()}" /> 
+                                    listener="#{contactBean.changeToDetail()}"
+                                    disabled="#{not userSessionBean.isPermitted(permissions.CONTACT_DETAIL)}"/>
 
                             <p:column headerText="#{messages['contact.list.name']}">
                                 <p:graphicImage width="20"

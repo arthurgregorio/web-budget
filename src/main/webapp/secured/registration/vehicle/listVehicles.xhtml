@@ -94,7 +94,7 @@
                                                  value="#{menu['new']}"
                                                  action="#{vehicleBean.changeToAdd()}"
                                                  styleClass="btn btn-flat btn-primary" 
-                                                 rendered="#{userSessionBean.isPermitted(permissions.VEHICLE_INSERT)}"/>
+                                                 rendered="#{userSessionBean.isPermitted(permissions.VEHICLE_ADD)}"/>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,8 @@
                                  emptyMessage="#{messages['list.empty']}">
 
                         <p:ajax event="rowSelect"
-                                listener="#{vehicleBean.changeToDetail()}" /> 
+                                listener="#{vehicleBean.changeToDetail()}"
+                                disabled="#{not userSessionBean.isPermitted(permissions.VEHICLE_DETAIL)}"/>
 
                         <p:column headerText="#{messages['card.list.name']}">
                             <p:graphicImage width="20"

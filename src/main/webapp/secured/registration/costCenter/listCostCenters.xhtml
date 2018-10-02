@@ -90,7 +90,7 @@
                                                  value="#{menu['new']}"
                                                  styleClass="btn btn-flat btn-primary" 
                                                  action="#{costCenterBean.changeToAdd()}"
-                                                 rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_INSERT)}"/>
+                                                 rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_ADD)}"/>
                             </div>
                         </div>
                     </div>
@@ -113,7 +113,8 @@
                                  emptyMessage="#{messages['list.empty']}">
 
                         <p:ajax event="rowSelect"
-                                listener="#{costCenterBean.changeToDetail()}" /> 
+                                listener="#{costCenterBean.changeToDetail()}"
+                                disabled="#{not userSessionBean.isPermitted(permissions.COST_CENTER_DETAIL)}"/>
 
                         <p:column headerText="#{messages['cost-center.list.name']}">
                             <p:graphicImage width="20"

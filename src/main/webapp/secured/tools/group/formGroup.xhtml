@@ -106,7 +106,7 @@
                                 value="#{groupBean.treeRoot}"
                                 selection="#{groupBean.selectedAuthorizations}">
                             <p:treeNode>
-                                <h:outputText value="#{permission[node]}"/>
+                                <h:outputText value="#{permission[groupBean.split(node)]}"/>
                             </p:treeNode>
                         </p:tree>
                     </div>

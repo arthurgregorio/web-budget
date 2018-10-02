@@ -185,12 +185,7 @@
                             <h4>#{messages['refueling.form.fuels']}</h4>
                         </div>
                         <div class="form-group col-md-4 align-right">
-                            <p:commandButton immediate="true"
-                                             update="fuelsList"
-                                             value="#{menu['add']}"
-                                             styleClass="btn btn-flat btn-primary"
-                                             disabled="#{refuelingBean.viewState ne 'ADDING'}"
-                                             actionListener="#{refuelingBean.value.addFuel()}" />
+
                         </div>
                         <div class="form-group col-md-12">
                             <p:dataTable id="fuelsList" 
@@ -264,17 +259,6 @@
                                             </h:outputText>
                                         </f:facet>
                                     </p:cellEditor>
-                                </p:column>
-                                <p:column width="15%" 
-                                          styleClass="align-center"
-                                          headerText="#{messages['list.actions']}">
-                                    <p:commandButton immediate="true"
-                                                     icon="fa fa-trash"
-                                                     title="#{menu['delete']}"
-                                                     update="fuelsList totalsBox"
-                                                     styleClass="btn btn-flat btn-danger"
-                                                     disabled="#{refuelingBean.viewState ne 'ADDING'}"
-                                                     actionListener="#{refuelingBean.value.deleteFuel(fuel)}" />
                                 </p:column>
                             </p:dataTable>
                         </div>

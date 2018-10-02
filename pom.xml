@@ -210,11 +210,6 @@
             <version>2.1.2</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.8</version>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.2</version>
@@ -224,7 +219,14 @@
             <artifactId>guava</artifactId>
             <version>26.0-jre</version>
         </dependency>
-        
+
+        <!--apache commons-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+
         <!--mustache-->
         <dependency>
             <groupId>com.github.spullara.mustache.java</groupId>

@@ -85,7 +85,7 @@
                                                  value="#{menu['new']}"
                                                  styleClass="btn btn-flat btn-primary" 
                                                  action="#{refuelingBean.changeToAdd()}"
-                                                 rendered="#{userSessionBean.isPermitted(permissions.REFUELING_INSERT)}"/>
+                                                 rendered="#{userSessionBean.isPermitted(permissions.REFUELING_ADD)}"/>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,8 @@
                                  emptyMessage="#{messages['list.empty']}">
 
                         <p:ajax event="rowSelect"
-                                listener="#{refuelingBean.changeToDetail()}" /> 
+                                listener="#{refuelingBean.changeToDetail()}"
+                                disabled="#{not userSessionBean.isPermitted(permissions.REFUELING_DETAIL)}"/>
 
                         <p:column headerText="#{messages['refueling.list.vehicle']}">
                             #{refueling.vehicleIdentification}
@@ -137,8 +138,7 @@
                         <p:column width="12%"
                                   styleClass="align-center" 
                                   headerText="#{messages['refueling.list.average-consumption']}">
-                            <h:outputText rendered="#{refueling.fullTank 
-                                                      and not refueling.firstRefueling}"
+                            <h:outputText rendered="#{refueling.fullTank and not refueling.firstRefueling}"
                                           value="#{refueling.averageConsumption} Km/L">
                                 <f:convertNumber pattern="#0.00" />
                             </h:outputText>

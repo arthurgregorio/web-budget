@@ -160,9 +160,10 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Convert all the select items in the UI and transform this in a simple {@link List} of {@link Authorization}
+     * This method parse the authorizations selected on the tree by the user to
+     * the objects of the domain model
      *
-     * @return the {@link Authorization} list is on the way
+     * @return the list of authorizations
      */
     private List<Authorization> parseAuthorizations() {
 
@@ -184,7 +185,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Create the model to the tree
+     * Create the authorizations tree
      */
     private void createAuthorizationsTree() {
 
@@ -204,9 +205,9 @@ public class GroupBean extends FormBean<Group> {
                     authorizations.stream()
                             .filter(authz -> authz.isFunctionality(functionality))
                             .map(Authorization::getFullPermission)
-                            .forEach(value -> {
+                            .forEach(authz -> {
                                 functionalityNode.getChildren().add(
-                                        new DefaultTreeNode(value, functionalityNode));
+                                        new DefaultTreeNode(authz, functionalityNode));
                             });
 
                     this.treeRoot.getChildren().add(functionalityNode);
@@ -214,7 +215,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Remove all the previous selected items
+     * Remove all the selections on the authorizations tree
      */
     private void unselectAuthorizations() {
 
@@ -232,7 +233,7 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Method to organize the tree
+     * Select all the nods with a given set of values to be marked
      */
     private void selectAuthorizations() {
 
@@ -267,10 +268,10 @@ public class GroupBean extends FormBean<Group> {
     }
 
     /**
-     * Method to translate the enums on the UI
+     * Helper method to prevent rewriting of the i18n code on each authorization
      *
-     * @param nodeDescription the current identification node description
-     * @return only the i18n part of the text
+     * @param nodeDescription the node description
+     * @return the part of the nod to be parsed in the i18n
      */
     public String split(String nodeDescription) {
         final String splited[] = nodeDescription.split(":");

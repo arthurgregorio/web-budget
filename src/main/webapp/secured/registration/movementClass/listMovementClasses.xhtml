@@ -90,7 +90,7 @@
                                                  value="#{menu['new']}"
                                                  action="#{movementClassBean.changeToAdd()}"
                                                  styleClass="btn btn-flat btn-primary" 
-                                                 rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_INSERT)}"/>
+                                                 rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_ADD)}"/>
                             </div>
                         </div>
                     </div>
@@ -113,7 +113,8 @@
                                  emptyMessage="#{messages['list.empty']}">
 
                         <p:ajax event="rowSelect"
-                                listener="#{movementClassBean.changeToDetail()}" /> 
+                                listener="#{movementClassBean.changeToDetail()}"
+                                disabled="#{not userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_DETAIL)}"/>
 
                         <p:column headerText="#{messages['movement-class.list.name']}">
                             <p:graphicImage width="20"

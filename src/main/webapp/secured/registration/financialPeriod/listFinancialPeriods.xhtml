@@ -81,7 +81,7 @@
                                                  value="#{menu['new']}"
                                                  styleClass="btn btn-flat btn-primary"
                                                  action="#{financialPeriodBean.changeToAdd()}"
-                                                 rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_INSERT)}"/>
+                                                 rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_ADD)}"/>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,8 @@
                                  emptyMessage="#{messages['list.empty']}">
 
                         <p:ajax event="rowSelect"
-                                listener="#{financialPeriodBean.changeToDetail()}"/>
+                                listener="#{financialPeriodBean.changeToDetail()}"
+                                disabled="#{not userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DETAIL)}"/>
 
                         <p:column headerText="#{messages['financial-period.list.identification']}">
                             #{financialPeriod.identification} -
@@ -156,11 +157,11 @@
                         <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
-                            <p:commandButton icon="fa fa-calculator"
-                                             title="#{menu['close-period']}"
-                                             styleClass="btn btn-flat btn-default"
-                                             action="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"
-                                             rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>
+                            <!--<p:commandButton icon="fa fa-calculator"-->
+                                             <!--title="#{menu['close-period']}"-->
+                                             <!--styleClass="btn btn-flat btn-default"-->
+                                             <!--action="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"-->
+                                             <!--rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>-->
                             <p:spacer width="10"
                                       rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"

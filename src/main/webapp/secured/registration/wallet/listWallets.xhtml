@@ -90,7 +90,7 @@
                                                  value="#{menu['new']}"
                                                  action="#{walletBean.changeToAdd()}"
                                                  styleClass="btn btn-flat btn-primary" 
-                                                 rendered="#{userSessionBean.isPermitted(permissions.WALLET_INSERT)}"/>
+                                                 rendered="#{userSessionBean.isPermitted(permissions.WALLET_ADD)}"/>
                             </div>
                         </div>
                     </div>
@@ -160,6 +160,12 @@
                                          styleClass="btn btn-flat btn-default"
                                          action="#{walletBean.changeToEdit(wallet.id)}"
                                          rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton icon="fa fa-eye"
+                                         title="#{menu['detail']}"
+                                         styleClass="btn btn-flat btn-default"
+                                         action="#{walletBean.changeToDetail(wallet.id)}"
+                                         rendered="#{userSessionBean.isPermitted(permissions.WALLET_DETAIL)}"/>
                         <p:spacer width="10"/>
                         <p:commandButton icon="fa fa-eraser"
                                          title="#{menu['delete']}"

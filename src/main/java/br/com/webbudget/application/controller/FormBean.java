@@ -155,6 +155,7 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean
     /**
      * Redirect the user to the edit page defined in the {@link NavigationManager}
      *
+     * @param id the id of the entity to be loaded
      * @return the edit page
      */
     public String changeToEdit(long id) {
@@ -162,7 +163,19 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean
     }
 
     /**
-     * Redirect the user to the detail page defined in the {@link NavigationManager}
+     * Redirect the user to the detail page defined in the {@link NavigationManager} with implicit navigation
+     *
+     * @param id the id of the entity to be loaded
+     * @return the detail page
+     */
+    public String changeToDetail(long id) {
+        return this.navigation.to(DETAIL_PAGE, of("id", id));
+    }
+
+    /**
+     * Redirect the user to the detail page defined in the {@link NavigationManager} with a servlet redirect
+     *
+     * Use this method where you can't pass a action to a {@link org.primefaces.component.commandbutton.CommandButton}
      */
     public void changeToDetail() {
         this.navigation.redirect(DETAIL_PAGE, of("id", this.value.getId()));
