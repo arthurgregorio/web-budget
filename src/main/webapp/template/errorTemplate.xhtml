@@ -43,14 +43,14 @@
         <link rel="stylesheet"
               crossorigin="anonymous"
               href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-              integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" />
+              integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"/>
 
         <style type="text/css">
             .content-wrapper {
                 margin-left: 0px;
                 padding: 5% 15%;
             }
-        </style>        
+        </style>
     </h:head>
 
     <h:body styleClass="sidebar-mini skin-blue">
@@ -58,23 +58,29 @@
             <div class="content-wrapper">
                 <section class="content">
                     <div class="error-page" style="width: 100%;">
-                        <ui:insert name="headline" />
+                        <ui:insert name="headline"/>
                         <div class="error-content">
                             <h3>
-                                <ui:insert name="message" />
+                                <ui:insert name="message"/>
                             </h3>
                             <p>
-                                <ui:insert name="details" />
+                                <ui:insert name="details"/>
                                 <ul>
                                     <li><b>#{messages['exception.requested-uri']}:</b> <a
                                             href="#{requestScope['javax.servlet.error.request_uri']}">#{requestScope['javax.servlet.error.request_uri']}</a>
                                     </li>
-                                    <li><b>#{messages['exception.is-ajax']}:</b> #{facesContext.partialViewContext.ajaxRequest ? menu['yes'] : menu['no']}</li>
-                                    <li><b>#{messages['exception.status']}:</b> #{requestScope['javax.servlet.error.status_code']}</li>
+                                    <li>
+                                        <b>#{messages['exception.is-ajax']}:</b> #{facesContext.partialViewContext.ajaxRequest ? menu['yes'] : menu['no']}
+                                    </li>
+                                    <li>
+                                        <b>#{messages['exception.status']}:</b> #{requestScope['javax.servlet.error.status_code']}
+                                    </li>
                                     <li jsf:rendered="#{not empty requestScope['javax.servlet.error.exception_type']}">
                                         <b>#{messages['exception.type']}:</b> #{requestScope['javax.servlet.error.exception_type']}
                                     </li>
-                                    <li><b>#{messages['exception.message']}:</b> #{requestScope['javax.servlet.error.message']}</li>
+                                    <li>
+                                        <b>#{messages['exception.message']}:</b> #{requestScope['javax.servlet.error.message']}
+                                    </li>
                                 </ul>
                             </p>
                             <p>
@@ -83,9 +89,9 @@
                             <p jsf:rendered="#{not empty requestScope['javax.servlet.error.exception_stacktrace']}">
                                 #{messages['exception.stack']}:
                                 <div style="overflow: auto;">
-                                    <pre>
-                                        #{of:printStackTrace(requestScope['javax.servlet.error.exception_stacktrace'])}
-                                    </pre>
+                                        <pre>
+                                            #{of:printStackTrace(requestScope['javax.servlet.error.exception_stacktrace'])}
+                                        </pre>
                                 </div>
                             </p>
                         </div>

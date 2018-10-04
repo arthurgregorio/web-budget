@@ -1,0 +1,136 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:o="http://omnifaces.org/ui"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:f="http://xmlns.jcp.org/jsf/core"
+          xmlns:h="http://xmlns.jcp.org/jsf/html"
+          xmlns:pe="http://primefaces.org/ui/extensions"
+          id="configFilterDialog"
+          width="700"
+          modal="true" 
+          closable="false"
+          resizable="false" 
+          closeOnEscape="true"
+          widgetVar="dialogConfigFilter" 
+          header="#{messages['config-filter.dialog.title']}">
+
+    <h:form id="configFilterForm">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <p:messages id="configFilterMessages" closable="true" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+<!--                        <p:pickList id="periodsList"
+                                    var="period" 
+                                    responsive="true"
+                                    itemValue="#{period}" 
+                                    style="display: block"
+                                    itemLabel="#{period.identification}"
+                                    value="#{movementBean.periodsModel}">
+                            <f:facet name="sourceCaption">
+                                #{messages['config-filter.form.available-periods']}
+                            </f:facet>
+                            <f:facet name="targetCaption">
+                                #{messages['config-filter.form.selected-periods']}
+                            </f:facet>
+                            <o:converter list="#{movementBean.periods}"
+                                         converterId="omnifaces.ListConverter" />
+                        </p:pickList>-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <p:outputLabel for="inType" 
+                                       value="#{messages['config-filter.form.type']}: "/>
+                        <p:selectOneMenu id="inType" 
+                                         converter="omnifaces.GenericEnumConverter"
+                                         value="#{movementBean.filter.movementType}">
+                            <f:selectItem itemValue="#{null}"
+                                          itemLabel="#{messages['config-filter.form.any-type']}" />
+                            <f:selectItems var="movementType"
+                                           itemValue="#{movementType}"
+                                           itemLabel="#{enums[movementType]}"
+                                           value="#{movementBean.movementTypes}"/> 
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <p:outputLabel for="inStatus" 
+                                       value="#{messages['config-filter.form.status']}: "/>
+                        <p:selectOneMenu id="inStatus" 
+                                         converter="omnifaces.GenericEnumConverter"
+                                         value="#{movementBean.filter.movementStateType}">
+                            <f:selectItem itemValue="#{null}"
+                                          itemLabel="#{messages['config-filter.form.any-state']}" />
+                            <f:selectItems var="statusType"
+                                           itemValue="#{statusType}"
+                                           itemLabel="#{enums[statusType]}"
+                                           value="#{movementBean.movementStateTypes}"/> 
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <p:outputLabel for="inDirection" 
+                                       value="#{messages['config-filter.form.direction']}: "/>
+                        <p:selectOneMenu id="inDirection" 
+                                         converter="omnifaces.GenericEnumConverter"
+                                         value="#{movementBean.filter.movementClassType}">
+                            <f:selectItem itemValue="#{null}"
+                                          itemLabel="#{messages['config-filter.form.any-direction']}" />
+                            <f:selectItems var="directionType"
+                                           itemValue="#{directionType}"
+                                           itemLabel="#{enums[directionType]}"
+                                           value="#{movementBean.movementClassTypes}"/> 
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 align-right">
+                <p:commandButton value="#{menu['save']}"
+                                 update="configFilterForm"
+                                 onstart="PF('searchBlock').block()"
+                                 styleClass="btn btn-flat btn-success"
+                                 oncomplete="PF('searchBlock').unblock()"
+                                 actionListener="#{movementBean.applyCustomFilters()}"/>
+                <p:spacer width="10"/>
+                <p:commandButton immediate="true"
+                                 value="#{menu['cancel']}"
+                                 styleClass="btn btn-flat btn-default"
+                                 onclick="PF('dialogConfigFilter').hide()"/>
+            </div>
+        </div>
+
+        <pe:blockUI widgetVar="searchBlock"
+                    target="configFilterForm">
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
+        </pe:blockUI>
+    </h:form>
+</p:dialog>

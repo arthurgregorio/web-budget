@@ -14,21 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.journal;
+package br.com.webbudget.domain.repositories.financial;
 
-import br.com.webbudget.domain.entities.journal.Fuel;
+import br.com.webbudget.domain.entities.financial.Transference;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 
 /**
- * The {@link Fuel} repository
+ * The {@link Transference} repository
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
- * @since 2.3.0, 05/06/2016
+ * @version 1.0.0
+ * @since 3.0.0, 03/10/2018
  */
 @Repository
-public interface FuelRepository extends DefaultRepository<Fuel> {
+public interface TransferenceRepository extends DefaultRepository<Transference> {
 
 }

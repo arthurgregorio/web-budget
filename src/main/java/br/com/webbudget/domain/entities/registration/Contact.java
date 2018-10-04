@@ -99,13 +99,13 @@ public class Contact extends PersistentEntity {
     private String neighborhood;
     @Setter
     @Getter
-    @Column(name = "province", length = 45)
     @NotBlank(message = "{contact.province}")
+    @Column(name = "province", length = 45, nullable = false)
     private String province;
     @Setter
     @Getter
-    @Column(name = "city", length = 45)
     @NotBlank(message = "{contact.city}")
+    @Column(name = "city", length = 45, nullable = false)
     private String city;
     @Setter
     @Getter

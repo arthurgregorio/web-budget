@@ -1,0 +1,80 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:o="http://omnifaces.org/ui"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:h="http://xmlns.jcp.org/jsf/html"
+          xmlns:f="http://xmlns.jcp.org/jsf/core"
+          id="launchesDialog"
+          width="750"
+          modal="true" 
+          closable="false"
+          resizable="false" 
+          closeOnEscape="true"
+          widgetVar="dialogLaunches" 
+          header="#{messages['launches.dialog.title']}">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h4>
+                <o:outputFormat escape="false"
+                                value="#{messages['launches.tip']}">
+                    <f:param value="#{fixedMovementBean.fixedMovement.identification}"/>
+                </o:outputFormat>
+            </h4>
+            <p:spacer height="5"/>
+            <p:dataTable rows="10"
+                         lazy="true"
+                         var="launch"
+                         paginator="true"
+                         sortMode="ascending"
+                         paginatorPosition="bottom"
+                         paginatorAlwaysVisible="false"
+                         emptyMessage="#{messages['list.empty']}"
+                         value="#{fixedMovementBean.launchesModel}">
+
+                <p:column styleClass="align-center"
+                          headerText="#{messages['launches.list.quote']}">
+                    #{launch.quote eq null ? '-' : launch.quote}  
+                </p:column>
+                <p:column styleClass="align-center"
+                          headerText="#{messages['launches.list.launch-date']}">
+                    <h:outputText value="#{launch.inclusion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                    </h:outputText>
+                </p:column>
+                <p:column styleClass="align-center"
+                          headerText="#{messages['launches.list.movement']}">
+                    #{launch.movement.code}
+                </p:column>
+                <p:column styleClass="align-center"
+                          headerText="#{messages['launches.list.period']}">
+                    #{launch.financialPeriod.identification}                        
+                </p:column>
+            </p:dataTable>
+        </div>
+    </div>
+    <div class="row align-center" style="margin-top: 20px">
+        <div class="col-sm-12">
+            <p:commandButton immediate="true"
+                             value="#{menu['back']}" 
+                             styleClass="btn btn-flat btn-default"
+                             onclick="PF('dialogLaunches').hide()"/>
+        </div>
+    </div>
+</p:dialog>

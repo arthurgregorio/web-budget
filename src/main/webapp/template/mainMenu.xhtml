@@ -87,31 +87,31 @@
             </ul>
         </li>
 
-        <!--<li class="dropdown">-->
-            <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['financial']} <span class="caret" /></a>-->
-            <!--<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">-->
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['financial']} <span class="caret" /></a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                 <!--<li jsf:rendered="#{userSessionBean.isPermitted(permissions.CLOSING_ACCESS)}">-->
                     <!--<p:link outcome="/main/movement/closing/closeFinancialPeriod.xhtml">-->
                         <!--<i class="fa fa-calculator" />-->
                         <!--#{menu['financial.closings']}-->
                     <!--</p:link>-->
                 <!--</li>-->
-                <!--<li jsf:rendered="#{userSessionBean.isPermitted(permissions.BALANCE_TRANSFERENCE_ACCESS)}">-->
-                    <!--<p:link outcome="/main/movement/transference/walletTransference.xhtml">-->
-                        <!--<i class="fa fa-exchange" />-->
-                        <!--#{menu['financial.transferences']}-->
-                    <!--</p:link>-->
-                <!--</li>-->
+                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.TRANSFERENCE_ACCESS)}">
+                    <p:link outcome="/secured/financial/transference/formTransference.xhtml">
+                        <i class="fa fa-exchange-alt" />
+                        #{menu['financial.transfers']}
+                    </p:link>
+                </li>
                 <!--<li jsf:rendered="#{userSessionBean.isPermitted(permissions.CARD_INVOICE_ACCESS)}">-->
                     <!--<p:link outcome="/main/movement/cardInvoice/cardInvoiceView.xhtml">-->
                         <!--<i class="fa fa-credit-card" />-->
                         <!--#{menu['financial.card-invoices']}-->
                     <!--</p:link>-->
                 <!--</li>-->
-                <!--<li class="divider" />-->
-                <!--<li class="dropdown-submenu">-->
-                    <!--<a href="#"><i class="fa fa-money" /> #{menu['financial.movements']} <span class="caret" /></a>-->
-                    <!--<ul class="dropdown-menu" role="menu">-->
+                <li class="divider" />
+                <li class="dropdown-submenu">
+                    <a href="#"><i class="fa fa-money" /> #{menu['financial.movements']} <span class="caret" /></a>
+                    <ul class="dropdown-menu" role="menu">
                         <!--<li jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">-->
                             <!--<p:link outcome="/main/movement/fixed/listFixedMovements.xhtml">-->
                                 <!--<i class="fa fa-circle" />-->
@@ -124,10 +124,10 @@
                                 <!--#{menu['financial.movements.period']}-->
                             <!--</p:link>-->
                         <!--</li>-->
-                    <!--</ul>-->
-                <!--</li>-->
-            <!--</ul>-->
-        <!--</li>-->
+                    </ul>
+                </li>
+            </ul>
+        </li>
 
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['tools']} <span class="caret" /></a>

@@ -1,0 +1,117 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <p:focus context="inPaymentMethod"/>
+
+    <ui:param name="payment" value="#{movementBean.movement.payment}"/>
+
+    <div jsf:id="paymentBox" class="row">
+        <div class="col-sm-5 form-group">
+            <p:outputLabel for="inPaymentMethod" 
+                           value="#{messages['payment.form.method']}: "/>
+            <p:selectOneMenu id="inPaymentMethod" 
+                             value="#{payment.paymentMethodType}"
+                             converter="omnifaces.GenericEnumConverter"
+                             disabled="#{movementBean.movement.cardInvoice 
+                                         or movementBean.movement.revenue}">
+                <p:ajax event="change"  
+                        update="paymentBox" />
+                <f:selectItems var="paymentType"
+                               itemValue="#{paymentType}"
+                               itemLabel="#{enums[paymentType]}"
+                               value="#{movementBean.paymentMethodTypes}"/>
+            </p:selectOneMenu>
+        </div>
+        <div class="col-sm-4 form-group">
+            <p:outputLabel for="inPaymentDate" 
+                           value="#{messages['payment.form.date']}: "/>
+            <p:calendar id="inPaymentDate" 
+                        mask="true"
+                        pattern="dd/MM/yyyy"
+                        converter="localDateConverter"
+                        value="#{payment.paymentDate}"/>
+        </div>
+        <div class="col-sm-3 form-group">
+            <p:outputLabel for="inDiscount" 
+                           value="#{messages['payment.form.discount']}: "/>
+            <p:inputNumber id="inDiscount" 
+                           symbol="R$ "
+                           decimalPlaces="2" 
+                           decimalSeparator="," 
+                           thousandSeparator="." 
+                           value="#{payment.discount}">
+                <f:converter converterId="javax.faces.BigDecimal" />
+            </p:inputNumber>
+        </div>
+        <div class="col-sm-12 form-group">
+            <p:outputLabel for="inWallet" 
+                           value="#{messages['payment.form.wallet']}: "/>
+            <p:selectOneMenu id="inWallet" 
+                             value="#{payment.wallet}" 
+                             converter="omnifaces.SelectItemsConverter"
+                             disabled="#{payment.paymentMethodType ne 'IN_CASH'}">
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{menu['select-one']}" />
+                <f:selectItems var="wallet"
+                               itemValue="#{wallet}"
+                               value="#{movementBean.wallets}"
+                               itemLabel="#{wallet.friendlyName}"/>
+            </p:selectOneMenu>
+        </div>
+        <div class="col-sm-12 form-group"
+             jsf:rendered="#{not movementBean.movement.revenue}">
+            <p:outputLabel for="inCreditCard" 
+                           value="#{messages['payment.form.credit-card']}: "/>
+            <p:selectOneMenu id="inCreditCard" 
+                             value="#{payment.card}" 
+                             converter="omnifaces.SelectItemsConverter"
+                             disabled="#{payment.paymentMethodType ne 'CREDIT_CARD'}">
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{menu['select-one']}" />
+                <f:selectItems var="creditCard"
+                               itemValue="#{creditCard}"
+                               value="#{movementBean.creditCards}"
+                               itemLabel="#{creditCard.readableName}"/>
+            </p:selectOneMenu>
+        </div>
+        <div class="col-sm-12 form-group"
+             jsf:rendered="#{not movementBean.movement.revenue}">
+            <p:outputLabel for="inDebitCard" 
+                           value="#{messages['payment.form.debit-card']}: "/>
+            <p:selectOneMenu id="inDebitCard" 
+                             value="#{payment.card}" 
+                             converter="omnifaces.SelectItemsConverter"
+                             disabled="#{payment.paymentMethodType ne 'DEBIT_CARD'}">
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{menu['select-one']}" />
+                <f:selectItems var="debitCard"
+                               itemValue="#{debitCard}"
+                               value="#{movementBean.debitCards}"
+                               itemLabel="#{debitCard.readableName}"/>
+            </p:selectOneMenu>
+        </div>
+    </div>
+</ui:composition>

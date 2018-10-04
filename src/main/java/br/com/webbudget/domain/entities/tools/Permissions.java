@@ -166,6 +166,13 @@ public class Permissions implements Serializable {
     @PermissionGrouper("refueling")
     private final String REFUELING_DETAIL = "refueling:detail";
 
+    @Getter
+    @PermissionGrouper("transference")
+    private final String TRANSFERENCE_ACCESS = "transference:access";
+    @Getter
+    @PermissionGrouper("transference")
+    private final String TRANSFERENCE_TRANSFER = "transference:transfer";
+
 //    @Getter
 //    @PermissionGrouper("movement")
 //    private final String MOVEMENT_ACCESS = "movement:access";
@@ -213,13 +220,6 @@ public class Permissions implements Serializable {
 //    @Getter
 //    @PermissionGrouper("card-invoice")
 //    private final String CARD_INVOICE_HISTORIC = "card-invoice:historic";
-
-//    @Getter
-//    @PermissionGrouper("balance-transference")
-//    private final String BALANCE_TRANSFERENCE_ACCESS = "balance-transference:access";
-//    @Getter
-//    @PermissionGrouper("balance-transference")
-//    private final String BALANCE_TRANSFERENCE_MAKE = "balance-transference:make";
 //
 //    @Getter
 //    @PermissionGrouper("closing")

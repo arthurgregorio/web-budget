@@ -1,0 +1,88 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:h="http://xmlns.jcp.org/jsf/html"
+          id="contactDialog"
+          width="700"
+          modal="true" 
+          position="top"
+          resizable="false" 
+          closeOnEscape="true"
+          styleClass="margin-t-30"
+          widgetVar="dialogContact" 
+          header="#{messages['contact.dialog.title']}">
+
+    <h:form id="contactForm">
+
+        <p:focus context="inFilter"/>
+        <p:defaultCommand target="btSearch"/>
+
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <div class="input-group">
+                    <p:inputText id="inFilter" 
+                                 style="z-index: 0"
+                                 styleClass="form-control"
+                                 value="#{movementBean.contactFilter}" 
+                                 placeholder="#{messages['filter.contact']}"/>
+                    <div class="input-group-btn">
+                        <p:commandLink id="btSearch"
+                                       process="contactForm"
+                                       value="#{menu['search']}"
+                                       styleClass="btn btn-flat btn-warning"
+                                       action="#{movementBean.filterContactsList()}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <p:dataTable id="contactsList" 
+                             rows="15"
+                             var="contact"
+                             paginator="true"
+                             rowKey="#{contact.id}"
+                             selectionMode="single"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{movementBean.contacts}"
+                             emptyMessage="#{messages['list.empty']}"
+                             selection="#{movementBean.movement.contact}">
+
+                    <p:ajax event="rowSelect" 
+                            listener="#{movementBean.onContactSelect()}" />
+
+                    <p:column headerText="#{messages['contact.list.name']}">
+                        #{contact.name}
+                    </p:column>
+                    <p:column width="20%" 
+                              styleClass="align-center"
+                              headerText="#{messages['contact.list.type']}">
+                        #{enums[contact.contactType]}
+                    </p:column>
+                    <p:column width="20%" 
+                              styleClass="align-center"
+                              headerText="#{messages['contact.list.document']}">
+                        #{contact.documentFormated}
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </div>
+    </h:form>
+</p:dialog>

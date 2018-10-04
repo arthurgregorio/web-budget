@@ -1,0 +1,146 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/mainTemplate.xhtml">
+
+    <ui:param name="activeMenu" value="cardInvoice"/>
+    <ui:param name="activeSubmenu" value="historic"/>
+
+    <f:metadata>
+        <f:viewAction action="#{invoiceHistoricBean.initialize()}"/>
+    </f:metadata>
+
+    <ui:define name="pageTitle">
+        #{messages['invoice-historic.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['invoice-historic.page-description']}
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li><a href="#">#{breadcrumb['financial']}</a></li>
+        <li><a href="#">#{breadcrumb['financial.card-invoices']}</a></li>
+        <li class="active">
+            <a href="cardInvoiceHistoric.xhtml">#{breadcrumb['financial.card-invoices.historic']}</a>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="row">
+            <div class="col-md-12">
+                <p:messages id="messages" closable="true" />
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header with-border row">
+                <h:form id="controlsForm" prependId="false">
+                    <p:defaultCommand target="btSearch"/>
+                    <div class="col-xs-4">
+                        <div class="input-group">
+                            <p:selectOneMenu id="inCards" 
+                                             value="#{invoiceHistoricBean.card}"
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{menu['select-one']}" />
+                                <f:selectItems var="card"
+                                               itemValue="#{card}"
+                                               itemLabel="#{card.readableName}"
+                                               value="#{invoiceHistoricBean.cards}"/>
+                            </p:selectOneMenu>
+                            <div class="input-group-btn">
+                                <p:spacer width="10"/>
+                                <p:commandButton id="btSearch"
+                                                 update="invoicesList"
+                                                 value="#{menu['search']}"
+                                                 styleClass="btn btn-flat btn-info" />
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+            <div jsf:id="boxBody" class="box-body">
+                <p:dataTable id="invoicesList" 
+                             rows="15"
+                             lazy="true"
+                             var="invoice"
+                             rowHover="true"
+                             paginator="true"
+                             sortOrder="descending"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             emptyMessage="#{messages['list.empty']}"
+                             value="#{invoiceHistoricBean.cardInvoicesModel}">
+
+                    <p:column width="20%" 
+                              style="text-align: center"
+                              headerText="#{messages['invoice-historic.list.generation']}">
+                        <h:outputText value="#{invoice.inclusion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText> 
+                    </p:column>
+                    <p:column style="text-align: center"
+                              headerText="#{messages['invoice-historic.list.identification']}">
+                        #{invoice.identification}
+                    </p:column>
+                    <p:column style="text-align: center"
+                              headerText="#{messages['invoice-historic.list.movement']}">
+                        <p:link value="#{invoice.movement.code}" 
+                                href="#{invoiceHistoricBean.changeToViewMovement(invoice.movement.id)}"/>
+                    </p:column>
+                    <p:column style="text-align: center"
+                              headerText="#{messages['invoice-historic.list.period']}">
+                        #{invoice.financialPeriod.identification}
+                    </p:column>
+                    <p:column style="text-align: center"
+                              headerText="#{messages['invoice-historic.list.total']}">
+                        <h:outputText value="#{invoice.total}">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                        </h:outputText>
+                    </p:column>
+                    <p:column width="12%" 
+                              style="text-align: center"
+                              headerText="#{menu['actions']}">
+                        <p:commandButton immediate="true"
+                                         icon="fa fa-search"
+                                         title="#{menu['detail']}"
+                                         styleClass="btn btn-flat btn-default"
+                                         action="#{invoiceHistoricBean.changeToDetail(invoice)}" />
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </div>
+
+        <p:blockUI block="boxBody"
+                   widgetVar="listBlock"
+                   trigger="invoicesList">
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget" 
+                            name="img/loading.gif" />
+        </p:blockUI>
+    </ui:define>
+</ui:composition>

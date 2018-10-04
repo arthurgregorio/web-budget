@@ -107,24 +107,6 @@ public class Wallet extends PersistentEntity {
     }
 
     /**
-     * The bank account of this wallet
-     *
-     * @return the {@link String} with the bank account information of this wallet
-     */
-    public String getAccountFormatted() { // FIXME verify
-
-        final StringBuilder builder = new StringBuilder();
-
-        builder.append(this.agency);
-        builder.append(" ");
-        builder.append(this.account);
-        builder.append("-");
-        builder.append(this.digit);
-
-        return builder.toString();
-    }
-
-    /**
      * To check if the balance of this wallet is nagative
      *
      * @return <code>true</code> for negative balance, <code>false</code> otherwise
