@@ -32,22 +32,17 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 import static br.com.webbudget.application.components.NavigationManager.Parameter.of;
 
 /**
- * The abstract form controller, this class hold all the commom functionalities
- * that a single form will have.
+ * The abstract form controller, this class hold all the basic features that a single form will have such as lazy
+ * loading support for primefaces data tables with the {@link LazyDataProvider}
  *
- * This class already implement the lazy loading support for primefaces with
- * the implementation of the {@link LazyDataProvider}
- *
- * @param <T> the type to be manipulated with this controller, needs to be a
- * class of the domain model child of the {@link PersistentEntity}
+ * @param <T> the type to be manipulated by this controller, must be a domain entity child of {@link PersistentEntity}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 28/03/2018
  */
-public abstract class FormBean<T extends PersistentEntity> extends AbstractBean
-        implements LazyDataProvider<T> {
+public abstract class FormBean<T extends PersistentEntity> extends AbstractBean implements LazyDataProvider<T> {
 
     @Getter
     @Setter

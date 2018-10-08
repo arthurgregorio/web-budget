@@ -17,6 +17,7 @@
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -40,7 +41,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form id="transferenceForm">
+        <h:form id="transferenceForm" prependId="false">
             <div class="row">
                 <div class="col-md-12">
                     <p:messages id="messages" closable="true"/>
@@ -49,64 +50,88 @@
             <div class="box box-#{profileBean.currentThemeColorName}">
                 <div class="box-body">
                     <div class="row">
-                        <div class="form-group col-md-2">
-                            <p:outputLabel for="inTransferDate"
-                                           value="#{messages['transference.form.transfer-date']}: "/>
-                            <p:calendar id="inTransferDate"
-                                        mask="true"
-                                        pattern="dd/MM/yyyy"
-                                        converter="localDateConverter"
-                                        value="#{transferenceBean.transference.transferDate}" />
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <p:outputLabel for="inTransferDate"
+                                                   value="#{messages['transference.form.transfer-date']}: "/>
+                                    <p:calendar id="inTransferDate"
+                                                mask="true"
+                                                pattern="dd/MM/yyyy"
+                                                converter="localDateConverter"
+                                                value="#{transferenceBean.transference.transferDate}"/>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <p:outputLabel for="inValue"
+                                                   value="#{messages['transference.form.value']}: "/>
+                                    <p:inputNumber id="inValue"
+                                                   symbol="R$ "
+                                                   decimalPlaces="2"
+                                                   decimalSeparator=","
+                                                   thousandSeparator="."
+                                                   value="#{transferenceBean.transference.value}">
+                                        <p:keyFilter regEx="/[0-9_,]/i"/>
+                                        <f:converter converterId="javax.faces.BigDecimal"/>
+                                    </p:inputNumber>
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <p:outputLabel for="inReason"
+                                                   value="#{messages['transference.form.description']}:"/>
+                                    <p:inputTextarea id="inReason"
+                                                     styleClass="form-control"
+                                                     value="#{transferenceBean.transference.description}"
+                                                     placeholder="#{messages['transference.form.description-placeholder']}"/>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-2 form-group">
-                            <p:outputLabel for="inValue"
-                                           value="#{messages['transference.form.value']}: "/>
-                            <p:inputNumber id="inValue"
-                                           symbol="R$ "
-                                           decimalPlaces="2"
-                                           decimalSeparator=","
-                                           thousandSeparator="."
-                                           value="#{transferenceBean.transference.value}">
-                                <p:keyFilter regEx="/[0-9_,]/i"/>
-                                <f:converter converterId="javax.faces.BigDecimal"/>
-                            </p:inputNumber>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <p:outputLabel for="inOrigin"
-                                           value="#{messages['transference.form.origin']}: "/>
-                            <p:selectOneMenu id="inOrigin"
-                                             converter="omnifaces.SelectItemsConverter"
-                                             value="#{transferenceBean.transference.origin}">
-                                <f:selectItem itemValue="#{null}"
-                                              itemLabel="#{menu['select-one']}"/>
-                                <f:selectItems var="wallet"
-                                               itemValue="#{wallet}"
-                                               itemLabel="#{wallet.description}"
-                                               value="#{transferenceBean.wallets}"/>
-                            </p:selectOneMenu>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <p:outputLabel for="inDestination"
-                                           value="#{messages['transference.form.destination']}: "/>
-                            <p:selectOneMenu id="inDestination"
-                                             converter="omnifaces.SelectItemsConverter"
-                                             value="#{transferenceBean.transference.destination}">
-                                <f:selectItem itemValue="#{null}"
-                                              noSelectionOption="true"
-                                              itemLabel="#{menu['select-one']}"/>
-                                <f:selectItems var="wallet"
-                                               itemValue="#{wallet}"
-                                               itemLabel="#{wallet.description}"
-                                               value="#{transferenceBean.wallets}"/>
-                            </p:selectOneMenu>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <p:outputLabel for="inReason"
-                                           value="#{messages['transference.form.description']}:"/>
-                            <p:inputTextarea id="inReason"
-                                             styleClass="form-control"
-                                             value="#{transferenceBean.transference.description}"
-                                             placeholder="#{messages['transference.form.description-placeholder']}"/>
+                        <div class="col-md-6">
+                            <div class="col-md-6 form-group">
+                                <p:outputLabel for="inOrigin"
+                                               value="#{messages['transference.form.origin']}: "/>
+                                <p:selectOneMenu id="inOrigin"
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 value="#{transferenceBean.transference.origin}">
+                                    <p:ajax event="change"
+                                            update="originBalanceBox"/>
+                                    <f:selectItem itemValue="#{null}"
+                                                  itemLabel="#{menu['select-one']}"/>
+                                    <f:selectItems var="wallet"
+                                                   itemValue="#{wallet}"
+                                                   itemLabel="#{wallet.description}"
+                                                   value="#{transferenceBean.wallets}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <p:outputLabel for="inDestination"
+                                               value="#{messages['transference.form.destination']}: "/>
+                                <p:selectOneMenu id="inDestination"
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 value="#{transferenceBean.transference.destination}">
+                                    <p:ajax event="change"
+                                            update="destinationBalanceBox"/>
+                                    <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
+                                                  itemLabel="#{menu['select-one']}"/>
+                                    <f:selectItems var="wallet"
+                                                   itemValue="#{wallet}"
+                                                   itemLabel="#{wallet.description}"
+                                                   value="#{transferenceBean.wallets}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div jsf:id="originBalanceBox" class="col-md-6 align-center">
+                                #{messages['transference.form.actual-balance']}
+                                <h:outputText styleClass="actual-balance #{transferenceBean.transference.originNegative ? 'text-red' : 'text-green'}"
+                                              value="#{transferenceBean.transference.originBalance}">
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                </h:outputText>
+                            </div>
+                            <div jsf:id="destinationBalanceBox" class="col-md-6 align-center">
+                                #{messages['transference.form.actual-balance']}
+                                <h:outputText styleClass="actual-balance #{transferenceBean.transference.destinationNegative ? 'text-red' : 'text-green'}"
+                                              value="#{transferenceBean.transference.destinationBalance}">
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                </h:outputText>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,6 +140,12 @@
                                      value="#{menu['transfer']}"
                                      styleClass="btn btn-flat btn-success"
                                      actionListener="#{transferenceBean.doTransference()}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton immediate="true"
+                                     update="transferenceForm"
+                                     value="#{menu['historic']}"
+                                     styleClass="btn btn-flat btn-primary"
+                                     action="#{transferenceBean.changeToHistoric()}"/>
                 </div>
             </div>
         </h:form>

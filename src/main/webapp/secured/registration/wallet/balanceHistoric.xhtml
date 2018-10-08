@@ -46,21 +46,14 @@
     </ui:define>
 
     <ui:define name="content">
-
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <p:messages id="messages" closable="true"/>
-            </div>
-        </div>
-
-        <div jsf:id="timelineBox" class="box-empty">
+        <div class="box-empty">
             <div class="row">
                 <div class="col-md-12 align-center"
-                     jsf:rendered="#{empty balanceHistoricBean.walletBalances}">
+                     jsf:rendered="#{empty balanceHistoricBean.walletBalanceDates}">
                     <h3>#{messages['balance-historic.no-historic']}</h3>
                 </div>
                 <div class="col-md-12"
-                     jsf:rendered="#{not empty balanceHistoricBean.walletBalances}">
+                     jsf:rendered="#{not empty balanceHistoricBean.walletBalanceDates}">
                     <p:dataScroller chunkSize="5"
                                     var="movementDate"
                                     value="#{balanceHistoricBean.walletBalanceDates}">
@@ -80,11 +73,11 @@
                                        jsf:rendered="#{balance.balanceType eq 'CREDIT'}"/>
                                     <div class="timeline-item" style="margin-right: 0">
                                         <span class="time">
-                                            <i class="fa fa-clock-o"/>
+                                            <i class="fa fa-clock"/>
                                             <p:spacer width="5"/>
                                             #{messages['balance-historic.movement-date']}:
-                                            <h:outputText value="#{movementDate}">
-                                                <f:converter converterId="localDateConverter"/>
+                                            <h:outputText value="#{balance.movementDateTime}">
+                                                <f:converter converterId="localDateTimeConverter"/>
                                             </h:outputText>
                                         </span>
                                         <h3 class="timeline-header">

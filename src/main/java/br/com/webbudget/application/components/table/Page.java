@@ -57,7 +57,7 @@ public class Page<T extends PersistentEntity> {
      * 
      * @return the empty page
      */
-    public static Page empty() {
+    public static <V extends PersistentEntity> Page<V> empty() {
         return new Page<>(Collections.emptyList(), 0);
     }
     

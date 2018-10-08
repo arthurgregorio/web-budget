@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.financial;
+package br.com.webbudget.domain.validators.financial.transference;
 
 import br.com.webbudget.domain.entities.financial.Transference;
-import br.com.webbudget.domain.repositories.DefaultRepository;
-import org.apache.deltaspike.data.api.Repository;
+import br.com.webbudget.domain.validators.BusinessValidator;
 
 /**
- * The {@link Transference} repository
+ * {@link Transference} validator facade for save actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 03/10/2018
+ * @since 3.0.0, 06/10/2018
  */
-@Repository
-public interface TransferenceRepository extends DefaultRepository<Transference> { }
+public interface TransferenceSavingValidator extends BusinessValidator<Transference> { }

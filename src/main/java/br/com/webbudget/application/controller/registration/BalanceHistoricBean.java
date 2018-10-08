@@ -43,12 +43,12 @@ import java.util.stream.Collectors;
 @ViewScoped
 public class BalanceHistoricBean extends AbstractBean {
 
+    private List<WalletBalance> walletBalances;
+
     @Getter
     private Wallet wallet;
     @Getter
     private List<LocalDate> walletBalanceDates;
-    @Getter
-    private List<WalletBalance> walletBalances;
 
     @Inject
     private WalletRepository walletRepository;
@@ -61,7 +61,6 @@ public class BalanceHistoricBean extends AbstractBean {
     public void initialize(long walletId) {
         this.wallet = this.walletRepository.findOptionalById(walletId).orElseGet(Wallet::new);
         this.walletBalances = this.walletBalanceRepository.findByWallet_id(walletId);
-
         this.processBalanceDates();
     }
 
@@ -70,7 +69,7 @@ public class BalanceHistoricBean extends AbstractBean {
      */
     private void processBalanceDates() {
         this.walletBalanceDates = this.walletBalances.stream()
-                .sorted(Comparator.comparing(WalletBalance::getMovementDate))
+                .sorted(Comparator.comparing(WalletBalance::getMovementDateTime))
                 .map(WalletBalance::getMovementDate)
                 .distinct()
                 .sorted(Comparator.reverseOrder())
@@ -86,6 +85,7 @@ public class BalanceHistoricBean extends AbstractBean {
     public List<WalletBalance> balancesByDate(LocalDate movementDate) {
         return this.walletBalances.stream()
                 .filter(balance -> balance.getMovementDate().equals(movementDate))
+                .sorted(Comparator.comparing(WalletBalance::getMovementDateTime).reversed())
                 .collect(Collectors.toList());
     }
 }

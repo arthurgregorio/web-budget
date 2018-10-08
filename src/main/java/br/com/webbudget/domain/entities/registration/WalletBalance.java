@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
@@ -71,8 +72,8 @@ public class WalletBalance extends PersistentEntity {
     private String observations;
     @Getter
     @Setter
-    @Column(name = "movement_date", nullable = false)
-    private LocalDate movementDate;
+    @Column(name = "movement_date_time", nullable = false)
+    private LocalDateTime movementDateTime;
 
     @Getter
     @Setter
@@ -109,24 +110,36 @@ public class WalletBalance extends PersistentEntity {
     }
 
     /**
+     * Helper method to get only the day of the movementation
      *
-     * @return
+     * @return the day only
+     */
+    public LocalDate getMovementDate() {
+        return this.movementDateTime.toLocalDate();
+    }
+
+    /**
+     * Helper to check if the old balance is negative
+     *
+     * @return true if is, false if not
      */
     public boolean isOldBalanceNegative() {
         return this.oldBalance.signum() < 0;
     }
 
     /**
+     * Helper to check if the actual balance is negative
      *
-     * @return
+     * @return true if is, false if not
      */
     public boolean isActualBalanceNegative() {
         return this.actualBalance.signum() < 0;
     }
 
     /**
+     * Helper to check if the movemented value is negative
      *
-     * @return
+     * @return true if is, false if not
      */
     public boolean isMovementedValueNegative() {
         return this.movementedValue.signum() < 0;

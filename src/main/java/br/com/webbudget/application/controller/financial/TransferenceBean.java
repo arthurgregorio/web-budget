@@ -19,8 +19,8 @@ package br.com.webbudget.application.controller.financial;
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entities.financial.Transference;
 import br.com.webbudget.domain.entities.registration.Wallet;
-import br.com.webbudget.domain.repositories.financial.TransferenceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
+import br.com.webbudget.domain.services.TransferenceService;
 import lombok.Getter;
 
 import javax.faces.view.ViewScoped;
@@ -48,8 +48,9 @@ public class TransferenceBean extends AbstractBean {
 
     @Inject
     private WalletRepository walletRepository;
+
     @Inject
-    private TransferenceRepository transferenceRepository;
+    private TransferenceService transferenceService;
 
     /**
      * Initialize the UI
@@ -60,10 +61,20 @@ public class TransferenceBean extends AbstractBean {
     }
 
     /**
-     * Use this method to validate and save the transference
+     * Use this method to make the transference
      */
     public void doTransference() {
-        this.transferenceRepository.save(this.transference);
+        this.transferenceService.transfer(this.transference);
+        this.transference = new Transference();
         this.addInfo(true, "info.transference.done");
+    }
+
+    /**
+     * Navigate to the historic page
+     *
+     * @return the path to the historic page
+     */
+    public String changeToHistoric() {
+        return "transferenceHistoric.xhtml?faces-redirect=true";
     }
 }

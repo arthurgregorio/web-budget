@@ -23,6 +23,7 @@ import br.com.webbudget.domain.entities.registration.WalletBalance;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Builder to work with the {@link WalletBalance}
@@ -41,7 +42,7 @@ public final class WalletBalanceBuilder {
      */
     private WalletBalanceBuilder() {
         this.walletBalance = new WalletBalance();
-        this.walletBalance.setMovementDate(LocalDate.now());
+        this.walletBalance.setMovementDateTime(LocalDateTime.now());
     }
     
     /**
@@ -111,8 +112,8 @@ public final class WalletBalanceBuilder {
      * @param movementDate the movement date
      * @return this builder
      */
-    public WalletBalanceBuilder withMovementDate(LocalDate movementDate) {
-        this.walletBalance.setMovementDate(movementDate);
+    public WalletBalanceBuilder withMovementDate(LocalDateTime movementDate) {
+        this.walletBalance.setMovementDateTime(movementDate);
         return this;
     }
 

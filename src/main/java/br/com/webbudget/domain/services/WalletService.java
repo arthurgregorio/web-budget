@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,11 +108,8 @@ public class WalletService {
      */
     @Transactional
     public void delete(Wallet wallet) {
-
         final List<WalletBalance> balances = this.walletBalanceRepository.findByWallet_id(wallet.getId());
-
         balances.forEach(balance -> this.walletBalanceRepository.removeAndFlush(balance));
-
         this.walletRepository.attachAndRemove(wallet);
     }
 
@@ -141,7 +138,7 @@ public class WalletService {
      * @param builder the builder with the balance historic
      */
     @Transactional
-    public void updateWalletBalance(WalletBalanceBuilder builder) {
+    private void updateWalletBalance(WalletBalanceBuilder builder) {
 
         final WalletBalance walletBalance = builder.build();
 

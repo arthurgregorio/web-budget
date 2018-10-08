@@ -21,7 +21,7 @@
 .wb-logo-prefix {
     color: #007fff;
 }
-.wb-logo-sufix {
+.wb-logo-suffix {
     color: black;
 }
 
@@ -46,6 +46,12 @@
 .wallet-status-label {
     position: relative;
     top: 8px;
+}
+
+/*actual balance box on the transference form*/
+.actual-balance {
+    font-size: 40px;
+    display: inherit;
 }
 
 /*theme selection block*/
