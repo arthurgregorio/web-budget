@@ -59,25 +59,22 @@ public class ProductionInitializer implements EnvironmentInitializer {
 
         checkNotNull(this.dataSource, "No datasource found for migrations");
 
-        final Flyway flyway = new Flyway();
-
-        flyway.setDataSource(this.dataSource);
-
-        flyway.setLocations("db/migration");
-        flyway.setBaselineOnMigrate(true);
+        final Flyway flyway = Flyway.configure()
+                .baselineOnMigrate(true)
+                .baselineVersion("0")
+                .dataSource(this.dataSource)
+                .locations("db/migrations").load();
 
         final MigrationInfo migrationInfo = flyway.info().current();
 
         if (migrationInfo == null) {
             this.logger.info("No existing database at the actual datasource");
         } else {
-            this.logger.info("Found a database with the version: {}", migrationInfo.getVersion()
-                    + " : " + migrationInfo.getDescription());
+            this.logger.info("Current versions {}", migrationInfo.getVersion() + " : " + migrationInfo.getDescription());
         }
 
         flyway.migrate();
 
-        this.logger.info("Successfully migrated to database version: {}",
-                flyway.info().current().getVersion());
+        this.logger.info("Successfully migrated to version: {}", flyway.info().current().getVersion());
     }
 }
