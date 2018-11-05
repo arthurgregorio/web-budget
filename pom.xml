@@ -301,7 +301,7 @@
 
     <profiles>
         <profile>
-            <id>ALPHA</id>
+            <id>alpha</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -319,7 +319,7 @@
             </properties>
         </profile>
         <profile>
-            <id>BETA</id>
+            <id>beta</id>
             <properties>
                 <application.version>${project.version}-BETA</application.version>
                 <skip.tests>false</skip.tests>
@@ -334,7 +334,22 @@
             </properties>
         </profile>
         <profile>
-            <id>RELEASE</id>
+            <id>release-candidate</id>
+            <properties>
+                <application.version>${project.version}-RC</application.version>
+                <skip.tests>false</skip.tests>
+                <project.stage>Production</project.stage>
+                <orm.show_sql>false</orm.show_sql>
+                <orm.ddl_auto>none</orm.ddl_auto>
+                <ldap.enabled>false</ldap.enabled>
+                <ldap.url>ldap://localhost</ldap.url>
+                <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
+                <ldap.user>CN=binduser,OU=Aplicacoes,DC=arthurgregorio,DC=eti,DC=br</ldap.user>
+                <ldap.password>minha-senha</ldap.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>release</id>
             <properties>
                 <application.version>${project.version}-RELEASE</application.version>
                 <skip.tests>false</skip.tests>
