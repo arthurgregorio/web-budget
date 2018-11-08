@@ -29,7 +29,7 @@
       xmlns:pe="http://primefaces.org/ui/extensions">
 
     <h:head>
-        <title>webBudget</title>
+        <title>#{messages['application.name']}</title>
 
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -57,14 +57,6 @@
     </h:head>
 
     <h:body styleClass="hold-transition layout-top-nav wysihtml5-supported #{profileBean.currentTheme}">
-
-        <!--        <h:form>
-                    <p:remoteCommand autoRun="true"
-                                     name="updateMessages" 
-                                     update="userMessagesBox"
-                                     actionListener="#{messagingBean.updateMessageStatus()}"/>
-                </h:form>-->
-
         <div class="wrapper">
             <header class="main-header">
                 <nav class="navbar navbar-static-top">
@@ -84,73 +76,6 @@
                     </div>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
-                            <!--                            <li jsf:id="userMessagesBox" class="dropdown messages-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-envelope-o"></i>
-                                    <span jsf:rendered="#{messagingBean.newMessages ne 0}"
-                                          class="label label-danger">#{messagingBean.newMessages}</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header align-center">
-                                        <o:outputFormat rendered="#{messagingBean.newMessages ne 0}"
-                                                        value="#{messages['message-box.tip']}">
-                                            <f:param value="#{messagingBean.newMessages}"/>
-                                        </o:outputFormat>
-                                        <span jsf:rendered="#{messagingBean.newMessages eq 0}">
-                            #{messages['message-box.no-messages']}
-                        </span>
-                    </li>
-                    <li>
-                        <ul class="menu">
-                            <ui:repeat value="#{messagingBean.unreadMessages}" var="unreadMessage">
-                                <li>
-                                    <p:link outcome="/main/tools/messaging/received/detailReceivedMessage.xhtml">
-                                        <f:param name="id" value="#{unreadMessage.id}"/>
-                                        <f:param name="viewState" value="DETAILING"/>
-                                        <f:param name="faces-redirect" value="true"/>
-                                        <div class="pull-left">
-                                            <img class="img-circle"
-                                                 src="#{resource['webbudget:img/ui-icon-high.svg']}"
-                                                 jsf:rendered="#{unreadMessage.priority eq 'HIGH'}"/>
-                                            <img class="img-circle"
-                                                 src="#{resource['webbudget:img/ui-icon-medium.svg']}"
-                                                 jsf:rendered="#{unreadMessage.priority eq 'MEDIUM'}"/>
-                                            <img class="img-circle"
-                                                 src="#{resource['webbudget:img/ui-icon-low.svg']}"
-                                                 jsf:rendered="#{unreadMessage.priority eq 'LOW'}"/>
-                                        </div>
-                                        <h4>
-                            #{of:abbreviate(unreadMessage.title, 20)}
-                            <small>
-                                <i class="fa fa-clock-o"></i> 
-                                <p:spacer width="5"/>
-                                <o:outputFormat value="#{messages['message-box.hours']}"
-                                                rendered="#{unreadMessage.timeUnit eq 'message-box.hours'}">
-                                    <f:param value="#{unreadMessage.elapsedTime}"/>
-                                </o:outputFormat>
-                                <o:outputFormat value="#{messages['message-box.minutes']}"
-                                                rendered="#{unreadMessage.timeUnit eq 'message-box.minutes'}">
-                                    <f:param value="#{unreadMessage.elapsedTime}"/>
-                                </o:outputFormat>
-                                <o:outputFormat value="#{messages['message-box.date']}"
-                                                rendered="#{unreadMessage.timeUnit eq null}">
-                                    <f:param value="#{unreadMessage.elapsedTime}"/>
-                                </o:outputFormat>
-                            </small>
-                        </h4>
-                        <p>#{of:abbreviate(unreadMessage.content, 48)}</p>
-                    </p:link>
-                </li>
-            </ui:repeat>
-        </ul>
-    </li>
-    <li class="footer">
-        <p:link href="/main/tools/messaging/received/listReceivedMessages.xhtml">
-            <span>#{menu['tools.messaging.view-received']}</span>
-        </p:link>
-    </li>
-</ul>
-</li>-->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <pe:gravatar id="userImage"
@@ -220,15 +145,6 @@
         </div>
 
         <ui:insert name="popups" />
-
-        <script type="text/javascript">
-            var messagesChannel = new WebSocket("#{utilsBean.messagesChannel}");
-            messagesChannel.onmessage = function (message) {
-                if (message.data === "newMessage") {
-                    updateMessages();
-                }
-            };
-        </script>
 
         <h:outputScript library="bootstrap" name="js/bootstrap.min.js" target="head"/>
         <h:outputScript library="adminlte" name="js/adminlte.min.js" target="head"/>

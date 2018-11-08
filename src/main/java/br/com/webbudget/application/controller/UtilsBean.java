@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Utilities controller to provide common functionalities to all the pages in the application
+ * Utilities controller to provide common functionality to all the pages in the application
  * 
  * @author Arthur Gregorio
  *

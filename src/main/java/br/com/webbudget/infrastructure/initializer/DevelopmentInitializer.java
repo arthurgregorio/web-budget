@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.infrastructure.initializer;
 
-import br.com.webbudget.domain.entities.tools.*;
+import br.com.webbudget.domain.entities.configuration.*;
 import br.com.webbudget.domain.repositories.tools.AuthorizationRepository;
 import br.com.webbudget.domain.repositories.tools.GrantRepository;
 import br.com.webbudget.domain.repositories.tools.GroupRepository;

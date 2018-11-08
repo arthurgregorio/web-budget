@@ -115,8 +115,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
      */
     private void goToErrorPage(FacesContext context, Throwable ex) {
 
-        final HttpServletRequest request = (HttpServletRequest)
-                context.getExternalContext().getRequest();
+        final HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
         request.setAttribute(ERROR_EXCEPTION + "_stacktrace", ex);
 
@@ -131,8 +130,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 
         final String errorPage = getErrorPage(ex);
 
-        context.getApplication().getNavigationHandler()
-                .handleNavigation(context, null, errorPage);
+        context.getApplication().getNavigationHandler().handleNavigation(context, null, errorPage);
 
         context.renderResponse();
     }

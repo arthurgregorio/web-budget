@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.validators.tools.group;
 
-import br.com.webbudget.domain.entities.tools.Group;
+import br.com.webbudget.domain.entities.configuration.Group;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.validators.BusinessValidator;
 
@@ -41,7 +41,7 @@ public class DeleteAdminGroupValidator implements GroupDeletingValidator {
     @Override
     public void validate(Group value) {
         if (value.isAdministrator()) {
-            throw BusinessLogicException.create("error.group.delete-administrator");
+            throw new BusinessLogicException("error.group.delete-administrator");
         }
     }
 }

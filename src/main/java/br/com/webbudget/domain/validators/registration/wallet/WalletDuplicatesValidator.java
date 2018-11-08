@@ -45,7 +45,7 @@ public class WalletDuplicatesValidator implements WalletSavingValidator, WalletU
     private void validateNotSaved(Wallet value) {
         final Optional<Wallet> found = this.find(value.getName(), value.getWalletType());
         found.ifPresent(movementClass -> {
-            throw BusinessLogicException.create("error.wallet.duplicated");
+            throw new BusinessLogicException("error.wallet.duplicated");
         });
     }
 
@@ -57,7 +57,7 @@ public class WalletDuplicatesValidator implements WalletSavingValidator, WalletU
     private void validateSaved(Wallet value) {
         final Optional<Wallet> found = this.find(value.getName(), value.getWalletType());
         if (found.isPresent() && found.get().equals(value)) {
-            throw BusinessLogicException.create("error.wallet.duplicated");
+            throw new BusinessLogicException("error.wallet.duplicated");
         }
     }
 

@@ -8,5 +8,5 @@ CREATE SCHEMA journal_audit;
 CREATE SCHEMA registration;
 CREATE SCHEMA registration_audit;
 
-CREATE SCHEMA tools;
-CREATE SCHEMA tools_audit;
+CREATE SCHEMA configuration;
+CREATE SCHEMA configuration_audit;

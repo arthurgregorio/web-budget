@@ -32,6 +32,9 @@ import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.JOURNAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.JOURNAL_AUDIT;
+
 /**
  * Classe que representa o combustivel utilizado no abastecimento
  *
@@ -42,10 +45,10 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Audited
-@Table(name = "fuels")
 @ToString(callSuper = true)
-@AuditTable(value = "audit_fuels")
 @EqualsAndHashCode(callSuper = true)
+@Table(name = "fuels", schema = JOURNAL)
+@AuditTable(value = "audit_fuels", schema = JOURNAL_AUDIT)
 public class Fuel extends PersistentEntity {
 
     @Getter

@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
- * This is a utility class to help the process of get some configurations on the system properties file
+ * This is a utility class to help the process of get some configuration from the system properties file
  *
  * @author Arthur Gregorio
  *

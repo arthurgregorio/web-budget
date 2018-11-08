@@ -29,7 +29,7 @@ public class WalletValidator implements TransferenceSavingValidator {
         final Wallet destination = value.getDestination();
 
         if (origin.equals(destination)) {
-            throw BusinessLogicException.create("error.transference.same-wallet");
+            throw new BusinessLogicException("error.transference.same-wallet");
         }
     }
 }

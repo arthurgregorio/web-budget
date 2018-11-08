@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.validators.tools.group;
 
-import br.com.webbudget.domain.entities.tools.Group;
+import br.com.webbudget.domain.entities.configuration.Group;
 import br.com.webbudget.domain.validators.BusinessValidator;
 
 /**

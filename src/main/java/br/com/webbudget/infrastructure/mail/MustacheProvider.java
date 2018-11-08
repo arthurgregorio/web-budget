@@ -76,7 +76,7 @@ public class MustacheProvider implements MailContentProvider {
         try {
             this.mustache.execute(writer, this.data).flush();
         } catch (IOException ex) {
-            throw BusinessLogicException.create("error.email.content-error", ex);
+            throw new BusinessLogicException("error.email.content-error", ex);
         }
 
         return writer.toString();

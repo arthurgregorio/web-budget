@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.validators.tools.user;
 
-import br.com.webbudget.domain.entities.tools.User;
+import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.domain.validators.BusinessValidator;
@@ -51,7 +51,7 @@ public class UsernameValidator implements UserSavingValidator {
                 .findOptionalByUsername(value.getUsername());
 
         if (usernameOptional.isPresent()) {
-            throw BusinessLogicException.create("error.user.username-duplicated");
+            throw new BusinessLogicException("error.user.username-duplicated");
         }
     }
 }

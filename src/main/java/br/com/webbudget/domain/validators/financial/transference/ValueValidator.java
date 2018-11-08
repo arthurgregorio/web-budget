@@ -24,7 +24,7 @@ public class ValueValidator implements TransferenceSavingValidator {
     @Override
     public void validate(Transference value) {
         if (value.getValue().signum() < 0) {
-            throw BusinessLogicException.create("error.transference.negative-value");
+            throw new BusinessLogicException("error.transference.negative-value");
         }
     }
 }

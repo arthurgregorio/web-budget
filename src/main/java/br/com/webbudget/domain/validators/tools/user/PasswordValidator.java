@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.validators.tools.user;
 
-import br.com.webbudget.domain.entities.tools.StoreType;
-import br.com.webbudget.domain.entities.tools.User;
+import br.com.webbudget.domain.entities.configuration.StoreType;
+import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.domain.validators.BusinessValidator;
@@ -70,7 +70,7 @@ public class PasswordValidator implements UserSavingValidator, UserUpdatingValid
 
         if (value.hasChangedPasswords()) {
             if (!value.isPasswordValid()) {
-                throw BusinessLogicException.create("error.user.password-not-match");
+                throw new BusinessLogicException("error.user.password-not-match");
             }
             value.setPassword(this.cryptPassword(value.getPassword()));
         } else {
@@ -83,7 +83,7 @@ public class PasswordValidator implements UserSavingValidator, UserUpdatingValid
      */
     private void validateUnsavedUserPassword(User value) {
         if (!value.isPasswordValid()) {
-            throw BusinessLogicException.create("error.user.password-not-match");
+            throw new BusinessLogicException("error.user.password-not-match");
         }
         value.setPassword(this.passwordEncoder.encryptPassword(value.getPassword()));
     }

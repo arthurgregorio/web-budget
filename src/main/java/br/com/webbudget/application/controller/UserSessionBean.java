@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.domain.entities.tools.User;
+import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.infrastructure.cdi.qualifiers.AuthenticatedUser;
 import lombok.Getter;

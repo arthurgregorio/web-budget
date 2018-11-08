@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.tools;
 
-import br.com.webbudget.domain.entities.tools.Message;
+import br.com.webbudget.domain.entities.configuration.Message;
 import org.apache.deltaspike.data.api.EntityRepository;
 
 /**

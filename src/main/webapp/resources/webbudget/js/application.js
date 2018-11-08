@@ -2,7 +2,7 @@ $(function () {
     'use strict'
 
     /**
-     * Function to setup all the configurations of the template
+     * Function to setup all the configuration of the template
      */
     function setup() {
         // use this to instantly change the sidebar color

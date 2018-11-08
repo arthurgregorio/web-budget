@@ -61,7 +61,7 @@ public class CardDuplicatesValidator implements CardSavingValidator, CardUpdatin
     private void validateNotSaved(Card value) {
         final Optional<Card> found = this.find(value.getNumber(), value.getCardType());
         found.ifPresent(movementClass -> {
-            throw BusinessLogicException.create("error.card.duplicated");
+            throw new BusinessLogicException("error.card.duplicated");
         });
     }
 
@@ -73,7 +73,7 @@ public class CardDuplicatesValidator implements CardSavingValidator, CardUpdatin
     private void validateSaved(Card value) {
         final Optional<Card> found = this.find(value.getNumber(), value.getCardType());
         if (found.isPresent() && found.get().equals(value)) {
-            throw BusinessLogicException.create("error.card.duplicated");
+            throw new BusinessLogicException("error.card.duplicated");
         }
     }
 

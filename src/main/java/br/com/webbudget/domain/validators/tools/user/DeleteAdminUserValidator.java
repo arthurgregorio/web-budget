@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.validators.tools.user;
 
-import br.com.webbudget.domain.entities.tools.User;
+import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.validators.BusinessValidator;
 import br.com.webbudget.infrastructure.cdi.qualifiers.AuthenticatedUser;
@@ -51,12 +51,12 @@ public class DeleteAdminUserValidator implements UserDeletingValidator {
 
         // prevent to delete you own user 
         if (principalUsername.equals(value.getUsername())) {
-            throw BusinessLogicException.create("error.user.delete-principal");
+            throw new BusinessLogicException("error.user.delete-principal");
         }
 
         // prevent to delete the main admin
         if (value.isAdministrator()) {
-            throw BusinessLogicException.create("error.user.delete-administrator");
+            throw new BusinessLogicException("error.user.delete-administrator");
         }
     }
 }

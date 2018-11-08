@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.tools;
 
-import br.com.webbudget.domain.entities.tools.Configuration;
+import br.com.webbudget.domain.entities.configuration.Configuration;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 

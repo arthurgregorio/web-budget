@@ -72,7 +72,7 @@ public class MovementClassBudgetValidator implements MovementClassSavingValidato
 
             // if the desired value is lower than the available, throw a exception
             if (available.compareTo(value.getBudget()) < 0) {
-                throw BusinessLogicException.create("error.movement-class.no-budget",
+                throw new BusinessLogicException("error.movement-class.no-budget",
                         "R$ " + String.format("%10.2f", available));
             }
         }

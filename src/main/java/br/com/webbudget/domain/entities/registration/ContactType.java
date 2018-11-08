@@ -65,7 +65,7 @@ public enum ContactType {
         try {
             this.validator.assertValid(document.replace("\\w", ""));
         } catch (Exception ex) {
-            throw BusinessLogicException.create("error.contact.invalid-document");
+            throw new BusinessLogicException("error.contact.invalid-document");
         }
     }
     

@@ -53,17 +53,17 @@ public class FinancialPeriodDatesValidator implements FinancialPeriodSavingValid
         final Long total = this.financialPeriodRepository.validatePeriodDates(start, end);
 
         if (total > 0) {
-            throw BusinessLogicException.create("error.financial-period.colliding-dates");
+            throw new BusinessLogicException("error.financial-period.colliding-dates");
         }
 
         // validate the start and the end date
         if (start.isAfter(end)) {
-            throw BusinessLogicException.create("error.financial-period.invalid-start-end");
+            throw new BusinessLogicException("error.financial-period.invalid-start-end");
         }
 
         // if the end date is before the current date, show error
         if (end.isBefore(LocalDate.now())) {
-            throw BusinessLogicException.create("error.financial-period.invalid-end");
+            throw new BusinessLogicException("error.financial-period.invalid-end");
         }
     }
 }

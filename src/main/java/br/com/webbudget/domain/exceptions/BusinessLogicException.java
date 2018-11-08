@@ -62,37 +62,4 @@ public class BusinessLogicException extends RuntimeException {
         super(message, throwable);
         this.parameters = parameters;
     }
-
-    /**
-     * Create a new instance of this exception
-     *
-     * @param message the message to be used
-     * @return this exception
-     */
-    public static BusinessLogicException create(String message) {
-        return new BusinessLogicException(message);
-    }
-
-    /**
-     * Create a new instance of this exception
-     *
-     * @param message the message to be used
-     * @param parameters the parameters to be passed to the message
-     * @return this exception
-     */
-    public static BusinessLogicException create(String message, Object... parameters) {
-        return new BusinessLogicException(message, parameters);
-    }
-
-    /**
-     * Create a new instance of this exception
-     *
-     * @param message the message to be used
-     * @param throwable the {@link Throwable} of this exception
-     * @param parameters the parameters to be passed to the message
-     * @return this exception
-     */
-    public static BusinessLogicException create(String message, Throwable throwable, Object... parameters) {
-        return new BusinessLogicException(message, throwable, parameters);
-    }
 }

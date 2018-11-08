@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.validators.tools.user;
 
-import br.com.webbudget.domain.entities.tools.User;
+import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.domain.validators.BusinessValidator;
@@ -55,7 +55,7 @@ public class UserMailValidator implements UserSavingValidator, UserUpdatingValid
             final User found = userOptional.get();
             
             if (!found.getUsername().equals(value.getUsername())) {
-                throw BusinessLogicException.create("error.user.email-duplicated");
+                throw new BusinessLogicException("error.user.email-duplicated");
             }
         }
     }

@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.application.controller.tools.ProfileBean.PasswordChangeDTO;
-import br.com.webbudget.domain.entities.tools.*;
+import br.com.webbudget.application.controller.configuration.ProfileBean.PasswordChangeDTO;
+import br.com.webbudget.domain.entities.configuration.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.*;
 import br.com.webbudget.domain.validators.tools.group.GroupDeletingValidator;

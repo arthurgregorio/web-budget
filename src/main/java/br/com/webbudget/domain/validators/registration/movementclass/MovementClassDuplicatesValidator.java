@@ -61,7 +61,7 @@ public class MovementClassDuplicatesValidator implements MovementClassSavingVali
     private void validateNotSaved(MovementClass value) {
         final Optional<MovementClass> found = this.find(value.getName(), value.getCostCenter().getName());
         found.ifPresent(movementClass -> {
-            throw BusinessLogicException.create("error.movement-class.duplicated");
+            throw new BusinessLogicException("error.movement-class.duplicated");
         });
     }
 
@@ -73,7 +73,7 @@ public class MovementClassDuplicatesValidator implements MovementClassSavingVali
     private void validateSaved(MovementClass value) {
         final Optional<MovementClass> found = this.find(value.getName(), value.getCostCenter().getName());
         if (found.isPresent() && found.get().equals(value)) {
-            throw BusinessLogicException.create("error.movement-class.duplicated");
+            throw new BusinessLogicException("error.movement-class.duplicated");
         }
     }
 

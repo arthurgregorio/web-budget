@@ -45,6 +45,6 @@ public class LicensePlateValidator implements VehicleSavingValidator {
     @Override
     public void validate(Vehicle value) {
         this.vehicleRepository.findOptionalByLicensePlate(value.getLicensePlate())
-                .ifPresent(vehicle -> BusinessLogicException.create("error.vehicle.duplicated"));
+                .ifPresent(vehicle -> new BusinessLogicException("error.vehicle.duplicated"));
     }
 }

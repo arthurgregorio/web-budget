@@ -48,7 +48,7 @@ public class CostCenterDuplicatesValidator implements CostCenterSavingValidator 
     public void validate(CostCenter value) {
         final Optional<CostCenter> found = this.costCenterRepository.findOptionalByName(value.getName());
         found.ifPresent(costCenter -> {
-            throw BusinessLogicException.create("error.cost-center.duplicated");
+            throw new BusinessLogicException("error.cost-center.duplicated");
         });
     }
 }

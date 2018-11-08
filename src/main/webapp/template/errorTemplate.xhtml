@@ -25,7 +25,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
-        <title>webBudget</title>
+        <title>#{messages['application.name']}</title>
 
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -47,7 +47,7 @@
 
         <style type="text/css">
             .content-wrapper {
-                margin-left: 0px;
+                margin-left: 0;
                 padding: 5% 15%;
             }
         </style>
@@ -58,42 +58,36 @@
             <div class="content-wrapper">
                 <section class="content">
                     <div class="error-page" style="width: 100%;">
-                        <ui:insert name="headline"/>
+                        <ui:insert name="headline" />
                         <div class="error-content">
                             <h3>
-                                <ui:insert name="message"/>
+                                <ui:insert name="message" />
                             </h3>
-                            <p>
-                                <ui:insert name="details"/>
+                            <div>
+                                <ui:insert name="details" />
                                 <ul>
                                     <li><b>#{messages['exception.requested-uri']}:</b> <a
                                             href="#{requestScope['javax.servlet.error.request_uri']}">#{requestScope['javax.servlet.error.request_uri']}</a>
                                     </li>
-                                    <li>
-                                        <b>#{messages['exception.is-ajax']}:</b> #{facesContext.partialViewContext.ajaxRequest ? menu['yes'] : menu['no']}
-                                    </li>
-                                    <li>
-                                        <b>#{messages['exception.status']}:</b> #{requestScope['javax.servlet.error.status_code']}
-                                    </li>
+                                    <li><b>#{messages['exception.is-ajax']}:</b> #{facesContext.partialViewContext.ajaxRequest ? menu['yes'] : menu['no']}</li>
+                                    <li><b>#{messages['exception.status']}:</b> #{requestScope['javax.servlet.error.status_code']}</li>
                                     <li jsf:rendered="#{not empty requestScope['javax.servlet.error.exception_type']}">
                                         <b>#{messages['exception.type']}:</b> #{requestScope['javax.servlet.error.exception_type']}
                                     </li>
-                                    <li>
-                                        <b>#{messages['exception.message']}:</b> #{requestScope['javax.servlet.error.message']}
-                                    </li>
+                                    <li><b>#{messages['exception.message']}:</b> #{requestScope['javax.servlet.error.message']}</li>
                                 </ul>
-                            </p>
+                            </div>
                             <p>
                                 <a href="/secured/dashboard.xhtml">#{messages['exception.return-dashboard']}</a>
                             </p>
-                            <p jsf:rendered="#{not empty requestScope['javax.servlet.error.exception_stacktrace']}">
-                                #{messages['exception.stack']}:
+                            <div jsf:rendered="#{not empty requestScope['javax.servlet.error.exception_stacktrace']}">
+                                #{messages['exception.stack']}
                                 <div style="overflow: auto;">
-                                        <pre>
-                                            #{of:printStackTrace(requestScope['javax.servlet.error.exception_stacktrace'])}
-                                        </pre>
+                                    <pre>
+                                        #{of:printStackTrace(requestScope['javax.servlet.error.exception_stacktrace'])}
+                                    </pre>
                                 </div>
-                            </p>
+                            </div>
                         </div>
                     </div>
                 </section>

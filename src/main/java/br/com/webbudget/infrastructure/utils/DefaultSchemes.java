@@ -10,9 +10,9 @@ package br.com.webbudget.infrastructure.utils;
  */
 public interface DefaultSchemes {
 
-    // the tools
-    String TOOLS = "tools";
-    String TOOLS_AUDIT = "tools_audit";
+    // the configuration
+    String CONFIGURATION = "configuration";
+    String CONFIGURATION_AUDIT = "configuration_audit";
 
     // the registration schema
     String REGISTRATION = "registration";

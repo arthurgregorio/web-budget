@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.repositories.tools;
 
-import br.com.webbudget.domain.entities.tools.Group;
-import br.com.webbudget.domain.entities.tools.Group_;
+import br.com.webbudget.domain.entities.configuration.Group;
+import br.com.webbudget.domain.entities.configuration.Group_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;

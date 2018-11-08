@@ -34,15 +34,15 @@ import javax.enterprise.context.ApplicationScoped;
 public class PathSecurityConfiguration implements HttpSecurityConfiguration {
 
     /**
-     * @return the HTTP security configurations for the application path's
+     * @return the HTTP security configuration for the application path's
      */
     @Override
     public HttpSecurityBuilder configureHttpSecurity() { // TODO add all the secured paths to here
 
         final HttpSecurityBuilder builder = new PermissionHttpSecurityBuilder();
 
-        builder.add("/secured/tools/users/**", "user:access", true)
-                .add("/secured/tools/groups/**", "group:access", true);
+        builder.add("/secured/configuration/users/**", "user:access", true)
+                .add("/secured/configuration/groups/**", "group:access", true);
 
         return builder;
     }

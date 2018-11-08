@@ -44,7 +44,7 @@ public class CardTypeValidator implements CardSavingValidator, CardUpdatingValid
         final CardType cardType = value.getCardType();
 
         if (cardType == CardType.DEBIT && value.getWallet() == null) {
-            throw BusinessLogicException.create("error.card.no-wallet");
+            throw new BusinessLogicException("error.card.no-wallet");
         }
     }
 }

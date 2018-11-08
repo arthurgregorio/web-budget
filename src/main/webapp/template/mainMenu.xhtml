@@ -72,12 +72,6 @@
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['journal']} <span class="caret" /></a>
             <ul class="dropdown-menu" role="menu">
-                <!--<li jsf:rendered="#{userSessionBean.isPermitted(permissions.RECORDS_ACCESS)}">-->
-                    <!--<p:link outcome="/main/journal/entries/listItems.xhtml">-->
-                        <!--<i class="fa fa-pencil" />-->
-                        <!--<span>#{menu['journal.records']}</span>-->
-                    <!--</p:link>-->
-                <!--</li>-->
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.REFUELING_ACCESS)}">
                     <p:link outcome="/secured/journal/refueling/listRefuelings.xhtml">
                         <i class="fa fa-gas-pump" />
@@ -130,26 +124,20 @@
         </li>
 
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['tools']} <span class="caret" /></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{menu['configuration']} <span class="caret" /></a>
             <ul class="dropdown-menu" role="menu">
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.GROUP_ACCESS)}">
-                    <p:link outcome="/secured/tools/group/listGroups.xhtml">
+                    <p:link outcome="/secured/configuration/group/listGroups.xhtml">
                         <i class="fa fa-users" />
-                        <span>#{menu['tools.groups']}</span>
+                        <span>#{menu['configuration.groups']}</span>
                     </p:link>
                 </li>
                 <li jsf:rendered="#{userSessionBean.isPermitted(permissions.USER_ACCESS)}">
-                    <p:link outcome="/secured/tools/user/listUsers.xhtml">
+                    <p:link outcome="/secured/configuration/user/listUsers.xhtml">
                         <i class="fa fa-user-plus" />
-                        <span>#{menu['tools.users']}</span>
+                        <span>#{menu['configuration.users']}</span>
                     </p:link>
                 </li>
-                <!--<li jsf:rendered="#{userSessionBean.isPermitted(permissions.CONFIGURATION_ACCESS)}">-->
-                    <!--<p:link outcome="/main/tools/configuration/configurations.xhtml">-->
-                    <!--<i class="fa fa-gears" />-->
-                    <!--<span>#{menu['tools.configurations']}</span>-->
-                    <!--</p:link>-->
-                <!--</li>-->
             </ul>
         </li>
     </ul>

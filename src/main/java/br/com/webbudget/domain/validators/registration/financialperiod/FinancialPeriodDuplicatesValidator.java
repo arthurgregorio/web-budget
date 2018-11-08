@@ -46,7 +46,7 @@ public class FinancialPeriodDuplicatesValidator implements FinancialPeriodSaving
     public void validate(FinancialPeriod value) {
         this.financialPeriodRepository.findOptionalByIdentification(value.getIdentification())
                 .ifPresent(movementClass -> {
-                    throw BusinessLogicException.create("error.financial-period.duplicated");
+                    throw new BusinessLogicException("error.financial-period.duplicated");
                 });
     }
 }
