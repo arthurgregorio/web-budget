@@ -50,7 +50,7 @@ public interface DefaultRepository<T extends PersistentEntity> extends EntityRep
      * @param id the id to search
      * @return the entity in a optional state
      */
-    Optional<T> findOptionalById(Long id);
+    Optional<T> findById(Long id);
 
     /**
      * Generic search method with lazy pagination support

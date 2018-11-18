@@ -68,7 +68,7 @@ public class WalletBean extends FormBean<Wallet> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.value = this.walletRepository.findOptionalById(id).orElseGet(Wallet::new);
+        this.value = this.walletRepository.findById(id).orElseGet(Wallet::new);
     }
 
     /**

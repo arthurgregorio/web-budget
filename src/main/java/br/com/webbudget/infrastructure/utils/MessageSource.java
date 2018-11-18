@@ -40,8 +40,7 @@ public final class MessageSource {
     static {
         final FacesContext facesContext = FacesContext.getCurrentInstance();
         
-        MESSAGES = ResourceBundle.getBundle("i18n.messages", 
-                facesContext.getApplication().getDefaultLocale());
+        MESSAGES = ResourceBundle.getBundle("i18n.messages", facesContext.getApplication().getDefaultLocale());
         
         LOG = LoggerFactory.getLogger(MessageSource.class);
     }

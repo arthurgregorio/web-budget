@@ -17,8 +17,7 @@
 package br.com.webbudget.infrastructure.utils;
 
 /**
- * Class that's generate sequences of random codes to use in unique 
- * identifications of certain objects of this project
+ * Class that's generate sequences of random codes to use in unique identifications of certain objects of this project
  *
  * @author Arthur Gregorio
  *

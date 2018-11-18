@@ -43,7 +43,7 @@ public interface VehicleRepository extends DefaultRepository<Vehicle> {
      * @param licensePlate the license plate of the vehicle to find
      * @return an {@link Optional} of the {@link Vehicle}
      */
-    Optional<Vehicle> findOptionalByLicensePlate(String licensePlate);
+    Optional<Vehicle> findByLicensePlate(String licensePlate);
     
     /**
      * Method to find by the last registered odometer for a given {@link Vehicle}

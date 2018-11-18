@@ -42,7 +42,7 @@ public interface CostCenterRepository extends DefaultRepository<CostCenter> {
      * @param name the of the {@link CostCenter} to find
      * @return an {@link Optional} of the {@link CostCenter}
      */
-    Optional<CostCenter> findOptionalByName(String name);
+    Optional<CostCenter> findByName(String name);
     
     /**
      * {@inheritDoc}

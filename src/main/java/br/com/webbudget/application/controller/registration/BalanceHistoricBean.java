@@ -59,7 +59,7 @@ public class BalanceHistoricBean extends AbstractBean {
      * Initialize the view with the balances of the give wallet
      */
     public void initialize(long walletId) {
-        this.wallet = this.walletRepository.findOptionalById(walletId).orElseGet(Wallet::new);
+        this.wallet = this.walletRepository.findById(walletId).orElseGet(Wallet::new);
         this.walletBalances = this.walletBalanceRepository.findByWallet_id(walletId);
         this.processBalanceDates();
     }

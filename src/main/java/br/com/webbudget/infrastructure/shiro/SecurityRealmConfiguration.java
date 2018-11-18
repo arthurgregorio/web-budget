@@ -20,18 +20,20 @@ import br.com.webbudget.domain.services.UserAccountService;
 import br.eti.arthurgregorio.shiroee.auth.AuthenticationMechanism;
 import br.eti.arthurgregorio.shiroee.auth.DatabaseAuthenticationMechanism;
 import br.eti.arthurgregorio.shiroee.config.RealmConfiguration;
+import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
 import br.eti.arthurgregorio.shiroee.config.ldap.LdapUserProvider;
 import br.eti.arthurgregorio.shiroee.realm.JdbcSecurityRealm;
 import br.eti.arthurgregorio.shiroee.realm.LdapSecurityRealm;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.realm.Realm;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The main security configuration of this application.
@@ -47,9 +49,10 @@ import org.apache.shiro.realm.Realm;
 @ApplicationScoped
 public class SecurityRealmConfiguration implements RealmConfiguration {
 
-    private Set<Realm> realms;     
+    private Set<Realm> realms;
+
     private CacheManager cacheManager;
-    private AuthenticationMechanism mechanism;    
+    private AuthenticationMechanism<UserDetails> mechanism;
     
     @Inject
     private LdapUserProvider ldapUserProvider;
@@ -65,8 +68,7 @@ public class SecurityRealmConfiguration implements RealmConfiguration {
         this.realms = new HashSet<>();
         this.cacheManager = new EhCacheManager();
         
-        this.mechanism = new DatabaseAuthenticationMechanism(
-                this.userAccountService);
+        this.mechanism = new DatabaseAuthenticationMechanism(this.userAccountService);
         
         this.configureJdbcRealm();
         this.configureLdapRealm();
@@ -102,8 +104,7 @@ public class SecurityRealmConfiguration implements RealmConfiguration {
      */
     private void configureLdapRealm() {
                 
-        final LdapSecurityRealm realm = new LdapSecurityRealm(
-                this.ldapUserProvider, this.mechanism);
+        final LdapSecurityRealm realm = new LdapSecurityRealm(this.ldapUserProvider, this.mechanism);
         
         realm.setCachingEnabled(true);
         realm.setCacheManager(this.cacheManager);

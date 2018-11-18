@@ -92,8 +92,7 @@ public class GroupBean extends FormBean<Group> {
 
         this.createAuthorizationsTree();
 
-        this.value = this.groupRepository.findOptionalById(id)
-                .orElseGet(Group::new);
+        this.value = this.groupRepository.findById(id).orElseGet(Group::new);
 
         if (this.viewState != ViewState.ADDING) {
             this.selectAuthorizations();

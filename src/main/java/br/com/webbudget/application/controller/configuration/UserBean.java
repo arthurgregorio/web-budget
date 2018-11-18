@@ -84,7 +84,7 @@ public class UserBean extends FormBean<User> {
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.groups = this.groupRepository.findAllActive();
-        this.value = this.userRepository.findOptionalById(id).orElseGet(User::new);
+        this.value = this.userRepository.findById(id).orElseGet(User::new);
     }
 
     /**
@@ -164,8 +164,6 @@ public class UserBean extends FormBean<User> {
         this.value.setUsername(userDetails.getSAMAccountName());
         this.value.setEmail(userDetails.getMail());
         this.value.setName(userDetails.getName());
-
-
     }
 
     /**

@@ -27,8 +27,7 @@ import java.io.Serializable;
 /**
  * The default implementation of a entity in the application.
  *
- * Every entity should extend this class to have the default behaviors of a
- * JPA entity
+ * Every entity should extend this class to have the default behaviors of a JPA entity
  *
  * @author Arthur Gregorio
  *

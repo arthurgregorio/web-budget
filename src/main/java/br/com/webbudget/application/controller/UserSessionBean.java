@@ -55,13 +55,11 @@ public class UserSessionBean implements Serializable {
     @PostConstruct
     protected void initialize() {
 
-        final String principalUsername = String.valueOf(
-                this.getSubject().getPrincipal());
+        final String principalUsername = String.valueOf(this.getSubject().getPrincipal());
 
         this.principal = this.userRepository
-                .findOptionalByUsername(principalUsername)
-                .orElseThrow(() -> new AuthenticationException(String.format(
-                        "User %s has no local user", principalUsername)));
+                .findByUsername(principalUsername)
+                .orElseThrow(() -> new AuthenticationException(String.format("User %s has no local user", principalUsername)));
     }
 
     /**

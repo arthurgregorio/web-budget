@@ -45,7 +45,7 @@ public interface ContactRepository extends DefaultRepository<Contact> {
      */
     @Override
     @EntityGraph(value = "Contact.withTelephones")
-    Optional<Contact> findOptionalById(Long id);
+    Optional<Contact> findById(Long id);
 
     /**
      * {@inheritDoc}

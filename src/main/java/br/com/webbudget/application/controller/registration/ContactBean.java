@@ -75,7 +75,7 @@ public class ContactBean extends FormBean<Contact> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.value = this.contactRepository.findOptionalById(id).orElseGet(Contact::new);
+        this.value = this.contactRepository.findById(id).orElseGet(Contact::new);
     }
 
     /**

@@ -46,7 +46,7 @@ public interface MovementClassRepository extends DefaultRepository<MovementClass
      * @param costCenterName the name of the cost center
      * @return a {@link Optional} of {@link MovementClass}
      */
-    Optional<MovementClass> findOptionalByNameAndCostCenter_name(String name, String costCenterName);
+    Optional<MovementClass> findByNameAndCostCenter_name(String name, String costCenterName);
     
     /**
      * Find a {@link MovementClass} by the type and the cost center id

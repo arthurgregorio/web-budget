@@ -65,9 +65,8 @@ public class RecoverPasswordService {
     public void recover(String email) {
 
         final User user = this.userRepository
-                .findOptionalByEmailAndStoreType(email, StoreType.LOCAL)
-                .orElseThrow(() -> new BusinessLogicException(
-                        "error.recover-password.user-not-found"));
+                .findByEmailAndStoreType(email, StoreType.LOCAL)
+                .orElseThrow(() -> new BusinessLogicException("error.recover-password.user-not-found"));
 
         final String newPassword = RandomCode.alphanumeric(8);
 
@@ -82,11 +81,7 @@ public class RecoverPasswordService {
                 .withContent(this.buildContent(user, newPassword))
                 .build();
 
-        try {
-            this.mailSender.fire(mailMessage);
-        } catch (Exception ex) {
-            throw new BusinessLogicException("error.core.sending-mail-error");
-        }
+        this.mailSender.fire(mailMessage);
     }
 
     /**
@@ -98,11 +93,9 @@ public class RecoverPasswordService {
      */
     private MailContentProvider buildContent(User user, String newPassword) {
 
-        final MustacheProvider provider =
-                new MustacheProvider("recoverPassword.mustache");
+        final MustacheProvider provider = new MustacheProvider("recoverPassword.mustache");
 
-        final String date = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm")
-                .format(LocalDateTime.now());
+        final String date = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm").format(LocalDateTime.now());
 
         provider.addContent("title", MessageSource.get("recover-password.email.title"));
         provider.addContent("detail", MessageSource.get("recover-password.email.detail"));

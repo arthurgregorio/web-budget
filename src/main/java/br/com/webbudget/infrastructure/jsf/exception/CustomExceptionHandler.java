@@ -97,8 +97,8 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
             if (Exceptions.is(rootCause, BusinessLogicException.class)) {
                 this.handleBusinessException(context, (BusinessLogicException) rootCause);
                 return;
-            } else if (Exceptions.is(rootCause, ConstraintViolationException.class)) {
-                this.handleConstraintViolationException(context, (RollbackException) rootCause);
+            } else if (Exceptions.is(rootCause, RollbackException.class)) {
+                this.handleRollbackExceptionException(context, (RollbackException) rootCause);
                 return;
             }
 
@@ -177,7 +177,7 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
      * @param context the context
      * @param ex the exception to fill the details
      */
-    private void handleConstraintViolationException(FacesContext context, RollbackException ex) {
+    private void handleRollbackExceptionException(FacesContext context, RollbackException ex) {
 
         if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
             throw new FacesException(ex);

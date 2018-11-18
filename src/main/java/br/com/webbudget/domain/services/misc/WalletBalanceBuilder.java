@@ -73,7 +73,7 @@ public final class WalletBalanceBuilder {
      */
     public WalletBalanceBuilder value(BigDecimal value) {
 
-        // determine which type of financial movementation we are doing
+        // determine which type of financial movement we are doing
         if (value.signum() < 0) {
             this.walletBalance.setBalanceType(BalanceType.DEBIT);
         } else {
@@ -131,7 +131,7 @@ public final class WalletBalanceBuilder {
     /**
      * Build the balance
      * 
-     * @return the builded {@link WalletBalance} for the wallet
+     * @return the {@link WalletBalance} for the wallet
      */
     public WalletBalance build() {
         this.walletBalance.processBalances();

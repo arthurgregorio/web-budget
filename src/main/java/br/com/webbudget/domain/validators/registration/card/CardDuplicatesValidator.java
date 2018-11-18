@@ -34,7 +34,7 @@ import java.util.Optional;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class CardDuplicatesValidator implements CardSavingValidator, CardUpdatingValidator {
+public class CardDuplicatesValidator implements CardSavingBusinessLogic, CardUpdatingBusinessLogic {
 
     @Inject
     private CardRepository cardRepository;
@@ -45,7 +45,7 @@ public class CardDuplicatesValidator implements CardSavingValidator, CardUpdatin
      * @param value
      */
     @Override
-    public void validate(Card value) {
+    public void run(Card value) {
         if (value.isSaved()) {
             this.validateSaved(value);
         } else {
@@ -85,6 +85,6 @@ public class CardDuplicatesValidator implements CardSavingValidator, CardUpdatin
      * @return a {@link Optional} of the {@link Card}
      */
     private Optional<Card> find(String number, CardType cardType) {
-        return this.cardRepository.findOptionalByNumberAndCardType(number, cardType);
+        return this.cardRepository.findByNumberAndCardType(number, cardType);
     }
 }

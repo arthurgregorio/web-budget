@@ -116,13 +116,6 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean 
     }
 
     /**
-     * Update the default listing component, by default this component is named by "itemsListing"
-     */
-    public void updateListing() {
-        this.updateComponent("itemsListing");
-    }
-
-    /**
      * Clear the form filters
      */
     public void clearFilters() {

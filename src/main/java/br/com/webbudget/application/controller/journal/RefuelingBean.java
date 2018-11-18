@@ -94,7 +94,7 @@ public class RefuelingBean extends FormBean<Refueling> {
         this.financialPeriods = this.financialPeriodRepository
                 .findByClosed(false);
         
-        this.value = this.refuelingRepository.findOptionalById(id)
+        this.value = this.refuelingRepository.findById(id)
                 .orElseGet(Refueling::new);
         
         // if detailing or deleting, list the classes to fill up the field

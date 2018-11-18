@@ -40,7 +40,7 @@ import java.util.Optional;
 public interface FinancialPeriodRepository extends DefaultRepository<FinancialPeriod> {
 
     /**
-     * Method used to validate if the dates give are within other periods
+     * Method used to run if the dates give are within other periods
      *
      * @param start the date to start
      * @param end the date to end
@@ -65,7 +65,7 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
      * @param identification the identification of the {@link FinancialPeriod} to search
      * @return an {@link Optional} of the {@link FinancialPeriod}
      */
-    Optional<FinancialPeriod> findOptionalByIdentification(String identification);
+    Optional<FinancialPeriod> findByIdentification(String identification);
 
     /**
      * {@inheritDoc}

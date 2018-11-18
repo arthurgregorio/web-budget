@@ -42,7 +42,7 @@ public interface GroupRepository extends DefaultRepository<Group> {
      * @param name the name of the {@link Group} to search
      * @return an {@link Optional} of the {@link Group}
      */
-    Optional<Group> findOptionalByName(String name);
+    Optional<Group> findByName(String name);
     
     /**
      * {@inheritDoc}

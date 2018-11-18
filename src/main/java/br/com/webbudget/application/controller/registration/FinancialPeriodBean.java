@@ -72,7 +72,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.value = this.financialPeriodRepository.findOptionalById(id).orElseGet(FinancialPeriod::new);
+        this.value = this.financialPeriodRepository.findById(id).orElseGet(FinancialPeriod::new);
         this.checkForOpenPeriods();
     }
 

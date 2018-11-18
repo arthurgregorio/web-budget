@@ -44,7 +44,7 @@ public interface CardRepository extends DefaultRepository<Card> {
      * @param type the type of the card defined by the {@link CardType} enum
      * @return an {@link Optional} of the card
      */
-    Optional<Card> findOptionalByNumberAndCardType(String number, CardType type);
+    Optional<Card> findByNumberAndCardType(String number, CardType type);
     
     /**
      * {@inheritDoc}

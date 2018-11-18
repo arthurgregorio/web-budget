@@ -44,7 +44,7 @@ public interface WalletRepository extends DefaultRepository<Wallet> {
      * @param walletType the type of the wallet defined by the {@link WalletType} enum
      * @return an {@link Optional} of the wallet
      */
-    Optional<Wallet> findOptionalByNameAndWalletType(String name, WalletType walletType);
+    Optional<Wallet> findByNameAndWalletType(String name, WalletType walletType);
     
     /**
      * {@inheritDoc}

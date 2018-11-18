@@ -43,7 +43,7 @@ public interface UserRepository extends DefaultRepository<User> {
      * @param email the {@link User} email address to find
      * @return an {@link Optional} of the {@link User}
      */
-    Optional<User> findOptionalByEmail(String email);
+    Optional<User> findByEmail(String email);
     
     /**
      * Find an {@link User} by the email address and the {@link StoreType}
@@ -52,7 +52,7 @@ public interface UserRepository extends DefaultRepository<User> {
      * @param storeType the enum value of {@link StoreType}
      * @return an {@link Optional} of the {@link User}
      */
-    Optional<User> findOptionalByEmailAndStoreType(String email, StoreType storeType);
+    Optional<User> findByEmailAndStoreType(String email, StoreType storeType);
     
     /**
      * Find an {@link User} by the username
@@ -60,7 +60,7 @@ public interface UserRepository extends DefaultRepository<User> {
      * @param username the username to find the {@link User} object
      * @return an {@link Optional} of the {@link User}
      */
-    Optional<User> findOptionalByUsername(String username);
+    Optional<User> findByUsername(String username);
     
     /**
      * {@inheritDoc}

@@ -63,7 +63,7 @@ public class BalanceAdjustmentBean extends AbstractBean {
      * @param walletId the id of the {@link Wallet} to be loaded
      */
     public void initialize(long walletId) {
-        this.wallet = this.walletRepository.findOptionalById(walletId)
+        this.wallet = this.walletRepository.findById(walletId)
                 .orElseGet(Wallet::new);
     }
 

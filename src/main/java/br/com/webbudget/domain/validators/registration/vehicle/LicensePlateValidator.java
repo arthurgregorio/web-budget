@@ -32,7 +32,7 @@ import javax.inject.Inject;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class LicensePlateValidator implements VehicleSavingValidator {
+public class LicensePlateValidator implements VehicleSavingBusinessLogic {
 
     @Inject
     private VehicleRepository vehicleRepository;
@@ -43,8 +43,8 @@ public class LicensePlateValidator implements VehicleSavingValidator {
      * @param value
      */
     @Override
-    public void validate(Vehicle value) {
-        this.vehicleRepository.findOptionalByLicensePlate(value.getLicensePlate())
+    public void run(Vehicle value) {
+        this.vehicleRepository.findByLicensePlate(value.getLicensePlate())
                 .ifPresent(vehicle -> new BusinessLogicException("error.vehicle.duplicated"));
     }
 }
