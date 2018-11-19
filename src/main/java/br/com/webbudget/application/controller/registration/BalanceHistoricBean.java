@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entities.registration.Wallet;
-import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import lombok.Getter;

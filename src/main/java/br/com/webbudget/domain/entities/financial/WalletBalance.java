@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entities.registration;
+package br.com.webbudget.domain.entities.financial;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
+import br.com.webbudget.domain.entities.registration.Wallet;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,11 +31,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION;
-import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_AUDIT;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
 
 /**
- * The representation of a wallet balance in the application
+ * The entity representation of a wallet balance
  *
  * @author Arthur Gregorio
  *
@@ -45,8 +46,8 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_
 @Audited
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "wallet_balances", schema = REGISTRATION)
-@AuditTable(value = "wallet_balances", schema = REGISTRATION_AUDIT)
+@Table(name = "wallet_balances", schema = FINANCIAL)
+@AuditTable(value = "wallet_balances", schema = FINANCIAL_AUDIT)
 public class WalletBalance extends PersistentEntity {
 
     @Getter
@@ -59,16 +60,16 @@ public class WalletBalance extends PersistentEntity {
     private BigDecimal oldBalance;
     @Getter
     @Setter
-    @Column(name = "movemented_value", nullable = false)
-    @NotNull(message = "{wallet-balance.movemented-value}")
-    private BigDecimal movementedValue;
+    @Column(name = "transaction_value", nullable = false)
+    @NotNull(message = "{wallet-balance.transaction-value}")
+    private BigDecimal transactionValue;
     @Getter
     @Setter
     @Column(name = "movement_code")
     private String movementCode;
     @Getter
     @Setter
-    @Column(name = "observations", length = 255)
+    @Column(name = "observations", columnDefinition = "TEXT")
     private String observations;
     @Getter
     @Setter
@@ -102,15 +103,14 @@ public class WalletBalance extends PersistentEntity {
         
         // calculate the actual and the old balance
         this.oldBalance = this.wallet.getActualBalance();
-        this.actualBalance = (this.wallet.getActualBalance()
-                .add(this.movementedValue));
+        this.actualBalance = (this.wallet.getActualBalance().add(this.transactionValue));
         
-        // update the target wallet balance
+        // update the actual balance of wallet
         this.wallet.setActualBalance(this.actualBalance);
     }
 
     /**
-     * Helper method to get only the day of the movementation
+     * Helper method to get only the date of the transaction
      *
      * @return the day only
      */
@@ -121,7 +121,7 @@ public class WalletBalance extends PersistentEntity {
     /**
      * Helper to check if the old balance is negative
      *
-     * @return true if is, false if not
+     * @return true if is, false otherwise
      */
     public boolean isOldBalanceNegative() {
         return this.oldBalance.signum() < 0;
@@ -130,18 +130,18 @@ public class WalletBalance extends PersistentEntity {
     /**
      * Helper to check if the actual balance is negative
      *
-     * @return true if is, false if not
+     * @return true if is, false otherwise
      */
     public boolean isActualBalanceNegative() {
         return this.actualBalance.signum() < 0;
     }
 
     /**
-     * Helper to check if the movemented value is negative
+     * Helper to check if the transaction value is negative
      *
-     * @return true if is, false if not
+     * @return true if is, false otherwise
      */
-    public boolean isMovementedValueNegative() {
-        return this.movementedValue.signum() < 0;
+    public boolean isTransactionValueNegative() {
+        return this.transactionValue.signum() < 0;
     }
 }

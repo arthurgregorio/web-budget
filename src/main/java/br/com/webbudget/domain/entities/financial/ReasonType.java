@@ -14,20 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entities.registration;
+package br.com.webbudget.domain.entities.financial;
 
 /**
- * The enum with the possible directions of a {@link WalletBalance}
+ * The enum with the possible reasons to have a new {@link WalletBalance}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 26/04/2018
+ * @since 3.0.0, 19/08/2018
  */
-public enum BalanceType {
+public enum ReasonType {
 
-    DEBIT("balance-type.debit"),
-    CREDIT("balance-type.credit");
+    REVENUE("reason-type.revenue"),
+    EXPENSE("reason-type.expense"),
+    ADJUSTMENT("reason-type.adjustment"),
+    TRANSFERENCE("reason-type.transference"),;
 
     private final String description;
 
@@ -36,7 +38,7 @@ public enum BalanceType {
      *
      * @param description the description for this enum, also is the i18n key
      */
-    BalanceType(String description) {
+    ReasonType(String description) {
         this.description = description;
     }
 

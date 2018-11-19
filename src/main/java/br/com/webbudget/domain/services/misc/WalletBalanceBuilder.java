@@ -16,13 +16,12 @@
  */
 package br.com.webbudget.domain.services.misc;
 
-import br.com.webbudget.domain.entities.registration.BalanceType;
-import br.com.webbudget.domain.entities.registration.ReasonType;
+import br.com.webbudget.domain.entities.financial.BalanceType;
+import br.com.webbudget.domain.entities.financial.ReasonType;
 import br.com.webbudget.domain.entities.registration.Wallet;
-import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.financial.WalletBalance;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -80,7 +79,7 @@ public final class WalletBalanceBuilder {
             this.walletBalance.setBalanceType(BalanceType.CREDIT);
         }
 
-        this.walletBalance.setMovementedValue(value);
+        this.walletBalance.setTransactionValue(value);
         return this;
     }
     

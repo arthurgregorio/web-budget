@@ -17,8 +17,8 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.financial.Transference;
-import br.com.webbudget.domain.entities.registration.ReasonType;
-import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.financial.ReasonType;
+import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.repositories.financial.TransferenceRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
