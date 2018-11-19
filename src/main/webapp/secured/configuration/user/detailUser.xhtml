@@ -92,20 +92,10 @@
                     <div class="form-group col-md-4">
                         <p:outputLabel for="inUsername"
                                        value="#{messages['user.form.username']}" />
-                        <div class="input-group">
                             <p:inputText id="inUsername"
                                          styleClass="form-control"
                                          value="#{userBean.value.username}"
                                          readonly="#{userBean.viewState eq 'EDITING'}"/>
-                            <div class="input-group-btn">
-                                <p:commandButton update="userForm"
-                                                 icon="fa fa-search"
-                                                 process="@this, inUsername"
-                                                 styleClass="btn btn-flat btn-warning"
-                                                 actionListener="#{userBean.findUserOnLdap()}"
-                                                 disabled="#{userBean.value.storeType eq 'LOCAL'}"/>
-                            </div>
-                        </div>
                     </div>
                     <div class="form-group col-md-4">
                         <p:outputLabel for="inName"
