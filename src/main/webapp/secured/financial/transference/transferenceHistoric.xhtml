@@ -70,9 +70,9 @@
                                         <span class="time">
                                             <i class="fa fa-clock"/>
                                             <p:spacer width="5"/>
-                                            #{messages['transference-historic.transference-date']}:
-                                            <h:outputText value="#{transference.transferDate}">
-                                                <f:converter converterId="localDateConverter"/>
+                                            #{messages['transference-historic.operation-date']}:
+                                            <h:outputText value="#{transference.createdOn}">
+                                                <f:converter converterId="localDateTimeConverter"/>
                                             </h:outputText>
                                         </span>
                                         <h3 class="timeline-header">

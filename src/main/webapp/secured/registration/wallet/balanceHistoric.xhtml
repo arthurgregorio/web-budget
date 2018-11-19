@@ -76,7 +76,7 @@
                                             <i class="fa fa-clock"/>
                                             <p:spacer width="5"/>
                                             #{messages['balance-historic.movement-date']}:
-                                            <h:outputText value="#{balance.movementDateTime}">
+                                            <h:outputText value="#{balance.createdOn}">
                                                 <f:converter converterId="localDateTimeConverter"/>
                                             </h:outputText>
                                         </span>
@@ -88,10 +88,22 @@
                                                           value="#{enums[balance.balanceType]}"
                                                           rendered="#{balance.balanceType eq 'DEBIT'}"/>
                                             <p:spacer width="10"/>
-                                            <span class="label label-info" jsf:rendered="#{balance.reasonType eq 'ADJUSTMENT'}">#{enums[balance.reasonType]}</span>
-                                            <span class="label label-warning" jsf:rendered="#{balance.reasonType eq 'TRANSFERENCE'}">#{enums[balance.reasonType]}</span>
-                                            <span class="label label-success" jsf:rendered="#{balance.reasonType eq 'REVENUE'}">#{enums[balance.reasonType]}</span>
-                                            <span class="label label-danger" jsf:rendered="#{balance.reasonType eq 'EXPENSE'}">#{enums[balance.reasonType]}</span>
+                                            <span class="label label-info"
+                                                  jsf:rendered="#{balance.reasonType eq 'ADJUSTMENT'}">
+                                                #{enums[balance.reasonType]}
+                                            </span>
+                                            <span class="label label-warning"
+                                                  jsf:rendered="#{balance.reasonType eq 'TRANSFERENCE'}">
+                                                #{enums[balance.reasonType]}
+                                            </span>
+                                            <span class="label label-success"
+                                                  jsf:rendered="#{balance.reasonType eq 'REVENUE'}">
+                                                #{enums[balance.reasonType]}
+                                            </span>
+                                            <span class="label label-danger"
+                                                  jsf:rendered="#{balance.reasonType eq 'EXPENSE'}">
+                                                #{enums[balance.reasonType]}
+                                            </span>
                                         </h3>
                                         <div class="timeline-body">
                                             <div class="row">
@@ -107,7 +119,7 @@
                                                 <div class="col-sm-4">
                                                     <p:outputLabel value="#{messages['balance-historic.movemented-value']}"/>
                                                     <h4>
-                                                        <h:outputText value="#{balance.movementedValue}">
+                                                        <h:outputText value="#{balance.transactionValue}">
                                                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                                         </h:outputText>
                                                     </h4>

@@ -153,6 +153,12 @@
                         <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
+                            <p:commandButton icon="fa fa-wrench"
+                                             title="#{menu['balance-adjust']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{walletBean.changeToBalanceAdjustment(wallet.id)}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.WALLET_ADJUST_BALANCE)}"/>
+                            <p:spacer width="10" rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
