@@ -50,8 +50,15 @@ public class PathSecurityConfiguration implements HttpSecurityConfiguration {
 
         final HttpSecurityBuilder builder = new PermissionHttpSecurityBuilder();
 
-        builder.add("/secured/configuration/users/**", this.permissions.getUSER_ACCESS(), true)
-                .add("/secured/configuration/groups/**", this.permissions.getGROUP_ACCESS(), true);
+        builder.add("/secured/configuration/user/**", this.permissions.getUSER_ACCESS(), true)
+                .add("/secured/configuration/group/**", this.permissions.getGROUP_ACCESS(), true)
+                .add("/secured/registration/card/**", this.permissions.getCARD_ACCESS(), true)
+                .add("/secured/registration/vehicle/**", this.permissions.getVEHICLE_ACCESS(), true)
+                .add("/secured/registration/contact/**", this.permissions.getCONTACT_ACCESS(), true)
+                .add("/secured/registration/wallet/**", this.permissions.getWALLET_ACCESS(), true)
+                .add("/secured/registration/costCenter/**", this.permissions.getCOST_CENTER_ACCESS(), true)
+                .add("/secured/registration/financialPeriod/**", this.permissions.getFINANCIAL_PERIOD_ACCESS(), true)
+                .add("/secured/registration/movementClass/**", this.permissions.getMOVEMENT_CLASS_ACCESS(), true);
 
         return builder;
     }
