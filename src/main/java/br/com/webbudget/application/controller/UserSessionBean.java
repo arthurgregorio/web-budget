@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.domain.entities.configuration.Profile;
 import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.infrastructure.cdi.qualifiers.AuthenticatedUser;
@@ -45,6 +46,8 @@ public class UserSessionBean implements Serializable {
 
     @Getter
     private User principal;
+    @Getter
+    private Profile profile;
 
     @Inject
     private UserRepository userRepository;
@@ -60,6 +63,8 @@ public class UserSessionBean implements Serializable {
         this.principal = this.userRepository
                 .findByUsername(principalUsername)
                 .orElseThrow(() -> new AuthenticationException(String.format("User %s has no local user", principalUsername)));
+
+        this.profile = this.principal.getProfile();
     }
 
     /**

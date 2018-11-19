@@ -65,10 +65,11 @@
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{walletBean.filter.value}"
-                                             placeholder="#{messages['filter.card']}" />
+                                             placeholder="#{messages['filter.wallet']}" />
                                 <div class="input-group-btn">
                                     <p:commandButton id="btSearch"
-                                                     update="walletsGrid"
+                                                     process="@form"
+                                                     update="itemsList"
                                                      value="#{menu['search']}"
                                                      onstart="PF('blocker').show()"
                                                      oncomplete="PF('blocker').hide()"
@@ -76,9 +77,9 @@
                                     <p:spacer width="10"/>
                                     <p:commandButton icon="fa fa-trash"
                                                      onstart="PF('blocker').show()"
+                                                     update="itemsList controlsForm"
                                                      title="#{menu['filter-clear']}"
                                                      oncomplete="PF('blocker').hide()"
-                                                     update="walletsGrid controlsForm"
                                                      styleClass="btn btn-flat btn-danger"
                                                      actionListener="#{walletBean.clearFilters()}"/>
                                 </div>
@@ -96,86 +97,78 @@
                     </div>
                 </h:form>
             </div>
-        </div>
-        <p:dataGrid id="walletsGrid"
-                    rows="16"
-                    lazy="true"
-                    columns="4"
-                    var="wallet"
-                    layout="grid"
-                    paginator="true"
-                    rowKey="#{wallet.id}"
-                    sortOrder="ascending"
-                    paginatorPosition="bottom"
-                    paginatorAlwaysVisible="false"
-                    selection="#{walletBean.value}"
-                    value="#{walletBean.dataModel}"
-                    emptyMessage="#{messages['list.empty']}">
+            <div jsf:id="boxBody" class="box-body">
+                <h:form id="itemsList">
+                    <p:dataTable rows="15"
+                                 var="wallet"
+                                 lazy="true"
+                                 rowHover="true"
+                                 paginator="true"
+                                 rowKey="#{wallet.id}"
+                                 sortOrder="ascending"
+                                 selectionMode="single"
+                                 paginatorPosition="bottom"
+                                 paginatorAlwaysVisible="false"
+                                 selection="#{walletBean.value}"
+                                 value="#{walletBean.dataModel}"
+                                 emptyMessage="#{messages['list.empty']}">
 
-            <div class="box box-#{profileBean.currentThemeColorName}">
-                <div class="box-header with-border" style="text-align: center">
-                    <h3 class="box-title">#{wallet.description}</h3>
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            #{messages['wallet.list.balance']}
-                            <div class="box-tools pull-right">
-                                <p:commandLink immediate="true"
-                                               rendered="#{profileBean.profile.showWalletBalances}"
-                                               action="#{walletBean.changeToBalanceHistory(wallet.id)}"
-                                               styleClass="#{wallet.balanceNegative ? 'text-red' : 'text-green'}">
-                                    <h:outputText value="R$ #{wallet.actualBalance}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                    </h:outputText>
-                                </p:commandLink>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            #{messages['wallet.list.type']}
-                            <div class="box-tools pull-right">
-                                #{enums[wallet.walletType]}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="box-footer">
-                    <span class="label label-danger wallet-status-label"
-                          jsf:rendered="#{not wallet.active}">
-                        #{messages['list.inactive']}
-                    </span>
-                    <span class="label label-success wallet-status-label"
-                          jsf:rendered="#{wallet.active}">
-                        #{messages['list.active']}
-                    </span>
-                    <div class="box-tools pull-right">
-                        <p:commandButton icon="fa fa-wrench"
-                                         title="#{menu['balance-adjust']}"
-                                         styleClass="btn btn-flat btn-default"
-                                         action="#{walletBean.changeToBalanceAdjustment(wallet.id)}"
-                                         rendered="#{userSessionBean.isPermitted(permissions.WALLET_ADJUST_BALANCE)}"/>
-                        <p:spacer width="10"/>
-                        <p:commandButton icon="fa fa-edit"
-                                         title="#{menu['edit']}"
-                                         styleClass="btn btn-flat btn-default"
-                                         action="#{walletBean.changeToEdit(wallet.id)}"
-                                         rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
-                        <p:spacer width="10"/>
-                        <p:commandButton icon="fa fa-eye"
-                                         title="#{menu['detail']}"
-                                         styleClass="btn btn-flat btn-default"
-                                         action="#{walletBean.changeToDetail(wallet.id)}"
-                                         rendered="#{userSessionBean.isPermitted(permissions.WALLET_DETAIL)}"/>
-                        <p:spacer width="10"/>
-                        <p:commandButton icon="fa fa-eraser"
-                                         title="#{menu['delete']}"
-                                         styleClass="btn btn-flat btn-danger"
-                                         action="#{walletBean.changeToDelete(wallet.id)}"
-                                         rendered="#{userSessionBean.isPermitted(permissions.WALLET_DELETE)}"/>
-                    </div>
-                </div>
+                        <p:ajax event="rowSelect"
+                                listener="#{walletBean.changeToDetail()}"
+                                disabled="#{not userSessionBean.isPermitted(permissions.WALLET_DETAIL)}"/>
+
+                        <p:column headerText="#{messages['wallet.list.name']}">
+                            <p:graphicImage width="20"
+                                            height="20"
+                                            library="webbudget"
+                                            name="images/inactive.png"
+                                            rendered="#{not wallet.active}"
+                                            title="#{messages['list.inactive']}"/>
+                            <p:graphicImage width="20"
+                                            height="20"
+                                            library="webbudget"
+                                            name="images/active.png"
+                                            rendered="#{wallet.active}"
+                                            title="#{messages['list.active']}"/>
+                            <p:spacer width="5"/>
+                            #{wallet.description}
+                        </p:column>
+                        <p:column width="15%"
+                                  styleClass="align-center"
+                                  headerText="#{messages['wallet.list.balance']}">
+                            <p:commandLink immediate="true"
+                                           rendered="#{userSessionBean.profile.showWalletBalances}"
+                                           action="#{walletBean.changeToBalanceHistory(wallet.id)}"
+                                           styleClass="#{wallet.balanceNegative ? 'text-red' : 'text-green'}">
+                                <h:outputText value="R$ #{wallet.actualBalance}">
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                </h:outputText>
+                            </p:commandLink>
+                        </p:column>
+                        <p:column width="15%"
+                                  styleClass="align-center"
+                                  headerText="#{messages['wallet.list.type']}">
+                            #{enums[wallet.walletType]}
+                        </p:column>
+                        <p:column width="15%"
+                                  styleClass="align-center"
+                                  headerText="#{messages['list.actions']}">
+                            <p:commandButton icon="fa fa-edit"
+                                             title="#{menu['edit']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{walletBean.changeToEdit(wallet.id)}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="fa fa-eraser"
+                                             title="#{menu['delete']}"
+                                             styleClass="btn btn-flat btn-danger"
+                                             action="#{walletBean.changeToDelete(wallet.id)}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.WALLET_DELETE)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
             </div>
-        </p:dataGrid>
-        <wb:blocker target="walletsGrid"/>
+        </div>
+        <wb:blocker target="boxBody"/>
     </ui:define>
 </ui:composition>

@@ -94,8 +94,7 @@ public class WalletBean extends FormBean<Wallet> {
      */
     @Override
     public Page<Wallet> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.walletRepository.findAllBy(this.filter.getValue(),
-                this.filter.getEntityStatusValue(), first, pageSize);
+        return this.walletRepository.findAllBy(this.filter.getValue(), this.filter.getEntityStatusValue(), first, pageSize);
     }
 
     /**
