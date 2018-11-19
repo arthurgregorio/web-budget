@@ -58,7 +58,7 @@ public class CostCenter extends PersistentEntity {
     @Getter
     @Setter
     @Convert(converter = ColorConverter.class)
-    @Column(name = "color", nullable = false, length = 20)
+    @Column(name = "color", nullable = false, length = 21)
     private Color color;
     @Getter
     @Setter
