@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.infrastructure.jsf.FacesUtils;
 import br.com.webbudget.infrastructure.utils.MessageSource;
 import org.omnifaces.util.Messages;
 import org.primefaces.PrimeFaces;
@@ -140,7 +141,7 @@ public abstract class AbstractBean implements Serializable {
      * @param componentId the component id
      */
     protected void temporizeHiding(String componentId) {
-        this.executeScript("setTimeout(\"$(\'#" + componentId + "\').slideUp(300)\", 8000)");
+        FacesUtils.temporizeHiding(componentId);
     }
 
     /**
@@ -149,7 +150,7 @@ public abstract class AbstractBean implements Serializable {
      * @param componentId the id of the component
      */
     protected void updateComponent(String componentId) {
-        PrimeFaces.current().ajax().update(componentId);
+        FacesUtils.updateComponent(componentId);
     }
 
     /**
@@ -158,6 +159,6 @@ public abstract class AbstractBean implements Serializable {
      * @param script the script to be executed
      */
     protected void executeScript(String script) {
-        PrimeFaces.current().executeScript(script);
+        FacesUtils.executeScript(script);
     }
 }
