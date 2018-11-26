@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package br.com.webbudget.infrastructure.jsf.exception;
 
 import org.omnifaces.config.WebXml;
@@ -12,7 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import static javax.servlet.RequestDispatcher.*;
 
 /**
- * Generic handler to all unmapped exceptions
+ * Generic handler for any type of exception, by default the {@link CustomExceptionHandlerWrapper} use this
+ * implementation to handle exceptions not mapped with a specific {@link CustomExceptionHandler}
  *
  * @author Arthur Gregorio
  *
@@ -62,9 +79,9 @@ public class UndefinedExceptionHandler implements CustomExceptionHandler<Throwab
     }
 
     /**
-     * Find on the web.xml a path to the error page
+     * Call the {@link WebXml} instance to get the generic error page path
      *
-     * @param exception the exception type to check
+     * @param exception the exception to check for specific pages
      * @return the error page
      */
     private String getErrorPage(Throwable exception) {

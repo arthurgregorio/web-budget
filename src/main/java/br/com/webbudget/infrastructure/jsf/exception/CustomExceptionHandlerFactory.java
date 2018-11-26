@@ -21,8 +21,7 @@ import javax.faces.context.ExceptionHandlerFactory;
 import java.util.Set;
 
 /**
- * Simple {@link ExceptionHandlerFactory} to customize the exception handling
- * in the application
+ * Simple {@link ExceptionHandlerFactory} to customize the exception handling by JSF
  *
  * @author Arthur Gregorio
  *
