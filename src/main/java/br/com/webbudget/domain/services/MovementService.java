@@ -176,7 +176,7 @@ public class MovementService {
 //
 //        // se pagamos no cartao de credito, coloca o vencimento do movimento 
 //        // para a data de vencimento da fatura do cartao
-//        if (payment.getPaymentMethodType() == PaymentMethodType.CREDIT_CARD) {
+//        if (payment.getPaymentMethodType() == PaymentMethod.CREDIT_CARD) {
 //            movement.setDueDate(payment.getCreditCardInvoiceDueDate(
 //                    movement.getFinancialPeriod()));
 //        }
@@ -205,7 +205,7 @@ public class MovementService {
 //        
 //        // seta no pagamento no movimento e atualiza
 //        movement.setPayment(payment);
-//        movement.setMovementStateType(MovementStateType.PAID);
+//        movement.setMovementStateType(MovementState.PAID);
 //
 //        this.movementRepository.save(movement);
 //        
@@ -214,12 +214,12 @@ public class MovementService {
 //                this.apportionmentRepository.listByMovement(movement)));
 //        
 //        // atualizamos os saldos das carteiras quando pagamento em dinheiro
-//        if (payment.getPaymentMethodType() == PaymentMethodType.IN_CASH
-//                || payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
+//        if (payment.getPaymentMethodType() == PaymentMethod.IN_CASH
+//                || payment.getPaymentMethodType() == PaymentMethod.DEBIT_CARD) {
 //
 //            Wallet wallet;
 //
-//            if (payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
+//            if (payment.getPaymentMethodType() == PaymentMethod.DEBIT_CARD) {
 //                wallet = payment.getCard().getWallet();
 //            } else {
 //                wallet = payment.getWallet();
@@ -274,14 +274,14 @@ public class MovementService {
 //        }
 //
 //        // devolve o saldo na carteira se for o caso
-//        if (movement.getMovementStateType() == MovementStateType.PAID
-//                && movement.getPayment().getPaymentMethodType() == PaymentMethodType.IN_CASH) {
+//        if (movement.getMovementStateType() == MovementState.PAID
+//                && movement.getPayment().getPaymentMethodType() == PaymentMethod.IN_CASH) {
 //
 //            Wallet paymentWallet;
 //
 //            final Payment payment = movement.getPayment();
 //
-//            if (payment.getPaymentMethodType() == PaymentMethodType.DEBIT_CARD) {
+//            if (payment.getPaymentMethodType() == PaymentMethod.DEBIT_CARD) {
 //                paymentWallet = payment.getCard().getWallet();
 //            } else {
 //                paymentWallet = payment.getWallet();
@@ -368,7 +368,7 @@ public class MovementService {
 //        });
 //
 //        // se houve pagamento, devolve o valor para a origem
-//        if (movement.getMovementStateType() == MovementStateType.PAID) {
+//        if (movement.getMovementStateType() == MovementState.PAID) {
 //
 //            final Wallet paymentWallet = movement.getPayment().getWallet();
 //
@@ -469,7 +469,7 @@ public class MovementService {
 //                            .inThePeriodOf(period)
 //                            .dividedAmong(fixedMovement.getApportionments());
 //
-//                    final Movement movement = 
+//                    final Movement movement =
 //                            this.updateMovement(movementBuilder.build());
 //
 //                    // criamos o lancamento 
@@ -647,10 +647,10 @@ public class MovementService {
 //     */
 //    public List<Movement> listOnlyMovementsByPeriod(FinancialPeriod period) {
 //
-//        MovementStateType state = MovementStateType.PAID;
+//        MovementState state = MovementState.PAID;
 //
 //        if (period.isClosed()) {
-//            state = MovementStateType.CALCULATED;
+//            state = MovementState.CALCULATED;
 //        }
 //
 //        return this.movementRepository.listByPeriodAndStateAndType(

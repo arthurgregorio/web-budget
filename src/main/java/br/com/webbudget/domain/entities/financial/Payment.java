@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
 
 /**
+ * This class represents the payment of any {@link Movement}
  *
  * @author Arthur Gregorio
  *
@@ -69,8 +70,8 @@ public class Payment extends PersistentEntity {
     @Setter
     @Enumerated
     @NotNull(message = "{payment.payment-method}")
-    @Column(name = "payment_method_type", nullable = false)
-    private PaymentMethodType paymentMethodType;
+    @Column(name = "payment_method", nullable = false)
+    private PaymentMethod paymentMethod;
 
     @Getter
     @Setter
@@ -84,85 +85,38 @@ public class Payment extends PersistentEntity {
     private Wallet wallet;
 
     /**
-     *
+     * Constructor
      */
     public Payment() {
         this.code = RandomCode.alphanumeric(6);
         this.paymentDate = LocalDate.now();
-        this.paymentMethodType = PaymentMethodType.IN_CASH;
+        this.paymentMethod = PaymentMethod.CASH;
     }
 
     /**
-     * Com este metodo construimos a data de vencimendo do cartao caso seja um
-     * pagamento via cartao de credito para entao setar no movimento a fim de
-     * que ele esteja no vencimento do cartao
+     * To check if this payment is paid with cash
      *
-     * @param period o periodo que esperamos que a data compreenda
-     * @return a data de vencimento do cartao
+     * @return true if is, false if not
      */
-    public LocalDate getCreditCardInvoiceDueDate(FinancialPeriod period) {
-
-        if (this.card == null) {
-            throw new BusinessLogicException("movement.execute.payment-not-credit-card");
-        }
-
-        final int expiration = this.card.getExpirationDay();
-
-        if (expiration != 0) {
-            return period.getEnd().withDayOfMonth(expiration).plusMonths(1);
-        } else {
-            return period.getEnd();
-        }
+    public boolean isPaidWithCash() {
+        return this.paymentMethod == PaymentMethod.CASH;
     }
 
     /**
-     * @return se este pagamento eh em dinheiro
-     */
-    public boolean isPaidInCash() {
-        return this.paymentMethodType == PaymentMethodType.IN_CASH;
-    }
-
-    /**
-     * @return se este pagamento eh em credito
-     */
-    public boolean isPaidOnCredit() {
-        return this.paymentMethodType == PaymentMethodType.CREDIT_CARD;
-    }
-
-    /**
-     * @return se este pagamento eh em debito
-     */
-    public boolean isPaidOnDebit() {
-        return this.paymentMethodType == PaymentMethodType.DEBIT_CARD;
-    }
-
-    /**
-     * Valida se este pagamento eh valido
-     */
-    public void validatePaymentMethod() {
-        if (this.isPaidInCash() && this.wallet == null) {
-            throw new BusinessLogicException("error.payment.no-wallet");
-        } else if ((this.isPaidOnCredit() || this.isPaidOnDebit()) && this.card == null) {
-            throw new BusinessLogicException("error.payment.no-card");
-        }
-    }
-
-    /**
-     * Valida se o desconto aqui inserido e menor que o valor do movimento 
-     * que estamos pagando por este pagamento
+     * To check if this payment is paid with a credit {@link Card}
      *
-     * @param value o valor do movimento para comparacao
+     * @return true if is, false if not
      */
-    public void validateDiscount(BigDecimal value) {
-        if (this.discount != null && this.discount.compareTo(value) >= 0) {
-            throw new BusinessLogicException("error.payment.invalid-discount");
-        }
+    public boolean isPaidWithCreditCard() {
+        return this.paymentMethod == PaymentMethod.CREDIT_CARD;
     }
 
     /**
-     * @return se temos ou nao um desconto para este pagamento
+     * To check if this payment is paid with a debit {@link Card}
+     *
+     * @return true if is, false if not
      */
-    boolean hasDiscount() {
-        return this.discount != null && this.discount != BigDecimal.ZERO;
+    public boolean isPaidWithDebitCard() {
+        return this.paymentMethod == PaymentMethod.DEBIT_CARD;
     }
 }

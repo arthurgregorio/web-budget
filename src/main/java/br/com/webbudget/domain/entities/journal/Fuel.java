@@ -63,7 +63,7 @@ public class Fuel extends PersistentEntity {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "fuel_type", nullable = false)
+    @Column(name = "fuel_type", nullable = false, length = 45)
     private FuelType fuelType;
 
     @Getter

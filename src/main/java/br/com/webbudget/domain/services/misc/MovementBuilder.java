@@ -17,8 +17,9 @@
 package br.com.webbudget.domain.services.misc;
 
 import br.com.webbudget.domain.entities.financial.Apportionment;
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.financial.Movement;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -35,75 +36,75 @@ import java.util.List;
  */
 public final class MovementBuilder extends Builder<Movement> {
 
-    /**
-     * Inicializa o movimento a ser construido
-     */
-    public MovementBuilder() {
-        this.value = new Movement();
-    }
-
-    /**
-     * @param value seu valor
-     * @return este builder
-     */
-    public MovementBuilder withValue(BigDecimal value) {
-        this.value.setValue(value);
-        return this;
-    }
-
-    /**
-     * @param description a sua descricao
-     * @return este builder
-     */
-    public MovementBuilder describedBy(String description) {
-        this.value.setDescription(description);
-        return this;
-    }
-
-    /**
-     * @param dueDate a sua data de vencimento
-     * @return este builder
-     */
-    public MovementBuilder onDueDate(LocalDate dueDate) {
-        this.value.setDueDate(dueDate);
-        return this;
-    }
-
-    /**
-     * @param financialPeriod o periodo que vamos usar no moviemento
-     * @return este builder
-     */
-    public MovementBuilder inThePeriodOf(FinancialPeriod financialPeriod) {
-        this.value.setFinancialPeriod(financialPeriod);
-        return this;
-    }
-
-    /**
-     * @param builder o builder de rateios
-     * @return este builder
-     */
-    public MovementBuilder dividedAmong(ApportionmentBuilder builder) {
-        this.value.addApportionment(builder.build());
-        return this;
-    }
-
-    /**
-     * @param apportionments os rateios
-     * @return este builder
-     */
-    public MovementBuilder dividedAmong(List<Apportionment> apportionments) {
-        apportionments
-                .stream()
-                .forEach(apportionment -> {
-                    this.value.addApportionment(apportionment.copy());
-                });
-        return this;
-    }
-    
-    /**
-     * @return o codigo do movimento gerado
-     */
-    public String getMovementCode() {
-        return this.value.getCode();
-    }
+//    /**
+//     * Inicializa o movimento a ser construido
+//     */
+//    public MovementBuilder() {
+//        this.value = new Movement();
+//    }
+//
+//    /**
+//     * @param value seu valor
+//     * @return este builder
+//     */
+//    public MovementBuilder withValue(BigDecimal value) {
+//        this.value.setValue(value);
+//        return this;
+//    }
+//
+//    /**
+//     * @param description a sua descricao
+//     * @return este builder
+//     */
+//    public MovementBuilder describedBy(String description) {
+//        this.value.setDescription(description);
+//        return this;
+//    }
+//
+//    /**
+//     * @param dueDate a sua data de vencimento
+//     * @return este builder
+//     */
+//    public MovementBuilder onDueDate(LocalDate dueDate) {
+//        this.value.setDueDate(dueDate);
+//        return this;
+//    }
+//
+//    /**
+//     * @param financialPeriod o periodo que vamos usar no moviemento
+//     * @return este builder
+//     */
+//    public MovementBuilder inThePeriodOf(FinancialPeriod financialPeriod) {
+//        this.value.setFinancialPeriod(financialPeriod);
+//        return this;
+//    }
+//
+//    /**
+//     * @param builder o builder de rateios
+//     * @return este builder
+//     */
+//    public MovementBuilder dividedAmong(ApportionmentBuilder builder) {
+//        this.value.add(builder.build());
+//        return this;
+//    }
+//
+//    /**
+//     * @param apportionments os rateios
+//     * @return este builder
+//     */
+//    public MovementBuilder dividedAmong(List<Apportionment> apportionments) {
+//        apportionments
+//                .stream()
+//                .forEach(apportionment -> {
+//                    this.value.add(apportionment.copy());
+//                });
+//        return this;
+//    }
+//
+//    /**
+//     * @return o codigo do movimento gerado
+//     */
+//    public String getMovementCode() {
+//        return this.value.getCode();
+//    }
 }

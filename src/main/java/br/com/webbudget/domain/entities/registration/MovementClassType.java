@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ public enum MovementClassType {
     private final String description;
 
     /**
-     * Default constructor
+     * Constructor
      *
      * @param description the description for this enum, also is the i18n key
      */

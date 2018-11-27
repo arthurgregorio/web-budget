@@ -95,7 +95,7 @@ public class Vehicle extends PersistentEntity {
     @Setter
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{vehicle.vehicle-type}")
-    @Column(name = "vehicle_type", nullable = false)
+    @Column(name = "vehicle_type", nullable = false, length = 45)
     private VehicleType vehicleType;
 
     @Getter

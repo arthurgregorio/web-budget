@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,33 @@
 package br.com.webbudget.domain.entities.financial;
 
 /**
+ * The state of the {@link Movement}
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0, 21/03/2014
  */
-public enum MovementStateType {
+public enum MovementState {
 
-    PAID("movement-state-type.paid"),
-    OPEN("movement-state-type.open"),
-    CANCELED("movement-state-type.canceled"),
-    CALCULATED("movement-state-type.calculated");
+    PAID("movement-state.paid"),
+    OPEN("movement-state.open"),
+    FINALIZED("movement-state.finalized");
 
     private final String description;
 
     /**
-     * @param description
+     * Constructor...
+     *
+     * @param description the description and also the i18n key
      */
-    private MovementStateType(String description) {
+    MovementState(String description) {
         this.description = description;
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return
      */
     @Override

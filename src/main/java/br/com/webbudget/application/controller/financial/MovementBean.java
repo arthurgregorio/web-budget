@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,16 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 /**
- * Controller da tela de movimentos do periodo
+ * The {@link Transaction} view controller
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 3.0.0
  * @since 1.0.0, 18/03/2014
  */
 @Named
@@ -500,8 +501,8 @@ public class MovementBean extends AbstractBean {
 //    /**
 //     * @return os estados possiveis dos movimentos
 //     */
-//    public MovementStateType[] getMovementStateTypes() {
-//        return MovementStateType.values();
+//    public MovementState[] getMovementStateTypes() {
+//        return MovementState.values();
 //    }
 //
 //    /**
@@ -521,7 +522,7 @@ public class MovementBean extends AbstractBean {
 //    /**
 //     * @return os possiveis metodos de pagamento
 //     */
-//    public PaymentMethodType[] getPaymentMethodTypes() {
-//        return PaymentMethodType.values();
+//    public PaymentMethod[] getPaymentMethodTypes() {
+//        return PaymentMethod.values();
 //    }
 }

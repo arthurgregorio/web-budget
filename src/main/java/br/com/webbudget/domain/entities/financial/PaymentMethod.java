@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,33 @@
 package br.com.webbudget.domain.entities.financial;
 
 /**
+ * The {@link Payment} method for a {@link Movement}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 1.0.0, 03/04/2014
  */
-public enum PaymentMethodType {
+public enum PaymentMethod {
 
-    IN_CASH("payment-method-type.in-cash"),
-    DEBIT_CARD("payment-method-type.debit-card"),
-    CREDIT_CARD("payment-method-type.credit-card");
+    CASH("payment-method.cash"),
+    DEBIT_CARD("payment-method.debit-card"),
+    CREDIT_CARD("payment-method.credit-card");
 
     private final String description;
 
     /**
-     * @param description
+     * Constructor
+     *
+     * @param description the description and also the i18n key
      */
-    private PaymentMethodType(String description) {
+    PaymentMethod(String description) {
         this.description = description;
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return
      */
     @Override

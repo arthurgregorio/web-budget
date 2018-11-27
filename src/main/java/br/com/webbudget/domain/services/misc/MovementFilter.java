@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.domain.services.misc;
 
+import br.com.webbudget.domain.entities.financial.MovementState;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.entities.financial.MovementStateType;
 import br.com.webbudget.domain.entities.financial.MovementType;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -55,7 +55,7 @@ public final class MovementFilter {
     private List<FinancialPeriod> periods;
 
     private Optional<MovementType> movementType;
-    private Optional<MovementStateType> movementStateType;
+    private Optional<MovementState> movementStateType;
     private Optional<MovementClassType> movementClassType;
 
     /**
@@ -177,14 +177,14 @@ public final class MovementFilter {
     /**
      * @return 
      */
-    public MovementStateType getMovementStateType() {
+    public MovementState getMovementStateType() {
         return this.movementStateType.orElse(null);
     }
 
     /**
      * @param movementStateType 
      */
-    public void setMovementStateType(MovementStateType movementStateType) {
+    public void setMovementStateType(MovementState movementStateType) {
         this.movementStateType = Optional.ofNullable(movementStateType);
     }
 

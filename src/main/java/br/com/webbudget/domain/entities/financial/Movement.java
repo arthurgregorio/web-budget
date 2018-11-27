@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,15 @@
 package br.com.webbudget.domain.entities.financial;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import br.com.webbudget.domain.entities.registration.*;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.entities.registration.Card;
+import br.com.webbudget.domain.entities.registration.CardInvoice;
+import br.com.webbudget.domain.entities.registration.Contact;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -35,39 +35,42 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
 import static javax.persistence.CascadeType.REMOVE;
-import static javax.persistence.FetchType.EAGER;
 
 /**
+ * The representation of all financial movements in the application
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0, 04/03/2014
  */
 @Entity
 @Audited
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "movements", schema = FINANCIAL)
+@ToString(callSuper = true, exclude = "apportionments")
 @AuditTable(value = "movements", schema = FINANCIAL_AUDIT)
+@EqualsAndHashCode(callSuper = true, exclude = "apportionments")
 public class Movement extends PersistentEntity {
 
     @Getter
-    @Column(name = "code", nullable = false, length = 8, unique = true)
+    @Column(name = "code", nullable = false, length = 6, unique = true)
     private String code;
+    @Getter
     @Setter
     @NotNull(message = "{movement.value}")
-    @Column(name = "value", nullable = false, length = 8)
+    @Column(name = "value", nullable = false)
     private BigDecimal value;
     @Getter
     @Setter
     @NotBlank(message = "{movement.description}")
-    @Column(name = "description", nullable = false, length = 255)
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
     @Getter
     @Setter
@@ -75,23 +78,14 @@ public class Movement extends PersistentEntity {
     private LocalDate dueDate;
     @Getter
     @Setter
-    @Enumerated
-    @Column(name = "movement_state_type", nullable = false)
-    private MovementStateType movementStateType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "movement_state", nullable = false, length = 45)
+    private MovementState movementState;
     @Getter
     @Setter
-    @Enumerated
-    @Column(name = "movement_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "movement_type", nullable = false, length = 45)
     private MovementType movementType;
-    @Getter
-    @Setter
-    @Column(name = "card_invoice_paid")
-    private boolean cardInvoicePaid;
-
-    @Getter
-    @Setter
-    @OneToOne(mappedBy = "movement", cascade = REMOVE)
-    private Launch launch;
 
     @Getter
     @Setter
@@ -107,151 +101,174 @@ public class Movement extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "id_card_invoice")
-    private CardInvoice cardInvoice;
-    @Getter
-    @Setter
-    @ManyToOne
     @NotNull(message = "{movement.financial-period}")
     @JoinColumn(name = "id_financial_period", nullable = false)
     private FinancialPeriod financialPeriod;
 
-    /**
-     * Fetch eager pois sempre que precisarmos pesquisar um movimento, vamos
-     * precisar saber como ele foi distribuido, ou seja, precisaremos do rateio
-     */
     @Getter
-    @Setter
-    @Fetch(FetchMode.JOIN)
-    @OneToMany(mappedBy = "movement", fetch = EAGER, cascade = REMOVE)
+    @OneToMany(mappedBy = "movement", cascade = REMOVE)
     private List<Apportionment> apportionments;
 
-    /**
-     * Atributo usado para o controle da view no momento de checar se um deter-
-     * minado movimento foi ou nao conferido na fatura do cartao
-     */
-    @Getter
-    @Setter
-    @Transient
-    private boolean checked;
-
     @Getter
     @Transient
-    private final List<Apportionment> deletedApportionments;
+    private final Set<Apportionment> deletedApportionments;
 
     /**
-     *
+     * Constructor
      */
     public Movement() {
 
-        this.code = RandomCode.alphanumeric(5);
+        this.code = RandomCode.alphanumeric(6);
 
         this.apportionments = new ArrayList<>();
-        this.deletedApportionments = new ArrayList<>();
+        this.deletedApportionments = new HashSet<>();
 
-        this.cardInvoicePaid = false;
+        this.movementState = MovementState.OPEN;
         this.movementType = MovementType.MOVEMENT;
-        this.movementStateType = MovementStateType.OPEN;
     }
 
     /**
-     * Metodo para adicao de rateios ao movimento
+     * Method used to add new an new {@link Apportionment} to this movement
      *
-     * @param apportionment o rateio a ser adiocionado
+     * @param apportionment the {@link Apportionment} to be added
      */
-    public void addApportionment(Apportionment apportionment) {
+    public void add(Apportionment apportionment) {
 
-        // checa se nao esta sendo inserido outro exatamente igual
-        if (this.apportionments.contains(apportionment)) {
-            throw new BusinessLogicException("error.apportionment.duplicated");
-        }
-
-        // checa se nao esta inserindo outro para o mesmo CC e MC
-        for (Apportionment a : this.apportionments) {
-            if (a.getCostCenter().equals(apportionment.getCostCenter())
-                    && a.getMovementClass().equals(apportionment.getMovementClass())) {
-                throw new BusinessLogicException("error.apportionment.duplicated");
-            }
-        }
-
-        // verificamos se os movimentos partem na mesma direcao, para que nao
-        // haja rateios com debitos e creditos juntos
-        if (!this.apportionments.isEmpty()) {
-
-            final MovementClassType direction = this.getDirection();
-            final MovementClassType apportionmentDirection
-                    = apportionment.getMovementClass().getMovementClassType();
-
-            if ((direction == MovementClassType.REVENUE && apportionmentDirection == MovementClassType.REVENUE)
-                    || (direction == MovementClassType.EXPENSE && apportionmentDirection == MovementClassType.EXPENSE)) {
-                throw new BusinessLogicException("error.apportionment.mix-of-classes");
-            }
-        }
-
-        // impossivel ter um rateio com valor igual a zero
-        if (apportionment.getValue().compareTo(BigDecimal.ZERO) == 0
-                || apportionment.getValue().compareTo(this.value) > 0) {
-            throw new BusinessLogicException("error.apportionment.invalid-value");
-        }
+        // TODO validate if you are not inserting duplicates, same CC and MC
+        // TODO validate if you are not inserting debit and credit apportionment, only one is permitted
+        // TODO validate apportionment with value = 0
 
         this.apportionments.add(apportionment);
     }
 
     /**
-     * Remove um rateio pelo seu codigo, caso nao localize o mesmo dispara uma
-     * exception para informor ao usuario que nao podera fazer nada pois sera um
-     * problema do sistema...
+     * Remove an {@link Apportionment} from the list of apportionments
      *
-     * LOL WHAT!?
+     * @param apportionment the {@link Apportionment} to be removed
+     */
+    public void remove(Apportionment apportionment) {
+        if (apportionment.isSaved()) {
+            this.deletedApportionments.add(apportionment);
+        }
+        this.apportionments.remove(apportionment);
+    }
+
+    /**
+     * Get only the name of the {@link Contact} of this movement
      *
-     * @param code o codigo
-     */
-    public void removeApportionment(String code) {
-
-        final Apportionment toRemove = this.apportionments.stream()
-                .filter(apportionment -> apportionment.getCode().equals(code))
-                .findFirst()
-                .orElseThrow(() -> new BusinessLogicException(
-                        "error.apportionment.not-found", code));
-
-        // se o rateio ja foi salvo, adicionamos ele em outra lista 
-        // para que quando salvar o movimento ele seja deletado
-        if (toRemove.isSaved()) {
-            this.deletedApportionments.add(toRemove);
-        }
-
-        // remove da lista principal
-        this.apportionments.remove(toRemove);
-    }
-
-    /**
-     * @return o valor deste movimento considerando seu possivel desconto
-     */
-    public BigDecimal getValue() {
-        if (this.payment != null && this.payment.hasDiscount()) {
-            return this.value.subtract(this.payment.getDiscount());
-        }
-        return value;
-    }
-
-    /**
-     * @return retorna o valor original deste movimento, sem descontos
-     */
-    public BigDecimal getOriginalValue() {
-        return this.value;
-    }
-
-    /**
-     * @return o nome do contato vinculado ao movimento
+     * @return the name of the linked {@link Contact}
      */
     public String getContactName() {
         return this.contact != null ? this.contact.getName() : "";
     }
 
     /**
-     * @return o valor da somatoria dos rateios
+     * Get the payment date of this movement
+     *
+     * @return the payment date
      */
-    public BigDecimal getApportionmentsTotal() {
+    public LocalDate getPaymentDate() {
+        return this.payment != null ? this.payment.getPaymentDate() : null;
+    }
+
+    /**
+     * To check if this movement is paid with a credit {@link Card}
+     *
+     * @return true if is, false if not
+     */
+    public boolean isPaidWithCreditCard() {
+        return this.payment.isPaidWithCreditCard();
+    }
+
+    /**
+     * To check if this movement is paid with a debit {@link Card}
+     *
+     * @return true if is, false if not
+     */
+    public boolean isPaidWithDebitCard() {
+        return this.payment.isPaidWithDebitCard();
+    }
+
+    /**
+     * To check if this movement is a {@link CardInvoice}
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isCardInvoice() {
+        return this.movementType == MovementType.CARD_INVOICE;
+    }
+
+    /**
+     * To check if this movement is paid or not
+     *
+     * @return true if paid, false otherwise
+     */
+    public boolean isPaid() {
+        return this.getMovementState() == MovementState.PAID;
+    }
+
+    /**
+     * To check if this movement can be edited
+     *
+     * It only can be edited if the {@link FinancialPeriod} is open and the movement is open to
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isEditable() {
+        return !this.isPaid() && !this.financialPeriod.isClosed();
+    }
+
+    /**
+     * To check if this movement can be deleted
+     *
+     * @return true if can be, false if not
+     */
+    public boolean isDeletable() {
+        return (this.movementState == MovementState.OPEN || this.movementState == MovementState.PAID)
+                && !this.financialPeriod.isClosed();
+    }
+
+    /**
+     * To check if this movement is overdue
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isOverdue() {
+        return this.dueDate.isBefore(LocalDate.now());
+    }
+
+    /**
+     * To check if this movement is a expense
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isExpense() {
+        return this.apportionments
+                .stream()
+                .findFirst()
+                .map(Apportionment::isExpense)
+                .orElse(false);
+    }
+
+    /**
+     * To check if this movement is a revenue
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isRevenue() {
+        return this.apportionments
+                .stream()
+                .findFirst()
+                .map(Apportionment::isRevenue)
+                .orElse(false);
+    }
+
+    /**
+     * Sum all the apportionments and give the total
+     *
+     * @return the total of all {@link Apportionment}
+     */
+    public BigDecimal calculateApportionmentsTotal() {
         return this.apportionments
                 .stream()
                 .map(Apportionment::getValue)
@@ -259,207 +276,11 @@ public class Movement extends PersistentEntity {
     }
 
     /**
-     * @return o valor a ser rateado descontando o valor ja rateado
-     */
-    public BigDecimal getValueToDivide() {
-        return this.value.subtract(this.getApportionmentsTotal());
-    }
-
-    /**
-     * @return se existe ou nao valores para serem rateados
-     */
-    public boolean hasValueToDivide() {
-        return this.getApportionmentsTotal().compareTo(this.value) == 0;
-    }
-
-    /**
-     * @return se este movimento foi pago com cartao de credito
-     */
-    public boolean isPaidOnCreditCard() {
-        return this.isExpense() && this.payment.getPaymentMethodType()
-                == PaymentMethodType.CREDIT_CARD;
-    }
-
-    /**
-     * @return se este movimento foi pago em cartao de debito
-     */
-    public boolean isPaidOnDebitCard() {
-        return this.isExpense() && this.payment.getPaymentMethodType()
-                == PaymentMethodType.DEBIT_CARD;
-    }
-
-    /**
-     * @return se este movimento eh uma fatura de cartao ou nao
-     */
-    public boolean isCardInvoice() {
-        return this.movementType == MovementType.CARD_INVOICE;
-    }
-
-    /**
-     * @return se este movimento nao eh uma fatura de cartao
-     */
-    public boolean isNotCardInvoice() {
-        return this.movementType != MovementType.CARD_INVOICE;
-    }
-
-    /**
-     * @return se temos um movimento editavel
-     */
-    public boolean isEditable() {
-        return (this.movementStateType == MovementStateType.OPEN
-                && !this.financialPeriod.isClosed());
-    }
-
-    /**
-     * @return se o movimento esta pago ou nao
-     */
-    public boolean isPaid() {
-        return this.movementStateType == MovementStateType.PAID
-                || this.movementStateType == MovementStateType.CALCULATED;
-    }
-
-    /**
-     * @return se temos um movimento pagavel
-     */
-    public boolean isPayable() {
-        return this.movementStateType == MovementStateType.OPEN
-                && !this.financialPeriod.isClosed();
-    }
-
-    /**
-     * @return se temos um movimento deletavel
-     */
-    public boolean isDeletable() {
-        return (this.movementStateType == MovementStateType.OPEN
-                || this.movementStateType == MovementStateType.PAID)
-                && !this.financialPeriod.isClosed();
-    }
-
-    /**
-     * @return se o movimento esta vencido ou nao
-     */
-    public boolean isOverdue() {
-        return this.dueDate.isBefore(LocalDate.now());
-    }
-
-    /**
-     * @return se temos ou nao nao movimento a data de pagamento setada
-     */
-    public boolean hasDueDate() {
-        return this.dueDate != null;
-    }
-
-    /**
-     * @return se este movimento e uma despesa
-     */
-    public boolean isExpense() {
-        return this.apportionments
-                .stream()
-                .findFirst()
-                .map(apportionment -> apportionment.isForExpenses())
-                .orElse(false);
-    }
-
-    /**
-     * @return se este movimento e uma receita
-     */
-    public boolean isRevenue() {
-        return this.apportionments
-                .stream()
-                .findFirst()
-                .map(apportionment -> apportionment.isForRevenues())
-                .orElse(false);
-    }
-
-    /**
-     * @return a data de pagamento deste movimento
-     */
-    public LocalDate getPaymentDate() {
-        return this.payment.getPaymentDate();
-    }
-
-    /**
-     * @return todos os centros de custo que este movimento faz parte
-     */
-    public List<CostCenter> getCostCenters() {
-
-        final List<CostCenter> costCenters = new ArrayList<>();
-
-        this.apportionments.stream().forEach((apportionment) -> {
-            costCenters.add(apportionment.getMovementClass().getCostCenter());
-        });
-
-        return costCenters;
-    }
-
-    /**
-     * De acordo com a primeira classe do rateio, diz se o movimento e de
-     * entrada ou saida
+     * Calculate the amount not divided into the apportionments
      *
-     * @return a direcao do movimento de acordo com as classes usadas
+     * @return the total possible to be divided by an {@link Apportionment}
      */
-    public MovementClassType getDirection() {
-        for (Apportionment apportionment : this.apportionments) {
-            return apportionment.getMovementClass().getMovementClassType();
-        }
-        return null;
-    }
-
-    /**
-     * Realiza a validacao dos rateios do movimento fixo
-     */
-    public void validateApportionments() {
-
-        if (this.getApportionments().isEmpty()) {
-            throw new BusinessLogicException(
-                    "error.apportionment.empty-apportionment");
-        } else if (this.getApportionmentsTotal().compareTo(this.getValue()) > 0) {
-            final String difference = String.format("%10.2f",
-                    this.getApportionmentsTotal().subtract(this.getValue()));
-            throw new BusinessLogicException(
-                    "error.apportionment.gt-value", difference);
-        } else if (this.getApportionmentsTotal().compareTo(this.getValue()) < 0) {
-            final String difference = String.format("%10.2f",
-                    this.getValue().subtract(this.getApportionmentsTotal()));
-            throw new BusinessLogicException(
-                    "error.apportionment.lt-value", difference);
-        }
-    }
-
-    /**
-     * @return se este movimento e o ultimo lancamento de uma serie de 
-     * lancamentos de movimentos fixos
-     */
-    public boolean isLastLaunch() {
-        return this.launch != null && this.launch.getFixedMovement().isFinalized();
-    }
-
-    /**
-     * @return se este movimento tem ou nao mais de um rateio
-     */
-    public boolean isMultiApportionment() {
-        return this.apportionments.size() > 1;
-    }
-
-    /**
-     * Valida o pagamento deste movimento
-     */
-    public void validatePayment() {
-
-        // movimentos com multiplos rateios nao sao passiveis de desconto
-        if (this.payment.hasDiscount() && this.isMultiApportionment()) {
-            throw new BusinessLogicException("error.payment.discount-app-multi");
-        }
-
-        // valida as formas de pagamento informadas
-        this.payment.validatePaymentMethod();
-
-        // valida o valor do desconto
-        this.payment.validateDiscount(this.value);
-
-        // aplica o desconto nos rateios caso tenha
-        this.apportionments.forEach(a -> {
-            a.setValue(this.getValue());
-        });
+    public BigDecimal calculateRemainingTotal() {
+        return this.value.subtract(this.calculateApportionmentsTotal());
     }
 }

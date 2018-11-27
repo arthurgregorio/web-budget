@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.entities.financial;
 
 /**
+ * The type of a {@link Movement}
  *
  * @author Arthur Gregorio
  *
@@ -28,22 +29,24 @@ public enum MovementType {
     MOVEMENT("movement-type.movement"),
     CARD_INVOICE("movement-type.card-invoice");
 
-    private final String i18nKey;
+    private final String description;
 
     /**
+     * Constructor
      *
-     * @param i18nKey
+     * @param description the description and also the i18n key
      */
-    private MovementType(String i18nKey) {
-        this.i18nKey = i18nKey;
+    MovementType(String description) {
+        this.description = description;
     }
 
     /**
+     * {@inheritDoc}
      *
      * @return
      */
     @Override
     public String toString() {
-        return this.i18nKey;
+        return this.description;
     }
 }

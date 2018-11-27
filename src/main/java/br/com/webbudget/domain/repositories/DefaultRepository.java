@@ -64,6 +64,7 @@ public interface DefaultRepository<T extends PersistentEntity> extends EntityRep
      * @param pageSize the size of the page
      * @return the list of objects found
      */
+    @SuppressWarnings("unchecked")
     default Page<T> findAllBy(String filter, Boolean active, int start, int pageSize) {
 
         final int totalRows = this.countPages(filter, active);
@@ -95,6 +96,7 @@ public interface DefaultRepository<T extends PersistentEntity> extends EntityRep
      * @param active the entity state property
      * @return total of the pages for this filter combination
      */
+    @SuppressWarnings("unchecked")
     default int countPages(String filter, Boolean active) {
 
         final Criteria<T, T> criteria = criteria().or(this.getRestrictions(filter));

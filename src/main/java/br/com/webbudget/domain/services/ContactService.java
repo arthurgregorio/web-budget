@@ -102,7 +102,7 @@ public class ContactService {
     public void delete(Contact contact) {
 
         // FIXME when we can save movements again, fix this to check on the contact deletion
-//        final List<Movement> movements = 
+//        final List<Movement> movements =
 //                this.movementRepository.listByContact(contact);
 //        
 //        // se tem vinculos, nao deleta
