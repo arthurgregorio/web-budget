@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.financial;
 
 /**
- * The type of a {@link Movement}
+ * Type of the {@link PeriodMovement}
  *
  * @author Arthur Gregorio
  *

@@ -39,14 +39,14 @@
                     <p:inputText id="inFilter" 
                                  style="z-index: 0"
                                  styleClass="form-control"
-                                 value="#{movementBean.contactFilter}" 
+                                 value="#{periodMovementBean.contactFilter}"
                                  placeholder="#{messages['filter.contact']}"/>
                     <div class="input-group-btn">
                         <p:commandLink id="btSearch"
                                        process="contactForm"
                                        value="#{menu['search']}"
                                        styleClass="btn btn-flat btn-warning"
-                                       action="#{movementBean.filterContactsList()}"/>
+                                       action="#{periodMovementBean.filterContactsList()}"/>
                     </div>
                 </div>
             </div>
@@ -61,12 +61,12 @@
                              selectionMode="single"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
-                             value="#{movementBean.contacts}"
+                             value="#{periodMovementBean.contacts}"
                              emptyMessage="#{messages['list.empty']}"
-                             selection="#{movementBean.movement.contact}">
+                             selection="#{periodMovementBean.movement.contact}">
 
                     <p:ajax event="rowSelect" 
-                            listener="#{movementBean.onContactSelect()}" />
+                            listener="#{periodMovementBean.onContactSelect()}" />
 
                     <p:column headerText="#{messages['contact.list.name']}">
                         #{contact.name}

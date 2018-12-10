@@ -104,20 +104,20 @@
                 <!--</li>-->
                 <li class="divider" />
                 <li class="dropdown-submenu">
-                    <a href="#"><i class="fa fa-money" /> #{menu['financial.movements']} <span class="caret" /></a>
+                    <a href="#"><i class="fa fa-hand-holding-usd" /> #{menu['financial.movements']} <span class="caret" /></a>
                     <ul class="dropdown-menu" role="menu">
-                        <!--<li jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">-->
-                            <!--<p:link outcome="/main/movement/fixed/listFixedMovements.xhtml">-->
-                                <!--<i class="fa fa-circle" />-->
-                                <!--#{menu['financial.movements.fixed']}-->
-                            <!--</p:link>-->
-                        <!--</li>-->
-                        <!--<li jsf:rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_ACCESS)}">-->
-                            <!--<p:link outcome="/main/movement/period/listMovements.xhtml">-->
-                                <!--<i class="fa fa-circle-o" />-->
-                                <!--#{menu['financial.movements.period']}-->
-                            <!--</p:link>-->
-                        <!--</li>-->
+                        <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">
+                            <p:link outcome="/secured/financial/movement/fixed/listFixedMovements.xhtml">
+                                <i class="fa fa-circle" />
+                                #{menu['financial.movements.fixed']}
+                            </p:link>
+                        </li>
+                        <li jsf:rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_ACCESS)}">
+                            <p:link outcome="/secured/financial/movement/period/listPeriodMovements.xhtml">
+                                <i class="fa fa-circle" />
+                                #{menu['financial.movements.period']}
+                            </p:link>
+                        </li>
                     </ul>
                 </li>
             </ul>

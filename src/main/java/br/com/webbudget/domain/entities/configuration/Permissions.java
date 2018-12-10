@@ -173,41 +173,47 @@ public class Permissions implements Serializable {
     @PermissionGrouper("transference")
     private final String TRANSFERENCE_TRANSFER = "transference:transfer";
 
-//    @Getter
-//    @PermissionGrouper("movement")
-//    private final String MOVEMENT_ACCESS = "movement:access";
-//    @Getter
-//    @PermissionGrouper("movement")
-//    private final String MOVEMENT_ADD = "movement:add";
-//    @Getter
-//    @PermissionGrouper("movement")
-//    private final String MOVEMENT_UPDATE = "movement:update";
-//    @Getter
-//    @PermissionGrouper("movement")
-//    private final String MOVEMENT_PAY = "movement:pay";
-//    @Getter
-//    @PermissionGrouper("movement")
-//    private final String MOVEMENT_DELETE = "movement:delete";
-//
-//    @Getter
-//    @PermissionGrouper("fixed-movement")
-//    private final String FIXED_MOVEMENT_ACCESS = "fixed-movement:access";
-//    @Getter
-//    @PermissionGrouper("fixed-movement")
-//    private final String FIXED_MOVEMENT_ADD = "fixed-movement:add";
-//    @Getter
-//    @PermissionGrouper("fixed-movement")
-//    private final String FIXED_MOVEMENT_UPDATE = "fixed-movement:update";
-//    @Getter
-//    @PermissionGrouper("fixed-movement")
-//    private final String FIXED_MOVEMENT_DELETE = "fixed-movement:delete";
-//    @Getter
-//    @PermissionGrouper("fixed-movement")
-//    private final String FIXED_MOVEMENT_LAUNCH = "fixed-movement:launch";
-//    @Getter
-//    @PermissionGrouper("fixed-movement")
-//    private final String FIXED_MOVEMENT_LAUNCHES = "fixed-movement:launches";
-//
+    @Getter
+    @PermissionGrouper("period-movement")
+    private final String PERIOD_MOVEMENT_ACCESS = "period-movement:access";
+    @Getter
+    @PermissionGrouper("period-movement")
+    private final String PERIOD_MOVEMENT_ADD = "period-movement:add";
+    @Getter
+    @PermissionGrouper("period-movement")
+    private final String PERIOD_MOVEMENT_UPDATE = "period-movement:update";
+    @Getter
+    @PermissionGrouper("period-movement")
+    private final String PERIOD_MOVEMENT_DETAIL = "period-movement:detail";
+    @Getter
+    @PermissionGrouper("period-movement")
+    private final String PERIOD_MOVEMENT_DELETE = "period-movement:delete";
+    @Getter
+    @PermissionGrouper("period-movement")
+    private final String PERIOD_MOVEMENT_PAY = "period-movement:pay";
+
+    @Getter
+    @PermissionGrouper("fixed-movement")
+    private final String FIXED_MOVEMENT_ACCESS = "fixed-movement:access";
+    @Getter
+    @PermissionGrouper("fixed-movement")
+    private final String FIXED_MOVEMENT_ADD = "fixed-movement:add";
+    @Getter
+    @PermissionGrouper("fixed-movement")
+    private final String FIXED_MOVEMENT_UPDATE = "fixed-movement:update";
+    @Getter
+    @PermissionGrouper("fixed-movement")
+    private final String FIXED_MOVEMENT_DETAIL = "fixed-movement:detail";
+    @Getter
+    @PermissionGrouper("fixed-movement")
+    private final String FIXED_MOVEMENT_DELETE = "fixed-movement:delete";
+    @Getter
+    @PermissionGrouper("fixed-movement")
+    private final String FIXED_MOVEMENT_LAUNCH = "fixed-movement:launch";
+    @Getter
+    @PermissionGrouper("fixed-movement")
+    private final String FIXED_MOVEMENT_LAUNCHES = "fixed-movement:launches";
+
 //    @Getter
 //    @PermissionGrouper("card-invoice")
 //    private final String CARD_INVOICE_PAY = "card-invoice:pay";
@@ -244,6 +250,9 @@ public class Permissions implements Serializable {
 
     @Getter
     @PermissionGrouper("user")
+    private final String USER_ACCESS = "user:access";
+    @Getter
+    @PermissionGrouper("user")
     private final String USER_ADD = "user:add";
     @Getter
     @PermissionGrouper("user")
@@ -254,10 +263,10 @@ public class Permissions implements Serializable {
     @Getter
     @PermissionGrouper("user")
     private final String USER_DETAIL = "user:detail";
-    @Getter
-    @PermissionGrouper("user")
-    private final String USER_ACCESS = "user:access";
 
+    @Getter
+    @PermissionGrouper("group")
+    private final String GROUP_ACCESS = "group:access";
     @Getter
     @PermissionGrouper("group")
     private final String GROUP_ADD = "group:add";
@@ -270,9 +279,6 @@ public class Permissions implements Serializable {
     @Getter
     @PermissionGrouper("group")
     private final String GROUP_DETAIL = "group:detail";
-    @Getter
-    @PermissionGrouper("group")
-    private final String GROUP_ACCESS = "group:access";
 
     /**
      * Method to process this class with reflection and build a list of {@link Authorization} to be used in the

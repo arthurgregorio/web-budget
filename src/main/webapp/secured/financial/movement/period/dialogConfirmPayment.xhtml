@@ -31,7 +31,7 @@
             <h4>
                 <o:outputFormat escape="false"
                                 value="#{messages['confirm-payment.dialog.tip']}">
-                    <f:param value="#{movementBean.movement.code}" />
+                    <f:param value="#{periodMovementBean.movement.code}" />
                 </o:outputFormat>
             </h4>
         </div>
@@ -40,7 +40,7 @@
         <div class="col-sm-12 align-center">
             <p:commandButton value="#{menu['back']}"
                              styleClass="btn btn-flat btn-default"
-                             action="#{movementBean.changeToList()}"/>
+                             action="#{periodMovementBean.changeToList()}"/>
         </div>
     </div>
 </p:dialog>

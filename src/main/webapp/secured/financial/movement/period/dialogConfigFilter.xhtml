@@ -68,13 +68,13 @@
                                        value="#{messages['config-filter.form.type']}: "/>
                         <p:selectOneMenu id="inType" 
                                          converter="omnifaces.GenericEnumConverter"
-                                         value="#{movementBean.filter.movementType}">
+                                         value="#{periodMovementBean.filter.movementType}">
                             <f:selectItem itemValue="#{null}"
                                           itemLabel="#{messages['config-filter.form.any-type']}" />
                             <f:selectItems var="movementType"
                                            itemValue="#{movementType}"
                                            itemLabel="#{enums[movementType]}"
-                                           value="#{movementBean.movementTypes}"/> 
+                                           value="#{periodMovementBean.movementTypes}"/>
                         </p:selectOneMenu>
                     </div>
                     <div class="col-sm-12 form-group">
@@ -82,13 +82,13 @@
                                        value="#{messages['config-filter.form.status']}: "/>
                         <p:selectOneMenu id="inStatus" 
                                          converter="omnifaces.GenericEnumConverter"
-                                         value="#{movementBean.filter.movementStateType}">
+                                         value="#{periodMovementBean.filter.movementStateType}">
                             <f:selectItem itemValue="#{null}"
                                           itemLabel="#{messages['config-filter.form.any-state']}" />
                             <f:selectItems var="statusType"
                                            itemValue="#{statusType}"
                                            itemLabel="#{enums[statusType]}"
-                                           value="#{movementBean.movementStateTypes}"/> 
+                                           value="#{periodMovementBean.movementStateTypes}"/>
                         </p:selectOneMenu>
                     </div>
                     <div class="col-sm-12 form-group">
@@ -96,13 +96,13 @@
                                        value="#{messages['config-filter.form.direction']}: "/>
                         <p:selectOneMenu id="inDirection" 
                                          converter="omnifaces.GenericEnumConverter"
-                                         value="#{movementBean.filter.movementClassType}">
+                                         value="#{periodMovementBean.filter.movementClassType}">
                             <f:selectItem itemValue="#{null}"
                                           itemLabel="#{messages['config-filter.form.any-direction']}" />
                             <f:selectItems var="directionType"
                                            itemValue="#{directionType}"
                                            itemLabel="#{enums[directionType]}"
-                                           value="#{movementBean.movementClassTypes}"/> 
+                                           value="#{periodMovementBean.movementClassTypes}"/>
                         </p:selectOneMenu>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                                  onstart="PF('searchBlock').block()"
                                  styleClass="btn btn-flat btn-success"
                                  oncomplete="PF('searchBlock').unblock()"
-                                 actionListener="#{movementBean.applyCustomFilters()}"/>
+                                 actionListener="#{periodMovementBean.applyCustomFilters()}"/>
                 <p:spacer width="10"/>
                 <p:commandButton immediate="true"
                                  value="#{menu['cancel']}"

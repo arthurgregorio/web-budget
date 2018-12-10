@@ -1,0 +1,166 @@
+<!--
+  Copyright (C) 2014 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:of="http://omnifaces.org/functions"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
+                template="/template/mainTemplate.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{periodMovementBean.initialize()}"/>
+    </f:metadata>
+
+    <ui:define name="pageTitle">
+        #{messages['period-movement.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['period-movement.page-description']}
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li><a href="#">#{breadcrumb['financial']}</a></li>
+        <li><a href="#">#{breadcrumb['financial.movements']}</a></li>
+        <li class="active">
+            <a href="listPeriodMovements.xhtml">
+                #{breadcrumb['financial.movements.period']}
+            </a>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <p:messages id="messages" closable="true" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+
+            </div>
+        </div>
+        <div class="box box-#{profileBean.currentThemeColorName}">
+            <div class="box-header with-border">
+
+            </div>
+            <div jsf:id="boxBody" class="box-body">
+                <h:form id="itemsList">
+                    <p:dataTable rows="25"
+                                 lazy="true"
+                                 paginator="true"
+                                 var="periodMovement"
+                                 sortOrder="descending"
+                                 selectionMode="single"
+                                 paginatorPosition="bottom"
+                                 rowKey="#{periodMovement.id}"
+                                 paginatorAlwaysVisible="false"
+                                 value="#{periodMovementBean.dataModel}"
+                                 selection="#{periodMovementBean.value}"
+                                 emptyMessage="#{messages['list.empty']}">
+
+                        <p:ajax event="rowSelect"
+                                listener="#{periodMovementBean.changeToDetail()}"
+                                disabled="#{not userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DETAIL)}"/>
+
+                        <p:column headerText="#{messages['period-movement.list.identification']}">
+                            <p:graphicImage width="20"
+                                            height="20"
+                                            library="webbudget"
+                                            name="img/ui-green-circle.png"
+                                            rendered="#{periodMovement.paid}"
+                                            title="#{enums[periodMovement.movementStateType]}"/>
+                            <p:graphicImage width="20"
+                                            height="20"
+                                            library="webbudget"
+                                            name="img/ui-red-circle.png"
+                                            rendered="#{periodMovement.open}"
+                                            title="#{enums[periodMovement.movementStateType]}"/>
+                            <p:graphicImage width="20"
+                                            height="20"
+                                            library="webbudget"
+                                            name="img/ui-blue-circle.png"
+                                            rendered="#{periodMovement.finalized}"
+                                            title="#{enums[periodMovement.movementStateType]}"/>
+                            <p:spacer width="10"/>
+                            <p:graphicImage width="24"
+                                            height="24"
+                                            library="webbudget"
+                                            name="img/ui-icon-plus.png"
+                                            rendered="#{periodMovement.revenue}"
+                                            title="#{messages['period-movement.list.revenue']}"/>
+                            <p:graphicImage width="24"
+                                            height="24"
+                                            library="webbudget"
+                                            name="img/ui-icon-minus.png"
+                                            rendered="#{periodMovement.expense}"
+                                            title="#{messages['period-movement.list.expense']}"/>
+                            <p:spacer width="10"/>
+                            #{periodMovement.identification}
+                        </p:column>
+                        <p:column width="12%"
+                                  styleClass="align-center"
+                                  headerText="#{messages['period-movement.list.value']}">
+                            <h:outputText value="#{periodMovement.value}" >
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="12%"
+                                  styleClass="align-center"
+                                  headerText="#{messages['period-movement.list.due-date']}">
+                            <h:outputText value="#{periodMovement.dueDate}">
+                                <f:converter converterId="localDateConverter"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="15%"
+                                  styleClass="align-center"
+                                  headerText="#{menu['list.actions']}">
+                            <p:commandButton icon="fa fa-money"
+                                             title="#{menu['pay']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{periodMovementBean.changeToPay(periodMovement.id)}"
+                                             rendered="#{periodMovement.payable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_PAY)}"/>
+                            <p:spacer width="10"
+                                      rendered="#{periodMovement.payable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_PAY)}"/>
+                            <p:commandButton icon="fa fa-edit"
+                                             title="#{menu['edit']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{periodMovementBean.changeToEdit(periodMovement.id)}"
+                                             rendered="#{periodMovement.editable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
+                            <p:spacer width="10"
+                                      rendered="#{periodMovement.editable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
+                            <p:commandButton icon="fa fa-eraser"
+                                             title="#{menu['delete']}"
+                                             styleClass="btn btn-flat btn-danger"
+                                             actionListener="#{periodMovementBean.changeToDelete(periodMovement.id)}"
+                                             rendered="#{periodMovement.deletable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_DELETE)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </div>
+        </div>
+        <wb:blocker target="boxBody"/>
+    </ui:define>
+
+    <ui:define name="popups">
+
+    </ui:define>
+</ui:composition>

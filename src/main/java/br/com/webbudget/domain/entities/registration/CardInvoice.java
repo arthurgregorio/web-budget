@@ -18,6 +18,7 @@ package br.com.webbudget.domain.entities.registration;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.financial.Movement;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -67,8 +68,8 @@ public class CardInvoice extends PersistentEntity {
     @Getter
     @Setter
     @OneToOne
-    @JoinColumn(name = "id_movement")
-    private Movement movement;
+    @JoinColumn(name = "id_period_movement")
+    private PeriodMovement periodMovement;
     @Getter
     @Setter
     @ManyToOne
@@ -159,8 +160,7 @@ public class CardInvoice extends PersistentEntity {
      * @return <code>true</code> if can be, <code>false</code> otherwise
      */
     public boolean isPayable() { // FIXME verify utility
-        return this.hasMovements()
-                && this.movement != null && this.movement.isPaid();
+        return this.hasMovements() && this.periodMovement != null && this.periodMovement.isPaid();
     }
 
     /**
@@ -169,8 +169,7 @@ public class CardInvoice extends PersistentEntity {
      * @return the start day of the invoice
      */
     public String getInvoicePeriodStart() { // FIXME verify utility
-        return DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                .format(this.financialPeriod.getStart());
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.financialPeriod.getStart());
     }
 
     /**
@@ -179,7 +178,6 @@ public class CardInvoice extends PersistentEntity {
      * @return the last day of the invoice
      */
     public String getInvoicePeriodEnd() { // FIXME verify utility
-        return DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                .format(this.financialPeriod.getEnd());
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.financialPeriod.getEnd());
     }
 }

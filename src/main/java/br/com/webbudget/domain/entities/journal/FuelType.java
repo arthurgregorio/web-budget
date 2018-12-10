@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.journal;
 
 /**
- * Classe que representa os tipos de combustivel disponiveis para abastecimento
+ * The possible types of {@link Fuel}
  *
  * @author Arthur Gregorio
  *
@@ -33,14 +33,16 @@ public enum FuelType {
     private final String description;
 
     /**
+     * Constructor...
      *
-     * @param description
+     * @param description the description and also the i18n key
      */
-    private FuelType(String description) {
+    FuelType(String description) {
         this.description = description;
     }
 
     /**
+     * {@inheritDoc}
      *
      * @return
      */

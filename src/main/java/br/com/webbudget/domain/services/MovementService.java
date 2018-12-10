@@ -268,7 +268,7 @@ public class MovementService {
 //                    movement.getLaunch().getFixedMovement();
 //            
 //            fixedMovement.setFixedMovementStatusType(
-//                    FixedMovementStatusType.ACTIVE);
+//                    FixedMovementState.ACTIVE);
 //            
 //            this.fixedMovementRepository.save(fixedMovement);
 //        }
@@ -486,7 +486,7 @@ public class MovementService {
 //                        // se chegamos na ultima parcela, encerramos
 //                        if (launch.getQuote().equals(fixedMovement.getQuotes())) {
 //                            fixedMovement.setFixedMovementStatusType(
-//                                    FixedMovementStatusType.FINALIZED);
+//                                    FixedMovementState.FINALIZED);
 //                            this.fixedMovementRepository.save(fixedMovement);
 //                        }
 //

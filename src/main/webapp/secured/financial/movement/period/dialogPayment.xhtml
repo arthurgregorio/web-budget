@@ -43,13 +43,13 @@
                 <p:commandButton update="paymentForm"
                                  value="#{menu['pay']}"
                                  styleClass="btn btn-flat btn-success" 
-                                 rendered="#{movementBean.viewState ne 'EDITING'}"
-                                 actionListener="#{movementBean.doSaveAndPayment()}"/>
+                                 rendered="#{periodMovementBean.viewState ne 'EDITING'}"
+                                 actionListener="#{periodMovementBean.doSaveAndPayment()}"/>
                 <p:commandButton update="paymentForm"
                                  value="#{menu['pay']}"
                                  styleClass="btn btn-flat btn-success" 
-                                 rendered="#{movementBean.viewState eq 'EDITING'}"
-                                 actionListener="#{movementBean.doUpdateAndPayment()}"/>
+                                 rendered="#{periodMovementBean.viewState eq 'EDITING'}"
+                                 actionListener="#{periodMovementBean.doUpdateAndPayment()}"/>
                 <p:spacer width="10"/>
                 <p:commandButton immediate="true"
                                  value="#{menu['cancel']}"

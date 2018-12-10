@@ -22,7 +22,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 /**
- * The {@link Transaction} view controller
+ * The {@link Movement} view controller
  *
  * @author Arthur Gregorio
  *
@@ -31,7 +31,7 @@ import javax.inject.Named;
  */
 @Named
 @ViewScoped
-public class MovementBean extends AbstractBean {
+public class MovementBean_old extends AbstractBean {
 
 //    @Getter
 //    @Setter
@@ -90,7 +90,7 @@ public class MovementBean extends AbstractBean {
 //        // inicializa o model customizado
 //        this.movementsModel = new MovementsListModel(
 //                this.movementService, () -> this.getFilter());
-//        
+//
 //        // inicializa o filtro
 //        this.filter = new MovementFilter();
 //
@@ -99,7 +99,7 @@ public class MovementBean extends AbstractBean {
 //                .stream()
 //                .sorted((v1, v2) -> v2.getStart().compareTo(v1.getStart()))
 //                .collect(Collectors.toList());
-//        
+//
 //        this.periodsModel = new DualListModel<>(this.periods, new ArrayList<>());
 //
 //        // seta a primeira busca sendo pelos periodos em aberto
@@ -139,19 +139,19 @@ public class MovementBean extends AbstractBean {
 //     * @param movementId o id do movimento a ser pago
 //     */
 //    public void initializePayment(long movementId) {
-//        
+//
 //        // inicializa o movimento
 //        this.movement = this.movementService.findMovementById(movementId);
-//        
+//
 //        final Payment payment = new Payment();
-//        
+//
 //        // se for um lancamento, pega a data de incio como data de pagamento
 //        if (this.movement.getLaunch() != null) {
 //            payment.setPaymentDate(this.movement.getLaunch().getStartDate());
 //        }
-//        
+//
 //        this.movement.setPayment(payment);
-//        
+//
 //        // inicializa carteiras e afins
 //        this.wallets = this.walletService.listWallets(Boolean.FALSE);
 //        this.debitCards = this.cardService.listDebitCards(Boolean.FALSE);
@@ -209,9 +209,9 @@ public class MovementBean extends AbstractBean {
 //            this.addError(false, "error.undefined-error", ex.getMessage());
 //        }
 //    }
-//    
+//
 //    /**
-//     * 
+//     *
 //     */
 //    public void doUpdateAndPayment() {
 //        try {
@@ -224,7 +224,7 @@ public class MovementBean extends AbstractBean {
 //            this.addError(false, "error.undefined-error", ex.getMessage());
 //        }
 //    }
-//    
+//
 //    /**
 //     * Aepnas paga o movimento
 //     */
@@ -269,14 +269,14 @@ public class MovementBean extends AbstractBean {
 //     * Exibe a telinha de pagamento
 //     */
 //    public void showPaymentDialog() {
-//        
+//
 //        final Payment payment = new Payment();
-//       
+//
 //        if (!this.movement.hasValueToDivide()) {
 //            this.addError(true, "error.movement.no-apportionment");
 //            return;
 //        }
-//        
+//
 //        // se for um lancamento, pega a data de incio como data de pagamento
 //        if (this.movement.getLaunch() != null) {
 //            payment.setPaymentDate(this.movement.getLaunch().getStartDate());
@@ -497,7 +497,7 @@ public class MovementBean extends AbstractBean {
 //                .collect(Collectors.toList());
 //        }
 //    }
-//    
+//
 //    /**
 //     * @return os estados possiveis dos movimentos
 //     */

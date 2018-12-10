@@ -173,7 +173,7 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
-     * Add a {@link Fuel} to the list of {@link Fuel}
+     * Add a {@link Fuel} to the list
      */
     public void addFuel() {
         this.fuels.add(new Fuel(this));

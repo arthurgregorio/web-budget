@@ -370,7 +370,7 @@ public class FixedMovementBean extends AbstractBean {
 //    /**
 //     * @return os status possiveis para um movimento fixo
 //     */
-//    public FixedMovementStatusType[] getAvailableFixedMovementStatusTypes() {
-//        return FixedMovementStatusType.values();
+//    public FixedMovementState[] getAvailableFixedMovementStatusTypes() {
+//        return FixedMovementState.values();
 //    }
 }

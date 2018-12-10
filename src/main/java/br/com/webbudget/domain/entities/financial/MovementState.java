@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.financial;
 
 /**
- * The state of the {@link Movement}
+ * The state of the {@link PeriodMovement} or the {@link FixedMovement}
  *
  * @author Arthur Gregorio
  *

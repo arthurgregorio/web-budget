@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,34 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entities.financial;
+package br.com.webbudget.domain.repositories.financial;
+
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Repository;
 
 /**
+ * The {@link PeriodMovement} repository
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.1.0, 20/09/2015
+ * @since 3.0.0, 04/12/2018
  */
-public enum FixedMovementStatusType {
+@Repository
+public interface PeriodMovementRepository extends EntityRepository<PeriodMovement, Long> {
 
-    ACTIVE("fixed-movement-status-type.active"),
-    FINALIZED("fixed-movement-status-type.finalized");
-
-    private final String description;
-
-    /**
-     * @param description
-     */
-    private FixedMovementStatusType(String description) {
-        this.description = description;
-    }
-
-    /**
-     * @return
-     */
-    @Override
-    public String toString() {
-        return this.description;
-    }
 }

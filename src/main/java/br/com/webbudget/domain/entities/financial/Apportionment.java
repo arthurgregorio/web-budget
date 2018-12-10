@@ -118,15 +118,4 @@ public class Apportionment extends PersistentEntity {
     public boolean isExpense() {
         return this.movementClass.isExpense();
     }
-
-    /**
-     * FIXME remove it is not necessary!
-     *
-     * Copy this apportionment to a new instance
-     *
-     * @return the new apportionment instance
-     */
-//    public Apportionment copy() {
-//        return new Apportionment(this.getValue(), this.getMovementClass());
-//    }
 }

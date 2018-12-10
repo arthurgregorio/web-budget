@@ -23,7 +23,7 @@
 
     <p:focus context="inPaymentMethod"/>
 
-    <ui:param name="payment" value="#{movementBean.movement.payment}"/>
+    <ui:param name="payment" value="#{periodMovementBean.movement.payment}"/>
 
     <div jsf:id="paymentBox" class="row">
         <div class="col-sm-5 form-group">
@@ -32,14 +32,14 @@
             <p:selectOneMenu id="inPaymentMethod" 
                              value="#{payment.paymentMethodType}"
                              converter="omnifaces.GenericEnumConverter"
-                             disabled="#{movementBean.movement.cardInvoice 
-                                         or movementBean.movement.revenue}">
+                             disabled="#{periodMovementBean.movement.cardInvoice
+                                         or periodMovementBean.movement.revenue}">
                 <p:ajax event="change"  
                         update="paymentBox" />
                 <f:selectItems var="paymentType"
                                itemValue="#{paymentType}"
                                itemLabel="#{enums[paymentType]}"
-                               value="#{movementBean.paymentMethodTypes}"/>
+                               value="#{periodMovementBean.paymentMethodTypes}"/>
             </p:selectOneMenu>
         </div>
         <div class="col-sm-4 form-group">
@@ -75,12 +75,12 @@
                               itemLabel="#{menu['select-one']}" />
                 <f:selectItems var="wallet"
                                itemValue="#{wallet}"
-                               value="#{movementBean.wallets}"
+                               value="#{periodMovementBean.wallets}"
                                itemLabel="#{wallet.friendlyName}"/>
             </p:selectOneMenu>
         </div>
         <div class="col-sm-12 form-group"
-             jsf:rendered="#{not movementBean.movement.revenue}">
+             jsf:rendered="#{not periodMovementBean.movement.revenue}">
             <p:outputLabel for="inCreditCard" 
                            value="#{messages['payment.form.credit-card']}: "/>
             <p:selectOneMenu id="inCreditCard" 
@@ -92,12 +92,12 @@
                               itemLabel="#{menu['select-one']}" />
                 <f:selectItems var="creditCard"
                                itemValue="#{creditCard}"
-                               value="#{movementBean.creditCards}"
+                               value="#{periodMovementBean.creditCards}"
                                itemLabel="#{creditCard.readableName}"/>
             </p:selectOneMenu>
         </div>
         <div class="col-sm-12 form-group"
-             jsf:rendered="#{not movementBean.movement.revenue}">
+             jsf:rendered="#{not periodMovementBean.movement.revenue}">
             <p:outputLabel for="inDebitCard" 
                            value="#{messages['payment.form.debit-card']}: "/>
             <p:selectOneMenu id="inDebitCard" 
@@ -109,7 +109,7 @@
                               itemLabel="#{menu['select-one']}" />
                 <f:selectItems var="debitCard"
                                itemValue="#{debitCard}"
-                               value="#{movementBean.debitCards}"
+                               value="#{periodMovementBean.debitCards}"
                                itemLabel="#{debitCard.readableName}"/>
             </p:selectOneMenu>
         </div>

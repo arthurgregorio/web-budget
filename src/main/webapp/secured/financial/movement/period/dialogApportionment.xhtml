@@ -39,10 +39,10 @@
         </div> 
 
         <wb:apportionmentForm blockForm="apportionmentForm"
-                              costCenterList="#{movementBean.costCenters}"
-                              apportionment="#{movementBean.apportionment}"
-                              movementClassList="#{movementBean.movementClasses}"
-                              onCostCenterSelect="#{movementBean.loadMovementClasses()}"/>
+                              costCenterList="#{periodMovementBean.costCenters}"
+                              apportionment="#{periodMovementBean.apportionment}"
+                              movementClassList="#{periodMovementBean.movementClasses}"
+                              onCostCenterSelect="#{periodMovementBean.loadMovementClasses()}"/>
         
         <div class="row">
             <div class="col-sm-12 align-right">
@@ -50,7 +50,7 @@
                                  value="#{menu['add']}"
                                  update="apportionmentMessages"
                                  styleClass="btn btn-flat btn-success"
-                                 actionListener="#{movementBean.addApportionment()}"/>
+                                 actionListener="#{periodMovementBean.addApportionment()}"/>
                 <p:spacer width="10"/>
                 <p:commandButton immediate="true"
                                  value="#{menu['cancel']}"
