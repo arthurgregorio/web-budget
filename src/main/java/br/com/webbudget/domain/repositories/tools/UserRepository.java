@@ -24,6 +24,8 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -79,10 +81,10 @@ public interface UserRepository extends DefaultRepository<User> {
      * @return 
      */
     @Override
-    default Criteria<User, User> getRestrictions(String filter) {
-        return criteria()
-                .likeIgnoreCase(User_.name, filter)
-                .likeIgnoreCase(User_.username, filter)
-                .likeIgnoreCase(User_.email, filter);
+    default Collection<Criteria<User, User>> getRestrictions(String filter) {
+        return List.of(
+                this.criteria().likeIgnoreCase(User_.name, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(User_.username, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(User_.email, this.likeAny(filter)));
     }
 }

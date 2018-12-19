@@ -25,6 +25,7 @@ import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,9 +93,9 @@ public interface RefuelingRepository extends DefaultRepository<Refueling> {
      * @return
      */
     @Override
-    default Criteria<Refueling, Refueling> getRestrictions(String filter) {
-        return criteria()
-                .likeIgnoreCase(Refueling_.place, filter)
-                .likeIgnoreCase(Refueling_.movementCode, filter);
+    default Collection<Criteria<Refueling, Refueling>> getRestrictions(String filter) {
+        return List.of(
+                this.criteria().likeIgnoreCase(Refueling_.place, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Refueling_.movementCode, this.likeAny(filter)));
     }
 }

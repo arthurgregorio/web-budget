@@ -25,6 +25,7 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,8 +75,8 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
      * @return
      */
     @Override
-    default Criteria<FinancialPeriod, FinancialPeriod> getRestrictions(String filter) {
-        return this.criteria().likeIgnoreCase(FinancialPeriod_.identification, filter);
+    default Collection<Criteria<FinancialPeriod, FinancialPeriod>> getRestrictions(String filter) {
+        return List.of(this.criteria().likeIgnoreCase(FinancialPeriod_.identification, this.likeAny(filter)));
     }
 
     /**

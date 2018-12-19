@@ -23,6 +23,8 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -61,10 +63,10 @@ public interface CostCenterRepository extends DefaultRepository<CostCenter> {
      * @return 
      */
     @Override
-    default Criteria<CostCenter, CostCenter> getRestrictions(String filter) {
-        return this.criteria()
-                .likeIgnoreCase(CostCenter_.description, filter)
-                .likeIgnoreCase(CostCenter_.name, filter);
+    default Collection<Criteria<CostCenter, CostCenter>> getRestrictions(String filter) {
+        return List.of(
+                this.criteria().likeIgnoreCase(CostCenter_.description, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(CostCenter_.name, this.likeAny(filter)));
     }
 
     /**

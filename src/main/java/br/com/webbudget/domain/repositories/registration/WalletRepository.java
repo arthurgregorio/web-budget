@@ -24,6 +24,8 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -53,10 +55,10 @@ public interface WalletRepository extends DefaultRepository<Wallet> {
      * @return 
      */
     @Override
-    default Criteria<Wallet, Wallet> getRestrictions(String filter) {
-        return criteria()
-                .eqIgnoreCase(Wallet_.bank, filter)
-                .eqIgnoreCase(Wallet_.name, filter);
+    default Collection<Criteria<Wallet, Wallet>> getRestrictions(String filter) {
+        return List.of(
+                this.criteria().likeIgnoreCase(Wallet_.bank, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Wallet_.name, this.likeAny(filter)));
     }
     
     /**
