@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.entities.registration.VehicleType;
@@ -48,7 +48,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class VehicleBean extends FormBean<Vehicle> {
+public class VehicleBean extends LazyFormBean<Vehicle> {
 
     @Getter
     private List<CostCenter> costCenters;

@@ -62,7 +62,7 @@ public class ClosingService {
 //        // se temos movimentos de cartao de credito que nao foram incluidos em
 //        // uma fatura do periodo
 //        cards.stream()
-//                .filter(Card::isCreditCard)
+//                .text(Card::isCreditCard)
 //                .forEach(card -> {
 //                    final List<Movement> movements = this.movementRepository
 //                            .listPaidWithoutInvoiceByPeriodAndCard(period, card);

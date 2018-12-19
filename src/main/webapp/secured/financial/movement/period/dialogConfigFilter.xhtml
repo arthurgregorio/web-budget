@@ -28,7 +28,7 @@
           resizable="false" 
           closeOnEscape="true"
           widgetVar="dialogConfigFilter" 
-          header="#{messages['config-filter.dialog.title']}">
+          header="#{messages['config-text.dialog.title']}">
 
     <h:form id="configFilterForm">
 
@@ -50,10 +50,10 @@
                                     itemLabel="#{period.identification}"
                                     value="#{movementBean.periodsModel}">
                             <f:facet name="sourceCaption">
-                                #{messages['config-filter.form.available-periods']}
+                                #{messages['config-text.form.available-periods']}
                             </f:facet>
                             <f:facet name="targetCaption">
-                                #{messages['config-filter.form.selected-periods']}
+                                #{messages['config-text.form.selected-periods']}
                             </f:facet>
                             <o:converter list="#{movementBean.periods}"
                                          converterId="omnifaces.ListConverter" />
@@ -65,12 +65,12 @@
                 <div class="row">
                     <div class="col-sm-12 form-group">
                         <p:outputLabel for="inType" 
-                                       value="#{messages['config-filter.form.type']}: "/>
+                                       value="#{messages['config-text.form.type']}: "/>
                         <p:selectOneMenu id="inType" 
                                          converter="omnifaces.GenericEnumConverter"
                                          value="#{periodMovementBean.filter.movementType}">
                             <f:selectItem itemValue="#{null}"
-                                          itemLabel="#{messages['config-filter.form.any-type']}" />
+                                          itemLabel="#{messages['config-text.form.any-type']}" />
                             <f:selectItems var="movementType"
                                            itemValue="#{movementType}"
                                            itemLabel="#{enums[movementType]}"
@@ -79,12 +79,12 @@
                     </div>
                     <div class="col-sm-12 form-group">
                         <p:outputLabel for="inStatus" 
-                                       value="#{messages['config-filter.form.status']}: "/>
+                                       value="#{messages['config-text.form.status']}: "/>
                         <p:selectOneMenu id="inStatus" 
                                          converter="omnifaces.GenericEnumConverter"
                                          value="#{periodMovementBean.filter.movementStateType}">
                             <f:selectItem itemValue="#{null}"
-                                          itemLabel="#{messages['config-filter.form.any-state']}" />
+                                          itemLabel="#{messages['config-text.form.any-state']}" />
                             <f:selectItems var="statusType"
                                            itemValue="#{statusType}"
                                            itemLabel="#{enums[statusType]}"
@@ -93,12 +93,12 @@
                     </div>
                     <div class="col-sm-12 form-group">
                         <p:outputLabel for="inDirection" 
-                                       value="#{messages['config-filter.form.direction']}: "/>
+                                       value="#{messages['config-text.form.direction']}: "/>
                         <p:selectOneMenu id="inDirection" 
                                          converter="omnifaces.GenericEnumConverter"
                                          value="#{periodMovementBean.filter.movementClassType}">
                             <f:selectItem itemValue="#{null}"
-                                          itemLabel="#{messages['config-filter.form.any-direction']}" />
+                                          itemLabel="#{messages['config-text.form.any-direction']}" />
                             <f:selectItems var="directionType"
                                            itemValue="#{directionType}"
                                            itemLabel="#{enums[directionType]}"

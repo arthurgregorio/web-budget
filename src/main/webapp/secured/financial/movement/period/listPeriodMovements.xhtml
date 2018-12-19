@@ -55,12 +55,31 @@
         </div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-
+            
             </div>
         </div>
         <div class="box box-#{profileBean.currentThemeColorName}">
             <div class="box-header with-border">
+                <h:form id="controlsForm">
+                    <!--<p:defaultCommand target="btSearch"/>-->
+                    <div class="row">
+                        <div class="col-xs-2">
 
+                        </div>
+                        <div class="col-xs-4">
+
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="box-tools pull-right">
+                                <p:commandButton immediate="true"
+                                                 value="#{menu['new']}"
+                                                 styleClass="btn btn-flat btn-primary"
+                                                 action="#{periodMovementBean.changeToAdd()}"
+                                                 rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_ADD)}"/>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
             </div>
             <div jsf:id="boxBody" class="box-body">
                 <h:form id="itemsList">
@@ -132,7 +151,7 @@
                         </p:column>
                         <p:column width="15%"
                                   styleClass="align-center"
-                                  headerText="#{menu['list.actions']}">
+                                  headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-money"
                                              title="#{menu['pay']}"
                                              styleClass="btn btn-flat btn-default"

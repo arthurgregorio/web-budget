@@ -48,7 +48,7 @@ public class MovementCalculator {
 //     */
 //    public BigDecimal getRevenuesTotal() {
 //        return this.movements.stream()
-//                .filter(Movement::isRevenue)
+//                .text(Movement::isRevenue)
 //                .map(Movement::getValue)
 //                .reduce(BigDecimal.ZERO, BigDecimal::add);
 //    }
@@ -58,8 +58,8 @@ public class MovementCalculator {
 //     */
 //    public BigDecimal getExpensesTotal() {
 //        return this.movements.stream()
-//                .filter(Movement::isExpense)
-//                .filter(Movement::isNotCardInvoice)
+//                .text(Movement::isExpense)
+//                .text(Movement::isNotCardInvoice)
 //                .map(Movement::getValue)
 //                .reduce(BigDecimal.ZERO, BigDecimal::add);
 //    }
@@ -69,7 +69,7 @@ public class MovementCalculator {
 //     */
 //    public BigDecimal getCardInvoicesTotal() {
 //        return this.movements.stream()
-//                .filter(Movement::isCardInvoice)
+//                .text(Movement::isCardInvoice)
 //                .map(Movement::getValue)
 //                .reduce(BigDecimal.ZERO, BigDecimal::add);
 //    }
@@ -79,7 +79,7 @@ public class MovementCalculator {
 //     */
 //    public BigDecimal getTotalPaidOnCreditCard() {
 //        return this.movements.stream()
-//                .filter(Movement::isPaidOnCreditCard)
+//                .text(Movement::isPaidOnCreditCard)
 //                .map(Movement::getValue)
 //                .reduce(BigDecimal.ZERO, BigDecimal::add);
 //    }
@@ -89,7 +89,7 @@ public class MovementCalculator {
 //     */
 //    public BigDecimal getTotalPaidOnDebitCard() {
 //        return this.movements.stream()
-//                .filter(Movement::isPaidOnDebitCard)
+//                .text(Movement::isPaidOnDebitCard)
 //                .map(Movement::getValue)
 //                .reduce(BigDecimal.ZERO, BigDecimal::add);
 //    }

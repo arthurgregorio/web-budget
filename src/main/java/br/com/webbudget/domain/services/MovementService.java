@@ -707,24 +707,24 @@ public class MovementService {
 //
 //    /**
 //     *
-//     * @param filter
+//     * @param text
 //     * @param pageRequest
 //     * @return
 //     */
-//    public Page<Movement> listMovementsByFilter(MovementFilter filter, PageRequest pageRequest) {
-//        return this.movementRepository.listByFilter(filter, pageRequest);
+//    public Page<Movement> listMovementsByFilter(PeriodMovementFilter text, PageRequest pageRequest) {
+//        return this.movementRepository.listByFilter(text, pageRequest);
 //    }
 //
 //    /**
 //     *
-//     * @param filter
+//     * @param text
 //     * @param pageRequest
 //     * @return
 //     */
-//    public Page<FixedMovement> listFixedMovementsByFilter(String filter, PageRequest pageRequest) {
+//    public Page<FixedMovement> listFixedMovementsByFilter(String text, PageRequest pageRequest) {
 //
 //        final Page<FixedMovement> page
-//                = this.fixedMovementRepository.listByFilter(filter, pageRequest);
+//                = this.fixedMovementRepository.listByFilter(text, pageRequest);
 //
 //        final FinancialPeriod period
 //                = this.financialPeriodService.findActiveFinancialPeriod();

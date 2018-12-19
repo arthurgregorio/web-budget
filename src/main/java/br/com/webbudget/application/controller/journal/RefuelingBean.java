@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.journal;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.journal.FuelType;
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
@@ -50,7 +50,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class RefuelingBean extends FormBean<Refueling> {
+public class RefuelingBean extends LazyFormBean<Refueling> {
 
     @Getter
     private List<Vehicle> vehicles;

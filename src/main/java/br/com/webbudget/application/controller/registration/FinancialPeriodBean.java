@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.FinancialPeriodService;
@@ -28,7 +28,6 @@ import org.primefaces.model.SortOrder;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.util.List;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
@@ -43,7 +42,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class FinancialPeriodBean extends FormBean<FinancialPeriod> {
+public class FinancialPeriodBean extends LazyFormBean<FinancialPeriod> {
 
     @Getter
     private boolean hasOpenPeriod;

@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.configuration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.configuration.Group;
 import br.com.webbudget.domain.entities.configuration.StoreType;
 import br.com.webbudget.domain.entities.configuration.User;
@@ -49,7 +49,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class UserBean extends FormBean<User> {
+public class UserBean extends LazyFormBean<User> {
 
     @Getter
     private List<Group> groups;

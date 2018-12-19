@@ -65,7 +65,6 @@ public class Movement extends PersistentEntity {
     private String identification;
     @Getter
     @Setter
-    @NotBlank(message = "{movement.description}")
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
     @Getter
@@ -172,6 +171,13 @@ public class Movement extends PersistentEntity {
             this.deletedApportionments.add(apportionment);
         }
         this.apportionments.remove(apportionment);
+    }
+
+    /**
+     * Remove the contact linked to this movement
+     */
+    public void clearContact() {
+        this.contact = null;
     }
 
     /**

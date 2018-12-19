@@ -162,12 +162,12 @@ public class PeriodDetailService {
 //                    .ofPattern("dd/MM").format(payDate));
 //
 //            final BigDecimal expensesTotal = expenses.stream()
-//                    .filter(movement -> movement.getPaymentDate().equals(payDate))
+//                    .text(movement -> movement.getPaymentDate().equals(payDate))
 //                    .map(Movement::getValue)
 //                    .reduce(BigDecimal.ZERO, BigDecimal::add);
 //
 //            final BigDecimal revenuesTotal = revenues.stream()
-//                    .filter(movement -> movement.getPaymentDate().equals(payDate))
+//                    .text(movement -> movement.getPaymentDate().equals(payDate))
 //                    .map(Movement::getValue)
 //                    .reduce(BigDecimal.ZERO, BigDecimal::add);
 //

@@ -82,7 +82,7 @@ public class FinancialPeriod extends PersistentEntity {
     private LocalDate end;
     @Getter
     @Setter
-    @Column(name = "closed")
+    @Column(name = "closed", nullable = false)
     private boolean closed;
 
     @Getter
@@ -95,6 +95,7 @@ public class FinancialPeriod extends PersistentEntity {
      * Default constructor
      */
     public FinancialPeriod() {
+        this.closed = false;
         this.expensesGoal = BigDecimal.ZERO;
         this.revenuesGoal = BigDecimal.ZERO;
         this.creditCardGoal = BigDecimal.ZERO;
@@ -107,6 +108,15 @@ public class FinancialPeriod extends PersistentEntity {
      */
     public boolean isExpired() {
         return LocalDate.now().compareTo(this.end) > 0;
+    }
+
+    /**
+     * Method to check if this period is active or not
+     *
+     * @return if this period is active or not with with <code>true</code> or <code>false</code> respectively
+     */
+    public boolean isCurrent() {
+        return !this.isExpired() && !this.isClosed();
     }
 
     /**
@@ -143,14 +153,5 @@ public class FinancialPeriod extends PersistentEntity {
      */
     public BigDecimal getRevenuesTotal() {
         return this.closing.getRevenues();
-    }
-
-    /**
-     * Method to check if this period is active or not
-     *
-     * @return if this period is active or not with with <code>true</code> or <code>false</code> respectively
-     */
-    public boolean isActive() {
-        return !this.isExpired() && !this.isClosed();
     }
 }

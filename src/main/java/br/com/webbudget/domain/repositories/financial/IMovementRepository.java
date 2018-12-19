@@ -74,11 +74,11 @@ public interface IMovementRepository extends EntityRepository<Movement, Long> {
 //
 //    /**
 //     * 
-//     * @param filter
+//     * @param text
 //     * @param pageRequest
 //     * @return 
 //     */
-//    public Page<Movement> listByFilter(MovementFilter filter, PageRequest pageRequest);
+//    public Page<Movement> listByFilter(PeriodMovementFilter text, PageRequest pageRequest);
 //    
 //    /**
 //     *

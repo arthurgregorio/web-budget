@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Wallet;
@@ -49,7 +49,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class CardBean extends FormBean<Card> {
+public class CardBean extends LazyFormBean<Card> {
 
     @Getter
     private List<Wallet> wallets;

@@ -81,6 +81,7 @@ public class PeriodMovement extends Movement {
      */
     public PeriodMovement() {
         super();
+        this.dueDate = LocalDate.now();
         this.movementState = MovementState.OPEN;
         this.movementType = MovementType.MOVEMENT;
     }

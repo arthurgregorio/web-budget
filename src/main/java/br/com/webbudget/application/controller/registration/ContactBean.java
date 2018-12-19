@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.*;
 import br.com.webbudget.domain.repositories.registration.AddressRepository;
 import br.com.webbudget.domain.repositories.registration.ContactRepository;
@@ -43,7 +43,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class ContactBean extends FormBean<Contact> {
+public class ContactBean extends LazyFormBean<Contact> {
 
     @Getter
     @Setter

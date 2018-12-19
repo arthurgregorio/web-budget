@@ -108,13 +108,13 @@
                     <ul class="dropdown-menu" role="menu">
                         <li jsf:rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ACCESS)}">
                             <p:link outcome="/secured/financial/movement/fixed/listFixedMovements.xhtml">
-                                <i class="fa fa-circle" />
+                                <i class="fa fa-thumbtack" />
                                 #{menu['financial.movements.fixed']}
                             </p:link>
                         </li>
                         <li jsf:rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_ACCESS)}">
                             <p:link outcome="/secured/financial/movement/period/listPeriodMovements.xhtml">
-                                <i class="fa fa-circle" />
+                                <i class="fa fa-calendar-check" />
                                 #{menu['financial.movements.period']}
                             </p:link>
                         </li>

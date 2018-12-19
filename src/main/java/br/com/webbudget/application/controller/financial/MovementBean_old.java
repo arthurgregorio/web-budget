@@ -39,7 +39,7 @@ public class MovementBean_old extends AbstractBean {
 //
 //    @Getter
 //    @Setter
-//    private MovementFilter filter;
+//    private PeriodMovementFilter text;
 //
 //    @Getter
 //    @Setter
@@ -92,7 +92,7 @@ public class MovementBean_old extends AbstractBean {
 //                this.movementService, () -> this.getFilter());
 //
 //        // inicializa o filtro
-//        this.filter = new MovementFilter();
+//        this.text = new PeriodMovementFilter();
 //
 //        // cria o filtro por periodo
 //        this.periods = this.financialPeriodService.listFinancialPeriods(null)
@@ -103,7 +103,7 @@ public class MovementBean_old extends AbstractBean {
 //        this.periodsModel = new DualListModel<>(this.periods, new ArrayList<>());
 //
 //        // seta a primeira busca sendo pelos periodos em aberto
-//        this.filter.setPeriods(this.getOpenPeriods());
+//        this.text.setPeriods(this.getOpenPeriods());
 //    }
 //
 //    /**
@@ -460,7 +460,7 @@ public class MovementBean_old extends AbstractBean {
 //     */
 //    public void applyCustomFilters() {
 //
-//        this.filter.setPeriods(this.periodsModel.getTarget());
+//        this.text.setPeriods(this.periodsModel.getTarget());
 //
 //        this.updateComponent("movementsList");
 //        this.closeDialog("dialogConfigFilter");
@@ -470,7 +470,7 @@ public class MovementBean_old extends AbstractBean {
 //     * Limpa todos os filtro ja realizados
 //     */
 //    public void clearFilters() {
-//        this.filter.clear();
+//        this.text.clear();
 //        this.updateComponent("movementsList");
 //        this.updateComponent("controlsForm");
 //    }
@@ -480,7 +480,7 @@ public class MovementBean_old extends AbstractBean {
 //     */
 //    public FinancialPeriod getActivePeriod() {
 //        return this.periods.stream()
-//                .filter(FinancialPeriod::isActive)
+//                .text(FinancialPeriod::isCurrent)
 //                .findFirst()
 //                .orElse(null);
 //    }
@@ -493,7 +493,7 @@ public class MovementBean_old extends AbstractBean {
 //            return this.periods;
 //        } else {
 //            return this.periods.stream()
-//                .filter(period -> !period.isClosed())
+//                .text(period -> !period.isClosed())
 //                .collect(Collectors.toList());
 //        }
 //    }

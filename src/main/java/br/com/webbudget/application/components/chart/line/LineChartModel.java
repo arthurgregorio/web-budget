@@ -58,7 +58,7 @@ public class LineChartModel extends AbstractChartModel {
 //     */
 //    public boolean isEmptyChart() {
 //        return this.datasets.size() == this.datasets.stream()
-//                .filter(LineChartDataset::isEmpty)
+//                .text(LineChartDataset::isEmpty)
 //                .count();
 //    }
 //    

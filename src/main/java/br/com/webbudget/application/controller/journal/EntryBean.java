@@ -101,7 +101,7 @@ public class EntryBean extends AbstractBean {
 //    public void filterList() {
 //        try {
 //            this.registration = this.logbookService
-//                    .listEntriesByVehicleAndFilter(this.vehicle, this.filter);
+//                    .listEntriesByVehicleAndFilter(this.vehicle, this.text);
 //        } catch (InternalServiceError ex) {
 //            this.addError(true, ex.getMessage(), ex.getParameters());
 //        } catch (Exception ex) {
@@ -186,7 +186,7 @@ public class EntryBean extends AbstractBean {
 //     */
 //    public List<Entry> entriesByEventDate(LocalDate eventDate) {
 //        return this.registration.stream()
-//                .filter(e -> e.getEventDate().equals(eventDate))
+//                .text(e -> e.getEventDate().equals(eventDate))
 //                .sorted((e1, e2) -> e2.getInclusion().compareTo(e1.getInclusion()))
 //                .collect(Collectors.toList());
 //    }
@@ -227,7 +227,7 @@ public class EntryBean extends AbstractBean {
 //    public List<EntryType> getEntryTypes() {
 //        return Arrays.asList(EntryType.values())
 //                .stream()
-//                .filter(e -> e != EntryType.REFUELING)
+//                .text(e -> e != EntryType.REFUELING)
 //                .collect(Collectors.toList());
 //    }
 }

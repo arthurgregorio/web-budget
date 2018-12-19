@@ -17,16 +17,27 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.table.LazyDataProvider;
+import br.com.webbudget.application.components.table.LazyModel;
 import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.components.table.filter.PeriodMovementFilter;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
+import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
+import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
+import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
 import br.com.webbudget.domain.services.PeriodMovementService;
+import lombok.Getter;
+import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.GET;
+import java.util.List;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
@@ -40,13 +51,30 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class PeriodMovementBean extends FormBean<PeriodMovement> {
+public class PeriodMovementBean extends FormBean<PeriodMovement> implements LazyDataProvider<PeriodMovement> {
+
+    @Getter
+    private final PeriodMovementFilter filter;
+    @Getter
+    private final LazyDataModel<PeriodMovement> dataModel;
+
+    @Getter
+    @Inject
+    private PeriodMovementFormBean formBean;
 
     @Inject
     private PeriodMovementService periodMovementService;
 
     @Inject
     private PeriodMovementRepository periodMovementRepository;
+
+    /**
+     * Constructor...
+     */
+    public PeriodMovementBean() {
+        this.filter = PeriodMovementFilter.getInstance();
+        this.dataModel = new LazyModel<>(this);
+    }
 
     /**
      * {@inheritDoc}
@@ -66,6 +94,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
+        this.formBean.initializeForAdding();
         this.value = this.periodMovementRepository.findById(id).orElseGet(PeriodMovement::new);
     }
 
@@ -92,7 +121,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> {
      */
     @Override
     public Page<PeriodMovement> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.periodMovementRepository.findAllBy(this.filter.getValue(), this.filter.getEntityStatusValue(), first, pageSize);
+        return this.periodMovementRepository.findAllBy(this.filter, first, pageSize);
     }
 
     /**
@@ -134,5 +163,13 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> {
      */
     public String changeToPay(long idMovement) {
         return "";
+    }
+
+    public void showContactDialog() {
+
+    }
+
+    public void showApportionmentDialog() {
+
     }
 }

@@ -58,7 +58,7 @@ public interface DefaultRepository<T extends PersistentEntity> extends EntityRep
      * To use this method you need to implement {@link #getRestrictions(java.lang.String)}
      * and {@link #getEntityStateProperty()}
      *
-     * @param filter the string filter to use
+     * @param filter the string text to use
      * @param active the object status of the entity, null means all states
      * @param start the start page
      * @param pageSize the size of the page
@@ -92,9 +92,9 @@ public interface DefaultRepository<T extends PersistentEntity> extends EntityRep
     /**
      * The method to count the pages of the pagination process
      *
-     * @param filter the filter to be used to count the pages
+     * @param filter the text to be used to count the pages
      * @param active the entity state property
-     * @return total of the pages for this filter combination
+     * @return total of the pages for this text combination
      */
     @SuppressWarnings("unchecked")
     default int countPages(String filter, Boolean active) {
@@ -157,7 +157,7 @@ public interface DefaultRepository<T extends PersistentEntity> extends EntityRep
      *
      * With this we can detect all the restrictions to build the criteria
      *
-     * @param filter the generic filter in {@link String} format
+     * @param filter the generic text in {@link String} format
      * @return the criteria for the type of the repository
      */
     default Criteria<T, T> getRestrictions(String filter) {
