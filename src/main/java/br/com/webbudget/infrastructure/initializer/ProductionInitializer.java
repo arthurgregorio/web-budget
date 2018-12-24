@@ -18,6 +18,7 @@ package br.com.webbudget.infrastructure.initializer;
 
 import org.apache.deltaspike.core.api.exclude.Exclude;
 import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.FlywayException;
 import org.flywaydb.core.api.MigrationInfo;
 import org.slf4j.Logger;
 
@@ -60,21 +61,27 @@ public class ProductionInitializer implements EnvironmentInitializer {
         checkNotNull(this.dataSource, "No datasource found for migrations");
 
         final Flyway flyway = Flyway.configure()
-                .baselineOnMigrate(true)
+                .sqlMigrationPrefix("v")
                 .baselineVersion("0")
+                .baselineOnMigrate(true)
                 .dataSource(this.dataSource)
-                .locations("db/migrations").load();
+                .locations("db/migrations")
+                .load();
 
         final MigrationInfo migrationInfo = flyway.info().current();
 
         if (migrationInfo == null) {
             this.logger.info("No existing database at the actual datasource");
-        } else {
-            this.logger.info("Current versions {}", migrationInfo.getVersion() + " : " + migrationInfo.getDescription());
+        }
+        else {
+            this.logger.info("Current version: {}", migrationInfo.getVersion() + " : " + migrationInfo.getDescription());
         }
 
-        flyway.migrate();
-
-        this.logger.info("Successfully migrated to version: {}", flyway.info().current().getVersion());
+        try {
+            flyway.migrate();
+            this.logger.info("Successfully migrated to version: {}", flyway.info().current().getVersion());
+        } catch (FlywayException ex) {
+            this.logger.info("Migrations failed!", ex);
+        }
     }
 }
