@@ -36,7 +36,7 @@ import java.util.List;
  * @since 3.0.0, 29/09/2018
  */
 @Dependent
-public class MovementClassBudgetValidator implements MovementClassSavingValidator, MovementClassUpdatingValidator {
+public class MovementClassBudgetValidator implements MovementClassSavingBusinessLogic, MovementClassUpdatingBusinessLogic {
 
     @Inject
     private MovementClassRepository movementClassRepository;
@@ -47,7 +47,7 @@ public class MovementClassBudgetValidator implements MovementClassSavingValidato
      * @param value
      */
     @Override
-    public void validate(MovementClass value) {
+    public void run(MovementClass value) {
 
         final CostCenter costCenter = value.getCostCenter();
         final MovementClassType classType = value.getMovementClassType();

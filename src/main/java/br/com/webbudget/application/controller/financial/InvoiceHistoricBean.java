@@ -91,7 +91,7 @@ public class InvoiceHistoricBean extends AbstractBean {
 //    public String changeToDetail(CardInvoice cardInvoice) {
 //        
 //        // lista os movimentos da fatura
-//        final List<Movement> movements = 
+//        final List<Movement> movements =
 //                this.movementService.listMovementsByCardInvoice(cardInvoice);
 //        
 //        // colocar os movimentos na fatura e seta na sessao

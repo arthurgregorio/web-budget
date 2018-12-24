@@ -18,22 +18,15 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.components.NavigationManager;
 import br.com.webbudget.application.components.ViewState;
-import br.com.webbudget.application.components.table.LazyDataProvider;
-import br.com.webbudget.application.components.table.LazyFilter;
-import br.com.webbudget.application.components.table.LazyModel;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.model.LazyDataModel;
-
-import java.util.List;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 import static br.com.webbudget.application.components.NavigationManager.Parameter.of;
 
 /**
- * The abstract form controller, this class hold all the basic features that a single form will have such as lazy
- * loading support for primefaces data tables with the {@link LazyDataProvider}
+ * The abstract form controller, this class hold all the basic features that a single form will have
  *
  * @param <T> the type to be manipulated by this controller, must be a domain entity child of {@link PersistentEntity}
  *
@@ -42,22 +35,14 @@ import static br.com.webbudget.application.components.NavigationManager.Paramete
  * @version 1.0.0
  * @since 3.0.0, 28/03/2018
  */
-public abstract class FormBean<T extends PersistentEntity> extends AbstractBean implements LazyDataProvider<T> {
+public abstract class FormBean<T extends PersistentEntity> extends AbstractBean {
 
     @Getter
     @Setter
     protected T value;
 
     @Getter
-    protected List<T> data;
-
-    @Getter
     protected ViewState viewState;
-
-    @Getter
-    protected final LazyFilter filter;
-    @Getter
-    protected final LazyDataModel<T> dataModel;
 
     protected final NavigationManager navigation;
 
@@ -65,12 +50,7 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean 
      * Create the bean and initialize the default data
      */
     public FormBean() {
-
-        this.dataModel = new LazyModel<>(this);
-
-        this.filter = LazyFilter.getInstance();
         this.navigation = NavigationManager.getInstance();
-
         this.initializeNavigationManager();
     }
 
@@ -113,20 +93,6 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean 
      */
     public void initialize() {
         this.viewState = ViewState.LISTING;
-    }
-
-    /**
-     * Update the default listing component, by default this component is named by "itemsListing"
-     */
-    public void updateListing() {
-        this.updateComponent("itemsListing");
-    }
-
-    /**
-     * Clear the form filters
-     */
-    public void clearFilters() {
-        this.filter.clear();
     }
 
     /**

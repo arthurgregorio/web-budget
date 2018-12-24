@@ -18,13 +18,13 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.entities.registration.VehicleType;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.VehicleRepository;
-import br.com.webbudget.domain.validators.registration.vehicle.VehicleSavingValidator;
+import br.com.webbudget.domain.validators.registration.vehicle.VehicleSavingBusinessLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
@@ -48,7 +48,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class VehicleBean extends FormBean<Vehicle> {
+public class VehicleBean extends LazyFormBean<Vehicle> {
 
     @Getter
     private List<CostCenter> costCenters;
@@ -60,7 +60,7 @@ public class VehicleBean extends FormBean<Vehicle> {
 
     @Any
     @Inject
-    private Instance<VehicleSavingValidator> savingValidators;
+    private Instance<VehicleSavingBusinessLogic> savingBusinessLogics;
 
     /**
      * {@inheritDoc}
@@ -81,7 +81,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.costCenters = this.costCenterRepository.findAllActive();
-        this.value = this.vehicleRepository.findOptionalById(id).orElseGet(Vehicle::new);
+        this.value = this.vehicleRepository.findById(id).orElseGet(Vehicle::new);
     }
 
     /**
@@ -117,7 +117,7 @@ public class VehicleBean extends FormBean<Vehicle> {
     @Override
     @Transactional
     public void doSave() {
-        this.savingValidators.forEach(validator -> validator.validate(this.value));
+        this.savingBusinessLogics.forEach(logic -> logic.run(this.value));
         this.vehicleRepository.save(this.value);
         this.value = new Vehicle();
         this.addInfo(true, "saved");

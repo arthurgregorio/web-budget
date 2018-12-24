@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entities.registration.Wallet;
-import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import lombok.Getter;
@@ -59,7 +59,7 @@ public class BalanceHistoricBean extends AbstractBean {
      * Initialize the view with the balances of the give wallet
      */
     public void initialize(long walletId) {
-        this.wallet = this.walletRepository.findOptionalById(walletId).orElseGet(Wallet::new);
+        this.wallet = this.walletRepository.findById(walletId).orElseGet(Wallet::new);
         this.walletBalances = this.walletBalanceRepository.findByWallet_id(walletId);
         this.processBalanceDates();
     }

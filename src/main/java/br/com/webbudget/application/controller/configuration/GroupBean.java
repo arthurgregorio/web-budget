@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.configuration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.configuration.Authorization;
 import br.com.webbudget.domain.entities.configuration.Grant;
 import br.com.webbudget.domain.entities.configuration.Group;
@@ -51,7 +51,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class GroupBean extends FormBean<Group> {
+public class GroupBean extends LazyFormBean<Group> {
 
     @Getter
     private TreeNode treeRoot;
@@ -92,8 +92,7 @@ public class GroupBean extends FormBean<Group> {
 
         this.createAuthorizationsTree();
 
-        this.value = this.groupRepository.findOptionalById(id)
-                .orElseGet(Group::new);
+        this.value = this.groupRepository.findById(id).orElseGet(Group::new);
 
         if (this.viewState != ViewState.ADDING) {
             this.selectAuthorizations();

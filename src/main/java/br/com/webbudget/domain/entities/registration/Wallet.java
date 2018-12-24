@@ -86,7 +86,7 @@ public class Wallet extends PersistentEntity {
     @Setter
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{wallet.wallet-type}")
-    @Column(name = "wallet_type", nullable = false)
+    @Column(name = "wallet_type", nullable = false, length = 45)
     private WalletType walletType;
 
     /**

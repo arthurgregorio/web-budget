@@ -36,7 +36,7 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.JOURNAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.JOURNAL_AUDIT;
 
 /**
- * Classe que representa o combustivel utilizado no abastecimento
+ * Class to represent a fuel used on the {@link Refueling}
  *
  * @author Arthur Gregorio
  *
@@ -48,7 +48,7 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.JOURNAL_AUDIT
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "fuels", schema = JOURNAL)
-@AuditTable(value = "audit_fuels", schema = JOURNAL_AUDIT)
+@AuditTable(value = "fuels", schema = JOURNAL_AUDIT)
 public class Fuel extends PersistentEntity {
 
     @Getter
@@ -63,7 +63,7 @@ public class Fuel extends PersistentEntity {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "fuel_type", nullable = false)
+    @Column(name = "fuel_type", nullable = false, length = 45)
     private FuelType fuelType;
 
     @Getter
@@ -73,7 +73,7 @@ public class Fuel extends PersistentEntity {
     private Refueling refueling;
     
     /**
-     * 
+     * Constructor...
      */
     public Fuel() {
         this.liters = BigDecimal.ZERO;
@@ -82,8 +82,9 @@ public class Fuel extends PersistentEntity {
     }
     
     /**
+     * Constructor...
      * 
-     * @param refueling 
+     * @param refueling the linked {@link Refueling}
      */
     public Fuel(Refueling refueling) {
         this();
@@ -91,25 +92,30 @@ public class Fuel extends PersistentEntity {
     }
     
     /**
-     * @return o custo deste combustivel
+     * Get the cost of this fuel
+     *
+     * @return the fuel cost, liters multiplied by the value per liter
      */
     public BigDecimal getCost() {
         return this.valuePerLiter.multiply(this.liters);
     }
     
     /**
-     * @return se o combustivel eh valido ou nao para ser salvo
+     * To check if this fuel is valid or not
+     *
+     * @return if this fuel is valid or not
      */
-    public boolean isValid() {
-        return this.liters != null && this.liters != BigDecimal.ZERO 
-                && this.valuePerLiter != null && this.valuePerLiter != BigDecimal.ZERO;
+    protected boolean isValid() {
+        return this.liters != null && this.liters.compareTo(BigDecimal.ZERO) == 0
+                && this.valuePerLiter != null && this.valuePerLiter.compareTo(BigDecimal.ZERO) == 0;
     }
-    
+
     /**
-     * @return se o combustivel e invalido
+     * The inversion of {@link #isValid()} to use in streams
+     *
+     * @return if this fuel is invalid or not
      */
-    public boolean isInvalid() {
-        return this.liters == null && this.liters == BigDecimal.ZERO 
-                && this.valuePerLiter == null && this.valuePerLiter == BigDecimal.ZERO;
+    protected boolean isInvalid() {
+        return !this.isValid();
     }
 }

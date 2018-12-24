@@ -23,8 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 /**
- * Simple helper class to manipulate JSON values with Jackson the
- * {@link ObjectMapper}
+ * Simple helper class to manipulate JSON values with Jackson the {@link ObjectMapper}
  *
  * @author Arthur Gregorio
  *

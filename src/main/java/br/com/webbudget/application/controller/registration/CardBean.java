@@ -18,14 +18,14 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
-import br.com.webbudget.domain.validators.registration.card.CardSavingValidator;
-import br.com.webbudget.domain.validators.registration.card.CardUpdatingValidator;
+import br.com.webbudget.domain.validators.registration.card.CardSavingBusinessLogic;
+import br.com.webbudget.domain.validators.registration.card.CardUpdatingBusinessLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
@@ -49,7 +49,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class CardBean extends FormBean<Card> {
+public class CardBean extends LazyFormBean<Card> {
 
     @Getter
     private List<Wallet> wallets;
@@ -61,10 +61,10 @@ public class CardBean extends FormBean<Card> {
 
     @Any
     @Inject
-    private Instance<CardSavingValidator> savingValidators;
+    private Instance<CardSavingBusinessLogic> savingBusinessLogics;
     @Any
     @Inject
-    private Instance<CardUpdatingValidator> updatingValidators;
+    private Instance<CardUpdatingBusinessLogic> updatingBusinessLogics;
 
     /**
      * {@inheritDoc}
@@ -85,7 +85,7 @@ public class CardBean extends FormBean<Card> {
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.wallets = this.walletRepository.findAllActive();
-        this.value = this.cardRepository.findOptionalById(id).orElseGet(Card::new);
+        this.value = this.cardRepository.findById(id).orElseGet(Card::new);
     }
 
     /**
@@ -130,7 +130,7 @@ public class CardBean extends FormBean<Card> {
     @Override
     @Transactional
     public void doSave() {
-        this.savingValidators.forEach(validator -> validator.validate(this.value));
+        this.savingBusinessLogics.forEach(logic -> logic.run(this.value));
         this.cardRepository.save(this.value);
         this.value = new Card();
         this.addInfo(true, "saved");
@@ -142,7 +142,7 @@ public class CardBean extends FormBean<Card> {
     @Override
     @Transactional
     public void doUpdate() {
-        this.updatingValidators.forEach(validator -> validator.validate(this.value));
+        this.updatingBusinessLogics.forEach(logic -> logic.run(this.value));
         this.value = this.cardRepository.saveAndFlushAndRefresh(this.value);
         this.addInfo(true, "updated");
     }

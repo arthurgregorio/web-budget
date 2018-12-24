@@ -20,10 +20,10 @@ import br.com.webbudget.application.controller.configuration.ProfileBean.Passwor
 import br.com.webbudget.domain.entities.configuration.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.*;
-import br.com.webbudget.domain.validators.tools.group.GroupDeletingValidator;
-import br.com.webbudget.domain.validators.tools.user.UserDeletingValidator;
-import br.com.webbudget.domain.validators.tools.user.UserSavingValidator;
-import br.com.webbudget.domain.validators.tools.user.UserUpdatingValidator;
+import br.com.webbudget.domain.validators.tools.group.GroupDeletingBusinessLogic;
+import br.com.webbudget.domain.validators.tools.user.UserDeletingBusinessLogic;
+import br.com.webbudget.domain.validators.tools.user.UserSavingBusinessLogic;
+import br.com.webbudget.domain.validators.tools.user.UserUpdatingBusinessLogic;
 import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetailsProvider;
@@ -64,17 +64,17 @@ public class UserAccountService implements UserDetailsProvider {
 
     @Any
     @Inject
-    private Instance<UserSavingValidator> userSavingValidators;
+    private Instance<UserSavingBusinessLogic> userSavingBusinessLogics;
     @Any
     @Inject
-    private Instance<UserUpdatingValidator> userUpdatingValidators;
+    private Instance<UserUpdatingBusinessLogic> userUpdatingBusinessLogics;
     @Any
     @Inject
-    private Instance<UserDeletingValidator> userDeletingValidators;
+    private Instance<UserDeletingBusinessLogic> userDeletingBusinessLogics;
 
     @Any
     @Inject
-    private Instance<GroupDeletingValidator> groupDeletingValidators;
+    private Instance<GroupDeletingBusinessLogic> groupDeletingBusinessLogics;
 
     /**
      * Persist a new {@link User}
@@ -84,9 +84,7 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public User save(User user) {
-        this.userSavingValidators.forEach(validator -> {
-            validator.validate(user);
-        });
+        this.userSavingBusinessLogics.forEach(logic -> logic.run(user));
         return this.userRepository.save(user);
     }
 
@@ -97,9 +95,7 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public void update(User user) {
-        this.userUpdatingValidators.forEach(validator -> {
-            validator.validate(user);
-        });
+        this.userUpdatingBusinessLogics.forEach(logic -> logic.run(user));
         this.userRepository.saveAndFlushAndRefresh(user);
     }
 
@@ -110,9 +106,7 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public void delete(User user) {
-        this.userDeletingValidators.forEach(validator -> {
-            validator.validate(user);
-        });
+        this.userDeletingBusinessLogics.forEach(logic -> logic.run(user));
         this.userRepository.attachAndRemove(user);
     }
 
@@ -130,9 +124,7 @@ public class UserAccountService implements UserDetailsProvider {
 
         if (actualMatch) {
             if (passwordChangeDTO.isNewPassMatching()) {
-                final String newPass = this.passwordEncoder.encryptPassword(
-                        passwordChangeDTO.getNewPassword());
-                user.setPassword(newPass);
+                user.setPassword(this.passwordEncoder.encryptPassword(passwordChangeDTO.getNewPassword()));
                 this.userRepository.saveAndFlushAndRefresh(user);
                 return;
             }
@@ -161,12 +153,10 @@ public class UserAccountService implements UserDetailsProvider {
     @Transactional
     public void save(Group group, List<Authorization> authorizations) {
         this.groupRepository.save(group);
-        authorizations.forEach(authz -> {
-            Authorization authorization = this.authorizationRepository
-                    .findOptionalByFunctionalityAndPermission(authz.getFunctionality(), authz.getPermission())
-                    .get();
-            this.grantRepository.save(new Grant(group, authorization));
-        });
+        authorizations.forEach(auth -> this.authorizationRepository
+                .findByFunctionalityAndPermission(auth.getFunctionality(), auth.getPermission())
+                .ifPresent(authorization -> this.grantRepository.save(new Grant(group, authorization)))
+        );
     }
 
     /**
@@ -198,12 +188,11 @@ public class UserAccountService implements UserDetailsProvider {
         });
 
         // save the new ones
-        authorizations.forEach(authz -> {
-            Authorization authorization = this.authorizationRepository
-                    .findOptionalByFunctionalityAndPermission(authz.getFunctionality(), authz.getPermission())
-                    .get();
-            this.grantRepository.save(new Grant(group, authorization));
-        });
+        authorizations.forEach(auth ->
+                this.authorizationRepository
+                        .findByFunctionalityAndPermission(auth.getFunctionality(), auth.getPermission())
+                        .ifPresent(authorization -> this.grantRepository.save(new Grant(group, authorization)))
+        );
     }
 
     /**
@@ -213,9 +202,7 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Transactional
     public void delete(Group group) {
-        this.groupDeletingValidators.forEach(validator -> {
-            validator.validate(group);
-        });
+        this.groupDeletingBusinessLogics.forEach(logic -> logic.run(group));
         this.groupRepository.attachAndRemove(group);
     }
 
@@ -238,7 +225,6 @@ public class UserAccountService implements UserDetailsProvider {
      */
     @Override
     public Optional<UserDetails> findUserDetailsByUsername(String username) {
-        final Optional<User> user = this.userRepository.findOptionalByUsername(username);
-        return Optional.ofNullable(user.orElse(null));
+        return Optional.ofNullable(this.userRepository.findByUsername(username).orElse(null));
     }
 }

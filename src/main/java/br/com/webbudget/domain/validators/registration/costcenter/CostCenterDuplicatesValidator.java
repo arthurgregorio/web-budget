@@ -19,7 +19,6 @@ package br.com.webbudget.domain.validators.registration.costcenter;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
-import net.bytebuddy.implementation.bytecode.Throw;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -34,7 +33,7 @@ import java.util.Optional;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class CostCenterDuplicatesValidator implements CostCenterSavingValidator {
+public class CostCenterDuplicatesValidator implements CostCenterSavingBusinessLogic {
 
     @Inject
     private CostCenterRepository costCenterRepository;
@@ -45,10 +44,10 @@ public class CostCenterDuplicatesValidator implements CostCenterSavingValidator 
      * @param value
      */
     @Override
-    public void validate(CostCenter value) {
-        final Optional<CostCenter> found = this.costCenterRepository.findOptionalByName(value.getName());
-        found.ifPresent(costCenter -> {
-            throw new BusinessLogicException("error.cost-center.duplicated");
-        });
+    public void run(CostCenter value) {
+        this.costCenterRepository.findByName(value.getName())
+                .ifPresent(costCenter -> {
+                    throw new BusinessLogicException("error.cost-center.duplicated");
+                });
     }
 }

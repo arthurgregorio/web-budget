@@ -18,10 +18,10 @@ package br.com.webbudget.infrastructure.jsf.exception;
 
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;
+import java.util.Set;
 
 /**
- * Simple {@link ExceptionHandlerFactory} to customize the exception handling
- * in the application
+ * Simple {@link ExceptionHandlerFactory} to customize the exception handling by JSF
  *
  * @author Arthur Gregorio
  *
@@ -46,6 +46,12 @@ public class CustomExceptionHandlerFactory extends ExceptionHandlerFactory {
      */
     @Override
     public ExceptionHandler getExceptionHandler() {
-        return new CustomExceptionHandler(this.getWrapped().getExceptionHandler());
+
+        final Set<CustomExceptionHandler> handlers = Set.of(
+                new BusinessLogicExceptionHandler(),
+                new ConstraintViolationExceptionHandler()
+        );
+
+        return new CustomExceptionHandlerWrapper(this.getWrapped().getExceptionHandler(), handlers);
     }
 }

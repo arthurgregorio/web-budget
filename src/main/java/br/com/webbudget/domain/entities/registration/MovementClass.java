@@ -66,8 +66,8 @@ public class MovementClass extends PersistentEntity {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "movement_class_type", nullable = false)
     @NotNull(message = "{movement-class.movement-class-type}")
+    @Column(name = "movement_class_type", nullable = false, length = 45)
     private MovementClassType movementClassType;
 
     @Getter
@@ -96,16 +96,16 @@ public class MovementClass extends PersistentEntity {
      *
      * @return <code>true</code> for revenue class, <code>false</code> otherwise
      */
-    public boolean isRevenues() {
+    public boolean isRevenue() {
         return this.movementClassType == MovementClassType.REVENUE;
     }
 
     /**
-     * To check if is a expenses class
+     * To check if is a expense class
      *
      * @return <code>true</code> for expenses class, <code>false</code> otherwise
      */
-    public boolean isExpenses() {
+    public boolean isExpense() {
         return this.movementClassType == MovementClassType.EXPENSE;
     }
 

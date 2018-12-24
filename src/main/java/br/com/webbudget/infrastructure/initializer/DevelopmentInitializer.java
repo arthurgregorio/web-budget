@@ -103,19 +103,10 @@ public class DevelopmentInitializer implements EnvironmentInitializer {
      */
     private void createAuthorizations() {
 
-        final List<Authorization> authorizations
-                = this.permissions.toAuthorizationList();
+        final List<Authorization> authorizations = this.permissions.toAuthorizationList();
 
-        authorizations.forEach(authorization -> {
-
-            final Optional<Authorization> optionalAuthz = this.authorizationRepository
-                    .findOptionalByFunctionalityAndPermission(authorization
-                            .getFunctionality(), authorization.getPermission());
-
-            if (!optionalAuthz.isPresent()) {
-                this.authorizationRepository.save(authorization);
-            }
-        });
+        authorizations.forEach(auth -> this.authorizationRepository.findByFunctionalityAndPermission(auth.getFunctionality(), auth.getPermission())
+                .ifPresentOrElse(saved -> { /* do nothing */ }, () -> this.authorizationRepository.save(auth)));
     }
 
     /**
@@ -124,21 +115,16 @@ public class DevelopmentInitializer implements EnvironmentInitializer {
     private void createDefaultGroup() {
 
         final Group group = this.groupRepository
-                .findOptionalByName("Administradores")
+                .findByName("Administradores")
                 .orElseGet(() -> new Group("Administradores"));
 
         if (!group.isSaved()) {
-
             this.logger.info("Creating default group");
-
             this.groupRepository.save(group);
 
-            final List<Authorization> authorizations
-                    = this.authorizationRepository.findAll();
+            final List<Authorization> authorizations = this.authorizationRepository.findAll();
 
-            authorizations.forEach(authorization -> {
-                this.grantRepository.save(new Grant(group, authorization));
-            });
+            authorizations.forEach(authorization -> this.grantRepository.save(new Grant(group, authorization)));
         }
     }
 
@@ -147,15 +133,14 @@ public class DevelopmentInitializer implements EnvironmentInitializer {
      */
     private void createDefaultUser() {
 
-        final Optional<User> optionalUser =
-                this.userRepository.findOptionalByUsername("admin");
+        final Optional<User> optionalUser = this.userRepository.findByUsername("admin");
 
         if (!optionalUser.isPresent()) {
 
             this.logger.info("Creating default user");
 
             final Group group = this.groupRepository
-                    .findOptionalByName("Administradores")
+                    .findByName("Administradores")
                     .orElseThrow(() -> new IllegalStateException("Can't find the Administrators group"));
 
             final User user = new User();

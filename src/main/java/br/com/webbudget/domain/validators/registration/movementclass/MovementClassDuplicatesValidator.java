@@ -34,7 +34,7 @@ import java.util.Optional;
  * @since 3.0.0, 29/09/2018
  */
 @Dependent
-public class MovementClassDuplicatesValidator implements MovementClassSavingValidator, MovementClassUpdatingValidator {
+public class MovementClassDuplicatesValidator implements MovementClassSavingBusinessLogic, MovementClassUpdatingBusinessLogic {
 
     @Inject
     private MovementClassRepository movementClassRepository;
@@ -45,7 +45,7 @@ public class MovementClassDuplicatesValidator implements MovementClassSavingVali
      * @param value
      */
     @Override
-    public void validate(MovementClass value) {
+    public void run(MovementClass value) {
         if (value.isSaved()) {
             this.validateSaved(value);
         } else {
@@ -85,6 +85,6 @@ public class MovementClassDuplicatesValidator implements MovementClassSavingVali
      * @return a {@link Optional} of the {@link MovementClass}
      */
     private Optional<MovementClass> find(String name, String costCenterName) {
-        return this.movementClassRepository.findOptionalByNameAndCostCenter_name(name, costCenterName);
+        return this.movementClassRepository.findByNameAndCostCenter_name(name, costCenterName);
     }
 }

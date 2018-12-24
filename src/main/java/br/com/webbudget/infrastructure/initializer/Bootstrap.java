@@ -54,7 +54,7 @@ public class Bootstrap {
      */
     @PostConstruct
     protected void initialize() {
-        this.logger.info("Initializing application, this can take a minute or more...");
+        this.logger.info("Initializing application, this may take few minutes...");
         this.initializer.initialize();
         this.logger.info("Initialization finished!");
    }

@@ -62,7 +62,7 @@ public class ClosingService {
 //        // se temos movimentos de cartao de credito que nao foram incluidos em
 //        // uma fatura do periodo
 //        cards.stream()
-//                .filter(Card::isCreditCard)
+//                .text(Card::isCreditCard)
 //                .forEach(card -> {
 //                    final List<Movement> movements = this.movementRepository
 //                            .listPaidWithoutInvoiceByPeriodAndCard(period, card);
@@ -74,7 +74,7 @@ public class ClosingService {
 //
 //        // checamos se existem movimentos em aberto
 //        final List<Movement> movements = this.movementRepository
-//                .listByPeriodAndState(period, MovementStateType.OPEN);
+//                .listByPeriodAndState(period, MovementState.OPEN);
 //
 //        if (!movements.isEmpty()) {
 //            throw new InternalServiceError(
@@ -117,7 +117,7 @@ public class ClosingService {
 //        // atualiza o status dos movimentos
 //        calculator.getMovements().stream()
 //                .map(movement -> { 
-//                    movement.setMovementStateType(MovementStateType.CALCULATED);
+//                    movement.setMovementStateType(MovementState.CALCULATED);
 //                    return movement;
 //                }).forEach(movement -> {
 //                    this.movementRepository.save(movement);

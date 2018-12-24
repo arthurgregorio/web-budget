@@ -18,7 +18,7 @@ import java.util.Optional;
  * @since 3.0.0, 28/09/2018
  */
 @Dependent
-public class WalletDuplicatesValidator implements WalletSavingValidator, WalletUpdatingValidator {
+public class WalletDuplicatesValidator implements WalletSavingBusinessLogic, WalletUpdatingBusinessLogic {
 
     @Inject
     private WalletRepository walletRepository;
@@ -29,7 +29,7 @@ public class WalletDuplicatesValidator implements WalletSavingValidator, WalletU
      * @param value
      */
     @Override
-    public void validate(Wallet value) {
+    public void run(Wallet value) {
         if (value.isSaved()) {
             this.validateSaved(value);
         } else {
@@ -69,6 +69,6 @@ public class WalletDuplicatesValidator implements WalletSavingValidator, WalletU
      * @return a {@link Optional} of the {@link Wallet}
      */
     private Optional<Wallet> find(String name, WalletType walletType) {
-        return this.walletRepository.findOptionalByNameAndWalletType(name, walletType);
+        return this.walletRepository.findByNameAndWalletType(name, walletType);
     }
 }

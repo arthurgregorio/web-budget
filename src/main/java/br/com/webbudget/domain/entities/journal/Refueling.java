@@ -173,7 +173,7 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
-     * Add a {@link Fuel} to the list of {@link Fuel}
+     * Add a {@link Fuel} to the list
      */
     public void addFuel() {
         this.fuels.add(new Fuel(this));
@@ -270,8 +270,7 @@ public class Refueling extends PersistentEntity {
      */
     public void calculateAverageConsumption(long totalDistance, BigDecimal liters) {
         if (!this.firstRefueling && totalDistance > 0) {
-            this.averageConsumption =
-                    new BigDecimal(totalDistance / liters.doubleValue());
+            this.averageConsumption = new BigDecimal(totalDistance / liters.doubleValue());
         }
     }
 
@@ -281,17 +280,8 @@ public class Refueling extends PersistentEntity {
      * @return the {@link Movement} description
      */
     public String getMovementDescription() {
-
-        final StringBuilder builder = new StringBuilder();
-
-        builder.append(this.vehicle.getIdentification());
-        builder.append(" - ");
-        builder.append(this.movementClass.getName());
-        builder.append(",  ");
-        builder.append(NumberFormat.getNumberInstance().format(this.liters));
-        builder.append("lts");
-
-        return builder.toString();
+        return this.vehicle.getIdentification() + " - " + this.movementClass.getName() + ",  "
+                + NumberFormat.getNumberInstance().format(this.liters) + "lts";
     }
 
     /**

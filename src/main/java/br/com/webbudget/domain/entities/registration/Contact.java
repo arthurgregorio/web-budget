@@ -120,7 +120,7 @@ public class Contact extends PersistentEntity {
     @Getter
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{contact.contact-type}")
-    @Column(name = "contact_type", nullable = false)
+    @Column(name = "contact_type", nullable = false, length = 45)
     private ContactType contactType;
 
     @Setter

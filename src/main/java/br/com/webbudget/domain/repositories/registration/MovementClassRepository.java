@@ -25,6 +25,7 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public interface MovementClassRepository extends DefaultRepository<MovementClass
      * @param costCenterName the name of the cost center
      * @return a {@link Optional} of {@link MovementClass}
      */
-    Optional<MovementClass> findOptionalByNameAndCostCenter_name(String name, String costCenterName);
+    Optional<MovementClass> findByNameAndCostCenter_name(String name, String costCenterName);
     
     /**
      * Find a {@link MovementClass} by the type and the cost center id
@@ -74,8 +75,7 @@ public interface MovementClassRepository extends DefaultRepository<MovementClass
      * @return 
      */
     @Override
-    default Criteria<MovementClass, MovementClass> getRestrictions(String filter) {
-       return criteria()
-                .likeIgnoreCase(MovementClass_.name, filter); 
+    default Collection<Criteria<MovementClass, MovementClass>> getRestrictions(String filter) {
+       return List.of(this.criteria().likeIgnoreCase(MovementClass_.name, this.likeAny(filter)));
     }
 }

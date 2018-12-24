@@ -16,11 +16,13 @@
  */
 package br.com.webbudget.infrastructure.shiro;
 
+import br.com.webbudget.domain.entities.configuration.Permissions;
 import br.eti.arthurgregorio.shiroee.config.HttpSecurityConfiguration;
 import br.eti.arthurgregorio.shiroee.config.http.HttpSecurityBuilder;
 import br.eti.arthurgregorio.shiroee.config.http.PermissionHttpSecurityBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  * The implementation of the {@link HttpSecurityConfiguration} for this project
@@ -33,16 +35,30 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PathSecurityConfiguration implements HttpSecurityConfiguration {
 
+    @Inject
+    private Permissions permissions;
+
     /**
-     * @return the HTTP security configuration for the application path's
+     * {@inheritDoc}
+     *
+     * @return
      */
     @Override
-    public HttpSecurityBuilder configureHttpSecurity() { // TODO add all the secured paths to here
+    public HttpSecurityBuilder configureHttpSecurity() {
+
+        // TODO secure all application path's
 
         final HttpSecurityBuilder builder = new PermissionHttpSecurityBuilder();
 
-        builder.add("/secured/configuration/users/**", "user:access", true)
-                .add("/secured/configuration/groups/**", "group:access", true);
+        builder.add("/secured/configuration/user/**", this.permissions.getUSER_ACCESS(), true)
+                .add("/secured/configuration/group/**", this.permissions.getGROUP_ACCESS(), true)
+                .add("/secured/registration/card/**", this.permissions.getCARD_ACCESS(), true)
+                .add("/secured/registration/vehicle/**", this.permissions.getVEHICLE_ACCESS(), true)
+                .add("/secured/registration/contact/**", this.permissions.getCONTACT_ACCESS(), true)
+                .add("/secured/registration/wallet/**", this.permissions.getWALLET_ACCESS(), true)
+                .add("/secured/registration/costCenter/**", this.permissions.getCOST_CENTER_ACCESS(), true)
+                .add("/secured/registration/financialPeriod/**", this.permissions.getFINANCIAL_PERIOD_ACCESS(), true)
+                .add("/secured/registration/movementClass/**", this.permissions.getMOVEMENT_CLASS_ACCESS(), true);
 
         return builder;
     }

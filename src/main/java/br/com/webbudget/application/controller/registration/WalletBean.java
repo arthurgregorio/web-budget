@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.registration.WalletType;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
@@ -42,7 +42,7 @@ import static br.com.webbudget.application.components.NavigationManager.Paramete
  */
 @Named
 @ViewScoped
-public class WalletBean extends FormBean<Wallet> {
+public class WalletBean extends LazyFormBean<Wallet> {
 
     @Inject
     private WalletService walletService;
@@ -68,7 +68,7 @@ public class WalletBean extends FormBean<Wallet> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.value = this.walletRepository.findOptionalById(id).orElseGet(Wallet::new);
+        this.value = this.walletRepository.findById(id).orElseGet(Wallet::new);
     }
 
     /**
@@ -94,8 +94,7 @@ public class WalletBean extends FormBean<Wallet> {
      */
     @Override
     public Page<Wallet> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.walletRepository.findAllBy(this.filter.getValue(),
-                this.filter.getEntityStatusValue(), first, pageSize);
+        return this.walletRepository.findAllBy(this.filter.getValue(), this.filter.getEntityStatusValue(), first, pageSize);
     }
 
     /**

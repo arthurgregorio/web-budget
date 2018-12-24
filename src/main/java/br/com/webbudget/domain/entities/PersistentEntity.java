@@ -20,19 +20,22 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * The default implementation of a entity in the application.
  *
- * Every entity should extend this class to have the default behaviors of a
- * JPA entity
+ * Every entity should extend this class to have the default behaviors of a JPA entity
  *
  * @author Arthur Gregorio
  *
- * @version 4.0.0
+ * @version 4.1.0
  * @since 1.0.0, 06/10/2013
  */
 @ToString
@@ -43,9 +46,40 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
 
     @Id
     @Getter
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GenericGenerator(
+            name = "pooled_sequence_generator",
+            strategy = "enhanced-sequence",
+            parameters = {
+                    @Parameter(name = "initial_value", value = "1"),
+                    @Parameter(name = "increment_size", value = "5"),
+                    @Parameter(name = "optimizer", value = "pooled-lo")
+            })
     @Column(name = "id", unique = true, updatable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pooled_sequence_generator")
     private Long id;
+
+    @Getter
+    @Column(name = "created_on", nullable = false)
+    private LocalDateTime createdOn;
+    @Getter
+    @Column(name = "updated_on")
+    private LocalDateTime updatedOn;
+
+    /**
+     * Set the date of creation for this entity
+     */
+    @PrePersist
+    protected void beforeInsert() {
+        this.createdOn = LocalDateTime.now();
+    }
+
+    /**
+     * Set the date of update for this entity
+     */
+    @PreUpdate
+    protected void beforeUpdate() {
+        this.updatedOn = LocalDateTime.now();
+    }
 
     /**
      * {@inheritDoc }

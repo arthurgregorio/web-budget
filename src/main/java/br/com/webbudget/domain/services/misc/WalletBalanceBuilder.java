@@ -16,13 +16,12 @@
  */
 package br.com.webbudget.domain.services.misc;
 
-import br.com.webbudget.domain.entities.registration.BalanceType;
-import br.com.webbudget.domain.entities.registration.ReasonType;
+import br.com.webbudget.domain.entities.financial.BalanceType;
+import br.com.webbudget.domain.entities.financial.ReasonType;
 import br.com.webbudget.domain.entities.registration.Wallet;
-import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.financial.WalletBalance;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -73,14 +72,14 @@ public final class WalletBalanceBuilder {
      */
     public WalletBalanceBuilder value(BigDecimal value) {
 
-        // determine which type of financial movementation we are doing
+        // determine which type of financial movement we are doing
         if (value.signum() < 0) {
             this.walletBalance.setBalanceType(BalanceType.DEBIT);
         } else {
             this.walletBalance.setBalanceType(BalanceType.CREDIT);
         }
 
-        this.walletBalance.setMovementedValue(value);
+        this.walletBalance.setTransactionValue(value);
         return this;
     }
     
@@ -131,7 +130,7 @@ public final class WalletBalanceBuilder {
     /**
      * Build the balance
      * 
-     * @return the builded {@link WalletBalance} for the wallet
+     * @return the {@link WalletBalance} for the wallet
      */
     public WalletBalance build() {
         this.walletBalance.processBalances();

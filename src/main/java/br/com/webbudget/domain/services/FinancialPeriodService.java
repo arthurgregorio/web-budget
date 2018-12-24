@@ -19,8 +19,8 @@ package br.com.webbudget.domain.services;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.events.NewPeriodOpened;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
-import br.com.webbudget.domain.validators.registration.financialperiod.FinancialPeriodSavingValidator;
-import br.com.webbudget.domain.validators.registration.financialperiod.FinancialPeriodUpdatingValidator;
+import br.com.webbudget.domain.validators.registration.financialperiod.PeriodSavingBusinessLogic;
+import br.com.webbudget.domain.validators.registration.financialperiod.PeriodUpdatingBusinessLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -49,10 +49,10 @@ public class FinancialPeriodService {
 
     @Any
     @Inject
-    private Instance<FinancialPeriodSavingValidator> savingValidators;
+    private Instance<PeriodSavingBusinessLogic> savingBusinessLogics;
     @Any
     @Inject
-    private Instance<FinancialPeriodUpdatingValidator> updatingValidators;
+    private Instance<PeriodUpdatingBusinessLogic> updatingBusinessLogics;
 
     /**
      * Use this method to persist a {@link FinancialPeriod}
@@ -62,7 +62,7 @@ public class FinancialPeriodService {
     @Transactional
     public void save(FinancialPeriod financialPeriod) {
 
-        this.savingValidators.forEach(validator -> validator.validate(financialPeriod));
+        this.savingBusinessLogics.forEach(logic -> logic.run(financialPeriod));
 
         // fire a event to notify the listeners
         this.newPeriodOpenedEvent.fire(this.financialPeriodRepository.save(financialPeriod));

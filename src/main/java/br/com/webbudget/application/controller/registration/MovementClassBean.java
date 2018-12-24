@@ -18,14 +18,14 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
-import br.com.webbudget.domain.validators.registration.movementclass.MovementClassSavingValidator;
-import br.com.webbudget.domain.validators.registration.movementclass.MovementClassUpdatingValidator;
+import br.com.webbudget.domain.validators.registration.movementclass.MovementClassSavingBusinessLogic;
+import br.com.webbudget.domain.validators.registration.movementclass.MovementClassUpdatingBusinessLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
@@ -49,7 +49,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class MovementClassBean extends FormBean<MovementClass> {
+public class MovementClassBean extends LazyFormBean<MovementClass> {
 
     @Getter
     private List<CostCenter> costCenters;
@@ -61,10 +61,10 @@ public class MovementClassBean extends FormBean<MovementClass> {
 
     @Any
     @Inject
-    private Instance<MovementClassSavingValidator> savingValidators;
+    private Instance<MovementClassSavingBusinessLogic> savingBusinessLogics;
     @Any
     @Inject
-    private Instance<MovementClassUpdatingValidator> updatingValidators;
+    private Instance<MovementClassUpdatingBusinessLogic> updatingBusinessLogics;
 
     /**
      * {@inheritDoc}
@@ -85,7 +85,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.costCenters = this.costCenterRepository.findAllActive();
-        this.value = this.movementClassRepository.findOptionalById(id)
+        this.value = this.movementClassRepository.findById(id)
                 .orElseGet(MovementClass::new);
     }
 
@@ -121,7 +121,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     @Override
     @Transactional
     public void doSave() {
-        this.savingValidators.forEach(validator -> validator.validate(this.value));
+        this.savingBusinessLogics.forEach(logic -> logic.run(this.value));
         this.movementClassRepository.save(this.value);
         this.value = new MovementClass();
         this.addInfo(true, "saved");
@@ -133,7 +133,7 @@ public class MovementClassBean extends FormBean<MovementClass> {
     @Override
     @Transactional
     public void doUpdate() {
-        this.updatingValidators.forEach(validator -> validator.validate(this.value));
+        this.updatingBusinessLogics.forEach(logic -> logic.run(this.value));
         this.value = this.movementClassRepository.saveAndFlushAndRefresh(this.value);
         this.addInfo(true, "updated");
     }

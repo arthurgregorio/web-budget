@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.configuration;
 
 import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.configuration.Group;
 import br.com.webbudget.domain.entities.configuration.StoreType;
 import br.com.webbudget.domain.entities.configuration.User;
@@ -49,7 +49,7 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
  */
 @Named
 @ViewScoped
-public class UserBean extends FormBean<User> {
+public class UserBean extends LazyFormBean<User> {
 
     @Getter
     private List<Group> groups;
@@ -84,7 +84,7 @@ public class UserBean extends FormBean<User> {
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.groups = this.groupRepository.findAllActive();
-        this.value = this.userRepository.findOptionalById(id).orElseGet(User::new);
+        this.value = this.userRepository.findById(id).orElseGet(User::new);
     }
 
     /**
@@ -164,8 +164,6 @@ public class UserBean extends FormBean<User> {
         this.value.setUsername(userDetails.getSAMAccountName());
         this.value.setEmail(userDetails.getMail());
         this.value.setName(userDetails.getName());
-
-
     }
 
     /**

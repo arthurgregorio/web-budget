@@ -19,8 +19,6 @@ package br.com.webbudget.domain.entities.financial;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.MovementClass;
-import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,6 +34,7 @@ import java.math.BigDecimal;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 
 /**
+ * The representation of an apportionment of a {@link Movement}
  *
  * @author Arthur Gregorio
  *
@@ -51,7 +50,7 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 public class Apportionment extends PersistentEntity {
 
     @Getter
-    @Column(name = "code", nullable = false, length = 8, unique = true)
+    @Column(name = "code", nullable = false, length = 6, unique = true)
     private String code;
     @Getter
     @Setter
@@ -83,54 +82,40 @@ public class Apportionment extends PersistentEntity {
     private MovementClass movementClass;
 
     /**
-     *
+     * Constructor...
      */
     public Apportionment() {
-        this.code = RandomCode.alphanumeric(5);
+        this.code = RandomCode.alphanumeric(6);
     }
 
     /**
+     * Constructor...
      *
-     * @param costCenter
-     * @param movementClass
-     * @param value
+     * @param value the value of this apportionment
+     * @param movementClass the apportionment {@link MovementClass} we use this to take the {@link CostCenter}
      */
-    public Apportionment(CostCenter costCenter, MovementClass movementClass, BigDecimal value) {
+    public Apportionment(BigDecimal value, MovementClass movementClass) {
         this();
-        if (!movementClass.getCostCenter().equals(costCenter)) {
-            throw new BusinessLogicException("error.apportionment.invalid-class-for-cc");
-        } else {
-            this.value = value;
-            this.costCenter = costCenter;
-            this.movementClass = movementClass;
-        }
+        this.value = value;
+        this.movementClass = movementClass;
+        this.costCenter = movementClass.getCostCenter();
     }
 
     /**
-     * @return se este e um rateio de receita
+     * To check if this apportionment is an income
+     *
+     * @return true if it is a revenue
      */
-    public boolean isForRevenues() {
-        return this.movementClass.getMovementClassType() == MovementClassType.REVENUE;
+    public boolean isRevenue() {
+        return this.movementClass.isRevenue();
     }
 
     /**
-     * @return se este e um rateio de despesa
+     * To check if this apportionment is an expense
+     *
+     * @return true if it is a expense
      */
-    public boolean isForExpenses() {
-        return this.movementClass.getMovementClassType() == MovementClassType.EXPENSE;
-    }
-
-    /**
-     * @return uma copia deste reateio com um novo codigo
-     */
-    public Apportionment copy() {
-
-        final Apportionment apportionment = new Apportionment();
-
-        apportionment.setValue(this.value);
-        apportionment.setCostCenter(this.costCenter);
-        apportionment.setMovementClass(this.movementClass);
-
-        return apportionment;
+    public boolean isExpense() {
+        return this.movementClass.isExpense();
     }
 }

@@ -40,5 +40,5 @@ public interface AuthorizationRepository extends DefaultRepository<Authorization
      * @param permission the permission of the {@link Authorization}
      * @return an {@link Optional} of the {@link Authorization}
      */
-    Optional<Authorization> findOptionalByFunctionalityAndPermission(String functionality, String permission);
+    Optional<Authorization> findByFunctionalityAndPermission(String functionality, String permission);
 }

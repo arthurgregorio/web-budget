@@ -1,0 +1,90 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:f="http://xmlns.jcp.org/jsf/core"
+          xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+          id="paymentDetailsDialog" 
+          width="500"
+          modal="true" 
+          closable="false"
+          resizable="false" 
+          closeOnEscape="true"
+          widgetVar="dialogPaymentDetails" 
+          header="#{messages['payment-details.dialog.title']}">
+
+    <script type="text/javascript">
+        PrimeFaces.widget.Dialog.prototype.applyFocus = function () {
+            jQuery('#closeButton').focus();
+        };
+    </script>
+
+    <ui:param name="payment" value="#{periodMovementBean.movement.payment}" />
+
+    <div class="row">
+        <div class="col-sm-6 form-group">
+            <p:outputLabel value="#{messages['payment-details.dialog.date']}: "/>
+            <p:inputText readonly="true" 
+                         styleClass="form-control"
+                         value="#{payment.paymentDate}">
+                <f:converter converterId="localDateConverter"/>
+            </p:inputText>
+        </div>
+        <div class="col-sm-6 form-group">
+            <p:outputLabel value="#{messages['payment-details.dialog.method']}: "/>
+            <p:inputText readonly="true" 
+                         styleClass="form-control"
+                         value="#{enums[payment.paymentMethodType]}"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-9 form-group">
+            <p:outputLabel value="#{messages['payment-details.dialog.source']}: "/>
+            <p:inputText readonly="true" 
+                         styleClass="form-control"
+                         value="#{payment.wallet.friendlyName}"
+                         rendered="#{payment.paymentMethodType eq 'IN_CASH'}"/>
+            <p:inputText readonly="true" 
+                         styleClass="form-control"
+                         value="#{payment.card.readableName}"
+                         rendered="#{payment.paymentMethodType ne 'IN_CASH'}"/>
+        </div>
+        <div class="col-sm-3 form-group">
+            <p:outputLabel value="#{messages['payment-details.dialog.discount']}: "/>
+            <p:inputNumber symbol="R$ "
+                           readonly="true"
+                           decimalPlaces="2" 
+                           decimalSeparator="," 
+                           thousandSeparator="." 
+                           value="#{payment.discount}">
+                <f:converter converterId="javax.faces.BigDecimal" />
+            </p:inputNumber>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 align-center">
+            <p:commandButton id="closeButton"
+                             immediate="true"
+                             value="#{menu['back']}"
+                             styleClass="btn btn-flat btn-default" 
+                             onclick="PF('dialogPaymentDetails').hide()"/>
+        </div>
+    </div>
+</p:dialog>

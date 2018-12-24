@@ -24,6 +24,8 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,7 +45,7 @@ public interface VehicleRepository extends DefaultRepository<Vehicle> {
      * @param licensePlate the license plate of the vehicle to find
      * @return an {@link Optional} of the {@link Vehicle}
      */
-    Optional<Vehicle> findOptionalByLicensePlate(String licensePlate);
+    Optional<Vehicle> findByLicensePlate(String licensePlate);
     
     /**
      * Method to find by the last registered odometer for a given {@link Vehicle}
@@ -71,11 +73,11 @@ public interface VehicleRepository extends DefaultRepository<Vehicle> {
      * @return 
      */
     @Override
-    default Criteria<Vehicle, Vehicle> getRestrictions(String filter) {
-        return criteria()
-                .eqIgnoreCase(Vehicle_.identification, filter)
-                .eqIgnoreCase(Vehicle_.brand, filter)
-                .eqIgnoreCase(Vehicle_.model, filter)
-                .eqIgnoreCase(Vehicle_.licensePlate, filter);
+    default Collection<Criteria<Vehicle, Vehicle>> getRestrictions(String filter) {
+        return List.of(
+                this.criteria().eqIgnoreCase(Vehicle_.brand, this.likeAny(filter)),
+                this.criteria().eqIgnoreCase(Vehicle_.model, this.likeAny(filter)),
+                this.criteria().eqIgnoreCase(Vehicle_.licensePlate, this.likeAny(filter)),
+                this.criteria().eqIgnoreCase(Vehicle_.identification, this.likeAny(filter)));
     }
 }

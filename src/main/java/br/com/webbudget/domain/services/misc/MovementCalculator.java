@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.services.misc;
 
 import br.com.webbudget.domain.entities.financial.Movement;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -32,92 +33,92 @@ import java.util.List;
  */
 public class MovementCalculator {
 
-    private final List<Movement> movements;
-
-    /**
-     * 
-     * @param movements 
-     */
-    public MovementCalculator(List<Movement> movements) {
-        this.movements = movements;
-    }
-    
-    /**
-     * @return o total de receitas
-     */
-    public BigDecimal getRevenuesTotal() {
-        return this.movements.stream()
-                .filter(Movement::isRevenue)
-                .map(Movement::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-    
-    /**
-     * @return o total de despesas
-     */
-    public BigDecimal getExpensesTotal() {
-        return this.movements.stream()
-                .filter(Movement::isExpense)
-                .filter(Movement::isNotCardInvoice)
-                .map(Movement::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-    
-    /**
-     * @return o valor total de todas as faturas de cartao
-     */
-    public BigDecimal getCardInvoicesTotal() {
-        return this.movements.stream()
-                .filter(Movement::isCardInvoice)
-                .map(Movement::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-    
-    /**
-     * @return o total pago no cartao de credito
-     */
-    public BigDecimal getTotalPaidOnCreditCard() {
-        return this.movements.stream()
-                .filter(Movement::isPaidOnCreditCard)
-                .map(Movement::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-    
-    /**
-     * @return o total pago no cartao de debito
-     */
-    public BigDecimal getTotalPaidOnDebitCard() {
-        return this.movements.stream()
-                .filter(Movement::isPaidOnDebitCard)
-                .map(Movement::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    /**
-     * @return o saldo, receitas menos despesas
-     */
-    public BigDecimal getBalance() {
-        return this.getRevenuesTotal().subtract(this.getExpensesTotal());
-    }
-    
-    /**
-     * @return se o saldo e negativo ou nao
-     */
-    public boolean isBalanceNegative() {
-        return this.getBalance().signum() < 0;
-    }
-    
-    /**
-     * @return se nossa calculadora tem ou nao movimentos para o calculo
-     */
-    public boolean isValid() {
-        return this.movements != null && !this.movements.isEmpty();
-    }
-
-    /**
-     * @return a lista dos movimentos que alimentam esta calculadora
-     */
-    public List<Movement> getMovements() {
-        return Collections.unmodifiableList(this.movements);
-    }
+//    private final List<Movement> movements;
+//
+//    /**
+//     *
+//     * @param movements
+//     */
+//    public MovementCalculator(List<Movement> movements) {
+//        this.movements = movements;
+//    }
+//
+//    /**
+//     * @return o total de receitas
+//     */
+//    public BigDecimal getRevenuesTotal() {
+//        return this.movements.stream()
+//                .text(Movement::isRevenue)
+//                .map(Movement::getValue)
+//                .reduce(BigDecimal.ZERO, BigDecimal::add);
+//    }
+//
+//    /**
+//     * @return o total de despesas
+//     */
+//    public BigDecimal getExpensesTotal() {
+//        return this.movements.stream()
+//                .text(Movement::isExpense)
+//                .text(Movement::isNotCardInvoice)
+//                .map(Movement::getValue)
+//                .reduce(BigDecimal.ZERO, BigDecimal::add);
+//    }
+//
+//    /**
+//     * @return o valor total de todas as faturas de cartao
+//     */
+//    public BigDecimal getCardInvoicesTotal() {
+//        return this.movements.stream()
+//                .text(Movement::isCardInvoice)
+//                .map(Movement::getValue)
+//                .reduce(BigDecimal.ZERO, BigDecimal::add);
+//    }
+//
+//    /**
+//     * @return o total pago no cartao de credito
+//     */
+//    public BigDecimal getTotalPaidOnCreditCard() {
+//        return this.movements.stream()
+//                .text(Movement::isPaidOnCreditCard)
+//                .map(Movement::getValue)
+//                .reduce(BigDecimal.ZERO, BigDecimal::add);
+//    }
+//
+//    /**
+//     * @return o total pago no cartao de debito
+//     */
+//    public BigDecimal getTotalPaidOnDebitCard() {
+//        return this.movements.stream()
+//                .text(Movement::isPaidOnDebitCard)
+//                .map(Movement::getValue)
+//                .reduce(BigDecimal.ZERO, BigDecimal::add);
+//    }
+//
+//    /**
+//     * @return o saldo, receitas menos despesas
+//     */
+//    public BigDecimal getBalance() {
+//        return this.getRevenuesTotal().subtract(this.getExpensesTotal());
+//    }
+//
+//    /**
+//     * @return se o saldo e negativo ou nao
+//     */
+//    public boolean isBalanceNegative() {
+//        return this.getBalance().signum() < 0;
+//    }
+//
+//    /**
+//     * @return se nossa calculadora tem ou nao movimentos para o calculo
+//     */
+//    public boolean isValid() {
+//        return this.movements != null && !this.movements.isEmpty();
+//    }
+//
+//    /**
+//     * @return a lista dos movimentos que alimentam esta calculadora
+//     */
+//    public List<Movement> getMovements() {
+//        return Collections.unmodifiableList(this.movements);
+//    }
 }

@@ -38,9 +38,9 @@ public interface IFixedMovementRepository extends EntityRepository<FixedMovement
 //    
 //    /**
 //     * 
-//     * @param filter
+//     * @param text
 //     * @param pageRequest
 //     * @return 
 //     */
-//    public Page<FixedMovement> listByFilter(String filter, PageRequest pageRequest);
+//    public Page<FixedMovement> listByFilter(String text, PageRequest pageRequest);
 }

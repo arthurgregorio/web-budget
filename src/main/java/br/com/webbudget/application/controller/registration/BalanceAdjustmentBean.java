@@ -18,7 +18,7 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.domain.entities.registration.Wallet;
-import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.WalletService;
 import lombok.Getter;
@@ -63,7 +63,7 @@ public class BalanceAdjustmentBean extends AbstractBean {
      * @param walletId the id of the {@link Wallet} to be loaded
      */
     public void initialize(long walletId) {
-        this.wallet = this.walletRepository.findOptionalById(walletId)
+        this.wallet = this.walletRepository.findById(walletId)
                 .orElseGet(Wallet::new);
     }
 

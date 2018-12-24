@@ -16,16 +16,15 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.registration.ReasonType;
+import br.com.webbudget.domain.entities.financial.ReasonType;
 import br.com.webbudget.domain.entities.registration.Wallet;
-import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.events.UpdateBalance;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
-import br.com.webbudget.domain.validators.registration.wallet.WalletSavingValidator;
-import br.com.webbudget.domain.validators.registration.wallet.WalletUpdatingValidator;
+import br.com.webbudget.domain.validators.registration.wallet.WalletSavingBusinessLogic;
+import br.com.webbudget.domain.validators.registration.wallet.WalletUpdatingBusinessLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -33,10 +32,8 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.xml.validation.Validator;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The service responsible for the business operations with {@link Wallet}
@@ -56,10 +53,10 @@ public class WalletService {
 
     @Any
     @Inject
-    private Instance<WalletSavingValidator> savingValidators;
+    private Instance<WalletSavingBusinessLogic> savingBusinessLogics;
     @Any
     @Inject
-    private Instance<WalletUpdatingValidator> updatingValidators;
+    private Instance<WalletUpdatingBusinessLogic> updatingBusinessLogics;
 
     /**
      * Use this method to persist a {@link Wallet}
@@ -69,7 +66,7 @@ public class WalletService {
     @Transactional
     public void save(Wallet wallet) {
 
-        this.savingValidators.forEach(validator -> validator.validate(wallet));
+        this.savingBusinessLogics.forEach(logic -> logic.run(wallet));
 
         // get the actual balance
         final BigDecimal actualBalance = wallet.getActualBalance();
@@ -97,7 +94,7 @@ public class WalletService {
      */
     @Transactional
     public Wallet update(Wallet wallet) {
-        this.updatingValidators.forEach(validator -> validator.validate(wallet));
+        this.updatingBusinessLogics.forEach(logic -> logic.run(wallet));
         return this.walletRepository.save(wallet);
     }
 

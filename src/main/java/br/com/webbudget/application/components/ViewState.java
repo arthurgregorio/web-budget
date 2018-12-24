@@ -17,7 +17,7 @@
 package br.com.webbudget.application.components;
 
 /**
- * This enum represents the possible view states to control the JSF views/forms
+ * This enum represents the possible view states to control the views/forms
  *
  * @author Arthur Gregorio
  *
@@ -31,4 +31,13 @@ public enum ViewState {
     EDITING,
     DELETING,
     DETAILING;
+
+    /**
+     * To check if in the current state is possible to edit values
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isEditable() {
+        return this == ADDING || this == EDITING;
+    }
 }

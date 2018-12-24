@@ -47,8 +47,7 @@ public class UtilsBean {
      */
     public String getBaseURL() {
         
-        final HttpServletRequest request = (HttpServletRequest) 
-                this.facesContext.getExternalContext().getRequest();
+        final HttpServletRequest request = (HttpServletRequest) this.facesContext.getExternalContext().getRequest();
         
         return request.getRequestURL()
                 .toString()
@@ -71,26 +70,6 @@ public class UtilsBean {
         return DateTimeFormatter
                 .ofPattern("dd/MM/yyyy HH:mm")
                 .format(LocalDateTime.now());
-    }
-    
-    /**
-     * @return the default channel to push new messages notifications
-     */
-    public String getMessagesChannel() {
-        
-        final StringBuilder builder = new StringBuilder();
-        
-        final String baseURL = this.getBaseURL();
-        
-        if (baseURL.contains("https")) {
-            builder.append(baseURL.replace("https", "wss"));
-        } else {
-            builder.append(baseURL.replace("http", "ws"));
-        }
-        
-        builder.append("channels/messages");
-        
-        return builder.toString();
     }
 
     /**

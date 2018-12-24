@@ -54,9 +54,9 @@ public class Telephone extends PersistentEntity {
     private String number;
     @Getter
     @Setter
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "{telephone.execute.type}")
-    @Enumerated
-    @Column(name = "number_type", nullable = false)
+    @Column(name = "number_type", nullable = false, length = 45)
     private NumberType numberType;
 
     @Getter

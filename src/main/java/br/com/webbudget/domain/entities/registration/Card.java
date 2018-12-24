@@ -83,7 +83,7 @@ public class Card extends PersistentEntity {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "card_type", nullable = false)
+    @Column(name = "card_type", nullable = false, length = 45)
     private CardType cardType;
 
     @Getter

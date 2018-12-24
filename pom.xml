@@ -311,7 +311,7 @@
                 <project.stage>Development</project.stage>
                 <orm.show_sql>true</orm.show_sql>
                 <orm.ddl_auto>update</orm.ddl_auto>
-                <ldap.enabled>false</ldap.enabled>
+                <ldap.active>false</ldap.active>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
                 <ldap.user>CN=binduser,OU=Aplicacoes,DC=arthurgregorio,DC=eti,DC=br</ldap.user>
@@ -326,7 +326,7 @@
                 <project.stage>SystemTest</project.stage>
                 <orm.show_sql>true</orm.show_sql>
                 <orm.ddl_auto>none</orm.ddl_auto>
-                <ldap.enabled>false</ldap.enabled>
+                <ldap.active>false</ldap.active>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
                 <ldap.user>CN=binduser,OU=Aplicacoes,DC=arthurgregorio,DC=eti,DC=br</ldap.user>
@@ -341,7 +341,7 @@
                 <project.stage>Production</project.stage>
                 <orm.show_sql>false</orm.show_sql>
                 <orm.ddl_auto>none</orm.ddl_auto>
-                <ldap.enabled>false</ldap.enabled>
+                <ldap.active>false</ldap.active>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
                 <ldap.user>CN=binduser,OU=Aplicacoes,DC=arthurgregorio,DC=eti,DC=br</ldap.user>
@@ -356,7 +356,7 @@
                 <project.stage>Production</project.stage>
                 <orm.show_sql>false</orm.show_sql>
                 <orm.ddl_auto>none</orm.ddl_auto>
-                <ldap.enabled>false</ldap.enabled>
+                <ldap.active>false</ldap.active>
                 <ldap.url>ldap://localhost</ldap.url>
                 <ldap.baseDn>OU=Usuarios,DC=arthurgregorio,DC=eti,DC=br</ldap.baseDn>
                 <ldap.user>CN=binduser,OU=Aplicacoes,DC=arthurgregorio,DC=eti,DC=br</ldap.user>

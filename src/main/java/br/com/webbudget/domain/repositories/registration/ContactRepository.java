@@ -24,6 +24,8 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,7 +47,7 @@ public interface ContactRepository extends DefaultRepository<Contact> {
      */
     @Override
     @EntityGraph(value = "Contact.withTelephones")
-    Optional<Contact> findOptionalById(Long id);
+    Optional<Contact> findById(Long id);
 
     /**
      * {@inheritDoc}
@@ -64,10 +66,10 @@ public interface ContactRepository extends DefaultRepository<Contact> {
      * @return
      */
     @Override
-    default Criteria<Contact, Contact> getRestrictions(String filter) {
-        return criteria()
-                .likeIgnoreCase(Contact_.name, filter)
-                .likeIgnoreCase(Contact_.email, filter)
-                .likeIgnoreCase(Contact_.document, filter);
+    default Collection<Criteria<Contact, Contact>> getRestrictions(String filter) {
+        return List.of(
+                this.criteria().likeIgnoreCase(Contact_.name, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Contact_.email, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Contact_.document, this.likeAny(filter)));
     }
 }

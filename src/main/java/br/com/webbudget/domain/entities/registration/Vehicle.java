@@ -83,8 +83,9 @@ public class Vehicle extends PersistentEntity {
     private long odometer;
     @Getter
     @Setter
-    @Column(name = "fuel_capacity", length = 4)
-    private int fuelCapacity;
+    @NotNull(message = "{vehicle.fuel-capacity}")
+    @Column(name = "fuel_capacity", length = 4, nullable = false)
+    private Integer fuelCapacity;
     @Getter
     @Setter
     @Column(name = "active", nullable = false)
@@ -94,7 +95,7 @@ public class Vehicle extends PersistentEntity {
     @Setter
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{vehicle.vehicle-type}")
-    @Column(name = "vehicle_type", nullable = false)
+    @Column(name = "vehicle_type", nullable = false, length = 45)
     private VehicleType vehicleType;
 
     @Getter
@@ -109,7 +110,9 @@ public class Vehicle extends PersistentEntity {
      */
     public Vehicle() {
         this.active = true;
+
         final int year = LocalDate.now().get(ChronoField.YEAR);
+
         this.modelYear = year;
         this.manufacturingYear = year;
     }

@@ -24,6 +24,8 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,7 +46,7 @@ public interface CardRepository extends DefaultRepository<Card> {
      * @param type the type of the card defined by the {@link CardType} enum
      * @return an {@link Optional} of the card
      */
-    Optional<Card> findOptionalByNumberAndCardType(String number, CardType type);
+    Optional<Card> findByNumberAndCardType(String number, CardType type);
     
     /**
      * {@inheritDoc}
@@ -63,11 +65,11 @@ public interface CardRepository extends DefaultRepository<Card> {
      * @return 
      */
     @Override
-    default Criteria<Card, Card> getRestrictions(String filter) {
-        return criteria()
-                .likeIgnoreCase(Card_.name, filter)
-                .likeIgnoreCase(Card_.number, filter)
-                .likeIgnoreCase(Card_.owner, filter)
-                .likeIgnoreCase(Card_.flag, filter);
+    default Collection<Criteria<Card, Card>> getRestrictions(String filter) {
+        return List.of(
+                this.criteria().likeIgnoreCase(Card_.name, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Card_.number, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Card_.owner, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Card_.flag, this.likeAny(filter)));
     }
 }

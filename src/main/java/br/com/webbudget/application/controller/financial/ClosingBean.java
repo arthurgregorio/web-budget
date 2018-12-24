@@ -80,7 +80,7 @@ public class ClosingBean extends AbstractBean {
 //    public void processPeriod() {
 //
 //        try {
-//            final List<Movement> movements = 
+//            final List<Movement> movements =
 //                    this.closingService.process(this.financialPeriod);
 //            this.calculator = new MovementCalculator(movements);
 //            this.updateComponent("periodBox");

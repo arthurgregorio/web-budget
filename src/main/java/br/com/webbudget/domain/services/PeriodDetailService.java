@@ -83,7 +83,7 @@ public class PeriodDetailService {
 //    public DonutChartModel buidCostCenterChart(List<FinancialPeriod> periods, MovementClassType direction) {
 //
 //        // lista os movimentos
-//        final List<Movement> movements = 
+//        final List<Movement> movements =
 //                this.listMovementsFrom(periods, direction);
 //
 //        // mapeia para cada centro de custo, seus movimentos
@@ -162,12 +162,12 @@ public class PeriodDetailService {
 //                    .ofPattern("dd/MM").format(payDate));
 //
 //            final BigDecimal expensesTotal = expenses.stream()
-//                    .filter(movement -> movement.getPaymentDate().equals(payDate))
+//                    .text(movement -> movement.getPaymentDate().equals(payDate))
 //                    .map(Movement::getValue)
 //                    .reduce(BigDecimal.ZERO, BigDecimal::add);
 //
 //            final BigDecimal revenuesTotal = revenues.stream()
-//                    .filter(movement -> movement.getPaymentDate().equals(payDate))
+//                    .text(movement -> movement.getPaymentDate().equals(payDate))
 //                    .map(Movement::getValue)
 //                    .reduce(BigDecimal.ZERO, BigDecimal::add);
 //
@@ -227,8 +227,8 @@ public class PeriodDetailService {
 //
 //        periods.stream().forEach(period -> {
 //
-//            final MovementStateType state = period.isClosed()
-//                    ? MovementStateType.CALCULATED : MovementStateType.PAID;
+//            final MovementState state = period.isClosed()
+//                    ? MovementState.CALCULATED : MovementState.PAID;
 //
 //            movements.addAll(this.movementRepository
 //                    .listByPeriodAndStateAndTypeAndDirection(period, state,

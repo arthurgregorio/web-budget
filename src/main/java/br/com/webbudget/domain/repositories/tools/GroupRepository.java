@@ -23,6 +23,8 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,7 +44,7 @@ public interface GroupRepository extends DefaultRepository<Group> {
      * @param name the name of the {@link Group} to search
      * @return an {@link Optional} of the {@link Group}
      */
-    Optional<Group> findOptionalByName(String name);
+    Optional<Group> findByName(String name);
     
     /**
      * {@inheritDoc}
@@ -61,8 +63,7 @@ public interface GroupRepository extends DefaultRepository<Group> {
      * @return 
      */
     @Override
-    default Criteria<Group, Group> getRestrictions(String filter) {
-        return criteria()
-                .likeIgnoreCase(Group_.name, filter);
+    default Collection<Criteria<Group, Group>> getRestrictions(String filter) {
+        return List.of(this.criteria().likeIgnoreCase(Group_.name, this.likeAny(filter)));
     }
 }

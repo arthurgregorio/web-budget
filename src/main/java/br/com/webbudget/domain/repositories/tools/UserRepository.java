@@ -24,6 +24,8 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,7 +45,7 @@ public interface UserRepository extends DefaultRepository<User> {
      * @param email the {@link User} email address to find
      * @return an {@link Optional} of the {@link User}
      */
-    Optional<User> findOptionalByEmail(String email);
+    Optional<User> findByEmail(String email);
     
     /**
      * Find an {@link User} by the email address and the {@link StoreType}
@@ -52,7 +54,7 @@ public interface UserRepository extends DefaultRepository<User> {
      * @param storeType the enum value of {@link StoreType}
      * @return an {@link Optional} of the {@link User}
      */
-    Optional<User> findOptionalByEmailAndStoreType(String email, StoreType storeType);
+    Optional<User> findByEmailAndStoreType(String email, StoreType storeType);
     
     /**
      * Find an {@link User} by the username
@@ -60,7 +62,7 @@ public interface UserRepository extends DefaultRepository<User> {
      * @param username the username to find the {@link User} object
      * @return an {@link Optional} of the {@link User}
      */
-    Optional<User> findOptionalByUsername(String username);
+    Optional<User> findByUsername(String username);
     
     /**
      * {@inheritDoc}
@@ -79,10 +81,10 @@ public interface UserRepository extends DefaultRepository<User> {
      * @return 
      */
     @Override
-    default Criteria<User, User> getRestrictions(String filter) {
-        return criteria()
-                .likeIgnoreCase(User_.name, filter)
-                .likeIgnoreCase(User_.username, filter)
-                .likeIgnoreCase(User_.email, filter);
+    default Collection<Criteria<User, User>> getRestrictions(String filter) {
+        return List.of(
+                this.criteria().likeIgnoreCase(User_.name, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(User_.username, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(User_.email, this.likeAny(filter)));
     }
 }

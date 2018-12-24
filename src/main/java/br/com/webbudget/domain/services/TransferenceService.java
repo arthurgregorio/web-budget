@@ -17,12 +17,12 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.financial.Transference;
-import br.com.webbudget.domain.entities.registration.ReasonType;
-import br.com.webbudget.domain.entities.registration.WalletBalance;
+import br.com.webbudget.domain.entities.financial.ReasonType;
+import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.repositories.financial.TransferenceRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
-import br.com.webbudget.domain.validators.financial.transference.TransferenceSavingValidator;
+import br.com.webbudget.domain.validators.financial.transference.TransferenceSavingBusinessLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -51,7 +51,7 @@ public class TransferenceService {
 
     @Any
     @Inject
-    private Instance<TransferenceSavingValidator> savingValidators;
+    private Instance<TransferenceSavingBusinessLogic> savingBusinessLogics;
 
     /**
      * Method to make the {@link WalletBalance} transference
@@ -61,7 +61,7 @@ public class TransferenceService {
     @Transactional
     public void transfer(Transference transference) {
 
-        this.savingValidators.forEach(validator -> validator.validate(transference));
+        this.savingBusinessLogics.forEach(logic -> logic.run(transference));
 
         this.transferenceRepository.save(transference);
 

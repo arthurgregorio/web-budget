@@ -34,7 +34,7 @@ public class FixedMovementBean extends AbstractBean {
 
 //    @Getter
 //    @Setter
-//    private String filter;
+//    private String text;
 //
 //    @Getter
 //    private FixedMovement fixedMovement;
@@ -87,7 +87,7 @@ public class FixedMovementBean extends AbstractBean {
 //                        .withDirection(sortOrder.name());
 //
 //                final Page<FixedMovement> page = movementService
-//                        .listFixedMovementsByFilter(filter, pageRequest);
+//                        .listFixedMovementsByFilter(text, pageRequest);
 //
 //                this.setRowCount(page.getTotalPagesInt());
 //
@@ -370,7 +370,7 @@ public class FixedMovementBean extends AbstractBean {
 //    /**
 //     * @return os status possiveis para um movimento fixo
 //     */
-//    public FixedMovementStatusType[] getAvailableFixedMovementStatusTypes() {
-//        return FixedMovementStatusType.values();
+//    public FixedMovementState[] getAvailableFixedMovementStatusTypes() {
+//        return FixedMovementState.values();
 //    }
 }

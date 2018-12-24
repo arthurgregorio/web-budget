@@ -25,6 +25,7 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.metamodel.SingularAttribute;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ import java.util.Optional;
 public interface FinancialPeriodRepository extends DefaultRepository<FinancialPeriod> {
 
     /**
-     * Method used to validate if the dates give are within other periods
+     * Method used to run if the dates give are within other periods
      *
      * @param start the date to start
      * @param end the date to end
@@ -65,7 +66,7 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
      * @param identification the identification of the {@link FinancialPeriod} to search
      * @return an {@link Optional} of the {@link FinancialPeriod}
      */
-    Optional<FinancialPeriod> findOptionalByIdentification(String identification);
+    Optional<FinancialPeriod> findByIdentification(String identification);
 
     /**
      * {@inheritDoc}
@@ -74,8 +75,8 @@ public interface FinancialPeriodRepository extends DefaultRepository<FinancialPe
      * @return
      */
     @Override
-    default Criteria<FinancialPeriod, FinancialPeriod> getRestrictions(String filter) {
-        return this.criteria().likeIgnoreCase(FinancialPeriod_.identification, filter);
+    default Collection<Criteria<FinancialPeriod, FinancialPeriod>> getRestrictions(String filter) {
+        return List.of(this.criteria().likeIgnoreCase(FinancialPeriod_.identification, this.likeAny(filter)));
     }
 
     /**
