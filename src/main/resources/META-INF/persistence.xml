@@ -29,13 +29,22 @@
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <properties>
-            <property name="hibernate.hbm2ddl.auto" value="${orm.ddl_auto}"/>
+            <!--hibernate core configs-->
             <property name="hibernate.show_sql" value="${orm.show_sql}"/>
+            <property name="hibernate.hbm2ddl.auto" value="${orm.ddl_auto}"/>
             <property name="hibernate.connection.autocommit" value="false"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
 
+            <!--hibernate envers configs-->
+            <property name="org.hibernate.envers.store_data_at_delete" value="true"/>
+            <property name="org.hibernate.envers.revision_field_name" value="revision"/>
+            <property name="org.hibernate.envers.revision_type_field_name" value="revision_type"/>
+
             <!--disable bean validation on save/update operations-->
             <property name="javax.persistence.validation.mode" value="none"/>
+
+            <!--custom naming strategy-->
+            <property name="hibernate.implicit_naming_strategy" value="br.com.webbudget.infrastructure.jpa.CustomNamingStrategy"/>
         </properties>
     </persistence-unit>
 </persistence>
