@@ -44,7 +44,8 @@
             <property name="javax.persistence.validation.mode" value="none"/>
 
             <!--custom naming strategy-->
-            <property name="hibernate.implicit_naming_strategy" value="br.com.webbudget.infrastructure.jpa.CustomNamingStrategy"/>
+            <!--disabled as stated in issue #336 -->
+            <!--<property name="hibernate.implicit_naming_strategy" value="br.com.webbudget.infrastructure.jpa.CustomNamingStrategy"/>-->
         </properties>
     </persistence-unit>
 </persistence>
