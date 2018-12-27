@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>br.com.webbudget</groupId>
-    <artifactId>webBudget</artifactId>
+    <artifactId>web-budget</artifactId>
     <version>3.0.0</version>
     <packaging>war</packaging>
 
@@ -43,7 +43,11 @@
     <developers>
         <developer>
             <name>Arthur Gregorio</name>
-            <email>contato@webbudget.com.br</email> 
+            <email>contato@webbudget.com.br</email>
+            <roles>
+                <role>developer</role>
+                <role>architect</role>
+            </roles>
         </developer>
     </developers>
 
