@@ -70,6 +70,7 @@ public interface ContactRepository extends DefaultRepository<Contact> {
         return List.of(
                 this.criteria().likeIgnoreCase(Contact_.name, this.likeAny(filter)),
                 this.criteria().likeIgnoreCase(Contact_.email, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Contact_.city, this.likeAny(filter)),
                 this.criteria().likeIgnoreCase(Contact_.document, this.likeAny(filter)));
     }
 }
