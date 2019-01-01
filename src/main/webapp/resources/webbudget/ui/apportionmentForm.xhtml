@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    Copyright (C) 2016 Arthur Gregorio, AG.Software
+    Copyright (C) 2015 Arthur Gregorio, AG.Software
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,67 +29,67 @@
         <c:attribute required="true"
                      type="java.util.List"
                      name="movementClassList"/>
+
         <c:attribute required="true"
                      name="blockForm"
                      type="java.lang.String"/>
-        <c:attribute required="true"
-                     name="apportionment"
-                     type="br.com.webbudget.domain.model.entity.financial.Apportionment"/>
 
         <c:attribute required="true"
-                     name="onCostCenterSelect" 
-                     method-signature="java.lang.String  actionListener()"/>
+                     name="apportionment"
+                     type="br.com.webbudget.domain.entities.financial.Apportionment"/>
+
+        <c:attribute required="true"
+                     name="onCostCenterSelect"
+                     method-signature="void  actionListener()"/>
     </c:interface>
 
     <c:implementation>
-        <div class="row">
-            <div class="col-sm-6 form-group">
-                <p:outputLabel for="inApportionment" 
-                               value="#{messages['apportionment.form.value']}: "/>
-                <p:inputNumber id="inApportionment" 
-                               symbol="R$ "
-                               decimalPlaces="2" 
-                               decimalSeparator="," 
-                               thousandSeparator="." 
-                               value="#{cc.attrs.apportionment.value}">
-                    <f:converter converterId="javax.faces.BigDecimal" />
-                </p:inputNumber>  
-            </div>
-            <div class="col-sm-12 form-group">
-                <p:outputLabel for="inCostCenter" 
-                               value="#{messages['apportionment.form.cost-center']}: "/>
-                <p:selectOneMenu id="inCostCenter" 
-                                 converter="omnifaces.SelectItemsConverter"
-                                 value="#{cc.attrs.apportionment.costCenter}" >
+        <div class="col-sm-6 form-group">
+            <p:outputLabel for="inApportionment"
+                           value="#{messages['apportionment.form.value']}: "/>
+            <p:inputNumber id="inApportionment"
+                           symbol="R$ "
+                           decimalPlaces="2"
+                           decimalSeparator=","
+                           thousandSeparator="."
+                           value="#{cc.attrs.apportionment.value}">
+                <f:converter converterId="javax.faces.BigDecimal" />
+            </p:inputNumber>
+        </div>
+        <div class="col-sm-12 form-group">
+            <p:outputLabel for="inCostCenter"
+                           value="#{messages['apportionment.form.cost-center']}: "/>
+            <p:selectOneMenu id="inCostCenter"
+                             converter="omnifaces.SelectItemsConverter"
+                             value="#{cc.attrs.apportionment.costCenter}" >
 
-                    <p:ajax event="change" 
-                            update="inMovementClass"
-                            listener="#{cc.attrs.onCostCenterSelect}" />
+                <p:ajax event="change"
+                        update="inMovementClass"
+                        listener="#{cc.attrs.onCostCenterSelect}" />
 
-                    <f:selectItem itemValue="#{null}"
-                                  noSelectionOption="true"
-                                  itemLabel="#{menu['select-one']}" />
-                    <f:selectItems var="costCenter" 
-                                   itemValue="#{costCenter}"
-                                   itemLabel="#{costCenter.name}"
-                                   value="#{cc.attrs.costCenterList}" /> 
-                </p:selectOneMenu>
-            </div>                        
-            <div class="col-sm-12 form-group">
-                <p:outputLabel for="inMovementClass" 
-                               value="#{messages['apportionment.form.movement-class']}: "/>
-                <p:selectOneMenu id="inMovementClass" 
-                                 converter="omnifaces.SelectItemsConverter"
-                                 value="#{cc.attrs.apportionment.movementClass}" >
-                    <f:selectItem itemValue="#{null}"
-                                  noSelectionOption="true"
-                                  itemLabel="#{menu['select-one']}" />
-                    <f:selectItems var="movementClass" 
-                                   itemValue="#{movementClass}"
-                                   itemLabel="#{movementClass.name}"
-                                   value="#{cc.attrs.movementClassList}" /> 
-                </p:selectOneMenu>
-            </div>                        
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{menu['select-one']}" />
+                <f:selectItems var="costCenter"
+                               itemValue="#{costCenter}"
+                               itemLabel="#{costCenter.name}"
+                               value="#{cc.attrs.costCenterList}" />
+            </p:selectOneMenu>
+        </div>
+        <div class="col-sm-12 form-group">
+            <p:outputLabel for="inMovementClass"
+                           value="#{messages['apportionment.form.movement-class']}: "/>
+            <p:selectOneMenu id="inMovementClass"
+                             converter="omnifaces.SelectItemsConverter"
+                             value="#{cc.attrs.apportionment.movementClass}" >
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{menu['select-one']}" />
+                <f:selectItems var="movementClass"
+                               itemValue="#{movementClass}"
+                               itemLabel="#{movementClass.name}"
+                               value="#{cc.attrs.movementClassList}" />
+            </p:selectOneMenu>
         </div>
 
         <p:blockUI trigger="inCostCenter"
@@ -97,8 +97,8 @@
                    widgetVar="#{cc.attrs.id}_block" >
             <p:graphicImage width="32" 
                             height="32"
-                            library="webbudget" 
-                            name="img/loading.gif" />
+                            library="webbudget"
+                            name="images/loading.gif" />
         </p:blockUI>
     </c:implementation>
 </html>

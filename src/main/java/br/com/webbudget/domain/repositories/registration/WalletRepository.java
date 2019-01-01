@@ -41,30 +41,30 @@ public interface WalletRepository extends DefaultRepository<Wallet> {
 
     /**
      * Use this method to search for a wallet by the name and type
-     * 
+     *
      * @param name the name of the wallet
      * @param walletType the type of the wallet defined by the {@link WalletType} enum
      * @return an {@link Optional} of the wallet
      */
     Optional<Wallet> findByNameAndWalletType(String name, WalletType walletType);
-    
+
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param filter
-     * @return 
+     * @return
      */
     @Override
     default Collection<Criteria<Wallet, Wallet>> getRestrictions(String filter) {
         return List.of(
-                this.criteria().likeIgnoreCase(Wallet_.bank, this.likeAny(filter)),
-                this.criteria().likeIgnoreCase(Wallet_.name, this.likeAny(filter)));
+                this.criteria().likeIgnoreCase(Wallet_.name, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Wallet_.bank, this.likeAny(filter)));
     }
-    
+
     /**
      * {@inheritDoc}
      *
-     * @return 
+     * @return
      */
     @Override
     default SingularAttribute<Wallet, Boolean> getEntityStateProperty() {

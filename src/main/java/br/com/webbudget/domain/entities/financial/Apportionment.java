@@ -66,11 +66,6 @@ public class Apportionment extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "id_fixed_movement")
-    private FixedMovement fixedMovement;
-    @Getter
-    @Setter
-    @ManyToOne
     @NotNull(message = "{apportionment.cost-center}")
     @JoinColumn(name = "id_cost_center", nullable = false)
     private CostCenter costCenter;
@@ -117,5 +112,23 @@ public class Apportionment extends PersistentEntity {
      */
     public boolean isExpense() {
         return this.movementClass.isExpense();
+    }
+
+    /**
+     * Get the {@link MovementClass} name
+     *
+     * @return the name if {@link MovementClass} is not null
+     */
+    public String getMovementClassName() {
+        return this.movementClass != null ? this.movementClass.getName() : "";
+    }
+
+    /**
+     * Get the {@link CostCenter} name
+     *
+     * @return the name if the {@link CostCenter} is not null
+     */
+    public String getCostCenterName() {
+        return this.costCenter != null ? this.costCenter.getName() : "";
     }
 }

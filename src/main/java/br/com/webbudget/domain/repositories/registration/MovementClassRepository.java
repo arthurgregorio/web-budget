@@ -42,26 +42,35 @@ public interface MovementClassRepository extends DefaultRepository<MovementClass
 
     /**
      * Find a {@link MovementClass} by the name and cost center name
-     * 
+     *
      * @param name the name of the movement class
      * @param costCenterName the name of the cost center
      * @return a {@link Optional} of {@link MovementClass}
      */
     Optional<MovementClass> findByNameAndCostCenter_name(String name, String costCenterName);
-    
+
     /**
      * Find a {@link MovementClass} by the type and the cost center id
-     * 
+     *
      * @param classType the {@link MovementClassType} enum type
      * @param costCenter the {@link CostCenter}
      * @return a {@link List} of {@link MovementClass}
      */
     List<MovementClass> findByMovementClassTypeAndCostCenter(MovementClassType classType, CostCenter costCenter);
-    
+
+    /**
+     * Find all {@link MovementClass} filtering by the status and {@link CostCenter}
+     *
+     * @param active if is active or not
+     * @param costCenter the {@link CostCenter}
+     * @return the list of {@link MovementClass}
+     */
+    List<MovementClass> findByActiveAndCostCenter(boolean active, CostCenter costCenter);
+
     /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     default SingularAttribute<MovementClass, Boolean> getEntityStateProperty() {
@@ -70,12 +79,12 @@ public interface MovementClassRepository extends DefaultRepository<MovementClass
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param filter
-     * @return 
+     * @return
      */
     @Override
     default Collection<Criteria<MovementClass, MovementClass>> getRestrictions(String filter) {
-       return List.of(this.criteria().likeIgnoreCase(MovementClass_.name, this.likeAny(filter)));
+        return List.of(this.criteria().likeIgnoreCase(MovementClass_.name, this.likeAny(filter)));
     }
 }

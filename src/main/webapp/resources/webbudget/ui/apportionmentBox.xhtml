@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    Copyright (C) 2016 Arthur Gregorio, AG.Software
+    Copyright (C) 2015 Arthur Gregorio, AG.Software
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,11 +26,11 @@
 
     <c:interface>
         <c:attribute required="true"
-                     name="baseBean" />
+                     name="baseBean"/>
 
         <c:attribute name="valueInput"
                      default="inValue"/>
-        <c:attribute name="disabled" 
+        <c:attribute name="disabled"
                      type="java.lang.Boolean"/>
 
         <c:attribute required="true"
@@ -38,7 +38,7 @@
                      name="apportionmentsList"/>
 
         <c:attribute required="true"
-                     name="showDialogAction" 
+                     name="showDialogAction"
                      method-signature="java.lang.String  actionListener()"/>
     </c:interface>
 
@@ -46,20 +46,20 @@
         <div jsf:id="container" class="row">
             <div class="col-sm-12 form-group">
                 <h4 style="display: inline-flex">
-                    #{messages['apportionment.form.apportionment']}:
+                    #{messages['apportionment.apportionments']}:
                 </h4>
                 <div class="pull-right">
-                    <p:commandButton update="messages"
+                    <p:commandButton immediate="true"
+                                     update="messages"
                                      value="#{menu['add']}"
                                      disabled="#{cc.attrs.disabled}"
-                                     styleClass="btn btn-flat btn-warning"
+                                     styleClass="btn btn-flat btn-primary"
                                      process="@this,#{cc.attrs.valueInput}"
                                      actionListener="#{cc.attrs.showDialogAction}"/>
                 </div>
             </div>
             <div class="col-sm-12">
-                <p:dataTable id="apportionmentList" 
-                             rows="15"
+                <p:dataTable rows="15"
                              paginator="true"
                              var="apportionment"
                              paginatorPosition="bottom"
@@ -69,28 +69,28 @@
 
                     <p:column styleClass="align-center"
                               headerText="#{messages['apportionment.list.cost-center']}">
-                        #{apportionment.costCenter.name}
+                        #{apportionment.costCenterName}
                     </p:column>
                     <p:column styleClass="align-center"
                               headerText="#{messages['apportionment.list.movement-class']}">
-                        #{apportionment.movementClass.name}
+                        #{apportionment.movementClassName}
                     </p:column>
-                    <p:column width="20%" 
+                    <p:column width="20%"
                               styleClass="align-center"
                               headerText="#{messages['apportionment.list.value']}">
                         <h:outputText value="#{apportionment.value}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                         </h:outputText>
                     </p:column>
-                    <p:column width="10%" 
+                    <p:column width="10%"
                               styleClass="align-center"
-                              headerText="#{menu['actions']}">
+                              rendered="#{cc.attrs.disabled}"
+                              headerText="#{messages['list.actions']}">
                         <p:commandButton immediate="true"
-                                         icon="fa fa-trash"
+                                         icon="fa fa-eraser"
                                          title="#{menu['delete']}"
-                                         disabled="#{cc.attrs.disabled}"
-                                         styleClass="btn btn-flat btn-default"
-                                         actionListener="#{cc.attrs.baseBean.deleteApportionment(apportionment.code)}" />
+                                         styleClass="btn btn-flat btn-danger"
+                                         actionListener="#{cc.attrs.baseBean.deleteApportionment(apportionment.code)}"/>
                     </p:column>
                 </p:dataTable>
             </div>

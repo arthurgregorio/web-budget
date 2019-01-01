@@ -40,16 +40,16 @@ public interface CostCenterRepository extends DefaultRepository<CostCenter> {
 
     /**
      * Find a {@link CostCenter} by the name
-     * 
+     *
      * @param name the of the {@link CostCenter} to find
      * @return an {@link Optional} of the {@link CostCenter}
      */
     Optional<CostCenter> findByName(String name);
-    
+
     /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     default SingularAttribute<CostCenter, Boolean> getEntityStateProperty() {
@@ -58,9 +58,9 @@ public interface CostCenterRepository extends DefaultRepository<CostCenter> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param filter
-     * @return 
+     * @return
      */
     @Override
     default Collection<Criteria<CostCenter, CostCenter>> getRestrictions(String filter) {
@@ -71,8 +71,8 @@ public interface CostCenterRepository extends DefaultRepository<CostCenter> {
 
     /**
      * {@inheritDoc}
-     * 
-     * @param criteria 
+     *
+     * @param criteria
      */
     @Override
     default void setOrder(Criteria<CostCenter, CostCenter> criteria) {
