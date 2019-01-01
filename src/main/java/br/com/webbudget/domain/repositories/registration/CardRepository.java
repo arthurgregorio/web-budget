@@ -47,11 +47,11 @@ public interface CardRepository extends DefaultRepository<Card> {
      * @return an {@link Optional} of the card
      */
     Optional<Card> findByNumberAndCardType(String number, CardType type);
-    
+
     /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     default SingularAttribute<Card, Boolean> getEntityStateProperty() {
@@ -62,14 +62,14 @@ public interface CardRepository extends DefaultRepository<Card> {
      * {@inheritDoc}
      *
      * @param filter
-     * @return 
+     * @return
      */
     @Override
     default Collection<Criteria<Card, Card>> getRestrictions(String filter) {
         return List.of(
                 this.criteria().likeIgnoreCase(Card_.name, this.likeAny(filter)),
                 this.criteria().likeIgnoreCase(Card_.number, this.likeAny(filter)),
-                this.criteria().likeIgnoreCase(Card_.owner, this.likeAny(filter)),
-                this.criteria().likeIgnoreCase(Card_.flag, this.likeAny(filter)));
+                this.criteria().likeIgnoreCase(Card_.flag, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Card_.owner, this.likeAny(filter)));
     }
 }

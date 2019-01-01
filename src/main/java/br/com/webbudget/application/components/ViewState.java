@@ -40,4 +40,40 @@ public enum ViewState {
     public boolean isEditable() {
         return this == ADDING || this == EDITING;
     }
+
+    /**
+     * To check if the state is EDITING
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isEditing() {
+        return this == EDITING;
+    }
+
+    /**
+     * To check if the state is ADDING
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isAdding() {
+        return this == ADDING;
+    }
+
+    /**
+     * To check if the state is DETAILING
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isDetailing() {
+        return this == DETAILING;
+    }
+
+    /**
+     * To check if the state is DELETING
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isDeleting() {
+        return this == DELETING;
+    }
 }

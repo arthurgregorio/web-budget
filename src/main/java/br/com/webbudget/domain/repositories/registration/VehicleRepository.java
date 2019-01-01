@@ -46,20 +46,20 @@ public interface VehicleRepository extends DefaultRepository<Vehicle> {
      * @return an {@link Optional} of the {@link Vehicle}
      */
     Optional<Vehicle> findByLicensePlate(String licensePlate);
-    
+
     /**
      * Method to find by the last registered odometer for a given {@link Vehicle}
-     * 
+     *
      * @param vehicleId the id of the {@link Vehicle} to find the odometer
      * @return the value of the last odometer
      */
     @Query("SELECT MAX(ve.odometer) FROM Vehicle ve WHERE ve.id = ?1")
     long findLastOdometer(long vehicleId);
-    
+
     /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     default SingularAttribute<Vehicle, Boolean> getEntityStateProperty() {
@@ -68,16 +68,16 @@ public interface VehicleRepository extends DefaultRepository<Vehicle> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param filter
-     * @return 
+     * @return
      */
     @Override
     default Collection<Criteria<Vehicle, Vehicle>> getRestrictions(String filter) {
         return List.of(
+                this.criteria().eqIgnoreCase(Vehicle_.identification, this.likeAny(filter)),
                 this.criteria().eqIgnoreCase(Vehicle_.brand, this.likeAny(filter)),
                 this.criteria().eqIgnoreCase(Vehicle_.model, this.likeAny(filter)),
-                this.criteria().eqIgnoreCase(Vehicle_.licensePlate, this.likeAny(filter)),
-                this.criteria().eqIgnoreCase(Vehicle_.identification, this.likeAny(filter)));
+                this.criteria().eqIgnoreCase(Vehicle_.licensePlate, this.likeAny(filter)));
     }
 }

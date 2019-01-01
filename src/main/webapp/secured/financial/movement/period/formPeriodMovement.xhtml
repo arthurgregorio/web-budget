@@ -34,10 +34,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{periodMovementBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{periodMovementBean.viewState.adding}"
                       value="#{messages['period-movement.page-description-adding']}"/>
         <o:outputFormat id="pageDescription"
-                        rendered="#{periodMovementBean.viewState eq 'EDITING'}"
+                        rendered="#{periodMovementBean.viewState.editing}"
                         value="#{messages['period-movement.page-description-editing']}">
             <f:param value="#{periodMovementBean.value.identification}"/>
         </o:outputFormat>
@@ -48,11 +48,11 @@
         <li><a href="#">#{breadcrumb['financial.movements']}</a></li>
         <li><a href="listPeriodMovements.xhtml">#{breadcrumb['financial.movements.period']}</a></li>
         <li class="active"
-            jsf:rendered="#{periodMovementBean.viewState eq 'ADDING'}">
+            jsf:rendered="#{periodMovementBean.viewState.adding}">
             <a href="#">#{breadcrumb['adding']}</a>
         </li>
         <li class="active"
-            jsf:rendered="#{periodMovementBean.viewState eq 'EDITING'}">
+            jsf:rendered="#{periodMovementBean.viewState.editing}">
             <a href="#">#{breadcrumb['editing']}</a>
         </li>
     </ui:define>
@@ -116,7 +116,7 @@
                                         <p:commandButton immediate="true"
                                                          icon="fa fa-search"
                                                          styleClass="btn btn-flat btn-warning"
-                                                         disabled="#{periodMovementBean.viewState eq 'DETAILING'}"
+                                                         disabled="#{periodMovementBean.viewState.detailing}"
                                                          actionListener="#{periodMovementBean.showContactDialog()}"/>
                                         <p:spacer width="10"
                                                   rendered="#{periodMovementBean.viewState.editable}"/>
@@ -163,11 +163,11 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <!--<wb:apportionmentBox id="apportionmentBox"-->
-                                             <!--baseBean="#{periodMovementBean}"-->
-                                             <!--apportionmentsList="#{periodMovementBean.value.apportionments}"-->
-                                             <!--showDialogAction="#{periodMovementBean.showApportionmentDialog()}"-->
-                                             <!--disabled="#{periodMovementBean.value.paid or periodMovementBean.viewState eq 'DETAILING'}"/>-->
+                        <wb:apportionmentBox id="apportionmentBox"
+                                             baseBean="#{periodMovementBean}"
+                                             apportionmentsList="#{periodMovementBean.value.apportionments}"
+                                             showDialogAction="#{periodMovementBean.showApportionmentDialog()}"
+                                             disabled="#{periodMovementBean.value.paid or periodMovementBean.viewState.detailing}"/>
                     </div>
                 </div>
                 <div class="box-footer align-right">
@@ -175,12 +175,12 @@
                                      update="periodMovementForm"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{periodMovementBean.doSave()}"
-                                     rendered="#{periodMovementBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{periodMovementBean.viewState.adding}"/>
                     <p:commandButton value="#{menu['update']}"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{periodMovementBean.doUpdate()}"
                                      update="periodMovementForm pageDescription"
-                                     rendered="#{periodMovementBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{periodMovementBean.viewState.editing}"/>
                     <p:spacer width="10"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
@@ -189,5 +189,8 @@
                 </div>
             </div>
         </h:form>
+    </ui:define>
+    <ui:define name="popups">
+        <ui:include src="dialogApportionment.xhtml"/>
     </ui:define>
 </ui:composition>

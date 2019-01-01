@@ -28,33 +28,31 @@
           widgetVar="dialogApportionment" 
           header="#{messages['apportionment.dialog.title']}">
 
-    <h:form id="apportionmentForm" prependId="false">
-
+    <h:form id="apportionmentForm">
         <p:defaultCommand target="btAdd"/>
-
         <div class="row">
             <div class="col-sm-12">
-                <p:messages id="apportionmentMessages" closable="true" />
+                <p:messages closable="true" />
             </div> 
-        </div> 
-
-        <wb:apportionmentForm blockForm="apportionmentForm"
-                              costCenterList="#{periodMovementBean.costCenters}"
-                              apportionment="#{periodMovementBean.apportionment}"
-                              movementClassList="#{periodMovementBean.movementClasses}"
-                              onCostCenterSelect="#{periodMovementBean.loadMovementClasses()}"/>
-        
+        </div>
+        <div class="row">
+            <wb:apportionmentForm blockForm="apportionmentForm"
+                                  apportionment="#{periodMovementBean.apportionment}"
+                                  costCenterList="#{periodMovementBean.formBean.costCenters}"
+                                  movementClassList="#{periodMovementBean.formBean.movementClasses}"
+                                  onCostCenterSelect="#{periodMovementBean.formBean.onCostCenterSelect()}"/>
+        </div>
         <div class="row">
             <div class="col-sm-12 align-right">
                 <p:commandButton id="btAdd"
+                                 update="@form"
                                  value="#{menu['add']}"
-                                 update="apportionmentMessages"
                                  styleClass="btn btn-flat btn-success"
                                  actionListener="#{periodMovementBean.addApportionment()}"/>
                 <p:spacer width="10"/>
                 <p:commandButton immediate="true"
                                  value="#{menu['cancel']}"
-                                 styleClass="btn btn-flat btn-default"
+                                 styleClass="btn btn-flat btn-primary"
                                  onclick="PF('dialogApportionment').hide()"/>
 
             </div>

@@ -22,22 +22,19 @@ import br.com.webbudget.application.components.table.LazyModel;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.components.table.filter.PeriodMovementFilter;
 import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
-import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
-import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
-import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
 import br.com.webbudget.domain.services.PeriodMovementService;
 import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
-import java.util.List;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
@@ -52,6 +49,10 @@ import static br.com.webbudget.application.components.NavigationManager.PageType
 @Named
 @ViewScoped
 public class PeriodMovementBean extends FormBean<PeriodMovement> implements LazyDataProvider<PeriodMovement> {
+
+    @Getter
+    @Setter
+    private Apportionment apportionment;
 
     @Getter
     private final PeriodMovementFilter filter;
@@ -165,11 +166,25 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
         return "";
     }
 
+    /**
+     * Use this method to update and show the {@link Contact} dialog
+     */
     public void showContactDialog() {
 
     }
 
+    /**
+     * Use this method to update and show the {@link Apportionment} dialog
+     */
     public void showApportionmentDialog() {
+        this.apportionment = new Apportionment();
+        this.updateAndOpenDialog("apportionmentDialog", "dialogApportionment");
+    }
 
+    /**
+     * Add the {@link Apportionment} to the {@link PeriodMovement}
+     */
+    public void addApportionment() {
+        this.value.add(this.apportionment);
     }
 }
