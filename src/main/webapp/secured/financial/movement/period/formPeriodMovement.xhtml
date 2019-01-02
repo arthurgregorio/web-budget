@@ -70,13 +70,13 @@
                         <b>#{messages['period-movement.form.current-period']}:</b>
                         <p:spacer width="5"/>
                         <h:outputText styleClass="text text-red"
-                                      rendered="#{periodMovementBean.formBean.currentPeriod eq null}"
+                                      rendered="#{periodMovementBean.currentPeriod eq null}"
                                       value="#{messages['period-movement.form.no-current-period']}"/>
-                        <o:outputFormat rendered="#{periodMovementBean.formBean.currentPeriod ne null}"
+                        <o:outputFormat rendered="#{periodMovementBean.currentPeriod ne null}"
                                         value="#{messages['period-movement.form.current-period-info']}">
-                            <f:param value="#{periodMovementBean.formBean.currentPeriod.identification}"/>
-                            <f:param value="#{periodMovementBean.formBean.currentPeriodStart}"/>
-                            <f:param value="#{periodMovementBean.formBean.currentPeriodEnd}"/>
+                            <f:param value="#{periodMovementBean.currentPeriod.identification}"/>
+                            <f:param value="#{periodMovementBean.currentPeriodStart}"/>
+                            <f:param value="#{periodMovementBean.currentPeriodEnd}"/>
                         </o:outputFormat>
                     </h3>
                 </div>
@@ -99,7 +99,7 @@
                                                  value="#{periodMovementBean.value.financialPeriod}">
                                     <f:selectItems var="period"
                                                    itemValue="#{period}"
-                                                   value="#{periodMovementBean.formBean.financialPeriods}"
+                                                   value="#{periodMovementBean.financialPeriods}"
                                                    itemLabel="#{not period.expired ? period.identification : period.identification.concat(' - ').concat(messages['period-movement.form.expired'])}" />
                                 </p:selectOneMenu>
                             </div>
@@ -162,10 +162,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <wb:apportionmentBox id="apportionmentBox"
-                                             baseBean="#{periodMovementBean}"
-                                             apportionmentsList="#{periodMovementBean.value.apportionments}"
+                    <div jsf:id="apportionmentBox" class="col-sm-6">
+                        <wb:apportionmentBox baseBean="#{periodMovementBean.value}"
+                                             apportionments="#{periodMovementBean.value.apportionments}"
                                              showDialogAction="#{periodMovementBean.showApportionmentDialog()}"
                                              disabled="#{periodMovementBean.value.paid or periodMovementBean.viewState.detailing}"/>
                     </div>
