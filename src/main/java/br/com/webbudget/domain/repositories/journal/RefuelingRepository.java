@@ -20,7 +20,7 @@ import br.com.webbudget.domain.entities.financial.Movement;
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.journal.Refueling_;
 import br.com.webbudget.domain.entities.registration.Vehicle;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
@@ -38,7 +38,7 @@ import java.util.Optional;
  * @since 2.3.0, 05/06/2016
  */
 @Repository
-public interface RefuelingRepository extends DefaultRepository<Refueling> {
+public interface RefuelingRepository extends LazyDefaultRepository<Refueling> {
 
     /**
      * Use this method to find all {@link Refueling} linked to a {@link Movement}

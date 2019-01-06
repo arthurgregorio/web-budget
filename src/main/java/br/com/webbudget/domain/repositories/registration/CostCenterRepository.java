@@ -18,7 +18,7 @@ package br.com.webbudget.domain.repositories.registration;
 
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.CostCenter_;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -36,7 +36,7 @@ import java.util.Optional;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface CostCenterRepository extends DefaultRepository<CostCenter> {
+public interface CostCenterRepository extends LazyDefaultRepository<CostCenter> {
 
     /**
      * Find a {@link CostCenter} by the name

@@ -19,7 +19,7 @@ package br.com.webbudget.domain.repositories.registration;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Card_;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -37,7 +37,7 @@ import java.util.Optional;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface CardRepository extends DefaultRepository<Card> {
+public interface CardRepository extends LazyDefaultRepository<Card> {
 
     /**
      * Find a {@link Card} by the number or type

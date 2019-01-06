@@ -19,7 +19,7 @@ package br.com.webbudget.domain.repositories.registration;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.registration.WalletType;
 import br.com.webbudget.domain.entities.registration.Wallet_;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -37,7 +37,7 @@ import java.util.Optional;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface WalletRepository extends DefaultRepository<Wallet> {
+public interface WalletRepository extends LazyDefaultRepository<Wallet> {
 
     /**
      * Use this method to search for a wallet by the name and type

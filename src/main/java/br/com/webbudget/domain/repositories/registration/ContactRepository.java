@@ -18,7 +18,7 @@ package br.com.webbudget.domain.repositories.registration;
 
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.Contact_;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.EntityGraph;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
@@ -37,7 +37,7 @@ import java.util.Optional;
  * @since 1.2.0, 12/04/2015
  */
 @Repository
-public interface ContactRepository extends DefaultRepository<Contact> {
+public interface ContactRepository extends LazyDefaultRepository<Contact> {
 
     /**
      * {@inheritDoc }

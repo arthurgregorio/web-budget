@@ -18,7 +18,7 @@ package br.com.webbudget.domain.repositories.registration;
 
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod_;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
@@ -38,7 +38,7 @@ import java.util.Optional;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface FinancialPeriodRepository extends DefaultRepository<FinancialPeriod> {
+public interface FinancialPeriodRepository extends LazyDefaultRepository<FinancialPeriod> {
 
     /**
      * Method used to run if the dates give are within other periods

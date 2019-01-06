@@ -19,7 +19,7 @@ package br.com.webbudget.domain.repositories.tools;
 import br.com.webbudget.domain.entities.configuration.StoreType;
 import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.entities.configuration.User_;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -37,7 +37,7 @@ import java.util.Optional;
  * @since 3.0.0, 28/12/2017
  */
 @Repository
-public interface UserRepository extends DefaultRepository<User> {
+public interface UserRepository extends LazyDefaultRepository<User> {
 
     /**
      * Find an {@link User} by the email address

@@ -18,7 +18,7 @@ package br.com.webbudget.domain.repositories.registration;
 
 import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.entities.registration.Vehicle_;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
@@ -37,7 +37,7 @@ import java.util.Optional;
  * @since 2.3.0, 05/06/2016
  */
 @Repository
-public interface VehicleRepository extends DefaultRepository<Vehicle> {
+public interface VehicleRepository extends LazyDefaultRepository<Vehicle> {
 
     /**
      * Use this method to find a vehicle by the license plate

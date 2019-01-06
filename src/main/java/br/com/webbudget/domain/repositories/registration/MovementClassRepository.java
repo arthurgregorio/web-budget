@@ -20,7 +20,7 @@ import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.registration.MovementClass_;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -38,7 +38,7 @@ import java.util.Optional;
  * @since 1.0.0, 04/03/2013
  */
 @Repository
-public interface MovementClassRepository extends DefaultRepository<MovementClass> {
+public interface MovementClassRepository extends LazyDefaultRepository<MovementClass> {
 
     /**
      * Find a {@link MovementClass} by the name and cost center name

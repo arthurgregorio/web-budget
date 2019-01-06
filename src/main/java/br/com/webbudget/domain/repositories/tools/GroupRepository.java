@@ -18,7 +18,7 @@ package br.com.webbudget.domain.repositories.tools;
 
 import br.com.webbudget.domain.entities.configuration.Group;
 import br.com.webbudget.domain.entities.configuration.Group_;
-import br.com.webbudget.domain.repositories.DefaultRepository;
+import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -36,20 +36,20 @@ import java.util.Optional;
  * @since 3.0.0, 28/12/2017
  */
 @Repository
-public interface GroupRepository extends DefaultRepository<Group> {
+public interface GroupRepository extends LazyDefaultRepository<Group> {
 
     /**
      * Fin a {@link Group} by the name
-     * 
+     *
      * @param name the name of the {@link Group} to search
      * @return an {@link Optional} of the {@link Group}
      */
     Optional<Group> findByName(String name);
-    
+
     /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     default SingularAttribute<Group, Boolean> getEntityStateProperty() {
@@ -58,9 +58,9 @@ public interface GroupRepository extends DefaultRepository<Group> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param filter
-     * @return 
+     * @return
      */
     @Override
     default Collection<Criteria<Group, Group>> getRestrictions(String filter) {
