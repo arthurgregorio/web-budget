@@ -25,7 +25,13 @@ import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.Contact;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
+import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
+import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
+import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
 import br.com.webbudget.domain.services.PeriodMovementService;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +41,9 @@ import org.primefaces.model.SortOrder;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
 
@@ -55,19 +64,31 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     private Apportionment apportionment;
 
     @Getter
-    private final PeriodMovementFilter filter;
+    private PeriodMovementFilter filter;
     @Getter
-    private final LazyDataModel<PeriodMovement> dataModel;
+    private LazyDataModel<PeriodMovement> dataModel;
 
     @Getter
+    private FinancialPeriod currentPeriod;
+
+    @Getter
+    private List<CostCenter> costCenters;
+    @Getter
+    private List<MovementClass> movementClasses;
+    @Getter
+    private List<FinancialPeriod> financialPeriods;
+
     @Inject
-    private PeriodMovementFormBean formBean;
+    private CostCenterRepository costCenterRepository;
+    @Inject
+    private MovementClassRepository movementClassRepository;
+    @Inject
+    private PeriodMovementRepository periodMovementRepository;
+    @Inject
+    private FinancialPeriodRepository financialPeriodRepository;
 
     @Inject
     private PeriodMovementService periodMovementService;
-
-    @Inject
-    private PeriodMovementRepository periodMovementRepository;
 
     /**
      * Constructor...
@@ -95,8 +116,26 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.formBean.initializeForAdding();
+
+        if (viewState.isAdding()) {
+            this.initializeForAdding();
+        }
+
         this.value = this.periodMovementRepository.findById(id).orElseGet(PeriodMovement::new);
+    }
+
+    /**
+     * Initialize the bean in the adding state
+     */
+    private void initializeForAdding() {
+
+        this.costCenters = this.costCenterRepository.findAllActive();
+        this.financialPeriods = this.financialPeriodRepository.findByClosed(false);
+
+        this.currentPeriod = this.financialPeriods.stream()
+                .filter(FinancialPeriod::isCurrent)
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -186,5 +225,33 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      */
     public void addApportionment() {
         this.value.add(this.apportionment);
+        this.updateComponent("apportionmentBox");
+        this.closeDialog("dialogApportionment");
+    }
+
+    /**
+     * Event to find {@link MovementClass} filtering by the selected {@link CostCenter}
+     */
+    public void onCostCenterSelect() {
+        this.movementClasses = this.movementClassRepository
+                .findByActiveAndCostCenter(true, this.apportionment.getCostCenter());
+    }
+
+    /**
+     * Get the current {@link FinancialPeriod} start date in string format
+     *
+     * @return the start date formatted in {@link String} type
+     */
+    public String getCurrentPeriodStart() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.currentPeriod.getStart());
+    }
+
+    /**
+     * Get the current {@link FinancialPeriod} end date in string format
+     *
+     * @return the end date formatted in {@link String} type
+     */
+    public String getCurrentPeriodEnd() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.currentPeriod.getEnd());
     }
 }

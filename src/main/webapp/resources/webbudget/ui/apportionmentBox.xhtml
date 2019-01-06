@@ -19,7 +19,6 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsf/composite">
@@ -35,15 +34,15 @@
 
         <c:attribute required="true"
                      type="java.util.List"
-                     name="apportionmentsList"/>
+                     name="apportionments"/>
 
         <c:attribute required="true"
                      name="showDialogAction"
-                     method-signature="java.lang.String  actionListener()"/>
+                     method-signature="java.lang.String actionListener()"/>
     </c:interface>
 
     <c:implementation>
-        <div jsf:id="container" class="row">
+        <div class="row">
             <div class="col-sm-12 form-group">
                 <h4 style="display: inline-flex">
                     #{messages['apportionment.apportionments']}:
@@ -59,12 +58,13 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <p:dataTable rows="15"
+                <p:dataTable id="apportionmentList"
+                             rows="15"
                              paginator="true"
                              var="apportionment"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
-                             value="#{cc.attrs.apportionmentsList}"
+                             value="#{cc.attrs.apportionments}"
                              emptyMessage="#{messages['list.empty']}">
 
                     <p:column styleClass="align-center"
@@ -84,13 +84,14 @@
                     </p:column>
                     <p:column width="10%"
                               styleClass="align-center"
-                              rendered="#{cc.attrs.disabled}"
+                              rendered="#{not cc.attrs.disabled}"
                               headerText="#{messages['list.actions']}">
                         <p:commandButton immediate="true"
                                          icon="fa fa-eraser"
                                          title="#{menu['delete']}"
+                                         update="apportionmentList"
                                          styleClass="btn btn-flat btn-danger"
-                                         actionListener="#{cc.attrs.baseBean.deleteApportionment(apportionment.code)}"/>
+                                         actionListener="#{cc.attrs.baseBean.remove(apportionment)}"/>
                     </p:column>
                 </p:dataTable>
             </div>
