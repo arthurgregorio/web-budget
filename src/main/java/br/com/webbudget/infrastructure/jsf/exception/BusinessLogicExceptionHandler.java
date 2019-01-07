@@ -56,7 +56,6 @@ public class BusinessLogicExceptionHandler implements CustomExceptionHandler<Bus
         Messages.add(FacesMessage.SEVERITY_ERROR, null, i18nMessage, exception.getParameters());
 
         context.renderResponse();
-        FacesUtils.temporizeHiding("messages");
     }
 
     /**

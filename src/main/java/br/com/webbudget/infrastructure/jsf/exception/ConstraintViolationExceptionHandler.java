@@ -54,7 +54,6 @@ public class ConstraintViolationExceptionHandler implements CustomExceptionHandl
         Messages.add(FacesMessage.SEVERITY_ERROR, null, MessageSource.get("error.core.constraint-violation"));
 
         context.renderResponse();
-        FacesUtils.temporizeHiding("messages");
     }
 
     /**
