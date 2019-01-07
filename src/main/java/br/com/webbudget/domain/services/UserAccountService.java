@@ -20,10 +20,10 @@ import br.com.webbudget.application.controller.configuration.ProfileBean.Passwor
 import br.com.webbudget.domain.entities.configuration.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.tools.*;
-import br.com.webbudget.domain.validators.tools.group.GroupDeletingBusinessLogic;
-import br.com.webbudget.domain.validators.tools.user.UserDeletingBusinessLogic;
-import br.com.webbudget.domain.validators.tools.user.UserSavingBusinessLogic;
-import br.com.webbudget.domain.validators.tools.user.UserUpdatingBusinessLogic;
+import br.com.webbudget.domain.logics.tools.group.GroupDeletingBusinessLogic;
+import br.com.webbudget.domain.logics.tools.user.UserDeletingBusinessLogic;
+import br.com.webbudget.domain.logics.tools.user.UserSavingBusinessLogic;
+import br.com.webbudget.domain.logics.tools.user.UserUpdatingBusinessLogic;
 import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetailsProvider;

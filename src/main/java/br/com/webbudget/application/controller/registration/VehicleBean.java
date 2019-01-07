@@ -24,7 +24,7 @@ import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.entities.registration.VehicleType;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.VehicleRepository;
-import br.com.webbudget.domain.validators.registration.vehicle.VehicleSavingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.vehicle.VehicleSavingBusinessLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 

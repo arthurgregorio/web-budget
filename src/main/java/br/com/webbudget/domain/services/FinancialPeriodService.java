@@ -19,8 +19,8 @@ package br.com.webbudget.domain.services;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.events.NewPeriodOpened;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
-import br.com.webbudget.domain.validators.registration.financialperiod.PeriodSavingBusinessLogic;
-import br.com.webbudget.domain.validators.registration.financialperiod.PeriodUpdatingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.financialperiod.PeriodSavingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.financialperiod.PeriodUpdatingBusinessLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;

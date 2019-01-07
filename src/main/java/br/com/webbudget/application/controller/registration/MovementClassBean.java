@@ -24,8 +24,8 @@ import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
-import br.com.webbudget.domain.validators.registration.movementclass.MovementClassSavingBusinessLogic;
-import br.com.webbudget.domain.validators.registration.movementclass.MovementClassUpdatingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.movementclass.MovementClassSavingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.movementclass.MovementClassUpdatingBusinessLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 

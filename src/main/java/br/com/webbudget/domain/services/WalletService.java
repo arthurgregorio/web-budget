@@ -23,8 +23,8 @@ import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
-import br.com.webbudget.domain.validators.registration.wallet.WalletSavingBusinessLogic;
-import br.com.webbudget.domain.validators.registration.wallet.WalletUpdatingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.wallet.WalletSavingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.wallet.WalletUpdatingBusinessLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;

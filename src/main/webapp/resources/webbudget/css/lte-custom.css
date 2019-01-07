@@ -74,3 +74,8 @@
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
+/*all dialogs must open in top of the screen and have this margin*/
+.dialog-margin-top {
+    margin-top: 100px;
+}

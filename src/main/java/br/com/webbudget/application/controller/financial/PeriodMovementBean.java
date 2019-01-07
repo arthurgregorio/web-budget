@@ -22,6 +22,7 @@ import br.com.webbudget.application.components.table.LazyModel;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.components.table.filter.PeriodMovementFilter;
 import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.validator.apportionment.ApportionmentValidator;
 import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.Contact;
@@ -38,10 +39,11 @@ import lombok.Setter;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -89,6 +91,10 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
 
     @Inject
     private PeriodMovementService periodMovementService;
+
+    @Any
+    @Inject
+    private Instance<ApportionmentValidator> apportionmentValidators;
 
     /**
      * Constructor...
@@ -216,7 +222,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      * Use this method to update and show the {@link Apportionment} dialog
      */
     public void showApportionmentDialog() {
-        this.apportionment = new Apportionment();
+        this.apportionment = new Apportionment(this.value.calculateRemainingTotal());
         this.updateAndOpenDialog("apportionmentDialog", "dialogApportionment");
     }
 
@@ -224,7 +230,9 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      * Add the {@link Apportionment} to the {@link PeriodMovement}
      */
     public void addApportionment() {
+        this.apportionmentValidators.forEach(validator -> validator.validate(this.apportionment, this.value));
         this.value.add(this.apportionment);
+        this.updateComponent("inValue");
         this.updateComponent("apportionmentBox");
         this.closeDialog("dialogApportionment");
     }

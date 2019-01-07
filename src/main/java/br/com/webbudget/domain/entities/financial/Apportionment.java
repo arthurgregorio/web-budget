@@ -84,6 +84,16 @@ public class Apportionment extends PersistentEntity {
     }
 
     /**
+     * Constructor
+     *
+     * @param value the value of the apportionment
+     */
+    public Apportionment(BigDecimal value) {
+        this();
+        this.value = value;
+    }
+
+    /**
      * Constructor...
      *
      * @param value the value of this apportionment
@@ -130,5 +140,16 @@ public class Apportionment extends PersistentEntity {
      */
     public String getCostCenterName() {
         return this.costCenter != null ? this.costCenter.getName() : "";
+    }
+
+    /**
+     * Compare if the given apportionment has the same {@link CostCenter} and {@link MovementClass}
+     *
+     * @param apportionment the instance to be compared
+     * @return true if is the same {@link CostCenter} and {@link MovementClass}, false otherwise
+     */
+    public boolean isCostCenterAndMovementClassEquals(Apportionment apportionment) {
+        return apportionment.getCostCenter().equals(this.costCenter)
+                && apportionment.getMovementClass().equals(this.movementClass);
     }
 }

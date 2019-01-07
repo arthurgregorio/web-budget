@@ -163,7 +163,8 @@
                         </div>
                     </div>
                     <div jsf:id="apportionmentBox" class="col-sm-6">
-                        <wb:apportionmentBox baseBean="#{periodMovementBean.value}"
+                        <wb:apportionmentBox valueInput="inValue"
+                                             baseBean="#{periodMovementBean.value}"
                                              apportionments="#{periodMovementBean.value.apportionments}"
                                              showDialogAction="#{periodMovementBean.showApportionmentDialog()}"
                                              disabled="#{periodMovementBean.value.paid or periodMovementBean.viewState.detailing}"/>

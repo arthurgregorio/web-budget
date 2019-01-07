@@ -24,8 +24,8 @@ import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
-import br.com.webbudget.domain.validators.registration.card.CardSavingBusinessLogic;
-import br.com.webbudget.domain.validators.registration.card.CardUpdatingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.card.CardSavingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.card.CardUpdatingBusinessLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 

@@ -22,7 +22,7 @@ import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.repositories.financial.TransferenceRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
-import br.com.webbudget.domain.validators.financial.transference.TransferenceSavingBusinessLogic;
+import br.com.webbudget.domain.logics.financial.transference.TransferenceSavingBusinessLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;

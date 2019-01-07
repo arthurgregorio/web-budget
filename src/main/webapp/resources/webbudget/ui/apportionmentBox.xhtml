@@ -48,12 +48,11 @@
                     #{messages['apportionment.apportionments']}:
                 </h4>
                 <div class="pull-right">
-                    <p:commandButton immediate="true"
-                                     update="messages"
+                    <p:commandButton update="messages"
                                      value="#{menu['add']}"
                                      disabled="#{cc.attrs.disabled}"
                                      styleClass="btn btn-flat btn-primary"
-                                     process="@this,#{cc.attrs.valueInput}"
+                                     process="@this #{cc.attrs.valueInput}"
                                      actionListener="#{cc.attrs.showDialogAction}"/>
                 </div>
             </div>
@@ -89,8 +88,8 @@
                         <p:commandButton immediate="true"
                                          icon="fa fa-eraser"
                                          title="#{menu['delete']}"
-                                         update="apportionmentList"
                                          styleClass="btn btn-flat btn-danger"
+                                         update="apportionmentList #{cc.attrs.valueInput}"
                                          actionListener="#{cc.attrs.baseBean.remove(apportionment)}"/>
                     </p:column>
                 </p:dataTable>

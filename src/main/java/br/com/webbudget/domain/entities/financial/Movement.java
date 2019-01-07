@@ -18,6 +18,7 @@ package br.com.webbudget.domain.entities.financial;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.Contact;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -83,10 +84,10 @@ public class Movement extends PersistentEntity {
     private List<Apportionment> apportionments;
 
     @Transient
-    private final Set<Apportionment> deletedApportionments;
+    private Set<Apportionment> deletedApportionments;
 
     /**
-     * Constructor
+     * Constructor...
      */
     public Movement() {
         this.code = RandomCode.alphanumeric(6);
@@ -153,11 +154,6 @@ public class Movement extends PersistentEntity {
      * @param apportionment the {@link Apportionment} to be added
      */
     public void add(Apportionment apportionment) {
-
-        // TODO validate if you are not inserting duplicates, same CC and MC
-        // TODO validate if you are not inserting debit and credit apportionment, only one is permitted
-        // TODO validate apportionment with value = 0
-
         this.apportionments.add(apportionment);
     }
 
@@ -198,6 +194,13 @@ public class Movement extends PersistentEntity {
      * @return the total possible to be divided by an {@link Apportionment}
      */
     public BigDecimal calculateRemainingTotal() {
-        return this.value.subtract(this.calculateApportionmentsTotal());
+
+        final BigDecimal remaining = this.value.subtract(this.calculateApportionmentsTotal());
+
+        if (remaining.signum() <= 0) {
+            throw new BusinessLogicException("error.period-movement.no-value-to-divide");
+        }
+
+        return remaining;
     }
 }
