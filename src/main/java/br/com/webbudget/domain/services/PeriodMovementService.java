@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.domain.repositories.financial.ApportionmentRepository;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -35,20 +36,30 @@ import javax.transaction.Transactional;
 public class PeriodMovementService {
 
     @Inject
+    private ApportionmentRepository apportionmentRepository;
+    @Inject
     private PeriodMovementRepository periodMovementRepository;
 
     /**
-     * Save a new {@link PeriodMovement}
+     * Create a new {@link PeriodMovement}
      *
      * @param periodMovement the {@link PeriodMovement} to be saved
      */
     @Transactional
     public void save(PeriodMovement periodMovement) {
-        this.periodMovementRepository.save(periodMovement);
+
+        // TODO put the movement saving logic here
+
+        final PeriodMovement saved = this.periodMovementRepository.save(periodMovement);
+
+        periodMovement.getApportionments().forEach(apportionment -> {
+            apportionment.setMovement(saved);
+            this.apportionmentRepository.save(apportionment);
+        });
     }
 
     /**
-     * Update some {@link PeriodMovement}
+     * Update the {@link PeriodMovement}
      *
      * @param periodMovement the {@link PeriodMovement} to be updated
      * @return the updated {@link PeriodMovement}
@@ -59,7 +70,7 @@ public class PeriodMovementService {
     }
 
     /**
-     * Attach and delete the give {@link PeriodMovement}
+     * Attach and delete a given {@link PeriodMovement}
      *
      * @param periodMovement the {@link PeriodMovement} to be deleted
      */

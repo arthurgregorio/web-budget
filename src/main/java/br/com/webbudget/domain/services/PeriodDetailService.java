@@ -32,7 +32,7 @@ public class PeriodDetailService {
 //    @Inject
 //    private IMovementRepository movementRepository;
 //    @Inject
-//    private IApportionmentRepository apportionmentRepository;
+//    private ApportionmentRepository apportionmentRepository;
 //    @Inject
 //    private IMovementClassRepository movementClassRepository;
 //

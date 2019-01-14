@@ -20,7 +20,6 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:of="http://omnifaces.org/functions"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
@@ -104,32 +103,32 @@
                             <p:graphicImage width="20"
                                             height="20"
                                             library="webbudget"
-                                            name="img/ui-green-circle.png"
+                                            name="images/blue-circle.png"
                                             rendered="#{periodMovement.paid}"
-                                            title="#{enums[periodMovement.movementStateType]}"/>
+                                            title="#{enums[periodMovement.movementState]}"/>
                             <p:graphicImage width="20"
                                             height="20"
                                             library="webbudget"
-                                            name="img/ui-red-circle.png"
+                                            name="images/orange-circle.png"
                                             rendered="#{periodMovement.open}"
-                                            title="#{enums[periodMovement.movementStateType]}"/>
+                                            title="#{enums[periodMovement.movementState]}"/>
                             <p:graphicImage width="20"
                                             height="20"
                                             library="webbudget"
-                                            name="img/ui-blue-circle.png"
+                                            name="images/green-circle.png"
                                             rendered="#{periodMovement.finalized}"
-                                            title="#{enums[periodMovement.movementStateType]}"/>
+                                            title="#{enums[periodMovement.movementState]}"/>
                             <p:spacer width="10"/>
-                            <p:graphicImage width="24"
-                                            height="24"
+                            <p:graphicImage width="20"
+                                            height="20"
                                             library="webbudget"
-                                            name="img/ui-icon-plus.png"
+                                            name="images/plus.png"
                                             rendered="#{periodMovement.revenue}"
                                             title="#{messages['period-movement.list.revenue']}"/>
-                            <p:graphicImage width="24"
-                                            height="24"
+                            <p:graphicImage width="20"
+                                            height="20"
                                             library="webbudget"
-                                            name="img/ui-icon-minus.png"
+                                            name="images/minus.png"
                                             rendered="#{periodMovement.expense}"
                                             title="#{messages['period-movement.list.expense']}"/>
                             <p:spacer width="10"/>
@@ -145,9 +144,8 @@
                         <p:column width="12%"
                                   styleClass="align-center"
                                   headerText="#{messages['period-movement.list.due-date']}">
-                            <h:outputText value="#{periodMovement.dueDate}">
-                                <f:converter converterId="localDateConverter"/>
-                            </h:outputText>
+                            <h:outputText converter="localDateConverter"
+                                          value="#{periodMovement.dueDate}"/>
                         </p:column>
                         <p:column width="15%"
                                   styleClass="align-center"
@@ -156,21 +154,21 @@
                                              title="#{menu['pay']}"
                                              styleClass="btn btn-flat btn-default"
                                              action="#{periodMovementBean.changeToPay(periodMovement.id)}"
-                                             rendered="#{periodMovement.payable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_PAY)}"/>
+                                             rendered="#{periodMovement.open and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_PAY)}"/>
                             <p:spacer width="10"
-                                      rendered="#{periodMovement.payable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_PAY)}"/>
+                                      rendered="#{periodMovement.open and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_PAY)}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
                                              action="#{periodMovementBean.changeToEdit(periodMovement.id)}"
-                                             rendered="#{periodMovement.editable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
+                                             rendered="#{not periodMovement.finalized and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
                             <p:spacer width="10"
-                                      rendered="#{periodMovement.editable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
+                                      rendered="#{not periodMovement.finalized and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
                                              actionListener="#{periodMovementBean.changeToDelete(periodMovement.id)}"
-                                             rendered="#{periodMovement.deletable eq true and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_DELETE)}"/>
+                                             rendered="#{not periodMovement.finalized and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_DELETE)}"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>

@@ -61,7 +61,7 @@ public class Apportionment extends PersistentEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "id_movement")
+    @JoinColumn(name = "id_movement", nullable = false)
     private Movement movement;
     @Getter
     @Setter

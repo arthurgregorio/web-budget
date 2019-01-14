@@ -24,6 +24,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.deltaspike.data.api.EntityGraph;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -35,6 +36,7 @@ import java.util.*;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
 
 /**
@@ -53,6 +55,7 @@ import static javax.persistence.CascadeType.REMOVE;
 @Table(name = "movements", schema = FINANCIAL)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @AuditTable(value = "movements", schema = FINANCIAL_AUDIT)
+@NamedEntityGraph(name = "Movement.full", attributeNodes = @NamedAttributeNode(value = "apportionments"))
 @DiscriminatorColumn(name = "discriminator_value", length = 15, discriminatorType = DiscriminatorType.STRING)
 public class Movement extends PersistentEntity {
 
@@ -80,7 +83,7 @@ public class Movement extends PersistentEntity {
     @JoinColumn(name = "id_contact")
     private Contact contact;
 
-    @OneToMany(mappedBy = "movement", cascade = REMOVE)
+    @OneToMany(mappedBy = "movement")
     private List<Apportionment> apportionments;
 
     @Transient
@@ -154,6 +157,7 @@ public class Movement extends PersistentEntity {
      * @param apportionment the {@link Apportionment} to be added
      */
     public void add(Apportionment apportionment) {
+        apportionment.setMovement(this);
         this.apportionments.add(apportionment);
     }
 
@@ -177,18 +181,6 @@ public class Movement extends PersistentEntity {
     }
 
     /**
-     * Sum all the apportionments and give the total
-     *
-     * @return the total of all {@link Apportionment}
-     */
-    public BigDecimal calculateApportionmentsTotal() {
-        return this.apportionments
-                .stream()
-                .map(Apportionment::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    /**
      * Calculate the amount not divided into the apportionments
      *
      * @return the total possible to be divided by an {@link Apportionment}
@@ -202,5 +194,17 @@ public class Movement extends PersistentEntity {
         }
 
         return remaining;
+    }
+
+    /**
+     * Sum all the apportionments and give the total
+     *
+     * @return the total of all {@link Apportionment}
+     */
+    private BigDecimal calculateApportionmentsTotal() {
+        return this.apportionments
+                .stream()
+                .map(Apportionment::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

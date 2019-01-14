@@ -132,24 +132,21 @@ public class PeriodMovement extends Movement {
     }
 
     /**
-     * To check if this movement can be edited
+     * To check if this movement is open or not
      *
-     * It only can be edited if the {@link FinancialPeriod} is open and the movement is open to
-     *
-     * @return true if is, false otherwise
+     * @return true if paid, false otherwise
      */
-    public boolean isEditable() {
-        return !this.isPaid() && !this.getFinancialPeriod().isClosed();
+    public boolean isOpen() {
+        return this.getMovementState() == MovementState.OPEN;
     }
 
     /**
-     * To check if this movement can be deleted
+     * To check if this movement is finalized or not
      *
-     * @return true if can be, false if not
+     * @return true if paid, false otherwise
      */
-    public boolean isDeletable() {
-        return (this.movementState == MovementState.OPEN || this.movementState == MovementState.PAID)
-                && !this.getFinancialPeriod().isClosed();
+    public boolean isFinalized() {
+        return this.getMovementState() == MovementState.FINALIZED;
     }
 
     /**

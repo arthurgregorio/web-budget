@@ -41,7 +41,7 @@ public class MovementService {
 //    @Inject
 //    private IFixedMovementRepository fixedMovementRepository;
 //    @Inject
-//    private IApportionmentRepository apportionmentRepository;
+//    private ApportionmentRepository apportionmentRepository;
 //    @Inject
 //    private IMovementClassRepository movementClassRepository;
 //
