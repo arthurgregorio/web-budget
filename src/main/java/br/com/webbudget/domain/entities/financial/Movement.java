@@ -24,7 +24,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.deltaspike.data.api.EntityGraph;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -32,7 +31,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
@@ -40,8 +42,8 @@ import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
 
 /**
- * This is a superclass used to map the common attributes between the {@link FixedMovement} and the
- * {@link PeriodMovement}. This class also represents the basic type of financial transaction in the application
+ * This is a superclass for a {@link FixedMovement} and {@link PeriodMovement}. This class also represents the basic
+ * type of financial transaction in the application
  *
  * @author Arthur Gregorio
  *
@@ -50,11 +52,11 @@ import static javax.persistence.CascadeType.REMOVE;
  */
 @Entity
 @Audited
-@ToString
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "movements", schema = FINANCIAL)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @AuditTable(value = "movements", schema = FINANCIAL_AUDIT)
+@ToString(callSuper = true, exclude = {"apportionments", "deletedApportionments"})
+@EqualsAndHashCode(callSuper = true, exclude = {"apportionments", "deletedApportionments"})
 @NamedEntityGraph(name = "Movement.full", attributeNodes = @NamedAttributeNode(value = "apportionments"))
 @DiscriminatorColumn(name = "discriminator_value", length = 15, discriminatorType = DiscriminatorType.STRING)
 public class Movement extends PersistentEntity {
@@ -65,7 +67,7 @@ public class Movement extends PersistentEntity {
     @Getter
     @Setter
     @NotBlank(message = "{movement.identification}")
-    @Column(name = "identification", nullable = false, length = 45)
+    @Column(name = "identification", nullable = false, length = 90)
     private String identification;
     @Getter
     @Setter
@@ -83,8 +85,8 @@ public class Movement extends PersistentEntity {
     @JoinColumn(name = "id_contact")
     private Contact contact;
 
-    @OneToMany(mappedBy = "movement")
-    private List<Apportionment> apportionments;
+    @OneToMany(mappedBy = "movement", cascade = {PERSIST, REMOVE})
+    private Set<Apportionment> apportionments;
 
     @Transient
     private Set<Apportionment> deletedApportionments;
@@ -94,7 +96,7 @@ public class Movement extends PersistentEntity {
      */
     public Movement() {
         this.code = RandomCode.alphanumeric(6);
-        this.apportionments = new ArrayList<>();
+        this.apportionments = new HashSet<>();
         this.deletedApportionments = new HashSet<>();
     }
 
@@ -103,8 +105,8 @@ public class Movement extends PersistentEntity {
      *
      * @return an unmodifiable {@link List} of the {@link #apportionments}
      */
-    public List<Apportionment> getApportionments() {
-        return Collections.unmodifiableList(this.apportionments);
+    public Set<Apportionment> getApportionments() {
+        return Collections.unmodifiableSet(this.apportionments);
     }
 
     /**

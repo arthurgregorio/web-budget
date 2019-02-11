@@ -26,7 +26,7 @@ import java.util.Optional;
  * The default repository, every repository inside this application should implement this interface
  *
  * @param <T> the type of this repository
- * 
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -35,10 +35,22 @@ import java.util.Optional;
 public interface DefaultRepository<T extends PersistentEntity> extends EntityRepository<T, Long>, CriteriaSupport<T> {
 
     /**
-     * Generic method to find a entity by Id and give an {@link Optional} as a result
+     * Generic method to find a entity by Id
      *
      * @param id the id to search
-     * @return the entity found in wrapped in a {@link Optional} object
+     * @return the entity in a optional state
      */
     Optional<T> findById(Long id);
+
+    /**
+     * Helper method to make a simple LIKE clause look in both ways (begin and end) of the sentence.
+     *
+     * Example: if the filter is 'John' the result after calling this method should be '%John%'
+     *
+     * @param filter the filter to put the wildcard '%'
+     * @return the string filter with 'any' style
+     */
+    default String likeAny(String filter) {
+        return "%" + filter + "%";
+    }
 }

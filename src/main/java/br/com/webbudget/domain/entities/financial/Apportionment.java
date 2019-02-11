@@ -32,6 +32,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
 
 /**
  * The representation of an apportionment of a {@link Movement}
@@ -46,7 +47,7 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "apportionments", schema = FINANCIAL)
-@AuditTable(value = "apportionments", schema = FINANCIAL)
+@AuditTable(value = "apportionments", schema = FINANCIAL_AUDIT)
 public class Apportionment extends PersistentEntity {
 
     @Getter

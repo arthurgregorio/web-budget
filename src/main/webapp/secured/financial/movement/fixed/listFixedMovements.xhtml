@@ -153,7 +153,7 @@
                                                  styleClass="btn btn-flat btn-default" 
                                                  action="#{fixedMovementBean.changeToEdit(fixedMovement.id)}" 
                                                  rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_UPDATE)}"/>
-                                <p:spacer width="10"/>
+                                <p:spacer width="5"/>
                                 <p:commandButton icon="fa fa-eraser"
                                                  title="#{menu['delete']}"
                                                  styleClass="btn btn-flat btn-default" 
@@ -173,7 +173,7 @@
                                      styleClass="btn btn-flat btn-warning" 
                                      action="#{fixedMovementBean.showLaunchesDialog()}"
                                      rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
-                    <p:spacer width="10"/>
+                    <p:spacer width="5"/>
                     <p:commandButton value="#{menu['launch']}"
                                      styleClass="btn btn-flat btn-info"  
                                      action="#{fixedMovementBean.showLaunchConfirmDialog()}"

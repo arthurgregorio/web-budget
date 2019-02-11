@@ -187,13 +187,13 @@
                                      rendered="#{fixedMovementBean.viewState eq 'EDITING'}"/>
                     <div style="display: inline-block"
                          jsf:rendered="#{fixedMovementBean.viewState ne 'ADDING'}">
-                        <p:spacer width="10"/>
+                        <p:spacer width="5"/>
                         <p:commandButton value="#{menu['launches']}"
                                          styleClass="btn btn-flat btn-warning" 
                                          action="#{fixedMovementBean.showLaunchesDialog()}"
                                          rendered="#{userSessionBean.hasRole(authorization.FIXED_MOVEMENT_LAUNCHES)}"/>
                     </div>
-                    <p:spacer width="10"/>
+                    <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
                                      styleClass="btn btn-flat btn-default" 

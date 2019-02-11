@@ -20,13 +20,11 @@ import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.components.table.filter.PeriodMovementFilter;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.PeriodMovement_;
-import org.apache.deltaspike.data.api.EntityRepository;
+import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
-import org.apache.deltaspike.data.api.criteria.CriteriaSupport;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The {@link PeriodMovement} repository
@@ -37,15 +35,7 @@ import java.util.Optional;
  * @since 3.0.0, 04/12/2018
  */
 @Repository
-public interface PeriodMovementRepository extends EntityRepository<PeriodMovement, Long>, CriteriaSupport<PeriodMovement> {
-
-    /**
-     * Find a {@link PeriodMovement} by the ID
-     *
-     * @param id the id of the {@link PeriodMovement}
-     * @return an {@link Optional} of the {@link PeriodMovement}
-     */
-    Optional<PeriodMovement> findById(Long id);
+public interface PeriodMovementRepository extends DefaultRepository<PeriodMovement> {
 
     /**
      * Generic search method to find any {@link PeriodMovement} with a specific group of filters

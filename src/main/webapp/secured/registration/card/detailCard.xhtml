@@ -166,12 +166,12 @@
                     <h:outputText styleClass="text-red text-bold"
                                   rendered="#{cardBean.viewState eq 'DELETING'}"
                                   value="#{messages['info.delete-confirmation']}"/>
-                    <p:spacer width="10"/>
+                    <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{cardBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
                                      rendered="#{cardBean.viewState eq 'DELETING'}"/>
-                    <p:spacer width="10"/>
+                    <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary" 
                                      action="#{cardBean.changeToListing()}"

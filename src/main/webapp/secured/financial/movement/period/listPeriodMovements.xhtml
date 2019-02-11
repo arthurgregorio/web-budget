@@ -116,9 +116,9 @@
                                             height="20"
                                             library="webbudget"
                                             name="images/green-circle.png"
-                                            rendered="#{periodMovement.finalized}"
+                                            rendered="#{periodMovement.accounted}"
                                             title="#{enums[periodMovement.movementState]}"/>
-                            <p:spacer width="10"/>
+                            <p:spacer width="5"/>
                             <p:graphicImage width="20"
                                             height="20"
                                             library="webbudget"
@@ -131,7 +131,7 @@
                                             name="images/minus.png"
                                             rendered="#{periodMovement.expense}"
                                             title="#{messages['period-movement.list.expense']}"/>
-                            <p:spacer width="10"/>
+                            <p:spacer width="5"/>
                             #{periodMovement.identification}
                         </p:column>
                         <p:column width="12%"
@@ -150,25 +150,25 @@
                         <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
-                            <p:commandButton icon="fa fa-money"
-                                             title="#{menu['pay']}"
-                                             styleClass="btn btn-flat btn-default"
+                            <p:commandButton title="#{menu['pay']}"
+                                             icon="fa fa-hand-holding-usd"
+                                             styleClass="btn btn-flat btn-success"
                                              action="#{periodMovementBean.changeToPay(periodMovement.id)}"
-                                             rendered="#{periodMovement.open and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_PAY)}"/>
-                            <p:spacer width="10"
-                                      rendered="#{periodMovement.open and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_PAY)}"/>
+                                             rendered="#{periodMovement.open and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_PAY)}"/>
+                            <p:spacer width="5"
+                                      rendered="#{periodMovement.open and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_PAY)}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
                                              action="#{periodMovementBean.changeToEdit(periodMovement.id)}"
-                                             rendered="#{not periodMovement.finalized and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
-                            <p:spacer width="10"
-                                      rendered="#{not periodMovement.finalized and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
+                                             rendered="#{not periodMovement.accounted and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
+                            <p:spacer width="5"
+                                      rendered="#{not periodMovement.accounted and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
                                              actionListener="#{periodMovementBean.changeToDelete(periodMovement.id)}"
-                                             rendered="#{not periodMovement.finalized and userSessionBean.hasRole(permissions.PERIOD_MOVEMENT_DELETE)}"/>
+                                             rendered="#{not periodMovement.accounted and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DELETE)}"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>

@@ -38,7 +38,7 @@
             <div class="col-sm-12 form-group">
                 <p:outputLabel for="inLaunchPeriod" 
                                value="#{messages['launch.form.period']}"/>
-                <p:spacer width="10"/>
+                <p:spacer width="5"/>
                 <p:selectOneMenu id="inLaunchPeriod" 
                                  converter="omnifaces.SelectItemsConverter"
                                  value="#{fixedMovementBean.financialPeriod}">
@@ -55,7 +55,7 @@
                                  value="#{menu['launch']}"
                                  styleClass="btn btn-flat btn-success"
                                  actionListener="#{fixedMovementBean.doLaunch()}"/>
-                <p:spacer width="10"/>
+                <p:spacer width="5"/>
                 <p:commandButton immediate="true"
                                  value="#{menu['back']}" 
                                  styleClass="btn btn-flat btn-default"

@@ -219,12 +219,12 @@
                     <h:outputText styleClass="text-red text-bold"
                                   value="#{messages['info.delete-confirmation']}"
                                   rendered="#{contactBean.viewState eq 'DELETING'}"/>
-                    <p:spacer width="10"/>
+                    <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{contactBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
                                      rendered="#{contactBean.viewState eq 'DELETING'}"/>
-                    <p:spacer width="10"/>
+                    <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary"
                                      action="#{contactBean.changeToListing()}"

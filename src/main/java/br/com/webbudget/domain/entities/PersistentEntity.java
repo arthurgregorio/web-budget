@@ -20,12 +20,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -96,5 +95,6 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
      * just override this method and put the logic here.
      */
     @Override
-    public void validate() { }
+    public void validate() {
+    }
 }

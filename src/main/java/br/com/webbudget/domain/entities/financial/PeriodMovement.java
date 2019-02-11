@@ -128,7 +128,7 @@ public class PeriodMovement extends Movement {
      * @return true if paid, false otherwise
      */
     public boolean isPaid() {
-        return this.getMovementState() == MovementState.PAID;
+        return this.movementState == MovementState.PAID;
     }
 
     /**
@@ -137,7 +137,7 @@ public class PeriodMovement extends Movement {
      * @return true if paid, false otherwise
      */
     public boolean isOpen() {
-        return this.getMovementState() == MovementState.OPEN;
+        return this.movementState == MovementState.OPEN;
     }
 
     /**
@@ -145,8 +145,8 @@ public class PeriodMovement extends Movement {
      *
      * @return true if paid, false otherwise
      */
-    public boolean isFinalized() {
-        return this.getMovementState() == MovementState.FINALIZED;
+    public boolean isAccounted() {
+        return this.movementState == MovementState.ACCOUNTED;
     }
 
     /**

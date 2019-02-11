@@ -28,7 +28,7 @@ public enum MovementState {
 
     PAID("movement-state.paid"),
     OPEN("movement-state.open"),
-    FINALIZED("movement-state.finalized");
+    ACCOUNTED("movement-state.accounted");
 
     private final String description;
 

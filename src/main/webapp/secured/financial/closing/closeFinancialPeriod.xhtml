@@ -141,14 +141,14 @@
                                 value="#{messages['closing.form.confirmation']}">
                     <f:param value="#{closingBean.financialPeriod.identification}"/>
                 </o:outputFormat>
-                <p:spacer width="10"/>
+                <p:spacer width="5"/>
                 <p:commandButton value="#{menu['yes']}"
                                  onclick="PF('processBlock').block()"
                                  styleClass="btn btn-flat btn-danger"
                                  action="#{closingBean.closePeriod()}"
                                  oncomplete="PF('processBlock').unblock()"
                                  rendered="#{userSessionBean.hasRole(authorization.CLOSING_CLOSE)}"/>
-                <p:spacer width="10"/>
+                <p:spacer width="5"/>
                 <p:commandButton value="#{menu['no']}"
                                  styleClass="btn btn-flat btn-default"
                                  action="#{closingBean.changeToDashboard()}"/>

@@ -31,7 +31,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  * Implementation for {@link DefaultRepository} with lazy load support
  *
  * @param <T> the type of this repository
- * 
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -40,14 +40,36 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public interface LazyDefaultRepository<T extends PersistentEntity> extends DefaultRepository<T> {
 
     /**
+     * Same function as {@link #findAllBy(String, Boolean, int, int)} but in simpler way, without the pagination
+     *
+     * @param filter the filter to be used to find the objects
+     * @param active the object state in the database, null means all states
+     * @return {@link List} with the objects found
+     */
+    default List<T> findAllBy(String filter, Boolean active) {
+
+        final Criteria<T, T> criteria = criteria();
+
+        if (isNotBlank(filter)) {
+            criteria.or(this.getRestrictions(filter));
+        }
+
+        criteria.eq(this.getEntityStateProperty(), active);
+
+        this.setOrder(criteria);
+
+        return criteria.createQuery().getResultList();
+    }
+
+    /**
      * Generic search method with lazy pagination support. To use this method you must implement
      * {@link #getRestrictions(String)} and {@link #getEntityStateProperty()}
      *
-     * @param filter the string filter to use
-     * @param active the object status of the entity, null means all states
-     * @param start the start page
-     * @param pageSize the size of the page
-     * @return the list of objects found
+     * @param filter the filter to be used to find the objects
+     * @param active the object state in the database, null means all states
+     * @param start the starting page
+     * @param pageSize size of the page
+     * @return {@link Page} filled with the objects found
      */
     default Page<T> findAllBy(String filter, Boolean active, int start, int pageSize) {
 
@@ -68,7 +90,7 @@ public interface LazyDefaultRepository<T extends PersistentEntity> extends Defau
     /**
      * Generic method to find all inactive entities
      *
-     * @return a list of all inactive entities
+     * @return a {@link List} of all inactive entities
      */
     default List<T> findAllInactive() {
 
@@ -83,11 +105,11 @@ public interface LazyDefaultRepository<T extends PersistentEntity> extends Defau
     /**
      * Generic method to find all active entities
      *
-     * @return the list of all active entities
+     * @return the {@link List} of all active entities
      */
     default List<T> findAllActive() {
 
-        final Criteria<T, T> criteria = this.criteria()
+        final Criteria<T, T> criteria = criteria()
                 .eq(this.getEntityStateProperty(), true);
 
         this.setOrder(criteria);
@@ -103,10 +125,9 @@ public interface LazyDefaultRepository<T extends PersistentEntity> extends Defau
      * @param active the active property provided by the {@link #getEntityStateProperty()}
      * @return a new criteria ready to query
      */
-    @SuppressWarnings("unchecked")
-    default Criteria<T,T> buildCriteria(String filter, Boolean active) {
+    default Criteria<T, T> buildCriteria(String filter, Boolean active) {
 
-        final Criteria<T, T> criteria = this.criteria();
+        final Criteria<T, T> criteria = criteria();
 
         if (isNotBlank(filter)) {
             criteria.or(this.getRestrictions(filter));
@@ -144,18 +165,6 @@ public interface LazyDefaultRepository<T extends PersistentEntity> extends Defau
     }
 
     /**
-     * Helper method to make a simple LIKE clause look in both ways (begin and end) of the sentence.
-     *
-     * Example: if the filter is 'John' the result after calling this method should be '%John%'
-     *
-     * @param filter the filter to put the wildcard '%'
-     * @return the string filter with 'any' style
-     */
-    default String likeAny(String filter) {
-        return "%" + filter + "%";
-    }
-
-    /**
      * This method should be implemented if the user needs to use the generic type search with the
      * {@link #findAllBy(String, Boolean, int, int)} method
      *
@@ -174,7 +183,7 @@ public interface LazyDefaultRepository<T extends PersistentEntity> extends Defau
      *
      * @return the attribute responsible for representing the entity state
      */
-    default SingularAttribute<T, Boolean> getEntityStateProperty() {
+    default SingularAttribute<? super T, Boolean> getEntityStateProperty() {
         throw new RuntimeException("getBlockProperty not implemented for query");
     }
 }

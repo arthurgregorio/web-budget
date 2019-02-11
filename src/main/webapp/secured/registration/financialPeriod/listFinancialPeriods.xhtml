@@ -64,7 +64,7 @@
                                                      onstart="PF('blocker').show()"
                                                      oncomplete="PF('blocker').hide()"
                                                      styleClass="btn btn-flat btn-primary"/>
-                                    <p:spacer width="10"/>
+                                    <p:spacer width="5"/>
                                     <p:commandButton icon="fa fa-trash"
                                                      onstart="PF('blocker').show()"
                                                      title="#{menu['filter-clear']}"
@@ -162,7 +162,7 @@
                                              <!--styleClass="btn btn-flat btn-default"-->
                                              <!--action="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"-->
                                              <!--rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>-->
-                            <p:spacer width="10"
+                            <p:spacer width="5"
                                       rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"

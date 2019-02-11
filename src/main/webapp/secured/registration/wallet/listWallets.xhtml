@@ -74,7 +74,7 @@
                                                      onstart="PF('blocker').show()"
                                                      oncomplete="PF('blocker').hide()"
                                                      styleClass="btn btn-flat btn-primary"/>
-                                    <p:spacer width="10"/>
+                                    <p:spacer width="5"/>
                                     <p:commandButton icon="fa fa-trash"
                                                      onstart="PF('blocker').show()"
                                                      update="itemsList controlsForm"
@@ -158,13 +158,15 @@
                                              styleClass="btn btn-flat btn-default"
                                              action="#{walletBean.changeToBalanceAdjustment(wallet.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.WALLET_ADJUST_BALANCE)}"/>
-                            <p:spacer width="10" rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
+                            <p:spacer width="5"
+                                      rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
                                              action="#{walletBean.changeToEdit(wallet.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
-                            <p:spacer width="10"/>
+                            <p:spacer width="5"
+                                      rendered="#{userSessionBean.isPermitted(permissions.WALLET_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
