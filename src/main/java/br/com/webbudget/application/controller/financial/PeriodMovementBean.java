@@ -30,6 +30,7 @@ import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
+import br.com.webbudget.domain.repositories.registration.ContactRepository;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
@@ -44,10 +45,13 @@ import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.GET;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.webbudget.application.components.NavigationManager.PageType.*;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * The {@link PeriodMovement} view controller
@@ -63,6 +67,10 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
 
     @Getter
     @Setter
+    private String contactFilter;
+
+    @Getter
+    @Setter
     private Apportionment apportionment;
 
     @Getter
@@ -74,12 +82,16 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     private FinancialPeriod currentPeriod;
 
     @Getter
+    private List<Contact> contacts;
+    @Getter
     private List<CostCenter> costCenters;
     @Getter
     private List<MovementClass> movementClasses;
     @Getter
     private List<FinancialPeriod> financialPeriods;
 
+    @Inject
+    private ContactRepository contactRepository;
     @Inject
     private CostCenterRepository costCenterRepository;
     @Inject
@@ -212,10 +224,35 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     }
 
     /**
-     * Use this method to update and show the {@link Contact} dialog
+     * Open the dialog to search for a {@link Contact} to link with this {@link PeriodMovement}
      */
-    public void showContactDialog() {
+    public void showSearchContactDialog() {
+        this.contactFilter = null;
+        this.contacts = new ArrayList<>();
+        this.updateAndOpenDialog("searchContactDialog", "dialogSearchContact");
+    }
 
+    /**
+     * Find the {@link Contact} by the given filter
+     */
+    public void searchContacts() {
+        this.contacts = this.contactRepository.findAllBy(this.contactFilter, true);
+    }
+
+    /**
+     * On the selection is made, call this method to close the dialog and update de UI
+     */
+    public void onContactSelect() {
+        this.updateComponent("contactBox");
+        this.closeDialog("dialogSearchContact");
+    }
+
+    /**
+     * Clear the selected contact
+     */
+    public void removeContact() {
+        this.value.setContact(null);
+        this.updateComponent("contactBox");
     }
 
     /**

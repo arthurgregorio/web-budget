@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.components.table.filter;
 
-import br.com.webbudget.domain.entities.financial.MovementState;
+import br.com.webbudget.domain.entities.financial.PeriodMovementState;
 import br.com.webbudget.domain.entities.financial.MovementType;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
@@ -48,7 +48,7 @@ public final class PeriodMovementFilter {
     private MovementType movementType;
     @Setter
     @Getter
-    private MovementState movementState;
+    private PeriodMovementState movementState;
 
     @Setter
     @Getter

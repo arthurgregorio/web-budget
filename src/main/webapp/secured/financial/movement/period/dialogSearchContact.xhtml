@@ -1,0 +1,98 @@
+<!--
+  Copyright (C) 2015 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:h="http://xmlns.jcp.org/jsf/html"
+          xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
+          id="searchContactDialog"
+          width="700"
+          modal="true"
+          position="top"
+          resizable="false"
+          closeOnEscape="true"
+          styleClass="dialog-margin"
+          widgetVar="dialogSearchContact"
+          header="#{messages['contact.dialog.title']}">
+
+    <h:form id="searchGuarantorForm">
+
+        <p:focus context="inFilter" />
+        <p:defaultCommand target="btSearch"/>
+
+        <div class="row">
+            <div class="col-md-12">
+                <p:messages closable="true" >
+                    <p:autoUpdate/>
+                </p:messages>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <div class="input-group" style="width: 100%">
+                    <p:inputText id="inFilter"
+                                 styleClass="form-control"
+                                 value="#{periodMovementBean.contactFilter}"
+                                 placeholder="#{messages['filter.contact']}" />
+                    <div class="input-group-btn" style="font-size: inherit">
+                        <p:commandButton id="btSearch"
+                                         update="itemsList"
+                                         icon="fa fa-search"
+                                         onstart="PF('blocker').show()"
+                                         oncomplete="PF('blocker').hide()"
+                                         styleClass="btn btn-flat btn-primary"
+                                         actionListener="#{periodMovementBean.searchContacts()}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p:dataTable id="itemsList"
+                             rows="10"
+                             var="contact"
+                             rowHover="true"
+                             paginator="true"
+                             selectionMode="single"
+                             rowKey="#{contact.id}"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             value="#{periodMovementBean.contacts}"
+                             emptyMessage="#{messages['list.empty']}"
+                             selection="#{periodMovementBean.value.contact}">
+
+                    <p:ajax event="rowSelect"
+                            listener="#{periodMovementBean.onContactSelect()}"/>
+
+                    <p:column width="55%"
+                              headerText="#{messages['contact.list.name']}">
+                        #{contact.name}
+                    </p:column>
+                    <p:column styleClass="align-center"
+                              headerText="#{messages['contact.list.document']}">
+                        #{contact.document}
+                    </p:column>
+                    <p:column styleClass="align-center"
+                              headerText="#{messages['contact.list.type']}">
+                        #{enums[contact.contactType]}
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </div>
+        <wb:blocker target="searchGuarantorForm"/>
+    </h:form>
+</p:dialog>

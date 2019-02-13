@@ -48,10 +48,10 @@ import static javax.persistence.CascadeType.REMOVE;
  */
 @Entity
 @Audited
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "contacts", schema = REGISTRATION)
 @AuditTable(value = "contacts", schema = REGISTRATION_AUDIT)
+@ToString(callSuper = true, exclude = {"telephones", "deletedTelephones"})
+@EqualsAndHashCode(callSuper = true, exclude = {"telephones", "deletedTelephones"})
 @NamedEntityGraph(name = "Contact.withTelephones", attributeNodes = @NamedAttributeNode(value = "telephones"))
 public class Contact extends PersistentEntity {
 

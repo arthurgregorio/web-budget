@@ -227,8 +227,8 @@ public class PeriodDetailService {
 //
 //        periods.stream().forEach(period -> {
 //
-//            final MovementState state = period.isClosed()
-//                    ? MovementState.CALCULATED : MovementState.PAID;
+//            final PeriodMovementState state = period.isClosed()
+//                    ? PeriodMovementState.CALCULATED : PeriodMovementState.PAID;
 //
 //            movements.addAll(this.movementRepository
 //                    .listByPeriodAndStateAndTypeAndDirection(period, state,

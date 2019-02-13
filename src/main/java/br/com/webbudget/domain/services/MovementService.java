@@ -205,7 +205,7 @@ public class MovementService {
 //        
 //        // seta no pagamento no movimento e atualiza
 //        movement.setPayment(payment);
-//        movement.setMovementStateType(MovementState.PAID);
+//        movement.setMovementStateType(PeriodMovementState.PAID);
 //
 //        this.movementRepository.save(movement);
 //        
@@ -274,7 +274,7 @@ public class MovementService {
 //        }
 //
 //        // devolve o saldo na carteira se for o caso
-//        if (movement.getMovementStateType() == MovementState.PAID
+//        if (movement.getMovementStateType() == PeriodMovementState.PAID
 //                && movement.getPayment().getPaymentMethodType() == PaymentMethod.IN_CASH) {
 //
 //            Wallet paymentWallet;
@@ -368,7 +368,7 @@ public class MovementService {
 //        });
 //
 //        // se houve pagamento, devolve o valor para a origem
-//        if (movement.getMovementStateType() == MovementState.PAID) {
+//        if (movement.getMovementStateType() == PeriodMovementState.PAID) {
 //
 //            final Wallet paymentWallet = movement.getPayment().getWallet();
 //
@@ -647,10 +647,10 @@ public class MovementService {
 //     */
 //    public List<Movement> listOnlyMovementsByPeriod(FinancialPeriod period) {
 //
-//        MovementState state = MovementState.PAID;
+//        PeriodMovementState state = PeriodMovementState.PAID;
 //
 //        if (period.isClosed()) {
-//            state = MovementState.CALCULATED;
+//            state = PeriodMovementState.CALCULATED;
 //        }
 //
 //        return this.movementRepository.listByPeriodAndStateAndType(

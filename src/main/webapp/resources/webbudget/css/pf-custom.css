@@ -7,6 +7,15 @@
     Created on : 26/09/2018
 */
 
+/*customize the dialog to display the input field correctly*/
+.ui-dialog .form-control {
+    z-index: 0 !important;
+}
+.ui-dialog .ui-inputfield.ui-state-focus {
+    border-color: #3c8dbc;
+    box-shadow: none;
+}
+
 /*remove the rounding conners of the calendar*/
 .ui-datepicker-calendar a.ui-state-default {
     border-radius: 0;

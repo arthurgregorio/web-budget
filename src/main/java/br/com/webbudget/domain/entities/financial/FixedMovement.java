@@ -63,8 +63,8 @@ public class FixedMovement extends Movement {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "movement_state")
-    private MovementState movementState;
+    @Column(name = "fixed_movement_state")
+    private FixedMovementState fixedMovementState;
 
     @Getter
     @Setter
@@ -77,7 +77,7 @@ public class FixedMovement extends Movement {
     public FixedMovement() {
         super();
         this.autoLaunch = true;
-        this.movementState = MovementState.OPEN;
+        this.fixedMovementState = FixedMovementState.STARTED;
     }
 
     /**
@@ -85,7 +85,7 @@ public class FixedMovement extends Movement {
      *
      * @return true if is, false if not
      */
-    boolean isFinalized() {
-        return this.movementState == MovementState.FINALIZED;
+    boolean isAcounted() {
+        return this.fixedMovementState == FixedMovementState.FINISHED;
     }
 }

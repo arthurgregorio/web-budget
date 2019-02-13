@@ -89,6 +89,6 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
                 .likeIgnoreCase(PeriodMovement_.identification, filter.getText())
                 .likeIgnoreCase(PeriodMovement_.code, filter.getText())
                 .eq(PeriodMovement_.movementType, filter.getMovementType())
-                .eq(PeriodMovement_.movementState, filter.getMovementState());
+                .eq(PeriodMovement_.periodMovementState, filter.getMovementState());
     }
 }

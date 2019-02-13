@@ -55,8 +55,8 @@ public class PeriodMovement extends Movement {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "movement_state", length = 45)
-    private MovementState movementState;
+    @Column(name = "period_movement_state", length = 45)
+    private PeriodMovementState periodMovementState;
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
@@ -82,8 +82,8 @@ public class PeriodMovement extends Movement {
     public PeriodMovement() {
         super();
         this.dueDate = LocalDate.now();
-        this.movementState = MovementState.OPEN;
         this.movementType = MovementType.MOVEMENT;
+        this.periodMovementState = PeriodMovementState.OPEN;
     }
 
     /**
@@ -128,7 +128,7 @@ public class PeriodMovement extends Movement {
      * @return true if paid, false otherwise
      */
     public boolean isPaid() {
-        return this.movementState == MovementState.PAID;
+        return this.periodMovementState == PeriodMovementState.PAID;
     }
 
     /**
@@ -137,7 +137,7 @@ public class PeriodMovement extends Movement {
      * @return true if paid, false otherwise
      */
     public boolean isOpen() {
-        return this.movementState == MovementState.OPEN;
+        return this.periodMovementState == PeriodMovementState.OPEN;
     }
 
     /**
@@ -146,7 +146,7 @@ public class PeriodMovement extends Movement {
      * @return true if paid, false otherwise
      */
     public boolean isAccounted() {
-        return this.movementState == MovementState.ACCOUNTED;
+        return this.periodMovementState == PeriodMovementState.ACCOUNTED;
     }
 
     /**

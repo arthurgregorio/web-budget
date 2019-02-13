@@ -59,6 +59,11 @@
 
     <ui:define name="content">
         <h:form id="periodMovementForm" prependId="false">
+
+            <p:remoteCommand process="@this"
+                             name="searchContact"
+                             actionListener="#{periodMovementBean.showSearchContactDialog()}"/>
+
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true"/>
@@ -110,6 +115,7 @@
                                 <div class="input-group">
                                     <p:inputText id="inContact"
                                                  readonly="true"
+                                                 onclick="searchContact()"
                                                  styleClass="form-control"
                                                  value="#{periodMovementBean.value.contactName}" />
                                     <div class="input-group-btn">
@@ -117,14 +123,14 @@
                                                          icon="fa fa-search"
                                                          styleClass="btn btn-flat btn-primary"
                                                          disabled="#{periodMovementBean.viewState.detailing}"
-                                                         actionListener="#{periodMovementBean.showContactDialog()}"/>
-                                        <p:spacer width="10"
+                                                         actionListener="#{periodMovementBean.showSearchContactDialog()}"/>
+                                        <p:spacer width="5"
                                                   rendered="#{periodMovementBean.viewState.editable}"/>
                                         <p:commandButton immediate="true"
                                                          icon="fa fa-trash"
                                                          styleClass="btn btn-flat btn-danger"
                                                          rendered="#{periodMovementBean.viewState.editable}"
-                                                         actionListener="#{periodMovementBean.value.clearContact()}"/>
+                                                         actionListener="#{periodMovementBean.removeContact()}"/>
                                     </div>
                                 </div>
                             </div>
@@ -192,5 +198,6 @@
     </ui:define>
     <ui:define name="popups">
         <ui:include src="dialogApportionment.xhtml"/>
+        <ui:include src="dialogSearchContact.xhtml"/>
     </ui:define>
 </ui:composition>

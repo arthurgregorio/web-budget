@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Arthur Gregorio, AG.Software
+ * Copyright (C) 2019 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +17,18 @@
 package br.com.webbudget.domain.entities.financial;
 
 /**
- * The state of the {@link PeriodMovement} or the {@link FixedMovement}
+ * Current state of a {@link PeriodMovement}
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
- * @since 1.0.0, 21/03/2014
+ * @version 1.0.0
+ * @since 1.0.0, 12/02/2019
  */
-public enum MovementState {
+public enum PeriodMovementState {
 
-    PAID("movement-state.paid"),
-    OPEN("movement-state.open"),
-    ACCOUNTED("movement-state.accounted");
+    PAID("period-movement-state.paid"),
+    OPEN("period-movement-state.open"),
+    ACCOUNTED("period-movement-state.accounted");
 
     private final String description;
 
@@ -37,7 +37,7 @@ public enum MovementState {
      *
      * @param description the description and also the i18n key
      */
-    MovementState(String description) {
+    PeriodMovementState(String description) {
         this.description = description;
     }
 

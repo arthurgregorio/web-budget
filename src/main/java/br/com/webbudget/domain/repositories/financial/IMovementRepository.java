@@ -94,7 +94,7 @@ public interface IMovementRepository extends EntityRepository<Movement, Long> {
 //     * @param state
 //     * @return
 //     */
-//    public List<Movement> listByPeriodAndState(FinancialPeriod period, MovementState state);
+//    public List<Movement> listByPeriodAndState(FinancialPeriod period, PeriodMovementState state);
 //
 //    /**
 //     *
@@ -127,7 +127,7 @@ public interface IMovementRepository extends EntityRepository<Movement, Long> {
 //     * @param type
 //     * @return
 //     */
-//    public List<Movement> listByPeriodAndStateAndType(FinancialPeriod period, MovementState state, MovementType type);
+//    public List<Movement> listByPeriodAndStateAndType(FinancialPeriod period, PeriodMovementState state, MovementType type);
 //
 //    /**
 //     *
@@ -146,5 +146,5 @@ public interface IMovementRepository extends EntityRepository<Movement, Long> {
 //     * @param direction
 //     * @return
 //     */
-//    public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period, MovementState state, MovementType type, MovementClassType direction);
+//    public List<Movement> listByPeriodAndStateAndTypeAndDirection(FinancialPeriod period, PeriodMovementState state, MovementType type, MovementClassType direction);
 }

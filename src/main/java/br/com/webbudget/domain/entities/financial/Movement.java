@@ -176,13 +176,6 @@ public class Movement extends PersistentEntity {
     }
 
     /**
-     * Remove the contact linked to this movement
-     */
-    public void clearContact() {
-        this.contact = null;
-    }
-
-    /**
      * Calculate the amount not divided into the apportionments
      *
      * @return the total possible to be divided by an {@link Apportionment}
