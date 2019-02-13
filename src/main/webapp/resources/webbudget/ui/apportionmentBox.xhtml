@@ -30,6 +30,9 @@
         <c:attribute name="valueInput"/>
         <c:attribute name="disabled"
                      type="java.lang.Boolean"/>
+        <c:attribute name="renderButtons"
+                     default="true"
+                     type="java.lang.Boolean"/>
 
         <c:attribute required="true"
                      name="apportionments"
@@ -52,6 +55,7 @@
                                      disabled="#{cc.attrs.disabled}"
                                      styleClass="btn btn-flat btn-primary"
                                      process="@this #{cc.attrs.valueInput}"
+                                     rendered="#{cc.attrs.renderButtons}"
                                      actionListener="#{cc.attrs.showDialogAction}"/>
                 </div>
             </div>
@@ -88,6 +92,7 @@
                                          icon="fa fa-eraser"
                                          title="#{menu['delete']}"
                                          styleClass="btn btn-flat btn-danger"
+                                         rendered="#{cc.attrs.renderButtons}"
                                          update="apportionmentList #{cc.attrs.valueInput}"
                                          actionListener="#{cc.attrs.baseBean.remove(apportionment)}"/>
                     </p:column>

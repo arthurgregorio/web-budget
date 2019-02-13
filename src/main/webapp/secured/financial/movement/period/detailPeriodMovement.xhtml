@@ -34,11 +34,12 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{periodMovementBean.viewState.adding}"
-                      value="#{messages['period-movement.page-description-adding']}"/>
-        <o:outputFormat id="pageDescription"
-                        rendered="#{periodMovementBean.viewState.editing}"
-                        value="#{messages['period-movement.page-description-editing']}">
+        <o:outputFormat rendered="#{periodMovementBean.viewState eq 'DETAILING'}"
+                        value="#{messages['period-movement.page-description-detailing']}">
+            <f:param value="#{periodMovementBean.value.identification}"/>
+        </o:outputFormat>
+        <o:outputFormat rendered="#{periodMovementBean.viewState eq 'DELETING'}"
+                        value="#{messages['period-movement.page-description-deleting']}">
             <f:param value="#{periodMovementBean.value.identification}"/>
         </o:outputFormat>
     </ui:define>
@@ -48,22 +49,17 @@
         <li><a href="#">#{breadcrumb['financial.movements']}</a></li>
         <li><a href="listPeriodMovements.xhtml">#{breadcrumb['financial.movements.period']}</a></li>
         <li class="active"
-            jsf:rendered="#{periodMovementBean.viewState.adding}">
-            <a href="#">#{breadcrumb['adding']}</a>
+            jsf:rendered="#{periodMovementBean.viewState eq 'DELETING'}">
+            <a href="#">#{breadcrumb['deleting']}</a>
         </li>
         <li class="active"
-            jsf:rendered="#{periodMovementBean.viewState.editing}">
-            <a href="#">#{breadcrumb['editing']}</a>
+            jsf:rendered="#{periodMovementBean.viewState eq 'DETAILING'}">
+            <a href="#">#{breadcrumb['detailing']}</a>
         </li>
     </ui:define>
 
     <ui:define name="content">
         <h:form id="periodMovementForm" prependId="false">
-
-            <p:remoteCommand process="@this"
-                             name="searchContact"
-                             actionListener="#{periodMovementBean.showSearchContactDialog()}"/>
-
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true"/>
@@ -108,31 +104,13 @@
                                              styleClass="form-control"
                                              value="#{periodMovementBean.value.identification}" />
                             </div>
-                            <div jsf:id="contactBox"
-                                 class="form-group col-md-6">
+                            <div class="form-group col-md-6">
                                 <p:outputLabel for="inContact"
                                                value="#{messages['period-movement.form.contact']}: "/>
-                                <div class="input-group">
-                                    <p:inputText id="inContact"
-                                                 readonly="true"
-                                                 onclick="searchContact()"
-                                                 styleClass="form-control"
-                                                 value="#{periodMovementBean.value.contactName}" />
-                                    <div class="input-group-btn">
-                                        <p:commandButton immediate="true"
-                                                         icon="fa fa-search"
-                                                         styleClass="btn btn-flat btn-primary"
-                                                         disabled="#{periodMovementBean.viewState.detailing}"
-                                                         actionListener="#{periodMovementBean.showSearchContactDialog()}"/>
-                                        <p:spacer width="5"
-                                                  rendered="#{periodMovementBean.viewState.editable}"/>
-                                        <p:commandButton immediate="true"
-                                                         icon="fa fa-trash"
-                                                         styleClass="btn btn-flat btn-danger"
-                                                         rendered="#{periodMovementBean.viewState.editable}"
-                                                         actionListener="#{periodMovementBean.removeContact()}"/>
-                                    </div>
-                                </div>
+                                <p:inputText id="inContact"
+                                             readonly="true"
+                                             styleClass="form-control"
+                                             value="#{periodMovementBean.value.contactName}" />
                             </div>
                             <div class="form-group col-md-3">
                                 <p:outputLabel for="inDueDate"
@@ -170,6 +148,7 @@
                     </div>
                     <div jsf:id="apportionmentBox" class="col-sm-6">
                         <wb:apportionmentBox valueInput="inValue"
+                                             renderButtons="false"
                                              baseBean="#{periodMovementBean.value}"
                                              apportionments="#{periodMovementBean.value.apportionments}"
                                              showDialogAction="#{periodMovementBean.showApportionmentDialog()}"
@@ -177,27 +156,22 @@
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <p:commandButton value="#{menu['save']}"
-                                     update="periodMovementForm"
-                                     styleClass="btn btn-flat btn-success"
-                                     action="#{periodMovementBean.doSave()}"
-                                     rendered="#{periodMovementBean.viewState.adding}"/>
-                    <p:commandButton value="#{menu['update']}"
-                                     styleClass="btn btn-flat btn-success"
-                                     action="#{periodMovementBean.doUpdate()}"
-                                     update="periodMovementForm pageDescription"
-                                     rendered="#{periodMovementBean.viewState.editing}"/>
+                    <h:outputText styleClass="text-red text-bold"
+                                  value="#{messages['info.delete-confirmation']}"
+                                  rendered="#{periodMovementBean.viewState eq 'DELETING'}"/>
+                    <p:spacer width="5"/>
+                    <p:commandButton process="@this"
+                                     value="#{menu['yes']}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     action="#{periodMovementBean.doDelete()}"
+                                     rendered="#{periodMovementBean.viewState eq 'DELETING'}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
                                      styleClass="btn btn-flat btn-primary"
-                                     action="#{periodMovementBean.changeToListing()}"/>
+                                     action="#{periodMovementBean.changeToListing()}"
+                                     value="#{periodMovementBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>
-    </ui:define>
-    <ui:define name="popups">
-        <ui:include src="dialogApportionment.xhtml"/>
-        <ui:include src="dialogSearchContact.xhtml"/>
     </ui:define>
 </ui:composition>

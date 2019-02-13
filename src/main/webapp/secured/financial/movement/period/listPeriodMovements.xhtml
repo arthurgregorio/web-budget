@@ -167,7 +167,7 @@
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
-                                             actionListener="#{periodMovementBean.changeToDelete(periodMovement.id)}"
+                                             action="#{periodMovementBean.changeToDelete(periodMovement.id)}"
                                              rendered="#{not periodMovement.accounted and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DELETE)}"/>
                         </p:column>
                     </p:dataTable>
