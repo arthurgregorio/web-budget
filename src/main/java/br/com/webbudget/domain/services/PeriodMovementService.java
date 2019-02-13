@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.repositories.financial.ApportionmentRepository;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
@@ -24,7 +23,6 @@ import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.util.List;
 
 /**
  * The {@link PeriodMovement} service
