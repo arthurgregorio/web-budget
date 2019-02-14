@@ -20,11 +20,15 @@ import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.components.table.filter.PeriodMovementFilter;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.PeriodMovement_;
+import br.com.webbudget.domain.entities.registration.Contact;
+import br.com.webbudget.domain.entities.registration.Contact_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * The {@link PeriodMovement} repository
@@ -38,19 +42,18 @@ import java.util.List;
 public interface PeriodMovementRepository extends DefaultRepository<PeriodMovement> {
 
     /**
-     * Generic search method to find any {@link PeriodMovement} with a specific group of filters
+     * Use this method to find all {@link PeriodMovement} using the lazy load strategy
      *
-     * TODO make this filter by all properties defined on the period movement filter
-     *
-     * @param start the start position of the query cursor
-     * @param pageSize the maximum amount of items per page
-     * @return the {@link Page} implementation with a {@link List} of {@link PeriodMovement} inside
+     * @param filter the {@link PeriodMovementFilter}
+     * @param start starting row
+     * @param pageSize page size
+     * @return the {@link Page} filled with the {@link PeriodMovement} found
      */
     default Page<PeriodMovement> findAllBy(PeriodMovementFilter filter, int start, int pageSize) {
 
         final int totalRows = this.countPages(filter);
 
-        final Criteria<PeriodMovement, PeriodMovement> criteria = criteria();
+        final Criteria<PeriodMovement, PeriodMovement> criteria = this.buildCriteria(filter);
 
         criteria.orderAsc(PeriodMovement_.createdOn);
 
@@ -63,32 +66,52 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
     }
 
     /**
-     * Count the pages to the datatable so the pagination will work
+     * This method is used to count the total of rows found with the given filter
      *
-     * @param filter the {@link PeriodMovementFilter} to be used
-     * @return the total of pages for this query
+     * @param filter the {@link PeriodMovementFilter}
+     * @return total size of the pages
      */
     @SuppressWarnings("unchecked")
     default int countPages(PeriodMovementFilter filter) {
-
-        final Criteria<PeriodMovement, PeriodMovement> criteria = criteria().or(this.getRestrictions(filter));
-
-        return criteria.select(Long.class, count(PeriodMovement_.id))
+        return this.buildCriteria(filter)
+                .select(Long.class, count(PeriodMovement_.id))
                 .getSingleResult()
                 .intValue();
     }
 
     /**
-     * Get all possible filters for the default query
+     * This method is used to build the {@link Criteria} used to find the {@link PeriodMovement}
      *
-     * @param filter the {@link PeriodMovementFilter} to be used
-     * @return the {@link Criteria} restrictions for this query
+     * @param filter the {@link PeriodMovementFilter}
+     * @return the {@link Criteria} with the restrictions to find the {@link PeriodMovement}
      */
-    default Criteria<PeriodMovement, PeriodMovement> getRestrictions(PeriodMovementFilter filter) {
-        return this.criteria()
-                .likeIgnoreCase(PeriodMovement_.identification, filter.getText())
-                .likeIgnoreCase(PeriodMovement_.code, filter.getText())
-                .eq(PeriodMovement_.movementType, filter.getMovementType())
-                .eq(PeriodMovement_.periodMovementState, filter.getMovementState());
+    @SuppressWarnings("unchecked")
+    default Criteria<PeriodMovement, PeriodMovement> buildCriteria(PeriodMovementFilter filter) {
+
+        final Criteria<PeriodMovement, PeriodMovement> criteria = this.criteria();
+
+        // set the movement state filter if present
+        if (filter.getMovementState() != null) {
+            criteria.eq(PeriodMovement_.periodMovementState, filter.getMovementState());
+        }
+
+        // the movement type filter if present
+        if (filter.getMovementType() != null) {
+            criteria.eq(PeriodMovement_.movementType, filter.getMovementType());
+        }
+
+        // now the OR filters, more generic
+        if (isNotBlank(filter.getText())) {
+
+            final String anyFilter = this.likeAny(filter.getText());
+
+            criteria.or(
+                    this.criteria().likeIgnoreCase(PeriodMovement_.code, anyFilter),
+                    this.criteria().likeIgnoreCase(PeriodMovement_.identification, anyFilter),
+                    this.criteria().join(PeriodMovement_.contact, where(Contact.class).likeIgnoreCase(Contact_.name, anyFilter))
+            );
+        }
+
+        return criteria;
     }
 }
