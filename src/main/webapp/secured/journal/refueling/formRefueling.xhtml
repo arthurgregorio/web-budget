@@ -33,10 +33,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{refuelingBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{refuelingBean.viewState.adding}"
                       value="#{messages['refueling.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{refuelingBean.viewState eq 'EDITING'}" 
+                        rendered="#{refuelingBean.viewState.editing}"
                         value="#{messages['refueling.page-description-editing']}">
             <f:param value="#{refuelingBean.value.code}"/>
         </o:outputFormat>
@@ -45,9 +45,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['journal']}</a></li>
         <li><a href="listRefuelings.xhtml">#{breadcrumb['journal.refuelings']}</a></li>
-        <li jsf:rendered="#{refuelingBean.viewState eq 'ADDING'}" 
+        <li jsf:rendered="#{refuelingBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{refuelingBean.viewState eq 'EDITING'}" 
+        <li jsf:rendered="#{refuelingBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
@@ -202,7 +202,7 @@
                                          paginatorAlwaysVisible="false"
                                          value="#{refuelingBean.value.fuels}"
                                          emptyMessage="#{messages['list.empty']}"
-                                         editable="#{refuelingBean.viewState eq 'ADDING'}">
+                                         editable="#{refuelingBean.viewState.adding}">
 
                                 <p:ajax process="@this"
                                         event="cellEdit" 
@@ -284,7 +284,7 @@
                                      value="#{menu['save']}"
                                      action="#{refuelingBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{refuelingBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{refuelingBean.viewState.adding}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

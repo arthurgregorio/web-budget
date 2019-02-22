@@ -33,10 +33,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{userBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{userBean.viewState.adding}"
                       value="#{messages['user.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{userBean.viewState eq 'EDITING'}" 
+                        rendered="#{userBean.viewState.editing}"
                         value="#{messages['user.page-description-editing']}">
             <f:param value="#{userBean.value.name}"/>
         </o:outputFormat>
@@ -45,9 +45,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['configuration']}</a></li>
         <li><a href="listUsers.xhtml">#{breadcrumb['configuration.users']}</a></li>
-        <li jsf:rendered="#{userBean.viewState eq 'ADDING'}" 
+        <li jsf:rendered="#{userBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{userBean.viewState eq 'EDITING'}" 
+        <li jsf:rendered="#{userBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
@@ -74,7 +74,7 @@
                             <p:selectOneMenu id="inStoreType"
                                              value="#{userBean.value.storeType}"
                                              converter="omnifaces.GenericEnumConverter"
-                                             disabled="#{userBean.viewState eq 'EDITING'}">
+                                             disabled="#{userBean.viewState.editing}">
                                 <p:ajax event="change" update="userForm" />
                                 <f:selectItems var="storeType"
                                                itemValue="#{storeType}"
@@ -91,7 +91,7 @@
                                 <p:inputText id="inUsername"
                                              styleClass="form-control"
                                              value="#{userBean.value.username}"
-                                             readonly="#{userBean.viewState eq 'EDITING'}"/>
+                                             readonly="#{userBean.viewState.editing}"/>
                                 <div class="input-group-btn">
                                     <p:commandButton update="userForm"
                                                      icon="fa fa-search"
@@ -157,13 +157,13 @@
                                      value="#{menu['save']}"
                                      action="#{userBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{userBean.viewState eq 'ADDING'}" />
+                                     rendered="#{userBean.viewState.adding}" />
                     <p:commandButton process="userForm"
                                      value="#{menu['update']}"
                                      action="#{userBean.doUpdate()}"
                                      update="userForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{userBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{userBean.viewState.editing}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.controller.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.Wallet;
@@ -29,8 +29,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.*;
-import static br.com.webbudget.application.components.NavigationManager.Parameter;
+import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
+import static br.com.webbudget.application.controller.NavigationManager.Parameter;
 
 /**
  * The {@link Wallet} maintenance routine controller
@@ -49,15 +49,6 @@ public class WalletBean extends LazyFormBean<Wallet> {
 
     @Inject
     private WalletRepository walletRepository;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void initialize() {
-        super.initialize();
-        this.temporizeHiding(this.getDefaultMessagesComponentId());
-    }
 
     /**
      * {@inheritDoc}

@@ -16,14 +16,12 @@
  */
 package br.com.webbudget.application.controller;
 
-import br.com.webbudget.application.components.NavigationManager;
-import br.com.webbudget.application.components.ViewState;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.*;
-import static br.com.webbudget.application.components.NavigationManager.Parameter.of;
+import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
+import static br.com.webbudget.application.controller.NavigationManager.Parameter.of;
 
 /**
  * The abstract form controller, this class hold all the basic features that a single form will have
@@ -50,7 +48,7 @@ public abstract class FormBean<T extends PersistentEntity> extends AbstractBean 
      * Create the bean and initialize the default data
      */
     public FormBean() {
-        this.navigation = NavigationManager.getInstance();
+        this.navigation = new NavigationManager();
         this.initializeNavigationManager();
     }
 

@@ -33,11 +33,11 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat rendered="#{refuelingBean.viewState eq 'DETAILING'}" 
+        <o:outputFormat rendered="#{refuelingBean.viewState.detailing}"
                         value="#{messages['refueling.page-description-detailing']}">
             <f:param value="#{refuelingBean.value.vehicleIdentification}"/>
         </o:outputFormat>
-        <o:outputFormat rendered="#{refuelingBean.viewState eq 'DELETING'}" 
+        <o:outputFormat rendered="#{refuelingBean.viewState.deleting}"
                         value="#{messages['refueling.page-description-deleting']}">
             <f:param value="#{refuelingBean.value.vehicleIdentification}"/>
         </o:outputFormat>
@@ -46,9 +46,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['journal']}</a></li>
         <li><a href="listRefuelings.xhtml">#{breadcrumb['journal.refuelings']}</a></li>
-        <li jsf:rendered="#{refuelingBean.viewState eq 'DELETING'}" 
+        <li jsf:rendered="#{refuelingBean.viewState.deleting}"
             class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
-        <li jsf:rendered="#{refuelingBean.viewState eq 'DETAILING'}" 
+        <li jsf:rendered="#{refuelingBean.viewState.detailing}"
             class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
@@ -198,7 +198,7 @@
                                          paginatorAlwaysVisible="false"
                                          value="#{refuelingBean.value.fuels}"
                                          emptyMessage="#{messages['list.empty']}"
-                                         editable="#{refuelingBean.viewState eq 'ADDING'}">
+                                         editable="#{refuelingBean.viewState.adding}">
 
                                 <p:ajax process="@this"
                                         event="cellEdit" 
@@ -267,17 +267,17 @@
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
                                   value="#{messages['info.delete-confirmation']}"
-                                  rendered="#{refuelingBean.viewState eq 'DELETING'}"/>
+                                  rendered="#{refuelingBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{refuelingBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
-                                     rendered="#{refuelingBean.viewState eq 'DELETING'}"/>
+                                     rendered="#{refuelingBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary" 
                                      action="#{refuelingBean.changeToListing()}"
-                                     value="#{refuelingBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
+                                     value="#{refuelingBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>

@@ -34,10 +34,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{contactBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{contactBean.viewState.adding}"
                       value="#{messages['contact.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{contactBean.viewState eq 'EDITING'}" 
+                        rendered="#{contactBean.viewState.editing}"
                         value="#{messages['contact.page-description-editing']}">
             <f:param value="#{contactBean.value.name}"/>
         </o:outputFormat>
@@ -46,9 +46,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listContacts.xhtml">#{breadcrumb['registration.contacts']}</a></li>
-        <li jsf:rendered="#{contactBean.viewState eq 'ADDING'}" 
+        <li jsf:rendered="#{contactBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{contactBean.viewState eq 'EDITING'}" 
+        <li jsf:rendered="#{contactBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
@@ -241,13 +241,13 @@
                                      value="#{menu['save']}"
                                      action="#{contactBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{contactBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{contactBean.viewState.adding}"/>
                     <p:commandButton process="contactForm"
                                      value="#{menu['update']}"
                                      action="#{contactBean.doUpdate()}"
                                      update="contactForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{contactBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{contactBean.viewState.editing}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

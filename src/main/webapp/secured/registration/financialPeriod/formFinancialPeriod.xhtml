@@ -126,7 +126,7 @@
                                      update="financialPeriodForm"
                                      styleClass="btn btn-flat btn-success"
                                      actionListener="#{financialPeriodBean.doSave()}"
-                                     rendered="#{financialPeriodBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{financialPeriodBean.viewState.adding}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

@@ -42,10 +42,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{costCenterBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{costCenterBean.viewState.adding}"
                       value="#{messages['cost-center.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{costCenterBean.viewState eq 'EDITING'}" 
+                        rendered="#{costCenterBean.viewState.editing}"
                         value="#{messages['cost-center.page-description-editing']}">
             <f:param value="#{costCenterBean.value.name}"/>
         </o:outputFormat>
@@ -54,9 +54,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listCostCenters.xhtml">#{breadcrumb['registration.cost-centers']}</a></li>
-        <li jsf:rendered="#{costCenterBean.viewState eq 'ADDING'}" 
+        <li jsf:rendered="#{costCenterBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{costCenterBean.viewState eq 'EDITING'}" 
+        <li jsf:rendered="#{costCenterBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
@@ -84,7 +84,7 @@
                                          maxlength="45"
                                          styleClass="form-control"
                                          value="#{costCenterBean.value.name}" 
-                                         disabled="#{costCenterBean.viewState eq 'EDITING'}"/>
+                                         disabled="#{costCenterBean.viewState.editing}"/>
                         </div>
                         <div class="form-group col-md-12">
                             <p:outputLabel for="inCostCenter" 
@@ -151,13 +151,13 @@
                                      value="#{menu['save']}"
                                      action="#{costCenterBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{costCenterBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{costCenterBean.viewState.adding}"/>
                     <p:commandButton process="costCenterForm"
                                      value="#{menu['update']}"
                                      action="#{costCenterBean.doUpdate()}"
                                      styleClass="btn btn-flat btn-success"
                                      update="costCenterForm pageDescription"
-                                     rendered="#{costCenterBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{costCenterBean.viewState.editing}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

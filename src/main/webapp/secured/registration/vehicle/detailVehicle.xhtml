@@ -33,11 +33,11 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat rendered="#{vehicleBean.viewState eq 'DETAILING'}" 
+        <o:outputFormat rendered="#{vehicleBean.viewState.detailing}"
                         value="#{messages['vehicle.page-description-detailing']}">
             <f:param value="#{vehicleBean.value.identification}"/>
         </o:outputFormat>
-        <o:outputFormat rendered="#{vehicleBean.viewState eq 'DELETING'}" 
+        <o:outputFormat rendered="#{vehicleBean.viewState.deleting}"
                         value="#{messages['vehicle.page-description-deleting']}">
             <f:param value="#{vehicleBean.value.identification}"/>
         </o:outputFormat>
@@ -46,9 +46,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listVehicles.xhtml">#{breadcrumb['registration.vehicles']}</a></li>
-        <li jsf:rendered="#{vehicleBean.viewState eq 'DELETING'}" 
+        <li jsf:rendered="#{vehicleBean.viewState.deleting}"
             class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
-        <li jsf:rendered="#{vehicleBean.viewState eq 'DETAILING'}" 
+        <li jsf:rendered="#{vehicleBean.viewState.detailing}"
             class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
@@ -131,7 +131,7 @@
                                      maxlength="11"
                                      styleClass="form-control"
                                      value="#{vehicleBean.value.licensePlate}"
-                                     disabled="#{vehicleBean.viewState eq 'EDITING'}"/>
+                                     disabled="#{vehicleBean.viewState.editing}"/>
                     </div>
                     <div class="form-group col-md-2">
                         <p:outputLabel for="inYearModel"
@@ -160,7 +160,7 @@
                                      maxlength="10"
                                      styleClass="form-control"
                                      value="#{vehicleBean.value.odometer}"
-                                     disabled="#{vehicleBean.viewState eq 'EDITING'}">
+                                     disabled="#{vehicleBean.viewState.editing}">
                             <p:keyFilter mask="num"/>
                         </p:inputText>
                     </div>
@@ -178,17 +178,17 @@
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
                                   value="#{messages['info.delete-confirmation']}"
-                                  rendered="#{vehicleBean.viewState eq 'DELETING'}"/>
+                                  rendered="#{vehicleBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{vehicleBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
-                                     rendered="#{vehicleBean.viewState eq 'DELETING'}"/>
+                                     rendered="#{vehicleBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary" 
                                      action="#{vehicleBean.changeToListing()}"
-                                     value="#{vehicleBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
+                                     value="#{vehicleBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>

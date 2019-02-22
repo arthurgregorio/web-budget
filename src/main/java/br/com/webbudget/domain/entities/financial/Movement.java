@@ -38,7 +38,6 @@ import java.util.Set;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
-import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
 
 /**
@@ -85,7 +84,7 @@ public class Movement extends PersistentEntity {
     @JoinColumn(name = "id_contact")
     private Contact contact;
 
-    @OneToMany(mappedBy = "movement", cascade = {PERSIST, REMOVE})
+    @OneToMany(mappedBy = "movement", cascade = REMOVE)
     private Set<Apportionment> apportionments;
 
     @Transient

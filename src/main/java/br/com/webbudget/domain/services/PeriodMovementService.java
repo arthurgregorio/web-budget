@@ -47,7 +47,13 @@ public class PeriodMovementService {
      */
     @Transactional
     public void save(PeriodMovement periodMovement) {
-        this.periodMovementRepository.save(periodMovement);
+
+        final PeriodMovement saved = this.periodMovementRepository.save(periodMovement);
+
+        periodMovement.getApportionments().forEach(apportionment -> {
+            apportionment.setMovement(saved);
+            this.apportionmentRepository.save(apportionment);
+        });
     }
 
     /**
@@ -58,7 +64,20 @@ public class PeriodMovementService {
      */
     @Transactional
     public PeriodMovement update(PeriodMovement periodMovement) {
-        return this.periodMovementRepository.saveAndFlushAndRefresh(periodMovement);
+
+        // delete all removed apportionments
+        periodMovement.getDeletedApportionments()
+                .forEach(apportionment -> this.apportionmentRepository.attachAndRemove(apportionment));
+
+        final PeriodMovement saved = this.periodMovementRepository.saveAndFlushAndRefresh(periodMovement);
+
+        // save all current apportionments
+        periodMovement.getApportionments().forEach(apportionment -> {
+            apportionment.setMovement(saved);
+            this.apportionmentRepository.save(apportionment);
+        });
+
+        return saved;
     }
 
     /**

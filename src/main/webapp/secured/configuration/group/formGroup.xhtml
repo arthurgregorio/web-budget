@@ -33,10 +33,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{groupBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{groupBean.viewState.adding}"
                       value="#{messages['group.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{groupBean.viewState eq 'EDITING'}" 
+                        rendered="#{groupBean.viewState.editing}"
                         value="#{messages['group.page-description-editing']}">
             <f:param value="#{groupBean.value.name}"/>
         </o:outputFormat>
@@ -45,9 +45,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['configuration']}</a></li>
         <li><a href="listGroups.xhtml">#{breadcrumb['configuration.groups']}</a></li>
-        <li jsf:rendered="#{groupBean.viewState eq 'ADDING'}" 
+        <li jsf:rendered="#{groupBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{groupBean.viewState eq 'EDITING'}" 
+        <li jsf:rendered="#{groupBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
@@ -117,12 +117,12 @@
                                      value="#{menu['save']}"
                                      action="#{groupBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{groupBean.viewState eq 'ADDING'}" />
+                                     rendered="#{groupBean.viewState.adding}" />
                     <p:commandButton value="#{menu['update']}"
                                      action="#{groupBean.doUpdate()}"
                                      update="groupForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{groupBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{groupBean.viewState.editing}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

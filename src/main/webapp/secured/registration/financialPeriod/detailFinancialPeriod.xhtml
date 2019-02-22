@@ -33,11 +33,11 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat rendered="#{financialPeriodBean.viewState eq 'DETAILING'}"
+        <o:outputFormat rendered="#{financialPeriodBean.viewState.detailing}"
                         value="#{messages['financial-period.page-description-detailing']}">
             <f:param value="#{financialPeriodBean.value.identification}"/>
         </o:outputFormat>
-        <o:outputFormat rendered="#{financialPeriodBean.viewState eq 'DELETING'}"
+        <o:outputFormat rendered="#{financialPeriodBean.viewState.deleting}"
                         value="#{messages['financial-period.page-description-deleting']}">
             <f:param value="#{financialPeriodBean.value.identification}"/>
         </o:outputFormat>
@@ -47,11 +47,11 @@
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listFinancialPeriods.xhtml">#{breadcrumb['registration.financial-periods']}</a></li>
         <li class="active"
-            jsf:rendered="#{financialPeriodBean.viewState eq 'DELETING'}">
+            jsf:rendered="#{financialPeriodBean.viewState.deleting}">
             <a href="#">#{breadcrumb['deleting']}</a>
         </li>
         <li class="active"
-            jsf:rendered="#{financialPeriodBean.viewState eq 'DETAILING'}">
+            jsf:rendered="#{financialPeriodBean.viewState.detailing}">
             <a href="#">#{breadcrumb['detailing']}</a>
         </li>
     </ui:define>
@@ -133,18 +133,18 @@
                 </div>
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
-                                  rendered="#{financialPeriodBean.viewState eq 'DELETING'}"
+                                  rendered="#{financialPeriodBean.viewState.deleting}"
                                   value="#{messages['info.delete-confirmation']}"/>
                     <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{financialPeriodBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
-                                     rendered="#{financialPeriodBean.viewState eq 'DELETING'}"/>
+                                     rendered="#{financialPeriodBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary"
                                      action="#{financialPeriodBean.changeToListing()}"
-                                     value="#{financialPeriodBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
+                                     value="#{financialPeriodBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>

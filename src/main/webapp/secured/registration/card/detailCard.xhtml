@@ -33,11 +33,11 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat rendered="#{cardBean.viewState eq 'DETAILING'}" 
+        <o:outputFormat rendered="#{cardBean.viewState.detailing}"
                         value="#{messages['card.page-description-detailing']}">
             <f:param value="#{cardBean.value.readableName}"/>
         </o:outputFormat>
-        <o:outputFormat rendered="#{cardBean.viewState eq 'DELETING'}" 
+        <o:outputFormat rendered="#{cardBean.viewState.deleting}"
                         value="#{messages['card.page-description-deleting']}">
             <f:param value="#{cardBean.value.readableName}"/>
         </o:outputFormat>
@@ -46,9 +46,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listCards.xhtml">#{breadcrumb['registration.cards']}</a></li>
-        <li jsf:rendered="#{cardBean.viewState eq 'DELETING'}" 
+        <li jsf:rendered="#{cardBean.viewState.deleting}"
             class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
-        <li jsf:rendered="#{cardBean.viewState eq 'DETAILING'}" 
+        <li jsf:rendered="#{cardBean.viewState.detailing}"
             class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
@@ -84,7 +84,7 @@
                         <p:selectOneMenu id="inCardType"
                                          value="#{cardBean.value.cardType}"
                                          converter="omnifaces.GenericEnumConverter"
-                                         disabled="#{cardBean.viewState eq 'EDITING'}">
+                                         disabled="#{cardBean.viewState.editing}">
                             <p:ajax event="change"
                                     update="inCreditLimit,inExpirationDay,inWallet" />
                             <f:selectItem itemValue="#{null}"
@@ -111,7 +111,7 @@
                                      styleClass="form-control"
                                      mask="9999-9999-9999-9999"
                                      value="#{cardBean.value.number}"
-                                     disabled="#{cardBean.viewState eq 'EDITING'}"/>
+                                     disabled="#{cardBean.viewState.editing}"/>
                     </div>
                     <div class="form-group col-md-3">
                         <p:outputLabel for="inOwner"
@@ -164,18 +164,18 @@
                 </div>
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
-                                  rendered="#{cardBean.viewState eq 'DELETING'}"
+                                  rendered="#{cardBean.viewState.deleting}"
                                   value="#{messages['info.delete-confirmation']}"/>
                     <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{cardBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
-                                     rendered="#{cardBean.viewState eq 'DELETING'}"/>
+                                     rendered="#{cardBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary" 
                                      action="#{cardBean.changeToListing()}"
-                                     value="#{cardBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
+                                     value="#{cardBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>

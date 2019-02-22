@@ -77,7 +77,7 @@ public class PeriodMovement extends Movement {
     private FinancialPeriod financialPeriod;
 
     /**
-     *
+     * Constructor...
      */
     public PeriodMovement() {
         super();

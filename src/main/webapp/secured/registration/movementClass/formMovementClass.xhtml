@@ -33,10 +33,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{movementClassBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{movementClassBean.viewState.adding}"
                       value="#{messages['movement-class.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{movementClassBean.viewState eq 'EDITING'}" 
+                        rendered="#{movementClassBean.viewState.editing}"
                         value="#{messages['movement-class.page-description-editing']}">
             <f:param value="#{movementClassBean.value.name}"/>
         </o:outputFormat>
@@ -45,9 +45,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listMovementClasses.xhtml">#{breadcrumb['registration.movement-classes']}</a></li>
-        <li jsf:rendered="#{movementClassBean.viewState eq 'ADDING'}" 
+        <li jsf:rendered="#{movementClassBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{movementClassBean.viewState eq 'EDITING'}" 
+        <li jsf:rendered="#{movementClassBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
@@ -73,7 +73,7 @@
                         <p:inputText id="inName" 
                                      styleClass="form-control"
                                      value="#{movementClassBean.value.name}"
-                                     disabled="#{movementClassBean.viewState eq 'EDITING'}"/>
+                                     disabled="#{movementClassBean.viewState.editing}"/>
                     </div>
                     <div class="form-group col-md-3">
                         <p:outputLabel for="inMovementClassType" 
@@ -81,7 +81,7 @@
                         <p:selectOneMenu id="inMovementClassType" 
                                          converter="omnifaces.GenericEnumConverter"
                                          value="#{movementClassBean.value.movementClassType}"
-                                         disabled="#{movementClassBean.viewState eq 'EDITING'}">
+                                         disabled="#{movementClassBean.viewState.editing}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
                                           itemLabel="#{menu['select-one']}" />
@@ -124,12 +124,12 @@
                                      update="movementClassForm"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{movementClassBean.doSave()}"
-                                     rendered="#{movementClassBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{movementClassBean.viewState.adding}"/>
                     <p:commandButton value="#{menu['update']}"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{movementClassBean.doUpdate()}"
                                      update="movementClassForm pageDescription"
-                                     rendered="#{movementClassBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{movementClassBean.viewState.editing}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

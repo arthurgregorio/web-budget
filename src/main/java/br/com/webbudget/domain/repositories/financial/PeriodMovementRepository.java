@@ -16,16 +16,19 @@
  */
 package br.com.webbudget.domain.repositories.financial;
 
+import br.com.webbudget.application.components.filter.PeriodMovementFilter;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.filter.PeriodMovementFilter;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.PeriodMovement_;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.Contact_;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
+import javax.persistence.criteria.JoinType;
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -91,8 +94,8 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
         final Criteria<PeriodMovement, PeriodMovement> criteria = this.criteria();
 
         // set the movement state filter if present
-        if (filter.getMovementState() != null) {
-            criteria.eq(PeriodMovement_.periodMovementState, filter.getMovementState());
+        if (filter.getPeriodMovementState() != null) {
+            criteria.eq(PeriodMovement_.periodMovementState, filter.getPeriodMovementState());
         }
 
         // the movement type filter if present
@@ -101,15 +104,21 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
         }
 
         // now the OR filters, more generic
-        if (isNotBlank(filter.getText())) {
+        if (isNotBlank(filter.getValue())) {
 
-            final String anyFilter = this.likeAny(filter.getText());
+            final String anyFilter = this.likeAny(filter.getValue());
 
-            criteria.or(
-                    this.criteria().likeIgnoreCase(PeriodMovement_.code, anyFilter),
-                    this.criteria().likeIgnoreCase(PeriodMovement_.identification, anyFilter),
-                    this.criteria().join(PeriodMovement_.contact, where(Contact.class).likeIgnoreCase(Contact_.name, anyFilter))
-            );
+            criteria.or(this.criteria().eq(PeriodMovement_.code, anyFilter));
+            criteria.or(this.criteria().likeIgnoreCase(PeriodMovement_.description, anyFilter));
+            criteria.or(this.criteria().likeIgnoreCase(PeriodMovement_.identification, anyFilter));
+            criteria.or(this.criteria().join(PeriodMovement_.financialPeriod,
+                    where(FinancialPeriod.class).likeIgnoreCase(FinancialPeriod_.identification, anyFilter)));
+            criteria.or(this.criteria().join(PeriodMovement_.contact,
+                    where(Contact.class, JoinType.LEFT).likeIgnoreCase(Contact_.name, anyFilter)));
+
+            // if we can cast the value of the filter to decimal, use this as filter
+            filter.valueToBigDecimal()
+                    .ifPresent(value -> criteria.or(this.criteria().eq(PeriodMovement_.value, value)));
         }
 
         return criteria;

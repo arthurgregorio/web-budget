@@ -42,11 +42,11 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat rendered="#{costCenterBean.viewState eq 'DETAILING'}" 
+        <o:outputFormat rendered="#{costCenterBean.viewState.detailing}"
                         value="#{messages['cost-center.page-description-detailing']}">
             <f:param value="#{costCenterBean.value.name}"/>
         </o:outputFormat>
-        <o:outputFormat rendered="#{costCenterBean.viewState eq 'DELETING'}" 
+        <o:outputFormat rendered="#{costCenterBean.viewState.deleting}"
                         value="#{messages['cost-center.page-description-deleting']}">
             <f:param value="#{costCenterBean.value.name}"/>
         </o:outputFormat>
@@ -55,9 +55,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listCostCenters.xhtml">#{breadcrumb['registration.cost-centers']}</a></li>
-        <li jsf:rendered="#{costCenterBean.viewState eq 'DELETING'}" 
+        <li jsf:rendered="#{costCenterBean.viewState.deleting}"
             class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
-        <li jsf:rendered="#{costCenterBean.viewState eq 'DETAILING'}" 
+        <li jsf:rendered="#{costCenterBean.viewState.detailing}"
             class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
@@ -87,7 +87,7 @@
                                          maxlength="45"
                                          styleClass="form-control"
                                          value="#{costCenterBean.value.name}" 
-                                         disabled="#{costCenterBean.viewState eq 'EDITING'}"/>
+                                         disabled="#{costCenterBean.viewState.editing}"/>
                         </div>
                         <div class="form-group col-md-12">
                             <p:outputLabel for="inCostCenter" 
@@ -150,17 +150,17 @@
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
                                   value="#{messages['info.delete-confirmation']}"
-                                  rendered="#{costCenterBean.viewState eq 'DELETING'}"/>
+                                  rendered="#{costCenterBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      styleClass="btn btn-flat btn-danger"
                                      action="#{costCenterBean.doDelete()}"
-                                     rendered="#{costCenterBean.viewState eq 'DELETING'}"/>
+                                     rendered="#{costCenterBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary" 
                                      action="#{costCenterBean.changeToListing()}"
-                                     value="#{costCenterBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
+                                     value="#{costCenterBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>

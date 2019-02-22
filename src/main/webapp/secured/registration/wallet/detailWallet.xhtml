@@ -33,11 +33,11 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat rendered="#{walletBean.viewState eq 'DETAILING'}"
+        <o:outputFormat rendered="#{walletBean.viewState.detailing}"
                         value="#{messages['wallet.page-description-detailing']}">
             <f:param value="#{walletBean.value.description}"/>
         </o:outputFormat>
-        <o:outputFormat rendered="#{walletBean.viewState eq 'DELETING'}"
+        <o:outputFormat rendered="#{walletBean.viewState.deleting}"
                         value="#{messages['wallet.page-description-deleting']}">
             <f:param value="#{walletBean.value.description}"/>
         </o:outputFormat>
@@ -46,9 +46,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listWallets.xhtml">#{breadcrumb['registration.wallets']}</a></li>
-        <li jsf:rendered="#{walletBean.viewState eq 'DELETING'}"
+        <li jsf:rendered="#{walletBean.viewState.deleting}"
             class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
-        <li jsf:rendered="#{walletBean.viewState eq 'DETAILING'}"
+        <li jsf:rendered="#{walletBean.viewState.detailing}"
             class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
@@ -77,7 +77,7 @@
                                      maxlength="45"
                                      styleClass="form-control"
                                      value="#{walletBean.value.name}"
-                                     disabled="#{walletBean.viewState eq 'EDITING'}"/>
+                                     disabled="#{walletBean.viewState.editing}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <p:outputLabel for="inWalletType" 
@@ -85,7 +85,7 @@
                         <p:selectOneMenu id="inWalletType" 
                                          value="#{walletBean.value.walletType}"
                                          converter="omnifaces.GenericEnumConverter"
-                                         disabled="#{walletBean.viewState eq 'EDITING'}">
+                                         disabled="#{walletBean.viewState.editing}">
                             <p:ajax event="change" update="bankAccountBox" />
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
@@ -169,17 +169,17 @@
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
                                   value="#{messages['info.delete-confirmation']}"
-                                  rendered="#{walletBean.viewState eq 'DELETING'}"/>
+                                  rendered="#{walletBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{walletBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
-                                     rendered="#{walletBean.viewState eq 'DELETING'}"/>
+                                     rendered="#{walletBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary"
                                      action="#{walletBean.changeToListing()}"
-                                     value="#{walletBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
+                                     value="#{walletBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>

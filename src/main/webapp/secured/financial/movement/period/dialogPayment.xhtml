@@ -48,7 +48,7 @@
                 <p:commandButton update="paymentForm"
                                  value="#{menu['pay']}"
                                  styleClass="btn btn-flat btn-success" 
-                                 rendered="#{periodMovementBean.viewState eq 'EDITING'}"
+                                 rendered="#{periodMovementBean.viewState.editing}"
                                  actionListener="#{periodMovementBean.doUpdateAndPayment()}"/>
                 <p:spacer width="5"/>
                 <p:commandButton immediate="true"

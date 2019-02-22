@@ -7,6 +7,12 @@
     Created on : 26/09/2018
 */
 
+/*delete text*/
+.delete-text {
+    position: relative;
+    top: 2px;
+}
+
 /*custom box border colors*/
 .box.box-blue {
     border-top-color: #3c8dbc;

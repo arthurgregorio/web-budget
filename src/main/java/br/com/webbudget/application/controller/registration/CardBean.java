@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.controller.ViewState;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.Card;
@@ -37,7 +37,7 @@ import javax.inject.Named;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.*;
+import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
 
 /**
  * The {@link Card} maintenance routine controller
@@ -65,15 +65,6 @@ public class CardBean extends LazyFormBean<Card> {
     @Any
     @Inject
     private Instance<CardUpdatingBusinessLogic> updatingBusinessLogics;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void initialize() {
-        super.initialize();
-        this.temporizeHiding(this.getDefaultMessagesComponentId());
-    }
 
     /**
      * {@inheritDoc}

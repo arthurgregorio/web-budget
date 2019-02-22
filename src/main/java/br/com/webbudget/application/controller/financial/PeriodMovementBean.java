@@ -16,11 +16,12 @@
  */
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.components.ViewState;
+import br.com.webbudget.application.components.PeriodMovementResume;
+import br.com.webbudget.application.controller.ViewState;
 import br.com.webbudget.application.components.table.LazyDataProvider;
 import br.com.webbudget.application.components.table.LazyModel;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.table.filter.PeriodMovementFilter;
+import br.com.webbudget.application.components.filter.PeriodMovementFilter;
 import br.com.webbudget.application.controller.FormBean;
 import br.com.webbudget.application.validator.apportionment.ApportionmentValidator;
 import br.com.webbudget.domain.entities.financial.Apportionment;
@@ -37,6 +38,7 @@ import br.com.webbudget.domain.repositories.registration.MovementClassRepository
 import br.com.webbudget.domain.services.PeriodMovementService;
 import lombok.Getter;
 import lombok.Setter;
+import org.omnifaces.util.Ajax;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -50,8 +52,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static br.com.webbudget.application.components.NavigationManager.PageType.*;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
 
 /**
  * The {@link PeriodMovement} view controller
@@ -77,6 +78,9 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     private PeriodMovementFilter filter;
     @Getter
     private LazyDataModel<PeriodMovement> dataModel;
+
+    @Getter
+    private PeriodMovementResume periodMovementResume;
 
     @Getter
     private FinancialPeriod currentPeriod;
@@ -112,17 +116,10 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      * Constructor...
      */
     public PeriodMovementBean() {
-        this.filter = PeriodMovementFilter.getInstance();
+        super();
+        this.filter = new PeriodMovementFilter();
         this.dataModel = new LazyModel<>(this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void initialize() {
-        super.initialize();
-        this.temporizeHiding(this.getDefaultMessagesComponentId());
+        this.periodMovementResume = new PeriodMovementResume();
     }
 
     /**
@@ -135,25 +132,19 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
 
-        if (viewState.isAdding()) {
-            this.initializeForAdding();
+        if (viewState.isEditable()) {
+            this.costCenters = this.costCenterRepository.findAllActive();
+            this.financialPeriods = this.financialPeriodRepository.findByClosed(false);
+        } else {
+            this.financialPeriods = this.financialPeriodRepository.findAll();
         }
-
-        this.value = this.periodMovementRepository.findById(id).orElseGet(PeriodMovement::new);
-    }
-
-    /**
-     * Initialize the bean in the adding state
-     */
-    private void initializeForAdding() {
-
-        this.costCenters = this.costCenterRepository.findAllActive();
-        this.financialPeriods = this.financialPeriodRepository.findByClosed(false);
 
         this.currentPeriod = this.financialPeriods.stream()
                 .filter(FinancialPeriod::isCurrent)
                 .findFirst()
                 .orElse(null);
+
+        this.value = this.periodMovementRepository.findById(id).orElseGet(PeriodMovement::new);
     }
 
     /**
@@ -179,7 +170,9 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      */
     @Override
     public Page<PeriodMovement> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.periodMovementRepository.findAllBy(this.filter, first, pageSize);
+        final Page<PeriodMovement> page = this.periodMovementRepository.findAllBy(this.filter, first, pageSize);
+        this.periodMovementResume.update(page.getContent());
+        return page;
     }
 
     /**
@@ -280,6 +273,14 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     public void onCostCenterSelect() {
         this.movementClasses = this.movementClassRepository
                 .findByActiveAndCostCenter(true, this.apportionment.getCostCenter());
+    }
+
+    /**
+     * Clear all filters applied to the current search
+     */
+    public void clearFilters() {
+        this.filter.clear();
+        this.updateComponent("itemsList");
     }
 
     /**

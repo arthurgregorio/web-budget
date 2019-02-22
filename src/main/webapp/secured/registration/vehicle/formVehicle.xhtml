@@ -33,10 +33,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{vehicleBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{vehicleBean.viewState.adding}"
                       value="#{messages['vehicle.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{vehicleBean.viewState eq 'EDITING'}" 
+                        rendered="#{vehicleBean.viewState.editing}"
                         value="#{messages['vehicle.page-description-editing']}">
             <f:param value="#{vehicleBean.value.identification}"/>
         </o:outputFormat>
@@ -45,9 +45,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listVehicles.xhtml">#{breadcrumb['registration.vehicles']}</a></li>
-        <li jsf:rendered="#{vehicleBean.viewState eq 'ADDING'}" 
+        <li jsf:rendered="#{vehicleBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{vehicleBean.viewState eq 'EDITING'}" 
+        <li jsf:rendered="#{vehicleBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
@@ -128,7 +128,7 @@
                                      maxlength="11"
                                      styleClass="form-control"
                                      value="#{vehicleBean.value.licensePlate}"
-                                     disabled="#{vehicleBean.viewState eq 'EDITING'}"/>
+                                     disabled="#{vehicleBean.viewState.editing}"/>
                     </div>
                     <div class="form-group col-md-2">
                         <p:outputLabel for="inYearModel" 
@@ -157,7 +157,7 @@
                                      maxlength="10"
                                      styleClass="form-control"
                                      value="#{vehicleBean.value.odometer}" 
-                                     disabled="#{vehicleBean.viewState eq 'EDITING'}">
+                                     disabled="#{vehicleBean.viewState.editing}">
                             <p:keyFilter mask="num"/>
                         </p:inputText>
                     </div>
@@ -177,13 +177,13 @@
                                      value="#{menu['save']}"
                                      action="#{vehicleBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{vehicleBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{vehicleBean.viewState.adding}"/>
                     <p:commandButton process="vehicleForm"
                                      value="#{menu['update']}"
                                      action="#{vehicleBean.doUpdate()}"
                                      update="vehicleForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{vehicleBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{vehicleBean.viewState.editing}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

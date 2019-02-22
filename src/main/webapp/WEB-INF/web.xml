@@ -64,32 +64,10 @@
         <session-timeout>30</session-timeout>
     </session-config>
     
-    <!--the error pages-->
-    <error-page>  
-        <error-code>401</error-code>
-        <location>/error/401.xhtml</location>
-    </error-page>
-    <error-page>  
-        <error-code>403</error-code>
-        <location>/error/401.xhtml</location>
-    </error-page>
-    <error-page>      
-        <error-code>404</error-code>
-        <location>/error/404.xhtml</location>  
-    </error-page>
-    <error-page>      
-        <error-code>500</error-code>
-        <location>/error/500.xhtml</location>  
-    </error-page>
-    
-    <!--primefaces configuration-->
+    <!--primefaces configurations-->
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <param-value>bootstrap</param-value>
-    </context-param>
-    <context-param>
-        <param-name>primefaces.TRANSFORM_METADATA</param-name>
-        <param-value>true</param-value>
+        <param-value>omega</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.FONT_AWESOME</param-name>
@@ -100,7 +78,7 @@
         <param-value>true</param-value>
     </context-param>
 
-    <!--mojarra context parameters-->
+    <!--mojarra configurations-->
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Production</param-value>
@@ -126,7 +104,7 @@
         <param-value>server</param-value>
     </context-param>
 
-    <!--mime types-->
+    <!--the mime type-->
     <mime-mapping>
         <extension>ico</extension>
         <mime-type>image/x-icon</mime-type>
@@ -136,10 +114,6 @@
         <mime-type>application/font-woff</mime-type>
     </mime-mapping>
     <mime-mapping>
-        <extension>woff2</extension>
-        <mime-type>application/font-woff2</mime-type>
-    </mime-mapping>
-    <mime-mapping>
         <extension>ttf</extension>
         <mime-type>application/font-sfnt</mime-type>
     </mime-mapping>
@@ -147,8 +121,22 @@
         <extension>eot</extension>
         <mime-type>application/vnd.ms-fontobject</mime-type>
     </mime-mapping>
-    <mime-mapping>
-        <extension>otf</extension>
-        <mime-type>font/opentype</mime-type>
-    </mime-mapping>
+
+    <!--error pages-->
+    <error-page>
+        <error-code>401</error-code>
+        <location>/error/401.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error/401.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500.xhtml</location>
+    </error-page>
 </web-app>

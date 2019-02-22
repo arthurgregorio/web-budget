@@ -34,11 +34,11 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat rendered="#{contactBean.viewState eq 'DETAILING'}"
+        <o:outputFormat rendered="#{contactBean.viewState.detailing}"
                         value="#{messages['contact.page-description-detailing']}">
             <f:param value="#{contactBean.value.name}"/>
         </o:outputFormat>
-        <o:outputFormat rendered="#{contactBean.viewState eq 'DELETING'}"
+        <o:outputFormat rendered="#{contactBean.viewState.deleting}"
                         value="#{messages['contact.page-description-deleting']}">
             <f:param value="#{contactBean.value.name}"/>
         </o:outputFormat>
@@ -47,9 +47,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listContacts.xhtml">#{breadcrumb['registration.contacts']}</a></li>
-        <li jsf:rendered="#{contactBean.viewState eq 'DELETING'}"
+        <li jsf:rendered="#{contactBean.viewState.deleting}"
             class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
-        <li jsf:rendered="#{contactBean.viewState eq 'DETAILING'}"
+        <li jsf:rendered="#{contactBean.viewState.detailing}"
             class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
@@ -218,17 +218,17 @@
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
                                   value="#{messages['info.delete-confirmation']}"
-                                  rendered="#{contactBean.viewState eq 'DELETING'}"/>
+                                  rendered="#{contactBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{contactBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
-                                     rendered="#{contactBean.viewState eq 'DELETING'}"/>
+                                     rendered="#{contactBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary"
                                      action="#{contactBean.changeToListing()}"
-                                     value="#{contactBean.viewState eq 'DELETING' ? menu['no'] : menu['back']}"/>
+                                     value="#{contactBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
             <wb:blocker target="addressBox"/>

@@ -38,14 +38,14 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{fixedMovementBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{fixedMovementBean.viewState.adding}"
                       value="#{messages['fixed-movement.page-description-including']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{fixedMovementBean.viewState eq 'EDITING'}" 
+                        rendered="#{fixedMovementBean.viewState.editing}"
                         value="#{messages['fixed-movement.page-description-editing']}">
             <f:param value="#{fixedMovementBean.fixedMovement.identification}"/>
         </o:outputFormat>
-        <o:outputFormat rendered="#{fixedMovementBean.viewState eq 'DETAILING'}" 
+        <o:outputFormat rendered="#{fixedMovementBean.viewState.detailing}"
                         value="#{messages['fixed-movement.page-description-detailing']}">
             <f:param value="#{fixedMovementBean.fixedMovement.identification}"/>
         </o:outputFormat>
@@ -55,11 +55,11 @@
         <li><a href="#">#{breadcrumb['financial']}</a></li>
         <li><a href="#">#{breadcrumb['financial.movements']}</a></li>
         <li><a href="listFixedMovements.xhtml">#{breadcrumb['financial.movements.fixed']}</a></li>
-        <li jsf:rendered="#{fixedMovementBean.viewState eq 'ADDING'}" 
+        <li jsf:rendered="#{fixedMovementBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['including']}</a></li>
-        <li jsf:rendered="#{fixedMovementBean.viewState eq 'EDITING'}" 
+        <li jsf:rendered="#{fixedMovementBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
-        <li jsf:rendered="#{fixedMovementBean.viewState eq 'DETAILING'}" 
+        <li jsf:rendered="#{fixedMovementBean.viewState.detailing}"
             class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
     </ui:define>
 
@@ -178,13 +178,13 @@
                                      process="fixedMovementForm"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{fixedMovementBean.doSave()}"
-                                     rendered="#{fixedMovementBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{fixedMovementBean.viewState.adding}"/>
                     <p:commandButton value="#{menu['update']}"
                                      update="fixedMovementForm"
                                      process="fixedMovementForm"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{fixedMovementBean.doUpdate()}"
-                                     rendered="#{fixedMovementBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{fixedMovementBean.viewState.editing}"/>
                     <div style="display: inline-block"
                          jsf:rendered="#{fixedMovementBean.viewState ne 'ADDING'}">
                         <p:spacer width="5"/>

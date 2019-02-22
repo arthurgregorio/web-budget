@@ -33,10 +33,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{walletBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{walletBean.viewState.adding}"
                       value="#{messages['wallet.page-description-adding']}"/>
         <o:outputFormat id="pageDescription"
-                        rendered="#{walletBean.viewState eq 'EDITING'}"
+                        rendered="#{walletBean.viewState.editing}"
                         value="#{messages['wallet.page-description-editing']}">
             <f:param value="#{walletBean.value.name}"/>
         </o:outputFormat>
@@ -45,9 +45,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listWallets.xhtml">#{breadcrumb['registration.wallets']}</a></li>
-        <li jsf:rendered="#{walletBean.viewState eq 'ADDING'}"
+        <li jsf:rendered="#{walletBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{walletBean.viewState eq 'EDITING'}"
+        <li jsf:rendered="#{walletBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
@@ -74,7 +74,7 @@
                                      maxlength="45"
                                      styleClass="form-control"
                                      value="#{walletBean.value.name}"
-                                     disabled="#{walletBean.viewState eq 'EDITING'}"/>
+                                     disabled="#{walletBean.viewState.editing}"/>
                     </div>
                     <div class="form-group col-md-6">
                         <p:outputLabel for="inWalletType"
@@ -82,7 +82,7 @@
                         <p:selectOneMenu id="inWalletType"
                                          value="#{walletBean.value.walletType}"
                                          converter="omnifaces.GenericEnumConverter"
-                                         disabled="#{walletBean.viewState eq 'EDITING'}">
+                                         disabled="#{walletBean.viewState.editing}">
                             <p:ajax event="change" update="bankAccountBox"/>
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
@@ -169,13 +169,13 @@
                                      value="#{menu['save']}"
                                      action="#{walletBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{walletBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{walletBean.viewState.adding}"/>
                     <p:commandButton process="walletForm"
                                      value="#{menu['update']}"
                                      action="#{walletBean.doUpdate()}"
                                      update="walletForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{walletBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{walletBean.viewState.editing}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

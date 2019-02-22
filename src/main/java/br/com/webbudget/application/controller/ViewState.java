@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.components;
+package br.com.webbudget.application.controller;
 
 /**
  * This enum represents the possible view states to control the views/forms

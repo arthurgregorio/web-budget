@@ -33,10 +33,10 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{cardBean.viewState eq 'ADDING'}"
+        <h:outputText rendered="#{cardBean.viewState.adding}"
                       value="#{messages['card.page-description-adding']}"/>
         <o:outputFormat id="pageDescription" 
-                        rendered="#{cardBean.viewState eq 'EDITING'}" 
+                        rendered="#{cardBean.viewState.editing}"
                         value="#{messages['card.page-description-editing']}">
             <f:param value="#{cardBean.value.readableName}"/>
         </o:outputFormat>
@@ -45,9 +45,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['registration']}</a></li>
         <li><a href="listCards.xhtml">#{breadcrumb['registration.cards']}</a></li>
-        <li jsf:rendered="#{cardBean.viewState eq 'ADDING'}" 
+        <li jsf:rendered="#{cardBean.viewState.adding}"
             class="active"><a href="#">#{breadcrumb['adding']}</a></li>
-        <li jsf:rendered="#{cardBean.viewState eq 'EDITING'}" 
+        <li jsf:rendered="#{cardBean.viewState.editing}"
             class="active"><a href="#">#{breadcrumb['editing']}</a></li>
     </ui:define>
 
@@ -81,7 +81,7 @@
                         <p:selectOneMenu id="inCardType" 
                                          value="#{cardBean.value.cardType}"
                                          converter="omnifaces.GenericEnumConverter"
-                                         disabled="#{cardBean.viewState eq 'EDITING'}">
+                                         disabled="#{cardBean.viewState.editing}">
                             <p:ajax event="change" 
                                     update="inCreditLimit,inExpirationDay,inWallet" />
                             <f:selectItem itemValue="#{null}"
@@ -108,7 +108,7 @@
                                      styleClass="form-control"
                                      mask="9999-9999-9999-9999" 
                                      value="#{cardBean.value.number}" 
-                                     disabled="#{cardBean.viewState eq 'EDITING'}"/>
+                                     disabled="#{cardBean.viewState.editing}"/>
                     </div>
                     <div class="form-group col-md-3">
                         <p:outputLabel for="inOwner" 
@@ -165,13 +165,13 @@
                                      value="#{menu['save']}"
                                      action="#{cardBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{cardBean.viewState eq 'ADDING'}"/>
+                                     rendered="#{cardBean.viewState.adding}"/>
                     <p:commandButton process="cardForm"
                                      value="#{menu['update']}"
                                      action="#{cardBean.doUpdate()}"
                                      update="cardForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
-                                     rendered="#{cardBean.viewState eq 'EDITING'}"/>
+                                     rendered="#{cardBean.viewState.editing}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"

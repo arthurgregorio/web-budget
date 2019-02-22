@@ -34,11 +34,11 @@
 
     <ui:define name="pageDescription">
         <div jsf:id="pageDescription">
-            <o:outputFormat rendered="#{groupBean.viewState eq 'DETAILING'}" 
+            <o:outputFormat rendered="#{groupBean.viewState.detailing}"
                             value="#{messages['group.page-description-detailing']}">
                 <f:param value="#{groupBean.value.name}"/>
             </o:outputFormat>
-            <o:outputFormat rendered="#{groupBean.viewState eq 'DELETING'}" 
+            <o:outputFormat rendered="#{groupBean.viewState.deleting}"
                             value="#{messages['group.page-description-deleting']}">
                 <f:param value="#{groupBean.value.name}"/>
             </o:outputFormat>
@@ -48,9 +48,9 @@
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['configuration']}</a></li>
         <li><a href="listGroups.xhtml">#{breadcrumb['configuration.groups']}</a></li>
-        <li jsf:rendered="#{groupBean.viewState eq 'DETAILING'}" 
+        <li jsf:rendered="#{groupBean.viewState.detailing}"
             class="active"><a href="#">#{breadcrumb['detailing']}</a></li>
-        <li jsf:rendered="#{groupBean.viewState eq 'DELETING'}" 
+        <li jsf:rendered="#{groupBean.viewState.deleting}"
             class="active"><a href="#">#{breadcrumb['deleting']}</a></li>
     </ui:define>
 
@@ -120,17 +120,17 @@
                 <div class="box-footer align-right">
                     <h:outputText styleClass="text-red text-bold"
                                   value="#{menu['delete.confirmation']}"
-                                  rendered="#{groupBean.viewState eq 'DELETING'}"/>
+                                  rendered="#{groupBean.viewState.deleting}"/>
                     <p:spacer width="5"/>
                     <p:commandButton value="#{menu['yes']}"
                                      action="#{groupBean.doDelete()}" 
                                      styleClass="btn btn-flat btn-danger" 
-                                     rendered="#{groupBean.viewState eq 'DELETING'}"/>
+                                     rendered="#{groupBean.viewState.deleting}"/>
                     <p:spacer width="5" />
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary"
                                      action="#{groupBean.changeToListing()}" 
-                                     value="#{groupBean.viewState eq 'DETAILING' ? menu['back'] : menu['no']}"/>
+                                     value="#{groupBean.viewState.detailing ? menu['back'] : menu['no']}"/>
                 </div>
             </div>
         </h:form>
