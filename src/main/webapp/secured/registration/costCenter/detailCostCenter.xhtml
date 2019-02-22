@@ -148,17 +148,34 @@
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <h:outputText styleClass="text-red text-bold"
+                    <h:outputText styleClass="text-red text-bold delete-text"
                                   value="#{messages['info.delete-confirmation']}"
                                   rendered="#{costCenterBean.viewState.deleting}"/>
-                    <p:spacer width="5"/>
-                    <p:commandButton value="#{menu['yes']}"
+                    <p:spacer width="10"
+                              rendered="#{costCenterBean.viewState.deleting}"/>
+                    <p:commandButton process="@this"
+                                     value="#{menu['yes']}"
                                      styleClass="btn btn-flat btn-danger"
                                      action="#{costCenterBean.doDelete()}"
                                      rendered="#{costCenterBean.viewState.deleting}"/>
-                    <p:spacer width="5"/>
+                    <p:spacer width="5"
+                              rendered="#{costCenterBean.viewState.deleting}"/>
                     <p:commandButton immediate="true"
-                                     styleClass="btn btn-flat btn-primary" 
+                                     value="#{menu['delete']}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     rendered="#{costCenterBean.viewState.detailing}"
+                                     action="#{costCenterBean.changeToDelete(costCenterBean.value.id)}"/>
+                    <p:spacer width="5"
+                              rendered="#{costCenterBean.viewState.detailing}"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['edit']}"
+                                     styleClass="btn btn-flat btn-success"
+                                     rendered="#{costCenterBean.viewState.detailing}"
+                                     action="#{costCenterBean.changeToEdit(costCenterBean.value.id)}"/>
+                    <p:spacer width="5"
+                              rendered="#{costCenterBean.viewState.detailing}"/>
+                    <p:commandButton immediate="true"
+                                     styleClass="btn btn-flat btn-primary"
                                      action="#{costCenterBean.changeToListing()}"
                                      value="#{costCenterBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>

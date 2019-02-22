@@ -163,17 +163,34 @@
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <h:outputText styleClass="text-red text-bold"
-                                  rendered="#{cardBean.viewState.deleting}"
+                    <h:outputText rendered="#{cardBean.viewState.deleting}"
+                                  styleClass="text-red text-bold delete-text"
                                   value="#{messages['info.delete-confirmation']}"/>
-                    <p:spacer width="5"/>
-                    <p:commandButton value="#{menu['yes']}"
+                    <p:spacer width="10"
+                              rendered="#{cardBean.viewState.deleting}"/>
+                    <p:commandButton process="@this"
+                                     value="#{menu['yes']}"
                                      action="#{cardBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
                                      rendered="#{cardBean.viewState.deleting}"/>
-                    <p:spacer width="5"/>
+                    <p:spacer width="5"
+                              rendered="#{cardBean.viewState.deleting}"/>
                     <p:commandButton immediate="true"
-                                     styleClass="btn btn-flat btn-primary" 
+                                     value="#{menu['delete']}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     rendered="#{cardBean.viewState.detailing}"
+                                     action="#{cardBean.changeToDelete(cardBean.value.id)}"/>
+                    <p:spacer width="5"
+                              rendered="#{cardBean.viewState.detailing}"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['edit']}"
+                                     styleClass="btn btn-flat btn-success"
+                                     rendered="#{cardBean.viewState.detailing}"
+                                     action="#{cardBean.changeToEdit(cardBean.value.id)}"/>
+                    <p:spacer width="5"
+                              rendered="#{cardBean.viewState.detailing}"/>
+                    <p:commandButton immediate="true"
+                                     styleClass="btn btn-flat btn-primary"
                                      action="#{cardBean.changeToListing()}"
                                      value="#{cardBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>

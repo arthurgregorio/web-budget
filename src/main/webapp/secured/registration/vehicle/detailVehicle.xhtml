@@ -176,17 +176,34 @@
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <h:outputText styleClass="text-red text-bold"
-                                  value="#{messages['info.delete-confirmation']}"
-                                  rendered="#{vehicleBean.viewState.deleting}"/>
-                    <p:spacer width="5"/>
-                    <p:commandButton value="#{menu['yes']}"
-                                     action="#{vehicleBean.doDelete()}"
+                    <h:outputText styleClass="text-red text-bold delete-text"
+                                  rendered="#{vehicleBean.viewState.deleting}"
+                                  value="#{messages['info.delete-confirmation']}"/>
+                    <p:spacer width="10"
+                              rendered="#{vehicleBean.viewState.deleting}"/>
+                    <p:commandButton process="@this"
+                                     value="#{menu['yes']}"
                                      styleClass="btn btn-flat btn-danger"
+                                     action="#{vehicleBean.doDelete()}"
                                      rendered="#{vehicleBean.viewState.deleting}"/>
-                    <p:spacer width="5"/>
+                    <p:spacer width="5"
+                              rendered="#{vehicleBean.viewState.deleting}"/>
                     <p:commandButton immediate="true"
-                                     styleClass="btn btn-flat btn-primary" 
+                                     value="#{menu['delete']}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     rendered="#{vehicleBean.viewState.detailing}"
+                                     action="#{vehicleBean.changeToDelete(vehicleBean.value.id)}"/>
+                    <p:spacer width="5"
+                              rendered="#{vehicleBean.viewState.detailing}"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['edit']}"
+                                     styleClass="btn btn-flat btn-success"
+                                     rendered="#{vehicleBean.viewState.detailing}"
+                                     action="#{vehicleBean.changeToEdit(vehicleBean.value.id)}"/>
+                    <p:spacer width="5"
+                              rendered="#{vehicleBean.viewState.detailing}"/>
+                    <p:commandButton immediate="true"
+                                     styleClass="btn btn-flat btn-primary"
                                      action="#{vehicleBean.changeToListing()}"
                                      value="#{vehicleBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
