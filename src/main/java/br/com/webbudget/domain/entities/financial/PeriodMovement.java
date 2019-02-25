@@ -92,7 +92,7 @@ public class PeriodMovement extends Movement {
      * @return the payment date
      */
     public LocalDate getPaymentDate() {
-        return this.payment != null ? this.payment.getPaymentDate() : null;
+        return this.payment != null ? this.payment.getPaidOn() : null;
     }
 
     /**

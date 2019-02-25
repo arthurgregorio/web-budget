@@ -36,7 +36,7 @@ import java.util.Optional;
  * @since 1.0.0, 09/08/2018
  */
 @Dependent
-public class PasswordLogic implements UserSavingBusinessLogic, UserUpdatingBusinessLogic {
+public class PasswordLogic implements UserSavingLogic, UserUpdatingLogic {
 
     @Inject
     private UserRepository userRepository;

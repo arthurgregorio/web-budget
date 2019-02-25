@@ -32,7 +32,7 @@ import javax.inject.Inject;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class CostCenterDuplicatesValidator implements CostCenterSavingBusinessLogic {
+public class CostCenterDuplicatesValidator implements CostCenterSavingLogic {
 
     @Inject
     private CostCenterRepository costCenterRepository;

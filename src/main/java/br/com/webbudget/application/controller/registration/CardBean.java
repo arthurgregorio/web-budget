@@ -24,8 +24,8 @@ import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
-import br.com.webbudget.domain.logics.registration.card.CardSavingBusinessLogic;
-import br.com.webbudget.domain.logics.registration.card.CardUpdatingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.card.CardSavingLogic;
+import br.com.webbudget.domain.logics.registration.card.CardUpdatingLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
@@ -61,10 +61,10 @@ public class CardBean extends LazyFormBean<Card> {
 
     @Any
     @Inject
-    private Instance<CardSavingBusinessLogic> savingBusinessLogics;
+    private Instance<CardSavingLogic> savingBusinessLogics;
     @Any
     @Inject
-    private Instance<CardUpdatingBusinessLogic> updatingBusinessLogics;
+    private Instance<CardUpdatingLogic> updatingBusinessLogics;
 
     /**
      * {@inheritDoc}

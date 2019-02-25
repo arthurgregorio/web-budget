@@ -14,17 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.tools.group;
+package br.com.webbudget.domain.logics.registration.vehicle;
 
-import br.com.webbudget.domain.entities.configuration.Group;
+import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
- * {@link Group} validator facade for delete actions
+ * {@link Vehicle} validator facade for save actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 09/08/2018
+ * @since 3.0.0, 27/09/2018
  */
-public interface GroupDeletingBusinessLogic extends BusinessLogic<Group> { }
+public interface VehicleSavingLogic extends BusinessLogic<Vehicle> { }

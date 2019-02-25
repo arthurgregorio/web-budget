@@ -14,17 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.registration.financialperiod;
+package br.com.webbudget.domain.logics.registration.card;
 
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
- * {@link FinancialPeriod} validator facade for save actions
+ * {@link Card} validator facade for save actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 27/09/2018
  */
-public interface PeriodUpdatingBusinessLogic extends BusinessLogic<FinancialPeriod> { }
+public interface CardUpdatingLogic extends BusinessLogic<Card> { }

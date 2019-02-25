@@ -32,7 +32,7 @@ import javax.inject.Inject;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class PeriodDuplicatesValidator implements PeriodSavingBusinessLogic {
+public class PeriodDuplicatesValidator implements PeriodSavingLogic {
 
     @Inject
     private FinancialPeriodRepository financialPeriodRepository;

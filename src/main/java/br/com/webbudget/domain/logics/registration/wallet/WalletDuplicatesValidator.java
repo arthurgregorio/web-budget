@@ -18,7 +18,7 @@ import java.util.Optional;
  * @since 3.0.0, 28/09/2018
  */
 @Dependent
-public class WalletDuplicatesValidator implements WalletSavingBusinessLogic, WalletUpdatingBusinessLogic {
+public class WalletDuplicatesValidator implements WalletSavingLogic, WalletUpdatingLogic {
 
     @Inject
     private WalletRepository walletRepository;

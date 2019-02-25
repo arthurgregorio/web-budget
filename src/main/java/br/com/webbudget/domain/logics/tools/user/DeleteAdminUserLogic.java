@@ -33,7 +33,7 @@ import javax.inject.Inject;
  * @since 3.0.0, 09/08/2018
  */
 @Dependent
-public class DeleteAdminUserLogic implements UserDeletingBusinessLogic {
+public class DeleteAdminUserLogic implements UserDeletingLogic {
 
     @Inject
     @AuthenticatedUser

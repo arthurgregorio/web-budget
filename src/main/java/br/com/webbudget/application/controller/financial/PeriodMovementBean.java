@@ -17,12 +17,12 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.components.PeriodMovementResume;
-import br.com.webbudget.application.controller.ViewState;
+import br.com.webbudget.application.components.filter.PeriodMovementFilter;
 import br.com.webbudget.application.components.table.LazyDataProvider;
 import br.com.webbudget.application.components.table.LazyModel;
 import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.components.filter.PeriodMovementFilter;
 import br.com.webbudget.application.controller.FormBean;
+import br.com.webbudget.application.controller.ViewState;
 import br.com.webbudget.application.validator.apportionment.ApportionmentValidator;
 import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
@@ -38,7 +38,6 @@ import br.com.webbudget.domain.repositories.registration.MovementClassRepository
 import br.com.webbudget.domain.services.PeriodMovementService;
 import lombok.Getter;
 import lombok.Setter;
-import org.omnifaces.util.Ajax;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -47,12 +46,12 @@ import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
+import static br.com.webbudget.application.controller.NavigationManager.Parameter.of;
 
 /**
  * The {@link PeriodMovement} view controller
@@ -213,7 +212,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      * @return the payment page
      */
     public String changeToPay(long idMovement) {
-        return "";
+        return this.navigation.to("formPayment.xhtml", of("movementId", idMovement));
     }
 
     /**

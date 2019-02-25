@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2013 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,17 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.registration.card;
+package br.com.webbudget.domain.repositories.financial;
 
-import br.com.webbudget.domain.entities.registration.Card;
-import br.com.webbudget.domain.logics.BusinessLogic;
+import br.com.webbudget.domain.entities.financial.Payment;
+import br.com.webbudget.domain.repositories.DefaultRepository;
+import org.apache.deltaspike.data.api.Repository;
 
 /**
- * {@link Card} validator facade for save actions
+ * The {@link Payment} repository
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
- * @since 3.0.0, 27/09/2018
+ * @version 2.0.0
+ * @since 1.0.0, 04/03/2013
  */
-public interface CardUpdatingBusinessLogic extends BusinessLogic<Card> { }
+@Repository
+public interface PaymentRepository extends DefaultRepository<Payment> { }

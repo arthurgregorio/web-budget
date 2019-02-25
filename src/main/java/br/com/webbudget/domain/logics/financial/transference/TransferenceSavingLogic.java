@@ -27,4 +27,4 @@ import br.com.webbudget.domain.logics.BusinessLogic;
  * @version 1.0.0
  * @since 3.0.0, 06/10/2018
  */
-public interface TransferenceSavingBusinessLogic extends BusinessLogic<Transference> { }
+public interface TransferenceSavingLogic extends BusinessLogic<Transference> { }

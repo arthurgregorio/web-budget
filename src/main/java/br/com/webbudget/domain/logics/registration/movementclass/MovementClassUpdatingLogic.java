@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,20 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.financial;
+package br.com.webbudget.domain.logics.registration.movementclass;
 
-import br.com.webbudget.domain.entities.financial.Payment;
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Repository;
+import br.com.webbudget.domain.entities.registration.MovementClass;
+import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
+ * {@link MovementClass} validator facade for save actions
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
- * @since 1.0.0, 04/03/2013
+ * @version 1.0.0
+ * @since 3.0.0, 27/09/2018
  */
-@Repository
-public interface IPaymentRepository extends EntityRepository<Payment, Long> {
-
-}
+public interface MovementClassUpdatingLogic extends BusinessLogic<MovementClass> { }

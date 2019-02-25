@@ -14,7 +14,7 @@ import javax.enterprise.context.Dependent;
  * @since 1.0.0, 06/10/2018
  */
 @Dependent
-public class NegativeValueValidator implements TransferenceSavingBusinessLogic {
+public class NegativeValueValidator implements TransferenceSavingLogic {
 
     /**
      * {@inheritDoc}

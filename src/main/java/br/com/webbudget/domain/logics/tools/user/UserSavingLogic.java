@@ -20,11 +20,11 @@ import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
- * {@link User} validator facade for update actions
+ * {@link User} validator facade for save actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 09/08/2018
  */
-public interface UserUpdatingBusinessLogic extends BusinessLogic<User> { }
+public interface UserSavingLogic extends BusinessLogic<User> { }

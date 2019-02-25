@@ -24,7 +24,7 @@ import br.com.webbudget.domain.entities.registration.Vehicle;
 import br.com.webbudget.domain.entities.registration.VehicleType;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.VehicleRepository;
-import br.com.webbudget.domain.logics.registration.vehicle.VehicleSavingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.vehicle.VehicleSavingLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
@@ -60,7 +60,7 @@ public class VehicleBean extends LazyFormBean<Vehicle> {
 
     @Any
     @Inject
-    private Instance<VehicleSavingBusinessLogic> savingBusinessLogics;
+    private Instance<VehicleSavingLogic> savingBusinessLogics;
 
     /**
      * {@inheritDoc}

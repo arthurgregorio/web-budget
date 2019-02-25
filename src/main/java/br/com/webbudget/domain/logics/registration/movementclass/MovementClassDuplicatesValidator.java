@@ -34,7 +34,7 @@ import java.util.Optional;
  * @since 3.0.0, 29/09/2018
  */
 @Dependent
-public class MovementClassDuplicatesValidator implements MovementClassSavingBusinessLogic, MovementClassUpdatingBusinessLogic {
+public class MovementClassDuplicatesValidator implements MovementClassSavingLogic, MovementClassUpdatingLogic {
 
     @Inject
     private MovementClassRepository movementClassRepository;

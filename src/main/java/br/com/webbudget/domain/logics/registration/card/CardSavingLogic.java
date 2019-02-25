@@ -14,17 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.registration.vehicle;
+package br.com.webbudget.domain.logics.registration.card;
 
-import br.com.webbudget.domain.entities.registration.Vehicle;
+import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
- * {@link Vehicle} validator facade for save actions
+ * {@link Card} validator facade for save actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 27/09/2018
  */
-public interface VehicleSavingBusinessLogic extends BusinessLogic<Vehicle> { }
+public interface CardSavingLogic extends BusinessLogic<Card> { }

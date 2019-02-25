@@ -34,7 +34,7 @@ import java.util.Optional;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class CardDuplicatesValidator implements CardSavingBusinessLogic, CardUpdatingBusinessLogic {
+public class CardDuplicatesValidator implements CardSavingLogic, CardUpdatingLogic {
 
     @Inject
     private CardRepository cardRepository;

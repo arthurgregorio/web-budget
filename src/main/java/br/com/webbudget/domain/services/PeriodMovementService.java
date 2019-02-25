@@ -17,10 +17,15 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementDeletingLogic;
+import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementSavingLogic;
+import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementUpdatingLogic;
 import br.com.webbudget.domain.repositories.financial.ApportionmentRepository;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -40,6 +45,16 @@ public class PeriodMovementService {
     @Inject
     private PeriodMovementRepository periodMovementRepository;
 
+    @Any
+    @Inject
+    private Instance<PeriodMovementSavingLogic> periodMovementSavingLogics;
+    @Any
+    @Inject
+    private Instance<PeriodMovementUpdatingLogic> periodMovementUpdatingLogics;
+    @Any
+    @Inject
+    private Instance<PeriodMovementDeletingLogic> periodMovementDeletingLogics;
+
     /**
      * Create a new {@link PeriodMovement}
      *
@@ -47,6 +62,8 @@ public class PeriodMovementService {
      */
     @Transactional
     public void save(PeriodMovement periodMovement) {
+
+        this.periodMovementSavingLogics.forEach(logic -> logic.run(periodMovement));
 
         final PeriodMovement saved = this.periodMovementRepository.save(periodMovement);
 
@@ -64,6 +81,8 @@ public class PeriodMovementService {
      */
     @Transactional
     public PeriodMovement update(PeriodMovement periodMovement) {
+
+        this.periodMovementUpdatingLogics.forEach(logic -> logic.run(periodMovement));
 
         // delete all removed apportionments
         periodMovement.getDeletedApportionments()
@@ -87,6 +106,7 @@ public class PeriodMovementService {
      */
     @Transactional
     public void delete(PeriodMovement periodMovement) {
+        this.periodMovementDeletingLogics.forEach(logic -> logic.run(periodMovement));
         this.periodMovementRepository.attachAndRemove(periodMovement);
     }
 }

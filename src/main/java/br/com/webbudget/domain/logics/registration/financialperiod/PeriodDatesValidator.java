@@ -33,7 +33,7 @@ import java.time.LocalDate;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class PeriodDatesValidator implements PeriodSavingBusinessLogic {
+public class PeriodDatesValidator implements PeriodSavingLogic {
 
     @Inject
     private FinancialPeriodRepository financialPeriodRepository;

@@ -31,7 +31,7 @@ public class MovementService {
 //    @Inject
 //    private ILaunchRepository launchRepository;
 //    @Inject
-//    private IPaymentRepository paymentRepository;
+//    private PaymentRepository paymentRepository;
 //    @Inject
 //    private IMovementRepository movementRepository;
 //    @Inject

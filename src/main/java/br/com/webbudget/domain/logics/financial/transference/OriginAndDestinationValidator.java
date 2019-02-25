@@ -15,7 +15,7 @@ import javax.enterprise.context.Dependent;
  * @since 1.0.0, 06/10/2018
  */
 @Dependent
-public class OriginAndDestinationValidator implements TransferenceSavingBusinessLogic {
+public class OriginAndDestinationValidator implements TransferenceSavingLogic {
 
     /**
      * {@inheritDoc}

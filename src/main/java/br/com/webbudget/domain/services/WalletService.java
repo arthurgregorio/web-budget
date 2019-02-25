@@ -23,8 +23,8 @@ import br.com.webbudget.domain.events.UpdateBalance;
 import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
-import br.com.webbudget.domain.logics.registration.wallet.WalletSavingBusinessLogic;
-import br.com.webbudget.domain.logics.registration.wallet.WalletUpdatingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.wallet.WalletSavingLogic;
+import br.com.webbudget.domain.logics.registration.wallet.WalletUpdatingLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -53,10 +53,10 @@ public class WalletService {
 
     @Any
     @Inject
-    private Instance<WalletSavingBusinessLogic> savingBusinessLogics;
+    private Instance<WalletSavingLogic> savingBusinessLogics;
     @Any
     @Inject
-    private Instance<WalletUpdatingBusinessLogic> updatingBusinessLogics;
+    private Instance<WalletUpdatingLogic> updatingBusinessLogics;
 
     /**
      * Use this method to persist a {@link Wallet}

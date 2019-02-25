@@ -21,7 +21,7 @@ import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
-import br.com.webbudget.domain.logics.registration.costcenter.CostCenterSavingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.costcenter.CostCenterSavingLogic;
 import org.primefaces.model.SortOrder;
 
 import javax.enterprise.inject.Any;
@@ -50,7 +50,7 @@ public class CostCenterBean extends LazyFormBean<CostCenter> {
     
     @Any
     @Inject
-    private Instance<CostCenterSavingBusinessLogic> savingBusinessLogics;
+    private Instance<CostCenterSavingLogic> savingBusinessLogics;
     
     /**
      * {@inheritDoc}

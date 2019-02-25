@@ -18,9 +18,8 @@ package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.events.NewPeriodOpened;
+import br.com.webbudget.domain.logics.registration.financialperiod.PeriodSavingLogic;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
-import br.com.webbudget.domain.logics.registration.financialperiod.PeriodSavingBusinessLogic;
-import br.com.webbudget.domain.logics.registration.financialperiod.PeriodUpdatingBusinessLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -49,10 +48,7 @@ public class FinancialPeriodService {
 
     @Any
     @Inject
-    private Instance<PeriodSavingBusinessLogic> savingBusinessLogics;
-    @Any
-    @Inject
-    private Instance<PeriodUpdatingBusinessLogic> updatingBusinessLogics;
+    private Instance<PeriodSavingLogic> savingBusinessLogics;
 
     /**
      * Use this method to persist a {@link FinancialPeriod}
@@ -75,18 +71,6 @@ public class FinancialPeriodService {
      */
     @Transactional
     public void delete(FinancialPeriod financialPeriod) {
-
-        // FIXME when we can persist movements, put this to work again
-
-//        final List<Movement> movements = this.movementRepository
-//                .listByPeriodAndStateAndType(financialPeriod, null, null);
-//        
-//        // se houver movimentos, lanca o erro
-//        if (movements != null && !movements.isEmpty()) {
-//            throw new BusinessLogicException("error.financial-period.has-movements",
-//                    financialPeriod.getIdentification());
-//        } 
-
         this.financialPeriodRepository.attachAndRemove(financialPeriod);
     }
 }

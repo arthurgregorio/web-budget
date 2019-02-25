@@ -14,34 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.tools.group;
+package br.com.webbudget.domain.logics.financial.periodmovement;
 
-import br.com.webbudget.domain.entities.configuration.Group;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.logics.BusinessLogic;
 
-import javax.enterprise.context.Dependent;
-
 /**
- * {@link BusinessLogic} to run if you are deleting the admin group
+ * {@link PeriodMovement} validator facade for save actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 09/08/2018
+ * @since 3.0.0, 22/02/2019
  */
-@Dependent
-public class DeleteAdminGroupLogic implements GroupDeletingLogic {
-
-    /**
-     * {@inheritDoc }
-     *
-     * @param value
-     */
-    @Override
-    public void run(Group value) {
-        if (value.isAdministrator()) {
-            throw new BusinessLogicException("error.group.delete-administrator");
-        }
-    }
-}
+public interface PeriodMovementSavingLogic extends BusinessLogic<PeriodMovement> { }

@@ -31,7 +31,7 @@ import javax.enterprise.context.Dependent;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class DebitCardWalletValidator implements CardSavingBusinessLogic, CardUpdatingBusinessLogic {
+public class DebitCardWalletValidator implements CardSavingLogic, CardUpdatingLogic {
 
     /**
      * {@inheritDoc }

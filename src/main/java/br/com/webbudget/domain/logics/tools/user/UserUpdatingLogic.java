@@ -17,37 +17,14 @@
 package br.com.webbudget.domain.logics.tools.user;
 
 import br.com.webbudget.domain.entities.configuration.User;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.tools.UserRepository;
 import br.com.webbudget.domain.logics.BusinessLogic;
 
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
-
 /**
- * {@link BusinessLogic} for the username validation logic
+ * {@link User} validator facade for update actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 09/08/2018
  */
-@Dependent
-public class UsernameLogic implements UserSavingLogic {
-
-    @Inject
-    private UserRepository userRepository;
-
-    /**
-     * {@inheritDoc }
-     *
-     * @param value
-     */
-    @Override
-    public void run(User value) {
-        this.userRepository.findByUsername(value.getUsername())
-                .ifPresent(user -> {
-                    throw new BusinessLogicException("error.user.username-duplicated");
-                });
-    }
-}
+public interface UserUpdatingLogic extends BusinessLogic<User> { }

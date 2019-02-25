@@ -18,10 +18,7 @@ package br.com.webbudget.domain.entities.financial;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.Card;
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.Wallet;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +35,7 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
 
 /**
- * This class represents the payment of any {@link Movement}
+ * This class represents the payment of any {@link PeriodMovement}
  *
  * @author Arthur Gregorio
  *
@@ -55,20 +52,20 @@ public class Payment extends PersistentEntity {
 
     @Getter
     @Setter
-    @Column(name = "code", nullable = false, length = 8, unique = true)
-    private String code;
+    @NotNull(message = "{payment.paid-on}")
+    @Column(name = "paid_on", nullable = false)
+    private LocalDate paidOn;
     @Getter
     @Setter
-    @NotNull(message = "{payment.payment-date}")
-    @Column(name = "payment_date", nullable = false)
-    private LocalDate paymentDate;
-    @Getter
-    @Setter
-    @Column(name = "discount", length = 8)
+    @Column(name = "discount")
     private BigDecimal discount;
     @Getter
     @Setter
-    @Enumerated
+    @Column(name = "paid_value", nullable = false)
+    private BigDecimal paidValue;
+    @Getter
+    @Setter
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "{payment.payment-method}")
     @Column(name = "payment_method", nullable = false)
     private PaymentMethod paymentMethod;
@@ -88,8 +85,8 @@ public class Payment extends PersistentEntity {
      * Constructor
      */
     public Payment() {
-        this.code = RandomCode.alphanumeric(6);
-        this.paymentDate = LocalDate.now();
+        this.paidOn = LocalDate.now();
+        this.discount = BigDecimal.ZERO;
         this.paymentMethod = PaymentMethod.CASH;
     }
 

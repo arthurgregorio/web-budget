@@ -32,7 +32,7 @@ import javax.inject.Inject;
  * @since 3.0.0, 27/09/2018
  */
 @Dependent
-public class LicensePlateValidator implements VehicleSavingBusinessLogic {
+public class LicensePlateValidator implements VehicleSavingLogic {
 
     @Inject
     private VehicleRepository vehicleRepository;

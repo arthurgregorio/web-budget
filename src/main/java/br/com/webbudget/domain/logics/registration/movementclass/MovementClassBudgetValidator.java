@@ -36,7 +36,7 @@ import java.util.List;
  * @since 3.0.0, 29/09/2018
  */
 @Dependent
-public class MovementClassBudgetValidator implements MovementClassSavingBusinessLogic, MovementClassUpdatingBusinessLogic {
+public class MovementClassBudgetValidator implements MovementClassSavingLogic, MovementClassUpdatingLogic {
 
     @Inject
     private MovementClassRepository movementClassRepository;

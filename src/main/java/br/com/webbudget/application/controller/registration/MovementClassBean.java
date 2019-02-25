@@ -24,8 +24,8 @@ import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
-import br.com.webbudget.domain.logics.registration.movementclass.MovementClassSavingBusinessLogic;
-import br.com.webbudget.domain.logics.registration.movementclass.MovementClassUpdatingBusinessLogic;
+import br.com.webbudget.domain.logics.registration.movementclass.MovementClassSavingLogic;
+import br.com.webbudget.domain.logics.registration.movementclass.MovementClassUpdatingLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
@@ -61,10 +61,10 @@ public class MovementClassBean extends LazyFormBean<MovementClass> {
 
     @Any
     @Inject
-    private Instance<MovementClassSavingBusinessLogic> savingBusinessLogics;
+    private Instance<MovementClassSavingLogic> savingBusinessLogics;
     @Any
     @Inject
-    private Instance<MovementClassUpdatingBusinessLogic> updatingBusinessLogics;
+    private Instance<MovementClassUpdatingLogic> updatingBusinessLogics;
 
     /**
      * {@inheritDoc}

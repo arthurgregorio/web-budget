@@ -14,17 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.registration.costcenter;
+package br.com.webbudget.domain.logics.financial.periodmovement;
 
-import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
- * {@link CostCenter} validator facade for save actions
+ * {@link PeriodMovement} validator facade for update actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 27/09/2018
+ * @since 3.0.0, 22/02/2019
  */
-public interface CostCenterSavingBusinessLogic extends BusinessLogic<CostCenter> { }
+public interface PeriodMovementUpdatingLogic extends BusinessLogic<PeriodMovement> { }

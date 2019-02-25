@@ -161,7 +161,6 @@
                                                value="#{messages['period-movement.form.description']}: "/>
                                 <p:inputTextarea id="inDescription"
                                                  rows="5"
-                                                 maxlength="255"
                                                  autoResize="false"
                                                  styleClass="form-control"
                                                  value="#{periodMovementBean.value.description}" />
@@ -171,6 +170,7 @@
                     <div jsf:id="apportionmentBox" class="col-sm-6">
                         <wb:apportionmentBox valueInput="inValue"
                                              baseBean="#{periodMovementBean.value}"
+                                             renderButtons="#{not periodMovementBean.value.paid}"
                                              apportionments="#{periodMovementBean.value.apportionments}"
                                              showDialogAction="#{periodMovementBean.showApportionmentDialog()}"
                                              disabled="#{periodMovementBean.value.paid or periodMovementBean.viewState.detailing}"/>

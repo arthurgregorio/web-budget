@@ -18,123 +18,112 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
-    <ui:param name="activeMenu" value="movements"/>
-    <ui:param name="activeSubmenu" value="period"/>
-
     <f:metadata>
-        <f:viewAction action="#{periodMovementBean.initializePayment(param.movementId)}"/>
+        <f:viewAction action="#{paymentBean.initialize(param.movementId)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
-        #{messages['movement.page-title']}
+        #{messages['payment.page-title']}
     </ui:define>
 
     <ui:define name="pageDescription">
-        <o:outputFormat id="pageDescription" 
-                        value="#{messages['movement.page-description-payment']}">
-            <f:param value="#{periodMovementBean.movement.code}"/>
+        <o:outputFormat id="pageDescription"
+                        value="#{messages['payment.page-description']}">
+            <f:param value="#{paymentBean.periodMovement.identification}"/>
         </o:outputFormat>
     </ui:define>
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['financial']}</a></li>
         <li><a href="#">#{breadcrumb['financial.movements']}</a></li>
-        <li class="active">
-            <a href="listMovements.xhtml">
-                #{breadcrumb['financial.movements.period']}
-            </a>
-        </li>
-        <li class="active">
-            <a href="#">
-                #{breadcrumb['financial.movements.period.payment']}
-            </a>
-        </li>
+        <li><a href="listPeriodMovements.xhtml">#{breadcrumb['financial.movements.period']}</a></li>
+        <li class="active"><a href="#">#{breadcrumb['financial.movements.period.payment']}</a></li>
     </ui:define>
 
     <ui:define name="content">
-
         <h:form id="paymentForm" prependId="false">
-
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" />
+                    <p:messages id="messages" closable="true"/>
                 </div>
             </div>
-            
             <div class="box">
                 <div class="box-body row">
-                    <div class="col-sm-6">
-                        <ui:include src="paymentBox.xhtml"/>
-                    </div>
                     <div class="col-sm-6">
                         <div class="row">
                             <div class="col-sm-12 form-group">
                                 <h4>#{messages['payment.form.movement-details']}</h4>
                             </div>
-                            <div class="col-sm-8 form-group">
-                                <p:outputLabel value="#{messages['movement.form.contact']}: "/>
-                                <br/>
-                                <h:outputText value="#{empty periodMovementBean.movement.contactName
-                                                       ? messages['movement.form.no-contact'] 
-                                                       : periodMovementBean.movement.contactName}"/>
-                            </div>
-                            <div class="col-sm-4 form-group">
+                            <div class="col-sm-3 form-group">
                                 <p:outputLabel value="#{messages['movement.form.launch-period']}: "/>
                                 <br/>
-                                #{periodMovementBean.movement.financialPeriod.identification}
+                                #{paymentBean.periodMovement.financialPeriod.identification}
                             </div>
-                            <div class="col-sm-4 form-group">
+                            <div class="col-sm-3 form-group">
                                 <p:outputLabel value="#{messages['movement.form.value']}: "/>
                                 <br/>
-                                <h:outputText value="#{periodMovementBean.movement.value}">
-                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                <h:outputText value="#{paymentBean.periodMovement.value}">
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                                 </h:outputText>
                             </div>
-                            <div class="col-sm-4 form-group">
+                            <div class="col-sm-3 form-group">
                                 <p:outputLabel value="#{messages['movement.form.due-date']}: "/>
                                 <br/>
-                                <h:outputText value="#{periodMovementBean.movement.dueDate}">
-                                    <f:converter converterId="localDateConverter"/>
-                                </h:outputText>
+                                <h:outputText converter="localDateConverter"
+                                              value="#{paymentBean.periodMovement.dueDate}"/>
                             </div>
-                            <div class="col-sm-4 form-group">
+                            <div class="col-sm-3 form-group">
                                 <p:outputLabel value="#{messages['movement.form.type']}: "/>
                                 <br/>
-                                #{enums[periodMovementBean.movement.movementType]}
+                                #{enums[paymentBean.periodMovement.movementType]}
+                            </div>
+                            <div class="col-sm-12 form-group">
+                                <p:outputLabel value="#{messages['movement.form.contact']}: "/>
+                                <br/>
+                                <h:outputText value="#{empty paymentBean.periodMovement.contactName
+                                                       ? messages['no-data']
+                                                       : paymentBean.periodMovement.contactName}"/>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 form-group">
+                                <p:outputLabel value="#{messages['movement.form.identification']}: "/>
+                                <br/>
+                                #{paymentBean.periodMovement.identification}
+                            </div>
+                            <div class="col-sm-12 form-group">
                                 <p:outputLabel value="#{messages['movement.form.description']}: "/>
                                 <br/>
-                                #{periodMovementBean.movement.description}
+                                <h:outputText value="#{empty paymentBean.periodMovement.description
+                                                       ? messages['no-data']
+                                                       : paymentBean.periodMovement.description}"/>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div class="col-sm-6">
 
+                    </div>
+                </div>
                 <div class="box-footer align-right">
                     <p:commandButton update="paymentForm"
                                      value="#{menu['pay']}"
-                                     styleClass="btn btn-flat btn-success" 
-                                     actionListener="#{periodMovementBean.doPayment()}"/>
+                                     styleClass="btn btn-flat btn-success"
+                                     actionListener="#{paymentBean.doPayment()}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
-                                     styleClass="btn btn-flat btn-default" 
-                                     action="#{periodMovementBean.changeToList()}"/>
+                                     styleClass="btn btn-flat btn-primary"
+                                     action="#{paymentBean.changeToListing()}"/>
                 </div>
             </div>
         </h:form>
     </ui:define>
-
     <ui:define name="popups">
-        <ui:include src="dialogConfirmPayment.xhtml" />
+        <ui:include src="dialogPaymentConfirmation.xhtml"/>
     </ui:define>
 </ui:composition>

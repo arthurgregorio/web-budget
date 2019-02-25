@@ -27,4 +27,4 @@ import br.com.webbudget.domain.logics.BusinessLogic;
  * @version 1.0.0
  * @since 3.0.0, 27/09/2018
  */
-public interface MovementClassUpdatingBusinessLogic extends BusinessLogic<MovementClass> { }
+public interface MovementClassSavingLogic extends BusinessLogic<MovementClass> { }
