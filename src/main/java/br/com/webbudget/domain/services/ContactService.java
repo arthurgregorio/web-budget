@@ -100,16 +100,6 @@ public class ContactService {
      */
     @Transactional
     public void delete(Contact contact) {
-
-        // FIXME when we can save movements again, fix this to check on the contact deletion
-//        final List<Movement> movements =
-//                this.movementRepository.listByContact(contact);
-//        
-//        // se tem vinculos, nao deleta
-//        if (!movements.isEmpty()) {
-//            throw new BusinessLogicException("error.contact.has-movements");
-//        }
-
         this.contactRepository.attachAndRemove(contact);
     }
 }

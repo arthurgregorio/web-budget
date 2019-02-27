@@ -22,7 +22,7 @@ package br.com.webbudget.domain.entities.financial;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 12/02/2019
+ * @since 3.0.0, 12/02/2019
  */
 public enum FixedMovementState {
 

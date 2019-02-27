@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.domain.entities.registration;
 
-import br.com.webbudget.application.components.Color;
+import br.com.webbudget.application.components.dto.Color;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.infrastructure.jpa.ColorConverter;
 import lombok.EqualsAndHashCode;

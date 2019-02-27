@@ -32,7 +32,7 @@ import javax.inject.Named;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Bean to be used as controller of the user profile
+ * The controller for the {@link User} {@link Profile} area
  *
  * @author Arthur Gregorio
  *

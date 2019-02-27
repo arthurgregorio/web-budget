@@ -22,7 +22,7 @@ package br.com.webbudget.domain.entities.registration;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 2.3.0, 15/05/2014
+ * @since 2.3.0, 16/05/2016
  */
 public enum VehicleType {
 

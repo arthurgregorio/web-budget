@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.infrastructure.jsf.converters;
 
-import br.com.webbudget.application.components.Color;
+import br.com.webbudget.application.components.dto.Color;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;

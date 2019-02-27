@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.infrastructure.jpa;
 
-import br.com.webbudget.application.components.Color;
+import br.com.webbudget.application.components.dto.Color;
 import javax.persistence.AttributeConverter;
 
 /**

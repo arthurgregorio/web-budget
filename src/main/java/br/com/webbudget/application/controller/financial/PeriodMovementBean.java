@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.components.PeriodMovementResume;
+import br.com.webbudget.application.components.dto.PeriodMovementResume;
 import br.com.webbudget.application.components.filter.PeriodMovementFilter;
 import br.com.webbudget.application.components.table.LazyDataProvider;
 import br.com.webbudget.application.components.table.LazyModel;
