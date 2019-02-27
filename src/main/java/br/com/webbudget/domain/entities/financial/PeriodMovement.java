@@ -157,4 +157,16 @@ public class PeriodMovement extends Movement {
     public boolean isOverdue() {
         return this.dueDate.isBefore(LocalDate.now());
     }
+
+    /**
+     * Method to prepare this movement to be paid
+     *
+     * @param payment the {@link Payment} to pay this movement
+     * @return this {@link PeriodMovement}
+     */
+    public PeriodMovement prepareToPay(Payment payment) {
+        this.payment = payment;
+        this.periodMovementState = PeriodMovementState.PAID;
+        return this;
+    }
 }

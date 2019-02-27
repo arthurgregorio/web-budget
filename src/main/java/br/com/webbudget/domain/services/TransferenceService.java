@@ -16,13 +16,13 @@
  */
 package br.com.webbudget.domain.services;
 
-import br.com.webbudget.domain.entities.financial.Transference;
 import br.com.webbudget.domain.entities.financial.ReasonType;
+import br.com.webbudget.domain.entities.financial.Transference;
 import br.com.webbudget.domain.entities.financial.WalletBalance;
-import br.com.webbudget.domain.events.UpdateBalance;
+import br.com.webbudget.domain.events.UpdateWalletBalance;
+import br.com.webbudget.domain.logics.financial.transference.TransferenceSavingLogic;
 import br.com.webbudget.domain.repositories.financial.TransferenceRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
-import br.com.webbudget.domain.logics.financial.transference.TransferenceSavingLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -46,8 +46,8 @@ public class TransferenceService {
     private TransferenceRepository transferenceRepository;
 
     @Inject
-    @UpdateBalance
-    private Event<WalletBalanceBuilder> updateBalanceEvent;
+    @UpdateWalletBalance
+    private Event<WalletBalance> updateWalletBalanceEvent;
 
     @Any
     @Inject
@@ -66,15 +66,19 @@ public class TransferenceService {
         this.transferenceRepository.save(transference);
 
         // transfer
-        this.updateBalanceEvent.fire(WalletBalanceBuilder.getInstance()
+        this.updateWalletBalanceEvent.fire(WalletBalanceBuilder.getInstance()
                 .to(transference.getDestination())
                 .value(transference.getValue())
-                .withReason(ReasonType.TRANSFERENCE));
+                .withReason(ReasonType.TRANSFERENCE)
+                .build()
+        );
 
         // adjust the origin balance
-        this.updateBalanceEvent.fire(WalletBalanceBuilder.getInstance()
+        this.updateWalletBalanceEvent.fire(WalletBalanceBuilder.getInstance()
                 .to(transference.getOrigin())
                 .value(transference.getValue().negate())
-                .withReason(ReasonType.TRANSFERENCE));
+                .withReason(ReasonType.TRANSFERENCE)
+                .build()
+        );
     }
 }

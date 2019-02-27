@@ -212,7 +212,8 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      * @return the payment page
      */
     public String changeToPay(long idMovement) {
-        return this.navigation.to("formPayment.xhtml", of("movementId", idMovement));
+        return this.navigation.to("formPayment.xhtml", of("movementId", idMovement),
+                of("viewState", ViewState.ADDING));
     }
 
     /**

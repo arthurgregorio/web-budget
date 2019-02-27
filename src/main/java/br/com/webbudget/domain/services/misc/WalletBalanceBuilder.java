@@ -18,15 +18,15 @@ package br.com.webbudget.domain.services.misc;
 
 import br.com.webbudget.domain.entities.financial.BalanceType;
 import br.com.webbudget.domain.entities.financial.ReasonType;
-import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.financial.WalletBalance;
+import br.com.webbudget.domain.entities.registration.Wallet;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * Builder to work with the {@link WalletBalance}
- * 
+ *
  * @author Arthur Gregorio
  *
  * @version 1.1.0
@@ -43,19 +43,19 @@ public final class WalletBalanceBuilder {
         this.walletBalance = new WalletBalance();
         this.walletBalance.setMovementDateTime(LocalDateTime.now());
     }
-    
+
     /**
      * Get a new instance of the builder
-     * 
+     *
      * @return this builder
      */
     public static WalletBalanceBuilder getInstance() {
         return new WalletBalanceBuilder();
     }
-    
+
     /**
      * Set the wallet to be the target of the transaction
-     * 
+     *
      * @param target the target wallet
      * @return this builder
      */
@@ -63,11 +63,11 @@ public final class WalletBalanceBuilder {
         this.walletBalance.setWallet(target);
         return this;
     }
-    
+
     /**
-     * The movement value
-     * 
-     * @param value the value to be credited or debited from the wallets
+     * The value to be debited or credited to the {@link Wallet}
+     *
+     * @param value the value
      * @return this builder
      */
     public WalletBalanceBuilder value(BigDecimal value) {
@@ -82,10 +82,10 @@ public final class WalletBalanceBuilder {
         this.walletBalance.setTransactionValue(value);
         return this;
     }
-    
+
     /**
      * The observations for this balance
-     * 
+     *
      * @param observations the observations
      * @return this builder
      */
@@ -93,10 +93,10 @@ public final class WalletBalanceBuilder {
         this.walletBalance.setObservations(observations);
         return this;
     }
-    
+
     /**
      * Indicate this balance is linked with some movement
-     * 
+     *
      * @param movementCode the movement code
      * @return this builder
      */
@@ -126,10 +126,10 @@ public final class WalletBalanceBuilder {
         this.walletBalance.setReasonType(reason);
         return this;
     }
-    
+
     /**
      * Build the balance
-     * 
+     *
      * @return the {@link WalletBalance} for the wallet
      */
     public WalletBalance build() {

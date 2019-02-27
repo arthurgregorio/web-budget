@@ -93,7 +93,7 @@ public class Card extends PersistentEntity {
     private Wallet wallet;
 
     /**
-     * Default constructor
+     * Constructor
      */
     public Card() {
         this.active = true;
@@ -112,8 +112,7 @@ public class Card extends PersistentEntity {
         builder.append(" - ");
 
         if (this.number.length() > 3) {
-            builder.append(this.number.substring(this.number.length() - 4,
-                    this.number.length()));
+            builder.append(this.number.substring(this.number.length() - 4));
         } else {
             builder.append(this.number);
         }
@@ -123,47 +122,4 @@ public class Card extends PersistentEntity {
 
         return builder.toString();
     }
-
-    /**
-     * This method provide a secure way to display the number of the card
-     *
-     * @return the first and last four numbers of the card
-     */
-    public String getSecureNumber() { // FIXME check if this is used
-
-        final StringBuilder secured = new StringBuilder();
-
-        if (this.number != null && this.number.length() >= 8) {
-
-            secured.append(this.number.substring(0, 2));
-
-            for (int i = 0; i < (this.number.length() - 2); i++) {
-                secured.append("*");
-            }
-            secured.append(this.number.substring(
-                    this.number.length() - 4, this.number.length()));
-        } else {
-            return this.number;
-        }
-
-        return secured.toString();
-    }
-
-    /**
-     * Use this method to check if the card is a credit card or not
-     *
-     * @return <code>true</code> for credit card, <code>false</code> otherwise
-     */
-    public boolean isCreditCard() {
-        return this.cardType == CardType.CREDIT;
-    } // FIXME check if this is used
-
-    /**
-     * Use this method to check if the card is a debit card or not
-     *
-     * @return <code>true</code> for debit card, <code>false</code> otherwise
-     */
-    public boolean isDebitCard() {
-        return this.cardType == CardType.DEBIT;
-    } // FIXME check if this is used
 }

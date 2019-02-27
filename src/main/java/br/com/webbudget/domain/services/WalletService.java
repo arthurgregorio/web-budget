@@ -17,14 +17,14 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.financial.ReasonType;
-import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.entities.financial.WalletBalance;
-import br.com.webbudget.domain.events.UpdateBalance;
+import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.events.UpdateWalletBalance;
+import br.com.webbudget.domain.logics.registration.wallet.WalletSavingLogic;
+import br.com.webbudget.domain.logics.registration.wallet.WalletUpdatingLogic;
 import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
-import br.com.webbudget.domain.logics.registration.wallet.WalletSavingLogic;
-import br.com.webbudget.domain.logics.registration.wallet.WalletUpdatingLogic;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -40,7 +40,7 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.2.0
+ * @version 2.0.0
  * @since 1.0.0, 12/03/2014
  */
 @ApplicationScoped
@@ -83,7 +83,7 @@ public class WalletService {
                 .value(actualBalance)
                 .withReason(ReasonType.ADJUSTMENT);
 
-        this.updateWalletBalance(builder);
+        this.updateWalletBalance(builder.build());
     }
 
     /**
@@ -126,34 +126,21 @@ public class WalletService {
                 .withReason(ReasonType.ADJUSTMENT)
                 .withObservations(observations);
 
-        this.updateWalletBalance(builder);
+        this.updateWalletBalance(builder.build());
     }
-    
+
     /**
      * Update the {@link WalletBalance} for a given wallet
      *
-     * @param builder the builder with the balance historic
+     * @param walletBalance the builder with the balance historic
      */
     @Transactional
-    private void updateWalletBalance(WalletBalanceBuilder builder) {
-
-        final WalletBalance walletBalance = builder.build();
+    private void updateWalletBalance(@Observes @UpdateWalletBalance WalletBalance walletBalance) {
 
         // update the actual balance on the wallet
         this.walletRepository.save(walletBalance.getWallet());
 
         // save the new balance history
         this.walletBalanceRepository.save(walletBalance);
-    }
-
-    /**
-     * This method listen to events on {@link UpdateBalance} and call the method
-     * to update the balance based on the builder received as a parameter
-     *
-     * @param builder the {@link WalletBalanceBuilder}
-     */
-    @Transactional
-    public void onWalletBalanceChange(@Observes @UpdateBalance WalletBalanceBuilder builder) {
-        this.updateWalletBalance(builder);
     }
 }

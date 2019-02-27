@@ -107,9 +107,9 @@ public class Wallet extends PersistentEntity {
     }
 
     /**
-     * To check if the balance of this wallet is nagative
+     * To check if the balance of this wallet is negative
      *
-     * @return <code>true</code> for negative balance, <code>false</code> otherwise
+     * @return true for negative balance, false otherwise
      */
     public boolean isBalanceNegative() {
         return this.actualBalance.signum() < 0;
@@ -118,9 +118,9 @@ public class Wallet extends PersistentEntity {
     /**
      * To check if the wallet is empty, it means balance = 0
      *
-     * @return <code>true</code> for empty wallet, <code>false</code> otherwise
+     * @return true for empty wallet, false otherwise
      */
-    public boolean isEmpty() { // FIXME refactor
-        return this.actualBalance == BigDecimal.ZERO;
+    public boolean isEmpty() {
+        return this.actualBalance.equals(BigDecimal.ZERO);
     }
 }

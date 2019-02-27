@@ -16,17 +16,18 @@
  */
 package br.com.webbudget.domain.events;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.ElementType.PARAMETER;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+
+import javax.enterprise.event.Event;
 import javax.inject.Qualifier;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Evento de notificacao de periodos encerrados
+ * {@link Event} qualifier for notification about the action of opening a {@link FinancialPeriod}
  *
  * @author Arthur Gregorio
  *
@@ -36,4 +37,4 @@ import javax.inject.Qualifier;
 @Qualifier
 @Retention(RUNTIME)
 @Target({TYPE, FIELD, METHOD, PARAMETER})
-public @interface PeriodClosed { }
+public @interface FinancialPeriodOpened { }

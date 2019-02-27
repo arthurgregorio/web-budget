@@ -49,7 +49,7 @@ public class MovementService {
 //    private FinancialPeriodService financialPeriodService;
 //    
 //    @Inject
-//    @MovementPaid
+//    @PeriodMovementPaid
 //    private Event<String> movementPaidEvent;
 //    @Inject
 //    @MovementSaved
@@ -62,7 +62,7 @@ public class MovementService {
 //    private Event<String> movementDeletedEvent;
 //    
 //    @Inject
-//    @UpdateBalance
+//    @UpdateWalletBalance
 //    private Event<BalanceBuilder> updateBalanceEvent;
 //
 //    /**

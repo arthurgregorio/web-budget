@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Arthur Gregorio, AG.Software
+ * Copyright (C) 2018 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 13/12/2017
+ * @since 3.0.0, 13/12/2018
  */
 @Qualifier
 @Documented

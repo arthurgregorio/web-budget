@@ -49,6 +49,15 @@ public interface CardRepository extends LazyDefaultRepository<Card> {
     Optional<Card> findByNumberAndCardType(String number, CardType type);
 
     /**
+     * Find the {@link Card} with the {@link CardType} specified and status
+     *
+     * @param cardType the {@link CardType} to filter the {@link Card}
+     * @param active which status you want to get
+     * @return the {@link List} of {@link Card} found
+     */
+    List<Card> findByCardTypeAndActive(CardType cardType, boolean active);
+
+    /**
      * {@inheritDoc}
      *
      * @return

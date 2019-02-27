@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import br.com.webbudget.domain.events.NewPeriodOpened;
+import br.com.webbudget.domain.events.FinancialPeriodOpened;
 import br.com.webbudget.domain.logics.registration.financialperiod.PeriodSavingLogic;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 
@@ -43,8 +43,8 @@ public class FinancialPeriodService {
     private FinancialPeriodRepository financialPeriodRepository;
 
     @Inject
-    @NewPeriodOpened
-    private Event<FinancialPeriod> newPeriodOpenedEvent;
+    @FinancialPeriodOpened
+    private Event<FinancialPeriod> financialPeriodOpenedEvent;
 
     @Any
     @Inject
@@ -61,7 +61,7 @@ public class FinancialPeriodService {
         this.savingBusinessLogics.forEach(logic -> logic.run(financialPeriod));
 
         // fire a event to notify the listeners
-        this.newPeriodOpenedEvent.fire(this.financialPeriodRepository.save(financialPeriod));
+        this.financialPeriodOpenedEvent.fire(this.financialPeriodRepository.save(financialPeriod));
     }
 
     /**
