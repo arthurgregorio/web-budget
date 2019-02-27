@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2013 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,32 +21,33 @@ import java.io.Serializable;
 /**
  * The basic entity definition for all the classes in the application
  *
- * @param <T> the type of
+ * @param <T> the type of the ID for this persistent entity
  *
  * @author Arthur Gregorio
  *
- * @version 4.0.0
+ * @version 4.1.0
  * @since 1.0.0, 06/10/2013
  */
 public interface IPersistentEntity<T extends Serializable> {
 
     /**
-     * @return the ID of the entity
+     * Get the ID for this entity
+     *
+     * @return value of the ID field
      */
     T getId();
 
     /**
-     * @return if the entity is saved or not
+     * If this entity is saved or not checking by the presence of the ID value
+     *
+     * @return true if is saved, false otherwise
      */
     boolean isSaved();
 
     /**
-     * helper method to call validation on the entity
-     */
-    void validate();
-
-    /**
-     * @return ther inverse of {@link #isSaved()}
+     * Sames as {@link #isSaved()} but in this case inverted for convenience use in lambda expressions
+     *
+     * @return true if not saved, false otherwise
      */
     default boolean isNotSaved() {
         return !this.isSaved();

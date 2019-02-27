@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2013 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,7 +94,5 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
      * Method to help the validation process of some entity, if you want to execute his state before any operation
      * just override this method and put the logic here.
      */
-    @Override
-    public void validate() {
-    }
+    public abstract void validate();
 }
