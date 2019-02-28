@@ -17,14 +17,30 @@
 package br.com.webbudget.domain.logics.financial.periodmovement;
 
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
-import br.com.webbudget.domain.logics.BusinessLogic;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
+
+import javax.enterprise.context.Dependent;
 
 /**
- * {@link PeriodMovement} validator facade for update actions
+ * Validator logic to stop any type of update or exclusion with an accounted {@link PeriodMovement}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 22/02/2019
+ * @since 3.0.0, 23/02/2019
  */
-public interface PeriodMovementUpdatingLogic extends BusinessLogic<PeriodMovement> { }
+@Dependent
+public class AccountedMovementValidator implements PeriodMovementDeletingLogic, PeriodMovementUpdatingLogic {
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param value
+     */
+    @Override
+    public void run(PeriodMovement value) {
+        if (value.isAccounted()) {
+            throw new BusinessLogicException("error.period-movement.deleted-or-update-accounted");
+        }
+    }
+}

@@ -206,6 +206,26 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     }
 
     /**
+     * Method to be used when the user wants to save the {@link PeriodMovement} and after that pay for this
+     *
+     * @return the outcome to the payment window
+     */
+    public String doSaveAndPay() {
+        final PeriodMovement saved = this.periodMovementService.save(this.value);
+        return this.changeToPay(saved.getId());
+    }
+
+    /**
+     * Method to be used when the user wants to update the {@link PeriodMovement} and after that pay for this
+     *
+     * @return the outcome to the payment window
+     */
+    public String doUpdateAndPay() {
+        final PeriodMovement saved = this.periodMovementService.update(this.value);
+        return this.changeToPay(saved.getId());
+    }
+
+    /**
      * Change to the payment view
      *
      * @param idMovement the {@link PeriodMovement} id

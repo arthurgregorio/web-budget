@@ -29,6 +29,7 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static javax.persistence.CascadeType.REMOVE;
@@ -103,7 +104,7 @@ public class PeriodMovement extends Movement {
      * @return true if is, false if not
      */
     public boolean isPaidWithCreditCard() {
-        return this.payment.isPaidWithCreditCard();
+        return this.payment != null && this.payment.isPaidWithCreditCard();
     }
 
     /**
@@ -112,7 +113,7 @@ public class PeriodMovement extends Movement {
      * @return true if is, false if not
      */
     public boolean isPaidWithDebitCard() {
-        return this.payment.isPaidWithDebitCard();
+        return this.payment != null && this.payment.isPaidWithDebitCard();
     }
 
     /**
@@ -121,7 +122,7 @@ public class PeriodMovement extends Movement {
      * @return true if is, false if not
      */
     public boolean isPaidWithCash() {
-        return this.payment.isPaidWithCash();
+        return this.payment != null && this.payment.isPaidWithCash();
     }
 
     /**
@@ -167,6 +168,24 @@ public class PeriodMovement extends Movement {
      */
     public boolean isOverdue() {
         return this.dueDate.isBefore(LocalDate.now());
+    }
+
+    /**
+     * Helper method to get only the discount value
+     *
+     * @return the payment discount value
+     */
+    public BigDecimal getValueWithDiscount() {
+        return this.payment != null ? this.payment.getPaidValue() : this.getValue();
+    }
+
+    /**
+     * Helper method to check if this movement had discount at the payment
+     *
+     * @return true if yes, false otherwise
+     */
+    public boolean isDiscountPresent() {
+        return this.payment != null && this.payment.getDiscount().compareTo(BigDecimal.ZERO) != 0;
     }
 
     /**

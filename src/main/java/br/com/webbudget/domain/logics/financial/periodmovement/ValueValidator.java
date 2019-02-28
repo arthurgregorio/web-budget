@@ -17,14 +17,30 @@
 package br.com.webbudget.domain.logics.financial.periodmovement;
 
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
-import br.com.webbudget.domain.logics.BusinessLogic;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
+
+import javax.enterprise.context.Dependent;
 
 /**
- * {@link PeriodMovement} validator facade for update actions
+ * Validator logic prevent the user to save a {@link PeriodMovement} with a negative value
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 22/02/2019
+ * @since 3.0.0, 23/02/2019
  */
-public interface PeriodMovementUpdatingLogic extends BusinessLogic<PeriodMovement> { }
+@Dependent
+public class ValueValidator implements PeriodMovementSavingLogic, PeriodMovementUpdatingLogic {
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param value
+     */
+    @Override
+    public void run(PeriodMovement value) {
+        if (value.getValue().signum() < 0) {
+            throw new BusinessLogicException("error.period-movement.negative-value");
+        }
+    }
+}

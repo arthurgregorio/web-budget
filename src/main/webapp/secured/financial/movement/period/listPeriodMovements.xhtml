@@ -237,14 +237,31 @@
                                             rendered="#{periodMovement.expense}"
                                             title="#{messages['period-movement.list.expense']}"/>
                             <p:spacer width="5"/>
+                            <p:graphicImage width="24"
+                                            height="24"
+                                            library="webbudget"
+                                            name="images/money.png"
+                                            rendered="#{periodMovement.paidWithCash}"
+                                            title="#{messages['period-movement.list.paid-cash']}"/>
+                            <p:graphicImage width="24"
+                                            height="24"
+                                            library="webbudget"
+                                            name="images/card.png"
+                                            title="#{messages['period-movement.list.paid-card']}"
+                                            rendered="#{periodMovement.paidWithDebitCard or periodMovement.paidWithCreditCard}"/>
+                            <p:spacer width="5"/>
                             #{periodMovement.identification}
                         </p:column>
                         <p:column width="12%"
                                   styleClass="align-center"
                                   headerText="#{messages['period-movement.list.value']}">
-                            <h:outputText value="#{periodMovement.value}" >
+                            <h:outputText value="#{periodMovement.valueWithDiscount}" >
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                             </h:outputText>
+                            <p:spacer width="5"/>
+                            <h:outputText value="(D)"
+                                          styleClass="text-bold text-red"
+                                          rendered="#{periodMovement.discountPresent}"/>
                         </p:column>
                         <p:column width="12%"
                                   styleClass="align-center"
@@ -257,7 +274,7 @@
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton title="#{menu['pay']}"
                                              icon="fa fa-hand-holding-usd"
-                                             styleClass="btn btn-flat btn-success"
+                                             styleClass="btn btn-flat btn-default"
                                              action="#{periodMovementBean.changeToPay(periodMovement.id)}"
                                              rendered="#{periodMovement.open and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_PAY)}"/>
                             <p:spacer width="5"
@@ -266,14 +283,14 @@
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
                                              action="#{periodMovementBean.changeToEdit(periodMovement.id)}"
-                                             rendered="#{not periodMovement.accounted and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
+                                             rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
                             <p:spacer width="5"
                                       rendered="#{not periodMovement.accounted and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
                                              action="#{periodMovementBean.changeToDelete(periodMovement.id)}"
-                                             rendered="#{not periodMovement.accounted and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DELETE)}"/>
+                                             rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DELETE)}"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>

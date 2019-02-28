@@ -69,9 +69,10 @@ public class PeriodMovementService {
      * Create a new {@link PeriodMovement}
      *
      * @param periodMovement the {@link PeriodMovement} to be saved
+     * @return the {@link PeriodMovement} saved
      */
     @Transactional
-    public void save(PeriodMovement periodMovement) {
+    public PeriodMovement save(PeriodMovement periodMovement) {
 
         this.periodMovementSavingLogics.forEach(logic -> logic.run(periodMovement));
 
@@ -81,6 +82,8 @@ public class PeriodMovementService {
             apportionment.setMovement(saved);
             this.apportionmentRepository.save(apportionment);
         });
+
+        return saved;
     }
 
     /**

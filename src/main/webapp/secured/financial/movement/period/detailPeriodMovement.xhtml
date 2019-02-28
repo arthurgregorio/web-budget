@@ -183,6 +183,13 @@
                     <p:spacer width="5"
                               rendered="#{periodMovementBean.viewState.detailing}"/>
                     <p:commandButton immediate="true"
+                                     value="#{menu['pay']}"
+                                     styleClass="btn btn-flat btn-warning"
+                                     action="#{periodMovementBean.changeToPay(periodMovementBean.value.id)}"
+                                     rendered="#{periodMovementBean.viewState.detailing and periodMovementBean.value.open}"/>
+                    <p:spacer width="5"
+                              rendered="#{periodMovementBean.viewState.detailing and periodMovementBean.value.open}"/>
+                    <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary"
                                      action="#{periodMovementBean.changeToListing()}"
                                      value="#{periodMovementBean.viewState.deleting ? menu['no'] : menu['back']}"/>
