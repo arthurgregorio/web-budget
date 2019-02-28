@@ -17,13 +17,19 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.domain.entities.financial.ReasonType;
+import br.com.webbudget.domain.entities.financial.WalletBalance;
+import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.events.UpdateWalletBalance;
 import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementDeletingLogic;
 import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementSavingLogic;
 import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementUpdatingLogic;
 import br.com.webbudget.domain.repositories.financial.ApportionmentRepository;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
+import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -44,6 +50,10 @@ public class PeriodMovementService {
     private ApportionmentRepository apportionmentRepository;
     @Inject
     private PeriodMovementRepository periodMovementRepository;
+
+    @Inject
+    @UpdateWalletBalance
+    private Event<WalletBalance> updateWalletBalanceEvent;
 
     @Any
     @Inject
@@ -106,7 +116,30 @@ public class PeriodMovementService {
      */
     @Transactional
     public void delete(PeriodMovement periodMovement) {
+
         this.periodMovementDeletingLogics.forEach(logic -> logic.run(periodMovement));
         this.periodMovementRepository.attachAndRemove(periodMovement);
+
+        // if the movement is paid with cash or debit, return the balance
+        if (periodMovement.isPaidWithCash() || periodMovement.isPaidWithDebitCard()) {
+            this.returnBalance(periodMovement, periodMovement.getPaymentWallet());
+        }
+    }
+
+    /**
+     * Method used to return the balance of the given {@link PeriodMovement} to the given {@link Wallet}
+     *
+     * @param periodMovement to be returned
+     * @param wallet to be credited
+     */
+    private void returnBalance(PeriodMovement periodMovement, Wallet wallet) {
+
+        final WalletBalanceBuilder builder = WalletBalanceBuilder.getInstance()
+                .to(wallet)
+                .forMovement(periodMovement.getCode())
+                .withReason(ReasonType.RETURN)
+                .value(periodMovement.getPayment().getPaidValue());
+
+        this.updateWalletBalanceEvent.fire(builder.build());
     }
 }

@@ -24,25 +24,25 @@
           modal="true"
           position="top"
           closable="false"
-          resizable="false" 
+          resizable="false"
           closeOnEscape="true"
           styleClass="dialog-margin-top"
-          widgetVar="dialogApportionment" 
+          widgetVar="dialogApportionment"
           header="#{messages['apportionment.dialog.title']}">
 
     <h:form id="apportionmentForm">
         <p:defaultCommand target="btAdd"/>
         <div class="row">
             <div class="col-sm-12">
-                <p:messages closable="true" />
-            </div> 
+                <p:messages closable="true"/>
+            </div>
         </div>
         <div class="row">
-            <wb:apportionmentForm blockForm="apportionmentForm"
-                                  apportionment="#{periodMovementBean.apportionment}"
-                                  costCenterList="#{periodMovementBean.costCenters}"
-                                  movementClassList="#{periodMovementBean.movementClasses}"
-                                  onCostCenterSelect="#{periodMovementBean.onCostCenterSelect()}"/>
+            <wb:formApportionmentBox blockForm="apportionmentForm"
+                                     apportionment="#{periodMovementBean.apportionment}"
+                                     costCenterList="#{periodMovementBean.costCenters}"
+                                     movementClassList="#{periodMovementBean.movementClasses}"
+                                     onCostCenterSelect="#{periodMovementBean.onCostCenterSelect()}"/>
         </div>
         <div class="row">
             <div class="col-sm-12 align-right">

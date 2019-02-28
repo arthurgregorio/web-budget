@@ -19,10 +19,12 @@ package br.com.webbudget.domain.entities.financial;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardInvoice;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.Wallet;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import net.bytebuddy.asm.Advice;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -114,6 +116,15 @@ public class PeriodMovement extends Movement {
     }
 
     /**
+     * To check if this movement is paid with a cash
+     *
+     * @return true if is, false if not
+     */
+    public boolean isPaidWithCash() {
+        return this.payment.isPaidWithCash();
+    }
+
+    /**
      * To check if this movement is a {@link CardInvoice}
      *
      * @return true if is, false otherwise
@@ -168,5 +179,20 @@ public class PeriodMovement extends Movement {
         this.payment = payment;
         this.periodMovementState = PeriodMovementState.PAID;
         return this;
+    }
+
+    /**
+     * Get the payment wallet for this movement. If no wallet is used to pay for this movement, an {@link IllegalStateException}
+     * is thrown with some information
+     *
+     * @return the payment wallet for this movement
+     */
+    public Wallet getPaymentWallet() {
+        if (this.isPaidWithCash()) {
+            return this.payment.getWallet();
+        } else if (this.isPaidWithDebitCard()) {
+            return this.payment.getDebitCardWallet();
+        }
+        throw new IllegalStateException("No wallet is used to pay this movement!");
     }
 }

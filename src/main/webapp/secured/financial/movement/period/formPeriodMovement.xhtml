@@ -97,7 +97,7 @@
                                     <f:selectItems var="period"
                                                    itemValue="#{period}"
                                                    value="#{periodMovementBean.financialPeriods}"
-                                                   itemLabel="#{not period.expired ? period.identification : period.identification.concat(' - ').concat(messages['period-movement.form.expired'])}" />
+                                                   itemLabel="#{not period.expired ? period.identification : period.identification.concat(' - ').concat(messages['period-movement.form.expired'])}"/>
                                 </p:selectOneMenu>
                             </div>
                             <div class="form-group col-md-6">
@@ -106,7 +106,7 @@
                                 <p:inputText id="inIdentification"
                                              maxlength="90"
                                              styleClass="form-control"
-                                             value="#{periodMovementBean.value.identification}" />
+                                             value="#{periodMovementBean.value.identification}"/>
                             </div>
                             <div jsf:id="contactBox"
                                  class="form-group col-md-6">
@@ -117,7 +117,7 @@
                                                  readonly="true"
                                                  onclick="searchContact()"
                                                  styleClass="form-control"
-                                                 value="#{periodMovementBean.value.contactName}" />
+                                                 value="#{periodMovementBean.value.contactName}"/>
                                     <div class="input-group-btn">
                                         <p:commandButton immediate="true"
                                                          icon="fa fa-search"
@@ -141,7 +141,7 @@
                                             mask="true"
                                             pattern="dd/MM/yyyy"
                                             converter="localDateConverter"
-                                            value="#{periodMovementBean.value.dueDate}" />
+                                            value="#{periodMovementBean.value.dueDate}"/>
                             </div>
                             <div class="form-group col-md-3">
                                 <p:outputLabel for="inValue"
@@ -153,7 +153,7 @@
                                                thousandSeparator="."
                                                value="#{periodMovementBean.value.value}"
                                                disabled="#{periodMovementBean.value.paid or not empty periodMovementBean.value.apportionments}">
-                                    <f:converter converterId="javax.faces.BigDecimal" />
+                                    <f:converter converterId="javax.faces.BigDecimal"/>
                                 </p:inputNumber>
                             </div>
                             <div class="form-group col-md-12">
@@ -163,17 +163,17 @@
                                                  rows="5"
                                                  autoResize="false"
                                                  styleClass="form-control"
-                                                 value="#{periodMovementBean.value.description}" />
+                                                 value="#{periodMovementBean.value.description}"/>
                             </div>
                         </div>
                     </div>
                     <div jsf:id="apportionmentBox" class="col-sm-6">
-                        <wb:apportionmentBox valueInput="inValue"
-                                             baseBean="#{periodMovementBean.value}"
-                                             renderButtons="#{not periodMovementBean.value.paid}"
-                                             apportionments="#{periodMovementBean.value.apportionments}"
-                                             showDialogAction="#{periodMovementBean.showApportionmentDialog()}"
-                                             disabled="#{periodMovementBean.value.paid or periodMovementBean.viewState.detailing}"/>
+                        <wb:listApportionmentBox valueInput="inValue"
+                                                 baseBean="#{periodMovementBean.value}"
+                                                 renderButtons="#{not periodMovementBean.value.paid}"
+                                                 apportionments="#{periodMovementBean.value.apportionments}"
+                                                 showDialogAction="#{periodMovementBean.showApportionmentDialog()}"
+                                                 disabled="#{periodMovementBean.value.paid or periodMovementBean.viewState.detailing}"/>
                     </div>
                 </div>
                 <div class="box-footer align-right">

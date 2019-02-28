@@ -81,27 +81,35 @@
                                             </h:outputText>
                                         </span>
                                         <h3 class="timeline-header">
-                                            <h:outputText styleClass="text-green text-bold"
-                                                          value="#{enums[balance.balanceType]}"
-                                                          rendered="#{balance.balanceType eq 'CREDIT'}"/>
-                                            <h:outputText styleClass="text-red text-bold"
-                                                          value="#{enums[balance.balanceType]}"
-                                                          rendered="#{balance.balanceType eq 'DEBIT'}"/>
+                                            <h:outputText rendered="#{balance.credit}"
+                                                          styleClass="text-green text-bold"
+                                                          value="#{enums[balance.balanceType]}"/>
+                                            <h:outputText rendered="#{balance.debit}"
+                                                          styleClass="text-red text-bold"
+                                                          value="#{enums[balance.balanceType]}"/>
                                             <p:spacer width="5"/>
-                                            <span class="label label-info"
-                                                  jsf:rendered="#{balance.reasonType eq 'ADJUSTMENT'}">
+                                            <span class="label bg-aqua"
+                                                  jsf:rendered="#{balance.adjustment}">
                                                 #{enums[balance.reasonType]}
                                             </span>
-                                            <span class="label label-warning"
-                                                  jsf:rendered="#{balance.reasonType eq 'TRANSFERENCE'}">
+                                            <span class="label bg-orange"
+                                                  jsf:rendered="#{balance.transference}">
                                                 #{enums[balance.reasonType]}
                                             </span>
-                                            <span class="label label-success"
-                                                  jsf:rendered="#{balance.reasonType eq 'REVENUE'}">
+                                            <span class="label bg-green"
+                                                  jsf:rendered="#{balance.revenue}">
                                                 #{enums[balance.reasonType]}
                                             </span>
-                                            <span class="label label-danger"
-                                                  jsf:rendered="#{balance.reasonType eq 'EXPENSE'}">
+                                            <span class="label bg-red"
+                                                  jsf:rendered="#{balance.expense}">
+                                                #{enums[balance.reasonType]}
+                                            </span>
+                                            <span class="label bg-maroon"
+                                                  jsf:rendered="#{balance.debitCard}">
+                                                #{enums[balance.reasonType]}
+                                            </span>
+                                            <span class="label bg-blue"
+                                                  jsf:rendered="#{balance.return}">
                                                 #{enums[balance.reasonType]}
                                             </span>
                                         </h3>

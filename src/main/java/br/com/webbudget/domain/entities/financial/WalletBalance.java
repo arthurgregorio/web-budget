@@ -144,4 +144,76 @@ public class WalletBalance extends PersistentEntity {
     public boolean isTransactionValueNegative() {
         return this.transactionValue.signum() < 0;
     }
+
+    /**
+     * Helper method to check if this balance is debit or not
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isDebit() {
+        return this.balanceType == BalanceType.DEBIT;
+    }
+
+    /**
+     * Helper method to check if this balance is credit or not
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isCredit() {
+        return this.balanceType == BalanceType.CREDIT;
+    }
+
+    /**
+     * Helper method to check if this balance is a revenue or not
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isRevenue() {
+        return this.reasonType == ReasonType.REVENUE;
+    }
+
+    /**
+     * Helper method to check if this balance is a expense or not
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isExpense() {
+        return this.reasonType == ReasonType.EXPENSE;
+    }
+
+    /**
+     * Helper method to check if this balance is a debit card payment or not
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isDebitCard() {
+        return this.reasonType == ReasonType.DEBIT_CARD;
+    }
+
+    /**
+     * Helper method to check if this balance is a transference or not
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isTransference() {
+        return this.reasonType == ReasonType.TRANSFERENCE;
+    }
+
+    /**
+     * Helper method to check if this balance is a adjustment or not
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isAdjustment() {
+        return this.reasonType == ReasonType.ADJUSTMENT;
+    }
+
+    /**
+     * Helper method to check if this balance is a return of value or not
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isReturn() {
+        return this.reasonType == ReasonType.RETURN;
+    }
 }

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright (C) 2015 Arthur Gregorio, AG.Software
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsf/composite">
+
+    <c:interface>
+        <c:attribute required="true"
+                     type="java.util.List"
+                     name="costCenterList"/>
+        <c:attribute required="true"
+                     type="java.util.List"
+                     name="movementClassList"/>
+
+        <c:attribute required="true"
+                     name="blockForm"
+                     type="java.lang.String"/>
+
+        <c:attribute required="true"
+                     name="apportionment"
+                     type="br.com.webbudget.domain.entities.financial.Apportionment"/>
+
+        <c:attribute required="true"
+                     name="onCostCenterSelect"
+                     method-signature="void  actionListener()"/>
+    </c:interface>
+
+    <c:implementation>
+        <div class="col-sm-6 form-group">
+            <p:outputLabel for="inApportionment"
+                           value="#{messages['apportionment.form.value']}: "/>
+            <p:inputNumber id="inApportionment"
+                           symbol="R$ "
+                           decimalPlaces="2"
+                           decimalSeparator=","
+                           thousandSeparator="."
+                           value="#{cc.attrs.apportionment.value}">
+                <f:converter converterId="javax.faces.BigDecimal" />
+            </p:inputNumber>
+        </div>
+        <div class="col-sm-12 form-group">
+            <p:outputLabel for="inCostCenter"
+                           value="#{messages['apportionment.form.cost-center']}: "/>
+            <p:selectOneMenu id="inCostCenter"
+                             converter="omnifaces.SelectItemsConverter"
+                             value="#{cc.attrs.apportionment.costCenter}" >
+
+                <p:ajax event="change"
+                        update="inMovementClass"
+                        listener="#{cc.attrs.onCostCenterSelect}" />
+
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{menu['select-one']}" />
+                <f:selectItems var="costCenter"
+                               itemValue="#{costCenter}"
+                               itemLabel="#{costCenter.name}"
+                               value="#{cc.attrs.costCenterList}" />
+            </p:selectOneMenu>
+        </div>
+        <div class="col-sm-12 form-group">
+            <p:outputLabel for="inMovementClass"
+                           value="#{messages['apportionment.form.movement-class']}: "/>
+            <p:selectOneMenu id="inMovementClass"
+                             converter="omnifaces.SelectItemsConverter"
+                             value="#{cc.attrs.apportionment.movementClass}" >
+                <f:selectItem itemValue="#{null}"
+                              noSelectionOption="true"
+                              itemLabel="#{menu['select-one']}" />
+                <f:selectItems var="movementClass"
+                               itemValue="#{movementClass}"
+                               itemLabel="#{movementClass.name}"
+                               value="#{cc.attrs.movementClassList}" />
+            </p:selectOneMenu>
+        </div>
+
+        <p:blockUI trigger="inCostCenter"
+                   block="#{cc.attrs.blockForm}"
+                   widgetVar="#{cc.attrs.id}_block" >
+            <p:graphicImage width="32" 
+                            height="32"
+                            library="webbudget"
+                            name="images/loading.gif" />
+        </p:blockUI>
+    </c:implementation>
+</html>

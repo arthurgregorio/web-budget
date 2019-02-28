@@ -89,10 +89,4 @@ public abstract class PersistentEntity implements IPersistentEntity<Long>, Seria
     public boolean isSaved() {
         return this.id != null && this.id != 0;
     }
-
-    /**
-     * Method to help the validation process of some entity, if you want to execute his state before any operation
-     * just override this method and put the logic here.
-     */
-    public abstract void validate();
 }

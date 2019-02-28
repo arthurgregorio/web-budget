@@ -17,7 +17,7 @@
 package br.com.webbudget.domain.entities.financial;
 
 /**
- * The enum with the possible reasons to have a new {@link WalletBalance}
+ * The enum with the possible reasons for a {@link WalletBalance} update transaction
  *
  * @author Arthur Gregorio
  *
@@ -26,9 +26,11 @@ package br.com.webbudget.domain.entities.financial;
  */
 public enum ReasonType {
 
+    RETURN("reason-type.return"),
     REVENUE("reason-type.revenue"),
     EXPENSE("reason-type.expense"),
     ADJUSTMENT("reason-type.adjustment"),
+    DEBIT_CARD("reason-type.debit-card"),
     TRANSFERENCE("reason-type.transference"),;
 
     private final String description;

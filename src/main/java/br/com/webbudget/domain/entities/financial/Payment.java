@@ -116,4 +116,13 @@ public class Payment extends PersistentEntity {
     public boolean isPaidWithDebitCard() {
         return this.paymentMethod == PaymentMethod.DEBIT_CARD;
     }
+
+    /**
+     * Helper method to get the {@link Wallet} linked with the {@link Card} if is a debit {@link Card}
+     *
+     * @return the {@link Wallet}
+     */
+    public Wallet getDebitCardWallet() {
+        return this.card.getWallet();
+    }
 }

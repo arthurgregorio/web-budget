@@ -20,6 +20,7 @@ import br.com.webbudget.domain.entities.financial.Payment;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.ReasonType;
 import br.com.webbudget.domain.entities.financial.WalletBalance;
+import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.events.UpdateWalletBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.financial.PaymentRepository;
@@ -52,9 +53,10 @@ public class PaymentService {
     private Event<WalletBalance> updateWalletBalanceEvent;
 
     /**
+     * Service method to pay a given {@link PeriodMovement}
      *
-     * @param periodMovement
-     * @param payment
+     * @param periodMovement to be paid
+     * @param payment object with the information about the payment
      */
     @Transactional
     public void pay(PeriodMovement periodMovement, Payment payment) {
@@ -69,16 +71,40 @@ public class PaymentService {
         this.periodMovementRepository.saveAndFlushAndRefresh(periodMovement.prepareToPay(
                 this.paymentRepository.save(payment)));
 
-        // now, if we are paying with cash, update the wallet balance
+        // now, if we are paying with cash or debit card, update the wallet balance
         if (payment.isPaidWithCash()) {
             this.afterPaymentWithCash(payment, periodMovement);
+        } else if (payment.isPaidWithDebitCard()) {
+            this.afterPaymentWithDebitCard(payment, periodMovement);
         }
     }
 
     /**
+     * Method to build the new {@link WalletBalance} and fire the {@link Event} to update if we are paying with a debit
+     * card
      *
-     * @param payment
-     * @param periodMovement
+     * @param payment the {@link Payment}
+     * @param periodMovement the {@link PeriodMovement} we are paying
+     */
+    private void afterPaymentWithDebitCard(Payment payment, PeriodMovement periodMovement) {
+
+        final Wallet wallet = payment.getCard().getWallet();
+
+        // debit card payments are always a expense and we have a specific reason this
+        final WalletBalanceBuilder builder = WalletBalanceBuilder.getInstance()
+                .to(wallet)
+                .withReason(ReasonType.DEBIT_CARD)
+                .forMovement(periodMovement.getCode())
+                .value(payment.getPaidValue().negate());
+
+        this.updateWalletBalanceEvent.fire(builder.build());
+    }
+
+    /**
+     * Method to build the new {@link WalletBalance} and fire the {@link Event} to update if we are paying with cash
+     *
+     * @param payment the {@link Payment}
+     * @param periodMovement the {@link PeriodMovement} we are paying
      */
     private void afterPaymentWithCash(Payment payment, PeriodMovement periodMovement) {
 
