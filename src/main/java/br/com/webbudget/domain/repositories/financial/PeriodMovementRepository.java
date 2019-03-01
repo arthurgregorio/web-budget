@@ -58,7 +58,7 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
 
         final Criteria<PeriodMovement, PeriodMovement> criteria = this.buildCriteria(filter);
 
-        criteria.orderAsc(PeriodMovement_.createdOn);
+        criteria.orderDesc(PeriodMovement_.createdOn);
 
         final List<PeriodMovement> data = criteria.createQuery()
                 .setFirstResult(start)

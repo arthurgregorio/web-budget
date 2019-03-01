@@ -24,7 +24,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import net.bytebuddy.asm.Advice;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -197,6 +196,12 @@ public class PeriodMovement extends Movement {
     public PeriodMovement prepareToPay(Payment payment) {
         this.payment = payment;
         this.periodMovementState = PeriodMovementState.PAID;
+
+        if (payment.isPaidWithCreditCard()) {
+            final int expirationDay = payment.getCard().getExpirationDay();
+            this.dueDate = this.financialPeriod.getEnd().plusMonths(1).withDayOfMonth(expirationDay);
+        }
+
         return this;
     }
 

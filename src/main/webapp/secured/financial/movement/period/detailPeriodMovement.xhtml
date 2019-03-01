@@ -68,17 +68,14 @@
             <div class="box box-#{profileBean.currentThemeColorName}">
                 <div class="box-header with-border">
                     <h3 class="box-title">
-                        <b>#{messages['period-movement.form.current-period']}:</b>
+                        <b>#{messages['period-movement.form.payment-status']}:</b>
                         <p:spacer width="5"/>
                         <h:outputText styleClass="text text-red"
-                                      rendered="#{periodMovementBean.currentPeriod eq null}"
-                                      value="#{messages['period-movement.form.no-current-period']}"/>
-                        <o:outputFormat rendered="#{periodMovementBean.currentPeriod ne null}"
-                                        value="#{messages['period-movement.form.current-period-info']}">
-                            <f:param value="#{periodMovementBean.currentPeriod.identification}"/>
-                            <f:param value="#{periodMovementBean.currentPeriodStart}"/>
-                            <f:param value="#{periodMovementBean.currentPeriodEnd}"/>
-                        </o:outputFormat>
+                                      rendered="#{periodMovementBean.value.open}"
+                                      value="#{messages['period-movement.form.is-open']}"/>
+                        <h:outputText styleClass="text text-green"
+                                      rendered="#{periodMovementBean.value.paid}"
+                                      value="#{messages['period-movement.form.is-paid']}"/>
                     </h3>
                 </div>
                 <div class="box-body row">
@@ -169,6 +166,13 @@
                     <p:spacer width="5"
                               rendered="#{periodMovementBean.viewState.deleting}"/>
                     <p:commandButton immediate="true"
+                                     value="#{menu['payment-details']}"
+                                     styleClass="btn btn-flat btn-default"
+                                     action="#{periodMovementBean.showPaymentDetailDialog()}"
+                                     rendered="#{periodMovementBean.viewState.detailing and periodMovementBean.value.paid}"/>
+                    <p:spacer width="5"
+                              rendered="#{periodMovementBean.viewState.detailing and periodMovementBean.value.paid}"/>
+                    <p:commandButton immediate="true"
                                      value="#{menu['delete']}"
                                      styleClass="btn btn-flat btn-danger"
                                      rendered="#{periodMovementBean.viewState.detailing}"
@@ -196,5 +200,8 @@
                 </div>
             </div>
         </h:form>
+    </ui:define>
+    <ui:define name="popups">
+        <ui:include src="dialogPaymentDetails.xhtml"/>
     </ui:define>
 </ui:composition>
