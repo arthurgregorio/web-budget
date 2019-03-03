@@ -19,7 +19,7 @@ package br.com.webbudget.domain.repositories.journal;
 import br.com.webbudget.domain.entities.financial.Movement;
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.journal.Refueling_;
-import br.com.webbudget.domain.entities.registration.Vehicle;
+import br.com.webbudget.domain.entities.registration.*;
 import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
@@ -94,8 +94,16 @@ public interface RefuelingRepository extends LazyDefaultRepository<Refueling> {
      */
     @Override
     default Collection<Criteria<Refueling, Refueling>> getRestrictions(String filter) {
+
+        final String anyFilter = this.likeAny(filter);
+
         return List.of(
                 this.criteria().likeIgnoreCase(Refueling_.place, this.likeAny(filter)),
-                this.criteria().likeIgnoreCase(Refueling_.movementCode, this.likeAny(filter)));
+                this.criteria().join(Refueling_.vehicle,
+                        where(Vehicle.class).likeIgnoreCase(Vehicle_.identification, anyFilter)),
+                this.criteria().join(Refueling_.movementClass,
+                        where(MovementClass.class).likeIgnoreCase(MovementClass_.name, anyFilter)),
+                this.criteria().join(Refueling_.financialPeriod,
+                        where(FinancialPeriod.class).likeIgnoreCase(FinancialPeriod_.identification, anyFilter)));
     }
 }
