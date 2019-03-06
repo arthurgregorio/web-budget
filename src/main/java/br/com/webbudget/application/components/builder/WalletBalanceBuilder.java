@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.services.misc;
+package br.com.webbudget.application.components.builder;
 
 import br.com.webbudget.domain.entities.financial.BalanceType;
 import br.com.webbudget.domain.entities.financial.ReasonType;
@@ -32,16 +32,14 @@ import java.time.LocalDateTime;
  * @version 1.1.0
  * @since 2.1.0, 27/08/2015
  */
-public final class WalletBalanceBuilder {
-
-    private final WalletBalance walletBalance;
+public final class WalletBalanceBuilder extends AbstractBuilder<WalletBalance> {
 
     /**
      * Private constructor to force working with the {@link #getInstance()} method
      */
     private WalletBalanceBuilder() {
-        this.walletBalance = new WalletBalance();
-        this.walletBalance.setMovementDateTime(LocalDateTime.now());
+        this.instance = new WalletBalance();
+        this.instance.setMovementDateTime(LocalDateTime.now());
     }
 
     /**
@@ -60,26 +58,26 @@ public final class WalletBalanceBuilder {
      * @return this builder
      */
     public WalletBalanceBuilder to(Wallet target) {
-        this.walletBalance.setWallet(target);
+        this.instance.setWallet(target);
         return this;
     }
 
     /**
-     * The value to be debited or credited to the {@link Wallet}
+     * The instance to be debited or credited to the {@link Wallet}
      *
-     * @param value the value
+     * @param value the instance
      * @return this builder
      */
     public WalletBalanceBuilder value(BigDecimal value) {
 
         // determine which type of financial movement we are doing
         if (value.signum() < 0) {
-            this.walletBalance.setBalanceType(BalanceType.DEBIT);
+            this.instance.setBalanceType(BalanceType.DEBIT);
         } else {
-            this.walletBalance.setBalanceType(BalanceType.CREDIT);
+            this.instance.setBalanceType(BalanceType.CREDIT);
         }
 
-        this.walletBalance.setTransactionValue(value);
+        this.instance.setTransactionValue(value);
         return this;
     }
 
@@ -90,7 +88,7 @@ public final class WalletBalanceBuilder {
      * @return this builder
      */
     public WalletBalanceBuilder withObservations(String observations) {
-        this.walletBalance.setObservations(observations);
+        this.instance.setObservations(observations);
         return this;
     }
 
@@ -101,7 +99,7 @@ public final class WalletBalanceBuilder {
      * @return this builder
      */
     public WalletBalanceBuilder forMovement(String movementCode) {
-        this.walletBalance.setMovementCode(movementCode);
+        this.instance.setMovementCode(movementCode);
         return this;
     }
 
@@ -112,7 +110,7 @@ public final class WalletBalanceBuilder {
      * @return this builder
      */
     public WalletBalanceBuilder withMovementDate(LocalDateTime movementDate) {
-        this.walletBalance.setMovementDateTime(movementDate);
+        this.instance.setMovementDateTime(movementDate);
         return this;
     }
 
@@ -123,17 +121,18 @@ public final class WalletBalanceBuilder {
      * @return this builder
      */
     public WalletBalanceBuilder withReason(ReasonType reason) {
-        this.walletBalance.setReasonType(reason);
+        this.instance.setReasonType(reason);
         return this;
     }
 
     /**
-     * Build the balance
+     * {@inheritDoc}
      *
-     * @return the {@link WalletBalance} for the wallet
+     * @return
      */
+    @Override
     public WalletBalance build() {
-        this.walletBalance.processBalances();
-        return this.walletBalance;
+        this.instance.processBalances();
+        return this.instance;
     }
 }

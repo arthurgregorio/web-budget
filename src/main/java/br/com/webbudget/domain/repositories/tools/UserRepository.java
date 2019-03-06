@@ -51,7 +51,7 @@ public interface UserRepository extends LazyDefaultRepository<User> {
      * Find an {@link User} by the email address and the {@link StoreType}
      * 
      * @param email the {@link User} email address to find
-     * @param storeType the enum value of {@link StoreType}
+     * @param storeType the enum instance of {@link StoreType}
      * @return an {@link Optional} of the {@link User}
      */
     Optional<User> findByEmailAndStoreType(String email, StoreType storeType);

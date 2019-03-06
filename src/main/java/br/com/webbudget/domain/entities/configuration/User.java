@@ -109,7 +109,7 @@ public class User extends PersistentEntity implements UserDetails {
     /**
      * To indicate if the user is blocked or not
      *
-     * @return <code>true</code> for blocked accounts <code>false</code> otherwise
+     * @return true for blocked accounts false otherwise
      */
     @Override
     public boolean isBlocked() {
@@ -119,7 +119,7 @@ public class User extends PersistentEntity implements UserDetails {
      * Method to check if this user is a bind account used only to host the basic data enable the LDAP/AD authentication
      * process
      *
-     * @return <code>true</code> or <code>false</code>
+     * @return true or false
      */
     @Override
     public boolean isLdapBindAccount() {
@@ -148,7 +148,7 @@ public class User extends PersistentEntity implements UserDetails {
     /**
      * To check if the password of this user is valid in the password change process
      * 
-     * @return <code>true</code> or <code>false</code>
+     * @return true or false
      */
     public boolean isPasswordValid() {
         return isNotBlank(this.password) 
@@ -159,7 +159,7 @@ public class User extends PersistentEntity implements UserDetails {
     /**
      * To check if the password of this user has changed
      * 
-     * @return <code>true</code> or <code>false</code>
+     * @return true or false
      */
     public boolean hasChangedPasswords() {
         return isNotBlank(this.password) 
@@ -169,7 +169,7 @@ public class User extends PersistentEntity implements UserDetails {
     /**
      * To check if this user is the default administrator
      * 
-     * @return <code>true</code> or <code>false</code>
+     * @return true or false
      */
     public boolean isAdministrator() {
         return this.username.equals("admin");

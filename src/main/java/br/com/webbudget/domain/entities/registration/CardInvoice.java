@@ -148,7 +148,7 @@ public class CardInvoice extends PersistentEntity {
     /**
      * Method to check if the invoice contains {@link Movement}
      *
-     * @return <code>true</code> if has, <code>false</code> if not
+     * @return true if has, false if not
      */
     public boolean hasMovements() {
         return !this.movements.isEmpty();
@@ -157,7 +157,7 @@ public class CardInvoice extends PersistentEntity {
     /**
      * Method to check if the invoice can be payd
      *
-     * @return <code>true</code> if can be, <code>false</code> otherwise
+     * @return true if can be, false otherwise
      */
     public boolean isPayable() { // FIXME verify utility
         return this.hasMovements() && this.periodMovement != null && this.periodMovement.isPaid();

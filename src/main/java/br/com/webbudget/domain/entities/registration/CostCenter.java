@@ -119,7 +119,7 @@ public class CostCenter extends PersistentEntity {
      * Method used to check if this cost center control the budget by the type of a {@link MovementClass}
      *
      * @param classType the {@link MovementClassType} to determine which budget we should consume
-     * @return <code>true</code> for a cost center that control budget or <code>false</code> otherwise
+     * @return true for a cost center that control budget or false otherwise
      */
     public boolean controlBudget(MovementClassType classType) {
         if (classType == MovementClassType.REVENUE) {

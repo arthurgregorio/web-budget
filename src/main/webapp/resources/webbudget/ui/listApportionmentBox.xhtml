@@ -87,13 +87,12 @@
                     </p:column>
                     <p:column width="10%"
                               styleClass="align-center"
-                              rendered="#{not cc.attrs.disabled}"
+                              rendered="#{cc.attrs.renderButtons}"
                               headerText="#{messages['list.actions']}">
                         <p:commandButton immediate="true"
                                          icon="fa fa-eraser"
                                          title="#{menu['delete']}"
                                          styleClass="btn btn-flat btn-danger"
-                                         rendered="#{cc.attrs.renderButtons}"
                                          update="apportionmentList #{cc.attrs.valueInput}"
                                          actionListener="#{cc.attrs.baseBean.remove(apportionment)}"/>
                     </p:column>

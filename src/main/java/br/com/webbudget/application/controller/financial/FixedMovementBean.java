@@ -17,6 +17,7 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.controller.AbstractBean;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -148,7 +149,7 @@ public class FixedMovementBean extends AbstractBean {
 //     * @return
 //     */
 //    public String changeToEdit(long fixedMovementId) {
-//        return "formFixedMovement.xhtml?faces-redirect=true&fixedMovementId=" 
+//        return "formFixedMovement.xhtml?faces-redirect=true&fixedMovementId="
 //                + fixedMovementId + "&viewState=" + ViewState.EDITING;
 //    }
 //
@@ -158,7 +159,7 @@ public class FixedMovementBean extends AbstractBean {
 //    public void changeToDelete(long fixedMovementId) {
 //        this.fixedMovement = this.movementService
 //                .findFixedMovementById(fixedMovementId);
-//        this.updateAndOpenDialog("deleteFixedMovementDialog", 
+//        this.updateAndOpenDialog("deleteFixedMovementDialog",
 //                "dialogDeleteFixedMovement");
 //    }
 //
@@ -234,7 +235,7 @@ public class FixedMovementBean extends AbstractBean {
 //        try {
 //            this.movementService.launchFixedMovements(
 //                    this.selectedFixedMovements, this.financialPeriod);
-//            this.addInfo(true, "fixed-movement.launched", 
+//            this.addInfo(true, "fixed-movement.launched",
 //                    this.financialPeriod.getIdentification());
 //        } catch (InternalServiceError ex) {
 //            this.addError(false, ex.getMessage(), ex.getParameters());
@@ -275,20 +276,20 @@ public class FixedMovementBean extends AbstractBean {
 //        }
 //        this.updateAndOpenDialog("confirmLaunchDialog","dialogConfirmLaunch");
 //    }
-//    
+//
 //    /**
 //     *
 //     */
 //    public void showLaunchesDialog() {
 //
 //        // valida se a selecao tem mais de um item
-//        if (this.viewState == ViewState.LISTING 
+//        if (this.viewState == ViewState.LISTING
 //                && this.selectedFixedMovements.size() != 1) {
 //            this.addError(true, "error.fixed-movement.more-than-one");
 //            return;
-//        } 
-//        
-//        // se a origem da visualizacao vem da tela de listem, pegamos da lista 
+//        }
+//
+//        // se a origem da visualizacao vem da tela de listem, pegamos da lista
 //        // de itens da table
 //        if (this.viewState == ViewState.LISTING) {
 //            this.fixedMovement = this.selectedFixedMovements.get(0);
@@ -316,7 +317,7 @@ public class FixedMovementBean extends AbstractBean {
 //                return page.getContent();
 //            }
 //        };
-//        
+//
 //        this.updateAndOpenDialog("launchesDialog", "dialogLaunches");
 //    }
 //

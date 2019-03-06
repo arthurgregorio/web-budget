@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.components.filter;
 
-import br.com.webbudget.domain.entities.financial.MovementType;
+import br.com.webbudget.domain.entities.financial.PeriodMovementType;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.PeriodMovementState;
 import lombok.*;
@@ -44,7 +44,7 @@ public final class PeriodMovementFilter {
 
     @Setter
     @Getter
-    private MovementType movementType;
+    private PeriodMovementType periodMovementType;
     @Setter
     @Getter
     private PeriodMovementState periodMovementState;
@@ -54,7 +54,7 @@ public final class PeriodMovementFilter {
      */
     public void clear() {
         this.value = null;
-        this.movementType = null;
+        this.periodMovementType = null;
         this.periodMovementState = null;
     }
 
@@ -72,12 +72,12 @@ public final class PeriodMovementFilter {
     }
 
     /**
-     * All possible values to filter a {@link PeriodMovement} by the {@link MovementType}
+     * All possible values to filter a {@link PeriodMovement} by the {@link PeriodMovementType}
      *
-     * @return the list of {@link MovementType}
+     * @return the list of {@link PeriodMovementType}
      */
-    public MovementType[] getMovementTypes() {
-        return MovementType.values();
+    public PeriodMovementType[] getMovementTypes() {
+        return PeriodMovementType.values();
     }
 
     /**

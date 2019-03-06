@@ -16,20 +16,23 @@
  */
 package br.com.webbudget.domain.services;
 
+import br.com.webbudget.application.components.builder.WalletBalanceBuilder;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.ReasonType;
 import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.events.CreatePeriodMovement;
+import br.com.webbudget.domain.events.DeletePeriodMovement;
 import br.com.webbudget.domain.events.UpdateWalletBalance;
 import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementDeletingLogic;
 import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementSavingLogic;
 import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementUpdatingLogic;
 import br.com.webbudget.domain.repositories.financial.ApportionmentRepository;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
-import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -127,6 +130,26 @@ public class PeriodMovementService {
         if (periodMovement.isPaidWithCash() || periodMovement.isPaidWithDebitCard()) {
             this.returnBalance(periodMovement, periodMovement.getPaymentWallet());
         }
+    }
+
+    /**
+     * Catch {@link Event} for {@link CreatePeriodMovement}
+     *
+     * @param periodMovement to be created
+     */
+    @Transactional
+    public void listenFor(@Observes @CreatePeriodMovement PeriodMovement periodMovement) {
+        this.save(periodMovement);
+    }
+
+    /**
+     * Catch the {@link Event} for {@link DeletePeriodMovement}
+     *
+     * @param movementCode of the {@link PeriodMovement} to be deleted
+     */
+    @Transactional
+    public void listenFor(@Observes @DeletePeriodMovement String movementCode) {
+        this.periodMovementRepository.findByCode(movementCode).ifPresent(this::delete);
     }
 
     /**

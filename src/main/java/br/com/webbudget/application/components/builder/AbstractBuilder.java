@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2019 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,33 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.financial.transference;
+package br.com.webbudget.application.components.builder;
 
-import br.com.webbudget.domain.entities.financial.Transference;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
-
-import javax.enterprise.context.Dependent;
+import br.com.webbudget.domain.entities.PersistentEntity;
 
 /**
- * Validate the transferred value inside the {@link Transference}
+ * Basic implementation of the builder pattern
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 06/10/2018
+ * @since 3.0.0, 03/03/2019
  */
-@Dependent
-public class NegativeValueValidator implements TransferenceSavingLogic {
+public abstract class AbstractBuilder<T extends PersistentEntity> {
+
+    protected T instance;
 
     /**
-     * {@inheritDoc}
+     * Call this method to build the instance for this builder instance
      *
-     * @param value
+     * @return the builder instance
      */
-    @Override
-    public void run(Transference value) {
-        if (value.getValue().signum() < 0) {
-            throw new BusinessLogicException("error.transference.negative-value");
-        }
-    }
+    abstract T build();
 }

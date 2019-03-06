@@ -18,6 +18,7 @@ package br.com.webbudget.domain.entities.journal;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.financial.Movement;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClass;
@@ -58,9 +59,9 @@ import static javax.persistence.FetchType.EAGER;
  */
 @Entity
 @Audited
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "refuelings", schema = JOURNAL)
+@ToString(callSuper = true, exclude = "fuels")
+@EqualsAndHashCode(callSuper = true, exclude = "fuels")
 @AuditTable(value = "refuelings", schema = JOURNAL_AUDIT)
 public class Refueling extends PersistentEntity {
 
@@ -117,28 +118,29 @@ public class Refueling extends PersistentEntity {
     @NotNull(message = "{refueling.event-date}")
     @Column(name = "event_date", nullable = false)
     private LocalDate eventDate;
-    @Getter
-    @Setter
-    @Column(name = "movement_code", length = 6)
-    private String movementCode;
 
     @Getter
     @Setter
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name = "id_period_movement")
+    private PeriodMovement periodMovement;
+    @Getter
+    @Setter
+    @ManyToOne(optional = false)
     @NotNull(message = "{refueling.vehicle}")
     @JoinColumn(name = "id_vehicle", nullable = false)
     private Vehicle vehicle;
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_movement_class")
+    @ManyToOne(optional = false)
     @NotNull(message = "{refueling.movement-class}")
+    @JoinColumn(name = "id_movement_class", nullable = false)
     private MovementClass movementClass;
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_financial_period")
+    @ManyToOne(optional = false)
     @NotNull(message = "{refueling.financial-period}")
+    @JoinColumn(name = "id_financial_period", nullable = false)
     private FinancialPeriod financialPeriod;
 
     @OneToMany(mappedBy = "refueling", orphanRemoval = true, fetch = EAGER, cascade = {PERSIST, REMOVE})
@@ -200,15 +202,6 @@ public class Refueling extends PersistentEntity {
     }
 
     /**
-     * Helper method to check if this {@link Refueling} is ok for a {@link Movement} inclusion
-     *
-     * @return <code>true</code> or <code>false</code> for a valid or invalid financial {@link Refueling}
-     */
-    public boolean isFinancialValid() {
-        return this.movementClass != null && this.getCost() != null;
-    }
-
-    /**
      * Get the {@link Vehicle} {@link CostCenter}
      *
      * @return the {@link Vehicle} {@link CostCenter}
@@ -220,7 +213,7 @@ public class Refueling extends PersistentEntity {
     /**
      * This is a helper method to check if the {@link Fuel} is ok the there are at least one informed
      *
-     * @return <code>true</code> or <code>false</code> for a valid or invalid list of {@link Fuel}
+     * @return true or false for a valid or invalid list of {@link Fuel}
      */
     public boolean isFuelsValid() {
         return this.fuels.stream()

@@ -25,7 +25,7 @@ import br.com.webbudget.domain.events.UpdateWalletBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.financial.PaymentRepository;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
-import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
+import br.com.webbudget.application.components.builder.WalletBalanceBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;

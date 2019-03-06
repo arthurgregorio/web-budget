@@ -62,7 +62,9 @@
         <h:form id="periodMovementForm" prependId="false">
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true"/>
+                    <p:messages id="messages" closable="true" >
+                        <p:autoUpdate />
+                    </p:messages>
                 </div>
             </div>
             <div class="box box-#{profileBean.currentThemeColorName}">

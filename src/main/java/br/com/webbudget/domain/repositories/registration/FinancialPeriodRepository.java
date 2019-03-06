@@ -55,7 +55,7 @@ public interface FinancialPeriodRepository extends LazyDefaultRepository<Financi
     /**
      * List all {@link FinancialPeriod} by the closing status
      * 
-     * @param isClosed <code>true</code> for closed periods or <code>false</code> for open periods
+     * @param isClosed true for closed periods or false for open periods
      * @return a {@link List} of {@link FinancialPeriod}
      */
     List<FinancialPeriod> findByClosed(boolean isClosed);

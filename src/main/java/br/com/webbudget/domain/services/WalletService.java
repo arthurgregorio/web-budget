@@ -24,7 +24,7 @@ import br.com.webbudget.domain.logics.registration.wallet.WalletSavingLogic;
 import br.com.webbudget.domain.logics.registration.wallet.WalletUpdatingLogic;
 import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
-import br.com.webbudget.domain.services.misc.WalletBalanceBuilder;
+import br.com.webbudget.application.components.builder.WalletBalanceBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;

@@ -30,6 +30,7 @@ import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.criteria.JoinType;
 import java.util.List;
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -43,6 +44,14 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 @Repository
 public interface PeriodMovementRepository extends DefaultRepository<PeriodMovement> {
+
+    /**
+     * Find a {@link PeriodMovement} by the code
+     *
+     * @param movementCode used as a filter
+     * @return an {@link Optional} of the {@link PeriodMovement}
+     */
+    Optional<PeriodMovement> findByCode(String movementCode);
 
     /**
      * Use this method to find all {@link PeriodMovement} using the lazy load strategy
@@ -99,8 +108,8 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
         }
 
         // the movement type filter if present
-        if (filter.getMovementType() != null) {
-            criteria.eq(PeriodMovement_.movementType, filter.getMovementType());
+        if (filter.getPeriodMovementType() != null) {
+            criteria.eq(PeriodMovement_.periodMovementType, filter.getPeriodMovementType());
         }
 
         // now the OR filters, more generic

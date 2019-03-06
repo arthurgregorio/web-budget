@@ -78,7 +78,7 @@ public class Authorization extends PersistentEntity {
      * Check if this authorization is for this functionality
      *
      * @param functionality the functionality to test
-     * @return <code>true</code> or <code>false</code>
+     * @return true or false
      */
     public boolean isFunctionality(String functionality) {
         return functionality != null && this.functionality.equals(functionality);
@@ -88,7 +88,7 @@ public class Authorization extends PersistentEntity {
      * Check if this authorization is for this permission
      *
      * @param permission the permission to test
-     * @return <code>true</code> or <code>false</code>
+     * @return true or false
      */
     public boolean isPermission(String permission) {
         return permission != null && (this.permission.equals(permission)

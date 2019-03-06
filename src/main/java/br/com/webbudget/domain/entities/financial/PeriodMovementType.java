@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,33 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.financial.transference;
-
-import br.com.webbudget.domain.entities.financial.Transference;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
-
-import javax.enterprise.context.Dependent;
+package br.com.webbudget.domain.entities.financial;
 
 /**
- * Validate the transferred value inside the {@link Transference}
+ * Type of the {@link PeriodMovement}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 06/10/2018
+ * @since 1.0.0, 15/05/2014
  */
-@Dependent
-public class NegativeValueValidator implements TransferenceSavingLogic {
+public enum PeriodMovementType {
+
+    MOVEMENT("period-movement-type.movement"),
+    CARD_INVOICE("period-movement-type.card-invoice");
+
+    private final String description;
+
+    /**
+     * Constructor
+     *
+     * @param description the description and also the i18n key
+     */
+    PeriodMovementType(String description) {
+        this.description = description;
+    }
 
     /**
      * {@inheritDoc}
      *
-     * @param value
+     * @return
      */
     @Override
-    public void run(Transference value) {
-        if (value.getValue().signum() < 0) {
-            throw new BusinessLogicException("error.transference.negative-value");
-        }
+    public String toString() {
+        return this.description;
     }
 }

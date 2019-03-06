@@ -94,7 +94,7 @@ public class MovementClass extends PersistentEntity {
     /**
      * To check if is a revenue class
      *
-     * @return <code>true</code> for revenue class, <code>false</code> otherwise
+     * @return true for revenue class, false otherwise
      */
     public boolean isRevenue() {
         return this.movementClassType == MovementClassType.REVENUE;
@@ -103,7 +103,7 @@ public class MovementClass extends PersistentEntity {
     /**
      * To check if is a expense class
      *
-     * @return <code>true</code> for expenses class, <code>false</code> otherwise
+     * @return true for expenses class, false otherwise
      */
     public boolean isExpense() {
         return this.movementClassType == MovementClassType.EXPENSE;
@@ -112,7 +112,7 @@ public class MovementClass extends PersistentEntity {
     /**
      * Method to check if the budget of this class is over the maximum value
      *
-     * @return <code>true</code> if the budget is over the maximum, <code>false</code> otherwise
+     * @return true if the budget is over the maximum, false otherwise
      */
     public boolean isOverBudget() {
         return this.totalMovements.compareTo(this.budget) >= 0;

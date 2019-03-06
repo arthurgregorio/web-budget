@@ -16,6 +16,10 @@
  */
 package br.com.webbudget.domain.services;
 
+import br.com.webbudget.application.components.builder.PeriodMovementBuilder;
+import br.com.webbudget.domain.entities.financial.Apportionment;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.domain.entities.financial.PeriodMovementType;
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.journal.RefuelingRepository;
@@ -26,8 +30,6 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * The {@link Refueling} service, all the logic related to this entity need to be here
@@ -41,34 +43,36 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class RefuelingService {
 
     @Inject
+    private PeriodMovementService periodMovementService;
+
+    @Inject
     private VehicleRepository vehicleRepository;
     @Inject
     private RefuelingRepository refuelingRepository;
-    
+
     /**
      * Method to save the {@link Refueling}
-     * 
+     *
      * @param refueling the {@link Refueling} to be saved
      */
     @Transactional
     public void save(Refueling refueling) {
-        
+
         if (!refueling.isFuelsValid()) {
             throw new BusinessLogicException("error.refueling.invalid-fuels");
         }
-        
+
         // get the last odometer to calculate the distance traveled
         final Long lastOdometer = this.refuelingRepository
                 .findLastOdometerByVehicle(refueling.getVehicle())
                 .orElse(0L);
-        
+
         // calculate the distance
         refueling.setFirstRefueling(lastOdometer == 0);
         refueling.calculateDistance(lastOdometer);
-        
+
         // get a list of unaccounted refueling
-        final List<Refueling> unaccounteds = this.refuelingRepository
-                .findUnaccountedByVehicle(refueling.getVehicle());
+        final List<Refueling> unaccounteds = this.refuelingRepository.findUnaccountedByVehicle(refueling.getVehicle());
 
         // if its not a full tank, don't calculate the performance, if is full
         // tank start the process for performance calculation
@@ -107,40 +111,40 @@ public class RefuelingService {
             refueling.setAccounted(false);
         }
 
+        // create the period movement for this refueling
+        final PeriodMovement periodMovement = this.periodMovementService.save(this.createPeriodMovementFor(refueling));
+
+        refueling.setPeriodMovement(periodMovement);
+
         // finally, save the refueling
         this.refuelingRepository.save(refueling);
 
-        final long vehicleOdometer = this.vehicleRepository
-                .findLastOdometer(refueling.getVehicle().getId());
+        final long vehicleOdometer = this.vehicleRepository.findLastOdometer(refueling.getVehicle().getId());
 
         // check if the vehicle odometer needs to be updated
         if (refueling.getOdometer() > vehicleOdometer) {
             refueling.updateVehicleOdometer();
             this.vehicleRepository.save(refueling.getVehicle());
         }
-        
-        // TODO after save the refueling, save the financial movement 
     }
 
     /**
      * Use this method to delete a {@link Refueling}
-     * 
+     *
      * @param refueling the {@link Refueling} to be deleted
      */
     @Transactional
     public void delete(Refueling refueling) {
-        
-        final Refueling last = this.refuelingRepository.findLastByVehicle(
-                refueling.getVehicle());
-        
+
+        final Refueling last = this.refuelingRepository.findLastByVehicle(refueling.getVehicle());
+
         // check if its the last refueling 
         if (last.getId().compareTo(refueling.getId()) != 0) {
             throw new BusinessLogicException("error.refueling.not-last");
         }
 
         // list the accounted refuelings by this refueling to change his status
-        final List<Refueling> accounteds = this.refuelingRepository
-                .findByMovementCode(refueling.getCode());
+        final List<Refueling> accounteds = this.refuelingRepository.findByMovementCode(refueling.getCode());
 
         accounteds.forEach(accounted -> {
             accounted.setAccounted(false);
@@ -148,12 +152,32 @@ public class RefuelingService {
             this.refuelingRepository.save(refueling);
         });
 
+        // delete the linked period movement just if he is not accounted yet
+        if (!refueling.getPeriodMovement().isAccounted()) {
+            this.periodMovementService.delete(refueling.getPeriodMovement());
+        }
+
         // delete the refueling
         this.refuelingRepository.attachAndRemove(refueling);
+    }
 
-        // fire the event to delete the movement linked to this refueling
-        if (isNotBlank(refueling.getMovementCode())) {
-            // TODO fire the event to delete the movement
-        }
+    /**
+     * Create a period movement for the given refueling {@link Refueling}
+     *
+     * @param refueling to used to create a {@link PeriodMovement}
+     * @return the {@link PeriodMovement} to be saved
+     */
+    private PeriodMovement createPeriodMovementFor(Refueling refueling) {
+
+        final PeriodMovementBuilder builder = new PeriodMovementBuilder()
+                .identification(refueling.getMovementDescription())
+                .description(refueling.getMovementDescription())
+                .value(refueling.getCost())
+                .dueDate(refueling.getEventDate())
+                .financialPeriod(refueling.getFinancialPeriod())
+                .type(PeriodMovementType.MOVEMENT)
+                .addApportionment(new Apportionment(refueling.getCost(), refueling.getMovementClass()));
+
+        return builder.build();
     }
 }

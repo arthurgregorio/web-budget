@@ -104,7 +104,7 @@ public class FinancialPeriod extends PersistentEntity {
     /**
      * Method to check if the period is expired or not
      *
-     * @return <code>true</code> for expired, <code>false</code> for non expired
+     * @return true for expired, false for non expired
      */
     public boolean isExpired() {
         return LocalDate.now().compareTo(this.end) > 0;
@@ -113,7 +113,7 @@ public class FinancialPeriod extends PersistentEntity {
     /**
      * Method to check if this period is active or not
      *
-     * @return if this period is active or not with with <code>true</code> or <code>false</code> respectively
+     * @return if this period is active or not with with true or false respectively
      */
     public boolean isCurrent() {
         return !this.isExpired() && !this.isClosed();

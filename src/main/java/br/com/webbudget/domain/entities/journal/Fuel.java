@@ -106,8 +106,8 @@ public class Fuel extends PersistentEntity {
      * @return if this fuel is valid or not
      */
     protected boolean isValid() {
-        return this.liters != null && this.liters.compareTo(BigDecimal.ZERO) == 0
-                && this.valuePerLiter != null && this.valuePerLiter.compareTo(BigDecimal.ZERO) == 0;
+        return this.liters != null && this.liters.compareTo(BigDecimal.ZERO) > 0
+                && this.valuePerLiter != null && this.valuePerLiter.compareTo(BigDecimal.ZERO) > 0;
     }
 
     /**
