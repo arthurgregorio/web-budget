@@ -16,10 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.registration;
 
-import br.com.webbudget.domain.entities.registration.CostCenter;
-import br.com.webbudget.domain.entities.registration.MovementClass;
-import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.entities.registration.MovementClass_;
+import br.com.webbudget.domain.entities.registration.*;
 import br.com.webbudget.domain.repositories.LazyDefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
@@ -85,6 +82,9 @@ public interface MovementClassRepository extends LazyDefaultRepository<MovementC
      */
     @Override
     default Collection<Criteria<MovementClass, MovementClass>> getRestrictions(String filter) {
-        return List.of(this.criteria().likeIgnoreCase(MovementClass_.name, this.likeAny(filter)));
+        return List.of(
+                this.criteria().likeIgnoreCase(MovementClass_.name, this.likeAny(filter)),
+                this.criteria().join(MovementClass_.costCenter,
+                        where(CostCenter.class).likeIgnoreCase(CostCenter_.name, this.likeAny(filter))));
     }
 }

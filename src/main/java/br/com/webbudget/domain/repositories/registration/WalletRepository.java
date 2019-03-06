@@ -58,6 +58,8 @@ public interface WalletRepository extends LazyDefaultRepository<Wallet> {
     default Collection<Criteria<Wallet, Wallet>> getRestrictions(String filter) {
         return List.of(
                 this.criteria().likeIgnoreCase(Wallet_.name, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Wallet_.account, this.likeAny(filter)),
+                this.criteria().likeIgnoreCase(Wallet_.agency, this.likeAny(filter)),
                 this.criteria().likeIgnoreCase(Wallet_.bank, this.likeAny(filter)));
     }
 
