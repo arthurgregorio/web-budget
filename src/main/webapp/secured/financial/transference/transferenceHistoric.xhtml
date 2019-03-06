@@ -47,7 +47,11 @@
             <div class="row">
                 <div class="col-md-12 align-center"
                      jsf:rendered="#{empty transferenceHistoricBean.transferenceDates}">
-                    <h4>#{messages['transference-historic.no-transfers']}</h4>
+                    <h3>#{messages['transference-historic.no-transfers']}</h3>
+                    <h4>
+                        <p:link value="#{menu['back']}"
+                                outcome="formTransference.xhtml"/>
+                    </h4>
                 </div>
                 <div class="col-md-12"
                      jsf:rendered="#{not empty transferenceHistoricBean.transferenceDates}">

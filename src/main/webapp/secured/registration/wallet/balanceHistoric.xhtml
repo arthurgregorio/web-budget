@@ -51,6 +51,10 @@
                 <div class="col-md-12 align-center"
                      jsf:rendered="#{empty balanceHistoricBean.walletBalanceDates}">
                     <h3>#{messages['balance-historic.no-historic']}</h3>
+                    <h4>
+                        <p:link value="#{menu['back']}"
+                                outcome="listWallets.xhtml"/>
+                    </h4>
                 </div>
                 <div class="col-md-12"
                      jsf:rendered="#{not empty balanceHistoricBean.walletBalanceDates}">
