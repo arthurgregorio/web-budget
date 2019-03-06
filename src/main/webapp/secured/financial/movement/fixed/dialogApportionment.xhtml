@@ -21,11 +21,11 @@
           xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
           id="apportionmentDialog"
           width="450"
-          modal="true" 
+          modal="true"
           closable="false"
-          resizable="false" 
+          resizable="false"
           closeOnEscape="true"
-          widgetVar="dialogApportionment" 
+          widgetVar="dialogApportionment"
           header="#{messages['apportionment.dialog.title']}">
 
     <h:form id="apportionmentForm" prependId="false">
@@ -35,15 +35,15 @@
         <div class="row">
             <div class="col-sm-12">
                 <p:messages id="apportionmentMessages" closable="true" />
-            </div> 
-        </div> 
+            </div>
+        </div>
 
         <wb:apportionmentForm blockForm="apportionmentForm"
                               costCenterList="#{fixedMovementBean.costCenters}"
                               apportionment="#{fixedMovementBean.apportionment}"
                               movementClassList="#{fixedMovementBean.movementClasses}"
                               onCostCenterSelect="#{fixedMovementBean.loadMovementClasses()}"/>
-        
+
         <div class="row">
             <div class="col-sm-12 align-right">
                 <p:commandButton id="btAdd"

@@ -49,13 +49,13 @@ public class Telephone extends PersistentEntity {
 
     @Getter
     @Setter
-    @NotBlank(message = "{telephone.execute.number}")
+    @NotBlank(message = "{telephone.number}")
     @Column(name = "number", nullable = false, length = 20)
     private String number;
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "{telephone.execute.type}")
+    @NotNull(message = "{telephone.type}")
     @Column(name = "number_type", nullable = false, length = 45)
     private NumberType numberType;
 

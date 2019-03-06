@@ -7,6 +7,19 @@
     Created on : 26/09/2018
 */
 
+/*fix the dialog padding in omega theme*/
+div.ui-dialog > .ui-dialog-titlebar {
+    padding: initial !important;
+}
+div.ui-dialog > .ui-dialog-content {
+    padding: 15px 20px 20px 20px; !important;
+}
+
+/*fix the error state at all input components*/
+input.ui-state-error {
+    border-left: 2px solid #ef5350 !important;
+}
+
 /*customize the dialog to display the input field correctly*/
 .ui-dialog .form-control {
     z-index: 0 !important;
@@ -67,11 +80,6 @@ label.ui-state-error {
 /*remove the black line in the column header*/
 th[role="columnheader"].ui-state-default {
     border-color: #ccc !important;
-}
-
-/*remove the asterisk on required field labels*/
-.ui-outputlabel-rfi {
-    display: none;
 }
 
 /*the buttons customizations*/
@@ -166,7 +174,6 @@ th[role="columnheader"].ui-state-default {
     min-width: 130px !important;
     display: block !important;
     position: relative !important;
-    border-color: #d2d6de !important;
     border-radius: 0 !important;
 }
 .ui-selectonemenu-trigger {
