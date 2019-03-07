@@ -144,7 +144,7 @@ public class RefuelingService {
         }
 
         // list the accounted refuelings by this refueling to change his status
-        final List<Refueling> accounteds = this.refuelingRepository.findByMovementCode(refueling.getCode());
+        final List<Refueling> accounteds = this.refuelingRepository.findByAccountedBy(refueling.getCode());
 
         accounteds.forEach(accounted -> {
             accounted.setAccounted(false);

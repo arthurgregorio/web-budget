@@ -16,7 +16,6 @@
  */
 package br.com.webbudget.domain.repositories.journal;
 
-import br.com.webbudget.domain.entities.financial.Movement;
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.journal.Refueling_;
 import br.com.webbudget.domain.entities.registration.*;
@@ -41,12 +40,12 @@ import java.util.Optional;
 public interface RefuelingRepository extends LazyDefaultRepository<Refueling> {
 
     /**
-     * Use this method to find all {@link Refueling} linked to a {@link Movement}
+     * Use this method to find all {@link Refueling} linked that is account by another refueling
      *
-     * @param movementCode the movement code to find the {@link Refueling}
-     * @return a list of {@link Refueling}
+     * @param refuelingCode of the linked {@link Refueling}
+     * @return {@link List} of {@link Refueling}
      */
-    List<Refueling> findByMovementCode(String movementCode);
+    List<Refueling> findByAccountedBy(String refuelingCode);
 
     /**
      * Use this method to find all the {@link Refueling} not accounted by any other {@link Refueling}
@@ -82,7 +81,7 @@ public interface RefuelingRepository extends LazyDefaultRepository<Refueling> {
      */
     @Override
     default void setOrder(Criteria<Refueling, Refueling> criteria) {
-        criteria.orderDesc(Refueling_.eventDate)
+        criteria.orderDesc(Refueling_.createdOn)
                 .orderDesc(Refueling_.id);
     }
 

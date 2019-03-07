@@ -273,7 +273,15 @@
                                      action="#{refuelingBean.doDelete()}"
                                      styleClass="btn btn-flat btn-danger"
                                      rendered="#{refuelingBean.viewState.deleting}"/>
-                    <p:spacer width="5"/>
+                    <p:spacer width="5"
+                              rendered="#{refuelingBean.viewState.deleting}"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['delete']}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     rendered="#{refuelingBean.viewState.detailing}"
+                                     action="#{refuelingBean.changeToDelete(refuelingBean.value.id)}"/>
+                    <p:spacer width="5"
+                              rendered="#{refuelingBean.viewState.detailing}"/>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary" 
                                      action="#{refuelingBean.changeToListing()}"
