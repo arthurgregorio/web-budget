@@ -45,7 +45,7 @@
 
             <!--custom naming strategy-->
             <!--disabled as stated in issue #336 -->
-            <!--<property name="hibernate.implicit_naming_strategy" instance="br.com.webbudget.infrastructure.jpa.CustomNamingStrategy"/>-->
+            <!--<property name="hibernate.implicit_naming_strategy" value="br.com.webbudget.infrastructure.jpa.CustomNamingStrategy"/>-->
         </properties>
     </persistence-unit>
 </persistence>

@@ -17,7 +17,6 @@
 package br.com.webbudget.domain.entities.financial;
 
 import br.com.webbudget.domain.entities.registration.Card;
-import br.com.webbudget.domain.entities.registration.CardInvoice;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import lombok.EqualsAndHashCode;
@@ -74,6 +73,11 @@ public class PeriodMovement extends Movement {
     @Getter
     @Setter
     @ManyToOne
+    @JoinColumn(name = "id_credit_card_invoice")
+    private CreditCardInvoice creditCardInvoice;
+    @Getter
+    @Setter
+    @ManyToOne
     @JoinColumn(name = "id_financial_period")
     @NotNull(message = "{period-movement.financial-period}")
     private FinancialPeriod financialPeriod;
@@ -125,7 +129,7 @@ public class PeriodMovement extends Movement {
     }
 
     /**
-     * To check if this movement is a {@link CardInvoice}
+     * To check if this movement is a {@link CreditCardInvoice}
      *
      * @return true if is, false otherwise
      */
@@ -217,6 +221,6 @@ public class PeriodMovement extends Movement {
         } else if (this.isPaidWithDebitCard()) {
             return this.payment.getDebitCardWallet();
         }
-        throw new IllegalStateException("No wallet is used to pay this movement!");
+        throw new IllegalStateException("This movement is in a inconsistent state of payment, contact Odin God.");
     }
 }

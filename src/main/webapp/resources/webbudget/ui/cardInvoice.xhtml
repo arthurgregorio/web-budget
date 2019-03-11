@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <h2 class="page-header">
-                        <i class="fa fa-credit-card"></i> #{cc.attrs.invoiceData.card.name}
+                        <i class="fa fa-credit-card"/> #{cc.attrs.invoiceData.card.name}
                         <small class="pull-right">
                             #{messages['card-invoice.due-date']}: 
                             <h:outputText value="#{cc.attrs.invoiceData.invoiceDueDate}">
@@ -87,12 +87,10 @@
                     #{cc.attrs.invoiceData.identification}
                 </div>
             </div>
-
             <div class="row">
                 <div jsf:id="movementsList"
                      class="col-xs-12 table-responsive">
-                    <h:form prependId="false">
-                        
+                    <h:form>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -146,7 +144,6 @@
                     </h:form>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-xs-6">
                 </div>

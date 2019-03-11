@@ -1,0 +1,179 @@
+<!--
+  Copyright (C) 2019 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
+                template="/template/mainTemplate.xhtml">
+
+    <ui:define name="pageTitle">
+        #{messages['credit-card-invoice.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        #{messages['credit-card-invoice.page-description']}
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li><a href="#">#{breadcrumb['financial']}</a></li>
+        <li class="active"><a href="#">#{breadcrumb['financial.credit-card-invoices']}</a></li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <p:messages id="messages" closable="true"/>
+            </div>
+        </div>
+        <div class="box box-#{profileBean.currentThemeColorName}">
+            <div class="box-header with-border">
+                <h:form id="controlsForm">
+                    <p:defaultCommand target="btSearch"/>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <p:selectOneMenu converter="omnifaces.GenericEnumConverter"
+                                             value="#{creditCardInvoiceBean.invoiceState}">
+                                <f:selectItem value="#{null}"
+                                              itemLabel="#{menu['select-one.all']}"/>
+                                <f:selectItems var="invoiceState"
+                                               itemValue="#{invoiceState}"
+                                               itemLabel="#{enums[invoiceState]}"
+                                               value="#{creditCardInvoiceBean.invoiceStates}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="input-group">
+                                <p:inputText styleClass="form-control"
+                                             value="#{creditCardInvoiceBean.filter}"
+                                             placeholder="#{messages['filter.credit-card-invoice']}"/>
+                                <div class="input-group-btn">
+                                    <p:commandButton id="btSearch"
+                                                     update="invoicesGrid"
+                                                     value="#{menu['search']}"
+                                                     onstart="PF('blocker').show()"
+                                                     oncomplete="PF('blocker').hide()"
+                                                     styleClass="btn btn-flat btn-primary"/>
+                                    <p:spacer width="5"/>
+                                    <p:commandButton icon="fa fa-trash"
+                                                     onstart="PF('blocker').show()"
+                                                     title="#{menu['filter-clear']}"
+                                                     oncomplete="PF('blocker').hide()"
+                                                     update="invoicesGrid controlsForm"
+                                                     styleClass="btn btn-flat btn-danger"
+                                                     actionListener="#{creditCardInvoiceBean.clearFilters()}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+        <p:dataGrid id="invoicesGrid"
+                    rows="16"
+                    lazy="true"
+                    columns="4"
+                    var="invoice"
+                    layout="grid"
+                    paginator="true"
+                    sortOrder="ascending"
+                    rowKey="#{invoice.id}"
+                    paginatorPosition="bottom"
+                    paginatorAlwaysVisible="false"
+                    emptyMessage="#{messages['list.empty']}"
+                    value="#{creditCardInvoiceBean.dataModel}"
+                    selection="#{creditCardInvoiceBean.invoice}">
+
+            <div class="box box-#{invoice.open ? 'red' : invoice.closed ? 'orange' : 'green'}">
+                <div class="box-header with-border">
+                    <i class="fa fa-credit-card"/>
+                    <h3 class="box-title">#{invoice.identification}</h3>
+                    <div class="fa pull-right">
+                        <i class="fa fa-calendar-alt"/>
+                        <h3 class="box-title">#{invoice.financialPeriod.identification}</h3>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row" style="margin-bottom: 5px">
+                        <div class="col-md-4">
+                            #{messages['credit-card-invoice.list.card']}:
+                        </div>
+                        <div class="col-md-8 align-right">
+                            #{invoice.card.readableName}
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 5px">
+                        <div class="col-md-4">
+                            #{messages['credit-card-invoice.list.total-value']}:
+                        </div>
+                        <div class="col-md-8 align-right">
+                            <h:outputText value="#{invoice.totalValue}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            </h:outputText>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            #{messages['credit-card-invoice.list.due-date']}:
+                        </div>
+                        <div class="col-md-8 align-right">
+                            <h:outputText value="#{invoice.dueDate}"
+                                          converter="localDateConverter"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <span jsf:rendered="#{invoice.open}"
+                          class="label label-danger invoice-state-label">
+                        #{enums[invoice.invoiceState]}
+                    </span>
+                    <span jsf:rendered="#{invoice.closed}"
+                          class="label label-warning invoice-state-label">
+                        #{enums[invoice.invoiceState]}
+                    </span>
+                    <span jsf:rendered="#{invoice.paid}"
+                          class="label label-success invoice-state-label">
+                        #{enums[invoice.invoiceState]}
+                    </span>
+                    <div class="pull-right">
+                        <p:commandButton immediate="true"
+                                         value="#{menu['close']}"
+                                         rendered="#{invoice.open}"
+                                         styleClass="btn btn-flat btn-success"/>
+                        <p:spacer width="5"
+                                  rendered="#{invoice.closed}"/>
+                        <p:commandButton immediate="true"
+                                         value="#{menu['pay']}"
+                                         rendered="#{invoice.closed}"
+                                         styleClass="btn btn-flat btn-warning"/>
+                        <p:spacer width="5"/>
+                        <p:commandButton immediate="true"
+                                         value="#{menu['detail']}"
+                                         styleClass="btn btn-flat btn-primary"/>
+                    </div>
+                </div>
+            </div>
+        </p:dataGrid>
+        <wb:blocker target="invoicesGrid"/>
+    </ui:define>
+</ui:composition>

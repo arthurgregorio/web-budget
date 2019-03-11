@@ -100,7 +100,7 @@
             <div jsf:id="boxBody" class="box-body">
                 <h:form id="itemsList">
                     <p:dataTable rows="25"
-                                 var="wallet"
+                                 var="invoice"
                                  lazy="true"
                                  rowHover="true"
                                  paginator="true"
@@ -122,25 +122,25 @@
                                             height="20"
                                             library="webbudget"
                                             name="images/inactive.png"
-                                            rendered="#{not wallet.active}"
+                                            rendered="#{not invoice.active}"
                                             title="#{messages['list.inactive']}"/>
                             <p:graphicImage width="20"
                                             height="20"
                                             library="webbudget"
                                             name="images/active.png"
-                                            rendered="#{wallet.active}"
+                                            rendered="#{invoice.active}"
                                             title="#{messages['list.active']}"/>
                             <p:spacer width="5"/>
-                            #{wallet.description}
+                            #{invoice.description}
                         </p:column>
                         <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['wallet.list.balance']}">
                             <p:commandLink immediate="true"
                                            rendered="#{userSessionBean.profile.showWalletBalances}"
-                                           action="#{walletBean.changeToBalanceHistory(wallet.id)}"
-                                           styleClass="#{wallet.balanceNegative ? 'text-red' : 'text-green'}">
-                                <h:outputText value="R$ #{wallet.actualBalance}">
+                                           action="#{walletBean.changeToBalanceHistory(invoice.id)}"
+                                           styleClass="#{invoice.balanceNegative ? 'text-red' : 'text-green'}">
+                                <h:outputText value="R$ #{invoice.actualBalance}">
                                     <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                 </h:outputText>
                             </p:commandLink>
@@ -148,7 +148,7 @@
                         <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['wallet.list.type']}">
-                            #{enums[wallet.walletType]}
+                            #{enums[invoice.walletType]}
                         </p:column>
                         <p:column width="15%"
                                   styleClass="align-center"
@@ -156,21 +156,21 @@
                             <p:commandButton icon="fa fa-wrench"
                                              title="#{menu['balance-adjust']}"
                                              styleClass="btn btn-flat btn-default"
-                                             action="#{walletBean.changeToBalanceAdjustment(wallet.id)}"
+                                             action="#{walletBean.changeToBalanceAdjustment(invoice.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.WALLET_ADJUST_BALANCE)}"/>
                             <p:spacer width="5"
                                       rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
-                                             action="#{walletBean.changeToEdit(wallet.id)}"
+                                             action="#{walletBean.changeToEdit(invoice.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.WALLET_UPDATE)}"/>
                             <p:spacer width="5"
                                       rendered="#{userSessionBean.isPermitted(permissions.WALLET_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
-                                             action="#{walletBean.changeToDelete(wallet.id)}"
+                                             action="#{walletBean.changeToDelete(invoice.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.WALLET_DELETE)}"/>
                         </p:column>
                     </p:dataTable>

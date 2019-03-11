@@ -214,19 +214,19 @@ public class Permissions implements Serializable {
     @PermissionGrouper("fixed-movement")
     private final String FIXED_MOVEMENT_LAUNCHES = "fixed-movement:launches";
 
-//    @Getter
-//    @PermissionGrouper("card-invoice")
-//    private final String CARD_INVOICE_PAY = "card-invoice:pay";
-//    @Getter
-//    @PermissionGrouper("card-invoice")
-//    private final String CARD_INVOICE_ACCESS = "card-invoice:access";
-//    @Getter
-//    @PermissionGrouper("card-invoice")
-//    private final String CARD_INVOICE_PROCESS = "card-invoice:process";
-//    @Getter
-//    @PermissionGrouper("card-invoice")
-//    private final String CARD_INVOICE_HISTORIC = "card-invoice:historic";
-//
+    @Getter
+    @PermissionGrouper("credit-card-invoice")
+    private final String CREDIT_CARD_INVOICE_PAY = "credit-card-invoice:pay";
+    @Getter
+    @PermissionGrouper("credit-card-invoice")
+    private final String CREDIT_CARD_INVOICE_ACCESS = "credit-card-invoice:access";
+    @Getter
+    @PermissionGrouper("credit-card-invoice")
+    private final String CREDIT_CARD_INVOICE_CLOSE = "credit-card-invoice:close";
+    @Getter
+    @PermissionGrouper("credit-card-invoice")
+    private final String CREDIT_CARD_INVOICE_HISTORIC = "credit-card-invoice:historic";
+
 //    @Getter
 //    @PermissionGrouper("closing")
 //    private final String CLOSING_ACCESS = "closing:access";

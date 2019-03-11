@@ -7,6 +7,26 @@
     Created on : 26/09/2018
 */
 
+/*wallets data grid customization*/
+#itemsList\:invoicesGrid_content {
+    border: none;
+}
+#invoicesGrid_content {
+    border: none;
+    background: none;
+    margin: 0 -.5em;
+}
+#invoicesGrid_content.ui-datagrid-content-empty {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 70px;
+}
+.invoice-state-label {
+    position: relative;
+    top: 6px;
+    font-size: 14px;
+}
+
 /*delete text*/
 .delete-text {
     position: relative;

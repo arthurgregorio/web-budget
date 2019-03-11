@@ -29,7 +29,7 @@
     <ui:param name="activeSubmenu" value="current"/>
 
     <f:metadata>
-        <f:viewAction action="#{cardInvoiceBean.initialize()}"/>
+        <f:viewAction action="#{creditCardInvoiceBean.initialize()}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -42,7 +42,7 @@
 
     <ui:define name="breadcrumb">
         <li><a href="#">#{breadcrumb['financial']}</a></li>
-        <li><a href="#">#{breadcrumb['financial.card-invoices']}</a></li>
+        <li><a href="#">#{breadcrumb['financial.credit-card-invoices']}</a></li>
         <li class="active">
             <a href="cardInvoiceView.xhtml">#{breadcrumb['financial.card-invoices.current']}</a>
         </li>
@@ -61,26 +61,26 @@
                 <h:form id="controlsForm" prependId="false">
                     <div class="col-sm-3">
                         <p:selectOneMenu converter="omnifaces.SelectItemsConverter"
-                                         value="#{cardInvoiceBean.cardInvoice.financialPeriod}">
+                                         value="#{creditCardInvoiceBean.creditCardInvoice.financialPeriod}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
                                           itemLabel="#{messages['card-invoice.select-period']}" />
                             <f:selectItems var="financialPeriod" 
                                            itemValue="#{financialPeriod}"
-                                           value="#{cardInvoiceBean.financialPeriods}" 
+                                           value="#{creditCardInvoiceBean.financialPeriods}"
                                            itemLabel="#{financialPeriod.identification}"/> 
                         </p:selectOneMenu>
                     </div>
                     <div class="col-sm-3">
                         <p:selectOneMenu converter="omnifaces.SelectItemsConverter"
-                                         value="#{cardInvoiceBean.cardInvoice.card}">
+                                         value="#{creditCardInvoiceBean.creditCardInvoice.card}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
                                           itemLabel="#{messages['card-invoice.select-card']}" />
                             <f:selectItems var="card"
                                            itemValue="#{card}"
                                            itemLabel="#{card.readableName}"
-                                           value="#{cardInvoiceBean.cards}"/>
+                                           value="#{creditCardInvoiceBean.cards}"/>
                         </p:selectOneMenu>
                     </div>
                     <div class="col-sm-6 align-right">
@@ -90,7 +90,7 @@
                                              process="controlsForm"
                                              value="#{menu['view']}"
                                              styleClass="btn btn-flat btn-info" 
-                                             actionListener="#{cardInvoiceBean.viewInvoice()}" />
+                                             actionListener="#{creditCardInvoiceBean.viewInvoice()}" />
                         </div>
                     </div>
                 </h:form>
@@ -99,15 +99,15 @@
 
         <div jsf:id="invoiceBox" class="row">
             <div class="col-xs-12 align-center"
-                 jsf:rendered="#{not cardInvoiceBean.cardInvoice.hasMovements()}">
+                 jsf:rendered="#{not creditCardInvoiceBean.creditCardInvoice.hasMovements()}">
                 <h4>#{messages['card-invoice.tip']}</h4>
             </div>
             <div class="col-xs-12"
-                 jsf:rendered="#{cardInvoiceBean.cardInvoice.hasMovements()}">
+                 jsf:rendered="#{creditCardInvoiceBean.creditCardInvoice.hasMovements()}">
                 <wb:cardInvoice printVersion="false"
-                                invoiceData="#{cardInvoiceBean.cardInvoice}"
-                                payInvoiceAction="#{cardInvoiceBean.moveInvoice()}"
-                                printInvoiceAction="#{cardInvoiceBean.changeToPrintInvoice()}"/>
+                                invoiceData="#{creditCardInvoiceBean.creditCardInvoice}"
+                                payInvoiceAction="#{creditCardInvoiceBean.moveInvoice()}"
+                                printInvoiceAction="#{creditCardInvoiceBean.changeToPrintInvoice()}"/>
             </div>
         </div>
     </ui:define>

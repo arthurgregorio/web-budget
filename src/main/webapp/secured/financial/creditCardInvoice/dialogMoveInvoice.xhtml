@@ -31,7 +31,7 @@
             <h4>
                 <o:outputFormat escape="false" 
                                 value="#{messages['card-invoice.dialog.message']}">
-                    <f:param value="#{cardInvoiceBean.cardInvoice.identification}"/>
+                    <f:param value="#{creditCardInvoiceBean.creditCardInvoice.identification}"/>
                 </o:outputFormat>
             </h4>
         </div>
@@ -41,7 +41,7 @@
             <p:commandButton immediate="true"
                              value="#{menu['back']}" 
                              styleClass="btn btn-flat btn-default"
-                             action="#{cardInvoiceBean.doCancel()}"/>
+                             action="#{creditCardInvoiceBean.doCancel()}"/>
         </div>
     </div>
 </p:dialog>

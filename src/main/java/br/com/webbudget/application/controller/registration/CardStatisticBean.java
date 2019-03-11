@@ -52,7 +52,7 @@ public class CardStatisticBean extends AbstractBean {
 //        this.card = this.cardService.findCardById(cardId);
 //
 //        // lista as ultimas 12 faturas do cartao selecionado
-//        final List<CardInvoice> invoices
+//        final List<CreditCardInvoice> invoices
 //                = this.cardService.listInvoicesByCard(this.card);
 //
 //        this.calculator = new InvoiceCalculator(this.card, invoices);
@@ -78,7 +78,7 @@ public class CardStatisticBean extends AbstractBean {
 //        final LineChartModel chartModel = new LineChartModel();
 //
 //        // pega a lista de faturas
-//        List<CardInvoice> invoices
+//        List<CreditCardInvoice> invoices
 //                = this.calculator.getOrderedByInclusion();
 //
 //        // secciona a lista para pegar somente as 12 primeiras

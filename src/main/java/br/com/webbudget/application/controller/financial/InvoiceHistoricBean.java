@@ -44,16 +44,16 @@ public class InvoiceHistoricBean extends AbstractBean {
 //    private MovementService movementService;
 //    
 //    @Getter
-//    private final AbstractLazyModel<CardInvoice> cardInvoicesModel;
+//    private final AbstractLazyModel<CreditCardInvoice> cardInvoicesModel;
 //
 //    /**
 //     * Monta o lazy data model para a datatable na view
 //     */
 //    public InvoiceHistoricBean() {
 //        
-//        this.cardInvoicesModel = new AbstractLazyModel<CardInvoice>() {
+//        this.cardInvoicesModel = new AbstractLazyModel<CreditCardInvoice>() {
 //            @Override
-//            public List<CardInvoice> load(int first, int pageSize, String sortField, 
+//            public List<CreditCardInvoice> load(int first, int pageSize, String sortField,
 //                    SortOrder sortOrder, Map<String, Object> filters) {
 //                
 //                final PageRequest pageRequest = new PageRequest();
@@ -64,7 +64,7 @@ public class InvoiceHistoricBean extends AbstractBean {
 //                        .sortingBy(sortField, "inclusion")
 //                        .withDirection(sortOrder.name());
 //                
-//                final Page<CardInvoice> page = 
+//                final Page<CreditCardInvoice> page =
 //                        cardService.listInvoicesByCard(card, pageRequest);
 //                
 //                this.setRowCount(page.getTotalPagesInt());
@@ -88,7 +88,7 @@ public class InvoiceHistoricBean extends AbstractBean {
 //     * @param cardInvoice a fatura a ser detalhada
 //     * @return a pagina 
 //     */
-//    public String changeToDetail(CardInvoice cardInvoice) {
+//    public String changeToDetail(CreditCardInvoice cardInvoice) {
 //        
 //        // lista os movimentos da fatura
 //        final List<Movement> movements =
