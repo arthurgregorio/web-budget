@@ -19,7 +19,10 @@ package br.com.webbudget.domain.entities.financial;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -31,7 +34,6 @@ import java.util.List;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
-import static javax.persistence.CascadeType.REMOVE;
 
 /**
  * The representation of a credit {@link Card} invoice in the application
