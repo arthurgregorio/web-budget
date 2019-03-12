@@ -20,12 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.faces.context.FacesContext;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * This is a helper class to obtain the i18n messages through the given key
+ * A helper class to obtain the i18n messages through the given key
  *
  * @author Arthur Gregorio
  *
@@ -46,9 +47,9 @@ public final class MessageSource {
     }
     
     /**
-     * Give a key and get the message, if the key exists
+     * Give a key and get the message if the key exists
      * 
-     * @param key the i18n key
+     * @param key i18n key
      * @return the message
      */
     public static String get(String key) {
@@ -60,5 +61,16 @@ public final class MessageSource {
         LOG.error("No message found for key {0}", key);
         
         return key;
+    }
+
+    /**
+     * Same as {@link #get(String)} but this one take some parameters to format the text found
+     *
+     * @param key to the desired text
+     * @param parameters parameters to be used in the formatter
+     * @return formatted message with parameters
+     */
+    public static String get(String key, Object... parameters) {
+        return MessageFormat.format(get(key), parameters);
     }
 }

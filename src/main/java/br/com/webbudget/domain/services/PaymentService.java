@@ -21,6 +21,7 @@ import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.ReasonType;
 import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.events.PeriodMovementPaid;
 import br.com.webbudget.domain.events.UpdateWalletBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.financial.PaymentRepository;
@@ -51,6 +52,9 @@ public class PaymentService {
     @Inject
     @UpdateWalletBalance
     private Event<WalletBalance> updateWalletBalanceEvent;
+    @Inject
+    @PeriodMovementPaid
+    private Event<PeriodMovement> periodMovementPaidEvent;
 
     /**
      * Service method to pay a given {@link PeriodMovement}
@@ -68,7 +72,7 @@ public class PaymentService {
         // save the paid value for easy viewing at the database
         payment.setPaidValue(periodMovement.getValue().subtract(payment.getDiscount()));
 
-        this.periodMovementRepository.saveAndFlushAndRefresh(periodMovement.prepareToPay(
+        final PeriodMovement saved = this.periodMovementRepository.saveAndFlushAndRefresh(periodMovement.prepareToPay(
                 this.paymentRepository.save(payment)));
 
         // now, if we are paying with cash or debit card, update the wallet balance
@@ -77,6 +81,8 @@ public class PaymentService {
         } else if (payment.isPaidWithDebitCard()) {
             this.afterPaymentWithDebitCard(payment, periodMovement);
         }
+
+        this.periodMovementPaidEvent.fire(saved);
     }
 
     /**

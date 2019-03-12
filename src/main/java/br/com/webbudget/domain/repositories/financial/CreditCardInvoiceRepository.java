@@ -30,6 +30,7 @@ import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The {@link CreditCardInvoice} repository
@@ -41,6 +42,15 @@ import java.util.List;
  */
 @Repository
 public interface CreditCardInvoiceRepository extends DefaultRepository<CreditCardInvoice> {
+
+    /**
+     * Find a {@link CreditCardInvoice} by the given {@link Card} and {@link FinancialPeriod}
+     *
+     * @param card to use as filter
+     * @param financialPeriod to use as filter
+     * @return an {@link Optional} of the {@link CreditCardInvoice}
+     */
+    Optional<CreditCardInvoice> findByCardAndFinancialPeriod(Card card, FinancialPeriod financialPeriod);
 
     /**
      * Lazy filter method to search for {@link CreditCardInvoice}

@@ -22,6 +22,7 @@ import br.com.webbudget.application.controller.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.events.CardCreated;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.logics.registration.card.CardSavingLogic;
@@ -29,6 +30,7 @@ import br.com.webbudget.domain.logics.registration.card.CardUpdatingLogic;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
@@ -58,6 +60,10 @@ public class CardBean extends LazyFormBean<Card> {
     private CardRepository cardRepository;
     @Inject
     private WalletRepository walletRepository;
+
+    @Inject
+    @CardCreated
+    private Event<Card> cardCreatedEvent;
 
     @Any
     @Inject
@@ -122,7 +128,7 @@ public class CardBean extends LazyFormBean<Card> {
     @Transactional
     public void doSave() {
         this.savingBusinessLogics.forEach(logic -> logic.run(this.value));
-        this.cardRepository.save(this.value);
+        this.cardCreatedEvent.fire(this.cardRepository.save(this.value));
         this.value = new Card();
         this.addInfo(true, "saved");
     }

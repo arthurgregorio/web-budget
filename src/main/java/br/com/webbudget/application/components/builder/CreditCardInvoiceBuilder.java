@@ -19,6 +19,7 @@ package br.com.webbudget.application.components.builder;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.infrastructure.utils.MessageSource;
 
 import java.time.LocalDate;
 
@@ -68,9 +69,20 @@ public class CreditCardInvoiceBuilder extends AbstractBuilder<CreditCardInvoice>
      */
     @Override
     public CreditCardInvoice build() {
-        this.instance.setIdentification(this.instance.getCard().getReadableName());
+        this.instance.setIdentification(this.defineIdentification());
         this.instance.setDueDate(this.defineDueDate());
         return this.instance;
+    }
+
+    /**
+     * Define the identification for this {@link CreditCardInvoice}
+     *
+     * @return the identification text
+     */
+    private String defineIdentification() {
+        final Card card = this.instance.getCard();
+        return MessageSource.get("credit-card-invoice.invoice-title", card.getName(),
+                card.getNumber().substring(card.getNumber().length() - 4));
     }
 
     /**
