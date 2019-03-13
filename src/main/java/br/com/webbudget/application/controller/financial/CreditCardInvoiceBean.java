@@ -20,8 +20,10 @@ import br.com.webbudget.application.components.table.LazyDataProvider;
 import br.com.webbudget.application.components.table.LazyModel;
 import br.com.webbudget.application.components.table.Page;
 import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.application.controller.NavigationManager;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.financial.InvoiceState;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepository;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +33,8 @@ import org.primefaces.model.SortOrder;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import static br.com.webbudget.application.controller.NavigationManager.Parameter.of;
 
 /**
  * Controller to the {@link CreditCardInvoice} view
@@ -60,11 +64,25 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
     @Inject
     private CreditCardInvoiceRepository creditCardInvoiceRepository;
 
+    private final NavigationManager navigationManager;
+
     /**
      * Constructor...
      */
     public CreditCardInvoiceBean() {
         this.dataModel = new LazyModel<>(this);
+        this.navigationManager = new NavigationManager();
+    }
+
+    /**
+     * Initialize UI to detail a {@link CreditCardInvoice}
+     *
+     * @param invoiceId to find the details
+     */
+    public void initializeDetail(long invoiceId) {
+
+        this.invoice = this.creditCardInvoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new IllegalStateException("Invoice can't be found!"));
     }
 
     /**
@@ -96,5 +114,15 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
      */
     public InvoiceState[] getInvoiceStates() {
         return InvoiceState.values();
+    }
+
+    /**
+     * Change to detail the {@link CreditCardInvoice}
+     *
+     * @param invoiceId to detail
+     * @return the outcome to the detail page
+     */
+    public String changeToDetail(long invoiceId) {
+        return this.navigationManager.to("detailCreditCardInvoice.xhtml", of("id", invoiceId));
     }
 }

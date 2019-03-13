@@ -28,63 +28,64 @@
 
     <c:interface>
         <c:attribute required="true"
-                     name="printVersion" 
+                     name="printVersion"
                      type="java.lang.Boolean"/>
 
         <c:attribute required="true"
-                     name="invoiceData" 
-                     type="br.com.webbudget.domain.model.entity.registration.CardInvoice" />
+                     name="invoice" 
+                     type="br.com.webbudget.domain.entities.financial.CreditCardInvoice" />
 
         <c:attribute name="payInvoiceAction" 
                      method-signature="java.lang.String  actionListener()"/>
-        <c:attribute name="printInvoiceAction" 
+        <c:attribute name="closeInvoiceAction"
+                     method-signature="java.lang.String  actionListener()"/>
+        <c:attribute name="printInvoiceAction"
                      method-signature="java.lang.String  actionListener()"/>
     </c:interface>
 
     <c:implementation>
-        <section class="invoice">
+        <section class="invoice" style="margin: 0">
             <div class="row">
                 <div class="col-xs-12">
                     <h2 class="page-header">
-                        <i class="fa fa-credit-card"/> #{cc.attrs.invoiceData.card.name}
+                        <i class="fa fa-credit-card"/> #{cc.attrs.invoice.card.readableName}
                         <small class="pull-right">
-                            #{messages['card-invoice.due-date']}: 
-                            <h:outputText value="#{cc.attrs.invoiceData.invoiceDueDate}">
-                                <f:converter converterId="localDateConverter"/>
-                            </h:outputText>
+                            #{messages['credit-card-invoice.invoice.due-date']}: 
+                            <h:outputText converter="localDateConverter"
+                                          value="#{cc.attrs.invoice.dueDate}"/>
                         </small>
                     </h2>
                 </div>
             </div>
             <div class="row invoice-info">
                 <div class="col-sm-4 invoice-col">
-                    #{messages['card-invoice.card-data']}
+                    #{messages['credit-card-invoice.invoice.card']}
                     <address>
-                        <strong>#{cc.attrs.invoiceData.card.owner}</strong>
+                        <strong>#{cc.attrs.invoice.card.owner}</strong>
                         <br/>
-                        #{cc.attrs.invoiceData.card.securedNumber}
+                        #{cc.attrs.invoice.card.securedNumber}
                         <br/>
-                        #{cc.attrs.invoiceData.card.flag}
+                        #{cc.attrs.invoice.card.flag}
                     </address>
                 </div>
                 <div class="col-sm-4 invoice-col">
-                    #{messages['card-invoice.period-data']}
+                    #{messages['credit-card-invoice.invoice.financial-period']}
                     <address>
-                        <strong>#{cc.attrs.invoiceData.financialPeriod.identification}</strong>
+                        <strong>#{cc.attrs.invoice.financialPeriod.identification}</strong>
                         <br/>
-                        <h:outputText value="#{cc.attrs.invoiceData.financialPeriod.creditCardGoal}" >
+                        <h:outputText value="#{cc.attrs.invoice.financialPeriod.creditCardGoal}" >
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                         </h:outputText> 
                         <br/>
-                        <o:outputFormat value="#{messages['card-invoice.period']}">
-                            <f:param value="#{cc.attrs.invoiceData.invoicePeriodStart}"/>
-                            <f:param value="#{cc.attrs.invoiceData.invoicePeriodEnd}"/>
+                        <o:outputFormat value="#{messages['credit-card-invoice.invoice.financial-period-dates']}">
+                            <!--<f:param value="#{cc.attrs.invoice.invoicePeriodStart}"/>-->
+                            <!--<f:param value="#{cc.attrs.invoice.invoicePeriodEnd}"/>-->
                         </o:outputFormat>
                     </address>
                 </div>
                 <div class="col-sm-4 invoice-col">
-                    <b>#{messages['card-invoice.identification']}:</b>
-                    #{cc.attrs.invoiceData.identification}
+                    <b>#{messages['credit-card-invoice.invoice.identification']}:</b>
+                    #{cc.attrs.invoice.identification}
                 </div>
             </div>
             <div class="row">
@@ -95,50 +96,49 @@
                             <thead>
                                 <tr>
                                     <th jsf:rendered="#{not cc.attrs.printVersion}">
-                                        <b>#{messages['card-invoice.checked']}</b>
+                                        <b>#{messages['credit-card-invoice.invoice.checked']}</b>
                                     </th>
-                                    <th><b>#{messages['card-invoice.movement-code']}</b></th>
-                                    <th><b>#{messages['card-invoice.movement-description']}</b></th>
-                                    <th><b>#{messages['card-invoice.payment-date']}</b></th>
-                                    <th><b>#{messages['card-invoice.value']}</b></th>
+                                    <th><b>#{messages['credit-card-invoice.invoice.payment-date']}</b></th>
+                                    <th><b>#{messages['credit-card-invoice.invoice.movement-identification']}</b></th>
+                                    <th><b>#{messages['credit-card-invoice.invoice.value']}</b></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <ui:repeat var="movement" 
-                                           value="#{cc.attrs.invoiceData.movements}">
-                                    <tr class="#{movement.checked ? 'checked-line' : ''}">
-                                        <td style="width:10%"
-                                            jsf:rendered="#{not cc.attrs.printVersion}">
-                                            <p:selectBooleanCheckbox value="#{movement.checked}">
-                                                <p:ajax update="#{cc.id}:movementsList"/>
-                                            </p:selectBooleanCheckbox>
-                                        </td>
-                                        <td style="width:10%">
-                                            <p:link target="_blank"
-                                                    includeViewParams="true"
-                                                    value="#{movement.code}" 
-                                                    rendered="#{not cc.attrs.printVersion}"
-                                                    outcome="/main/financial/movement/period/formMovement.xhtml">
-                                                <f:param name="movementId" value="#{movement.id}"/>
-                                                <f:param name="viewState" value="#{'DETAILING'}"/>
-                                                <f:param name="faces-redirect" value="#{true}"/>
-                                            </p:link>
-                                            <h:outputText value="#{movement.code}"
-                                                          rendered="#{cc.attrs.printVersion}"/>
-                                        </td>
-                                        <td>#{movement.description}</td>
-                                        <td>
-                                            <h:outputText value="#{movement.paymentDate}">
-                                                <f:converter converterId="localDateConverter"/>
-                                            </h:outputText>
-                                        </td>
-                                        <td>
-                                            <h:outputText value="#{movement.value}" >
-                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                            </h:outputText>                                                 
-                                        </td>
-                                    </tr>
-                                </ui:repeat>
+                                <!--<ui:repeat var="movement" -->
+                                           <!--value="#{cc.attrs.invoice.periodMovements}">-->
+                                    <!--<tr class="#{movement.checked ? 'checked-line' : ''}">-->
+                                        <!--<td style="width:10%"-->
+                                            <!--jsf:rendered="#{not cc.attrs.printVersion}">-->
+                                            <!--<p:selectBooleanCheckbox value="#{movement.checked}">-->
+                                                <!--<p:ajax update="#{cc.id}:movementsList"/>-->
+                                            <!--</p:selectBooleanCheckbox>-->
+                                        <!--</td>-->
+                                        <!--<td style="width:10%">-->
+                                            <!--<p:link target="_blank"-->
+                                                    <!--includeViewParams="true"-->
+                                                    <!--value="#{movement.code}" -->
+                                                    <!--rendered="#{not cc.attrs.printVersion}"-->
+                                                    <!--outcome="/main/financial/movement/period/formMovement.xhtml">-->
+                                                <!--<f:param name="movementId" value="#{movement.id}"/>-->
+                                                <!--<f:param name="viewState" value="#{'DETAILING'}"/>-->
+                                                <!--<f:param name="faces-redirect" value="#{true}"/>-->
+                                            <!--</p:link>-->
+                                            <!--<h:outputText value="#{movement.code}"-->
+                                                          <!--rendered="#{cc.attrs.printVersion}"/>-->
+                                        <!--</td>-->
+                                        <!--<td>#{movement.description}</td>-->
+                                        <!--<td>-->
+                                            <!--<h:outputText value="#{movement.paymentDate}">-->
+                                                <!--<f:converter converterId="localDateConverter"/>-->
+                                            <!--</h:outputText>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--<h:outputText value="#{movement.value}" >-->
+                                                <!--<f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />-->
+                                            <!--</h:outputText>-->
+                                        <!--</td>-->
+                                    <!--</tr>-->
+                                <!--</ui:repeat>-->
                             </tbody>
                         </table>
                     </h:form>
@@ -149,16 +149,16 @@
                 </div>
                 <div class="col-xs-6">
                     <p class="lead">
-                        <o:outputFormat value="#{messages['card-invoice.movements-until']}">
-                            <f:param value="#{viewManagerBean.actualDate}"/>
-                        </o:outputFormat>
+                        #{messages['credit-card-invoice.invoice.closing-date']}
+                        <!--<h:outputText converter="localDateConverter"-->
+                                      <!--value="#{cc.attrs.invoice.closingDate}"/>-->
                     </p>
                     <div class="table-responsive">
                         <table class="table">
                             <tr>
-                                <th style="width:50%"><b>#{messages['card-invoice.total']}</b></th>
+                                <th style="width:50%"><b>#{messages['credit-card-invoice.invoice.total']}</b></th>
                                 <td>
-                                    <h:outputText value="#{cc.attrs.invoiceData.total}" >
+                                    <h:outputText value="#{cc.attrs.invoice.totalValue}" >
                                         <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                                     </h:outputText> 
                                 </td>
@@ -170,17 +170,17 @@
             <div class="row no-print"
                  jsf:rendered="#{not cc.attrs.printVersion}">
                 <div class="col-xs-12 align-right">
-                    <p:commandButton immediate="true" 
-                                     value="#{menu['move']}" 
-                                     styleClass="btn btn-flat btn-success"
-                                     actionListener="#{cc.attrs.payInvoiceAction}"
-                                     rendered="#{not cc.attrs.printVersion
-                                                 and cc.attrs.invoiceData.hasMovements()
-                                                 and userSessionBean.hasRole(authorization.CARD_INVOICE_PAY)}"/>
-                    <p:spacer width="5"/>
+                    <!--<p:commandButton immediate="true" -->
+                                     <!--value="#{menu['close']}"-->
+                                     <!--styleClass="btn btn-flat btn-success"-->
+                                     <!--actionListener="#{cc.attrs.payInvoiceAction}"-->
+                                     <!--rendered="#{not cc.attrs.printVersion-->
+                                                 <!--and not empty cc.attrs.invoice.periodMovements-->
+                                                 <!--and userSessionBean.isPermitted(permissions.CREDIT_CARD_INVOICE_PAY)}"/>-->
+                    <!--<p:spacer width="5"/>-->
                     <p:commandButton immediate="true"
                                      value="#{menu['print']}"
-                                     styleClass="btn btn-flat btn-default" 
+                                     styleClass="btn btn-flat btn-primary"
                                      action="#{cc.attrs.printInvoiceAction}"
                                      rendered="#{not cc.attrs.printVersion}"/>
                 </div>

@@ -34,6 +34,7 @@ import java.util.List;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * The representation of a credit {@link Card} invoice in the application
@@ -49,9 +50,6 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUD
 @Table(name = "credit_card_invoices", schema = FINANCIAL)
 @EqualsAndHashCode(callSuper = true, exclude = "periodMovements")
 @AuditTable(value = "credit_card_invoices", schema = FINANCIAL_AUDIT)
-@NamedEntityGraph(
-        name = "CreditCardInvoice.withPeriodMovements",
-        attributeNodes = @NamedAttributeNode(value = "periodMovements"))
 public class CreditCardInvoice extends PersistentEntity {
 
     @Getter
@@ -87,7 +85,7 @@ public class CreditCardInvoice extends PersistentEntity {
     @JoinColumn(name = "id_financial_period")
     public FinancialPeriod financialPeriod;
 
-    @OneToMany(mappedBy = "creditCardInvoice")
+    @OneToMany(mappedBy = "creditCardInvoice", fetch = EAGER)
     private List<PeriodMovement> periodMovements;
 
     /**

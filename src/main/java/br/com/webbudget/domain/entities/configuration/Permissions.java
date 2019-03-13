@@ -223,9 +223,6 @@ public class Permissions implements Serializable {
     @Getter
     @PermissionGrouper("credit-card-invoice.title")
     private final String CREDIT_CARD_INVOICE_CLOSE = "credit-card-invoice:close";
-    @Getter
-    @PermissionGrouper("credit-card-invoice.title")
-    private final String CREDIT_CARD_INVOICE_HISTORIC = "credit-card-invoice:historic";
 
 //    @Getter
 //    @PermissionGrouper("closing")

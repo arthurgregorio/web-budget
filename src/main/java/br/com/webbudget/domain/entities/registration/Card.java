@@ -122,4 +122,26 @@ public class Card extends PersistentEntity {
 
         return builder.toString();
     }
+
+    /**
+     * If the card number is correct with 8 chars return a secured version of the number
+     *
+     * @return a limited version of the card number
+     */
+    public String getSecuredNumber() {
+
+        final StringBuilder secured = new StringBuilder();
+
+        if (this.number != null && this.number.length() >= 8) {
+            secured.append(this.number.substring(0, 2));
+            for (int i = 0; i < (this.number.length() - 2); i++) {
+                secured.append("*");
+            }
+            secured.append(this.number.substring(this.number.length() - 4, this.number.length()));
+        } else {
+            return this.number;
+        }
+
+        return secured.toString();
+    }
 }
