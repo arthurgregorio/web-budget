@@ -25,20 +25,19 @@
     <h:head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <title>#{cardInvoicePrintBean.invoice.identification}</title>
+        <title>#{messages['credit-card-invoice.print-invoice']}</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['webbudget:img/favicon.ico']}"/>
 
-        <h:outputStylesheet library="bootstrap" name="css/bootstrap.css"/>
-        <h:outputStylesheet library="webbudget" name="css/adminlte.css"/>
+        <h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css"/>
+        <h:outputStylesheet library="adminlte" name="css/adminlte.min.css"/>
     </h:head>
 
     <h:body onload="window.print()">
         <div class="wrapper">
             <wb:cardInvoice printVersion="true"
-                            invoiceData="#{flash.cardInvoice}"/>
+                            invoice="#{flash.creditCardInvoice}"/>
         </div>
     </h:body>
 </html>

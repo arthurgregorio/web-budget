@@ -29,6 +29,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -130,6 +131,24 @@ public class CreditCardInvoice extends PersistentEntity {
      */
     public boolean isPaid() {
         return this.invoiceState == InvoiceState.PAID;
+    }
+
+    /**
+     * Get the {@link FinancialPeriod} start date
+     *
+     * @return start date as {@link String}
+     */
+    public String getPeriodStart() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.financialPeriod.getStart());
+    }
+
+    /**
+     * Get the {@link FinancialPeriod} end date
+     *
+     * @return end date as {@link String}
+     */
+    public String getPeriodEnd() {
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.financialPeriod.getEnd());
     }
 
     /**

@@ -86,3 +86,8 @@ input[type=number]::-webkit-outer-spin-button {
 td {
     vertical-align: middle;
 }
+
+/*line to mark a check movement at the invoice*/
+.checked-line {
+    text-decoration: line-through;
+}

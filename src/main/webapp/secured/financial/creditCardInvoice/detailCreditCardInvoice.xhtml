@@ -65,7 +65,7 @@
                  jsf:rendered="#{not empty creditCardInvoiceBean.invoice.periodMovements}">
                 <wb:cardInvoice printVersion="false"
                                 invoice="#{creditCardInvoiceBean.invoice}"
-                                payInvoiceAction="#{creditCardInvoiceBean.moveInvoice()}"
+                                backAction="#{creditCardInvoiceBean.changeToListing()}"
                                 printInvoiceAction="#{creditCardInvoiceBean.changeToPrintInvoice()}"/>
             </div>
         </div>

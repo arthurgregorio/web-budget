@@ -23,10 +23,10 @@ import br.com.webbudget.application.controller.AbstractBean;
 import br.com.webbudget.application.controller.NavigationManager;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.financial.InvoiceState;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepository;
 import lombok.Getter;
 import lombok.Setter;
+import org.omnifaces.util.Faces;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -124,5 +124,24 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
      */
     public String changeToDetail(long invoiceId) {
         return this.navigationManager.to("detailCreditCardInvoice.xhtml", of("id", invoiceId));
+    }
+
+    /**
+     * Navigate back to the listing view
+     *
+     * @return the outcome to the listing view
+     */
+    public String changeToListing() {
+        return this.navigationManager.to("listCreditCardInvoices.xhtml");
+    }
+
+    /**
+     * Navigate to the print page
+     *
+     * @return the outcome to the print page
+     */
+    public String changeToPrintInvoice() {
+        Faces.setFlashAttribute("creditCardInvoice", this.invoice);
+        return this.navigationManager.to("cardInvoicePrint.xhtml");
     }
 }

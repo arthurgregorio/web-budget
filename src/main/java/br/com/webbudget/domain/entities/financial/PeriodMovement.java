@@ -27,6 +27,7 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.GET;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -81,6 +82,14 @@ public class PeriodMovement extends Movement {
     @JoinColumn(name = "id_financial_period")
     @NotNull(message = "{period-movement.financial-period}")
     private FinancialPeriod financialPeriod;
+
+    /**
+     * Used at the credit card invoice to mark the movement and help the user to check the invoice
+     */
+    @Getter
+    @Setter
+    @Transient
+    private boolean checked;
 
     /**
      * Constructor...
