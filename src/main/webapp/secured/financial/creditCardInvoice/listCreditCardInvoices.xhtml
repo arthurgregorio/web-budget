@@ -40,7 +40,9 @@
     <ui:define name="content">
         <div class="row">
             <div class="col-sm-12">
-                <p:messages id="messages" closable="true"/>
+                <p:messages id="messages" closable="true">
+                    <p:autoUpdate/>
+                </p:messages>
             </div>
         </div>
         <div class="box box-#{profileBean.currentThemeColorName}">
@@ -159,7 +161,10 @@
                         <p:commandButton immediate="true"
                                          value="#{menu['close']}"
                                          rendered="#{invoice.open}"
-                                         styleClass="btn btn-flat btn-success"/>
+                                         onstart="PF('blocker').show()"
+                                         oncomplete="PF('blocker').hide()"
+                                         styleClass="btn btn-flat btn-success"
+                                         action="#{creditCardInvoiceBean.doClose(invoice.id)}"/>
                         <p:spacer width="5"
                                   rendered="#{invoice.closed}"/>
                         <p:commandButton immediate="true"
@@ -176,5 +181,8 @@
             </div>
         </p:dataGrid>
         <wb:blocker target="invoicesGrid"/>
+    </ui:define>
+    <ui:define name="popups">
+        <ui:include src="dialogInvoiceClosed.xhtml"/>
     </ui:define>
 </ui:composition>

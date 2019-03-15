@@ -16,9 +16,12 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
+import br.com.webbudget.application.components.builder.PeriodMovementBuilder;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.MovementClass;
+import br.com.webbudget.infrastructure.utils.MessageSource;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +31,7 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -65,6 +69,10 @@ public class CreditCardInvoice extends PersistentEntity {
     @Setter
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;
+    @Getter
+    @Setter
+    @Column(name = "closing_date")
+    private LocalDate closingDate;
     @Getter
     @Setter
     @Column(name = "invoice_state", nullable = false)
@@ -160,5 +168,43 @@ public class CreditCardInvoice extends PersistentEntity {
         return this.periodMovements.stream()
                 .map(Movement::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * Convert this credit card invoice into a {@link PeriodMovement}
+     *
+     * @param movementClass to be used at the {@link Apportionment}
+     * @return the {@link PeriodMovement} for this invoice
+     */
+    public PeriodMovement toPeriodMovement(MovementClass movementClass) {
+
+        final String dueDateString = DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.dueDate);
+        final String valueString = NumberFormat.getCurrencyInstance().format(this.totalValue);
+
+        final String description = MessageSource.get("credit-card-invoice.invoice-description",
+                this.card.getReadableName(), dueDateString, valueString, this.financialPeriod.getIdentification());
+
+        return new PeriodMovementBuilder()
+                .type(PeriodMovementType.CARD_INVOICE)
+                .financialPeriod(this.financialPeriod)
+                .dueDate(this.dueDate)
+                .identification(this.identification)
+                .description(description)
+                .value(this.totalValue)
+                .addApportionment(new Apportionment(this.totalValue, movementClass))
+                .build();
+    }
+
+    /**
+     * Prepare this invoice to be closed
+     *
+     * @param periodMovement to link with this invoice
+     * @return this invoice to be saved with the new state
+     */
+    public CreditCardInvoice prepareToClose(PeriodMovement periodMovement) {
+        this.periodMovement = periodMovement;
+        this.invoiceState = InvoiceState.CLOSED;
+        this.closingDate = LocalDate.now();
+        return this;
     }
 }

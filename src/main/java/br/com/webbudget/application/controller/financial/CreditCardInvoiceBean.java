@@ -24,6 +24,7 @@ import br.com.webbudget.application.controller.NavigationManager;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.financial.InvoiceState;
 import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepository;
+import br.com.webbudget.domain.services.CreditCardInvoiceService;
 import lombok.Getter;
 import lombok.Setter;
 import org.omnifaces.util.Faces;
@@ -62,6 +63,9 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
     private LazyDataModel<CreditCardInvoice> dataModel;
 
     @Inject
+    private CreditCardInvoiceService creditCardInvoiceService;
+
+    @Inject
     private CreditCardInvoiceRepository creditCardInvoiceRepository;
 
     private final NavigationManager navigationManager;
@@ -80,7 +84,6 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
      * @param invoiceId to find the details
      */
     public void initializeDetail(long invoiceId) {
-
         this.invoice = this.creditCardInvoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new IllegalStateException("Invoice can't be found!"));
     }
@@ -97,6 +100,16 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
     @Override
     public Page<CreditCardInvoice> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
         return this.creditCardInvoiceRepository.findAllBy(this.filter, this.invoiceState, first, pageSize);
+    }
+
+    /**
+     * Call the method to close the {@link CreditCardInvoice}
+     *
+     * @param invoiceId to search for the invoice to close
+     */
+    public void doClose(long invoiceId) {
+        this.creditCardInvoiceService.close(invoiceId);
+        this.addInfo(true, "info.credit-card-invoice.closed");
     }
 
     /**

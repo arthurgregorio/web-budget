@@ -17,13 +17,13 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.application.components.builder.CreditCardInvoiceBuilder;
-import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
-import br.com.webbudget.domain.entities.financial.Payment;
-import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.application.components.builder.PeriodMovementBuilder;
+import br.com.webbudget.domain.entities.financial.*;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.events.CardCreated;
+import br.com.webbudget.domain.events.CreatePeriodMovement;
 import br.com.webbudget.domain.events.FinancialPeriodOpened;
 import br.com.webbudget.domain.events.PeriodMovementPaid;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
@@ -31,12 +31,16 @@ import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepositor
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
+import br.com.webbudget.infrastructure.utils.MessageSource;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -51,6 +55,9 @@ import java.util.List;
 public class CreditCardInvoiceService {
 
     @Inject
+    private PeriodMovementService periodMovementService;
+
+    @Inject
     private CardRepository cardRepository;
     @Inject
     private PeriodMovementRepository periodMovementRepository;
@@ -58,6 +65,24 @@ public class CreditCardInvoiceService {
     private FinancialPeriodRepository financialPeriodRepository;
     @Inject
     private CreditCardInvoiceRepository creditCardInvoiceRepository;
+
+    /**
+     * Effectively close the {@link CreditCardInvoice}
+     *
+     * @param invoiceId to search for the {@link CreditCardInvoice} to be closed
+     */
+    @Transactional
+    public void close(long invoiceId) {
+
+        // TODO bring from system configs the movement class to pay for invoices
+
+//        final CreditCardInvoice invoice = this.creditCardInvoiceRepository.findById(invoiceId)
+//                .orElseThrow(() -> new BusinessLogicException("error.credit-card-invoice.not-found"));
+//
+//        final PeriodMovement periodMovement = this.periodMovementService.save(invoice.toPeriodMovement());
+//
+//        this.creditCardInvoiceRepository.saveAndFlushAndRefresh(invoice.prepareToClose(periodMovement));
+    }
 
     /**
      * This method observes for events about the {@link FinancialPeriod} opening action and create the
