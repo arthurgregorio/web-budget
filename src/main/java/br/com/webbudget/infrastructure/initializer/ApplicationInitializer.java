@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2019 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.infrastructure.initializer;
 
+import org.apache.deltaspike.core.api.projectstage.ProjectStage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -23,39 +24,45 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.util.Comparator;
 
 /**
- * This class is the start point of the basic configurations for the application
- *
- * Through here whe configure the default user and all the data that need to be initialized in the database before
- * the first start
- *
- * This class is a EJB and runs on every start of the environment
+ * Default initializer for the application. This class will automatic discovery for all tasks to be performed at
+ * initialization time
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 27/12/2017
+ * @since 3.0.0, 17/03/2019
  */
 @Startup
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
-public class Bootstrap {
+public class ApplicationInitializer {
 
     @Inject
     private Logger logger;
 
     @Inject
-    private EnvironmentInitializer initializer;
+    private ProjectStage projectStage;
+
+    @Any
+    @Inject
+    private Instance<InitializationTask> tasks;
 
     /**
-     * Initialize and do the job
+     * Call the tasks and log the execution status
      */
     @PostConstruct
-    protected void initialize() {
-        this.logger.info("Initializing application, this may take few minutes...");
-        this.initializer.initialize();
-        this.logger.info("Initialization finished!");
-   }
+    public void initialize() {
+        this.logger.info("webBudget is now preparing the initialization tasks...");
+        this.tasks.stream()
+                .sorted(Comparator.comparingInt(InitializationTask::getPriority))
+                .forEach(InitializationTask::run);
+        this.logger.info("{} initialization tasks performed and the applications is now running in {} mode",
+                this.tasks.stream().count(), this.projectStage);
+    }
 }

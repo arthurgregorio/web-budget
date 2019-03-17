@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2019 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +17,26 @@
 package br.com.webbudget.infrastructure.initializer;
 
 /**
- * Abstraction for initializing the environment, this class is a contract to provide a simple way to inject any
- * initialization strategy in the {@link Bootstrap} phase of the application
+ * Interface to define the initialization task structure
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 27/12/2017
+ * @since 3.0.0, 17/03/2019
  */
-public interface EnvironmentInitializer {
+public interface InitializationTask {
 
     /**
-     * Call the initialization process
+     * Call this method to run this initialization task
      */
-    void initialize();
+    void run();
+
+    /**
+     * Use this method to define a default priority to this task
+     *
+     * @return the int value representing the priority number, default is zero (highest priority)
+     */
+    default int getPriority() {
+        return 0;
+    }
 }
