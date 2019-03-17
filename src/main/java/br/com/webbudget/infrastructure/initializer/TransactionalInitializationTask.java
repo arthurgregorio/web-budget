@@ -57,5 +57,5 @@ public abstract class TransactionalInitializationTask implements InitializationT
     /**
      * Use this method to run the task in a {@link Transactional} environment
      */
-    abstract void runInsideTransaction();
+    public abstract void runInsideTransaction();
 }

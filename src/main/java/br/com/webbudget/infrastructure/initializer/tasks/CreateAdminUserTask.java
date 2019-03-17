@@ -14,12 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infrastructure.initializer;
+package br.com.webbudget.infrastructure.initializer.tasks;
 
 import br.com.webbudget.domain.entities.configuration.Group;
 import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.repositories.configuration.GroupRepository;
 import br.com.webbudget.domain.repositories.configuration.UserRepository;
+import br.com.webbudget.infrastructure.initializer.InitializationTask;
+import br.com.webbudget.infrastructure.initializer.TransactionalInitializationTask;
 import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage.Production;
@@ -52,7 +54,7 @@ public class CreateAdminUserTask extends TransactionalInitializationTask {
      * {@inheritDoc}
      */
     @Override
-    void runInsideTransaction() {
+    public void runInsideTransaction() {
         this.userRepository.findByUsername("admin").ifPresentOrElse(user -> {/* do nothing */}, () -> {
 
             final Group group = this.groupRepository

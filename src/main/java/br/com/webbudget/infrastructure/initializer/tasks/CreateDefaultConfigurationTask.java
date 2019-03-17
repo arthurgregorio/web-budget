@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infrastructure.initializer;
+package br.com.webbudget.infrastructure.initializer.tasks;
 
 import br.com.webbudget.application.components.dto.Color;
 import br.com.webbudget.domain.entities.configuration.Configuration;
@@ -24,6 +24,8 @@ import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.repositories.configuration.ConfigurationRepository;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
+import br.com.webbudget.infrastructure.initializer.InitializationTask;
+import br.com.webbudget.infrastructure.initializer.TransactionalInitializationTask;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;
 
@@ -53,7 +55,7 @@ public class CreateDefaultConfigurationTask extends TransactionalInitializationT
      * {@inheritDoc}
      */
     @Override
-    void runInsideTransaction() {
+    public void runInsideTransaction() {
 
         final CostCenter costCenter = new CostCenter();
 

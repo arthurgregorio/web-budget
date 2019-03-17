@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.infrastructure.initializer;
+package br.com.webbudget.infrastructure.initializer.tasks;
 
+import br.com.webbudget.infrastructure.initializer.InitializationTask;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
