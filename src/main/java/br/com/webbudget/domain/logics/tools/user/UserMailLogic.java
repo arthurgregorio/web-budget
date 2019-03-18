@@ -18,7 +18,7 @@ package br.com.webbudget.domain.logics.tools.user;
 
 import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.tools.UserRepository;
+import br.com.webbudget.domain.repositories.configuration.UserRepository;
 import br.com.webbudget.domain.logics.BusinessLogic;
 
 import javax.enterprise.context.Dependent;

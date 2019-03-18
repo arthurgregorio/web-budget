@@ -17,30 +17,30 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.application.components.builder.CreditCardInvoiceBuilder;
-import br.com.webbudget.application.components.builder.PeriodMovementBuilder;
-import br.com.webbudget.domain.entities.financial.*;
+import br.com.webbudget.domain.entities.configuration.Configuration;
+import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
+import br.com.webbudget.domain.entities.financial.Payment;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.events.CardCreated;
-import br.com.webbudget.domain.events.CreatePeriodMovement;
 import br.com.webbudget.domain.events.FinancialPeriodOpened;
+import br.com.webbudget.domain.events.PeriodMovementDeleted;
 import br.com.webbudget.domain.events.PeriodMovementPaid;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.repositories.configuration.ConfigurationRepository;
 import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepository;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
-import br.com.webbudget.infrastructure.utils.MessageSource;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -60,6 +60,8 @@ public class CreditCardInvoiceService {
     @Inject
     private CardRepository cardRepository;
     @Inject
+    private ConfigurationRepository configurationRepository;
+    @Inject
     private PeriodMovementRepository periodMovementRepository;
     @Inject
     private FinancialPeriodRepository financialPeriodRepository;
@@ -74,14 +76,21 @@ public class CreditCardInvoiceService {
     @Transactional
     public void close(long invoiceId) {
 
-        // TODO bring from system configs the movement class to pay for invoices
+        final Configuration configuration = this.configurationRepository.findCurrent()
+                .orElseThrow(() -> new BusinessLogicException("error.configuration.not-found"));
 
-//        final CreditCardInvoice invoice = this.creditCardInvoiceRepository.findById(invoiceId)
-//                .orElseThrow(() -> new BusinessLogicException("error.credit-card-invoice.not-found"));
-//
-//        final PeriodMovement periodMovement = this.periodMovementService.save(invoice.toPeriodMovement());
-//
-//        this.creditCardInvoiceRepository.saveAndFlushAndRefresh(invoice.prepareToClose(periodMovement));
+        final CreditCardInvoice invoice = this.creditCardInvoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new BusinessLogicException("error.credit-card-invoice.not-found"));
+
+        // check if this invoice is with value equal to zero, then inform that it will closed at the end of the period
+        if (invoice.getTotalValue().compareTo(BigDecimal.ZERO) == 0) {
+            throw new BusinessLogicException("error.credit-card-invoice.total-value-equal-zero");
+        }
+
+        final PeriodMovement periodMovement = this.periodMovementService
+                .save(invoice.toPeriodMovement(configuration.getCreditCardClass()));
+
+        this.creditCardInvoiceRepository.saveAndFlushAndRefresh(invoice.prepareToClose(periodMovement));
     }
 
     /**
@@ -114,6 +123,25 @@ public class CreditCardInvoiceService {
     }
 
     /**
+     * This method listen to {@link Event} about the {@link Payment} of any {@link PeriodMovement} and if we are
+     * paying a {@link CreditCardInvoice} movement, then, this method will update the status of the invoice
+     *
+     * @param periodMovement to check if is a invoice payment
+     */
+    @Transactional
+    public void changeInvoiceStatus(@Observes @PeriodMovementPaid PeriodMovement periodMovement) {
+
+        if (!periodMovement.isCreditCardInvoice()) {
+            return;
+        }
+
+        final CreditCardInvoice invoice = this.creditCardInvoiceRepository.findByPeriodMovement(periodMovement)
+                .orElseThrow(() -> new BusinessLogicException("error.credit-card-invoice.not-found"));
+
+        this.creditCardInvoiceRepository.saveAndFlushAndRefresh(invoice.prepareToPay());
+    }
+
+    /**
      * This method listen to {@link Event} about the {@link Payment} of any {@link PeriodMovement} and if we are paying
      * with a credit {@link Card} update the {@link CreditCardInvoice} with this {@link PeriodMovement}
      *
@@ -140,7 +168,27 @@ public class CreditCardInvoiceService {
         this.periodMovementRepository.saveAndFlushAndRefresh(periodMovement);
 
         // update the invoice total
-        invoice.setTotalValue(invoice.getTotalValue().add(periodMovement.getValue()));
+        invoice.setTotalValue(invoice.getTotalValue().add(periodMovement.getValueWithDiscount()));
+        this.creditCardInvoiceRepository.saveAndFlushAndRefresh(invoice);
+    }
+
+    /**
+     * Listen for {@link Event} about the action of deleting a {@link PeriodMovement} and then update the total value
+     * of the {@link CreditCardInvoice}
+     *
+     * @param periodMovement to be discounted from the {@link CreditCardInvoice}
+     */
+    @Transactional
+    public void updateInvoiceAfterDelete(@Observes @PeriodMovementDeleted PeriodMovement periodMovement) {
+
+        if (!periodMovement.isPaidWithCreditCard()) {
+            return;
+        }
+
+        final CreditCardInvoice invoice = periodMovement.getCreditCardInvoice();
+
+        invoice.setTotalValue(invoice.getTotalValue().subtract(periodMovement.getValueWithDiscount()));
+
         this.creditCardInvoiceRepository.saveAndFlushAndRefresh(invoice);
     }
 

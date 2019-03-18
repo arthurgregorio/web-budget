@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import br.com.webbudget.application.controller.ViewState;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.LazyFormBean;
+import br.com.webbudget.application.components.ui.ViewState;
+import br.com.webbudget.application.components.ui.table.Page;
+import br.com.webbudget.application.components.ui.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.logics.registration.costcenter.CostCenterSavingLogic;
@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
-import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
 
 /**
  * The {@link CostCenter} maintenance routine controller

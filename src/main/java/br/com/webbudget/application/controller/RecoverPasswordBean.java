@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.application.components.ui.AbstractBean;
 import br.com.webbudget.domain.services.RecoverPasswordService;
 import lombok.Getter;
 import lombok.Setter;

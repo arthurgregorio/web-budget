@@ -16,11 +16,11 @@
  */
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.components.table.LazyDataProvider;
-import br.com.webbudget.application.components.table.LazyModel;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.controller.NavigationManager;
+import br.com.webbudget.application.components.ui.table.LazyDataProvider;
+import br.com.webbudget.application.components.ui.table.LazyModel;
+import br.com.webbudget.application.components.ui.table.Page;
+import br.com.webbudget.application.components.ui.AbstractBean;
+import br.com.webbudget.application.components.ui.NavigationManager;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.financial.InvoiceState;
 import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepository;
@@ -35,7 +35,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static br.com.webbudget.application.controller.NavigationManager.Parameter.of;
+import static br.com.webbudget.application.components.ui.NavigationManager.Parameter.of;
 
 /**
  * Controller to the {@link CreditCardInvoice} view

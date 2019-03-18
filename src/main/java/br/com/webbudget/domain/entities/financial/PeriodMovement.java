@@ -142,7 +142,7 @@ public class PeriodMovement extends Movement {
      *
      * @return true if is, false otherwise
      */
-    public boolean isCardInvoice() {
+    public boolean isCreditCardInvoice() {
         return this.periodMovementType == PeriodMovementType.CARD_INVOICE;
     }
 

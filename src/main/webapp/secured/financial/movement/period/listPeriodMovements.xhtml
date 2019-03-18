@@ -49,7 +49,7 @@
     <ui:define name="content">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <p:messages id="messages" closable="true" />
+                <p:messages id="messages" closable="true"/>
             </div>
         </div>
         <div jsf:id="resumeBox" class="row">
@@ -57,8 +57,8 @@
                 <div class="small-box bg-orange">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{periodMovementBean.periodMovementResume.totalOpen}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            <h:outputText value="#{periodMovementBean.periodMovementResume.totalOpen}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
                         <p>#{messages['period-movement.list.total-open']}</p>
@@ -72,8 +72,8 @@
                 <div class="small-box bg-blue">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{periodMovementBean.periodMovementResume.totalPaid}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            <h:outputText value="#{periodMovementBean.periodMovementResume.totalPaid}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
                         <p>#{messages['period-movement.list.total-paid']}</p>
@@ -87,8 +87,8 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{periodMovementBean.periodMovementResume.totalRevenue}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            <h:outputText value="#{periodMovementBean.periodMovementResume.totalRevenue}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
                         <p>#{messages['period-movement.list.total-revenue']}</p>
@@ -102,8 +102,8 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{periodMovementBean.periodMovementResume.totalExpense}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            <h:outputText value="#{periodMovementBean.periodMovementResume.totalExpense}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
                         <p>#{messages['period-movement.list.total-expense']}</p>
@@ -145,7 +145,7 @@
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{periodMovementBean.filter.value}"
-                                             placeholder="#{messages['filter.period-movement']}" />
+                                             placeholder="#{messages['filter.period-movement']}"/>
                                 <div class="input-group-btn">
                                     <p:commandButton id="btSearch"
                                                      value="#{menu['search']}"
@@ -182,7 +182,7 @@
                     <p:remoteCommand process="@this" name="updateResume" update="resumeBox"/>
 
                     <script type="text/javascript">
-                        $(document).ready(function() {
+                        $(document).ready(function () {
                             updateResume();
                         });
                     </script>
@@ -255,8 +255,8 @@
                         <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['period-movement.list.value']}">
-                            <h:outputText value="#{periodMovement.valueWithDiscount}" >
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                            <h:outputText value="#{periodMovement.valueWithDiscount}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                             <p:spacer width="5"/>
                             <h:outputText value="(D)"

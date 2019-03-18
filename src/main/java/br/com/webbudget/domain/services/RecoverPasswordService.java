@@ -20,7 +20,7 @@ import br.com.webbudget.domain.entities.configuration.StoreType;
 import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.infrastructure.mail.SimpleMailMessage;
-import br.com.webbudget.domain.repositories.tools.UserRepository;
+import br.com.webbudget.domain.repositories.configuration.UserRepository;
 import br.com.webbudget.infrastructure.mail.MailContentProvider;
 import br.com.webbudget.infrastructure.mail.MailMessage;
 import br.com.webbudget.infrastructure.mail.MustacheProvider;

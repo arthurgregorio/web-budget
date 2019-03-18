@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.domain.repositories.financial;
 
-import br.com.webbudget.application.components.filter.PeriodMovementFilter;
-import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.components.ui.filter.PeriodMovementFilter;
+import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.PeriodMovement_;
 import br.com.webbudget.domain.entities.registration.Contact;
@@ -25,6 +25,7 @@ import br.com.webbudget.domain.entities.registration.Contact_;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
+import org.apache.deltaspike.data.api.EntityGraph;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
@@ -46,11 +47,22 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public interface PeriodMovementRepository extends DefaultRepository<PeriodMovement> {
 
     /**
+     * {@inheritDoc}
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    @EntityGraph(value = "Movement.full")
+    Optional<PeriodMovement> findById(Long id);
+
+    /**
      * Find a {@link PeriodMovement} by the code
      *
      * @param movementCode used as a filter
      * @return an {@link Optional} of the {@link PeriodMovement}
      */
+    @EntityGraph(value = "Movement.full")
     Optional<PeriodMovement> findByCode(String movementCode);
 
     /**

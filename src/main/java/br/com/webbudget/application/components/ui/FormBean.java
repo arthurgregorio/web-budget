@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.controller;
+package br.com.webbudget.application.components.ui;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
-import static br.com.webbudget.application.controller.NavigationManager.Parameter.of;
+import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.ui.NavigationManager.Parameter.of;
 
 /**
  * The abstract form controller, this class hold all the basic features that a single form will have

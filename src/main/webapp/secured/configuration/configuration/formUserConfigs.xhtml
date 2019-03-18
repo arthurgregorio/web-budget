@@ -1,0 +1,150 @@
+<!--
+  Copyright (C) 2019 Arthur Gregorio, AG.Software
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <p:importEnum var="theme"
+                  type="br.com.webbudget.domain.entities.configuration.ThemeType"/>
+
+    <h:form>
+        <h3 class="control-sidebar-heading">#{messages['profile.preferences']}</h3>
+        <div class="form-group">
+            <label class="control-sidebar-subheading">
+                <input type="checkbox"
+                       class="pull-right"
+                       data-sidebarskin="toggle"
+                       jsf:value="#{profileBean.profile.userDarkSidebar}"/>
+                #{messages['profile.appearance.toggle-sidebar']}
+            </label>
+            <p>
+                #{messages['profile.appearance.toggle-sidebar-tip']}
+            </p>
+        </div>
+        <div class="form-group">
+            <label class="control-sidebar-subheading">
+                <input type="checkbox"
+                       class="pull-right"
+                       jsf:value="#{profileBean.profile.showWalletBalances}"/>
+                #{messages['profile.appearance.show-balances']}
+            </label>
+            <p>
+                #{messages['profile.appearance.show-balances-tip']}
+            </p>
+        </div>
+        <h4 class="control-sidebar-heading">#{messages['profile.skins']}</h4>
+        <ul class="list-unstyled clearfix">
+            <li class="skin-block">
+                <p:commandLink immediate="true"
+                               class='clearfix full-opacity-hover theme-selector'
+                               actionListener="#{profileBean.changeTheme(theme.BLUE)}">
+                    <div>
+                        <span style='display:block; width: 20%; float: left; height: 7px; background: #367fa9;'/>
+                        <span class='bg-light-blue' style='display:block; width: 80%; float: left; height: 7px;'/>
+                    </div>
+                    <div>
+                        <span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                        <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+                    </div>
+                </p:commandLink>
+                <p class='text-center no-margin'>#{enums[theme.BLUE]}</p>
+            </li>
+            <li class="skin-block">
+                <p:commandLink immediate="true"
+                               class='clearfix full-opacity-hover theme-selector'
+                               actionListener="#{profileBean.changeTheme(theme.BLACK)}">
+                    <div style='box-shadow: 0 0 2px rgba(0,0,0,0.1)' class='clearfix'>
+                        <span style='display:block; width: 20%; float: left; height: 7px; background: #fefefe;'/>
+                        <span style='display:block; width: 80%; float: left; height: 7px; background: #fefefe;'/>
+                    </div>
+                    <div>
+                        <span style='display:block; width: 20%; float: left; height: 20px; background: #222;'/>
+                        <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+                    </div>
+                </p:commandLink>
+                <p class='text-center no-margin'>#{enums[theme.BLACK]}</p>
+            </li>
+            <li class="skin-block">
+                <p:commandLink immediate="true"
+                               class='clearfix full-opacity-hover theme-selector'
+                               actionListener="#{profileBean.changeTheme(theme.PURPLE)}">
+                    <div>
+                        <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-purple-active'/>
+                        <span class='bg-purple' style='display:block; width: 80%; float: left; height: 7px;'/>
+                    </div>
+                    <div>
+                        <span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                        <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+                    </div>
+                </p:commandLink>
+                <p class='text-center no-margin'>#{enums[theme.PURPLE]}</p>
+            </li>
+            <li class="skin-block">
+                <p:commandLink immediate="true"
+                               class='clearfix full-opacity-hover theme-selector'
+                               actionListener="#{profileBean.changeTheme(theme.GREEN)}">
+                    <div>
+                        <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-green-active'/>
+                        <span class='bg-green' style='display:block; width: 80%; float: left; height: 7px;'/>
+                    </div>
+                    <div>
+                        <span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                        <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+                    </div>
+                </p:commandLink>
+                <p class='text-center no-margin'>#{enums[theme.GREEN]}</p>
+            </li>
+            <li class="skin-block">
+                <p:commandLink immediate="true"
+                               class='clearfix full-opacity-hover theme-selector'
+                               actionListener="#{profileBean.changeTheme(theme.RED)}">
+                    <div>
+                        <span style='display:block; width: 20%; float: left; height: 7px;' class='bg-red-active'/>
+                        <span class='bg-red' style='display:block; width: 80%; float: left; height: 7px;'/>
+                    </div>
+                    <div><span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                        <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+                    </div>
+                </p:commandLink>
+                <p class='text-center no-margin'>#{enums[theme.RED]}</p>
+            </li>
+            <li class="skin-block">
+                <p:commandLink immediate="true"
+                               class='clearfix full-opacity-hover theme-selector'
+                               actionListener="#{profileBean.changeTheme(theme.YELLOW)}">
+                    <div><span style='display:block; width: 20%; float: left; height: 7px;' class='bg-yellow-active'/>
+                        <span class='bg-yellow' style='display:block; width: 80%; float: left; height: 7px;'/>
+                    </div>
+                    <div><span style='display:block; width: 20%; float: left; height: 20px; background: #222d32;'/>
+                        <span style='display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;'/>
+                    </div>
+                </p:commandLink>
+                <p class='text-center no-margin'>#{enums[theme.YELLOW]}</p>
+            </li>
+        </ul>
+        <div class="form-group">
+            <label class="control-sidebar-subheading pull-right" style="padding-top: 20px">
+                <p:commandButton value="#{menu['save']}"
+                                 styleClass="btn btn-flat btn-primary"
+                                 actionListener="#{profileBean.updateProfile()}"/>
+            </label>
+        </div>
+    </h:form>
+</ui:composition>

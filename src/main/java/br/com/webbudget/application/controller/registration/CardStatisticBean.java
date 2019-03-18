@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller.registration;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.application.components.ui.AbstractBean;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 

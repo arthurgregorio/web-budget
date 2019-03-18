@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.services;
 
+import br.com.webbudget.application.components.dto.PaymentWrapper;
 import br.com.webbudget.domain.entities.financial.Payment;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.ReasonType;
@@ -24,12 +25,15 @@ import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.events.PeriodMovementPaid;
 import br.com.webbudget.domain.events.UpdateWalletBalance;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.logics.financial.payment.PaymentSavingLogic;
 import br.com.webbudget.domain.repositories.financial.PaymentRepository;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 import br.com.webbudget.application.components.builder.WalletBalanceBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -56,6 +60,10 @@ public class PaymentService {
     @PeriodMovementPaid
     private Event<PeriodMovement> periodMovementPaidEvent;
 
+    @Any
+    @Inject
+    private Instance<PaymentSavingLogic> paymentSavingLogics;
+
     /**
      * Service method to pay a given {@link PeriodMovement}
      *
@@ -65,9 +73,7 @@ public class PaymentService {
     @Transactional
     public void pay(PeriodMovement periodMovement, Payment payment) {
 
-        if (payment.getDiscount().compareTo(periodMovement.getValue()) > 0) {
-            throw new BusinessLogicException("error.payment.discount-gt-movement-value");
-        }
+        this.paymentSavingLogics.forEach(logic -> logic.run(new PaymentWrapper(payment, periodMovement)));
 
         // save the paid value for easy viewing at the database
         payment.setPaidValue(periodMovement.getValue().subtract(payment.getDiscount()));

@@ -46,7 +46,7 @@
 
         <c:attribute required="true"
                      name="managedBean"
-                     type="br.com.webbudget.application.controller.AbstractBean"/>
+                     type="br.com.webbudget.application.components.ui.AbstractBean"/>
     </c:interface>
 
     <c:implementation>
@@ -68,7 +68,6 @@
                                decimalPlaces="2"
                                decimalSeparator=","
                                thousandSeparator="."
-                               disabled="#{cc.attrs.onlyOnCash}"
                                value="#{cc.attrs.value.discount}">
                     <f:converter converterId="javax.faces.BigDecimal" />
                 </p:inputNumber>

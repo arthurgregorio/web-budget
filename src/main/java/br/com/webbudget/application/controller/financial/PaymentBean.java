@@ -16,8 +16,8 @@
  */
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.controller.AbstractBean;
-import br.com.webbudget.application.controller.ViewState;
+import br.com.webbudget.application.components.ui.AbstractBean;
+import br.com.webbudget.application.components.ui.ViewState;
 import br.com.webbudget.domain.entities.financial.Payment;
 import br.com.webbudget.domain.entities.financial.PaymentMethod;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
@@ -76,10 +76,10 @@ public class PaymentBean extends AbstractBean {
     /**
      * Initialize the bean to process the payment
      *
-     * @param movementId the {@link PeriodMovement} to be paid
+     * @param id the {@link PeriodMovement} to be paid
      * @param viewState the {@link ViewState} to be used
      */
-    public void initialize(long movementId, ViewState viewState) {
+    public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
 
         this.payment = new Payment();
@@ -88,7 +88,7 @@ public class PaymentBean extends AbstractBean {
         this.debitCards = this.cardRepository.findByCardTypeAndActive(CardType.DEBIT, true);
         this.creditCards = this.cardRepository.findByCardTypeAndActive(CardType.CREDIT, true);
 
-        this.periodMovement = this.periodMovementRepository.findById(movementId)
+        this.periodMovement = this.periodMovementRepository.findById(id)
                 .orElseThrow(() -> new BusinessLogicException("error.payment.cant-find-movement"));
     }
 

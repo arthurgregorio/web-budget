@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Utilities controller to provide common functionality to all the pages in the application
+ * Utilities controller to provide common functionality to all the pages
  * 
  * @author Arthur Gregorio
  *
@@ -43,7 +43,9 @@ public class UtilsBean {
     private FacesContext facesContext;
     
     /**
-     * @return the application base URL
+     * Get the application base URL
+     *
+     * @return application base URL
      */
     public String getBaseURL() {
         
@@ -55,7 +57,9 @@ public class UtilsBean {
     }
     
     /**
-     * @return the actual date in String format
+     * Get the actual date as {@link String}
+     *
+     * @return actual date in {@link String} formatted in dd/MM/yyyy
      */
     public String getActualDate() {
         return DateTimeFormatter
@@ -64,7 +68,9 @@ public class UtilsBean {
     }
 
     /**
-     * @return the actual date and time on String format
+     * Get the actual date and time as {@link String}
+     *
+     * @return actual date and time as {@link String} formatted in dd/MM/yyyy HH:mm
      */
     public String getActualDateTime() {
         return DateTimeFormatter
@@ -73,14 +79,18 @@ public class UtilsBean {
     }
 
     /**
-     * @return the application version from the configurations
+     * Get from configurations the current version of the application
+     *
+     * @return application version
      */
     public String getApplicationVersion() {
         return Configurations.get("application.version");
     }
 
     /**
-     * @return the current year for the copyright text
+     * Get the current year to use at the little notice at the application footer
+     *
+     * @return current year for the copyright text
      */
     public String getCurrentYear() {
         return DateTimeFormatter.ofPattern("yyyy").format(LocalDate.now());

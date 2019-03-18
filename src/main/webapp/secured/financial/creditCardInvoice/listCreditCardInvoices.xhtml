@@ -45,7 +45,7 @@
                 </p:messages>
             </div>
         </div>
-        <div class="box box-#{profileBean.currentThemeColorName}">
+        <div class="box box-#{profileBean.currentThemeColorName}" style="margin-bottom: 10px;">
             <div class="box-header with-border">
                 <h:form id="controlsForm">
                     <p:defaultCommand target="btSearch"/>
@@ -159,6 +159,7 @@
                     </span>
                     <div class="pull-right">
                         <p:commandButton immediate="true"
+                                         update="invoicesGrid"
                                          value="#{menu['close']}"
                                          rendered="#{invoice.open}"
                                          onstart="PF('blocker').show()"
@@ -167,10 +168,13 @@
                                          action="#{creditCardInvoiceBean.doClose(invoice.id)}"/>
                         <p:spacer width="5"
                                   rendered="#{invoice.closed}"/>
-                        <p:commandButton immediate="true"
-                                         value="#{menu['pay']}"
-                                         rendered="#{invoice.closed}"
-                                         styleClass="btn btn-flat btn-warning"/>
+                        <p:link value="#{menu['pay']}"
+                                rendered="#{invoice.closed}"
+                                styleClass="btn btn-flat btn-warning"
+                                outcome="/secured/financial/movement/period/formPayment.xhtml">
+                            <f:param name="viewState" value="ADDING"/>
+                            <f:param name="id" value="#{invoice.periodMovement.id}"/>
+                        </p:link>
                         <p:spacer width="5"/>
                         <p:commandButton immediate="true"
                                          value="#{menu['detail']}"
@@ -181,8 +185,5 @@
             </div>
         </p:dataGrid>
         <wb:blocker target="invoicesGrid"/>
-    </ui:define>
-    <ui:define name="popups">
-        <ui:include src="dialogInvoiceClosed.xhtml"/>
     </ui:define>
 </ui:composition>

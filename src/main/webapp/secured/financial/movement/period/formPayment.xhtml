@@ -25,7 +25,7 @@
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
-        <f:viewAction action="#{paymentBean.initialize(param.movementId, param.viewState)}"/>
+        <f:viewAction action="#{paymentBean.initialize(param.id, param.viewState)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">
@@ -117,7 +117,7 @@
                                                debitCardList="#{paymentBean.debitCards}"
                                                creditCardList="#{paymentBean.creditCards}"
                                                paymentMethods="#{paymentBean.paymentMethods}"
-                                               onlyOnCash="#{paymentBean.periodMovement.cardInvoice or paymentBean.periodMovement.revenue}"/>
+                                               onlyOnCash="#{paymentBean.periodMovement.creditCardInvoice or paymentBean.periodMovement.revenue}"/>
                             </div>
                         </div>
                     </div>

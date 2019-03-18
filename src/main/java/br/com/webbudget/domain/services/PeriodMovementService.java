@@ -17,17 +17,21 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.application.components.builder.WalletBalanceBuilder;
+import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.ReasonType;
 import br.com.webbudget.domain.entities.financial.WalletBalance;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.events.CreatePeriodMovement;
 import br.com.webbudget.domain.events.DeletePeriodMovement;
+import br.com.webbudget.domain.events.PeriodMovementDeleted;
 import br.com.webbudget.domain.events.UpdateWalletBalance;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementDeletingLogic;
 import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementSavingLogic;
 import br.com.webbudget.domain.logics.financial.periodmovement.PeriodMovementUpdatingLogic;
 import br.com.webbudget.domain.repositories.financial.ApportionmentRepository;
+import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepository;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -53,10 +57,15 @@ public class PeriodMovementService {
     private ApportionmentRepository apportionmentRepository;
     @Inject
     private PeriodMovementRepository periodMovementRepository;
+    @Inject
+    private CreditCardInvoiceRepository creditCardInvoiceRepository;
 
     @Inject
     @UpdateWalletBalance
     private Event<WalletBalance> updateWalletBalanceEvent;
+    @Inject
+    @PeriodMovementDeleted
+    private Event<PeriodMovement> periodMovementDeletedEvent;
 
     @Any
     @Inject
@@ -124,12 +133,24 @@ public class PeriodMovementService {
     public void delete(PeriodMovement periodMovement) {
 
         this.periodMovementDeletingLogics.forEach(logic -> logic.run(periodMovement));
+
+        // if is a invoice movement, remove the link first
+        if (periodMovement.isCreditCardInvoice()) {
+
+            final CreditCardInvoice invoice = this.creditCardInvoiceRepository.findByPeriodMovement(periodMovement)
+                    .orElseThrow(() -> new BusinessLogicException("error.credit-card-invoice.not-found"));
+
+            this.creditCardInvoiceRepository.saveAndFlushAndRefresh(invoice.prepareToReopen());
+        }
+
         this.periodMovementRepository.attachAndRemove(periodMovement);
 
         // if the movement is paid with cash or debit, return the balance
         if (periodMovement.isPaidWithCash() || periodMovement.isPaidWithDebitCard()) {
             this.returnBalance(periodMovement, periodMovement.getPaymentWallet());
         }
+
+        this.periodMovementDeletedEvent.fire(periodMovement);
     }
 
     /**

@@ -16,14 +16,14 @@
  */
 package br.com.webbudget.application.controller.configuration;
 
-import br.com.webbudget.application.controller.ViewState;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.LazyFormBean;
+import br.com.webbudget.application.components.ui.ViewState;
+import br.com.webbudget.application.components.ui.table.Page;
+import br.com.webbudget.application.components.ui.LazyFormBean;
 import br.com.webbudget.domain.entities.configuration.Authorization;
 import br.com.webbudget.domain.entities.configuration.Grant;
 import br.com.webbudget.domain.entities.configuration.Group;
 import br.com.webbudget.domain.entities.configuration.Permissions;
-import br.com.webbudget.domain.repositories.tools.GroupRepository;
+import br.com.webbudget.domain.repositories.configuration.GroupRepository;
 import br.com.webbudget.domain.services.UserAccountService;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
 
 /**
  * The {@link Group} maintenance routine controller

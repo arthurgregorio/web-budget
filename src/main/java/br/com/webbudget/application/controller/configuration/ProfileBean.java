@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller.configuration;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.application.components.ui.AbstractBean;
 import br.com.webbudget.application.controller.UserSessionBean;
 import br.com.webbudget.domain.entities.configuration.Profile;
 import br.com.webbudget.domain.entities.configuration.ThemeType;

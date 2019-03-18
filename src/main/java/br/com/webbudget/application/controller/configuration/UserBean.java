@@ -16,15 +16,15 @@
  */
 package br.com.webbudget.application.controller.configuration;
 
-import br.com.webbudget.application.controller.ViewState;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.LazyFormBean;
+import br.com.webbudget.application.components.ui.ViewState;
+import br.com.webbudget.application.components.ui.table.Page;
+import br.com.webbudget.application.components.ui.LazyFormBean;
 import br.com.webbudget.domain.entities.configuration.Group;
 import br.com.webbudget.domain.entities.configuration.StoreType;
 import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.tools.GroupRepository;
-import br.com.webbudget.domain.repositories.tools.UserRepository;
+import br.com.webbudget.domain.repositories.configuration.GroupRepository;
+import br.com.webbudget.domain.repositories.configuration.UserRepository;
 import br.com.webbudget.domain.services.UserAccountService;
 import br.com.webbudget.infrastructure.utils.Configurations;
 import br.eti.arthurgregorio.shiroee.config.ldap.LdapUser;
@@ -37,7 +37,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
-import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
 
 /**
  * The {@link User} maintenance routine controller

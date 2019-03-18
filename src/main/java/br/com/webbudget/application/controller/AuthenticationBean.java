@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.application.components.ui.AbstractBean;
 import br.eti.arthurgregorio.shiroee.auth.Authenticator;
 import br.eti.arthurgregorio.shiroee.auth.Credential;
 import lombok.Getter;

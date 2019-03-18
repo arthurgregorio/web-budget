@@ -19,7 +19,7 @@ package br.com.webbudget.domain.services;
 import br.com.webbudget.application.controller.configuration.ProfileBean.PasswordChangeDTO;
 import br.com.webbudget.domain.entities.configuration.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.tools.*;
+import br.com.webbudget.domain.repositories.configuration.*;
 import br.com.webbudget.domain.logics.tools.group.GroupDeletingLogic;
 import br.com.webbudget.domain.logics.tools.user.UserDeletingLogic;
 import br.com.webbudget.domain.logics.tools.user.UserSavingLogic;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Arthur Gregorio, AG.Software
+ * Copyright (C) 2019 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,31 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.tools;
+package br.com.webbudget.domain.repositories.configuration;
 
-import br.com.webbudget.domain.entities.configuration.Grant;
-import br.com.webbudget.domain.entities.configuration.Group;
+import br.com.webbudget.domain.entities.configuration.Configuration;
 import br.com.webbudget.domain.repositories.DefaultRepository;
+import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
- * The {@link Grant} repository
+ * The {@link Configuration} repository
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 28/12/2017
+ * @since 3.0.0, 16/03/2019
  */
 @Repository
-public interface GrantRepository extends DefaultRepository<Grant> {
+public interface ConfigurationRepository extends DefaultRepository<Configuration> {
 
     /**
-     * Find a list o {@link Grant} from a given {@link Group}
-     * 
-     * @param group the {@link Group} to list his {@link Grant}
-     * @return a {@link List} of {@link Grant}
+     * Find the current {@link Configuration}
+     *
+     * @return an {@link Optional} of the current configuration
      */
-    List<Grant> findByGroup(Group group);
+    @Query("FROM Configuration c " +
+            "WHERE c.id = (SELECT MAX(co.id) FROM Configuration co)")
+    Optional<Configuration> findCurrent();
 }

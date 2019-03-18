@@ -49,7 +49,7 @@ public class AutoCloseMessages extends MessagesRenderer {
 
         writer.write('\n');
         writer.startElement("script", null);
-        writer.writeText("setTimeout(\"$(\'#" + component.getClientId() + "\').slideUp(300)\", 8000)", null);
+        writer.writeText("setTimeout(\"$(\'#" + component.getClientId() + "\').slideUp(500)\", 8000)", null);
         writer.endElement("script");
         writer.append('\r');
         writer.append('\n');

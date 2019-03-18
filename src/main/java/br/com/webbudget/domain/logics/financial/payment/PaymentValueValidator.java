@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2019 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,40 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.tools.user;
+package br.com.webbudget.domain.logics.financial.payment;
 
-import br.com.webbudget.domain.entities.configuration.User;
+import br.com.webbudget.application.components.dto.PaymentWrapper;
+import br.com.webbudget.domain.entities.financial.Payment;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.configuration.UserRepository;
-import br.com.webbudget.domain.logics.BusinessLogic;
 
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 
 /**
- * {@link BusinessLogic} for the username validation logic
+ * Simple validator to check if the {@link Payment} value is greater than the {@link PeriodMovement} value
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 09/08/2018
+ * @since 3.0.0, 17/03/2019
  */
 @Dependent
-public class UsernameLogic implements UserSavingLogic {
-
-    @Inject
-    private UserRepository userRepository;
+public class PaymentValueValidator implements PaymentSavingLogic {
 
     /**
-     * {@inheritDoc }
+     * {@inheritDoc}
      *
      * @param value
      */
     @Override
-    public void run(User value) {
-        this.userRepository.findByUsername(value.getUsername())
-                .ifPresent(user -> {
-                    throw new BusinessLogicException("error.user.username-duplicated");
-                });
+    public void run(PaymentWrapper value) {
+
+        final Payment payment = value.getPayment();
+
+        if (payment.getDiscount().compareTo(value.getPeriodMovement().getValue()) > 0) {
+            throw new BusinessLogicException("error.payment.discount-gt-movement-value");
+        }
     }
 }

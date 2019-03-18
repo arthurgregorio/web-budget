@@ -14,16 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.repositories.tools;
+package br.com.webbudget.domain.repositories.configuration;
 
-import br.com.webbudget.domain.entities.configuration.Authorization;
+import br.com.webbudget.domain.entities.configuration.Grant;
+import br.com.webbudget.domain.entities.configuration.Group;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
- * The {@link Authorization} repository
+ * The {@link Grant} repository
  *
  * @author Arthur Gregorio
  *
@@ -31,14 +32,13 @@ import java.util.Optional;
  * @since 3.0.0, 28/12/2017
  */
 @Repository
-public interface AuthorizationRepository extends DefaultRepository<Authorization> {
+public interface GrantRepository extends DefaultRepository<Grant> {
 
     /**
-     * Find an {@link Authorization} by the functionality and the permission
+     * Find a list o {@link Grant} from a given {@link Group}
      * 
-     * @param functionality the functionality of the {@link Authorization}
-     * @param permission the permission of the {@link Authorization}
-     * @return an {@link Optional} of the {@link Authorization}
+     * @param group the {@link Group} to list his {@link Grant}
+     * @return a {@link List} of {@link Grant}
      */
-    Optional<Authorization> findByFunctionalityAndPermission(String functionality, String permission);
+    List<Grant> findByGroup(Group group);
 }

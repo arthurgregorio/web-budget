@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.components.filter;
+package br.com.webbudget.application.components.ui.filter;
 
 import br.com.webbudget.domain.entities.financial.PeriodMovementType;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;

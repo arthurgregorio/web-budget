@@ -16,16 +16,12 @@
  */
 package br.com.webbudget.domain.repositories;
 
-import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.PersistentEntity_;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
-import javax.persistence.metamodel.SingularAttribute;
-import java.util.Collection;
 import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Implementation for {@link DefaultRepository} with lazy load support

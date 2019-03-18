@@ -75,19 +75,24 @@ public class CreditCardInvoice extends PersistentEntity {
     private LocalDate closingDate;
     @Getter
     @Setter
+    @Column(name = "payment_date")
+    private LocalDate paymentDate;
+    @Getter
+    @Setter
     @Column(name = "invoice_state", nullable = false)
     private InvoiceState invoiceState;
+
+    @Getter
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "id_period_movement")
+    private PeriodMovement periodMovement;
 
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_card")
     private Card card;
-    @Getter
-    @Setter
-    @OneToOne
-    @JoinColumn(name = "id_period_movement")
-    private PeriodMovement periodMovement;
     @Getter
     @Setter
     @ManyToOne
@@ -205,6 +210,30 @@ public class CreditCardInvoice extends PersistentEntity {
         this.periodMovement = periodMovement;
         this.invoiceState = InvoiceState.CLOSED;
         this.closingDate = LocalDate.now();
+        return this;
+    }
+
+    /**
+     * Prepare this invoice to be paid
+     *
+     * @return this invoice to be saved with the new state
+     */
+    public CreditCardInvoice prepareToPay() {
+        this.invoiceState = InvoiceState.PAID;
+        this.paymentDate = LocalDate.now();
+        return this;
+    }
+
+    /**
+     * Prepare this invoice to open again
+     *
+     * @return this invoice to be saved with the new status
+     */
+    public CreditCardInvoice prepareToReopen() {
+        this.closingDate = null;
+        this.paymentDate = null;
+        this.periodMovement = null;
+        this.invoiceState = InvoiceState.OPEN;
         return this;
     }
 }

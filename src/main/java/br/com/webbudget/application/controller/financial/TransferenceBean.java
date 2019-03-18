@@ -16,7 +16,7 @@
  */
 package br.com.webbudget.application.controller.financial;
 
-import br.com.webbudget.application.controller.AbstractBean;
+import br.com.webbudget.application.components.ui.AbstractBean;
 import br.com.webbudget.domain.entities.financial.Transference;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;

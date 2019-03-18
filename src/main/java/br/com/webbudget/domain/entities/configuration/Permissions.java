@@ -215,35 +215,14 @@ public class Permissions implements Serializable {
     private final String FIXED_MOVEMENT_LAUNCHES = "fixed-movement:launches";
 
     @Getter
-    @PermissionGrouper("credit-card-invoice.title")
+    @PermissionGrouper("credit-card-invoice")
     private final String CREDIT_CARD_INVOICE_PAY = "credit-card-invoice:pay";
     @Getter
-    @PermissionGrouper("credit-card-invoice.title")
+    @PermissionGrouper("credit-card-invoice")
     private final String CREDIT_CARD_INVOICE_ACCESS = "credit-card-invoice:access";
     @Getter
-    @PermissionGrouper("credit-card-invoice.title")
+    @PermissionGrouper("credit-card-invoice")
     private final String CREDIT_CARD_INVOICE_CLOSE = "credit-card-invoice:close";
-
-//    @Getter
-//    @PermissionGrouper("closing")
-//    private final String CLOSING_ACCESS = "closing:access";
-//    @Getter
-//    @PermissionGrouper("closing")
-//    private final String CLOSING_CLOSE = "closing:close";
-//    @Getter
-//    @PermissionGrouper("closing")
-//    private final String CLOSING_PROCESS = "closing:process";
-//
-//    @Getter
-//    @PermissionGrouper("message")
-//    private final String MESSAGE_SEND = "message:send";
-//
-//    @Getter
-//    @PermissionGrouper("configuration")
-//    private final String CONFIGURATION_ACCESS = "configuration:access";
-//    @Getter
-//    @PermissionGrouper("configuration")
-//    private final String CONFIGURATION_UPDATE = "configuration:update";
 
     @Getter
     @PermissionGrouper("user")
@@ -299,8 +278,7 @@ public class Permissions implements Serializable {
 
                 final String functionality = grouper.value();
 
-                authorizations.add(new Authorization(functionality,
-                        permission.replace(functionality + ":", "")));
+                authorizations.add(new Authorization(functionality, permission.replace(functionality + ":", "")));
             } catch (IllegalAccessException ex) {
                 throw new IllegalStateException("Can't parse the authorizations with reflection! Contact the administrator.");
             }

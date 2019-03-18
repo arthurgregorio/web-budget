@@ -25,6 +25,10 @@
                 xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
+    <f:metadata>
+        <f:viewAction action="#{systemConfigurationBean.initialize()}"/>
+    </f:metadata>
+
     <ui:define name="pageTitle">
         #{messages['dashboard.page-title']}
     </ui:define>

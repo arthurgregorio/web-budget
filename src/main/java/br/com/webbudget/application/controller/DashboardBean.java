@@ -16,6 +16,8 @@
  */
 package br.com.webbudget.application.controller;
 
+import br.com.webbudget.application.components.ui.AbstractBean;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 

@@ -17,12 +17,12 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.components.dto.PeriodMovementResume;
-import br.com.webbudget.application.components.filter.PeriodMovementFilter;
-import br.com.webbudget.application.components.table.LazyDataProvider;
-import br.com.webbudget.application.components.table.LazyModel;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.FormBean;
-import br.com.webbudget.application.controller.ViewState;
+import br.com.webbudget.application.components.ui.FormBean;
+import br.com.webbudget.application.components.ui.ViewState;
+import br.com.webbudget.application.components.ui.filter.PeriodMovementFilter;
+import br.com.webbudget.application.components.ui.table.LazyDataProvider;
+import br.com.webbudget.application.components.ui.table.LazyModel;
+import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.application.validator.apportionment.ApportionmentValidator;
 import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
@@ -50,8 +50,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
-import static br.com.webbudget.application.controller.NavigationManager.Parameter.of;
+import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.ui.NavigationManager.Parameter.of;
 
 /**
  * The {@link PeriodMovement} view controller
@@ -232,7 +232,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      * @return the payment page
      */
     public String changeToPay(long idMovement) {
-        return this.navigation.to("formPayment.xhtml", of("movementId", idMovement),
+        return this.navigation.to("formPayment.xhtml", of("id", idMovement),
                 of("viewState", ViewState.ADDING));
     }
 

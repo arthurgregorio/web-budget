@@ -16,10 +16,11 @@
  */
 package br.com.webbudget.domain.repositories.financial;
 
-import br.com.webbudget.application.components.table.Page;
+import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice_;
 import br.com.webbudget.domain.entities.financial.InvoiceState;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.Card_;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
@@ -42,6 +43,14 @@ import java.util.Optional;
  */
 @Repository
 public interface CreditCardInvoiceRepository extends DefaultRepository<CreditCardInvoice> {
+
+    /**
+     * Find a {@link CreditCardInvoice} by the {@link PeriodMovement} used to pay the invoice
+     *
+     * @param periodMovement linked with this invoice
+     * @return an {@link Optional} of the {@link CreditCardInvoice}
+     */
+    Optional<CreditCardInvoice> findByPeriodMovement(PeriodMovement periodMovement);
 
     /**
      * Find a {@link CreditCardInvoice} by the given {@link Card} and {@link FinancialPeriod}

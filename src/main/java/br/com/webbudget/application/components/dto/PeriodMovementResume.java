@@ -76,22 +76,24 @@ public final class PeriodMovementResume implements Serializable {
 
         this.totalOpen = periodMovements.stream()
                 .filter(PeriodMovement::isOpen)
-                .map(PeriodMovement::getValue)
+                .map(PeriodMovement::getValueWithDiscount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         this.totalPaid = periodMovements.stream()
                 .filter(PeriodMovement::isPaid)
-                .map(PeriodMovement::getValue)
+                .filter(periodMovement -> !periodMovement.isPaidWithCreditCard())
+                .map(PeriodMovement::getValueWithDiscount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         this.totalRevenue = periodMovements.stream()
                 .filter(PeriodMovement::isRevenue)
-                .map(PeriodMovement::getValue)
+                .map(PeriodMovement::getValueWithDiscount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         this.totalExpense = periodMovements.stream()
                 .filter(PeriodMovement::isExpense)
-                .map(PeriodMovement::getValue)
+                .filter(periodMovement -> !periodMovement.isPaidWithCreditCard())
+                .map(PeriodMovement::getValueWithDiscount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

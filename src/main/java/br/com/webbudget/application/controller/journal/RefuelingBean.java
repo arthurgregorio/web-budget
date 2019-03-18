@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.application.controller.journal;
 
-import br.com.webbudget.application.controller.ViewState;
-import br.com.webbudget.application.components.table.Page;
-import br.com.webbudget.application.controller.LazyFormBean;
+import br.com.webbudget.application.components.ui.ViewState;
+import br.com.webbudget.application.components.ui.table.Page;
+import br.com.webbudget.application.components.ui.LazyFormBean;
 import br.com.webbudget.domain.entities.journal.FuelType;
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
@@ -38,7 +38,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
-import static br.com.webbudget.application.controller.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
 
 /**
  * The of the {@link Refueling} view
