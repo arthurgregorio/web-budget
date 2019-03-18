@@ -57,25 +57,42 @@ public class CreateDefaultConfigurationTask extends TransactionalInitializationT
     @Override
     public void runInsideTransaction() {
 
-        final CostCenter costCenter = new CostCenter();
+        // create the default cost center
+        this.costCenterRepository.findByName("Cartão de Crédito")
+                .ifPresentOrElse(costCenter -> {/* do nothing*/}, () -> {
 
-        costCenter.setColor(Color.randomize());
-        costCenter.setName("Cartão de Crédito");
+                    final CostCenter costCenter = new CostCenter();
 
-        this.costCenterRepository.save(costCenter);
+                    costCenter.setColor(Color.randomize());
+                    costCenter.setName("Cartão de Crédito");
 
-        final MovementClass movementClass = new MovementClass();
+                    this.costCenterRepository.save(costCenter);
+                });
 
-        movementClass.setName("Faturas");
-        movementClass.setCostCenter(costCenter);
-        movementClass.setMovementClassType(MovementClassType.EXPENSE);
+        // create the default movement class
+        this.movementClassRepository.findByNameAndCostCenter_name("Faturas", "Cartão de Crédito")
+                .ifPresentOrElse(costCenter -> {/* do nothing*/}, () -> {
 
-        this.movementClassRepository.save(movementClass);
+                    final MovementClass movementClass = new MovementClass();
 
-        final Configuration configuration = new Configuration();
+                    movementClass.setName("Faturas");
+                    movementClass.setCostCenter(this.costCenterRepository.findByName("Cartão de Crédito")
+                            .orElseThrow(() -> new IllegalStateException("Configuration error! Can't find cost center")));
+                    movementClass.setMovementClassType(MovementClassType.EXPENSE);
 
-        configuration.setCreditCardClass(movementClass);
+                    this.movementClassRepository.save(movementClass);
+                });
 
-        this.configurationRepository.save(configuration);
+        // update the configuration
+        this.configurationRepository.findCurrent().ifPresentOrElse(configuration -> {/* do nothig */}, () -> {
+
+            final Configuration configuration = new Configuration();
+
+            configuration.setCreditCardClass(this.movementClassRepository
+                    .findByNameAndCostCenter_name("Faturas", "Cartão de Crédito")
+                    .orElseThrow(() -> new IllegalStateException("Configuration error! Can't find movement class")));
+
+            this.configurationRepository.save(configuration);
+        });
     }
 }
