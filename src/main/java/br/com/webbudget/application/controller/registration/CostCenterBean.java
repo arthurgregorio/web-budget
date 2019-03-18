@@ -20,6 +20,7 @@ import br.com.webbudget.application.components.ui.ViewState;
 import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.application.components.ui.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.logics.registration.costcenter.CostCenterUpdatingLogic;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
 import br.com.webbudget.domain.logics.registration.costcenter.CostCenterSavingLogic;
 import org.primefaces.model.SortOrder;
@@ -50,8 +51,11 @@ public class CostCenterBean extends LazyFormBean<CostCenter> {
     
     @Any
     @Inject
-    private Instance<CostCenterSavingLogic> savingBusinessLogics;
-    
+    private Instance<CostCenterSavingLogic> costCenterSavingLogics;
+    @Any
+    @Inject
+    private Instance<CostCenterUpdatingLogic> costCenterUpdatingLogics;
+
     /**
      * {@inheritDoc}
      * 
@@ -97,7 +101,7 @@ public class CostCenterBean extends LazyFormBean<CostCenter> {
     @Override
     @Transactional
     public void doSave() {
-        this.savingBusinessLogics.forEach(logic -> logic.run(this.value));
+        this.costCenterSavingLogics.forEach(logic -> logic.run(this.value));
         this.costCenterRepository.save(this.value);
         this.value = new CostCenter();
         this.data = this.costCenterRepository.findAllActive();
@@ -110,6 +114,7 @@ public class CostCenterBean extends LazyFormBean<CostCenter> {
     @Override
     @Transactional
     public void doUpdate() {
+        this.costCenterUpdatingLogics.forEach(logic -> logic.run(this.value));
         this.value = this.costCenterRepository.saveAndFlushAndRefresh(this.value);
         this.data = this.costCenterRepository.findAllActive();
         this.addInfo(true, "updated");
