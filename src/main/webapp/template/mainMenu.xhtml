@@ -138,6 +138,12 @@
                         <span>#{menu['configuration.users']}</span>
                     </p:link>
                 </li>
+                <li jsf:rendered="#{userSessionBean.isPermitted(permissions.CONFIGURATION_ACCESS)}">
+                    <p:link outcome="/secured/configuration/configuration/formConfiguration.xhtml">
+                        <i class="fa fa-cogs" />
+                        <span>#{menu['configuration.configurations']}</span>
+                    </p:link>
+                </li>
             </ul>
         </li>
     </ul>

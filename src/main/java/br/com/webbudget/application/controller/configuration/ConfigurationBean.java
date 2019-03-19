@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.controller;
+package br.com.webbudget.application.controller.configuration;
 
 import br.com.webbudget.application.components.ui.AbstractBean;
+import br.com.webbudget.application.components.ui.FormBean;
 import br.com.webbudget.domain.entities.configuration.Configuration;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
@@ -40,7 +41,7 @@ import java.util.List;
  */
 @Named
 @ViewScoped
-public class SystemConfigurationBean extends AbstractBean {
+public class ConfigurationBean extends AbstractBean {
 
     @Getter
     private Configuration configuration;
@@ -66,7 +67,7 @@ public class SystemConfigurationBean extends AbstractBean {
      * Save {@link Configuration}
      */
     @Transactional
-    public void save() {
+    public void doSave() {
         this.configurationRepository.save(this.configuration);
         this.addInfo(true, "info.configuration.saved");
     }
