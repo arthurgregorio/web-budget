@@ -17,7 +17,6 @@
 package br.com.webbudget.application.controller.configuration;
 
 import br.com.webbudget.application.components.ui.AbstractBean;
-import br.com.webbudget.application.components.ui.FormBean;
 import br.com.webbudget.domain.entities.configuration.Configuration;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
