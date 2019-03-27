@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
+  Copyright (C) 2019 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -34,11 +34,12 @@
     </ui:define>
 
     <ui:define name="pageDescription">
-        <h:outputText rendered="#{fixedMovementBean.viewState.adding}"
-                      value="#{messages['fixed-movement.page-description-adding']}"/>
-        <o:outputFormat id="pageDescription"
-                        rendered="#{fixedMovementBean.viewState.editing}"
-                        value="#{messages['fixed-movement.page-description-editing']}">
+        <o:outputFormat rendered="#{fixedMovementBean.viewState.detailing}"
+                        value="#{messages['fixed-movement.page-description-detailing']}">
+            <f:param value="#{fixedMovementBean.value.identification}"/>
+        </o:outputFormat>
+        <o:outputFormat rendered="#{fixedMovementBean.viewState.deleting}"
+                        value="#{messages['fixed-movement.page-description-deleting']}">
             <f:param value="#{fixedMovementBean.value.identification}"/>
         </o:outputFormat>
     </ui:define>
@@ -48,12 +49,8 @@
         <li><a href="#">#{breadcrumb['financial.movements']}</a></li>
         <li><a href="listFixedMovements.xhtml">#{breadcrumb['financial.movements.fixed']}</a></li>
         <li class="active"
-            jsf:rendered="#{fixedMovementBean.viewState.adding}">
-            <a href="#">#{breadcrumb['adding']}</a>
-        </li>
-        <li class="active"
-            jsf:rendered="#{fixedMovementBean.viewState.editing}">
-            <a href="#">#{breadcrumb['editing']}</a>
+            jsf:rendered="#{fixedMovementBean.viewState.deleting}">
+            <a href="#">#{breadcrumb['deleting']}</a>
         </li>
         <li class="active"
             jsf:rendered="#{fixedMovementBean.viewState.detailing}">
@@ -70,7 +67,9 @@
             
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true"/>
+                    <p:messages id="messages" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
                 </div>
             </div>
             <div class="box box-#{profileBean.currentThemeColorName}">
@@ -91,31 +90,14 @@
                                              styleClass="form-control"
                                              value="#{fixedMovementBean.value.identification}"/>
                             </div>
-                            <div jsf:id="contactBox"
-                                 class="form-group col-md-6">
+                            <div class="form-group col-md-6">
                                 <p:outputLabel for="inContact"
                                                value="#{messages['fixed-movement.form.contact']}: "/>
-                                <div class="input-group">
-                                    <p:inputText id="inContact"
-                                                 readonly="true"
-                                                 onclick="searchContact()"
-                                                 styleClass="form-control"
-                                                 value="#{fixedMovementBean.value.contactName}"/>
-                                    <div class="input-group-btn">
-                                        <p:commandButton immediate="true"
-                                                         icon="fa fa-search"
-                                                         styleClass="btn btn-flat btn-primary"
-                                                         disabled="#{fixedMovementBean.viewState.detailing}"
-                                                         actionListener="#{fixedMovementBean.showSearchContactDialog()}"/>
-                                        <p:spacer width="5"
-                                                  rendered="#{fixedMovementBean.viewState.editable}"/>
-                                        <p:commandButton immediate="true"
-                                                         icon="fa fa-trash"
-                                                         styleClass="btn btn-flat btn-danger"
-                                                         rendered="#{fixedMovementBean.viewState.editable}"
-                                                         actionListener="#{fixedMovementBean.removeContact()}"/>
-                                    </div>
-                                </div>
+                                <p:inputText id="inContact"
+                                             readonly="true"
+                                             onclick="searchContact()"
+                                             styleClass="form-control"
+                                             value="#{fixedMovementBean.value.contactName}"/>
                             </div>
                             <div class="col-sm-3 form-group">
                                 <p:outputLabel for="inStartDate"
@@ -177,36 +159,48 @@
                     </div>
                     <div jsf:id="apportionmentBox" class="col-sm-6">
                         <wb:listApportionmentBox valueInput="inValue"
+                                                 renderButtons="#{false}"
                                                  baseBean="#{fixedMovementBean.value}"
-                                                 renderButtons="#{fixedMovementBean.viewState.adding}"
                                                  apportionments="#{fixedMovementBean.value.apportionments}"
                                                  showDialogAction="#{fixedMovementBean.showApportionmentDialog()}"/>
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <p:commandButton value="#{menu['save']}"
-                                     update="fixedMovementForm"
-                                     process="fixedMovementForm"
-                                     styleClass="btn btn-flat btn-success"
-                                     action="#{fixedMovementBean.doSave()}"
-                                     rendered="#{fixedMovementBean.viewState.adding}"/>
-                    <p:commandButton value="#{menu['update']}"
-                                     update="fixedMovementForm"
-                                     process="fixedMovementForm"
-                                     styleClass="btn btn-flat btn-success"
-                                     action="#{fixedMovementBean.doUpdate()}"
-                                     rendered="#{fixedMovementBean.viewState.editing}"/>
-                    <p:spacer width="5"/>
+                    <h:outputText styleClass="text-red text-bold delete-text"
+                                  value="#{messages['info.delete-confirmation']}"
+                                  rendered="#{fixedMovementBean.viewState.deleting}"/>
+                    <p:spacer width="10"
+                              rendered="#{fixedMovementBean.viewState.deleting}"/>
+                    <p:commandButton process="@this"
+                                     value="#{menu['yes']}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     action="#{fixedMovementBean.doDelete()}"
+                                     rendered="#{fixedMovementBean.viewState.deleting}"/>
+                    <p:spacer width="5"
+                              rendered="#{fixedMovementBean.viewState.deleting}"/>
                     <p:commandButton immediate="true"
-                                     value="#{menu['back']}"
+                                     value="#{menu['delete']}"
+                                     styleClass="btn btn-flat btn-danger"
+                                     rendered="#{fixedMovementBean.viewState.detailing}"
+                                     action="#{fixedMovementBean.changeToDelete(fixedMovementBean.value.id)}"/>
+                    <p:spacer width="5"
+                              rendered="#{fixedMovementBean.viewState.detailing}"/>
+                    <p:commandButton immediate="true"
+                                     value="#{menu['edit']}"
+                                     styleClass="btn btn-flat btn-success"
+                                     rendered="#{fixedMovementBean.viewState.detailing}"
+                                     action="#{fixedMovementBean.changeToEdit(fixedMovementBean.value.id)}"/>
+                    <p:spacer width="5"
+                              rendered="#{fixedMovementBean.viewState.detailing}"/>
+                    <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary"
-                                     action="#{fixedMovementBean.changeToListing()}"/>
+                                     action="#{fixedMovementBean.changeToListing()}"
+                                     value="#{fixedMovementBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
         </h:form>
     </ui:define>
     <ui:define name="popups">
-        <ui:include src="dialogSearchContact.xhtml"/>
-        <ui:include src="dialogApportionment.xhtml"/>
+        <!--<ui:include src="dialogLaunches.xhtml"/>-->
     </ui:define>
 </ui:composition>

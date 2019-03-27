@@ -14,39 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entities.financial;
+package br.com.webbudget.domain.logics.financial.movement.period;
+
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
+
+import javax.enterprise.context.Dependent;
 
 /**
- * Current state of a {@link FixedMovement}
+ * Validator logic prevent the user to save a {@link PeriodMovement} with a negative value
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 12/02/2019
+ * @since 3.0.0, 23/02/2019
  */
-public enum FixedMovementState {
-
-    ACTIVE("fixed-movement-state.active"),
-    FINISHED("fixed-movement-state.finished");
-
-    private final String description;
-
-    /**
-     * Constructor...
-     *
-     * @param description the description and also the i18n key
-     */
-    FixedMovementState(String description) {
-        this.description = description;
-    }
+@Dependent
+public class ValueValidator implements PeriodMovementSavingLogic, PeriodMovementUpdatingLogic {
 
     /**
      * {@inheritDoc}
      *
-     * @return
+     * @param value
      */
     @Override
-    public String toString() {
-        return this.description;
+    public void run(PeriodMovement value) {
+        if (value.getValue().signum() < 0) {
+            throw new BusinessLogicException("error.period-movement.negative-value");
+        }
     }
 }

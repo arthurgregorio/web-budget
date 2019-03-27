@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,12 +28,12 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 /**
- * This class represents the movements used on each period or for a short time, all movements of this type can be
- * repeated across the periods turning into a {@link PeriodMovement}
+ * This class represents the {@link Movement} used on each {@link FinancialPeriod} or for a short time. All movements
+ * of this type can be repeated across the periods
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 2.1.0, 18/09/2015
  */
 @Entity
@@ -77,15 +78,25 @@ public class FixedMovement extends Movement {
     public FixedMovement() {
         super();
         this.autoLaunch = true;
-        this.fixedMovementState = FixedMovementState.STARTED;
+        this.startDate = LocalDate.now();
+        this.fixedMovementState = FixedMovementState.ACTIVE;
     }
 
     /**
-     * To check if this fixed movement is finalized or not
+     * To check if this movement is finished or not
      *
-     * @return true if is, false if not
+     * @return true if is, otherwise, false
      */
-    boolean isAcounted() {
+    public boolean isFinished() {
         return this.fixedMovementState == FixedMovementState.FINISHED;
+    }
+
+    /**
+     * To check if this movement is active or not
+     *
+     * @return true if is, otherwise, false
+     */
+    public boolean isActive() {
+        return this.fixedMovementState == FixedMovementState.ACTIVE;
     }
 }

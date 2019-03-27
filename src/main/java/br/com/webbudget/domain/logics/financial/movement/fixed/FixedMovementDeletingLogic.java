@@ -14,33 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.financial.periodmovement;
+package br.com.webbudget.domain.logics.financial.movement.fixed;
 
-import br.com.webbudget.domain.entities.financial.PeriodMovement;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
-
-import javax.enterprise.context.Dependent;
+import br.com.webbudget.domain.entities.financial.FixedMovement;
+import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
- * Validator logic to stop any type of update or exclusion with an accounted {@link PeriodMovement}
+ * {@link FixedMovement} facade for deleting actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 23/02/2019
+ * @since 3.0.0, 25/03/2019
  */
-@Dependent
-public class AccountedMovementValidator implements PeriodMovementDeletingLogic, PeriodMovementUpdatingLogic {
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param value
-     */
-    @Override
-    public void run(PeriodMovement value) {
-        if (value.isAccounted()) {
-            throw new BusinessLogicException("error.period-movement.deleted-or-update-accounted");
-        }
-    }
-}
+public interface FixedMovementDeletingLogic extends BusinessLogic<FixedMovement> { }

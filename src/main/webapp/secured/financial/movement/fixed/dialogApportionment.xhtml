@@ -22,40 +22,39 @@
           id="apportionmentDialog"
           width="450"
           modal="true"
-          closable="false"
+          position="top"
+          closable="true"
           resizable="false"
           closeOnEscape="true"
+          styleClass="dialog-margin-top"
           widgetVar="dialogApportionment"
           header="#{messages['apportionment.dialog.title']}">
 
-    <h:form id="apportionmentForm" prependId="false">
-
+    <h:form id="apportionmentForm">
         <p:defaultCommand target="btAdd"/>
-
         <div class="row">
             <div class="col-sm-12">
-                <p:messages id="apportionmentMessages" closable="true" />
+                <p:messages closable="true"/>
             </div>
         </div>
-
-        <wb:apportionmentForm blockForm="apportionmentForm"
-                              costCenterList="#{fixedMovementBean.costCenters}"
-                              apportionment="#{fixedMovementBean.apportionment}"
-                              movementClassList="#{fixedMovementBean.movementClasses}"
-                              onCostCenterSelect="#{fixedMovementBean.loadMovementClasses()}"/>
-
+        <div class="row">
+            <wb:formApportionmentBox blockForm="apportionmentForm"
+                                     costCenterList="#{fixedMovementBean.costCenters}"
+                                     apportionment="#{fixedMovementBean.apportionment}"
+                                     movementClassList="#{fixedMovementBean.movementClasses}"
+                                     onCostCenterSelect="#{fixedMovementBean.onCostCenterSelect()}"/>
+        </div>
         <div class="row">
             <div class="col-sm-12 align-right">
                 <p:commandButton id="btAdd"
-                                 style="color: white"
+                                 update="@form"
                                  value="#{menu['add']}"
-                                 update="apportionmentMessages"
                                  styleClass="btn btn-flat btn-success"
                                  actionListener="#{fixedMovementBean.addApportionment()}"/>
                 <p:spacer width="5"/>
                 <p:commandButton immediate="true"
                                  value="#{menu['cancel']}"
-                                 styleClass="btn btn-flat btn-default"
+                                 styleClass="btn btn-flat btn-primary"
                                  onclick="PF('dialogApportionment').hide()"/>
 
             </div>

@@ -14,23 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.financial.periodmovement;
+package br.com.webbudget.domain.logics.financial.movement.fixed;
 
-import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.domain.entities.financial.Apportionment;
+import br.com.webbudget.domain.entities.financial.FixedMovement;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 
 import javax.enterprise.context.Dependent;
 
 /**
- * Validator logic prevent the user to save a {@link PeriodMovement} with a negative value
+ * Validator to check if the {@link FixedMovement} contains {@link Apportionment}
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 23/02/2019
+ * @since 1.0.0, 26/03/2019
  */
 @Dependent
-public class ValueValidator implements PeriodMovementSavingLogic, PeriodMovementUpdatingLogic {
+public class ContainsApportionmentValidator implements FixedMovementSavingLogic {
 
     /**
      * {@inheritDoc}
@@ -38,9 +39,9 @@ public class ValueValidator implements PeriodMovementSavingLogic, PeriodMovement
      * @param value
      */
     @Override
-    public void run(PeriodMovement value) {
-        if (value.getValue().signum() < 0) {
-            throw new BusinessLogicException("error.period-movement.negative-value");
+    public void run(FixedMovement value) {
+        if (value.getApportionments().isEmpty()) {
+            throw new BusinessLogicException("error.fixed-movement.no-apportionments");
         }
     }
 }

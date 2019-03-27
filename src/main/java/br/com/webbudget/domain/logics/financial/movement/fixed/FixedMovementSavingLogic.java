@@ -14,39 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.entities.financial;
+package br.com.webbudget.domain.logics.financial.movement.fixed;
+
+import br.com.webbudget.domain.entities.financial.FixedMovement;
+import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
- * Current state of a {@link FixedMovement}
+ * {@link FixedMovement} facade for saving actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 12/02/2019
+ * @since 3.0.0, 25/03/2019
  */
-public enum FixedMovementState {
-
-    ACTIVE("fixed-movement-state.active"),
-    FINISHED("fixed-movement-state.finished");
-
-    private final String description;
-
-    /**
-     * Constructor...
-     *
-     * @param description the description and also the i18n key
-     */
-    FixedMovementState(String description) {
-        this.description = description;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return
-     */
-    @Override
-    public String toString() {
-        return this.description;
-    }
-}
+public interface FixedMovementSavingLogic extends BusinessLogic<FixedMovement> { }

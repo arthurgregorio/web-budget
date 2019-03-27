@@ -14,17 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.financial.periodmovement;
+package br.com.webbudget.domain.logics.financial.movement.fixed;
 
-import br.com.webbudget.domain.entities.financial.PeriodMovement;
-import br.com.webbudget.domain.logics.BusinessLogic;
+import br.com.webbudget.domain.entities.financial.FixedMovement;
+
+import javax.enterprise.context.Dependent;
 
 /**
- * {@link PeriodMovement} validator facade for save actions
+ * Validator to check if the {@link FixedMovement} contains launches and prevent the deletion
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 22/02/2019
+ * @since 1.0.0, 26/03/2019
  */
-public interface PeriodMovementSavingLogic extends BusinessLogic<PeriodMovement> { }
+@Dependent
+public class AlreadyUsedValidator implements FixedMovementDeletingLogic {
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param value
+     */
+    @Override
+    public void run(FixedMovement value) {
+        // TODO make the logic to find if this fixed movement is used
+    }
+}

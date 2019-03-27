@@ -14,24 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics.financial.periodmovement;
+package br.com.webbudget.domain.logics.financial.movement.period;
 
-import br.com.webbudget.domain.entities.financial.Apportionment;
+import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 
 import javax.enterprise.context.Dependent;
 
 /**
- * Validator to check if the user are not trying to save a {@link PeriodMovement} without an {@link Apportionment}
+ * Validator to check if the {@link PeriodMovement} is linked with a {@link CreditCardInvoice} and prevent to delete it
+ * if the invoice is paid or closed
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 23/02/2019
+ * @since 3.0.0, 17/03/2019
  */
 @Dependent
-public class ContainsApportionmentsValidator implements PeriodMovementSavingLogic, PeriodMovementUpdatingLogic {
+public class InvoiceLinkValidator implements PeriodMovementDeletingLogic, PeriodMovementUpdatingLogic {
 
     /**
      * {@inheritDoc}
@@ -40,8 +41,9 @@ public class ContainsApportionmentsValidator implements PeriodMovementSavingLogi
      */
     @Override
     public void run(PeriodMovement value) {
-        if (value.getApportionments().isEmpty()) {
-            throw new BusinessLogicException("error.period-movement.no-apportionments");
+        if (value.getCreditCardInvoice() != null &&
+                (value.getCreditCardInvoice().isPaid() || value.getCreditCardInvoice().isClosed())) {
+            throw new BusinessLogicException("error.period-movement.invoice-paid-or-closed");
         }
     }
 }

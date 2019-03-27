@@ -282,6 +282,8 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
 
     /**
      * Add the {@link Apportionment} to the {@link PeriodMovement}
+     *
+     * FIXME remove this dup code
      */
     public void addApportionment() {
         this.apportionmentValidators.forEach(validator -> validator.validate(this.apportionment, this.value));
