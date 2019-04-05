@@ -16,18 +16,25 @@
  */
 package br.com.webbudget.application.controller.registration;
 
+import br.com.webbudget.application.components.ui.FormBean;
 import br.com.webbudget.application.components.ui.ViewState;
+import br.com.webbudget.application.components.ui.filter.FinancialPeriodFilter;
+import br.com.webbudget.application.components.ui.table.LazyDataProvider;
+import br.com.webbudget.application.components.ui.table.LazyModel;
 import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.application.components.ui.LazyFormBean;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.FinancialPeriodService;
 import lombok.Getter;
+import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.GET;
 import java.util.List;
 
 import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
@@ -42,16 +49,31 @@ import static br.com.webbudget.application.components.ui.NavigationManager.PageT
  */
 @Named
 @ViewScoped
-public class FinancialPeriodBean extends LazyFormBean<FinancialPeriod> {
+public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements LazyDataProvider<FinancialPeriod> {
 
     @Getter
     private boolean hasOpenPeriod;
+
+    @Getter
+    private FinancialPeriodFilter filter;
+
+    @Getter
+    private LazyDataModel<FinancialPeriod> dataModel;
 
     @Inject
     private FinancialPeriodService financialPeriodService;
 
     @Inject
     private FinancialPeriodRepository financialPeriodRepository;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.dataModel = new LazyModel<>(this);
+    }
 
     /**
      * {@inheritDoc}
@@ -89,7 +111,7 @@ public class FinancialPeriodBean extends LazyFormBean<FinancialPeriod> {
      */
     @Override
     public Page<FinancialPeriod> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.financialPeriodRepository.findAllBy(this.filter.getValue(), null, first, pageSize);
+        return this.financialPeriodRepository.findAllBy(this.filter.getValue(), this.filter.getClosed(), first, pageSize);
     }
 
     /**
@@ -139,5 +161,12 @@ public class FinancialPeriodBean extends LazyFormBean<FinancialPeriod> {
     private void checkForOpenPeriods() {
         final List<FinancialPeriod> periods = this.financialPeriodRepository.findByClosed(false);
         this.hasOpenPeriod = periods.size() > 0;
+    }
+
+    /**
+     * Clear the filter
+     */
+    public void clearFilters() {
+        this.filter = new FinancialPeriodFilter();
     }
 }

@@ -25,22 +25,17 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
- * DTO to use for filter the {@link PeriodMovement} list. This class hold the possible filter options and serve as a
- * place to retrieve some possible values to use as a filter
+ * A specific implementation of the {@link BasicFilter} to be used at the {@link PeriodMovement} controller
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 10/12/2018
  */
-@ToString
 @NoArgsConstructor
-@EqualsAndHashCode
-public final class PeriodMovementFilter {
-
-    @Setter
-    @Getter
-    private String value;
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public final class PeriodMovementFilter extends BasicFilter {
 
     @Setter
     @Getter

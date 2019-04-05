@@ -14,24 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.components.ui.table;
+package br.com.webbudget.application.components.ui.filter;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
- * This filter implementation is a utility class to help the lazy loading feature on data tables
+ * An generic implementation of the {@link BasicFilter} to be used with a basic CRUD in the application
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
  * @since 3.0.0, 20/03/2018
  */
-public final class LazyFilter {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public final class LazyFilter extends BasicFilter {
 
-    @Getter
-    @Setter
-    public String value;
     @Getter
     @Setter
     public EntityStatus entityStatus;
