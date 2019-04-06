@@ -91,20 +91,29 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="box-tools pull-right">
-                                <p:commandButton immediate="true"
-                                                 value="#{menu['new']}"
-                                                 styleClass="btn btn-flat btn-primary"
-                                                 action="#{fixedMovementBean.changeToAdd()}"
-                                                 rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ADD)}"/>
-                            </div>
+                        <div class="col-xs-6 align-right">
+                            <p:commandButton update="messages"
+                                             value="#{menu['launch']}"
+                                             onclick="submitSelected()"
+                                             styleClass="btn btn-flat btn-success"
+                                             actionListener="#{fixedMovementBean.showPeriodSelectDialog()}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_LAUNCH)}"/>
+                            <p:spacer width="5"
+                                      rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_LAUNCH)}"/>
+                            <p:commandButton immediate="true"
+                                             value="#{menu['new']}"
+                                             styleClass="btn btn-flat btn-primary"
+                                             action="#{fixedMovementBean.changeToAdd()}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_ADD)}"/>
                         </div>
                     </div>
                 </h:form>
             </div>
             <div jsf:id="boxBody" class="box-body">
                 <h:form id="itemsList">
+
+                    <p:remoteCommand name="submitSelected" />
+
                     <p:dataTable rows="25"
                                  lazy="true"
                                  rowHover="true"
@@ -136,7 +145,8 @@
                                             name="images/red-circle.png"
                                             title="#{messages['fixed-movement.list.not-launched']}"
                                             rendered="#{not fixedMovement.alreadyLaunched and fixedMovement.active}"/>
-                            <p:spacer width="5"/>
+                            <p:spacer width="5"
+                                      rendered="#{fixedMovement.active}"/>
                             <p:graphicImage width="20"
                                             height="20"
                                             library="webbudget"
@@ -155,28 +165,36 @@
                         <p:column width="10%"
                                   styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
-                            <p:commandButton icon="fa fa-search"
+                            <p:commandButton process="@this"
+                                             icon="fa fa-search"
                                              title="#{menu['detail']}"
                                              styleClass="btn btn-flat btn-default"
                                              action="#{fixedMovementBean.changeToDetail(fixedMovement.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_DETAIL)}"/>
-                            <p:spacer width="5"/>
-                            <p:commandButton icon="fa fa-edit"
+                            <p:spacer width="5"
+                                      rendered="#{fixedMovement.active}"/>
+                            <p:commandButton process="@this"
+                                             icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
                                              action="#{fixedMovementBean.changeToEdit(fixedMovement.id)}"
-                                             rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_UPDATE)}"/>
-                            <p:spacer width="5"/>
-                            <p:commandButton icon="fa fa-eraser"
+                                             rendered="#{fixedMovement.active and userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_UPDATE)}"/>
+                            <p:spacer width="5"
+                                      rendered="#{fixedMovement.active}"/>
+                            <p:commandButton process="@this"
+                                             icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
                                              action="#{fixedMovementBean.changeToDelete(fixedMovement.id)}"
-                                             rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_DELETE)}"/>
+                                             rendered="#{fixedMovement.active and userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_DELETE)}"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>
             </div>
         </div>
         <wb:blocker target="boxBody"/>
+    </ui:define>
+    <ui:define name="popups">
+        <ui:include src="dialogPeriodSelect.xhtml"/>
     </ui:define>
 </ui:composition>

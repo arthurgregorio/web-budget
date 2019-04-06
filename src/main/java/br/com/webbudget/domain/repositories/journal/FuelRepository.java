@@ -29,6 +29,4 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 2.3.0, 05/06/2016
  */
 @Repository
-public interface FuelRepository extends DefaultRepository<Fuel> {
-
-}
+public interface FuelRepository extends DefaultRepository<Fuel> { }

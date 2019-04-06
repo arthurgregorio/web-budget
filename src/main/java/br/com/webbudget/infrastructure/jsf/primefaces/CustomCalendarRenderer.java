@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.infrastructure.jsf.primefaces;
 
+import org.primefaces.component.api.UICalendar;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.calendar.CalendarRenderer;
 
@@ -27,7 +28,7 @@ import java.io.IOException;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 2.2.0, 03/02/2016
  */
 public class CustomCalendarRenderer extends CalendarRenderer {
@@ -43,8 +44,7 @@ public class CustomCalendarRenderer extends CalendarRenderer {
      * @throws IOException
      */
     @Override
-    protected void encodeInput(FacesContext context, Calendar calendar, String id, String value, boolean popup)
-            throws IOException {
+    protected void encodeInput(FacesContext context, UICalendar calendar, String id, String value, boolean popup) throws IOException {
 
         final String styleClass = calendar.getInputStyleClass() + " form-control";
 

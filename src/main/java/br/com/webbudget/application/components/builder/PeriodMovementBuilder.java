@@ -17,13 +17,14 @@
 package br.com.webbudget.application.components.builder;
 
 import br.com.webbudget.domain.entities.financial.Apportionment;
-import br.com.webbudget.domain.entities.financial.PeriodMovementType;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.domain.entities.financial.PeriodMovementType;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * The {@link PeriodMovement} builder
@@ -129,6 +130,17 @@ public final class PeriodMovementBuilder extends AbstractBuilder<PeriodMovement>
      */
     public PeriodMovementBuilder addApportionment(Apportionment apportionment) {
         this.instance.add(apportionment);
+        return this;
+    }
+
+    /**
+     * Add a {@link Set} of {@link Apportionment} to the {@link PeriodMovement}
+     *
+     * @param apportionments a {@link Set} of {@link Apportionment}
+     * @return this builder
+     */
+    public PeriodMovementBuilder addApportionments(Set<Apportionment> apportionments) {
+        this.instance.addAll(apportionments);
         return this;
     }
 

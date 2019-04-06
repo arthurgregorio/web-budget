@@ -60,11 +60,6 @@
 
     <ui:define name="content">
         <h:form id="fixedMovementForm" prependId="false">
-
-            <p:remoteCommand process="@this"
-                             name="searchContact"
-                             actionListener="#{fixedMovementBean.showSearchContactDialog()}"/>
-            
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true">
@@ -77,6 +72,10 @@
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox value="#{fixedMovementBean.value.autoLaunch}"
                                                  itemLabel="#{messages['fixed-movement.form.auto-launch']}"/>
+                        <p:spacer width="5"/>
+                        <p:selectBooleanCheckbox id="inUndetermined"
+                                                 value="#{fixedMovementBean.value.undetermined}"
+                                                 itemLabel="#{messages['fixed-movement.form.undetermined']}"/>
                     </h3>
                 </div>
                 <div class="box-body row">
@@ -95,7 +94,6 @@
                                                value="#{messages['fixed-movement.form.contact']}: "/>
                                 <p:inputText id="inContact"
                                              readonly="true"
-                                             onclick="searchContact()"
                                              styleClass="form-control"
                                              value="#{fixedMovementBean.value.contactName}"/>
                             </div>
@@ -116,33 +114,41 @@
                                                decimalPlaces="2"
                                                decimalSeparator=","
                                                thousandSeparator="."
-                                               value="#{fixedMovementBean.value.value}"
-                                               disabled="#{not empty fixedMovementBean.value.apportionments}">
+                                               value="#{fixedMovementBean.value.value}">
                                     <f:converter converterId="javax.faces.BigDecimal"/>
                                 </p:inputNumber>
                             </div>
-                            <div jsf:id="quotesBox" class="col-sm-6 form-group">
-                                <p:outputLabel for="inQuotes"
-                                               value="#{messages['fixed-movement.form.quotes']}: "/>
+                            <div jsf:id="quotesBox" class="col-sm-6">
                                 <div class="row">
-                                    <div class="col-sm-6">
-                                        <p:inputText id="inQuotes"
+                                    <div class="col-sm-4 form-group">
+                                        <p:outputLabel for="inTotalQuotes"
+                                                       value="#{messages['fixed-movement.form.total-quotes']}: "/>
+                                        <p:inputText id="inTotalQuotes"
                                                      maxlength="3"
                                                      styleClass="form-control"
-                                                     value="#{fixedMovementBean.value.quotes}"
-                                                     disabled="#{not fixedMovementBean.viewState.adding or fixedMovementBean.value.undetermined}">
+                                                     value="#{fixedMovementBean.value.totalQuotes}">
                                             <p:keyFilter mask="num"/>
                                         </p:inputText>
                                     </div>
-                                    <div class="col-sm-6" style="padding-top: 7px">
-                                        <p:selectBooleanCheckbox id="inUndetermined"
-                                                                 value="#{fixedMovementBean.value.undetermined}"
-                                                                 disabled="#{not fixedMovementBean.viewState.adding}"
-                                                                 itemLabel="#{messages['fixed-movement.form.undetermined']}">
-                                            <p:ajax event="change"
-                                                    process="@this"
-                                                    listener="#{fixedMovementBean.onQuotesChanged()}"/>
-                                        </p:selectBooleanCheckbox>
+                                    <div class="col-sm-4 form-group">
+                                        <p:outputLabel for="inStartingQuote"
+                                                       value="#{messages['fixed-movement.form.starting-quote']}: "/>
+                                        <p:inputText id="inStartingQuote"
+                                                     maxlength="3"
+                                                     styleClass="form-control"
+                                                     value="#{fixedMovementBean.value.startingQuote}">
+                                            <p:keyFilter mask="num"/>
+                                        </p:inputText>
+                                    </div>
+                                    <div class="col-sm-4 form-group">
+                                        <p:outputLabel for="inActualQuote"
+                                                       value="#{messages['fixed-movement.form.actual-quote']}: "/>
+                                        <p:inputText id="inActualQuote"
+                                                     maxlength="3"
+                                                     styleClass="form-control"
+                                                     value="#{fixedMovementBean.value.actualQuote}">
+                                            <p:keyFilter mask="num"/>
+                                        </p:inputText>
                                     </div>
                                 </div>
                             </div>
@@ -166,32 +172,34 @@
                     </div>
                 </div>
                 <div class="box-footer align-right">
-                    <h:outputText styleClass="text-red text-bold delete-text"
-                                  value="#{messages['info.delete-confirmation']}"
-                                  rendered="#{fixedMovementBean.viewState.deleting}"/>
-                    <p:spacer width="10"
-                              rendered="#{fixedMovementBean.viewState.deleting}"/>
                     <p:commandButton process="@this"
-                                     value="#{menu['yes']}"
-                                     styleClass="btn btn-flat btn-danger"
-                                     action="#{fixedMovementBean.doDelete()}"
-                                     rendered="#{fixedMovementBean.viewState.deleting}"/>
-                    <p:spacer width="5"
-                              rendered="#{fixedMovementBean.viewState.deleting}"/>
-                    <p:commandButton immediate="true"
-                                     value="#{menu['delete']}"
-                                     styleClass="btn btn-flat btn-danger"
+                                     value="#{menu['launches']}"
+                                     styleClass="btn btn-flat btn-default"
                                      rendered="#{fixedMovementBean.viewState.detailing}"
-                                     action="#{fixedMovementBean.changeToDelete(fixedMovementBean.value.id)}"/>
-                    <p:spacer width="5"
-                              rendered="#{fixedMovementBean.viewState.detailing}"/>
-                    <p:commandButton immediate="true"
-                                     value="#{menu['edit']}"
-                                     styleClass="btn btn-flat btn-success"
-                                     rendered="#{fixedMovementBean.viewState.detailing}"
-                                     action="#{fixedMovementBean.changeToEdit(fixedMovementBean.value.id)}"/>
-                    <p:spacer width="5"
-                              rendered="#{fixedMovementBean.viewState.detailing}"/>
+                                     actionListener="#{fixedMovementBean.showLaunchesDialog()}"/>
+                    <p:spacer width="5"/>
+                    <ui:fragment rendered="#{fixedMovementBean.viewState.deleting}">
+                        <h:outputText styleClass="text-red text-bold delete-text"
+                                      value="#{messages['info.delete-confirmation']}"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton process="@this"
+                                         value="#{menu['yes']}"
+                                         styleClass="btn btn-flat btn-danger"
+                                         action="#{fixedMovementBean.doDelete()}"/>
+                        <p:spacer width="5"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{fixedMovementBean.viewState.detailing and not fixedMovementBean.value.finished}">
+                        <p:commandButton immediate="true"
+                                         value="#{menu['delete']}"
+                                         styleClass="btn btn-flat btn-danger"
+                                         action="#{fixedMovementBean.changeToDelete(fixedMovementBean.value.id)}"/>
+                        <p:spacer width="5"/>
+                        <p:commandButton immediate="true"
+                                         value="#{menu['edit']}"
+                                         styleClass="btn btn-flat btn-success"
+                                         action="#{fixedMovementBean.changeToEdit(fixedMovementBean.value.id)}"/>
+                        <p:spacer width="5"/>
+                    </ui:fragment>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary"
                                      action="#{fixedMovementBean.changeToListing()}"
@@ -201,6 +209,6 @@
         </h:form>
     </ui:define>
     <ui:define name="popups">
-        <!--<ui:include src="dialogLaunches.xhtml"/>-->
+        <ui:include src="dialogLaunches.xhtml"/>
     </ui:define>
 </ui:composition>

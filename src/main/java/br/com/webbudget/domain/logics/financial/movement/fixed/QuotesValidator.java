@@ -17,11 +17,12 @@
 package br.com.webbudget.domain.logics.financial.movement.fixed;
 
 import br.com.webbudget.domain.entities.financial.FixedMovement;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 
 import javax.enterprise.context.Dependent;
 
 /**
- * Validator to check if the {@link FixedMovement} contains launches and prevent the deletion
+ * Validator to check if the the quotes of a {@link FixedMovement}
  *
  * @author Arthur Gregorio
  *
@@ -29,7 +30,7 @@ import javax.enterprise.context.Dependent;
  * @since 3.0.0, 26/03/2019
  */
 @Dependent
-public class AlreadyUsedValidator implements FixedMovementDeletingLogic {
+public class QuotesValidator implements FixedMovementSavingLogic {
 
     /**
      * {@inheritDoc}
@@ -38,6 +39,20 @@ public class AlreadyUsedValidator implements FixedMovementDeletingLogic {
      */
     @Override
     public void run(FixedMovement value) {
-        // TODO make the logic to find if this fixed movement is used
+        if (!value.isUndetermined()) {
+
+            final int total = value.getTotalQuotes();
+
+            // if no starting quote is set them we assume one as first quote
+            if (value.getStartingQuote() == null) {
+                value.setStartingQuote(1);
+            }
+
+            final int starting = value.getStartingQuote();
+
+            if (starting > total) {
+                throw new BusinessLogicException("error.fixed-movement.starting-quote-gt-total");
+            }
+        }
     }
 }

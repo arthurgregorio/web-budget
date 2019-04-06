@@ -79,6 +79,7 @@ public class CreditCardInvoice extends PersistentEntity {
     private LocalDate paymentDate;
     @Getter
     @Setter
+    @Enumerated(EnumType.STRING)
     @Column(name = "invoice_state", nullable = false)
     private InvoiceState invoiceState;
 

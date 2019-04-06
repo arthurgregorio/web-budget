@@ -25,12 +25,17 @@ import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.application.validator.apportionment.ApportionmentValidator;
 import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.financial.FixedMovement;
+import br.com.webbudget.domain.entities.financial.Launch;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClass;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.financial.FixedMovementRepository;
+import br.com.webbudget.domain.repositories.financial.LaunchRepository;
 import br.com.webbudget.domain.repositories.registration.ContactRepository;
 import br.com.webbudget.domain.repositories.registration.CostCenterRepository;
+import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.repositories.registration.MovementClassRepository;
 import br.com.webbudget.domain.services.FixedMovementService;
 import lombok.Getter;
@@ -68,6 +73,13 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
     @Getter
     @Setter
     private Apportionment apportionment;
+    @Getter
+    @Setter
+    private FinancialPeriod selectedFinancialPeriod;
+
+    @Getter
+    @Setter
+    private List<FixedMovement> selectedFixedMovements;
 
     @Getter
     private FixedMovementFilter filter;
@@ -75,19 +87,21 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
     private LazyDataModel<FixedMovement> dataModel;
 
     @Getter
+    private List<Launch> launches;
+    @Getter
     private List<Contact> contacts;
     @Getter
     private List<CostCenter> costCenters;
     @Getter
     private List<MovementClass> movementClasses;
-
     @Getter
-    @Setter
-    private List<FixedMovement> selectedFixedMovements;
+    private List<FinancialPeriod> openFinancialPeriods;
 
     @Inject
     private FixedMovementService fixedMovementService;
 
+    @Inject
+    private LaunchRepository launchRepository;
     @Inject
     private ContactRepository contactRepository;
     @Inject
@@ -96,6 +110,8 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
     private MovementClassRepository movementClassRepository;
     @Inject
     private FixedMovementRepository fixedMovementRepository;
+    @Inject
+    private FinancialPeriodRepository financialPeriodRepository;
 
     @Any
     @Inject
@@ -111,6 +127,16 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.selectedFixedMovements = new ArrayList<>();
+        this.openFinancialPeriods = this.financialPeriodRepository.findByClosed(false);
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @param id
      * @param viewState
@@ -118,8 +144,13 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
+
         this.costCenters = this.costCenterRepository.findAllActive();
         this.value = this.fixedMovementRepository.findById(id).orElseGet(FixedMovement::new);
+
+        if (viewState.isDetailing()) {
+            this.launches = this.launchRepository.findByFixedMovement(this.value);
+        }
     }
 
     /**
@@ -180,6 +211,16 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
     }
 
     /**
+     * Execute the launching of the {@link FixedMovement}
+     */
+    public void doLaunch() {
+        this.fixedMovementService.launch(this.selectedFixedMovements, this.selectedFinancialPeriod);
+        this.closeDialog("dialogPeriodSelect");
+        this.addInfo(false, "fixed-movement.launch", this.selectedFinancialPeriod.getIdentification());
+        this.updateComponent("messages");
+    }
+
+    /**
      * Clear the listing view filters
      */
     public void clearFilters() {
@@ -201,7 +242,8 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
      * When the user change the quotes at the UI, this method will be triggered to change the fields behavior
      */
     public void onQuotesChanged() {
-        this.value.setQuotes(null);
+        this.value.setTotalQuotes(null);
+        this.value.setStartingQuote(null);
         this.updateComponent("quotesBox");
     }
 
@@ -209,7 +251,7 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
      * Specific method to display the launches of a {@link FixedMovement}
      */
     public void showLaunchesDialog() {
-
+        this.updateAndOpenDialog("launchesDialog", "dialogLaunches");
     }
 
     /**
@@ -273,4 +315,15 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
                 .findByActiveAndCostCenter(true, this.apportionment.getCostCenter());
     }
 
+    /**
+     * Method used to display the {@link FinancialPeriod} select window before the launch process
+     */
+    public void showPeriodSelectDialog() {
+
+        if (this.selectedFixedMovements.isEmpty()) {
+            throw new BusinessLogicException("error.fixed-movement.list-is-empty");
+        }
+
+        this.updateAndOpenDialog("periodSelectDialog", "dialogPeriodSelect");
+    }
 }

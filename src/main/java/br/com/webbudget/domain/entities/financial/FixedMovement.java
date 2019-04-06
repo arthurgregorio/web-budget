@@ -45,8 +45,16 @@ public class FixedMovement extends Movement {
 
     @Getter
     @Setter
-    @Column(name = "quotes")
-    private Integer quotes;
+    @Column(name = "total_quotes")
+    private Integer totalQuotes;
+    @Getter
+    @Setter
+    @Column(name = "starting_quote")
+    private Integer startingQuote;
+    @Getter
+    @Setter
+    @Column(name = "actual_quote")
+    private Integer actualQuote;
     @Getter
     @Setter
     @Column(name = "auto_launch")
@@ -78,6 +86,7 @@ public class FixedMovement extends Movement {
     public FixedMovement() {
         super();
         this.autoLaunch = true;
+        this.undetermined = true;
         this.startDate = LocalDate.now();
         this.fixedMovementState = FixedMovementState.ACTIVE;
     }

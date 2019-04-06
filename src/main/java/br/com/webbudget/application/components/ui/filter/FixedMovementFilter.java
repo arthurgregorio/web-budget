@@ -32,7 +32,6 @@ import java.util.Optional;
  * @since 3.0.0, 22/03/2019
  */
 @ToString
-@NoArgsConstructor
 @EqualsAndHashCode
 public final class FixedMovementFilter {
 
@@ -43,6 +42,13 @@ public final class FixedMovementFilter {
     @Setter
     @Getter
     private FixedMovementState fixedMovementState;
+
+    /**
+     * Constructor...
+     */
+    public FixedMovementFilter() {
+        this.clear();
+    }
 
     /**
      * Clear this filter to default values

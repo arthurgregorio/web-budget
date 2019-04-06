@@ -78,6 +78,15 @@
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox value="#{fixedMovementBean.value.autoLaunch}"
                                                  itemLabel="#{messages['fixed-movement.form.auto-launch']}"/>
+                        <p:spacer width="5"/>
+                        <p:selectBooleanCheckbox id="inUndetermined"
+                                                 value="#{fixedMovementBean.value.undetermined}"
+                                                 disabled="#{not fixedMovementBean.viewState.adding}"
+                                                 itemLabel="#{messages['fixed-movement.form.undetermined']}">
+                            <p:ajax event="change"
+                                    process="@this"
+                                    listener="#{fixedMovementBean.onQuotesChanged()}"/>
+                        </p:selectBooleanCheckbox>
                     </h3>
                 </div>
                 <div class="box-body row">
@@ -139,28 +148,29 @@
                                     <f:converter converterId="javax.faces.BigDecimal"/>
                                 </p:inputNumber>
                             </div>
-                            <div jsf:id="quotesBox" class="col-sm-6 form-group">
-                                <p:outputLabel for="inQuotes"
-                                               value="#{messages['fixed-movement.form.quotes']}: "/>
+                            <div jsf:id="quotesBox" class="col-sm-6">
                                 <div class="row">
-                                    <div class="col-sm-6">
-                                        <p:inputText id="inQuotes"
+                                    <div class="col-sm-6 form-group">
+                                        <p:outputLabel for="inTotalQuotes"
+                                                       value="#{messages['fixed-movement.form.total-quotes']}: "/>
+                                        <p:inputText id="inTotalQuotes"
                                                      maxlength="3"
                                                      styleClass="form-control"
-                                                     value="#{fixedMovementBean.value.quotes}"
+                                                     value="#{fixedMovementBean.value.totalQuotes}"
                                                      disabled="#{not fixedMovementBean.viewState.adding or fixedMovementBean.value.undetermined}">
                                             <p:keyFilter mask="num"/>
                                         </p:inputText>
                                     </div>
-                                    <div class="col-sm-6" style="padding-top: 7px">
-                                        <p:selectBooleanCheckbox id="inUndetermined"
-                                                                 value="#{fixedMovementBean.value.undetermined}"
-                                                                 disabled="#{not fixedMovementBean.viewState.adding}"
-                                                                 itemLabel="#{messages['fixed-movement.form.undetermined']}">
-                                            <p:ajax event="change"
-                                                    process="@this"
-                                                    listener="#{fixedMovementBean.onQuotesChanged()}"/>
-                                        </p:selectBooleanCheckbox>
+                                    <div class="col-sm-6 form-group">
+                                        <p:outputLabel for="inStartingQuote"
+                                                       value="#{messages['fixed-movement.form.starting-quote']}: "/>
+                                        <p:inputText id="inStartingQuote"
+                                                     maxlength="3"
+                                                     styleClass="form-control"
+                                                     value="#{fixedMovementBean.value.startingQuote}"
+                                                     disabled="#{not fixedMovementBean.viewState.adding or fixedMovementBean.value.undetermined}">
+                                            <p:keyFilter mask="num"/>
+                                        </p:inputText>
                                     </div>
                                 </div>
                             </div>

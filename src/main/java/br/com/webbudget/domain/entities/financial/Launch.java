@@ -16,20 +16,9 @@
  */
 package br.com.webbudget.domain.entities.financial;
 
-import br.com.webbudget.infrastructure.utils.RandomCode;
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.PersistentEntity;
-import java.time.LocalDate;
-
-import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
-import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
-import static javax.persistence.CascadeType.REMOVE;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,14 +26,17 @@ import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import javax.persistence.*;
+
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
+import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
+
 /**
- * Representacao do lancamento de um determinado movimento fixo na lista de 
- * movimentos de um periodo, esta entidade serve como ligacao entre o estado
- * onde o movimento fixo vira um movimento efetivamente
+ * The representation of a {@link FixedMovement} launch in a given {@link FinancialPeriod}
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 2.1.0, 21/09/2015
  */
 @Entity
@@ -54,51 +46,44 @@ import org.hibernate.envers.Audited;
 @Table(name = "launches", schema = FINANCIAL)
 @AuditTable(value = "launches", schema = FINANCIAL_AUDIT)
 public class Launch extends PersistentEntity {
-    
+
     @Getter
-    @Column(name = "code", nullable = false, length = 8, unique = true)
-    private final String code;
+    @Column(name = "code", nullable = false, length = 6, unique = true)
+    private String code;
     @Getter
     @Setter
-    @Column(name = "quote")
-    private Integer quote;
+    @Column(name = "quote_number")
+    private int quoteNumber;
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_financial_period", nullable = false)
     private FinancialPeriod financialPeriod;
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_fixed_movement", nullable = false)
     private FixedMovement fixedMovement;
     @Getter
     @Setter
-    @OneToOne(cascade = REMOVE)
-    @JoinColumn(name = "id_movement", nullable = false)
-    private Movement movement;
-    
+    @OneToOne(optional = false)
+    @JoinColumn(name = "id_period_movement", nullable = false)
+    private PeriodMovement periodMovement;
+
     /**
-     * Inicializamos o que for necessario
+     * Constructor...
      */
     public Launch() {
-        this.code = RandomCode.alphanumeric(5);
+        this.code = RandomCode.alphanumeric(6);
     }
 
     /**
-     * @param period o periodo que devemos checar
-     * @return se pertence ou nao ao periodo
+     * Method used to check if this is the last launch of the {@link FixedMovement}
+     *
+     * @return true if is, false otherwise
      */
-    public boolean belongsToPeriod(FinancialPeriod period) {
-        return this.financialPeriod.equals(period);
-    }
-    
-    /**
-     * @return a data de incio do movimento fixo
-     */
-    public LocalDate getStartDate() {
-        return this.fixedMovement.getStartDate() == null 
-                ? LocalDate.now() : this.fixedMovement.getStartDate();
+    public boolean isLastQuote() {
+        return this.fixedMovement.getTotalQuotes() == this.quoteNumber;
     }
 }

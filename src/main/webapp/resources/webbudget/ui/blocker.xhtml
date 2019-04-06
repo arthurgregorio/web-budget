@@ -25,11 +25,14 @@
         <c:attribute name="target"
                      required="true"
                      type="java.lang.String"/>
+        <c:attribute name="name"
+                     default="blocker"
+                     type="java.lang.String"/>
     </c:interface>
 
     <c:implementation>
-        <p:blockUI widgetVar="blocker"
-                   block="#{cc.attrs.target}">
+        <p:blockUI block="#{cc.attrs.target}"
+                   widgetVar="#{cc.attrs.name}">
             <p:graphicImage width="32" 
                             height="32"
                             library="webbudget" 

@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
@@ -158,8 +159,16 @@ public class Movement extends PersistentEntity {
      * @param apportionment the {@link Apportionment} to be added
      */
     public void add(Apportionment apportionment) {
-        apportionment.setMovement(this);
         this.apportionments.add(apportionment);
+    }
+
+    /**
+     * Same function of {@link #add(Apportionment)} but this one takes a {@link Set} as parameter
+     *
+     * @param apportionments to be added
+     */
+    public void addAll(Set<Apportionment> apportionments) {
+        this.apportionments.addAll(apportionments);
     }
 
     /**
@@ -200,5 +209,18 @@ public class Movement extends PersistentEntity {
                 .stream()
                 .map(Apportionment::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * Copy the {@link Apportionment} to a new list without reference to this movement
+     *
+     * This method is mainly used at the process of transforming a {@link FixedMovement} in a {@link PeriodMovement}
+     *
+     * @return a new {@link Set} of new {@link Apportionment} objects
+     */
+    public Set<Apportionment> copyApportionments() {
+        return this.apportionments.stream()
+                .map(Apportionment::copyOf)
+                .collect(Collectors.toSet());
     }
 }

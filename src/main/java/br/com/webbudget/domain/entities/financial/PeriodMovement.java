@@ -27,7 +27,6 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.GET;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 

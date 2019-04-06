@@ -21,59 +21,56 @@
           xmlns:h="http://xmlns.jcp.org/jsf/html"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
           id="launchesDialog"
-          width="750"
-          modal="true" 
-          closable="false"
-          resizable="false" 
+          width="600"
+          modal="true"
+          position="top"
+          closable="true"
+          resizable="false"
           closeOnEscape="true"
-          widgetVar="dialogLaunches" 
-          header="#{messages['launches.dialog.title']}">
+          widgetVar="dialogLaunches"
+          styleClass="dialog-margin-top"
+          header="#{messages['launch.dialog.title']}">
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 form-group">
             <h4>
                 <o:outputFormat escape="false"
-                                value="#{messages['launches.tip']}">
-                    <f:param value="#{fixedMovementBean.fixedMovement.identification}"/>
+                                value="#{messages['launch.message']}: ">
+                    <f:param value="#{fixedMovementBean.value.identification}"/>
                 </o:outputFormat>
             </h4>
-            <p:spacer height="5"/>
-            <p:dataTable rows="10"
-                         lazy="true"
+        </div>
+        <div class="col-sm-12 form-group">
+            <p:dataTable rows="15"
                          var="launch"
+                         rowHover="true"
                          paginator="true"
-                         sortMode="ascending"
                          paginatorPosition="bottom"
                          paginatorAlwaysVisible="false"
-                         emptyMessage="#{messages['list.empty']}"
-                         value="#{fixedMovementBean.launchesModel}">
+                         value="#{fixedMovementBean.launches}"
+                         emptyMessage="#{messages['list.empty']}">
 
-                <p:column styleClass="align-center"
-                          headerText="#{messages['launches.list.quote']}">
-                    #{launch.quote eq null ? '-' : launch.quote}  
+                <p:column width="15%"
+                          styleClass="align-center"
+                          headerText="#{messages['launch.list.quote-number']}">
+                    #{launch.quoteNumber}
                 </p:column>
                 <p:column styleClass="align-center"
-                          headerText="#{messages['launches.list.launch-date']}">
-                    <h:outputText value="#{launch.inclusion}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                          headerText="#{messages['launch.list.launch-date']}">
+                    <h:outputText value="#{launch.createdOn}">
+                        <f:converter converterId="localDateTimeConverter"/>
                     </h:outputText>
                 </p:column>
                 <p:column styleClass="align-center"
-                          headerText="#{messages['launches.list.movement']}">
-                    #{launch.movement.code}
-                </p:column>
-                <p:column styleClass="align-center"
-                          headerText="#{messages['launches.list.period']}">
-                    #{launch.financialPeriod.identification}                        
+                          headerText="#{messages['launches.list.financial-period']}">
+                    #{launch.financialPeriod.identification}
                 </p:column>
             </p:dataTable>
         </div>
-    </div>
-    <div class="row align-center" style="margin-top: 20px">
-        <div class="col-sm-12">
+        <div class="col-sm-12 align-right">
             <p:commandButton immediate="true"
-                             value="#{menu['back']}" 
-                             styleClass="btn btn-flat btn-default"
+                             value="#{menu['close']}"
+                             styleClass="btn btn-flat btn-primary"
                              onclick="PF('dialogLaunches').hide()"/>
         </div>
     </div>

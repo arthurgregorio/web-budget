@@ -153,4 +153,14 @@ public class Apportionment extends PersistentEntity {
         return apportionment.getCostCenter().equals(this.costCenter)
                 && apportionment.getMovementClass().equals(this.movementClass);
     }
+
+    /**
+     * Method used to copy an apportionment to another
+     *
+     * @param toCopy apportionment to be copied
+     * @return an entire new apportionment
+     */
+    public static Apportionment copyOf(Apportionment toCopy){
+        return new Apportionment(toCopy.getValue(), toCopy.getMovementClass());
+    }
 }

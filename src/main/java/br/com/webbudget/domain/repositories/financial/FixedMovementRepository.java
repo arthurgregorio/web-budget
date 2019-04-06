@@ -25,7 +25,6 @@ import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.EntityGraph;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
-import org.hibernate.internal.CriteriaImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,27 +43,22 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public interface FixedMovementRepository extends DefaultRepository<FixedMovement> {
 
     /**
+     * Find a {@link FixedMovement} by the ID
      *
-     * @param id the id to search
-     * @return
+     * @param id to search for
+     * @return an {@link Optional} of the {@link FixedMovement}
      */
     @Override
     @EntityGraph(value = "Movement.full")
     Optional<FixedMovement> findById(Long id);
 
     /**
+     * Method used to search for {@link FixedMovement} using pagination
      *
-     * @param identification
-     * @return
-     */
-    Optional<FixedMovement> findByIdentificationLikeIgnoreCase(String identification);
-
-    /**
-     *
-     * @param filter
-     * @param start
-     * @param pageSize
-     * @return
+     * @param filter to be applied
+     * @param start starting point
+     * @param pageSize maximum size of the page
+     * @return a {@link Page} with the {@link FixedMovement} found
      */
     default Page<FixedMovement> findAllBy(FixedMovementFilter filter, int start, int pageSize) {
 
@@ -83,9 +77,10 @@ public interface FixedMovementRepository extends DefaultRepository<FixedMovement
     }
 
     /**
+     * Method used to count the pages before the pagination process
      *
-     * @param filter
-     * @return
+     * @param filter used to find and count the pages
+     * @return number of pages for the given filter
      */
     @SuppressWarnings("unchecked")
     default int countPages(FixedMovementFilter filter) {
@@ -96,9 +91,10 @@ public interface FixedMovementRepository extends DefaultRepository<FixedMovement
     }
 
     /**
+     * Create and apply the filters to the {@link Criteria}
      *
-     * @param filter
-     * @return
+     * @param filter to be used
+     * @return the {@link Criteria} created to search for {@link FixedMovement}
      */
     @SuppressWarnings("unchecked")
     default Criteria<FixedMovement, FixedMovement> buildCriteria(FixedMovementFilter filter) {
