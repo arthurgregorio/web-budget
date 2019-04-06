@@ -72,6 +72,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
     @Override
     public void initialize() {
         super.initialize();
+        this.filter = new FinancialPeriodFilter();
         this.dataModel = new LazyModel<>(this);
     }
 
@@ -111,7 +112,8 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
      */
     @Override
     public Page<FinancialPeriod> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.financialPeriodRepository.findAllBy(this.filter.getValue(), this.filter.getClosed(), first, pageSize);
+        return this.financialPeriodRepository.findAllBy(this.filter.getValue(),
+                this.filter.getFinancialPeriodStatusValue(), first, pageSize);
     }
 
     /**

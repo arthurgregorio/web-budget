@@ -54,13 +54,11 @@
                     <div class="row">
                         <div class="col-xs-2">
                             <p:selectOneMenu converter="omnifaces.GenericEnumConverter"
-                                             value="#{financialPeriodBean.filter.closed}">
-                                <f:selectItem value="#{null}"
-                                              itemLabel="#{menu['select-one.all']}"/>
-                                <f:selectItem value="#{true}"
-                                              itemLabel="#{menu['filter.financial-period.closed']}"/>
-                                <f:selectItem value="#{false}"
-                                              itemLabel="#{menu['filter.financial-period.not-closed']}"/>
+                                             value="#{financialPeriodBean.filter.financialPeriodStatus}">
+                                <f:selectItems var="financialPeriodStatus"
+                                               itemValue="#{financialPeriodStatus}"
+                                               itemLabel="#{enums[financialPeriodStatus]}"
+                                               value="#{financialPeriodBean.filter.financialPeriodStatusValues}"/>
                             </p:selectOneMenu>
                         </div>
                         <div class="col-xs-4">
@@ -169,10 +167,10 @@
                                   styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
                             <!--<p:commandButton icon="fa fa-calculator"-->
-                                             <!--title="#{menu['close-period']}"-->
-                                             <!--styleClass="btn btn-flat btn-default"-->
-                                             <!--action="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"-->
-                                             <!--rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>-->
+                            <!--title="#{menu['close-period']}"-->
+                            <!--styleClass="btn btn-flat btn-default"-->
+                            <!--action="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"-->
+                            <!--rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>-->
                             <p:spacer width="5"
                                       rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"

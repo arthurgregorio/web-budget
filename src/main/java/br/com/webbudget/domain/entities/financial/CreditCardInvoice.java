@@ -80,7 +80,7 @@ public class CreditCardInvoice extends PersistentEntity {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "invoice_state", nullable = false)
+    @Column(name = "invoice_state", nullable = false, length = 45)
     private InvoiceState invoiceState;
 
     @Getter

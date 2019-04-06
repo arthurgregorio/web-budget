@@ -68,7 +68,7 @@ public final class LazyFilter extends BasicFilter {
      * @return the status value
      */
     public Boolean getEntityStatusValue() {
-        return entityStatus.value();
+        return this.entityStatus.value();
     }
 
     /**
