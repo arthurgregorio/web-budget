@@ -52,8 +52,8 @@ public class Launch extends PersistentEntity {
     private String code;
     @Getter
     @Setter
-    @Column(name = "quote_number")
-    private int quoteNumber;
+    @Column(name = "quote_number", length = 6)
+    private Integer quoteNumber;
 
     @Getter
     @Setter

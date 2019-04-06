@@ -160,7 +160,7 @@ public class FixedMovementService {
         this.launchRepository.save(launch);
 
         // update the fixed movement
-        if (launch.isLastQuote()) {
+        if (launch.isLastQuote() && !fixedMovement.isUndetermined()) {
             fixedMovement.setFixedMovementState(FixedMovementState.FINISHED);
         }
 

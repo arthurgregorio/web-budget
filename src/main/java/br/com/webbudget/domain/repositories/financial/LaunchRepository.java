@@ -18,6 +18,7 @@ package br.com.webbudget.domain.repositories.financial;
 
 import br.com.webbudget.domain.entities.financial.FixedMovement;
 import br.com.webbudget.domain.entities.financial.Launch;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
@@ -54,4 +55,23 @@ public interface LaunchRepository extends DefaultRepository<Launch> {
      * @return the {@link List} of {@link Launch} found
      */
     List<Launch> findByFixedMovement(FixedMovement fixedMovement);
+
+    /**
+     * Find a {@link Launch} by a {@link PeriodMovement}
+     *
+     * @param periodMovement to use as filter
+     * @return an {@link Optional} of the {@link Launch}
+     */
+    Optional<Launch> findByPeriodMovement(PeriodMovement periodMovement);
+
+    /**
+     * Find the last {@link Launch} for the {@link FixedMovement} given
+     *
+     * @param fixedMovement to be used as filter
+     * @return an {@link Optional} of the last {@link Launch} for this {@link FixedMovement}
+     */
+    @Query("FROM Launch la " +
+            "WHERE la.quoteNumber = (SELECT MAX(l.quoteNumber) FROM Launch l WHERE l.fixedMovement = ?1) " +
+            "AND la.fixedMovement = ?1")
+    Optional<Launch> findLastLaunch(FixedMovement fixedMovement);
 }
