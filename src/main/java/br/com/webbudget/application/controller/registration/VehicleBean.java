@@ -71,7 +71,13 @@ public class VehicleBean extends LazyFormBean<Vehicle> {
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        this.costCenters = this.costCenterRepository.findAllActive();
+
+        if (viewState.isDetailing() || viewState.isDeleting()) {
+            this.costCenters = this.costCenterRepository.findAll();
+        } else {
+            this.costCenters = this.costCenterRepository.findAllActive();
+        }
+
         this.value = this.vehicleRepository.findById(id).orElseGet(Vehicle::new);
     }
 

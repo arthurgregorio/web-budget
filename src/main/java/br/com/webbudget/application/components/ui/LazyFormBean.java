@@ -17,7 +17,7 @@
 package br.com.webbudget.application.components.ui;
 
 import br.com.webbudget.application.components.ui.table.LazyDataProvider;
-import br.com.webbudget.application.components.ui.table.LazyFilter;
+import br.com.webbudget.application.components.ui.filter.LazyFilter;
 import br.com.webbudget.application.components.ui.table.LazyModel;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import lombok.Getter;
