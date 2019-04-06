@@ -22,7 +22,6 @@ import br.com.webbudget.domain.entities.financial.FixedMovementState;
 import br.com.webbudget.domain.entities.financial.Launch;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.logics.financial.movement.fixed.FixedMovementDeletingLogic;
 import br.com.webbudget.domain.logics.financial.movement.fixed.FixedMovementSavingLogic;
 import br.com.webbudget.domain.repositories.financial.ApportionmentRepository;

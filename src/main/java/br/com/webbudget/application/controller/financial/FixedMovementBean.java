@@ -218,6 +218,7 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
         this.closeDialog("dialogPeriodSelect");
         this.addInfo(false, "fixed-movement.launch", this.selectedFinancialPeriod.getIdentification());
         this.updateComponent("messages");
+        this.updateComponent("itemsList");
     }
 
     /**
@@ -296,8 +297,6 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
 
     /**
      * Add the {@link Apportionment} to the {@link FixedMovement}
-     *
-     * FIXME remove this dup code
      */
     public void addApportionment() {
         this.apportionmentValidators.forEach(validator -> validator.validate(this.apportionment, this.value));
