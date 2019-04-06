@@ -84,6 +84,10 @@ public class FinancialPeriod extends PersistentEntity {
     @Setter
     @Column(name = "closed", nullable = false)
     private boolean closed;
+    @Getter
+    @Setter
+    @Column(name = "expired", nullable = false)
+    private boolean expired;
 
     @Getter
     @Setter
@@ -96,18 +100,10 @@ public class FinancialPeriod extends PersistentEntity {
      */
     public FinancialPeriod() {
         this.closed = false;
+        this.expired = false;
         this.expensesGoal = BigDecimal.ZERO;
         this.revenuesGoal = BigDecimal.ZERO;
         this.creditCardGoal = BigDecimal.ZERO;
-    }
-
-    /**
-     * Method to check if the period is expired or not
-     *
-     * @return true for expired, false for non expired
-     */
-    public boolean isExpired() {
-        return LocalDate.now().compareTo(this.end) > 0;
     }
 
     /**
