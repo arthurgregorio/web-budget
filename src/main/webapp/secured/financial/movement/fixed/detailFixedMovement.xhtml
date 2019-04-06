@@ -192,13 +192,17 @@
                         <p:commandButton immediate="true"
                                          value="#{menu['delete']}"
                                          styleClass="btn btn-flat btn-danger"
-                                         action="#{fixedMovementBean.changeToDelete(fixedMovementBean.value.id)}"/>
-                        <p:spacer width="5"/>
+                                         action="#{fixedMovementBean.changeToDelete(fixedMovementBean.value.id)}"
+                                         rendered="#{fixedMovementBean.value.active and userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_DELETE)}"/>
+                        <p:spacer width="5"
+                                  rendered="#{fixedMovementBean.value.active and userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_DELETE)}"/>
                         <p:commandButton immediate="true"
                                          value="#{menu['edit']}"
                                          styleClass="btn btn-flat btn-success"
-                                         action="#{fixedMovementBean.changeToEdit(fixedMovementBean.value.id)}"/>
-                        <p:spacer width="5"/>
+                                         action="#{fixedMovementBean.changeToEdit(fixedMovementBean.value.id)}"
+                                         rendered="#{fixedMovementBean.value.active and userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_UPDATE)}"/>
+                        <p:spacer width="5"
+                                  rendered="#{fixedMovementBean.value.active and userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_UPDATE)}"/>
                     </ui:fragment>
                     <p:commandButton immediate="true"
                                      styleClass="btn btn-flat btn-primary"

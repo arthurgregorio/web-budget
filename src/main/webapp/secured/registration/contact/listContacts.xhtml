@@ -151,7 +151,8 @@
                                              styleClass="btn btn-flat btn-default"
                                              action="#{contactBean.changeToEdit(contact.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.CONTACT_UPDATE)}"/>
-                            <p:spacer width="5"/>
+                            <p:spacer width="5"
+                                      rendered="#{userSessionBean.isPermitted(permissions.CONTACT_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"

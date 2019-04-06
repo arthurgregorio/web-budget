@@ -172,7 +172,7 @@
                                              action="#{fixedMovementBean.changeToDetail(fixedMovement.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_DETAIL)}"/>
                             <p:spacer width="5"
-                                      rendered="#{fixedMovement.active}"/>
+                                      rendered="#{fixedMovement.active and userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_DETAIL)}"/>
                             <p:commandButton process="@this"
                                              icon="fa fa-edit"
                                              title="#{menu['edit']}"
@@ -180,7 +180,7 @@
                                              action="#{fixedMovementBean.changeToEdit(fixedMovement.id)}"
                                              rendered="#{fixedMovement.active and userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_UPDATE)}"/>
                             <p:spacer width="5"
-                                      rendered="#{fixedMovement.active}"/>
+                                      rendered="#{fixedMovement.active and userSessionBean.isPermitted(permissions.FIXED_MOVEMENT_UPDATE)}"/>
                             <p:commandButton process="@this"
                                              icon="fa fa-eraser"
                                              title="#{menu['delete']}"

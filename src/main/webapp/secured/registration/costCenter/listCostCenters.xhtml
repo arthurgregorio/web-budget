@@ -154,7 +154,8 @@
                                              styleClass="btn btn-flat btn-default"
                                              action="#{costCenterBean.changeToEdit(costCenter.id)}" 
                                              rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_UPDATE)}"/>
-                            <p:spacer width="5"/>
+                            <p:spacer width="5"
+                                      rendered="#{userSessionBean.isPermitted(permissions.COST_CENTER_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"

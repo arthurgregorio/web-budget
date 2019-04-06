@@ -150,13 +150,15 @@
                                              styleClass="btn btn-flat btn-default"
                                              action="#{cardBean.changeToStatistics(card.id)}" 
                                              rendered="#{userSessionBean.isPermitted(permissions.CARD_STATISTICS)}"/>
-                            <p:spacer width="5"/>
+                            <p:spacer width="5"
+                                      rendered="#{userSessionBean.isPermitted(permissions.CARD_STATISTICS)}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
                                              action="#{cardBean.changeToEdit(card.id)}" 
                                              rendered="#{userSessionBean.isPermitted(permissions.CARD_UPDATE)}"/>
-                            <p:spacer width="5"/>
+                            <p:spacer width="5"
+                                      rendered="#{userSessionBean.isPermitted(permissions.CARD_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
