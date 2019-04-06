@@ -19,6 +19,7 @@ package br.com.webbudget.domain.repositories.financial;
 import br.com.webbudget.domain.entities.financial.FixedMovement;
 import br.com.webbudget.domain.entities.financial.Launch;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
@@ -74,4 +75,17 @@ public interface LaunchRepository extends DefaultRepository<Launch> {
             "WHERE la.quoteNumber = (SELECT MAX(l.quoteNumber) FROM Launch l WHERE l.fixedMovement = ?1) " +
             "AND la.fixedMovement = ?1")
     Optional<Launch> findLastLaunch(FixedMovement fixedMovement);
+
+    /**
+     * Method to count how much {@link Launch} we have for a given {@link FixedMovement} at open {@link FinancialPeriod}
+     *
+     * @param fixedMovement to search for {@link Launch}
+     * @return the total of {@link Launch} found for this {@link FixedMovement}
+     */
+    @Query("SELECT COUNT(*) " +
+            "FROM Launch la " +
+            "WHERE la.fixedMovement = ?1 " +
+            "AND la.financialPeriod.id IN " +
+            "   (SELECT fp.id FROM FinancialPeriod fp WHERE fp.closed = false AND fp.expired = false)")
+    long countByFixedMovementAtCurrentFinancialPeriod(FixedMovement fixedMovement);
 }

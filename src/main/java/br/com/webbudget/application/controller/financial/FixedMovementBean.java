@@ -176,7 +176,17 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
      */
     @Override
     public Page<FixedMovement> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        return this.fixedMovementRepository.findAllBy(this.filter, first, pageSize);
+
+        final Page<FixedMovement> page = this.fixedMovementRepository.findAllBy(this.filter, first, pageSize);
+
+        // check to see if the fixed movement is already launched at the current active period
+        page.getContent()
+                .stream()
+                .filter(FixedMovement::isActive)
+                .forEach(fixedMovement -> fixedMovement.setAlreadyLaunched(
+                        this.launchRepository.countByFixedMovementAtCurrentFinancialPeriod(fixedMovement) > 0));
+
+        return page;
     }
 
     /**
