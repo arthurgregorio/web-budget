@@ -48,9 +48,9 @@
                 </div>
             </div>
             <div class="box box-#{profileBean.currentThemeColorName}">
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-6">
+                <div class="box-body row">
+                    <div class="col-md-6">
+                        <div class="row">
                             <div class="col-md-6 form-group">
                                 <p:outputLabel for="inOrigin"
                                                value="#{messages['transference.form.origin']}: "/>
@@ -99,38 +99,38 @@
                                 </h:outputText>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <p:outputLabel for="inTransferDate"
-                                                   value="#{messages['transference.form.transfer-date']}: "/>
-                                    <p:calendar id="inTransferDate"
-                                                mask="true"
-                                                pattern="dd/MM/yyyy"
-                                                converter="localDateConverter"
-                                                value="#{transferenceBean.transference.transferDate}"/>
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <p:outputLabel for="inValue"
-                                                   value="#{messages['transference.form.value']}: "/>
-                                    <p:inputNumber id="inValue"
-                                                   symbol="R$ "
-                                                   decimalPlaces="2"
-                                                   decimalSeparator=","
-                                                   thousandSeparator="."
-                                                   value="#{transferenceBean.transference.value}">
-                                        <p:keyFilter regEx="/[0-9_,]/i"/>
-                                        <f:converter converterId="javax.faces.BigDecimal"/>
-                                    </p:inputNumber>
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <p:outputLabel for="inReason"
-                                                   value="#{messages['transference.form.description']}:"/>
-                                    <p:inputTextarea id="inReason"
-                                                     styleClass="form-control"
-                                                     value="#{transferenceBean.transference.description}"
-                                                     placeholder="#{messages['transference.form.description-placeholder']}"/>
-                                </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <p:outputLabel for="inTransferDate"
+                                               value="#{messages['transference.form.transfer-date']}: "/>
+                                <p:calendar id="inTransferDate"
+                                            mask="true"
+                                            pattern="dd/MM/yyyy"
+                                            converter="localDateConverter"
+                                            value="#{transferenceBean.transference.transferDate}"/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <p:outputLabel for="inValue"
+                                               value="#{messages['transference.form.value']}: "/>
+                                <p:inputNumber id="inValue"
+                                               symbol="R$ "
+                                               decimalPlaces="2"
+                                               decimalSeparator=","
+                                               thousandSeparator="."
+                                               value="#{transferenceBean.transference.value}">
+                                    <p:keyFilter regEx="/[0-9_,]/i"/>
+                                    <f:converter converterId="javax.faces.BigDecimal"/>
+                                </p:inputNumber>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <p:outputLabel for="inReason"
+                                               value="#{messages['transference.form.description']}:"/>
+                                <p:inputTextarea id="inReason"
+                                                 styleClass="form-control"
+                                                 value="#{transferenceBean.transference.description}"
+                                                 placeholder="#{messages['transference.form.description-placeholder']}"/>
                             </div>
                         </div>
                     </div>
