@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
+  Copyright (C) 2014 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,27 +19,35 @@
           xmlns:o="http://omnifaces.org/ui"
           xmlns:p="http://primefaces.org/ui"
           xmlns:f="http://xmlns.jcp.org/jsf/core"
-          id="closingConfirmationDialog" 
+          id="closingConfirmationDialog"
+          width="500"
           modal="true"
-          resizable="false" 
+          position="top"
+          closable="true"
+          resizable="false"
+          closeOnEscape="true"
+          styleClass="dialog-margin-top"
           widgetVar="dialogClosingConfirmation" 
-          header="#{messages['closing-confirmation.dialog.title']}">
+          header="#{messages['closing.dialog.title']}">
 
     <div class="row">
         <div class="col-sm-12 form-group">
             <h4>
                 <o:outputFormat escape="false" 
-                                value="#{messages['closing-confirmation.period-closed']}">
+                                value="#{messages['closing.dialog.message']}">
                     <f:param value="#{closingBean.financialPeriod.identification}" />
                 </o:outputFormat>
             </h4>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12 align-center">
-            <p:commandButton value="#{menu['back']}"
-                             styleClass="btn btn-flat btn-default" 
-                             action="closeFinancialPeriod.xhtml?faces-redirect=true"/>
+        <div class="col-sm-12 align-right">
+            <p:commandButton value="#{menu['yes']}"
+                             styleClass="btn btn-flat btn-success"
+                             actionListener="#{closingBean.doClosing()}"/>
+            <p:commandButton value="#{menu['no']}"
+                             styleClass="btn btn-flat btn-primary"
+                             onclick="PF('dialogClosingConfirmation').hide()"/>
         </div>
     </div>
 </p:dialog>

@@ -260,6 +260,10 @@ public class Permissions implements Serializable {
     @PermissionGrouper("configuration")
     private final String CONFIGURATION_ACCESS = "configuration:access";
 
+    @Getter
+    @PermissionGrouper("closing")
+    private final String CLOSING_ACCESS = "closing:access";
+
     /**
      * Method to process this class with reflection and build a list of {@link Authorization} to be used in the
      * {@link Group} creation form
