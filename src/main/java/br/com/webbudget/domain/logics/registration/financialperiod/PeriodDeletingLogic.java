@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2019 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@ import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
- * {@link FinancialPeriod} facade for saving actions
+ * {@link FinancialPeriod} facade for deleting actions
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 27/09/2018
+ * @since 3.0.0, 07/04/2019
  */
-public interface PeriodSavingLogic extends BusinessLogic<FinancialPeriod> { }
+public interface PeriodDeletingLogic extends BusinessLogic<FinancialPeriod> { }

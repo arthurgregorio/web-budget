@@ -18,6 +18,7 @@ package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.events.FinancialPeriodOpened;
+import br.com.webbudget.domain.logics.registration.financialperiod.PeriodDeletingLogic;
 import br.com.webbudget.domain.logics.registration.financialperiod.PeriodSavingLogic;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 
@@ -50,6 +51,9 @@ public class FinancialPeriodService {
     @Any
     @Inject
     private Instance<PeriodSavingLogic> savingBusinessLogics;
+    @Any
+    @Inject
+    private Instance<PeriodDeletingLogic> periodDeletingLogics;
 
     /**
      * Use this method to persist a {@link FinancialPeriod}
@@ -77,6 +81,7 @@ public class FinancialPeriodService {
      */
     @Transactional
     public void delete(FinancialPeriod financialPeriod) {
+        this.periodDeletingLogics.forEach(logic -> logic.run(financialPeriod));
         this.financialPeriodRepository.attachAndRemove(financialPeriod);
     }
 }
