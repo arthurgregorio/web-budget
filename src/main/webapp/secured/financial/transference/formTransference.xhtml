@@ -60,10 +60,11 @@
                                     <p:ajax event="change"
                                             update="originBalanceBox"/>
                                     <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
                                                   itemLabel="#{menu['select-one']}"/>
-                                    <f:selectItems var="invoice"
-                                                   itemValue="#{invoice}"
-                                                   itemLabel="#{invoice.description}"
+                                    <f:selectItems var="wallet"
+                                                   itemValue="#{wallet}"
+                                                   itemLabel="#{wallet.description}"
                                                    value="#{transferenceBean.wallets}"/>
                                 </p:selectOneMenu>
                             </div>
@@ -79,8 +80,8 @@
                                                   noSelectionOption="true"
                                                   itemLabel="#{menu['select-one']}"/>
                                     <f:selectItems var="wallet"
-                                                   itemValue="#{invoice}"
-                                                   itemLabel="#{invoice.description}"
+                                                   itemValue="#{wallet}"
+                                                   itemLabel="#{wallet.description}"
                                                    value="#{transferenceBean.wallets}"/>
                                 </p:selectOneMenu>
                             </div>

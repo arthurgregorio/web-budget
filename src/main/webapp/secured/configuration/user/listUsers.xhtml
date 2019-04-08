@@ -137,8 +137,7 @@
                                   headerText="#{messages['user.list.username']}">
                             #{user.username}
                         </p:column>
-
-                        <p:column width="15%" 
+                        <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-edit"
@@ -146,7 +145,8 @@
                                              styleClass="btn btn-flat btn-default"
                                              action="#{userBean.changeToEdit(user.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.USER_UPDATE)}"/>
-                            <p:spacer width="5"/>
+                            <p:spacer width="5"
+                                      rendered="#{userSessionBean.isPermitted(permissions.USER_UPDATE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"

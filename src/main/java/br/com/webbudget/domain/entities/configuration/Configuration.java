@@ -19,8 +19,6 @@ package br.com.webbudget.domain.entities.configuration;
 import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import lombok.*;
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -29,7 +27,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.CONFIGURATION;
-import static br.com.webbudget.infrastructure.utils.DefaultSchemes.CONFIGURATION_AUDIT;
 
 /**
  * This class represents the configuration of the entire application
@@ -40,12 +37,10 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.CONFIGURATION
  * @since 3.0.0, 16/03/2019
  */
 @Entity
-@Audited
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "configurations", schema = CONFIGURATION)
-@AuditTable(value = "configurations", schema = CONFIGURATION_AUDIT)
 public class Configuration extends PersistentEntity {
 
     @Getter

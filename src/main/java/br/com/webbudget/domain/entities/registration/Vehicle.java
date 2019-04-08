@@ -72,15 +72,16 @@ public class Vehicle extends PersistentEntity {
     @Getter
     @Setter
     @Column(name = "model_year", length = 4)
-    private int modelYear;
+    private Integer modelYear;
     @Getter
     @Setter
     @Column(name = "manufacturing_year", length = 4)
-    private int manufacturingYear;
+    private Integer manufacturingYear;
     @Getter
     @Setter
-    @Column(name = "odometer", length = 11)
-    private long odometer;
+    @NotNull(message = "{vehicle.odometer}")
+    @Column(name = "odometer", length = 11, nullable = false)
+    private Long odometer;
     @Getter
     @Setter
     @NotNull(message = "{vehicle.fuel-capacity}")
@@ -110,6 +111,7 @@ public class Vehicle extends PersistentEntity {
      */
     public Vehicle() {
         this.active = true;
+        this.odometer = 0L;
 
         final int year = LocalDate.now().get(ChronoField.YEAR);
 

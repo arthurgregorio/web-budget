@@ -76,9 +76,6 @@ public class CreditCardInvoiceService {
     @Transactional
     public void close(long invoiceId) {
 
-        final Configuration configuration = this.configurationRepository.findCurrent()
-                .orElseThrow(() -> new BusinessLogicException("error.configuration.not-found"));
-
         final CreditCardInvoice invoice = this.creditCardInvoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new BusinessLogicException("error.credit-card-invoice.not-found"));
 
@@ -86,6 +83,9 @@ public class CreditCardInvoiceService {
         if (invoice.getTotalValue().compareTo(BigDecimal.ZERO) == 0) {
             throw new BusinessLogicException("error.credit-card-invoice.total-value-equal-zero");
         }
+
+        final Configuration configuration = this.configurationRepository.findCurrent()
+                .orElseThrow(() -> new BusinessLogicException("error.configuration.not-found"));
 
         final PeriodMovement periodMovement = this.periodMovementService
                 .save(invoice.toPeriodMovement(configuration.getCreditCardClass()));

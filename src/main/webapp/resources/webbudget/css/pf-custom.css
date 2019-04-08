@@ -19,6 +19,9 @@ div.ui-dialog > .ui-dialog-content {
 input.ui-state-error {
     border-left: 2px solid #ef5350 !important;
 }
+span.ui-inputnumber.ui-widget.ui-state-error {
+    border: none;
+}
 
 /*customize the dialog to display the input field correctly*/
 .ui-dialog .form-control {

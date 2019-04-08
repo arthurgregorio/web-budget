@@ -128,9 +128,9 @@ public class UserAccountService implements UserDetailsProvider {
                 this.userRepository.saveAndFlushAndRefresh(user);
                 return;
             }
-            throw new BusinessLogicException("profile.new-pass-not-match");
+            throw new BusinessLogicException("change-password.new-pass-not-match");
         }
-        throw new BusinessLogicException("profile.actual-pass-not-match");
+        throw new BusinessLogicException("change-password.actual-pass-not-match");
     }
 
     /**

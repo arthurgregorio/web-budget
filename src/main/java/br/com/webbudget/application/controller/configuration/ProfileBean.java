@@ -113,7 +113,7 @@ public class ProfileBean extends AbstractBean {
     }
 
     /**
-     * Open the change password popup
+     * Open the dialog to change de password
      */
     public void showChangePasswordDialog() {
         this.passwordChangeDTO = new PasswordChangeDTO();
@@ -121,28 +121,30 @@ public class ProfileBean extends AbstractBean {
     }
 
     /**
-     * A simple DTO to transfer the data through the layers of the system
+     * A simple DTO to transfer the password change data through the application layers
      */
     public class PasswordChangeDTO {
 
         @Getter
         @Setter
-        @NotBlank(message = "{profile.actual-password}")
+        @NotBlank(message = "{change-password.actual-password}")
         private String actualPassword;
         @Getter
         @Setter
-        @NotBlank(message = "{profile.new-password}")
+        @NotBlank(message = "{change-password.new-password}")
         private String newPassword;
         @Getter
         @Setter
-        @NotBlank(message = "{profile.new-password-confirmation}")
+        @NotBlank(message = "{change-password.new-password-confirmation}")
         private String newPasswordConfirmation;
 
         /**
-         * @return check if the new password is matching with the confirmation
+         * Method used to check if the passwords informed are matching
+         *
+         * @return true if is, false otherwise
          */
         public boolean isNewPassMatching() {
-            return this.newPassword.equals(newPasswordConfirmation);
+            return this.newPassword.equals(this.newPasswordConfirmation);
         }
     }
 }

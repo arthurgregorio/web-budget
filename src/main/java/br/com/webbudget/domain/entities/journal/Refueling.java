@@ -86,13 +86,13 @@ public class Refueling extends PersistentEntity {
     private boolean fullTank;
     @Getter
     @Setter
-    @Min(value = 1, message = "{refueling.odometer}")
+    @NotNull(message = "{refueling.odometer}")
     @Column(name = "odometer", nullable = false)
-    private long odometer;
+    private Long odometer;
     @Getter
     @Setter
     @Column(name = "distance", nullable = false)
-    private long distance;
+    private Long distance;
     @Getter
     @Setter
     @Column(name = "average_consumption")

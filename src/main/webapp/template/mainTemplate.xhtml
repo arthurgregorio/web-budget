@@ -91,7 +91,10 @@
                                     <li class="user-footer">
                                         <h:form>
                                             <div class="pull-left">
-
+                                                <p:commandLink value="#{menu['change-password']}"
+                                                               styleClass="btn btn-flat btn-primary"
+                                                               actionListener="#{profileBean.showChangePasswordDialog()}"
+                                                               rendered="#{userSessionBean.principal.storeType eq 'LOCAL'}"/>
                                             </div>
                                             <div class="pull-right">
                                                 <a class="btn btn-flat btn-danger" href="/logout">#{menu['logout']}</a>
@@ -142,13 +145,14 @@
         </div>
 
         <ui:insert name="popups" />
-
-        <h:outputScript library="primefaces" name="primefaces-locale.js" target="head"/>
-        <h:outputScript library="bootstrap" name="js/bootstrap.min.js" target="head"/>
-        <h:outputScript library="pace" name="js/pace.min.js" target="head"/>
-        <h:outputScript library="adminlte" name="js/adminlte.min.js" target="head"/>
-        <h:outputScript library="webbudget" name="js/application.js" target="head"/>
-
-        <ui:insert name="scripts" />
+        <ui:include src="/secured/dialogChangePassword.xhtml"/>
     </h:body>
+
+    <h:outputScript library="primefaces" name="primefaces-locale.js" target="head"/>
+    <h:outputScript library="bootstrap" name="js/bootstrap.min.js" target="head"/>
+    <h:outputScript library="pace" name="js/pace.min.js" target="head"/>
+    <h:outputScript library="adminlte" name="js/adminlte.min.js" target="head"/>
+    <h:outputScript library="webbudget" name="js/application.js" target="head"/>
+
+    <ui:insert name="scripts" />
 </html>
