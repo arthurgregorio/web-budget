@@ -56,14 +56,9 @@ public class PeriodDatesValidator implements PeriodSavingLogic {
             throw new BusinessLogicException("error.financial-period.colliding-dates");
         }
 
-        // run the start and the end date
+        // if the start is after the end, show error
         if (start.isAfter(end)) {
             throw new BusinessLogicException("error.financial-period.invalid-start-end");
-        }
-
-        // if the end date is before the current date, show error
-        if (end.isBefore(LocalDate.now())) {
-            throw new BusinessLogicException("error.financial-period.invalid-end");
         }
     }
 }

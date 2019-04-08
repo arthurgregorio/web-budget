@@ -27,6 +27,7 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 
 /**
  * The service responsible for the business operations with the {@link FinancialPeriod}
@@ -59,6 +60,11 @@ public class FinancialPeriodService {
     public void save(FinancialPeriod financialPeriod) {
 
         this.savingBusinessLogics.forEach(logic -> logic.run(financialPeriod));
+
+        // check if the period is already expired and mark it as expired
+        if (LocalDate.now().compareTo(financialPeriod.getEnd()) > 0) {
+            financialPeriod.setExpired(true);
+        }
 
         // fire a event to notify the listeners
         this.financialPeriodOpenedEvent.fire(this.financialPeriodRepository.save(financialPeriod));

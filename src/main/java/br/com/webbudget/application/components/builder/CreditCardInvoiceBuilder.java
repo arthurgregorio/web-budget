@@ -23,6 +23,8 @@ import br.com.webbudget.infrastructure.utils.MessageSource;
 
 import java.time.LocalDate;
 
+import static br.com.webbudget.infrastructure.utils.RandomCode.numeric;
+
 /**
  * Builder implementation for the {@link CreditCardInvoice}
  *
@@ -81,7 +83,7 @@ public class CreditCardInvoiceBuilder extends AbstractBuilder<CreditCardInvoice>
      */
     private String defineIdentification() {
         final Card card = this.instance.getCard();
-        return MessageSource.get("credit-card-invoice.invoice-title", card.getName(),
+        return MessageSource.get("credit-card-invoice.invoice-title", numeric(4), card.getName(),
                 card.getNumber().substring(card.getNumber().length() - 4));
     }
 
