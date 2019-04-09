@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,16 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package br.com.webbudget.domain.entities.financial;
 
-import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.com.webbudget.domain.entities.PersistentEntity;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.infrastructure.utils.RandomCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,14 +26,19 @@ import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUDIT;
 
 /**
+ * The result of the accounting for a {@link FinancialPeriod}
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 3.0.0
  * @since 1.0.0, 09/04/2014
  */
 @Entity
@@ -49,10 +49,6 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL_AUD
 @AuditTable(value = "closings", schema = FINANCIAL_AUDIT)
 public class Closing extends PersistentEntity {
 
-    @Getter
-    @Setter
-    @Column(name = "code", nullable = false, unique = true)
-    private String code;
     @Getter
     @Setter
     @Column(name = "revenues", nullable = false)
@@ -71,6 +67,10 @@ public class Closing extends PersistentEntity {
     private BigDecimal debitCardExpenses;
     @Getter
     @Setter
+    @Column(name = "cash_expenses", nullable = false)
+    private BigDecimal cashExpenses;
+    @Getter
+    @Setter
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
     @Getter
@@ -81,23 +81,25 @@ public class Closing extends PersistentEntity {
     @Setter
     @Column(name = "closing_date", nullable = false)
     private LocalDate closingDate;
-        
+
+    @Getter
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "id_financial_period")
+    private FinancialPeriod financialPeriod;
+
     /**
-     * 
+     * Constructor...
      */
     public Closing() {
-        
+
+        this.balance = BigDecimal.ZERO;
         this.expenses = BigDecimal.ZERO;
         this.revenues = BigDecimal.ZERO;
-        
+        this.accumulated = BigDecimal.ZERO;
         this.creditCardExpenses = BigDecimal.ZERO;
         this.debitCardExpenses = BigDecimal.ZERO;
-        
-        this.balance = BigDecimal.ZERO;
-        this.accumulated = BigDecimal.ZERO;
-        
+
         this.closingDate = LocalDate.now();
-        
-        this.code = RandomCode.alphanumeric(5);
     }
 }

@@ -23,10 +23,12 @@ import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.ClosingService;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.List;
 
 /**
  * Controller for the {@link Closing} process
@@ -41,7 +43,14 @@ import javax.inject.Named;
 public class ClosingBean extends AbstractBean {
 
     @Getter
+    @Setter
     private FinancialPeriod financialPeriod;
+
+    @Getter
+    private Closing closing;
+
+    @Getter
+    private List<FinancialPeriod> openFinancialPeriods;
 
     @Inject
     private FinancialPeriodRepository financialPeriodRepository;
@@ -55,6 +64,8 @@ public class ClosingBean extends AbstractBean {
      * @param financialPeriodId if this parameter is used, search and set this {@link FinancialPeriod} to be closed
      */
     public void initialize(long financialPeriodId) {
+
+        this.openFinancialPeriods = this.financialPeriodRepository.findByClosed(false);
 
         if (financialPeriodId != 0) {
             this.financialPeriod = this.financialPeriodRepository.findById(financialPeriodId)
@@ -73,6 +84,6 @@ public class ClosingBean extends AbstractBean {
      * Simulate the closing process to display a resume of the totals
      */
     public void doSimulation() {
-
+        this.closing = this.closingService.simulate(this.financialPeriod);
     }
 }

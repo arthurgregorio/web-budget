@@ -22,8 +22,6 @@ import br.com.webbudget.application.components.ui.filter.FinancialPeriodFilter;
 import br.com.webbudget.application.components.ui.table.LazyDataProvider;
 import br.com.webbudget.application.components.ui.table.LazyModel;
 import br.com.webbudget.application.components.ui.table.Page;
-import br.com.webbudget.application.components.ui.LazyFormBean;
-import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.FinancialPeriodService;
@@ -34,10 +32,10 @@ import org.primefaces.model.SortOrder;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
 import java.util.List;
 
 import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.ui.NavigationManager.Parameter.of;
 
 /**
  * The {@link FinancialPeriod} controller
@@ -154,7 +152,8 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
      * @return the closing page to redirect
      */
     public String changeToClosing(long financialPeriodId) {
-        return ""; // FIXME put the right URL for redirect action here
+        return this.navigation.to("/secured/financial/closing/formClosing.xhtml",
+                of("id", financialPeriodId));
     }
 
     /**

@@ -29,6 +29,4 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 1.0.0, 09/04/2014
  */
 @Repository
-public interface ClosingRepository extends DefaultRepository<Closing> {
-
-}
+public interface ClosingRepository extends DefaultRepository<Closing> { }

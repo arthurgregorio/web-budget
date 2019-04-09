@@ -166,11 +166,11 @@
                         <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
-                            <!--<p:commandButton icon="fa fa-calculator"-->
-                            <!--title="#{menu['close-period']}"-->
-                            <!--styleClass="btn btn-flat btn-default"-->
-                            <!--action="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"-->
-                            <!--rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.CLOSING_CLOSE)}"/>-->
+                            <p:commandButton icon="fa fa-calculator"
+                                             title="#{menu['close-period']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{financialPeriodBean.changeToClosing(financialPeriod.id)}"
+                                             rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.CLOSING_ACCESS)}"/>
                             <p:spacer width="5"
                                       rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"

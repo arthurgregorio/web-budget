@@ -25,7 +25,10 @@ import lombok.ToString;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -90,9 +93,7 @@ public class FinancialPeriod extends PersistentEntity {
     private boolean expired;
 
     @Getter
-    @Setter
-    @OneToOne
-    @JoinColumn(name = "id_closing")
+    @OneToOne(mappedBy = "financialPeriod")
     private Closing closing;
 
     /**
