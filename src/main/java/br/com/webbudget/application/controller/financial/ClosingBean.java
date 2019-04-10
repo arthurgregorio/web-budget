@@ -77,7 +77,18 @@ public class ClosingBean extends AbstractBean {
      * Execute the closing process
      */
     public void doClosing() {
+        this.closingService.close(this.financialPeriod);
+        this.closing = null;
+        this.openFinancialPeriods = this.financialPeriodRepository.findByClosed(false);
+        this.closeDialog("dialogClosingConfirmation");
+        this.addInfo(true, "info.closing.period-closed", this.financialPeriod.getIdentification());
+    }
 
+    /**
+     * Update and open the {@link Closing} confirmation dialog
+     */
+    public void showClosingConfirmationDialog() {
+        this.updateAndOpenDialog("closingConfirmationDialog", "dialogClosingConfirmation");
     }
 
     /**

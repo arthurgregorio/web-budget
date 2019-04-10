@@ -17,8 +17,6 @@
 package br.com.webbudget.domain.services;
 
 import br.com.webbudget.domain.entities.financial.Closing;
-import br.com.webbudget.domain.entities.financial.PeriodMovement;
-import br.com.webbudget.domain.entities.financial.PeriodMovementType;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.financial.ClosingRepository;
@@ -27,9 +25,6 @@ import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service used by the {@link Closing} process
@@ -46,6 +41,9 @@ public class ClosingService {
     private ClosingRepository closingRepository;
     @Inject
     private PeriodMovementRepository periodMovementRepository;
+
+    @Inject
+    private PeriodMovementCalculator periodMovementCalculator;
 
     /**
      * Effectively close the {@link FinancialPeriod}
@@ -74,38 +72,16 @@ public class ClosingService {
             throw new BusinessLogicException("error.closing.no-period-selected");
         }
 
-        final List<PeriodMovement> periodMovements = this.periodMovementRepository
-                .findByFinancialPeriodAndPeriodMovementType(financialPeriod, PeriodMovementType.MOVEMENT);
-
-        final List<PeriodMovement> expenses = periodMovements.stream()
-                .filter(PeriodMovement::isExpense)
-                .collect(Collectors.toList());
-
-        final List<PeriodMovement> revenues = periodMovements.stream()
-                .filter(PeriodMovement::isRevenue)
-                .collect(Collectors.toList());
+        this.periodMovementCalculator.load(financialPeriod);
 
         final Closing closing = new Closing();
 
-        closing.setCreditCardExpenses(expenses.stream()
-                .filter(PeriodMovement::isPaidWithCreditCard)
-                .map(PeriodMovement::getValueWithDiscount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add));
-        closing.setDebitCardExpenses(expenses.stream()
-                .filter(PeriodMovement::isPaidWithDebitCard)
-                .map(PeriodMovement::getValueWithDiscount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add));
-        closing.setCashExpenses(expenses.stream()
-                .filter(PeriodMovement::isPaidWithCash)
-                .map(PeriodMovement::getValueWithDiscount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add));
+        closing.setCreditCardExpenses(this.periodMovementCalculator.getCreditCardExpensesValue());
+        closing.setDebitCardExpenses(this.periodMovementCalculator.getDebitCardExpensesValue());
+        closing.setCashExpenses(this.periodMovementCalculator.getCashExpensesValue());
 
-        closing.setRevenues(revenues.stream()
-                .map(PeriodMovement::getValueWithDiscount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add));
-        closing.setExpenses(expenses.stream()
-                .map(PeriodMovement::getValueWithDiscount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add));
+        closing.setRevenues(this.periodMovementCalculator.getRevenuesValue());
+        closing.setExpenses(this.periodMovementCalculator.getExpensesValue());
 
         closing.setBalance(closing.getRevenues().subtract(closing.getExpenses()));
 

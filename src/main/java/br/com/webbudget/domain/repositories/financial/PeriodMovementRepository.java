@@ -19,7 +19,6 @@ package br.com.webbudget.domain.repositories.financial;
 import br.com.webbudget.application.components.ui.filter.PeriodMovementFilter;
 import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
-import br.com.webbudget.domain.entities.financial.PeriodMovementType;
 import br.com.webbudget.domain.entities.financial.PeriodMovement_;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.Contact_;
@@ -67,13 +66,12 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
     Optional<PeriodMovement> findByCode(String movementCode);
 
     /**
-     * List all {@link PeriodMovement} by {@link PeriodMovementType} and {@link FinancialPeriod}
+     * List all {@link PeriodMovement} by the {@link FinancialPeriod}
      *
      * @param period to be used as a filter
-     * @param type to be used as a filter
      * @return the {@link List} of {@link PeriodMovement} found
      */
-    List<PeriodMovement> findByFinancialPeriodAndPeriodMovementType(FinancialPeriod period, PeriodMovementType type);
+    List<PeriodMovement> findByFinancialPeriod(FinancialPeriod period);
 
     /**
      * Use this method to find all {@link PeriodMovement} using the lazy load strategy

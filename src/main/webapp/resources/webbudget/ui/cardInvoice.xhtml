@@ -119,7 +119,14 @@
                                         <p:ajax update="#{cc.id}:movementsList"/>
                                     </p:selectBooleanCheckbox>
                                 </td>
-                                <td>#{movement.description}</td>
+                                <td>
+                                    <h:outputText id="txIdentification"
+                                                  value="#{movement.identification}"/>
+                                    <p:tooltip position="left"
+                                               for="txIdentification"
+                                               value="#{movement.description}"
+                                               rendered="#{not empty movement.description}"/>
+                                </td>
                                 <td style="width: 15%">
                                     <h:outputText value="#{movement.paymentDate}">
                                         <f:converter converterId="localDateConverter"/>
