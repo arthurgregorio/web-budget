@@ -49,9 +49,20 @@ public class AutoCloseMessages extends MessagesRenderer {
 
         writer.write('\n');
         writer.startElement("script", null);
-        writer.writeText("setTimeout(\"$(\'#" + component.getClientId() + "\').slideUp(500)\", 8000)", null);
+        writer.writeText("setTimeout(\"$(\'#" + this.sanitizeId(component.getClientId())
+                + "\').slideUp(500)\", 8000)", null);
         writer.endElement("script");
         writer.append('\r');
         writer.append('\n');
+    }
+
+    /**
+     * Sanitize the component to enable jQuery to find them
+     *
+     * @param actualId auto generated component id
+     * @return the new sanitized id
+     */
+    private String sanitizeId(String actualId) {
+        return actualId.replace(":", "\\\\\\\\:");
     }
 }
