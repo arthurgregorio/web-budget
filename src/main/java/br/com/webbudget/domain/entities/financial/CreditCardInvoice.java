@@ -148,6 +148,15 @@ public class CreditCardInvoice extends PersistentEntity {
     }
 
     /**
+     * Method used to check if the invoice is empty or not
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isEmpty() {
+        return this.totalValue.compareTo(BigDecimal.ZERO) == 0 && this.periodMovements.isEmpty();
+    }
+
+    /**
      * Get the {@link FinancialPeriod} start date
      *
      * @return start date as {@link String}
@@ -163,17 +172,6 @@ public class CreditCardInvoice extends PersistentEntity {
      */
     public String getPeriodEnd() {
         return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(this.financialPeriod.getEnd());
-    }
-
-    /**
-     * Method to calculate the total invoice amount
-     *
-     * @return the sum of the {@link PeriodMovement} values
-     */
-    public BigDecimal calculateTotal() {
-        return this.periodMovements.stream()
-                .map(Movement::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     /**

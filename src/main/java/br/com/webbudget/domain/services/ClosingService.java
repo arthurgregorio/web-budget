@@ -19,12 +19,15 @@ package br.com.webbudget.domain.services;
 import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.logics.financial.closing.ClosingSavingLogic;
 import br.com.webbudget.domain.repositories.financial.ClosingRepository;
-import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 
 /**
  * Service used by the {@link Closing} process
@@ -39,11 +42,13 @@ public class ClosingService {
 
     @Inject
     private ClosingRepository closingRepository;
-    @Inject
-    private PeriodMovementRepository periodMovementRepository;
 
     @Inject
     private PeriodMovementCalculator periodMovementCalculator;
+
+    @Any
+    @Inject
+    private Instance<ClosingSavingLogic> closingSavingLogics;
 
     /**
      * Effectively close the {@link FinancialPeriod}
@@ -53,12 +58,19 @@ public class ClosingService {
     @Transactional
     public void close(FinancialPeriod financialPeriod) {
 
+        // use the simulation to get the values to be saved as resume
         final Closing closing = this.simulate(financialPeriod);
 
-        // TODO calculate the accumulated
-        // TODO update financial period status to closed
-        // TODO update all period movement status to accounted
-        // TODO update all credit card invoices to accounted and delete the invoices without movements
+        // run the business logic of the closing process
+        this.closingSavingLogics.forEach(logic -> logic.run(closing));
+
+        // calculate the accumulated and save
+        final BigDecimal lastClosingAccumulated = this.closingRepository.findLastClosingAccumulatedValue()
+                .orElse(BigDecimal.ZERO);
+
+        closing.setAccumulated(lastClosingAccumulated.add(closing.getBalance()));
+
+        this.closingRepository.save(closing);
     }
 
     /**

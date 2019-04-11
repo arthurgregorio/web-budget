@@ -18,7 +18,11 @@ package br.com.webbudget.domain.repositories.financial;
 
 import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.repositories.DefaultRepository;
+import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
+
+import java.math.BigDecimal;
+import java.util.Optional;
 
 /**
  * The {@link Closing} repository
@@ -29,4 +33,15 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 1.0.0, 09/04/2014
  */
 @Repository
-public interface ClosingRepository extends DefaultRepository<Closing> { }
+public interface ClosingRepository extends DefaultRepository<Closing> {
+
+    /**
+     * Find the value accumulated of the last {@link Closing}
+     *
+     * @return an {@link Optional} of the value accumulated from the last {@link Closing}
+     */
+    @Query("SELECT cl.accumulated " +
+            "FROM Closing cl " +
+            "WHERE cl.id = (SELECT MAX(id) FROM Closing)")
+    Optional<BigDecimal> findLastClosingAccumulatedValue();
+}

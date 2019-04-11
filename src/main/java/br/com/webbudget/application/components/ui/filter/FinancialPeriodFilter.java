@@ -42,7 +42,7 @@ public class FinancialPeriodFilter extends BasicFilter {
      * Constructor...
      */
     public FinancialPeriodFilter() {
-        this.financialPeriodStatus = FinancialPeriodStatus.OPEN;
+        this.financialPeriodStatus = FinancialPeriodStatus.ALL;
     }
 
     /**

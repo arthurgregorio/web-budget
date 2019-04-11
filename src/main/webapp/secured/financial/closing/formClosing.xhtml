@@ -48,7 +48,7 @@
                     <p:messages id="messages" closable="true"/>
                 </div>
             </div>
-            <div class="box box-#{profileBean.currentThemeColorName}">
+            <div jsf:id="controlsBox" class="box box-#{profileBean.currentThemeColorName}">
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-md-6" style="display: flex">
@@ -83,12 +83,24 @@
                                              styleClass="btn btn-flat btn-success"
                                              rendered="#{closingBean.closing ne null}"
                                              actionListener="#{closingBean.showClosingConfirmationDialog()}"/>
+                            <p:spacer width="5"
+                                      rendered="#{closingBean.closing ne null}"/>
+                            <p:commandButton process="@this"
+                                             value="#{menu['cancel']}"
+                                             action="#{closingBean.doCancel()}"
+                                             styleClass="btn btn-flat btn-danger"
+                                             rendered="#{closingBean.closing ne null}"/>
                         </div>
                     </div>
                 </div>
             </div>
         </h:form>
         <div jsf:id="closingResumeBox" class="row">
+            <ui:fragment rendered="#{closingBean.closing eq null}">
+                <div class="col-md-12 align-center">
+                    <h3>#{messages['closing.form.message']}</h3>
+                </div>
+            </ui:fragment>
             <ui:fragment rendered="#{closingBean.closing ne null}">
                 <div class="col-md-4">
                     <div class="small-box bg-green">
@@ -182,7 +194,7 @@
                 </div>
             </ui:fragment>
         </div>
-        <wb:blocker target="closingResumeBox"/>
+        <wb:blocker target="controlsForm"/>
     </ui:define>
     <ui:define name="popups">
         <ui:include src="dialogClosingConfirmation.xhtml"/>

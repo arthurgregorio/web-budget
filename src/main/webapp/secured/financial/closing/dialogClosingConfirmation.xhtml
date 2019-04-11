@@ -32,7 +32,12 @@
           widgetVar="dialogClosingConfirmation"
           header="#{messages['closing.dialog.title']}">
 
-    <h:form id="closingConfirmationBox">
+    <h:form id="closingConfirmationForm">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <p:messages id="messages" closable="true" />
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12 form-group">
                 <h4>
@@ -45,10 +50,10 @@
             <div class="col-sm-12 align-right">
                 <p:commandButton value="#{menu['yes']}"
                                  styleClass="btn btn-flat btn-success"
-                                 update="closingResumeBox controlsForm"
                                  onstart="PF('confirmationBlocker').show()"
                                  actionListener="#{closingBean.doClosing()}"
-                                 oncomplete="PF('confirmationBlocker').hide()"/>
+                                 oncomplete="PF('confirmationBlocker').hide()"
+                                 update="closingConfirmationForm closingResumeBox controlsBox"/>
                 <p:spacer width="5"/>
                 <p:commandButton value="#{menu['no']}"
                                  styleClass="btn btn-flat btn-primary"
@@ -57,5 +62,5 @@
         </div>
     </h:form>
     <wb:blocker name="confirmationBlocker"
-                target="closingConfirmationBox"/>
+                target="closingConfirmationForm"/>
 </p:dialog>

@@ -200,6 +200,21 @@ public class PeriodMovement extends Movement {
     }
 
     /**
+     * Get the payment wallet for this movement. If no wallet is used to pay for this movement, an {@link IllegalStateException}
+     * is thrown with some information
+     *
+     * @return the payment wallet for this movement
+     */
+    public Wallet getPaymentWallet() {
+        if (this.isPaidWithCash()) {
+            return this.payment.getWallet();
+        } else if (this.isPaidWithDebitCard()) {
+            return this.payment.getDebitCardWallet();
+        }
+        throw new IllegalStateException("This movement is in a inconsistent state of payment, contact Odin God.");
+    }
+
+    /**
      * Method to prepare this movement to be paid
      *
      * @param payment the {@link Payment} to pay this movement
@@ -218,17 +233,12 @@ public class PeriodMovement extends Movement {
     }
 
     /**
-     * Get the payment wallet for this movement. If no wallet is used to pay for this movement, an {@link IllegalStateException}
-     * is thrown with some information
+     * Method used to prepare this period movement to be accounted
      *
-     * @return the payment wallet for this movement
+     * @return this object
      */
-    public Wallet getPaymentWallet() {
-        if (this.isPaidWithCash()) {
-            return this.payment.getWallet();
-        } else if (this.isPaidWithDebitCard()) {
-            return this.payment.getDebitCardWallet();
-        }
-        throw new IllegalStateException("This movement is in a inconsistent state of payment, contact Odin God.");
+    public PeriodMovement prepareToAccount() {
+        this.periodMovementState = PeriodMovementState.ACCOUNTED;
+        return this;
     }
 }

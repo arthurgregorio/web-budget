@@ -47,8 +47,8 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.REGISTRATION_
  */
 @Entity
 @Audited
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true, exclude = "closing")
+@EqualsAndHashCode(callSuper = true, exclude = "closing")
 @Table(name = "financial_periods", schema = REGISTRATION)
 @AuditTable(value = "financial_periods", schema = REGISTRATION_AUDIT)
 public class FinancialPeriod extends PersistentEntity {
@@ -150,5 +150,15 @@ public class FinancialPeriod extends PersistentEntity {
      */
     public BigDecimal getRevenuesTotal() {
         return this.closing.getRevenues();
+    }
+
+    /**
+     * Prepare this financial period to be closed
+     *
+     * @return this object
+     */
+    public FinancialPeriod prepareToClose() {
+        this.closed = true;
+        return this;
     }
 }

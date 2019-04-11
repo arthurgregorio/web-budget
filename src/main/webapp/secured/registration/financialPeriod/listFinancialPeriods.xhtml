@@ -117,14 +117,14 @@
                                 disabled="#{not userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DETAIL)}"/>
 
                         <p:column headerText="#{messages['financial-period.list.identification']}">
-                            #{financialPeriod.identification} -
+                            #{financialPeriod.identification}
                             <strong class="text-green"
                                     jsf:rendered="#{not financialPeriod.expired and not financialPeriod.closed}">
-                                #{messages['financial-period.list.open']}
+                                - #{messages['financial-period.list.open']}
                             </strong>
                             <strong class="text-red"
                                     jsf:rendered="#{financialPeriod.expired eq true and not financialPeriod.closed}">
-                                #{messages['financial-period.list.expired']}
+                                - #{messages['financial-period.list.expired']}
                             </strong>
                         </p:column>
                         <p:column width="12%"
@@ -154,9 +154,9 @@
                         <p:column width="12%"
                                   styleClass="align-center"
                                   headerText="#{messages['financial-period.list.result']}">
-                            <h:outputText value="#{financialPeriod.result}"
-                                          rendered="#{financialPeriod.closed}"
-                                          styleClass="#{financialPeriod.result.signum() lt 0 ? 'text-red' : 'text-green'}">
+                            <h:outputText rendered="#{financialPeriod.closed}"
+                                          value="#{financialPeriod.accumulated}"
+                                          styleClass="#{financialPeriod.accumulated.signum() lt 0 ? 'text-red' : 'text-green'}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                             <h:outputText value="#{messages['no-data']}"
@@ -166,6 +166,11 @@
                         <p:column width="15%"
                                   styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
+                            <p:commandButton icon="fa fa-search"
+                                             title="#{menu['detail']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{financialPeriodBean.changeToDetail(financialPeriod.id)}"
+                                             rendered="#{financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DETAIL)}"/>
                             <p:commandButton icon="fa fa-calculator"
                                              title="#{menu['close-period']}"
                                              styleClass="btn btn-flat btn-default"

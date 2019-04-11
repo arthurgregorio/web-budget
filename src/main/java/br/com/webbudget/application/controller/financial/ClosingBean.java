@@ -85,6 +85,16 @@ public class ClosingBean extends AbstractBean {
     }
 
     /**
+     * Cancel the action of {@link Closing} a {@link FinancialPeriod} and send back the user to the {@link Closing} page
+     * refreshing the UI to the starting state
+     *
+     * @return the outcome to the {@link Closing} form
+     */
+    public String doCancel() {
+        return "formClosing.xhtml?faces-redirect=true";
+    }
+
+    /**
      * Update and open the {@link Closing} confirmation dialog
      */
     public void showClosingConfirmationDialog() {

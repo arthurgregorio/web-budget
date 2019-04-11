@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Arthur Gregorio, AG.Software
+ * Copyright (C) 2019 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.domain.logics;
+package br.com.webbudget.domain.logics.financial.closing;
+
+import br.com.webbudget.domain.entities.financial.Closing;
+import br.com.webbudget.domain.logics.BusinessLogic;
 
 /**
- * This interface represents an abstraction of the business logic running inside the services. With this kind of
- * approach we almost remove all the coupling with the services and some business rules
- *
- * @param <T> the type to be manipulated by the validator
+ * Interface to define a {@link BusinessLogic} for the {@link Closing} process
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 09/08/2018
+ * @since 3.0.0, 08/04/2019
  */
-@FunctionalInterface
-public interface BusinessLogic<T> {
-
-    /**
-     * Call this method to run the validation process defined in one of the implementations of this interface
-     *
-     * @param value the value to work with
-     */
-    void run(T value);
-}
+public interface ClosingSavingLogic extends BusinessLogic<Closing> { }
