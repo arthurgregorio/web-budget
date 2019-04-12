@@ -16,6 +16,7 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -142,17 +143,37 @@
                             </p:selectOneMenu>
                         </div>
                         <div class="col-xs-3">
-                            <p:autoComplete multiple="true"
+                            <p:autoComplete id="inFinancialPeriod"
+                                            multiple="true"
+                                            queryDelay="600"
                                             var="financialPeriod"
-                                            styleClass="form-control"
                                             itemValue="#{financialPeriod}"
-                                            converter="omnifaces.SelectItemsConverter"
                                             itemLabel="#{financialPeriod.identification}"
                                             value="#{periodMovementBean.filter.selectedFinancialPeriods}"
-                                            completeMethod="#{periodMovementBean.completeFinancialPeriod}"
-                                            placeholder="#{messages['filter.period-movement.financial-period']}">
+                                            completeMethod="#{periodMovementBean.completeFinancialPeriod}">
+                                <o:converter converterId="omnifaces.ListConverter"
+                                             list="#{periodMovementBean.financialPeriods}"/>
                                 <p:column>
-                                    <h:outputText value="#{financialPeriod.identification}" />
+                                    <p:graphicImage width="20"
+                                                    height="20"
+                                                    library="webbudget"
+                                                    name="images/green-circle.png"
+                                                    rendered="#{not financialPeriod.closed}"
+                                                    title="#{messages['financial-period.list.open']}"/>
+                                    <p:graphicImage width="20"
+                                                    height="20"
+                                                    library="webbudget"
+                                                    name="images/orange-circle.png"
+                                                    rendered="#{financialPeriod.expired}"
+                                                    title="#{messages['financial-period.list.expired']}"/>
+                                    <p:graphicImage width="20"
+                                                    height="20"
+                                                    library="webbudget"
+                                                    name="images/red-circle.png"
+                                                    rendered="#{financialPeriod.closed}"
+                                                    title="#{messages['financial-period.list.closed']}"/>
+                                    <p:spacer width="5"/>
+                                    #{financialPeriod.identification}
                                 </p:column>
                             </p:autoComplete>
                         </div>

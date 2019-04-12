@@ -123,6 +123,16 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.financialPeriods = this.financialPeriodRepository.findAll();
+        this.filter.setSelectedFinancialPeriods(this.financialPeriodRepository.findByClosed(false));
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @param id
      * @param viewState
@@ -299,6 +309,16 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     public void onCostCenterSelect() {
         this.movementClasses = this.movementClassRepository
                 .findByActiveAndCostCenter(true, this.apportionment.getCostCenter());
+    }
+
+    /**
+     * Autocomplete method used by the auto complete input on the filters area
+     *
+     * @param query text to search for the financial period
+     * @return a {@link List} with the {@link FinancialPeriod} found
+     */
+    public List<FinancialPeriod> completeFinancialPeriod(String query) {
+        return this.financialPeriodRepository.findByIdentificationLikeIgnoreCaseOrderByCreatedOnDesc(query + "%");
     }
 
     /**

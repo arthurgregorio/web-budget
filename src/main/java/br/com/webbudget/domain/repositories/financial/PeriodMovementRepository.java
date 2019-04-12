@@ -150,6 +150,12 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
                     .ifPresent(value -> criteria.or(this.criteria().eq(PeriodMovement_.value, value)));
         }
 
+        // put the selected financial periods as a filter
+        if (filter.getSelectedFinancialPeriods() != null && !filter.getSelectedFinancialPeriods().isEmpty()) {
+            criteria.join(PeriodMovement_.financialPeriod, where(FinancialPeriod.class)
+                    .in(FinancialPeriod_.identification, filter.getSelectedFinancialPeriodsAsStringArray()));
+        }
+
         return criteria;
     }
 }

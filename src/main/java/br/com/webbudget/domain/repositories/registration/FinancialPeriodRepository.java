@@ -69,6 +69,15 @@ public interface FinancialPeriodRepository extends LazyDefaultRepository<Financi
     Optional<FinancialPeriod> findByIdentification(String identification);
 
     /**
+     * Same as {@link #findByIdentification(String)} but this one make a like comparison and return the resultas as a
+     * {@link List}
+     *
+     * @param identification to query
+     * @return a {@link List} with the {@link FinancialPeriod} found
+     */
+    List<FinancialPeriod> findByIdentificationLikeIgnoreCaseOrderByCreatedOnDesc(String identification);
+
+    /**
      * {@inheritDoc}
      *
      * @param filter

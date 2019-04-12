@@ -7,6 +7,24 @@
     Created on : 26/09/2018
 */
 
+/*adjust the autocomplete content*/
+div.ui-autocomplete {
+    width: 100% !important;
+}
+.ui-autocomplete-token{
+    padding: 3px !important;
+}
+.ui-autocomplete-input-token {
+    margin: 3px !important;
+}
+ul.ui-autocomplete-multiple-container {
+    width: 100% !important;
+}
+ul.ui-autocomplete-multiple-container.ui-state-focus {
+    border-color: #3c8dbc;
+    box-shadow: none;
+}
+
 /*fix the dialog padding in omega theme*/
 div.ui-dialog > .ui-dialog-titlebar {
     padding: initial !important;

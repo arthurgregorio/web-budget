@@ -16,13 +16,20 @@
  */
 package br.com.webbudget.application.components.ui.filter;
 
-import br.com.webbudget.domain.entities.financial.PeriodMovementType;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.PeriodMovementState;
-import lombok.*;
+import br.com.webbudget.domain.entities.financial.PeriodMovementType;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * A specific implementation of the {@link BasicFilter} to be used at the {@link PeriodMovement} controller
@@ -32,7 +39,6 @@ import java.util.Optional;
  * @version 1.0.0
  * @since 3.0.0, 10/12/2018
  */
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public final class PeriodMovementFilter extends BasicFilter {
@@ -43,6 +49,16 @@ public final class PeriodMovementFilter extends BasicFilter {
     @Setter
     @Getter
     private PeriodMovementState periodMovementState;
+    @Setter
+    @Getter
+    private List<FinancialPeriod> selectedFinancialPeriods;
+
+    /**
+     * Constructor...
+     */
+    public PeriodMovementFilter() {
+        this.selectedFinancialPeriods = new ArrayList<>();
+    }
 
     /**
      * Clear this filter to default values
@@ -82,5 +98,17 @@ public final class PeriodMovementFilter extends BasicFilter {
      */
     public PeriodMovementState[] getPeriodMovementStates() {
         return PeriodMovementState.values();
+    }
+
+    /**
+     * Transform the selected {@link FinancialPeriod} into an array of {@link String} to be used on the query
+     *
+     * @return the selected {@link FinancialPeriod} as {@link String} array
+     */
+    public String[] getSelectedFinancialPeriodsAsStringArray() {
+        return this.selectedFinancialPeriods.stream()
+                .map(FinancialPeriod::getIdentification)
+                .collect(Collectors.toList())
+                .toArray(String[]::new);
     }
 }
