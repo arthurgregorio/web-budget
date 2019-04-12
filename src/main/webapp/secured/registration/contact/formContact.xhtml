@@ -139,9 +139,9 @@
                                 <div class="input-group-btn">
                                     <p:commandButton icon="fa fa-search"
                                                      process="@this inZipcode"
-                                                     onstart="PF('blocker').show()"
-                                                     oncomplete="PF('blocker').hide()"
+                                                     onstart="PF('adressBlocker').show()"
                                                      styleClass="btn btn-flat btn-primary"
+                                                     oncomplete="PF('adressBlocker').hide()"
                                                      actionListener="#{contactBean.searchAddress()}"/>
                                 </div>
                             </div>
@@ -234,16 +234,19 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="box-footer align-right">
                     <p:commandButton update="contactForm"
                                      process="contactForm"
                                      value="#{menu['save']}"
+                                     onstart="PF('blocker').show()"
                                      action="#{contactBean.doSave()}"
+                                     oncomplete="PF('blocker').hide()"
                                      styleClass="btn btn-flat btn-success"
                                      rendered="#{contactBean.viewState.adding}"/>
                     <p:commandButton process="contactForm"
                                      value="#{menu['update']}"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      action="#{contactBean.doUpdate()}"
                                      update="contactForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
@@ -255,10 +258,11 @@
                                      action="#{contactBean.changeToListing()}"/>
                 </div>
             </div>
-            <wb:blocker target="addressBox"/>
+            <wb:blocker target="addressBox"
+                        name="adressBlocker"/>
         </h:form>
+        <wb:blocker target="contactForm"/>
     </ui:define>
-
     <ui:define name="popups">
         <ui:include src="dialogTelephone.xhtml" />
     </ui:define>

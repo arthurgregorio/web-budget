@@ -22,6 +22,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
@@ -164,11 +165,15 @@
                                      process="cardForm"
                                      value="#{menu['save']}"
                                      action="#{cardBean.doSave()}"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      styleClass="btn btn-flat btn-success"
                                      rendered="#{cardBean.viewState.adding}"/>
                     <p:commandButton process="cardForm"
                                      value="#{menu['update']}"
+                                     onstart="PF('blocker').show()"
                                      action="#{cardBean.doUpdate()}"
+                                     oncomplete="PF('blocker').hide()"
                                      update="cardForm pageDescription"
                                      styleClass="btn btn-flat btn-success"
                                      rendered="#{cardBean.viewState.editing}"/>
@@ -180,5 +185,6 @@
                 </div>
             </div>
         </h:form>
+        <wb:blocker target="cardForm"/>
     </ui:define>
 </ui:composition>

@@ -197,12 +197,16 @@
                     <p:commandButton value="#{menu['save']}"
                                      update="fixedMovementForm"
                                      process="fixedMovementForm"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{fixedMovementBean.doSave()}"
                                      rendered="#{fixedMovementBean.viewState.adding}"/>
                     <p:commandButton value="#{menu['update']}"
                                      update="fixedMovementForm"
                                      process="fixedMovementForm"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{fixedMovementBean.doUpdate()}"
                                      rendered="#{fixedMovementBean.viewState.editing}"/>
@@ -214,6 +218,7 @@
                 </div>
             </div>
         </h:form>
+        <wb:blocker target="fixedMovementForm"/>
     </ui:define>
     <ui:define name="popups">
         <ui:include src="dialogSearchContact.xhtml"/>

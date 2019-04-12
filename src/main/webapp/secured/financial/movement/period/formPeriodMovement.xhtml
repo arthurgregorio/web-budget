@@ -179,6 +179,8 @@
                 <div class="box-footer align-right">
                     <p:commandButton value="#{menu['save']}"
                                      update="periodMovementForm"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{periodMovementBean.doSave()}"
                                      rendered="#{periodMovementBean.viewState.adding}"/>
@@ -186,10 +188,14 @@
                               rendered="#{periodMovementBean.viewState.adding}"/>
                     <p:commandButton value="#{menu['save-pay']}"
                                      update="periodMovementForm"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      styleClass="btn btn-flat btn-warning"
                                      action="#{periodMovementBean.doSaveAndPay()}"
                                      rendered="#{periodMovementBean.viewState.adding}"/>
                     <p:commandButton value="#{menu['update']}"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      styleClass="btn btn-flat btn-success"
                                      action="#{periodMovementBean.doUpdate()}"
                                      update="periodMovementForm pageDescription"
@@ -197,6 +203,8 @@
                     <p:spacer width="5"
                               rendered="#{periodMovementBean.viewState.editing and periodMovementBean.value.open}"/>
                     <p:commandButton value="#{menu['update-pay']}"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      styleClass="btn btn-flat btn-warning"
                                      update="periodMovementForm pageDescription"
                                      action="#{periodMovementBean.doUpdateAndPay()}"
@@ -209,6 +217,7 @@
                 </div>
             </div>
         </h:form>
+        <wb:blocker target="periodMovementForm"/>
     </ui:define>
     <ui:define name="popups">
         <ui:include src="dialogApportionment.xhtml"/>

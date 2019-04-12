@@ -124,6 +124,8 @@
                 <div class="box-footer align-right">
                     <p:commandButton value="#{menu['save']}"
                                      update="financialPeriodForm"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      styleClass="btn btn-flat btn-success"
                                      actionListener="#{financialPeriodBean.doSave()}"
                                      rendered="#{financialPeriodBean.viewState.adding}"/>
@@ -135,5 +137,6 @@
                 </div>
             </div>
         </h:form>
+        <wb:blocker target="financialPeriodForm"/>
     </ui:define>
 </ui:composition>

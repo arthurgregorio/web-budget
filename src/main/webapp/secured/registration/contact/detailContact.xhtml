@@ -222,6 +222,8 @@
                         <p:spacer width="10"/>
                         <p:commandButton process="@this"
                                          value="#{menu['yes']}"
+                                         onstart="PF('blocker').show()"
+                                         oncomplete="PF('blocker').hide()"
                                          action="#{contactBean.doDelete()}"
                                          styleClass="btn btn-flat btn-danger"/>
                         <p:spacer width="5"/>
@@ -248,7 +250,7 @@
                                      value="#{contactBean.viewState.deleting ? menu['no'] : menu['back']}"/>
                 </div>
             </div>
-            <wb:blocker target="addressBox"/>
         </h:form>
+        <wb:blocker target="contactForm"/>
     </ui:define>
 </ui:composition>

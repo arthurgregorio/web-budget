@@ -184,6 +184,8 @@
                         <p:spacer width="10"/>
                         <p:commandButton process="@this"
                                          value="#{menu['yes']}"
+                                         onstart="PF('blocker').show()"
+                                         oncomplete="PF('blocker').hide()"
                                          styleClass="btn btn-flat btn-danger"
                                          action="#{fixedMovementBean.doDelete()}"/>
                         <p:spacer width="5"/>
@@ -211,6 +213,7 @@
                 </div>
             </div>
         </h:form>
+        <wb:blocker target="fixedMovementForm"/>
     </ui:define>
     <ui:define name="popups">
         <ui:include src="dialogLaunches.xhtml"/>

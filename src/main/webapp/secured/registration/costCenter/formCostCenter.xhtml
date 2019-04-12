@@ -149,11 +149,15 @@
                     <p:commandButton update="costCenterForm"
                                      process="costCenterForm"
                                      value="#{menu['save']}"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      action="#{costCenterBean.doSave()}"
                                      styleClass="btn btn-flat btn-success"
                                      rendered="#{costCenterBean.viewState.adding}"/>
                     <p:commandButton process="costCenterForm"
                                      value="#{menu['update']}"
+                                     onstart="PF('blocker').show()"
+                                     oncomplete="PF('blocker').hide()"
                                      action="#{costCenterBean.doUpdate()}"
                                      styleClass="btn btn-flat btn-success"
                                      update="costCenterForm pageDescription"
@@ -166,5 +170,6 @@
                 </div>
             </div>
         </h:form>
+        <wb:blocker target="costCenterForm"/>
     </ui:define>
 </ui:composition>
