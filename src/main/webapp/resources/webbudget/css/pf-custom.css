@@ -7,6 +7,12 @@
     Created on : 26/09/2018
 */
 
+/*adjust select boolean button text*/
+.ui-selectbooleanbutton > span.ui-button-text {
+    position: relative;
+    top: 3px;
+}
+
 /*adjust the autocomplete content*/
 div.ui-autocomplete {
     width: 100% !important;

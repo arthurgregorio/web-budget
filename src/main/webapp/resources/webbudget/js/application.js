@@ -1,5 +1,5 @@
 $(function () {
-    'use strict'
+    'use strict';
 
     /**
      * Function to setup all the configuration of the template
@@ -49,4 +49,20 @@ function changeSkin(cls) {
     });
 
     $('body').addClass(cls);
+}
+
+/**
+ *
+ */
+function changeActiveStatus() {
+
+    var component = $('.ui-selectbooleanbutton');
+
+    if (component.hasClass('ui-state-active')) {
+        component.removeClass('btn-danger');
+        component.addClass('btn-success');
+    } else {
+        component.removeClass('btn-success');
+        component.addClass('btn-danger');
+    }
 }
