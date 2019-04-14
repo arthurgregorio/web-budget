@@ -53,6 +53,14 @@ public interface FixedMovementRepository extends DefaultRepository<FixedMovement
     Optional<FixedMovement> findById(Long id);
 
     /**
+     * Find all {@link FixedMovement} by the auto launch flag
+     *
+     * @param autoLaunch true or false
+     * @return a {@link List} of the {@link FixedMovement} found
+     */
+    List<FixedMovement> findByAutoLaunch(boolean autoLaunch);
+
+    /**
      * Method used to search for {@link FixedMovement} using pagination
      *
      * @param filter to be applied

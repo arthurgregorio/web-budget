@@ -22,6 +22,7 @@ import br.com.webbudget.domain.entities.financial.FixedMovementState;
 import br.com.webbudget.domain.entities.financial.Launch;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.events.FinancialPeriodOpened;
 import br.com.webbudget.domain.logics.financial.movement.fixed.FixedMovementDeletingLogic;
 import br.com.webbudget.domain.logics.financial.movement.fixed.FixedMovementSavingLogic;
 import br.com.webbudget.domain.repositories.financial.ApportionmentRepository;
@@ -29,6 +30,7 @@ import br.com.webbudget.domain.repositories.financial.FixedMovementRepository;
 import br.com.webbudget.domain.repositories.financial.LaunchRepository;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -176,5 +178,15 @@ public class FixedMovementService {
     @Transactional
     public void launch(List<FixedMovement> fixedMovements, FinancialPeriod financialPeriod) {
         fixedMovements.forEach(fixedMovement -> this.launch(fixedMovement.getId(), financialPeriod));
+    }
+
+    /**
+     * When a new {@link FinancialPeriod} is opened this method listen to the event and launch all the {@link FixedMovement}
+     * marked as auto-launch
+     *
+     * @param financialPeriod opened
+     */
+    public void onFinancialPeriodOpen(@Observes @FinancialPeriodOpened FinancialPeriod financialPeriod) {
+        this.launch(this.fixedMovementRepository.findByAutoLaunch(true), financialPeriod);
     }
 }
