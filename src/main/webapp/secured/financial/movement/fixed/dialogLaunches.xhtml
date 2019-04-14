@@ -53,7 +53,10 @@
                 <p:column width="15%"
                           styleClass="align-center"
                           headerText="#{messages['launch.list.quote-number']}">
-                    #{launch.quoteNumber}
+                    <h:outputText value="#{messages['no-data']}"
+                                  rendered="#{launch.fixedMovement.undetermined}"/>
+                    <h:outputText value="#{launch.quoteNumber}"
+                                  rendered="#{not launch.fixedMovement.undetermined}"/>
                 </p:column>
                 <p:column styleClass="align-center"
                           headerText="#{messages['launch.list.launch-date']}">
