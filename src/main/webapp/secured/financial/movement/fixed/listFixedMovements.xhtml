@@ -164,6 +164,21 @@
                         </p:column>
                         <p:column width="10%"
                                   styleClass="align-center"
+                                  headerText="#{messages['fixed-movement.list.quotes']}">
+                            <h:outputText rendered="#{fixedMovement.undetermined}"
+                                          value="#{messages['fixed-movement.form.undetermined']}"/>
+                            <h:outputText rendered="#{not fixedMovement.undetermined}"
+                                          value="#{fixedMovement.actualQuote}/#{fixedMovement.totalQuotes}"/>
+                        </p:column>
+                        <p:column width="15%"
+                                  styleClass="align-center"
+                                  headerText="#{messages['fixed-movement.list.value']}">
+                            <h:outputText value="#{fixedMovement.value}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="10%"
+                                  styleClass="align-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton process="@this"
                                              icon="fa fa-search"
