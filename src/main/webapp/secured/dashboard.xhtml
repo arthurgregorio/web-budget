@@ -16,13 +16,10 @@
 -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:o="http://omnifaces.org/ui"
-                xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/template/mainTemplate.xhtml">
 
     <ui:define name="pageTitle">
@@ -38,212 +35,127 @@
     </ui:define>
 
     <ui:define name="content">
-
-<!--        <pe:blockUI widgetVar="loadingBlock"
-                    target="movimentationSummary" >
-            <p:graphicImage width="32" 
-                            height="32"
-                            library="webbudget" 
-                            name="img/loading.gif" />
-        </pe:blockUI> 
-
-        <div jsf:id="movimentationSummary">
-            <div class="row">
-                <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" />
+        <div jsf:id="periodResumeBox" class="row">
+            <div class="col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>
+                            <h:outputText value="#{closingBean.closing.revenues}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                        </h3>
+                        <p>#{messages['closing.form.revenues']}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-plus-circle"/>
+                    </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="box">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">#{messages['dashboard.movimentation-summary']}</h3>
-                        </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <p class="text-center">
-                                        <strong>#{messages['dashboard.periods-summary']}</strong>
-                                    </p>
-                                    <div class="chart"
-                                         jsf:rendered="#{not dashboardBean.lineChartModel.emptyChart}">
-                                        <canvas id="closingsChart" style="height: 245px;"></canvas>
-                                    </div>
-                                    <div class="chart" 
-                                         style="text-align: center; margin-top: 75px"
-                                         jsf:rendered="#{dashboardBean.lineChartModel.emptyChart}">
-                                        <h4>#{messages['dashboard.no-periods-summary']}</h4>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <p class="text-center">
-                                        <strong>#{messages['dahsboard.goals']}</strong>
-                                    </p>
-                                    <div class="progress-group">
-                                        <span class="progress-text">#{messages['dashboard.goal.credit-card']}</span>
-                                        <span class="progress-number">
-                                            <b>
-                                                <h:outputText value="#{dashboardBean.calculator.totalPaidOnCreditCard}" >
-                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                                </h:outputText>
-                                            </b>
-                                            /
-                                            <h:outputText value="#{dashboardBean.totalCreditCardGoal}" >
-                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                            </h:outputText>
-                                        </span>
-                                        <div class="progress sm">
-                                            <div class="progress-bar progress-bar-aqua" 
-                                                 style="width: #{dashboardBean.percentageCreditCard}%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-group">
-                                        <span class="progress-text">#{messages['dashboard.goal.expenses']}</span>
-                                        <span class="progress-number">
-                                            <b>
-                                                <h:outputText value="#{dashboardBean.calculator.expensesTotal}" >
-                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                                </h:outputText>
-                                            </b>
-                                            /
-                                            <h:outputText value="#{dashboardBean.totalExpensesGoal}" >
-                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                            </h:outputText>
-                                        </span>
-                                        <div class="progress sm">
-                                            <div class="progress-bar progress-bar-red"
-                                                 style="width: #{dashboardBean.percentageExpenses}%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-group">
-                                        <span class="progress-text">#{messages['dashboard.goal.revenues']}</span>
-                                        <span class="progress-number">
-                                            <b>
-                                                <h:outputText value="#{dashboardBean.calculator.revenuesTotal}" >
-                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                                </h:outputText>
-                                            </b>
-                                            /
-                                            <h:outputText value="#{dashboardBean.totalRevenueGoal}" >
-                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                            </h:outputText>
-                                        </span>
-                                        <div class="progress sm">
-                                            <div class="progress-bar progress-bar-green" 
-                                                 style="width: #{dashboardBean.percentageRevenues}%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="box-footer">
-                            <div class="row">
-                                <div class="col-sm-3 col-xs-6">
-                                    <div class="description-block border-right">
-                                        <h5 class="description-header text-green">
-                                            <h:outputText value="#{dashboardBean.calculator.revenuesTotal}" >
-                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                            </h:outputText>
-                                        </h5>
-                                        <span class="description-text">#{messages['dashboard.total-revenue']}</span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3 col-xs-6">
-                                    <div class="description-block border-right">
-                                        <h5 class="description-header text-red">
-                                            <h:outputText value="#{dashboardBean.calculator.expensesTotal}" >
-                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                            </h:outputText>
-                                        </h5>
-                                        <span class="description-text">#{messages['dashboard.total-expenses']}</span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3 col-xs-6">
-                                    <div class="description-block border-right">
-                                        <h5 class="description-header #{dashboardBean.calculator.balance.signum() 
-                                                                        lt 0 ? 'text-red' : 'text-aqua'}">
-                                            <h:outputText value="#{dashboardBean.calculator.balance}" >
-                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                            </h:outputText>
-                                        </h5>
-                                        <span class="description-text">#{messages['dashboard.balance']}</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-3 col-xs-6">
-                                    <div class="description-block">
-                                        <h5 class="description-header #{dashboardBean.accumulated.signum() 
-                                                                        lt 0 ? 'text-red' : 'text-aqua'}">
-                                            <h:outputText value="#{dashboardBean.accumulated}" >
-                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
-                                            </h:outputText>
-                                        </h5>
-                                        <span class="description-text">#{messages['dashboard.acumulated']}</span>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="col-md-4">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>
+                            <h:outputText value="#{closingBean.closing.expenses}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                        </h3>
+                        <p>#{messages['closing.form.expenses']}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-minus-circle"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-box bg-fuchsia">
+                    <div class="inner">
+                        <h3>
+                            <h:outputText value="#{closingBean.closing.debitCardExpenses}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                        </h3>
+                        <p>#{messages['closing.form.debit-card-expenses']}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money-check-alt"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-box bg-orange">
+                    <div class="inner">
+                        <h3>
+                            <h:outputText value="#{closingBean.closing.creditCardExpenses}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                        </h3>
+                        <p>#{messages['closing.form.credit-card-expenses']}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-credit-card"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-box bg-maroon">
+                    <div class="inner">
+                        <h3>
+                            <h:outputText value="#{closingBean.closing.cashExpenses}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                        </h3>
+                        <p>#{messages['closing.form.cash-expenses']}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-dollar-sign"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3>
+                            <h:outputText value="#{closingBean.closing.balance}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                        </h3>
+                        <p>#{messages['closing.form.balance']}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-balance-scale"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div jsf:id="costCentersResumeBox" class="row">
+            <div class="col-md-6">
+                <div class="box box-#{profileBean.currentThemeColorName}">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            #{messages['dashboard.cost-center-revenues']}
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="chart-responsive">
+                            <canvas id="costCenterRevenues"/>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="box box-success">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">#{messages['dashboard.revenues-by-cost-center']}</h3>
-                        </div>
-                        <div class="box-body">
-                            <div class="col-xs-12 align-center"
-                                 jsf:rendered="#{not dashboardBean.revenuesCostCenterModel.containsData()}">
-                                <h4>#{messages['dashboard.no-data']}</h4>
-                            </div>
-                            <div class="col-xs-4"
-                                 jsf:rendered="#{dashboardBean.revenuesCostCenterModel.containsData()}">
-                                <div id="revenuesByCostCenterLegend" class="chart-legend"></div>
-                            </div>
-                            <div class="col-xs-8"
-                                 jsf:rendered="#{dashboardBean.revenuesCostCenterModel.containsData()}">
-                                <div class="chart">
-                                    <canvas id="revenuesByCostCenter" style="height:300px"></canvas>
-                                </div>
-                            </div>
-                        </div>
+            <div class="col-md-6">
+                <div class="box box-#{profileBean.currentThemeColorName}">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            #{messages['dashboard.cost-center-expenses']}
+                        </h3>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="box box-danger">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">#{messages['dashboard.expenses-by-cost-center']}</h3>
-                        </div>
-                        <div class="box-body">
-                            <div class="col-xs-12 align-center"
-                                 jsf:rendered="#{not dashboardBean.expensesCostCenterModel.containsData()}">
-                                <h4>#{messages['dashboard.no-data']}</h4>
-                            </div>
-                            <div class="col-xs-4"
-                                 jsf:rendered="#{dashboardBean.expensesCostCenterModel.containsData()}">
-                                <div id="expensesByCostCenterLegend" class="chart-legend"></div>
-                            </div>
-                            <div class="col-xs-8"
-                                 jsf:rendered="#{dashboardBean.expensesCostCenterModel.containsData()}">
-                                <div class="chart">
-                                    <canvas id="expensesByCostCenter" style="height:300px"></canvas>
-                                </div>
-                            </div>
+                    <div class="box-body">
+                        <div class="chart-responsive">
+                            <canvas id="costCenterExpenses"/>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <h:form prependId="false">
-            <p:remoteCommand autoRun="true"
-                             name="initializer"
-                             update=":movimentationSummary"
-                             onstart="block('loadingBlock')"
-                             oncomplete="unblock('loadingBlock')"
-                             actionListener="#{dashboardBean.initialize()}"/>
-        </h:form>-->
     </ui:define>
 </ui:composition>
