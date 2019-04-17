@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2015 Arthur Gregorio, AG.Software
+    Copyright (C) 2014 Arthur Gregorio, AG.Software
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/template/mainTemplate.xhtml">
 
+    <f:metadata>
+        <f:viewAction action="#{dashboardBean.initialize()}"/>
+    </f:metadata>
+    
     <ui:define name="pageTitle">
         #{messages['dashboard.page-title']}
     </ui:define>
@@ -40,11 +44,11 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{closingBean.closing.revenues}">
+                            <h:outputText value="#{dashboardBean.openPeriodResume.revenues}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
-                        <p>#{messages['closing.form.revenues']}</p>
+                        <p>#{messages['dashboard.cards.revenues']}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-plus-circle"/>
@@ -55,11 +59,11 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{closingBean.closing.expenses}">
+                            <h:outputText value="#{dashboardBean.openPeriodResume.expenses}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
-                        <p>#{messages['closing.form.expenses']}</p>
+                        <p>#{messages['dashboard.cards.expenses']}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-minus-circle"/>
@@ -70,11 +74,11 @@
                 <div class="small-box bg-fuchsia">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{closingBean.closing.debitCardExpenses}">
+                            <h:outputText value="#{dashboardBean.openPeriodResume.debitCardExpenses}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
-                        <p>#{messages['closing.form.debit-card-expenses']}</p>
+                        <p>#{messages['dashboard.cards.debit-card-expenses']}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-money-check-alt"/>
@@ -85,11 +89,11 @@
                 <div class="small-box bg-orange">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{closingBean.closing.creditCardExpenses}">
+                            <h:outputText value="#{dashboardBean.openPeriodResume.creditCardExpenses}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
-                        <p>#{messages['closing.form.credit-card-expenses']}</p>
+                        <p>#{messages['dashboard.cards.credit-card-expenses']}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-credit-card"/>
@@ -100,11 +104,11 @@
                 <div class="small-box bg-maroon">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{closingBean.closing.cashExpenses}">
+                            <h:outputText value="#{dashboardBean.openPeriodResume.cashExpenses}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
-                        <p>#{messages['closing.form.cash-expenses']}</p>
+                        <p>#{messages['dashboard.cards.cash-expenses']}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-dollar-sign"/>
@@ -115,11 +119,11 @@
                 <div class="small-box bg-blue">
                     <div class="inner">
                         <h3>
-                            <h:outputText value="#{closingBean.closing.balance}">
+                            <h:outputText value="#{dashboardBean.openPeriodResume.balance}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </h3>
-                        <p>#{messages['closing.form.balance']}</p>
+                        <p>#{messages['dashboard.cards.balance']}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-balance-scale"/>
@@ -132,7 +136,7 @@
                 <div class="box box-#{profileBean.currentThemeColorName}">
                     <div class="box-header with-border">
                         <h3 class="box-title">
-                            #{messages['dashboard.cost-center-revenues']}
+                            #{messages['dashboard.chart.cost-center-revenues']}
                         </h3>
                     </div>
                     <div class="box-body">
@@ -146,7 +150,7 @@
                 <div class="box box-#{profileBean.currentThemeColorName}">
                     <div class="box-header with-border">
                         <h3 class="box-title">
-                            #{messages['dashboard.cost-center-expenses']}
+                            #{messages['dashboard.chart.cost-center-expenses']}
                         </h3>
                     </div>
                     <div class="box-body">

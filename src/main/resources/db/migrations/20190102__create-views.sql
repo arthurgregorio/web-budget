@@ -1,6 +1,7 @@
 -- view 001
 CREATE OR REPLACE VIEW financial.wb_view_001 AS
-SELECT fp.identification AS financial_period,
+SELECT row_number() OVER () AS id,
+       fp.identification AS financial_period,
        mc.movement_class_type AS direction,
        cc.id AS cost_center_id,
        cc.name AS cost_center,
@@ -18,7 +19,8 @@ COMMENT ON VIEW financial.wb_view_001
 
 -- view 002
 CREATE OR REPLACE VIEW financial.wb_view_002 AS
-SELECT fp.identification AS financial_period,
+SELECT row_number() OVER () AS id,
+       fp.identification AS financial_period,
        mc.movement_class_type AS direction,
        cc.id AS cost_center_id,
        cc.name AS cost_center,
@@ -84,7 +86,8 @@ CREATE OR REPLACE VIEW financial.wb_view_003 AS
     FROM revenues_total rt,
          expenses_total et
   )
-  SELECT revenues_total.revenues,
+  SELECT row_number() OVER () AS id,
+         revenues_total.revenues,
          expenses_total.expenses,
          cash_expenses_total.cash_expenses,
          credit_card_expenses_total.credit_card_expenses,
@@ -106,7 +109,8 @@ COMMENT ON VIEW financial.wb_view_003
 CREATE MATERIALIZED VIEW financial.wb_mview_001
   TABLESPACE pg_default
 AS
-SELECT COALESCE(sum(cl.revenues), 0::numeric) AS revenues_total,
+SELECT row_number() OVER () AS id,
+       COALESCE(sum(cl.revenues), 0::numeric) AS revenues_total,
        COALESCE(sum(cl.expenses), 0::numeric) AS expenses_total,
        COALESCE(sum(cl.credit_card_expenses), 0::numeric) AS credit_card_expenses,
        COALESCE(sum(cl.cash_expenses), 0::numeric) AS cash_expenses,
