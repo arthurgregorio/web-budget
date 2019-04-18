@@ -16,9 +16,12 @@
  */
 package br.com.webbudget.domain.repositories.view;
 
+import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.view.CostCenterTotal;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
+
+import java.util.List;
 
 /**
  * The {@link CostCenterTotal} repository
@@ -29,4 +32,13 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 3.0.0, 16/04/2019
  */
 @Repository
-public interface CostCenterTotalRepository extends EntityRepository<CostCenterTotal, Long> { }
+public interface CostCenterTotalRepository extends EntityRepository<CostCenterTotal, Long> {
+
+    /**
+     * Find the {@link CostCenterTotal} by the direction
+     *
+     * @param direction as a {@link MovementClassType} filter
+     * @return a {@link List} with all {@link CostCenterTotal} found
+     */
+    List<CostCenterTotal> findByDirection(MovementClassType direction);
+}

@@ -7,7 +7,7 @@
 function drawPieChart(chartData, canvas) {
 
     var config = {
-        type: 'pie',
+        type: 'polarArea',
         data: chartData,
         options: {
             responsive: true,

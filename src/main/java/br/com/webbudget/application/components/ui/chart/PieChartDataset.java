@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.webbudget.application.components.ui.chart.pie;
+package br.com.webbudget.application.components.ui.chart;
 
 import br.com.webbudget.application.components.dto.Color;
 import lombok.Getter;
@@ -36,11 +36,16 @@ public class PieChartDataset {
     @Getter
     @Setter
     private String label;
+    @Getter
+    @Setter
+    private int borderWidth;
 
     @Getter
     private List<Integer> data;
     @Getter
     private List<String> backgroundColor;
+    @Getter
+    private List<String> borderColor;
 
     /**
      * Constructor...
@@ -49,7 +54,10 @@ public class PieChartDataset {
 
         this.label = label;
 
+        this.borderWidth = 1;
+
         this.data = new ArrayList<>();
+        this.borderColor = new ArrayList<>();
         this.backgroundColor = new ArrayList<>();
     }
 
@@ -81,6 +89,7 @@ public class PieChartDataset {
      * @param color to be added
      */
     public void addColor(Color color) {
-        this.backgroundColor.add(color.toString());
+        this.backgroundColor.add(color.transparent().toString());
+        this.borderColor.add(color.darker().toString());
     }
 }

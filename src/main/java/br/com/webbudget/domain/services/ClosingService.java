@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.services;
 
+import br.com.webbudget.domain.calculators.PeriodMovementCalculator;
 import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;

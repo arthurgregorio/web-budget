@@ -16,21 +16,20 @@
  */
 package br.com.webbudget.domain.entities.view;
 
+import br.com.webbudget.application.components.dto.Color;
 import br.com.webbudget.domain.entities.ImmutableEntity;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
+import br.com.webbudget.infrastructure.jpa.ColorConverter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Immutable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
@@ -69,6 +68,10 @@ public class MovementClassTotal extends ImmutableEntity {
     @Getter
     @Column(name = "cost_center")
     private String costCenter;
+    @Getter
+    @Column(name = "cost_center_color")
+    @Convert(converter = ColorConverter.class)
+    private Color costCenterColor;
     @Getter
     @Column(name = "movement_class_id")
     private Long movementClassId;

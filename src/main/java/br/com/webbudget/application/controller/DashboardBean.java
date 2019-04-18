@@ -17,6 +17,8 @@
 package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.components.ui.AbstractBean;
+import br.com.webbudget.domain.calculators.CostCenterTotalCalculator;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.view.OpenPeriodResume;
 import br.com.webbudget.domain.repositories.view.OpenPeriodResumeRepository;
 import lombok.Getter;
@@ -41,6 +43,9 @@ public class DashboardBean extends AbstractBean {
     private OpenPeriodResume openPeriodResume;
 
     @Inject
+    private CostCenterTotalCalculator costCenterTotalCalculator;
+
+    @Inject
     private OpenPeriodResumeRepository openPeriodResumeRepository;
 
     /**
@@ -48,5 +53,11 @@ public class DashboardBean extends AbstractBean {
      */
     public void initialize() {
         this.openPeriodResume = this.openPeriodResumeRepository.load().orElseGet(OpenPeriodResume::new);
+
+        this.costCenterTotalCalculator.load(MovementClassType.REVENUE);
+        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toPieChartModel().toJson() + ", 'costCenterRevenues')");
+
+        this.costCenterTotalCalculator.load(MovementClassType.EXPENSE);
+        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toPieChartModel().toJson() + ", 'costCenterExpenses')");
     }
 }

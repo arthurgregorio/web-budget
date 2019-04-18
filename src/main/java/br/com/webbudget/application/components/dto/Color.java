@@ -96,13 +96,22 @@ public final class Color {
     }
 
     /**
+     * Get this color almost transparent
+     *
+     * @return almost transparent version of this color
+     */
+    public Color transparent() {
+        return new Color(this.getRed(), this.getGreen(), this.getBlue(), 0.3);
+    }
+
+    /**
      * Get a random RGB color
      *
      * @return some random color
      */
     public static Color randomize() {
 
-        int rgb[] = new int[3];
+        int[] rgb = new int[3];
 
         for (int i = 0; i < 3; i++) {
             rgb[i] = ThreadLocalRandom.current().nextInt(1, 255 + 1);
@@ -129,7 +138,7 @@ public final class Color {
                 .replace("(", "")
                 .replace(")", "");
         
-        final String color[] = numbers.split(",");
+        final String[] color = numbers.split(",");
         
         if (color.length < 4) {
             return new Color(Integer.valueOf(color[0]), 
