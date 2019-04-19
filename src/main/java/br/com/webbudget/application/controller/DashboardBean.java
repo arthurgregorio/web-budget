@@ -18,9 +18,11 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.components.ui.AbstractBean;
 import br.com.webbudget.domain.calculators.CostCenterTotalCalculator;
+import br.com.webbudget.domain.calculators.PeriodResumeCalculator;
+import br.com.webbudget.domain.entities.financial.Closing;
+import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.view.OpenPeriodResume;
-import br.com.webbudget.domain.repositories.view.OpenPeriodResumeRepository;
 import lombok.Getter;
 
 import javax.faces.view.ViewScoped;
@@ -43,21 +45,103 @@ public class DashboardBean extends AbstractBean {
     private OpenPeriodResume openPeriodResume;
 
     @Inject
-    private CostCenterTotalCalculator costCenterTotalCalculator;
-
+    private PeriodResumeCalculator periodResumeCalculator;
     @Inject
-    private OpenPeriodResumeRepository openPeriodResumeRepository;
+    private CostCenterTotalCalculator costCenterTotalCalculator;
 
     /**
      * Initialize dashboard with data
      */
     public void initialize() {
-        this.openPeriodResume = this.openPeriodResumeRepository.load().orElseGet(OpenPeriodResume::new);
 
+        // load the data about the financial periods
+        this.periodResumeCalculator.load();
+
+        this.openPeriodResume = this.periodResumeCalculator.getOpenPeriodResume();
+
+        // load the data about the cost centers
         this.costCenterTotalCalculator.load(MovementClassType.REVENUE);
-        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toPieChartModel().toJson() + ", 'costCenterRevenues')");
+        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toPieChartModel().toJson()
+                + ", 'costCenterRevenuesChart')");
 
         this.costCenterTotalCalculator.load(MovementClassType.EXPENSE);
-        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toPieChartModel().toJson() + ", 'costCenterExpenses')");
+        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toPieChartModel().toJson()
+                + ", 'costCenterExpensesChart')");
+    }
+
+    /**
+     * Compare both revenues from all open {@link FinancialPeriod} and with the last {@link Closing} to determine if
+     * we got a increase or a decrease on the revenues
+     *
+     * @return 0 for equal values, 1 for greater than or -1 to less than
+     */
+    public int compareRevenue() {
+        return this.periodResumeCalculator.compareRevenues();
+    }
+
+    /**
+     * Method used to calculate the percentage increased or decreased
+     *
+     * @return the percentage increased or decreased
+     */
+    public int calculateRevenuePercentage() {
+        return this.periodResumeCalculator.calculateRevenuesPercentage();
+    }
+
+    /**
+     * Compare both expenses from all open {@link FinancialPeriod} and with the last {@link Closing} to determine if
+     * we got a increase or a decrease on the expenses
+     *
+     * @return 0 for equal values, 1 for greater than or -1 to less than
+     */
+    public int compareExpense() {
+        return this.periodResumeCalculator.compareExpenses();
+    }
+
+    /**
+     * Method used to calculate the percentage increased or decreased
+     *
+     * @return the percentage increased or decreased
+     */
+    public int calculateExpensePercentage() {
+        return this.periodResumeCalculator.calculateExpensesPercentage();
+    }
+
+    /**
+     * Compare both balances from all open {@link FinancialPeriod} and with the last {@link Closing} to determine if
+     * we got a increase or a decrease on the balances
+     *
+     * @return 0 for equal values, 1 for greater than or -1 to less than
+     */
+    public int compareBalance() {
+        return this.periodResumeCalculator.compareBalances();
+    }
+
+    /**
+     * Method used to calculate the percentage increased or decreased
+     *
+     * @return the percentage increased or decreased
+     */
+    public int calculateBalancePercentage() {
+        return this.periodResumeCalculator.calculateBalancesPercentage();
+    }
+
+    /**
+     * Compare both accumulated result from all open {@link FinancialPeriod} and with the last {@link Closing} to
+     * determine if we got a increase or a decrease on the accumulated
+     *
+     * @return 0 for equal values, 1 for greater than or -1 to less than
+     */
+    public int compareAccumulated() {
+        return this.periodResumeCalculator.compareAccumulates();
+    }
+
+    /**
+     * Method used to calculate the percentage increased or decreased
+     *
+     * @return the percentage increased or decreased
+     */
+    public int calculateAccumulatedPercentage() {
+        return this.periodResumeCalculator.calculateAccumulatesPercentage();
     }
 }

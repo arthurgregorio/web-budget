@@ -18,15 +18,13 @@ package br.com.webbudget.domain.entities.view;
 
 import br.com.webbudget.domain.entities.ImmutableEntity;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
@@ -68,6 +66,11 @@ public class OpenPeriodResume extends ImmutableEntity {
     @Column(name = "balance")
     private BigDecimal balance;
 
+    @Getter
+    @Setter
+    @Transient
+    private BigDecimal accumulated;
+
     /**
      * Constructor...
      */
@@ -79,5 +82,6 @@ public class OpenPeriodResume extends ImmutableEntity {
         this.debitCardExpenses = BigDecimal.ZERO;
         this.movementsOpen = BigDecimal.ZERO;
         this.balance = BigDecimal.ZERO;
+        this.accumulated = BigDecimal.ZERO;
     }
 }

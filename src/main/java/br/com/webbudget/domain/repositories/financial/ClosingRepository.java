@@ -44,4 +44,13 @@ public interface ClosingRepository extends DefaultRepository<Closing> {
             "FROM Closing cl " +
             "WHERE cl.id = (SELECT MAX(id) FROM Closing)")
     Optional<BigDecimal> findLastClosingAccumulatedValue();
+
+    /**
+     * Select most recent {@link Closing}
+     *
+     * @return an {@link Optional} of the last {@link Closing}
+     */
+    @Query("FROM Closing cl " +
+            "WHERE cl.id = (SELECT MAX(id) FROM Closing)")
+    Optional<Closing> findLastClosing();
 }

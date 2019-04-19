@@ -18,6 +18,7 @@ package br.com.webbudget.domain.calculators;
 
 import br.com.webbudget.application.components.ui.chart.PieChartDataset;
 import br.com.webbudget.application.components.ui.chart.PieChartModel;
+import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.view.CostCenterTotal;
 import br.com.webbudget.domain.repositories.view.CostCenterTotalRepository;

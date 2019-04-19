@@ -43,39 +43,9 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
         <h:outputScript library="webbudget" name="js/chart-manager.js" target="head"/>
 
-        <div jsf:id="periodResumeBox" class="row">
+        <div jsf:id="expensesResumeBox" class="row">
             <div class="col-md-4">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3>
-                            <h:outputText value="#{dashboardBean.openPeriodResume.revenues}">
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
-                            </h:outputText>
-                        </h3>
-                        <p>#{messages['dashboard.cards.revenues']}</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-plus-circle"/>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3>
-                            <h:outputText value="#{dashboardBean.openPeriodResume.expenses}">
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
-                            </h:outputText>
-                        </h3>
-                        <p>#{messages['dashboard.cards.expenses']}</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-minus-circle"/>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="small-box bg-fuchsia">
+                <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3>
                             <h:outputText value="#{dashboardBean.openPeriodResume.debitCardExpenses}">
@@ -90,7 +60,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="small-box bg-orange">
+                <div class="small-box bg-olive">
                     <div class="inner">
                         <h3>
                             <h:outputText value="#{dashboardBean.openPeriodResume.creditCardExpenses}">
@@ -105,7 +75,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="small-box bg-maroon">
+                <div class="small-box bg-purple">
                     <div class="inner">
                         <h3>
                             <h:outputText value="#{dashboardBean.openPeriodResume.cashExpenses}">
@@ -119,18 +89,155 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3>
-                            <h:outputText value="#{dashboardBean.openPeriodResume.balance}">
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
-                            </h:outputText>
+        </div>
+        <div jsf:id="periodResumeBox" class="row">
+            <div class="col-md-12">
+                <div class="box box-#{profileBean.currentThemeColorName}">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            #{messages['dashboard.financial-period.resume']}
                         </h3>
-                        <p>#{messages['dashboard.cards.balance']}</p>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-balance-scale"/>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p class="text-center">
+                                    <strong>#{messages['dashboard.financial-period.last-six']}</strong>
+                                </p>
+                                <div class="chart">
+                                    <canvas id="periodResultChart" style="height: 180px; width: 1072px;" width="1072" height="180"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="text-center">
+                                    <strong>#{messages['dashboard.financial-period.goal']}</strong>
+                                </p>
+                                <div class="progress-group">
+                                    <span class="progress-text">Add Products to Cart</span>
+                                    <span class="progress-number"><b>160</b>/200</span>
+
+                                    <div class="progress sm">
+                                        <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-group">
+                                    <span class="progress-text">Complete Purchase</span>
+                                    <span class="progress-number"><b>310</b>/400</span>
+
+                                    <div class="progress sm">
+                                        <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-group">
+                                    <span class="progress-text">Visit Premium Page</span>
+                                    <span class="progress-number"><b>480</b>/800</span>
+
+                                    <div class="progress sm">
+                                        <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-group">
+                                    <span class="progress-text">Send Inquiries</span>
+                                    <span class="progress-number"><b>250</b>/500</span>
+
+                                    <div class="progress sm">
+                                        <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-6">
+                                <div class="description-block border-right">
+                                    <span class="description-percentage text-green"
+                                          jsf:rendered="#{dashboardBean.compareRevenue() gt 0}">
+                                        <i class="fa fa-caret-up"/> #{dashboardBean.calculateRevenuePercentage()}%
+                                    </span>
+                                    <span class="description-percentage text-blue"
+                                          jsf:rendered="#{dashboardBean.compareRevenue() eq 0}">
+                                        <i class="fa fa-caret-left"/> #{dashboardBean.calculateRevenuePercentage()}%
+                                    </span>
+                                    <span class="description-percentage text-red"
+                                          jsf:rendered="#{dashboardBean.compareRevenue() lt 0}">
+                                        <i class="fa fa-caret-down"/> #{dashboardBean.calculateRevenuePercentage()}%
+                                    </span>
+                                    <h5 class="description-header">
+                                        <h:outputText value="#{dashboardBean.openPeriodResume.revenues}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </h5>
+                                    <span class="description-text">#{messages['dashboard.financial-period.revenues']}</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6">
+                                <div class="description-block border-right">
+                                    <span class="description-percentage text-green"
+                                          jsf:rendered="#{dashboardBean.compareExpense() gt 0}">
+                                        <i class="fa fa-caret-up"/> #{dashboardBean.calculateExpensePercentage()}%
+                                    </span>
+                                    <span class="description-percentage text-blue"
+                                          jsf:rendered="#{dashboardBean.compareExpense() eq 0}">
+                                        <i class="fa fa-caret-left"/> #{dashboardBean.calculateExpensePercentage()}%
+                                    </span>
+                                    <span class="description-percentage text-red"
+                                          jsf:rendered="#{dashboardBean.compareExpense() lt 0}">
+                                        <i class="fa fa-caret-down"/> #{dashboardBean.calculateExpensePercentage()}%
+                                    </span>
+                                    <h5 class="description-header">
+                                        <h:outputText value="#{dashboardBean.openPeriodResume.expenses}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </h5>
+                                    <span class="description-text">#{messages['dashboard.financial-period.expenses']}</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6">
+                                <div class="description-block border-right">
+                                    <span class="description-percentage text-green"
+                                          jsf:rendered="#{dashboardBean.compareBalance() gt 0}">
+                                        <i class="fa fa-caret-up"/> #{dashboardBean.calculateBalancePercentage()}%
+                                    </span>
+                                    <span class="description-percentage text-blue"
+                                          jsf:rendered="#{dashboardBean.compareBalance() eq 0}">
+                                        <i class="fa fa-caret-left"/> #{dashboardBean.calculateBalancePercentage()}%
+                                    </span>
+                                    <span class="description-percentage text-red"
+                                          jsf:rendered="#{dashboardBean.compareBalance() lt 0}">
+                                        <i class="fa fa-caret-down"/> #{dashboardBean.calculateBalancePercentage()}%
+                                    </span>
+                                    <h5 class="description-header">
+                                        <h:outputText value="#{dashboardBean.openPeriodResume.balance}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </h5>
+                                    <span class="description-text">#{messages['dashboard.financial-period.balance']}</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6">
+                                <div class="description-block">
+                                    <span class="description-percentage text-green"
+                                          jsf:rendered="#{dashboardBean.compareAccumulated() gt 0}">
+                                        <i class="fa fa-caret-up"/> #{dashboardBean.calculateAccumulatedPercentage()}%
+                                    </span>
+                                    <span class="description-percentage text-blue"
+                                          jsf:rendered="#{dashboardBean.compareAccumulated() eq 0}">
+                                        <i class="fa fa-caret-left"/> #{dashboardBean.calculateAccumulatedPercentage()}%
+                                    </span>
+                                    <span class="description-percentage text-red"
+                                          jsf:rendered="#{dashboardBean.compareAccumulated() lt 0}">
+                                        <i class="fa fa-caret-down"/> #{dashboardBean.calculateAccumulatedPercentage()}%
+                                    </span>
+                                    <h5 class="description-header">
+                                        <h:outputText value="#{dashboardBean.openPeriodResume.accumulated}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </h5>
+                                    <span class="description-text">#{messages['dashboard.financial-period.accumulated']}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -145,8 +252,9 @@
                     </div>
                     <div class="box-body">
                         <div class="chart-responsive">
-                            <canvas id="costCenterRevenues" height="160"
+                            <canvas id="costCenterRevenuesChart"
                                     width="350"
+                                    height="160"
                                     style="width: 350px; height: 160px;"/>
                         </div>
                     </div>
@@ -161,8 +269,9 @@
                     </div>
                     <div class="box-body">
                         <div class="chart-responsive">
-                            <canvas id="costCenterExpenses" height="160"
+                            <canvas id="costCenterExpensesChart"
                                     width="350"
+                                    height="160"
                                     style="width: 350px; height: 160px;"/>
                         </div>
                     </div>
