@@ -89,7 +89,7 @@ public class CostCenterTotalCalculator {
      *
      * @return the {@link PieChartModel} with the data of this calculator
      */
-    public PieChartModel toPieChartModel() {
+    public PieChartModel toChartModel() {
 
         final BigDecimal total = this.costCenterTotals.stream()
                 .map(CostCenterTotal::getValue)
@@ -99,7 +99,7 @@ public class CostCenterTotalCalculator {
 
         this.costCenterTotals.forEach(costCenterTotal -> {
             dataset.addColor(costCenterTotal.getCostCenterColor());
-            dataset.addData(percentageOf(costCenterTotal.getValue(), total));
+            dataset.addData(percentageOf(costCenterTotal.getValue(), total, true));
         });
 
         final PieChartModel model = new PieChartModel();

@@ -1,14 +1,14 @@
 /**
  * Draw a pie chart using chartJs lib
  *
- * @param chartData to be applied to the chart
+ * @param data to be applied to the chart
  * @param canvas where the chart will draw
  */
-function drawPieChart(chartData, canvas) {
+function drawPieChart(data, canvas) {
 
-    var config = {
+    var configuration = {
         type: 'polarArea',
-        data: chartData,
+        data: data,
         options: {
             responsive: true,
             legend: {
@@ -16,7 +16,7 @@ function drawPieChart(chartData, canvas) {
             },
             tooltips: {
                 callbacks: {
-                    label: function(tooltipItem, data) {
+                    label: function (tooltipItem, data) {
                         return " " + data.labels[tooltipItem.index];
                     }
                 }
@@ -24,5 +24,24 @@ function drawPieChart(chartData, canvas) {
         }
     };
 
-    new Chart(document.getElementById(canvas).getContext('2d'), config);
+    new Chart(document.getElementById(canvas).getContext('2d'), configuration);
+}
+
+/**
+ * Draw a line chart using chartJS lib
+ *
+ * @param data chart data
+ * @param canvas where the chart will be draw
+ */
+function drawLineChart(data, canvas) {
+
+    var configuration = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true
+        }
+    };
+
+    new Chart(document.getElementById(canvas).getContext('2d'), configuration);
 }

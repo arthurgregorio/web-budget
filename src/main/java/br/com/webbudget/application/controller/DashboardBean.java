@@ -18,6 +18,7 @@ package br.com.webbudget.application.controller;
 
 import br.com.webbudget.application.components.ui.AbstractBean;
 import br.com.webbudget.domain.calculators.CostCenterTotalCalculator;
+import br.com.webbudget.domain.calculators.PeriodResultCalculator;
 import br.com.webbudget.domain.calculators.PeriodResumeCalculator;
 import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
@@ -47,6 +48,8 @@ public class DashboardBean extends AbstractBean {
     @Inject
     private PeriodResumeCalculator periodResumeCalculator;
     @Inject
+    private PeriodResultCalculator periodResultCalculator;
+    @Inject
     private CostCenterTotalCalculator costCenterTotalCalculator;
 
     /**
@@ -59,13 +62,19 @@ public class DashboardBean extends AbstractBean {
 
         this.openPeriodResume = this.periodResumeCalculator.getOpenPeriodResume();
 
+        // load the data about the result of closed periods
+        this.periodResultCalculator.load();
+
+        this.executeScript("drawLineChart(" + this.periodResultCalculator.toChartModel().toJson()
+                + ", 'periodResultChart')");
+
         // load the data about the cost centers
         this.costCenterTotalCalculator.load(MovementClassType.REVENUE);
-        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toPieChartModel().toJson()
+        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toChartModel().toJson()
                 + ", 'costCenterRevenuesChart')");
 
         this.costCenterTotalCalculator.load(MovementClassType.EXPENSE);
-        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toPieChartModel().toJson()
+        this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toChartModel().toJson()
                 + ", 'costCenterExpensesChart')");
     }
 
@@ -143,5 +152,32 @@ public class DashboardBean extends AbstractBean {
      */
     public int calculateAccumulatedPercentage() {
         return this.periodResumeCalculator.calculateAccumulatesPercentage();
+    }
+
+    /**
+     * Calculate goal percentage of completion
+     *
+     * @return percentage of completion for this goal
+     */
+    public int calculateExpensesGoalPercentage() {
+        return this.periodResumeCalculator.getExpensesGoalPercentage();
+    }
+
+    /**
+     * Calculate goal percentage of completion
+     *
+     * @return percentage of completion for this goal
+     */
+    public int calculateRevenuesGoalPercentage() {
+        return this.periodResumeCalculator.getRevenuesGoalPercentage();
+    }
+
+    /**
+     * Calculate goal percentage of completion
+     *
+     * @return percentage of completion for this goal
+     */
+    public int calculateCreditCardsGoalPercentage() {
+        return this.periodResumeCalculator.getCreditCardsGoalPercentage();
     }
 }

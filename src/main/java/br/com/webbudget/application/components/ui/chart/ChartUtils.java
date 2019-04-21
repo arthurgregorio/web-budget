@@ -18,6 +18,9 @@ package br.com.webbudget.application.components.ui.chart;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class used when we need to draw a chart
@@ -38,20 +41,37 @@ public final class ChartUtils {
      */
     public static int percentageOf(BigDecimal x, BigDecimal total) {
 
-        x = x.setScale(2, RoundingMode.HALF_UP);
+        requireNonNull(x);
+        requireNonNull(total);
 
-        if (x == null || total == null) {
-            return 0;
-        }
+        x = x.setScale(2, RoundingMode.CEILING);
 
-        BigDecimal percentage;
+        final BigDecimal percentage = x.multiply(new BigDecimal(100)).divide(total, 2, RoundingMode.CEILING);
 
-        if (x.compareTo(total) >= 0) {
-            return 100;
+        return percentage.intValue();
+    }
+
+    /**
+     * Same as {@link #percentageOf(BigDecimal, BigDecimal, boolean)} but this one takes a third parameter to define if
+     * the percentage value is bigger than 100, limit it to 100 only.
+     *
+     * Example: if the result is 200, limit this to 100. Or if the X is greater than the total, return 100 directly
+     *
+     * @param x the amount representing the value that we want to find (% of)
+     * @param total representing 100%
+     * @param compareToLimit if we want to check and limit the value to 100 if the percentage is above 100
+     * @return the corresponding percentage of the total value
+     */
+    public static int percentageOf(BigDecimal x, BigDecimal total, boolean compareToLimit) {
+        if (compareToLimit) {
+            if (x.compareTo(total) >= 0) {
+                return 100;
+            } else {
+                int percentage = percentageOf(x, total);
+                return percentage > 100 ? 100 : percentage;
+            }
         } else {
-            percentage = x.multiply(new BigDecimal(100)).divide(total, 2, RoundingMode.HALF_UP);
+            return percentageOf(x, total);
         }
-
-        return percentage.intValue() > 100 ? 100 : percentage.intValue();
     }
 }

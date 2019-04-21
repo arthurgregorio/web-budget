@@ -20,20 +20,18 @@ import br.com.webbudget.domain.entities.ImmutableEntity;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 
 /**
- * Immutable entity used to summarize the totals for all open (or expired) {@link FinancialPeriod}
+ * Immutable entity used to get a result of all closed {@link FinancialPeriod}
  *
  * @author Arthur Gregorio
  *
@@ -44,9 +42,15 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 @Immutable
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "wb_view_003", schema = FINANCIAL)
-public class OpenPeriodResume extends ImmutableEntity {
+@Table(name = "wb_view_005", schema = FINANCIAL)
+public class PeriodResult extends ImmutableEntity {
 
+    @Getter
+    @Column(name = "financial_period_id")
+    private Long financialPeriodId;
+    @Getter
+    @Column(name = "financial_period")
+    private String financialPeriod;
     @Getter
     @Column(name = "revenues")
     private BigDecimal revenues;
@@ -54,49 +58,15 @@ public class OpenPeriodResume extends ImmutableEntity {
     @Column(name = "expenses")
     private BigDecimal expenses;
     @Getter
-    @Column(name = "cash_expenses")
-    private BigDecimal cashExpenses;
-    @Getter
-    @Column(name = "credit_card_expenses")
-    private BigDecimal creditCardExpenses;
-    @Getter
-    @Column(name = "debit_card_expenses")
-    private BigDecimal debitCardExpenses;
-    @Getter
-    @Column(name = "movements_open")
-    private BigDecimal movementsOpen;
-    @Getter
     @Column(name = "balance")
     private BigDecimal balance;
-    @Getter
-    @Column(name = "credit_card_goal")
-    private BigDecimal creditCardGoal;
-    @Getter
-    @Column(name = "expenses_goal")
-    private BigDecimal expensesGoal;
-    @Getter
-    @Column(name = "revenues_goal")
-    private BigDecimal revenuesGoal;
-
-    @Getter
-    @Setter
-    @Transient
-    private BigDecimal accumulated;
 
     /**
      * Constructor...
      */
-    public OpenPeriodResume() {
+    public PeriodResult() {
         this.revenues = BigDecimal.ZERO;
         this.expenses = BigDecimal.ZERO;
-        this.cashExpenses = BigDecimal.ZERO;
-        this.creditCardExpenses = BigDecimal.ZERO;
-        this.debitCardExpenses = BigDecimal.ZERO;
-        this.movementsOpen = BigDecimal.ZERO;
         this.balance = BigDecimal.ZERO;
-        this.accumulated = BigDecimal.ZERO;
-        this.creditCardGoal = BigDecimal.ZERO;
-        this.expensesGoal = BigDecimal.ZERO;
-        this.revenuesGoal = BigDecimal.ZERO;
     }
 }

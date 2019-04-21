@@ -45,7 +45,7 @@
 
         <div jsf:id="expensesResumeBox" class="row">
             <div class="col-md-4">
-                <div class="small-box bg-aqua">
+                <div class="small-box bg-light-blue">
                     <div class="inner">
                         <h3>
                             <h:outputText value="#{dashboardBean.openPeriodResume.debitCardExpenses}">
@@ -113,35 +113,48 @@
                                     <strong>#{messages['dashboard.financial-period.goal']}</strong>
                                 </p>
                                 <div class="progress-group">
-                                    <span class="progress-text">Add Products to Cart</span>
-                                    <span class="progress-number"><b>160</b>/200</span>
-
+                                    <span class="progress-text">#{messages['dashboard.goals.revenues']}</span>
+                                    <span class="progress-number">
+                                        <h:outputText styleClass="text-bold"
+                                                      value="#{dashboardBean.openPeriodResume.revenues}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText> /
+                                        <h:outputText value="#{dashboardBean.openPeriodResume.revenuesGoal}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </span>
                                     <div class="progress sm">
-                                        <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                                        <div class="progress-bar progress-bar-green" style="width: #{dashboardBean.calculateRevenuesGoalPercentage()}%"></div>
                                     </div>
                                 </div>
                                 <div class="progress-group">
-                                    <span class="progress-text">Complete Purchase</span>
-                                    <span class="progress-number"><b>310</b>/400</span>
-
+                                    <span class="progress-text">#{messages['dashboard.goals.expenses']}</span>
+                                    <span class="progress-number">
+                                        <h:outputText styleClass="text-bold"
+                                                      value="#{dashboardBean.openPeriodResume.expenses}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText> /
+                                        <h:outputText value="#{dashboardBean.openPeriodResume.expensesGoal}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </span>
                                     <div class="progress sm">
-                                        <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                                        <div class="progress-bar progress-bar-red" style="width: #{dashboardBean.calculateExpensesGoalPercentage()}%"></div>
                                     </div>
                                 </div>
                                 <div class="progress-group">
-                                    <span class="progress-text">Visit Premium Page</span>
-                                    <span class="progress-number"><b>480</b>/800</span>
-
+                                    <span class="progress-text">#{messages['dashboard.goals.credit-card']}</span>
+                                    <span class="progress-number">
+                                        <h:outputText styleClass="text-bold"
+                                                      value="#{dashboardBean.openPeriodResume.creditCardExpenses}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText> /
+                                        <h:outputText value="#{dashboardBean.openPeriodResume.creditCardGoal}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </span>
                                     <div class="progress sm">
-                                        <div class="progress-bar progress-bar-green" style="width: 80%"></div>
-                                    </div>
-                                </div>
-                                <div class="progress-group">
-                                    <span class="progress-text">Send Inquiries</span>
-                                    <span class="progress-number"><b>250</b>/500</span>
-
-                                    <div class="progress sm">
-                                        <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                                        <div class="progress-bar progress-bar-yellow" style="width: #{dashboardBean.calculateCreditCardsGoalPercentage()}%"></div>
                                     </div>
                                 </div>
                             </div>

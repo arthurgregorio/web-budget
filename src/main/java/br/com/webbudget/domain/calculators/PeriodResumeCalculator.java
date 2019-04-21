@@ -22,7 +22,6 @@ import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.view.OpenPeriodResume;
 import br.com.webbudget.domain.repositories.financial.ClosingRepository;
 import br.com.webbudget.domain.repositories.view.OpenPeriodResumeRepository;
-import jdk.jfr.Percentage;
 import lombok.Getter;
 
 import javax.enterprise.context.RequestScoped;
@@ -56,7 +55,11 @@ public class PeriodResumeCalculator {
     public void load() {
         this.lastClosing = this.closingRepository.findLastClosing().orElseGet(Closing::new);
         this.openPeriodResume = this.openPeriodResumeRepository.load().orElseGet(OpenPeriodResume::new);
-        this.openPeriodResume.setAccumulated(this.lastClosing.getAccumulated().add(this.openPeriodResume.getBalance()));
+
+        if (this.openPeriodResume.getRevenues().compareTo(BigDecimal.ZERO) != 0
+                || this.openPeriodResume.getExpenses().compareTo(BigDecimal.ZERO) != 0) {
+            this.openPeriodResume.setAccumulated(this.lastClosing.getAccumulated().add(this.openPeriodResume.getBalance()));
+        }
     }
 
     /**
@@ -74,8 +77,11 @@ public class PeriodResumeCalculator {
      * @return the percentage of increase or decrease
      */
     public int calculateRevenuesPercentage() {
-        final BigDecimal difference = this.openPeriodResume.getRevenues().subtract(this.lastClosing.getRevenues());
-        return ChartUtils.percentageOf(difference.plus(), this.openPeriodResume.getRevenues());
+        if (this.openPeriodResume.getRevenues().compareTo(BigDecimal.ZERO) != 0) {
+            final BigDecimal difference = this.openPeriodResume.getRevenues().subtract(this.lastClosing.getRevenues());
+            return ChartUtils.percentageOf(difference.abs(), this.openPeriodResume.getRevenues().abs());
+        }
+        return 100;
     }
 
     /**
@@ -93,8 +99,11 @@ public class PeriodResumeCalculator {
      * @return the percentage of increase or decrease
      */
     public int calculateExpensesPercentage() {
-        final BigDecimal difference = this.openPeriodResume.getExpenses().subtract(this.lastClosing.getExpenses());
-        return ChartUtils.percentageOf(difference.plus(), this.openPeriodResume.getExpenses());
+        if (this.openPeriodResume.getExpenses().compareTo(BigDecimal.ZERO) != 0) {
+            final BigDecimal difference = this.openPeriodResume.getExpenses().subtract(this.lastClosing.getExpenses());
+            return ChartUtils.percentageOf(difference.abs(), this.openPeriodResume.getExpenses().abs());
+        }
+        return 100;
     }
 
     /**
@@ -112,8 +121,11 @@ public class PeriodResumeCalculator {
      * @return the percentage of increase or decrease
      */
     public int calculateBalancesPercentage() {
-        final BigDecimal difference = this.openPeriodResume.getBalance().subtract(this.lastClosing.getBalance());
-        return ChartUtils.percentageOf(difference.plus(), this.openPeriodResume.getBalance());
+        if (this.openPeriodResume.getBalance().compareTo(BigDecimal.ZERO) != 0) {
+            final BigDecimal difference = this.openPeriodResume.getBalance().subtract(this.lastClosing.getBalance());
+            return ChartUtils.percentageOf(difference.abs(), this.openPeriodResume.getBalance().abs());
+        }
+        return 100;
     }
 
     /**
@@ -131,7 +143,40 @@ public class PeriodResumeCalculator {
      * @return the percentage of increase or decrease
      */
     public int calculateAccumulatesPercentage() {
-        final BigDecimal difference = this.openPeriodResume.getAccumulated().subtract(this.lastClosing.getAccumulated());
-        return ChartUtils.percentageOf(difference.plus(), this.openPeriodResume.getAccumulated());
+        if (this.openPeriodResume.getAccumulated().compareTo(BigDecimal.ZERO) != 0) {
+            final BigDecimal difference = this.openPeriodResume.getAccumulated().subtract(this.lastClosing.getAccumulated());
+            return ChartUtils.percentageOf(difference.abs(), this.openPeriodResume.getAccumulated().abs());
+        }
+        return 100;
+    }
+
+    /**
+     * Calculate goal percentage of completion
+     *
+     * @return percentage of completion for this goal
+     */
+    public int getExpensesGoalPercentage() {
+        return ChartUtils.percentageOf(this.openPeriodResume.getExpenses(),
+                this.openPeriodResume.getExpensesGoal(), true);
+    }
+
+    /**
+     * Calculate goal percentage of completion
+     *
+     * @return percentage of completion for this goal
+     */
+    public int getRevenuesGoalPercentage() {
+        return ChartUtils.percentageOf(this.openPeriodResume.getRevenues(),
+                this.openPeriodResume.getRevenuesGoal(), true);
+    }
+
+    /**
+     * Calculate goal percentage of completion
+     *
+     * @return percentage of completion for this goal
+     */
+    public int getCreditCardsGoalPercentage() {
+        return ChartUtils.percentageOf(this.openPeriodResume.getCreditCardExpenses(),
+                this.openPeriodResume.getCreditCardGoal(), true);
     }
 }
