@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Chart model used by the line chart
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -35,7 +37,7 @@ public class LineChartModel<T> extends AbstractChartModel {
     private List<LineChartDataset<T>> datasets;
 
     /**
-     *
+     * Constructor...
      */
     public LineChartModel() {
         this.labels = new ArrayList<>();
@@ -43,32 +45,36 @@ public class LineChartModel<T> extends AbstractChartModel {
     }
 
     /**
+     * Add a new dataset to the model
      *
-     * @param dataset
+     * @param dataset to be added
      */
     public void addDataset(LineChartDataset<T> dataset) {
         this.datasets.add(dataset);
     }
 
     /**
+     * Add a new {@link List} of dataset
      *
-     * @param datasets
+     * @param datasets {@link List} to be added
      */
     public void addAllDatasets(List<LineChartDataset<T>> datasets) {
         this.datasets.addAll(datasets);
     }
 
     /**
+     * Add a new label
      *
-     * @param label
+     * @param label to be added
      */
     public void addDataset(String label) {
         this.labels.add(label);
     }
 
     /**
+     * Add a {@link List} of labels to the model
      *
-     * @param labels
+     * @param labels {@link List} to be added
      */
     public void addAllLabels(List<String> labels) {
         this.labels.addAll(labels);

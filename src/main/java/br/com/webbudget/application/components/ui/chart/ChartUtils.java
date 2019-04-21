@@ -18,7 +18,6 @@ package br.com.webbudget.application.components.ui.chart;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 

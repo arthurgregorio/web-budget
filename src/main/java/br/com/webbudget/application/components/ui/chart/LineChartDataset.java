@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Dataset to be used as data carrier to the {@link LineChartModel}
+ *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
@@ -47,7 +49,7 @@ public class LineChartDataset<T> {
     private List<T> data;
 
     /**
-     *
+     * Constructor...
      */
     public LineChartDataset() {
         this.fill = false;
@@ -55,16 +57,18 @@ public class LineChartDataset<T> {
     }
 
     /**
+     * Add a value to this dataset
      *
-     * @param value
+     * @param value to be added
      */
     public void addData(T value) {
         this.data.add(value);
     }
 
     /**
+     * Add a {@link List} of values to this dataset
      *
-     * @param values
+     * @param values {@link List} to be added
      */
     public void addAllData(List<T> values) {
         this.data.addAll(values);
