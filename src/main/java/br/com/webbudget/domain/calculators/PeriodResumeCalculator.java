@@ -81,7 +81,7 @@ public class PeriodResumeCalculator {
             final BigDecimal difference = this.openPeriodResume.getRevenues().subtract(this.lastClosing.getRevenues());
             return ChartUtils.percentageOf(difference.abs(), this.openPeriodResume.getRevenues().abs());
         }
-        return 100;
+        return this.lastClosing.getFinancialPeriod() == null ? 0 : 100;
     }
 
     /**
@@ -103,7 +103,7 @@ public class PeriodResumeCalculator {
             final BigDecimal difference = this.openPeriodResume.getExpenses().subtract(this.lastClosing.getExpenses());
             return ChartUtils.percentageOf(difference.abs(), this.openPeriodResume.getExpenses().abs());
         }
-        return 100;
+        return this.lastClosing.getFinancialPeriod() == null ? 0 : 100;
     }
 
     /**
@@ -125,7 +125,7 @@ public class PeriodResumeCalculator {
             final BigDecimal difference = this.openPeriodResume.getBalance().subtract(this.lastClosing.getBalance());
             return ChartUtils.percentageOf(difference.abs(), this.openPeriodResume.getBalance().abs());
         }
-        return 100;
+        return this.lastClosing.getFinancialPeriod() == null ? 0 : 100;
     }
 
     /**
@@ -147,7 +147,7 @@ public class PeriodResumeCalculator {
             final BigDecimal difference = this.openPeriodResume.getAccumulated().subtract(this.lastClosing.getAccumulated());
             return ChartUtils.percentageOf(difference.abs(), this.openPeriodResume.getAccumulated().abs());
         }
-        return 100;
+        return this.lastClosing.getFinancialPeriod() == null ? 0 : 100;
     }
 
     /**
