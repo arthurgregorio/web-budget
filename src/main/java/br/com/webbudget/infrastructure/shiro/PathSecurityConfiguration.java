@@ -46,19 +46,24 @@ public class PathSecurityConfiguration implements HttpSecurityConfiguration {
     @Override
     public HttpSecurityBuilder configureHttpSecurity() {
 
-        // TODO secure all application path's
-
         final HttpSecurityBuilder builder = new PermissionHttpSecurityBuilder();
 
         builder.add("/secured/configuration/user/**", this.permissions.getUSER_ACCESS(), true)
                 .add("/secured/configuration/group/**", this.permissions.getGROUP_ACCESS(), true)
+                .add("/secured/configuration/configuration/**", this.permissions.getCONFIGURATION_ACCESS(), true)
                 .add("/secured/registration/card/**", this.permissions.getCARD_ACCESS(), true)
                 .add("/secured/registration/vehicle/**", this.permissions.getVEHICLE_ACCESS(), true)
                 .add("/secured/registration/contact/**", this.permissions.getCONTACT_ACCESS(), true)
                 .add("/secured/registration/wallet/**", this.permissions.getWALLET_ACCESS(), true)
                 .add("/secured/registration/costCenter/**", this.permissions.getCOST_CENTER_ACCESS(), true)
                 .add("/secured/registration/financialPeriod/**", this.permissions.getFINANCIAL_PERIOD_ACCESS(), true)
-                .add("/secured/registration/movementClass/**", this.permissions.getMOVEMENT_CLASS_ACCESS(), true);
+                .add("/secured/registration/movementClass/**", this.permissions.getMOVEMENT_CLASS_ACCESS(), true)
+                .add("/secured/journal/refueling/**", this.permissions.getREFUELING_ACCESS(), true)
+                .add("/secured/financial/movement/fixed/**", this.permissions.getPERIOD_MOVEMENT_ACCESS(), true)
+                .add("/secured/financial/movement/period/**", this.permissions.getFIXED_MOVEMENT_ACCESS(), true)
+                .add("/secured/financial/closing/**", this.permissions.getCLOSING_ACCESS(), true)
+                .add("/secured/financial/transference/**", this.permissions.getTRANSFERENCE_ACCESS(), true)
+                .add("/secured/financial/creditCardInvoice/**", this.permissions.getCREDIT_CARD_INVOICE_ACCESS(), true);
 
         return builder;
     }

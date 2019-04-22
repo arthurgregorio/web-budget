@@ -1,3 +1,7 @@
+/*
+  Create the views used at the reports and dashboards
+*/
+
 -- view 001
 CREATE OR REPLACE VIEW financial.wb_view_001 AS
 SELECT row_number() OVER () AS id,
