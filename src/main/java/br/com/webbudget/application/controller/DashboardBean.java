@@ -43,6 +43,9 @@ import javax.inject.Named;
 public class DashboardBean extends AbstractBean {
 
     @Getter
+    private boolean loaded;
+
+    @Getter
     private OpenPeriodResume openPeriodResume;
 
     @Inject
@@ -76,6 +79,8 @@ public class DashboardBean extends AbstractBean {
         this.costCenterTotalCalculator.load(MovementClassType.EXPENSE);
         this.executeScript("drawPieChart(" + this.costCenterTotalCalculator.toChartModel().toJson()
                 + ", 'costCenterExpensesChart')");
+
+        this.loaded = true;
     }
 
     /**

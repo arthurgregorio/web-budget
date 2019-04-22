@@ -18,7 +18,8 @@ $(function () {
  * Function to toggle the configuration sidebar color
  */
 function toggleSidebarColor() {
-    var $sidebar = $('.control-sidebar')
+    const $sidebar = $('.control-sidebar')
+
     if ($sidebar.hasClass('control-sidebar-dark')) {
         $sidebar.removeClass('control-sidebar-dark')
         $sidebar.addClass('control-sidebar-light')
@@ -35,7 +36,7 @@ function toggleSidebarColor() {
  */
 function changeSkin(cls) {
 
-    var skins = [
+    const skins = [
         'skin-blue',
         'skin-black',
         'skin-red',

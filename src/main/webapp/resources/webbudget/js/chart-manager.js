@@ -6,7 +6,7 @@
  */
 function drawPieChart(data, canvas) {
 
-    var configuration = {
+    const configuration = {
         type: 'polarArea',
         data: data,
         options: {
@@ -35,7 +35,13 @@ function drawPieChart(data, canvas) {
  */
 function drawLineChart(data, canvas) {
 
-    var configuration = {
+    const formatter = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2
+    });
+
+    const configuration = {
         type: 'line',
         data: data,
         options: {
@@ -43,7 +49,7 @@ function drawLineChart(data, canvas) {
             tooltips: {
                 callbacks: {
                     label: function (tooltipItem, data) {
-                        return " " + formatAsMonetaryValue(tooltipItem.value);
+                        return " " + formatter.format(tooltipItem.value);
                     }
                 }
             }
@@ -51,22 +57,4 @@ function drawLineChart(data, canvas) {
     };
 
     new Chart(document.getElementById(canvas).getContext('2d'), configuration);
-}
-
-/**
- * Simple function to format the value as monetary value
- *
- * @param number to be formatted
- * @returns {string} the formatted number
- */
-function formatAsMonetaryValue(number) {
-    number += '';
-    x = number.split('.');
-    x1 = x[0];
-    x2 = x.length > 1 ? ',' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
-    while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + '.' + '$2');
-    }
-    return "R$ " + x1 + x2;
 }
