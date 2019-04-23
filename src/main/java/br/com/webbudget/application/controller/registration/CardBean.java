@@ -16,17 +16,17 @@
  */
 package br.com.webbudget.application.controller.registration;
 
+import br.com.webbudget.application.components.ui.LazyFormBean;
 import br.com.webbudget.application.components.ui.ViewState;
 import br.com.webbudget.application.components.ui.table.Page;
-import br.com.webbudget.application.components.ui.LazyFormBean;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.events.CardCreated;
-import br.com.webbudget.domain.repositories.registration.CardRepository;
-import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import br.com.webbudget.domain.logics.registration.card.CardSavingLogic;
 import br.com.webbudget.domain.logics.registration.card.CardUpdatingLogic;
+import br.com.webbudget.domain.repositories.registration.CardRepository;
+import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import lombok.Getter;
 import org.primefaces.model.SortOrder;
 
@@ -40,6 +40,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
+import static br.com.webbudget.application.components.ui.NavigationManager.Parameter.of;
 
 /**
  * The {@link Card} maintenance routine controller
@@ -112,16 +113,6 @@ public class CardBean extends LazyFormBean<Card> {
     }
 
     /**
-     * Send the user to the card statistics page
-     *
-     * @param id the id of the card to show statistics
-     * @return the navigation case
-     */
-    public String changeToStatistics(long id) {
-        return "";
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -155,6 +146,16 @@ public class CardBean extends LazyFormBean<Card> {
         this.cardRepository.attachAndRemove(this.value);
         this.addInfoAndKeep("deleted");
         return this.changeToListing();
+    }
+
+    /**
+     * Send the user to the card statistics page
+     *
+     * @param id the id of the card to show statistics
+     * @return the navigation case
+     */
+    public String changeToStatistics(long id) {
+        return this.navigation.to("cardStatistics.xhtml", of("id", id));
     }
 
     /**
