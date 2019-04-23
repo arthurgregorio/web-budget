@@ -68,6 +68,7 @@ public class ProfileBean extends AbstractBean {
      */
     public void updateProfile() {
         this.profile = this.userAccountService.updateUserProfile(this.profile);
+        this.addInfo(true, "info.profile.updated");
     }
 
     /**

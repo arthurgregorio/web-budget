@@ -320,6 +320,7 @@
 
         <h:form>
             <p:remoteCommand autoRun="true"
+                             process="@this"
                              actionListener="#{dashboardBean.initialize()}"
                              update="expensesResumeBox costCentersResumeBox periodResumeBox"/>
         </h:form>

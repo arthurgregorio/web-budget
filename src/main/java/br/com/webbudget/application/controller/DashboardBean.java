@@ -49,11 +49,11 @@ public class DashboardBean extends AbstractBean {
     private OpenPeriodResume openPeriodResume;
 
     @Inject
-    private PeriodResumeCalculator periodResumeCalculator;
+    private transient PeriodResumeCalculator periodResumeCalculator;
     @Inject
-    private PeriodResultCalculator periodResultCalculator;
+    private transient PeriodResultCalculator periodResultCalculator;
     @Inject
-    private CostCenterTotalCalculator costCenterTotalCalculator;
+    private transient CostCenterTotalCalculator costCenterTotalCalculator;
 
     /**
      * Initialize dashboard with data

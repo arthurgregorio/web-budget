@@ -22,7 +22,7 @@ import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.financial.PeriodMovementRepository;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  * @since 3.0.0, 09/04/2019
  */
-@RequestScoped
+@Dependent
 public class PeriodMovementCalculator {
 
     private List<PeriodMovement> expenses;

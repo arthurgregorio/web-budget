@@ -25,6 +25,9 @@
                   type="br.com.webbudget.domain.entities.configuration.ThemeType"/>
 
     <h:form>
+        <div class="form-group">
+            <p:messages closable="true"/>
+        </div>
         <h3 class="control-sidebar-heading">#{messages['profile.preferences']}</h3>
         <div class="form-group">
             <label class="control-sidebar-subheading">
@@ -142,6 +145,7 @@
         <div class="form-group">
             <label class="control-sidebar-subheading pull-right" style="padding-top: 20px">
                 <p:commandButton value="#{menu['save']}"
+                                 update="@form"
                                  styleClass="btn btn-flat btn-primary"
                                  actionListener="#{profileBean.updateProfile()}"/>
             </label>

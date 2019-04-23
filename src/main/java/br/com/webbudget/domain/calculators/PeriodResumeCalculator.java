@@ -24,7 +24,7 @@ import br.com.webbudget.domain.repositories.financial.ClosingRepository;
 import br.com.webbudget.domain.repositories.view.OpenPeriodResumeRepository;
 import lombok.Getter;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 
@@ -36,7 +36,7 @@ import java.math.BigDecimal;
  * @version 1.0.0
  * @since 3.0.0, 17/04/2019
  */
-@RequestScoped
+@Dependent
 public class PeriodResumeCalculator {
 
     @Getter

@@ -23,7 +23,7 @@ import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.view.CostCenterTotal;
 import br.com.webbudget.domain.repositories.view.CostCenterTotalRepository;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ import static br.com.webbudget.application.components.ui.chart.ChartUtils.percen
  * @version 1.0.0
  * @since 3.0.0, 17/04/2019
  */
-@RequestScoped
+@Dependent
 public class CostCenterTotalCalculator {
 
     private List<CostCenterTotal> costCenterTotals;
