@@ -106,7 +106,7 @@
                             <th><b>#{messages['credit-card-invoice.invoice.movement-identification']}</b></th>
                             <th><b>#{messages['credit-card-invoice.invoice.payment-date']}</b></th>
                             <th><b>#{messages['credit-card-invoice.invoice.value']}</b></th>
-                            <th><b>#{menu['details']}</b></th>
+                            <th jsf:rendered="#{not cc.attrs.printVersion}"><b>#{menu['details']}</b></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -137,7 +137,8 @@
                                         <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                                     </h:outputText>
                                 </td>
-                                <td style="width: 8%">
+                                <td style="width: 8%"
+                                    jsf:rendered="#{not cc.attrs.printVersion}">
                                     <p:link title="#{menu['details']}"
                                             outcome="/secured/financial/movement/period/detailPeriodMovement.xhtml">
                                         <i class="fa fa-search"/>
