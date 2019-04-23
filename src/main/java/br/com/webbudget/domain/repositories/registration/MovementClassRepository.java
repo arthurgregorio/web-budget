@@ -67,6 +67,16 @@ public interface MovementClassRepository extends LazyDefaultRepository<MovementC
     /**
      * {@inheritDoc}
      *
+     * @param criteria
+     */
+    @Override
+    default void setOrder(Criteria<MovementClass, MovementClass> criteria) {
+        criteria.orderAsc(MovementClass_.name);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @return
      */
     @Override
