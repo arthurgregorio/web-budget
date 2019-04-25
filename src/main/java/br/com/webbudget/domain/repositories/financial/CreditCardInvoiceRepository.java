@@ -61,6 +61,15 @@ public interface CreditCardInvoiceRepository extends DefaultRepository<CreditCar
      */
     Optional<CreditCardInvoice> findByCardAndFinancialPeriod(Card card, FinancialPeriod financialPeriod);
 
+
+    /**
+     * Get a list of {@link CreditCardInvoice} for a given {@link Card}
+     *
+     * @param card to use as filter
+     * @return the {@link List} of invoices
+     */
+    List<CreditCardInvoice> findByCard(Card card);
+
     /**
      * Find all {@link CreditCardInvoice} for a given {@link FinancialPeriod}
      *
