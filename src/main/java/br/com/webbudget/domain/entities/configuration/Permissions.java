@@ -129,6 +129,9 @@ public class Permissions implements Serializable {
     private final String FINANCIAL_PERIOD_ACCESS = "financial-period:access";
     @Getter
     @PermissionGrouper("financial-period")
+    private final String FINANCIAL_PERIOD_REOPEN = "financial-period:reopen";
+    @Getter
+    @PermissionGrouper("financial-period")
     private final String FINANCIAL_PERIOD_ADD = "financial-period:add";
     @Getter
     @PermissionGrouper("financial-period")

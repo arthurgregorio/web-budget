@@ -23,6 +23,7 @@ import br.com.webbudget.application.components.ui.table.LazyDataProvider;
 import br.com.webbudget.application.components.ui.table.LazyModel;
 import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.FinancialPeriodService;
 import lombok.Getter;
@@ -48,6 +49,8 @@ import static br.com.webbudget.application.components.ui.NavigationManager.Param
 @Named
 @ViewScoped
 public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements LazyDataProvider<FinancialPeriod> {
+
+    private long periodToReopen;
 
     @Getter
     private boolean hasOpenPeriod;
@@ -146,6 +149,24 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
     }
 
     /**
+     * Reopen a give {@link FinancialPeriod}
+     */
+    public void doReopening() {
+        this.closeDialog("dialogReopeningConfirmation");
+    }
+
+    /**
+     * Display a message to the user asking if he wants to reopen the {@link FinancialPeriod}
+     *
+     * @param financialPeriodId to be reopened
+     */
+    public void showReopenConfirmationDialog(long financialPeriodId) {
+        this.value = this.financialPeriodRepository.findById(financialPeriodId)
+                .orElseThrow(() -> new BusinessLogicException("error.financial-period.not-found"));
+        this.updateAndOpenDialog("reopeningConfirmationDialog", "dialogReopeningConfirmation");
+    }
+
+    /**
      * Helper method to navigate to the closing page of the selected {@link FinancialPeriod}
      *
      * @param financialPeriodId the id of the selected {@link FinancialPeriod}
@@ -154,6 +175,16 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
     public String changeToClosing(long financialPeriodId) {
         return this.navigation.to("/secured/financial/closing/formClosing.xhtml",
                 of("id", financialPeriodId));
+    }
+
+    /**
+     * Helper method used to redirect to the statistics page
+     *
+     * @param financialPeriodId the id of the selected {@link FinancialPeriod}
+     * @return the outcome to the statistics page
+     */
+    public String changeToStatistics(long financialPeriodId) {
+        return "";
     }
 
     /**
