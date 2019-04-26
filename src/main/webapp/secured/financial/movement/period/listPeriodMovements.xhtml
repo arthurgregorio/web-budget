@@ -289,7 +289,7 @@
                             #{periodMovement.identification}
                         </p:column>
                         <p:column width="15%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['period-movement.list.value']}">
                             <h:outputText value="#{periodMovement.valueWithDiscount}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
@@ -300,13 +300,13 @@
                                           rendered="#{periodMovement.discountPresent}"/>
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['period-movement.list.due-date']}">
                             <h:outputText converter="localDateConverter"
                                           value="#{periodMovement.dueDate}"/>
                         </p:column>
                         <p:column width="15%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton title="#{menu['pay']}"
                                              icon="fa fa-hand-holding-usd"

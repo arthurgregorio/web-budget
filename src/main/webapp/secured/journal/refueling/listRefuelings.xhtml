@@ -115,28 +115,28 @@
                             #{refueling.vehicleIdentification}
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center" 
+                                  styleClass="text-center"
                                   headerText="#{messages['refueling.list.liters']}">
                             <h:outputText value="#{refueling.liters}">
                                 <f:convertNumber pattern="#0.00" />
                             </h:outputText>
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center" 
+                                  styleClass="text-center"
                                   headerText="#{messages['refueling.list.cost']}">
                             <h:outputText value="#{refueling.cost}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                             </h:outputText>
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center" 
+                                  styleClass="text-center"
                                   headerText="#{messages['refueling.list.cost-liter']}">
                             <h:outputText value="#{refueling.costPerLiter}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                             </h:outputText>
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center" 
+                                  styleClass="text-center"
                                   headerText="#{messages['refueling.list.average-consumption']}">
                             <h:outputText rendered="#{refueling.fullTank and not refueling.firstRefueling}"
                                           value="#{refueling.averageConsumption} Km/L">
@@ -152,7 +152,7 @@
                             </span>
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"

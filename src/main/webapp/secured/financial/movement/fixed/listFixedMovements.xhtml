@@ -91,7 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-6 align-right">
+                        <div class="col-xs-6 text-right">
                             <p:commandButton update="messages"
                                              value="#{menu['launch']}"
                                              onclick="submitSelected()"
@@ -130,7 +130,7 @@
 
                         <p:column width="5%"
                                   selectionMode="multiple"
-                                  styleClass="align-center"/>
+                                  styleClass="text-center"/>
 
                         <p:column headerText="#{messages['fixed-movement.list.identification']}">
                             <p:graphicImage width="20"
@@ -163,7 +163,7 @@
                             #{fixedMovement.identification}
                         </p:column>
                         <p:column width="10%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['fixed-movement.list.quotes']}">
                             <h:outputText rendered="#{fixedMovement.undetermined}"
                                           value="#{messages['fixed-movement.form.undetermined']}"/>
@@ -171,14 +171,14 @@
                                           value="#{fixedMovement.actualQuote}/#{fixedMovement.totalQuotes}"/>
                         </p:column>
                         <p:column width="15%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['fixed-movement.list.value']}">
                             <h:outputText value="#{fixedMovement.value}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </p:column>
                         <p:column width="10%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton process="@this"
                                              icon="fa fa-search"

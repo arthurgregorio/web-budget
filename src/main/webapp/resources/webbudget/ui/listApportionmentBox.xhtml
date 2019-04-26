@@ -71,23 +71,23 @@
                              value="#{cc.attrs.apportionments}"
                              emptyMessage="#{messages['list.empty']}">
 
-                    <p:column styleClass="align-center"
+                    <p:column styleClass="text-center"
                               headerText="#{messages['apportionment.list.cost-center']}">
                         #{apportionment.costCenterName}
                     </p:column>
-                    <p:column styleClass="align-center"
+                    <p:column styleClass="text-center"
                               headerText="#{messages['apportionment.list.movement-class']}">
                         #{apportionment.movementClassName}
                     </p:column>
                     <p:column width="20%"
-                              styleClass="align-center"
+                              styleClass="text-center"
                               headerText="#{messages['apportionment.list.value']}">
                         <h:outputText value="#{apportionment.value}">
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                         </h:outputText>
                     </p:column>
                     <p:column width="10%"
-                              styleClass="align-center"
+                              styleClass="text-center"
                               rendered="#{cc.attrs.renderButtons}"
                               headerText="#{messages['list.actions']}">
                         <p:commandButton immediate="true"

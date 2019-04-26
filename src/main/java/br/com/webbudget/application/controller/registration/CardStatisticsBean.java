@@ -21,12 +21,18 @@ import br.com.webbudget.application.components.dto.CreditCardInvoiceResume;
 import br.com.webbudget.application.components.ui.AbstractBean;
 import br.com.webbudget.application.components.ui.chart.LineChartDataset;
 import br.com.webbudget.application.components.ui.chart.LineChartModel;
+import br.com.webbudget.application.components.ui.chart.PieChartDataset;
+import br.com.webbudget.application.components.ui.chart.PieChartModel;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.registration.Card;
-import br.com.webbudget.domain.entities.view.PeriodResult;
+import br.com.webbudget.domain.entities.registration.CostCenter;
+import br.com.webbudget.domain.entities.view.CardConsume;
+import br.com.webbudget.domain.entities.view.CardConsumeDetailed;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepository;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
+import br.com.webbudget.domain.repositories.view.CardConsumeDetailedRepository;
+import br.com.webbudget.domain.repositories.view.CardConsumeRepository;
 import br.com.webbudget.infrastructure.utils.MessageSource;
 import lombok.Getter;
 
@@ -36,6 +42,8 @@ import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static br.com.webbudget.application.components.ui.chart.ChartUtils.percentageOf;
 
 /**
  * The {@link Card} statistics controller
@@ -59,11 +67,17 @@ public class CardStatisticsBean extends AbstractBean {
 
     @Getter
     private List<CreditCardInvoice> invoices;
+    @Getter
+    private List<CardConsumeDetailed> cardConsumesDetailed;
 
     @Inject
     private CardRepository cardRepository;
     @Inject
+    private CardConsumeRepository cardConsumeRepository;
+    @Inject
     private CreditCardInvoiceRepository creditCardInvoiceRepository;
+    @Inject
+    private CardConsumeDetailedRepository cardConsumeDetailedRepository;
 
     /**
      * Initialize this bean
@@ -86,21 +100,48 @@ public class CardStatisticsBean extends AbstractBean {
     public void loadChart() {
 
         this.resume = new CreditCardInvoiceResume();
-        this.resume.load(invoices);
+        this.resume.load(this.invoices);
 
-        this.loadValuesChart(invoices);
+        this.loadValuesChart();
+        this.loadConsumeChart();
 
-
+        this.cardConsumesDetailed = this.cardConsumeDetailedRepository.findByCardId(this.card.getId());
 
         this.loaded = true;
     }
 
     /**
-     * Draw the chart about last six {@link CreditCardInvoice} values
-     *
-     * @param invoices the list of {@link CreditCardInvoice}
+     * Draw a chart with the consume of this {@link Card} grouped by {@link CostCenter}
      */
-    private void loadValuesChart(List<CreditCardInvoice> invoices) {
+    private void loadConsumeChart() {
+
+        final List<CardConsume> cardConsumes = this.cardConsumeRepository.findByCardId(this.card.getId());
+
+        final BigDecimal total = cardConsumes.stream()
+                .map(CardConsume::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        final PieChartDataset dataset = new PieChartDataset("default");
+
+        cardConsumes.forEach(consume -> {
+            dataset.addColor(consume.getCostCenterColor());
+            dataset.addData(percentageOf(consume.getValue(), total, true));
+        });
+
+        final PieChartModel model = new PieChartModel();
+
+        model.addData(dataset);
+        model.addAllLabel(cardConsumes.stream()
+                .map(CardConsume::getCostCenter)
+                .collect(Collectors.toList()));
+
+        this.executeScript("drawPieChart(" + model.toJson() + ", 'consumeByCostCenterChart')");
+    }
+
+    /**
+     * Draw the chart about last six {@link CreditCardInvoice} values
+     */
+    private void loadValuesChart() {
 
         final Color blue = new Color(30, 144, 255);
 
@@ -109,14 +150,14 @@ public class CardStatisticsBean extends AbstractBean {
         valuesDataset.setLabel(MessageSource.get("card-statistics.chart.value"));
         valuesDataset.setBorderColor(blue.toString());
         valuesDataset.setBackgroundColor(blue.transparent().toString());
-        valuesDataset.addAllData(invoices.stream()
+        valuesDataset.addAllData(this.invoices.stream()
                 .map(CreditCardInvoice::getTotalValue)
                 .collect(Collectors.toList()));
 
         final LineChartModel<BigDecimal> model = new LineChartModel<>();
 
         model.addDataset(valuesDataset);
-        model.addAllLabels(invoices.stream()
+        model.addAllLabels(this.invoices.stream()
                 .map(invoice -> invoice.getFinancialPeriod().getIdentification())
                 .collect(Collectors.toList()));
 

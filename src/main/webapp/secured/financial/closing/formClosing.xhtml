@@ -70,7 +70,7 @@
                                                value="#{closingBean.openFinancialPeriods}"/>
                             </p:selectOneMenu>
                         </div>
-                        <div class="col-md-6 align-right">
+                        <div class="col-md-6 text-right">
                             <p:commandButton value="#{menu['process']}"
                                              onstart="PF('blocker').show()"
                                              oncomplete="PF('blocker').hide()"
@@ -97,7 +97,7 @@
         </h:form>
         <div jsf:id="closingResumeBox" class="row">
             <ui:fragment rendered="#{closingBean.closing eq null}">
-                <div class="col-md-12 align-center">
+                <div class="col-md-12 text-center">
                     <h3>#{messages['closing.form.message']}</h3>
                 </div>
             </ui:fragment>

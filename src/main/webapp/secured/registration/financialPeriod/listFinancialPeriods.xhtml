@@ -139,21 +139,21 @@
                             #{financialPeriod.identification}
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['financial-period.list.start']}">
                             <h:outputText value="#{financialPeriod.start}">
                                 <f:converter converterId="localDateConverter"/>
                             </h:outputText>
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['financial-period.list.end']}">
                             <h:outputText value="#{financialPeriod.end}">
                                 <f:converter converterId="localDateConverter"/>
                             </h:outputText>
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['financial-period.list.closing-date']}">
                             <h:outputText rendered="#{financialPeriod.closed eq true}"
                                           value="#{financialPeriod.closing.closingDate}">
@@ -163,7 +163,7 @@
                                           rendered="#{not financialPeriod.closed}"/>
                         </p:column>
                         <p:column width="12%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['financial-period.list.result']}">
                             <h:outputText rendered="#{financialPeriod.closed}"
                                           value="#{financialPeriod.accumulated}"
@@ -175,7 +175,7 @@
                         </p:column>
 
                         <p:column width="15%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-search"
                                              title="#{menu['detail']}"

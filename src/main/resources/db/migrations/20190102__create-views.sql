@@ -142,3 +142,36 @@ FROM registration.financial_periods fp
        JOIN financial.closings cl ON cl.id_financial_period = fp.id AND fp.closed = true;
 
 COMMENT ON VIEW financial.wb_view_005 IS 'Result of each closed financial period';
+
+-- view 006
+CREATE OR REPLACE VIEW financial.wb_view_006 AS
+SELECT ca.id AS card_id,
+       cc.color AS cost_center_color,
+       cc.name AS cost_center,
+       sum(pa.paid_value) AS total_value
+FROM financial.movements pm
+         JOIN financial.apportionments ap ON pm.id = ap.id_movement
+         JOIN registration.cost_centers cc ON ap.id_cost_center = cc.id
+         JOIN financial.payments pa ON pa.id = pm.id_payment
+         JOIN registration.cards ca ON ca.id = pa.id_card AND pa.payment_method::text = 'CREDIT_CARD'::text
+GROUP BY ca.id, cc.name, cc.color;
+
+COMMENT ON VIEW financial.wb_view_006 IS 'Consume of every card grouped by cost center';
+
+-- view 007
+CREATE OR REPLACE VIEW financial.wb_view_007 AS
+SELECT row_number() OVER () AS id,
+       ca.id AS card_id,
+       cc.name AS cost_center,
+       mc.name AS movement_class,
+       sum(pa.paid_value) AS total_value
+FROM financial.movements pm
+         JOIN financial.apportionments ap ON pm.id = ap.id_movement
+         JOIN registration.cost_centers cc ON ap.id_cost_center = cc.id
+         JOIN registration.movement_classes mc ON ap.id_movement_class = mc.id
+         JOIN financial.payments pa ON pa.id = pm.id_payment
+         JOIN registration.cards ca ON ca.id = pa.id_card AND pa.payment_method::text = 'CREDIT_CARD'::text
+GROUP BY ca.id, cc.name, mc.name
+ORDER BY (sum(pa.paid_value)) DESC, cc.name, mc.name;
+
+COMMENT ON VIEW financial.wb_view_007 IS 'A more detailed resume of every card consume';

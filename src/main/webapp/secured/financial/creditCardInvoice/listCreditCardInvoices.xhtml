@@ -120,7 +120,7 @@
                         <div class="col-md-4">
                             #{messages['credit-card-invoice.list.card']}:
                         </div>
-                        <div class="col-md-8 align-right">
+                        <div class="col-md-8 text-right">
                             #{invoice.card.readableName}
                         </div>
                     </div>
@@ -128,7 +128,7 @@
                         <div class="col-md-4">
                             #{messages['credit-card-invoice.list.total-value']}:
                         </div>
-                        <div class="col-md-8 align-right">
+                        <div class="col-md-8 text-right">
                             <h:outputText value="#{invoice.totalValue}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
@@ -138,7 +138,7 @@
                         <div class="col-md-4">
                             #{messages['credit-card-invoice.list.due-date']}:
                         </div>
-                        <div class="col-md-8 align-right">
+                        <div class="col-md-8 text-right">
                             <h:outputText value="#{invoice.dueDate}"
                                           converter="localDateConverter"/>
                         </div>

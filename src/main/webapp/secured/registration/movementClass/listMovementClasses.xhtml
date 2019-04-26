@@ -146,19 +146,19 @@
                             #{movementClass.name}
                         </p:column>
                         <p:column width="20%"
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['movement-class.list.cost-center']}">
                             #{movementClass.costCenter.name}
                         </p:column>
                         <p:column width="15%" 
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['movement-class.list.budget']}">
                             <h:outputText value="#{movementClass.budget}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
                             </h:outputText>
                         </p:column>
                         <p:column width="15%" 
-                                  styleClass="align-center"
+                                  styleClass="text-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"

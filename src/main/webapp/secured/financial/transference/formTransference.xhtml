@@ -85,14 +85,14 @@
                                                    value="#{transferenceBean.wallets}"/>
                                 </p:selectOneMenu>
                             </div>
-                            <div jsf:id="originBalanceBox" class="col-md-6 align-center">
+                            <div jsf:id="originBalanceBox" class="col-md-6 text-center">
                                 #{messages['transference.form.actual-balance']}
                                 <h:outputText styleClass="actual-balance #{transferenceBean.transference.originNegative ? 'text-red' : 'text-green'}"
                                               value="#{transferenceBean.transference.originBalance}">
                                     <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                                 </h:outputText>
                             </div>
-                            <div jsf:id="destinationBalanceBox" class="col-md-6 align-center">
+                            <div jsf:id="destinationBalanceBox" class="col-md-6 text-center">
                                 #{messages['transference.form.actual-balance']}
                                 <h:outputText styleClass="actual-balance #{transferenceBean.transference.destinationNegative ? 'text-red' : 'text-green'}"
                                               value="#{transferenceBean.transference.destinationBalance}">
@@ -136,7 +136,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-footer align-right">
+                <div class="box-footer text-right">
                     <p:commandButton update="transferenceForm"
                                      value="#{menu['transfer']}"
                                      styleClass="btn btn-flat btn-success"

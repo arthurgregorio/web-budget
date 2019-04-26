@@ -191,7 +191,7 @@
                         </div>
                         <div jsf:id="telephonesPanel"
                              class="col-sm-12">
-                            <div class="align-right" style="margin-bottom: 10px">
+                            <div class="text-right" style="margin-bottom: 10px">
 
                             </div>
                             <p:dataTable id="telephonesList"
@@ -203,11 +203,11 @@
                                          paginatorAlwaysVisible="false"
                                          value="#{contactBean.value.telephones}"
                                          emptyMessage="#{messages['list.empty']}">
-                                <p:column styleClass="align-center"
+                                <p:column styleClass="text-center"
                                           headerText="#{messages['telephone.list.number']}">
                                     #{telephone.number}
                                 </p:column>
-                                <p:column styleClass="align-center"
+                                <p:column styleClass="text-center"
                                           headerText="#{messages['telephone.list.type']}">
                                     #{enums[telephone.numberType]}
                                 </p:column>
@@ -215,7 +215,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-footer align-right">
+                <div class="box-footer text-right">
                     <ui:fragment rendered="#{contactBean.viewState.deleting}">
                         <h:outputText styleClass="text-red text-bold delete-text"
                                       value="#{messages['info.delete-confirmation']}"/>

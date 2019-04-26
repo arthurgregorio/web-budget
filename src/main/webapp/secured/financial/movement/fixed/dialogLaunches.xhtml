@@ -49,26 +49,26 @@
                          emptyMessage="#{messages['list.empty']}">
 
                 <p:column width="15%"
-                          styleClass="align-center"
+                          styleClass="text-center"
                           headerText="#{messages['launch.list.quote-number']}">
                     <h:outputText value="#{messages['no-data']}"
                                   rendered="#{launch.fixedMovement.undetermined}"/>
                     <h:outputText value="#{launch.quoteNumber}"
                                   rendered="#{not launch.fixedMovement.undetermined}"/>
                 </p:column>
-                <p:column styleClass="align-center"
+                <p:column styleClass="text-center"
                           headerText="#{messages['launch.list.launch-date']}">
                     <h:outputText value="#{launch.createdOn}">
                         <f:converter converterId="localDateTimeConverter"/>
                     </h:outputText>
                 </p:column>
-                <p:column styleClass="align-center"
+                <p:column styleClass="text-center"
                           headerText="#{messages['launches.list.financial-period']}">
                     #{launch.financialPeriod.identification}
                 </p:column>
             </p:dataTable>
         </div>
-        <div class="col-sm-12 align-right">
+        <div class="col-sm-12 text-right">
             <p:commandButton immediate="true"
                              value="#{menu['close']}"
                              styleClass="btn btn-flat btn-primary"

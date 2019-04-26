@@ -185,7 +185,7 @@
                         <div class="form-group col-md-8">
                             <h4>#{messages['refueling.form.fuels']}:</h4>
                         </div>
-                        <div class="form-group col-md-4 align-right">
+                        <div class="form-group col-md-4 text-right">
 
                         </div>
                         <div class="form-group col-md-12">
@@ -206,7 +206,7 @@
                                         update="totalsBox"
                                         listener="#{refuelingBean.value.totalize()}" />
                                 
-                                <p:column styleClass="align-center"
+                                <p:column styleClass="text-center"
                                           headerText="#{messages['fuel.list.type']}">
                                     <p:cellEditor>
                                         <f:facet name="input">
@@ -224,7 +224,7 @@
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                                <p:column styleClass="align-center"
+                                <p:column styleClass="text-center"
                                           headerText="#{messages['fuel.list.value-liter']}">
                                     <p:cellEditor>
                                         <f:facet name="input">
@@ -243,7 +243,7 @@
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                                <p:column styleClass="align-center"
+                                <p:column styleClass="text-center"
                                           headerText="#{messages['fuel.list.liters']}">
                                     <p:cellEditor>
                                         <f:facet name="input">
@@ -265,7 +265,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-footer align-right">
+                <div class="box-footer text-right">
                     <h:outputText styleClass="text-red text-bold"
                                   value="#{messages['info.delete-confirmation']}"
                                   rendered="#{refuelingBean.viewState.deleting}"/>

@@ -198,7 +198,7 @@
                         </div>
                         <div jsf:id="telephonesPanel"
                              class="col-sm-12">
-                            <div class="align-right" style="margin-bottom: 10px">
+                            <div class="text-right" style="margin-bottom: 10px">
                                 <p:commandButton immediate="true"
                                                  value="#{menu['new']}"
                                                  styleClass="btn btn-flat btn-primary"
@@ -213,16 +213,16 @@
                                          paginatorAlwaysVisible="false"
                                          value="#{contactBean.value.telephones}"
                                          emptyMessage="#{messages['list.empty']}">
-                                <p:column styleClass="align-center"
+                                <p:column styleClass="text-center"
                                           headerText="#{messages['telephone.list.number']}">
                                     #{telephone.number}
                                 </p:column>
-                                <p:column styleClass="align-center"
+                                <p:column styleClass="text-center"
                                           headerText="#{messages['telephone.list.type']}">
                                     #{enums[telephone.numberType]}
                                 </p:column>
                                 <p:column width="10%" 
-                                          styleClass="align-center"
+                                          styleClass="text-center"
                                           headerText="#{messages['list.actions']}">
                                     <p:commandButton immediate="true"
                                                      icon="fa fa-eraser"
@@ -234,7 +234,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-footer align-right">
+                <div class="box-footer text-right">
                     <p:commandButton update="contactForm"
                                      process="contactForm"
                                      value="#{menu['save']}"
