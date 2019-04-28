@@ -188,13 +188,6 @@
                                              action="#{financialPeriodBean.changeToStatistics(financialPeriod.id)}"
                                              rendered="#{financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DETAIL)}"/>
                             <p:spacer width="5"
-                                      rendered="#{financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_REOPEN)}"/>
-                            <p:commandButton icon="fa fa-redo"
-                                             title="#{menu['reopen']}"
-                                             styleClass="btn btn-flat btn-danger"
-                                             action="#{financialPeriodBean.showReopenConfirmationDialog(financialPeriod.id)}"
-                                             rendered="#{financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_REOPEN)}"/>
-                            <p:spacer width="5"
                                       rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
@@ -207,8 +200,5 @@
             </div>
         </div>
         <wb:blocker target="boxBody"/>
-    </ui:define>
-    <ui:define name="popups">
-        <ui:include src="dialogReopeningConfirmation.xhtml"/>
     </ui:define>
 </ui:composition>

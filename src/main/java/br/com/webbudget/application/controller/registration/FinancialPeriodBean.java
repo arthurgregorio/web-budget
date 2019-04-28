@@ -23,7 +23,6 @@ import br.com.webbudget.application.components.ui.table.LazyDataProvider;
 import br.com.webbudget.application.components.ui.table.LazyModel;
 import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.services.ClosingService;
 import br.com.webbudget.domain.services.FinancialPeriodService;
@@ -164,12 +163,8 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
 
     /**
      * Display a message to the user asking if he wants to reopen the {@link FinancialPeriod}
-     *
-     * @param financialPeriodId to be reopened
      */
-    public void showReopenConfirmationDialog(long financialPeriodId) {
-        this.value = this.financialPeriodRepository.findById(financialPeriodId)
-                .orElseThrow(() -> new BusinessLogicException("error.financial-period.not-found"));
+    public void showReopenConfirmationDialog() {
         this.updateAndOpenDialog("reopeningConfirmationDialog", "dialogReopeningConfirmation");
     }
 
