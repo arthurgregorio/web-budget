@@ -198,7 +198,7 @@ public class CreditCardInvoiceService {
      * @param card to create the invoice
      * @param financialPeriod to be used for the invoice
      */
-    private void createInvoice(Card card, FinancialPeriod financialPeriod) {
+    public void createInvoice(Card card, FinancialPeriod financialPeriod) {
 
         final CreditCardInvoice creditCardInvoice = new CreditCardInvoiceBuilder()
                 .card(card)

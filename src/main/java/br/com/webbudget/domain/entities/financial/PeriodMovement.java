@@ -241,4 +241,15 @@ public class PeriodMovement extends Movement {
         this.periodMovementState = PeriodMovementState.ACCOUNTED;
         return this;
     }
+
+    /**
+     * Method used when we need to reopen the {@link FinancialPeriod} and rollback the status of this movement to be
+     * Paid again
+     *
+     * @return this object
+     */
+    public PeriodMovement prepareToReopenPeriod() {
+        this.periodMovementState = PeriodMovementState.PAID;
+        return this;
+    }
 }

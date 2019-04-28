@@ -25,6 +25,7 @@ import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
+import br.com.webbudget.domain.services.ClosingService;
 import br.com.webbudget.domain.services.FinancialPeriodService;
 import lombok.Getter;
 import org.primefaces.model.LazyDataModel;
@@ -61,6 +62,8 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
     @Getter
     private LazyDataModel<FinancialPeriod> dataModel;
 
+    @Inject
+    private ClosingService closingService;
     @Inject
     private FinancialPeriodService financialPeriodService;
 
@@ -149,10 +152,14 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
     }
 
     /**
-     * Reopen a give {@link FinancialPeriod}
+     * Reopen a {@link FinancialPeriod}
      */
     public void doReopening() {
+        this.closingService.reopen(this.value);
+        this.updateComponent("itemsList");
         this.closeDialog("dialogReopeningConfirmation");
+        this.addInfo(true, "info.financial-period.reopened", this.value.getIdentification());
+        this.updateComponent("messages");
     }
 
     /**
@@ -184,7 +191,7 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
      * @return the outcome to the statistics page
      */
     public String changeToStatistics(long financialPeriodId) {
-        return "";
+        return this.navigation.to("", of("id", financialPeriodId));
     }
 
     /**

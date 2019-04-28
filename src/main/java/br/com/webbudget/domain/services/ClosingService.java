@@ -20,7 +20,9 @@ import br.com.webbudget.domain.calculators.PeriodMovementCalculator;
 import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
+import br.com.webbudget.domain.logics.BusinessLogic;
 import br.com.webbudget.domain.logics.financial.closing.ClosingSavingLogic;
+import br.com.webbudget.domain.logics.financial.closing.ReopenPeriodLogic;
 import br.com.webbudget.domain.repositories.financial.ClosingRepository;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -49,6 +51,9 @@ public class ClosingService {
 
     @Any
     @Inject
+    private Instance<ReopenPeriodLogic> reopenPeriodLogics;
+    @Any
+    @Inject
     private Instance<ClosingSavingLogic> closingSavingLogics;
 
     /**
@@ -72,6 +77,23 @@ public class ClosingService {
         closing.setAccumulated(lastClosingAccumulated.add(closing.getBalance()));
 
         this.closingRepository.save(closing);
+    }
+
+    /**
+     * Reopen the {@link FinancialPeriod}
+     *
+     * @param financialPeriod to reopened
+     */
+    @Transactional
+    public void reopen(FinancialPeriod financialPeriod) {
+
+        this.closingRepository.findLastClosing().ifPresent(closing -> {
+            if (!closing.getFinancialPeriod().getIdentification().equals(financialPeriod.getIdentification())) {
+                throw new BusinessLogicException("error.closing.not-last");
+            }
+        });
+
+        this.reopenPeriodLogics.forEach(logic -> logic.run(financialPeriod));
     }
 
     /**

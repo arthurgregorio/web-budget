@@ -161,4 +161,14 @@ public class FinancialPeriod extends PersistentEntity {
         this.closed = true;
         return this;
     }
+
+    /**
+     * Prepare this financial period to be reopened
+     *
+     * @return this object
+     */
+    public FinancialPeriod prepareToReopen() {
+        this.closed = false;
+        return this;
+    }
 }
