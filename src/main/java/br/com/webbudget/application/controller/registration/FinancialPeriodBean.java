@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Arthur Gregorio, AG.Software
+ * Copyright (C) 2014 Arthur Gregorio, AG.Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -186,7 +186,8 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
      * @return the outcome to the statistics page
      */
     public String changeToStatistics(long financialPeriodId) {
-        return this.navigation.to("", of("id", financialPeriodId));
+        return this.navigation.to("/secured/registration/financialPeriod/financialPeriodStatistics.xhtml",
+                of("id", financialPeriodId));
     }
 
     /**

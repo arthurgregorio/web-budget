@@ -83,11 +83,11 @@
                     </div>
                     <div class="col-md-4 text-right">
                         <p:commandButton process="@this"
-                                         update="chartBox"
                                          value="#{menu['update']}"
+                                         update="chartBox tableBox"
                                          styleClass="btn btn-flat btn-primary"
                                          disabled="#{empty cardStatisticsBean.invoices}"
-                                         actionListener="#{cardStatisticsBean.loadChart()}"/>
+                                         actionListener="#{cardStatisticsBean.loadCharts()}"/>
                     </div>
                 </div>
             </div>
@@ -184,7 +184,6 @@
                 </div>
             </ui:fragment>
         </div>
-
         <div jsf:id="tableBox" class="row">
             <ui:fragment rendered="#{not cardStatisticsBean.loaded}">
                 <div class="col-md-12 form-group text-center">
@@ -234,12 +233,11 @@
                 </div>
             </ui:fragment>
         </div>
-
         <h:form>
             <p:remoteCommand autoRun="true"
                              process="@this"
                              update="chartBox tableBox"
-                             actionListener="#{cardStatisticsBean.loadChart()}"
+                             actionListener="#{cardStatisticsBean.loadCharts()}"
                              rendered="#{not empty cardStatisticsBean.invoices}"/>
         </h:form>
     </ui:define>

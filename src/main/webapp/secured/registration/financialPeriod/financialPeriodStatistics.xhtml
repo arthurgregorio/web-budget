@@ -1,0 +1,100 @@
+<!--
+  Copyright (C) 2019 Arthur Gregorio, AG.Software
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template/mainTemplate.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{periodStatisticsBean.initialize(param.id)}"/>
+    </f:metadata>
+
+    <ui:define name="pageTitle">
+        #{messages['period-statistics.page-title']}
+    </ui:define>
+
+    <ui:define name="pageDescription">
+        <o:outputFormat value="#{messages['period-statistics.page-description']}">
+            <f:param value="#{periodStatisticsBean.financialPeriod.identification}"/>
+        </o:outputFormat>
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <li><a href="#">#{breadcrumb['registration']}</a></li>
+        <li><a href="listFinancialPeriods.xhtml">#{breadcrumb['registration.financial-periods']}</a></li>
+        <li class="active"><a href="#">#{breadcrumb['registration.financial-periods.statistics']}</a></li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:outputStylesheet library="chartjs" name="css/chart.min.css"/>
+
+        <h:outputScript library="chartjs" name="js/chart.min.js" target="head"/>
+        <h:outputScript library="webbudget" name="js/chart-manager.js" target="head"/>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <p:messages id="messages" closable="true"/>
+            </div>
+        </div>
+        <div class="box box-#{profileBean.currentThemeColorName}">
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-md-8">
+                        <span class="label label-success box-title"
+                              style="position: relative; top: 3px;"
+                              jsf:rendered="#{not periodStatisticsBean.financialPeriod.closed}">
+                            #{messages['financial-period.is-open']}
+                        </span>
+                        <span class="label label-danger box-title"
+                              style="position: relative; top: 3px;"
+                              jsf:rendered="#{periodStatisticsBean.financialPeriod.closed}">
+                            #{messages['financial-period.is-closed']}
+                        </span>
+                        <h3 class="box-title"
+                            style="position: relative; top: 4px;">
+                            <p:spacer width="5"/>
+                            <o:outputFormat escape="false"
+                                            value="#{messages['period-statistics.period-description']}">
+                                <f:param value="#{periodStatisticsBean.financialPeriod.identification}"/>
+                                <f:param value="#{periodStatisticsBean.startAsString}"/>
+                                <f:param value="#{periodStatisticsBean.endAsString}"/>
+                            </o:outputFormat>
+                        </h3>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <p:commandButton process="@this"
+                                         value="#{menu['update']}"
+                                         styleClass="btn btn-flat btn-primary"
+                                         actionListener="#{periodStatisticsBean.loadCharts()}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h:form>
+            <p:remoteCommand autoRun="true"
+                             process="@this"
+                             actionListener="#{periodStatisticsBean.loadCharts()}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

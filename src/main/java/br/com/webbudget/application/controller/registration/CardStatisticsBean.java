@@ -97,7 +97,7 @@ public class CardStatisticsBean extends AbstractBean {
     /**
      * Load charts on the UI
      */
-    public void loadChart() {
+    public void loadCharts() {
 
         this.resume = new CreditCardInvoiceResume();
         this.resume.load(this.invoices);
