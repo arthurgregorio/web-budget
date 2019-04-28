@@ -86,6 +86,7 @@
                                          update="chartBox"
                                          value="#{menu['update']}"
                                          styleClass="btn btn-flat btn-primary"
+                                         disabled="#{empty cardStatisticsBean.invoices}"
                                          actionListener="#{cardStatisticsBean.loadChart()}"/>
                     </div>
                 </div>
