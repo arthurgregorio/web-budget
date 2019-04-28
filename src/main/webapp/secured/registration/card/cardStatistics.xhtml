@@ -187,7 +187,8 @@
         <div jsf:id="tableBox" class="row">
             <ui:fragment rendered="#{not cardStatisticsBean.loaded}">
                 <div class="col-md-12 form-group text-center">
-                    <h3 class="box-title">
+                    <h3 class="box-title"
+                        jsf:rendered="#{not empty cardStatisticsBean.invoices}">
                         #{messages['card-statistics.loading.detailed-consume']}
                     </h3>
                 </div>
