@@ -17,36 +17,30 @@
 package br.com.webbudget.domain.repositories.view;
 
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import br.com.webbudget.domain.entities.view.PeriodResult;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
+import br.com.webbudget.domain.entities.view.DailyUse;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
- * The {@link PeriodResult} repository
+ * {@link DailyUse} repository
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 16/04/2019
+ * @since 3.0.0, 28/04/2019
  */
 @Repository
-public interface PeriodResultRepository extends EntityRepository<PeriodResult, Long> {
+public interface DailyUseRepository extends EntityRepository<DailyUse, Long> {
 
     /**
-     * List the first six results
-     *
-     * @return a {@link List} with the first six results
-     */
-    List<PeriodResult> findTop6OrderById();
-
-    /**
-     * Find the result for a specific {@link FinancialPeriod}
+     * List daily consumption by {@link FinancialPeriod} and direction
      *
      * @param financialPeriodId to use as filter
-     * @return an {@link Optional} of the result found
+     * @param direction used to filter revenues or expenses only
+     * @return a {@link List} of the {@link DailyUse}
      */
-    Optional<PeriodResult> findByFinancialPeriodId(Long financialPeriodId);
+    List<DailyUse> findByFinancialPeriodIdAndDirection(Long financialPeriodId, MovementClassType direction);
 }

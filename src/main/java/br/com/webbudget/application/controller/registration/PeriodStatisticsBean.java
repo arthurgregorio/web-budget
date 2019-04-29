@@ -16,16 +16,36 @@
  */
 package br.com.webbudget.application.controller.registration;
 
+import br.com.webbudget.application.components.dto.Color;
 import br.com.webbudget.application.components.ui.AbstractBean;
+import br.com.webbudget.application.components.ui.chart.LineChartDataset;
+import br.com.webbudget.application.components.ui.chart.LineChartModel;
+import br.com.webbudget.application.components.ui.chart.PieChartDataset;
+import br.com.webbudget.application.components.ui.chart.PieChartModel;
+import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.MovementClassType;
+import br.com.webbudget.domain.entities.view.DailyUse;
+import br.com.webbudget.domain.entities.view.PeriodResult;
+import br.com.webbudget.domain.entities.view.UseByCostCenter;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
+import br.com.webbudget.domain.repositories.view.DailyUseRepository;
+import br.com.webbudget.domain.repositories.view.PeriodResultRepository;
+import br.com.webbudget.domain.repositories.view.UseByCostCenterRepository;
+import br.com.webbudget.domain.repositories.view.UseByMovementClassRepository;
+import br.com.webbudget.infrastructure.utils.MessageSource;
 import lombok.Getter;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static br.com.webbudget.application.components.ui.chart.ChartUtils.percentageOf;
 
 /**
  * Controller for the {@link FinancialPeriod} statistics view
@@ -40,10 +60,28 @@ import java.time.format.DateTimeFormatter;
 public class PeriodStatisticsBean extends AbstractBean {
 
     @Getter
+    private boolean loaded;
+
+    @Getter
+    private BigDecimal revenues;
+    @Getter
+    private BigDecimal expenses;
+    @Getter
+    private BigDecimal balance;
+
+    @Getter
     private FinancialPeriod financialPeriod;
 
     @Inject
+    private DailyUseRepository dailyUseRepository;
+    @Inject
+    private PeriodResultRepository periodResultRepository;
+    @Inject
     private FinancialPeriodRepository financialPeriodRepository;
+    @Inject
+    private UseByCostCenterRepository useByCostCenterRepository;
+    @Inject
+    private UseByMovementClassRepository useByMovementClassRepository;
 
     /**
      * Initialize this view
@@ -51,6 +89,11 @@ public class PeriodStatisticsBean extends AbstractBean {
      * @param financialPeriodId to search for the {@link FinancialPeriod}
      */
     public void initialize(Long financialPeriodId) {
+
+        this.revenues = BigDecimal.ZERO;
+        this.expenses = BigDecimal.ZERO;
+        this.balance = BigDecimal.ZERO;
+
         this.financialPeriod = this.financialPeriodRepository.findById(financialPeriodId)
                 .orElseThrow(() -> new BusinessLogicException("error.period-statistics.period-not-found"));
     }
@@ -60,6 +103,141 @@ public class PeriodStatisticsBean extends AbstractBean {
      */
     public void loadCharts() {
 
+        this.loadRevenuesDailyChart();
+        this.loadExpensesDailyChart();
+
+        this.loadRevenuesCostCenterChart();
+        this.loadExpensesCostCenterChart();
+
+        if (this.financialPeriod.isClosed()) {
+
+            final PeriodResult periodResult = this.periodResultRepository
+                    .findByFinancialPeriodId(this.financialPeriod.getId()).orElseGet(PeriodResult::new);
+
+            this.revenues = periodResult.getRevenues();
+            this.expenses = periodResult.getExpenses();
+            this.balance = periodResult.getBalance();
+        } else {
+            // TODO when the period is open, calculate the resume
+        }
+
+        this.loaded = true;
+    }
+
+    /**
+     * Load revenues use chart by {@link CostCenter}
+     */
+    private void loadRevenuesCostCenterChart() {
+
+        final List<UseByCostCenter> revenues = this.useByCostCenterRepository
+                .findByFinancialPeriodIdAndDirection(this.financialPeriod.getId(), MovementClassType.REVENUE);
+
+        final BigDecimal total = revenues.stream()
+                .map(UseByCostCenter::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        final PieChartDataset dataset = new PieChartDataset("default");
+
+        revenues.forEach(use -> {
+            dataset.addColor(use.getCostCenterColor());
+            dataset.addData(percentageOf(use.getValue(), total, true));
+        });
+
+        final PieChartModel model = new PieChartModel();
+
+        model.addData(dataset);
+        model.addAllLabel(revenues.stream()
+                .map(UseByCostCenter::getCostCenter)
+                .collect(Collectors.toList()));
+
+        this.executeScript("drawPieChart(" + model.toJson() + ", 'revenuesUseByCostCenterChart')");
+    }
+
+    /**
+     * Load expenses use chart by {@link CostCenter}
+     */
+    private void loadExpensesCostCenterChart() {
+
+        final List<UseByCostCenter> expenses = this.useByCostCenterRepository
+                .findByFinancialPeriodIdAndDirection(this.financialPeriod.getId(), MovementClassType.EXPENSE);
+
+        final BigDecimal total = expenses.stream()
+                .map(UseByCostCenter::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        final PieChartDataset dataset = new PieChartDataset("default");
+
+        expenses.forEach(use -> {
+            dataset.addColor(use.getCostCenterColor());
+            dataset.addData(percentageOf(use.getValue(), total, true));
+        });
+
+        final PieChartModel model = new PieChartModel();
+
+        model.addData(dataset);
+        model.addAllLabel(expenses.stream()
+                .map(UseByCostCenter::getCostCenter)
+                .collect(Collectors.toList()));
+
+        this.executeScript("drawPieChart(" + model.toJson() + ", 'expensesUseByCostCenterChart')");
+    }
+
+    /**
+     * Load the chart of daily expenses
+     */
+    private void loadExpensesDailyChart() {
+
+        final List<DailyUse> expenses = this.dailyUseRepository
+                .findByFinancialPeriodIdAndDirection(this.financialPeriod.getId(), MovementClassType.EXPENSE);
+
+        final Color red = new Color(220, 20, 60);
+
+        final LineChartDataset<BigDecimal> expensesDataset = new LineChartDataset<>();
+
+        expensesDataset.setLabel(MessageSource.get("period-statistics.chart.expenses"));
+        expensesDataset.setBorderColor(red.toString());
+        expensesDataset.setBackgroundColor(red.transparent().toString());
+        expensesDataset.addAllData(expenses.stream()
+                .map(DailyUse::getValue)
+                .collect(Collectors.toList()));
+
+        final LineChartModel<BigDecimal> model = new LineChartModel<>();
+
+        model.addDataset(expensesDataset);
+        model.addAllLabels(expenses.stream()
+                .map(DailyUse::getPaymentDateAsString)
+                .collect(Collectors.toList()));
+
+        this.executeScript("drawLineChart(" + model.toJson() + ", 'dailyExpensesUseChart')");
+    }
+
+    /**
+     * Load the chart of daily revenues
+     */
+    private void loadRevenuesDailyChart() {
+
+        final List<DailyUse> revenues = this.dailyUseRepository
+                .findByFinancialPeriodIdAndDirection(this.financialPeriod.getId(), MovementClassType.REVENUE);
+
+        final Color green = new Color(34, 139, 34);
+
+        final LineChartDataset<BigDecimal> revenuesDataset = new LineChartDataset<>();
+
+        revenuesDataset.setLabel(MessageSource.get("period-statistics.chart.revenues"));
+        revenuesDataset.setBorderColor(green.toString());
+        revenuesDataset.setBackgroundColor(green.transparent().toString());
+        revenuesDataset.addAllData(revenues.stream()
+                .map(DailyUse::getValue)
+                .collect(Collectors.toList()));
+
+        final LineChartModel<BigDecimal> model = new LineChartModel<>();
+
+        model.addDataset(revenuesDataset);
+        model.addAllLabels(revenues.stream()
+                .map(DailyUse::getPaymentDateAsString)
+                .collect(Collectors.toList()));
+
+        this.executeScript("drawLineChart(" + model.toJson() + ", 'dailyRevenuesUseChart')");
     }
 
     /**
