@@ -58,7 +58,7 @@ public final class MessageSource {
             return MESSAGES.getString(key);
         }
         
-        LOG.error("No message found for key {0}", key);
+        LOG.error("No message found for key {}", key);
         
         return key;
     }

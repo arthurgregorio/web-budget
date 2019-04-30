@@ -16,31 +16,29 @@
  */
 package br.com.webbudget.domain.repositories.view;
 
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.entities.view.UseByMovementClass;
+import br.com.webbudget.domain.entities.view.OpenPeriodResult;
 import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
- * {@link UseByMovementClass} repository
+ * The {@link OpenPeriodResult} repository
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 3.0.0, 28/04/2019
+ * @since 3.0.0, 29/04/2019
  */
 @Repository
-public interface UseByMovementClassRepository extends EntityRepository<UseByMovementClass, Long> {
+public interface OpenPeriodResultRepository extends EntityRepository<OpenPeriodResult, Long> {
 
     /**
-     * Find all {@link UseByMovementClass} filtering by {@link FinancialPeriod} and direction
+     * Find the first line of the view, where the results are calculated
      *
-     * @param financialPeriodId to use as filter
-     * @param direction to use as filter
-     * @return a {@link List} of all {@link UseByMovementClass} found
+     * @return an {@link Optional} of the {@link OpenPeriodResult}
      */
-    List<UseByMovementClass> findByFinancialPeriodIdAndDirection(Long financialPeriodId, MovementClassType direction);
+    @Query("FROM OpenPeriodResult op WHERE op.id = (SELECT MAX(id) FROM OpenPeriodResult)")
+    Optional<OpenPeriodResult> load();
 }

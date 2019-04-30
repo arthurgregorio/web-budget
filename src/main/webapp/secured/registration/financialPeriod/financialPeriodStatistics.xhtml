@@ -197,10 +197,98 @@
                 </div>
             </div>
         </div>
+        <div jsf:id="movementClassUseBox" class="row">
+            <div class="col-md-6">
+                <div class="box box-#{profileBean.currentThemeColorName}">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            #{messages['period-statistics.expenses-by-movement-class']}
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p:dataTable rows="25"
+                                             rowHover="true"
+                                             paginator="true"
+                                             sortMode="multiple"
+                                             sortOrder="ascending"
+                                             paginatorPosition="bottom"
+                                             var="expenseByMovementClass"
+                                             paginatorAlwaysVisible="false"
+                                             emptyMessage="#{messages['list.empty']}"
+                                             value="#{periodStatisticsBean.expensesByMovementClass}">
+
+                                    <p:column sortBy="#{expenseByMovementClass.costCenter}"
+                                              headerText="#{messages['period-statistics.list.cost-center']}">
+                                        #{expenseByMovementClass.costCenter}
+                                    </p:column>
+                                    <p:column sortBy="#{expenseByMovementClass.movementClass}"
+                                              headerText="#{messages['period-statistics.list.movement-class']}">
+                                        #{expenseByMovementClass.movementClass}
+                                    </p:column>
+                                    <p:column width="20%"
+                                              styleClass="text-center"
+                                              sortBy="#{expenseByMovementClass.value}"
+                                              headerText="#{messages['period-statistics.list.value']}">
+                                        <h:outputText value="#{expenseByMovementClass.value}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-#{profileBean.currentThemeColorName}">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            #{messages['period-statistics.revenues-by-movement-class']}
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p:dataTable rows="25"
+                                             rowHover="true"
+                                             paginator="true"
+                                             sortMode="multiple"
+                                             sortOrder="ascending"
+                                             paginatorPosition="bottom"
+                                             var="revenuesByMovementClass"
+                                             paginatorAlwaysVisible="false"
+                                             emptyMessage="#{messages['list.empty']}"
+                                             value="#{periodStatisticsBean.revenuesByMovementClass}">
+
+                                    <p:column sortBy="#{revenuesByMovementClass.costCenter}"
+                                              headerText="#{messages['period-statistics.list.cost-center']}">
+                                        #{revenuesByMovementClass.costCenter}
+                                    </p:column>
+                                    <p:column sortBy="#{revenuesByMovementClass.movementClass}"
+                                              headerText="#{messages['period-statistics.list.movement-class']}">
+                                        #{revenuesByMovementClass.movementClass}
+                                    </p:column>
+                                    <p:column width="20%"
+                                              styleClass="text-center"
+                                              sortBy="#{revenuesByMovementClass.value}"
+                                              headerText="#{messages['period-statistics.list.value']}">
+                                        <h:outputText value="#{revenuesByMovementClass.value}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <h:form>
             <p:remoteCommand autoRun="true"
                              process="@this"
-                             update="resumeBox"
+                             update="resumeBox movementClassUseBox"
                              actionListener="#{periodStatisticsBean.loadCharts()}"/>
         </h:form>
     </ui:define>

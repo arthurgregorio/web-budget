@@ -25,21 +25,17 @@ import br.com.webbudget.application.components.ui.chart.PieChartModel;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
-import br.com.webbudget.domain.entities.view.DailyUse;
-import br.com.webbudget.domain.entities.view.PeriodResult;
-import br.com.webbudget.domain.entities.view.UseByCostCenter;
+import br.com.webbudget.domain.entities.view.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
-import br.com.webbudget.domain.repositories.view.DailyUseRepository;
-import br.com.webbudget.domain.repositories.view.PeriodResultRepository;
-import br.com.webbudget.domain.repositories.view.UseByCostCenterRepository;
-import br.com.webbudget.domain.repositories.view.UseByMovementClassRepository;
+import br.com.webbudget.domain.repositories.view.*;
 import br.com.webbudget.infrastructure.utils.MessageSource;
 import lombok.Getter;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.GET;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -72,6 +68,11 @@ public class PeriodStatisticsBean extends AbstractBean {
     @Getter
     private FinancialPeriod financialPeriod;
 
+    @Getter
+    private List<UseByMovementClass> revenuesByMovementClass;
+    @Getter
+    private List<UseByMovementClass> expensesByMovementClass;
+
     @Inject
     private DailyUseRepository dailyUseRepository;
     @Inject
@@ -80,6 +81,8 @@ public class PeriodStatisticsBean extends AbstractBean {
     private FinancialPeriodRepository financialPeriodRepository;
     @Inject
     private UseByCostCenterRepository useByCostCenterRepository;
+    @Inject
+    private OpenPeriodResultRepository openPeriodResultRepository;
     @Inject
     private UseByMovementClassRepository useByMovementClassRepository;
 
@@ -118,8 +121,19 @@ public class PeriodStatisticsBean extends AbstractBean {
             this.expenses = periodResult.getExpenses();
             this.balance = periodResult.getBalance();
         } else {
-            // TODO when the period is open, calculate the resume
+
+            final OpenPeriodResult openPeriodResult = this.openPeriodResultRepository.load()
+                    .orElseGet(OpenPeriodResult::new);
+
+            this.revenues = openPeriodResult.getRevenues();
+            this.expenses = openPeriodResult.getExpenses();
+            this.balance = openPeriodResult.getBalance();
         }
+
+        this.expensesByMovementClass = this.useByMovementClassRepository
+                .findByFinancialPeriodIdAndDirection(this.financialPeriod.getId(), MovementClassType.EXPENSE);
+        this.revenuesByMovementClass = this.useByMovementClassRepository
+                .findByFinancialPeriodIdAndDirection(this.financialPeriod.getId(), MovementClassType.REVENUE);
 
         this.loaded = true;
     }
