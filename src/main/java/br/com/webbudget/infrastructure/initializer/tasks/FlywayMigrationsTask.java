@@ -63,6 +63,7 @@ public class FlywayMigrationsTask implements InitializationTask {
                 .locations("db/migrations")
                 .baselineOnMigrate(true)
                 .baselineVersion("0")
+                .sqlMigrationPrefix("")
                 .load();
 
         final MigrationInfo migrationInfo = flyway.info().current();

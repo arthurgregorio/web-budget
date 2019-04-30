@@ -1,5 +1,5 @@
 /*
-  Create the views used at the reports and dashboards
+  Create the views used on the reports and dashboards
 */
 
 -- view 001
