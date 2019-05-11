@@ -126,15 +126,17 @@
                             <p:graphicImage width="20"
                                             height="20"
                                             library="webbudget"
-                                            name="images/orange-circle.png"
-                                            rendered="#{financialPeriod.expired}"
-                                            title="#{messages['financial-period.list.expired']}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
                                             name="images/red-circle.png"
                                             rendered="#{financialPeriod.closed}"
                                             title="#{messages['financial-period.list.closed']}"/>
+                            <p:spacer width="5"
+                                      rendered="#{financialPeriod.expired}"/>
+                            <p:graphicImage width="20"
+                                            height="20"
+                                            library="webbudget"
+                                            name="images/orange-circle.png"
+                                            rendered="#{financialPeriod.expired}"
+                                            title="#{messages['financial-period.list.expired']}"/>
                             <p:spacer width="5"/>
                             #{financialPeriod.identification}
                         </p:column>
