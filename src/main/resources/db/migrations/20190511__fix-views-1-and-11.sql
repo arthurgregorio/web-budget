@@ -1,5 +1,7 @@
+DROP VIEW financial.wb_view_001;
 DROP VIEW financial.wb_view_011;
 
+-- recreate view 011
 CREATE OR REPLACE VIEW financial.wb_view_011 AS
     WITH revenues_total AS (
         SELECT fp.id AS period_id,
@@ -40,3 +42,24 @@ CREATE OR REPLACE VIEW financial.wb_view_011 AS
     GROUP BY ofp.financial_period_id, ofp.financial_period, ofp.expired, ofp.revenues, ofp.expenses;
 
 COMMENT ON VIEW financial.wb_view_011 IS 'Quick resume of the current open period, excluding expired ones';
+
+-- recreate view 001
+CREATE OR REPLACE VIEW financial.wb_view_001 AS
+SELECT row_number() OVER () AS id,
+       mc.movement_class_type AS direction,
+       cc.id AS cost_center_id,
+       cc.name AS cost_center,
+       cc.color AS cost_center_color,
+       COALESCE(sum(pa.paid_value), 0::numeric) AS total_value
+FROM financial.movements pm
+         JOIN registration.financial_periods fp ON fp.id = pm.id_financial_period
+         JOIN financial.apportionments ap ON ap.id_movement = pm.id
+         JOIN registration.cost_centers cc ON cc.id = ap.id_cost_center
+         JOIN registration.movement_classes mc ON mc.id = ap.id_movement_class
+         JOIN financial.payments pa ON pa.id = pm.id_payment AND fp.closed = false AND pm.period_movement_type::text = 'MOVEMENT'::text AND pm.discriminator_value::text = 'PERIOD_MOVEMENT'::text
+GROUP BY cc.id, cc.name, mc.movement_class_type
+ORDER BY mc.movement_class_type;
+
+COMMENT ON VIEW financial.wb_view_001 IS 'List by the open financial periods all cost centers and the respective value spent or received in each one';
+
+

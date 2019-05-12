@@ -52,12 +52,6 @@ import static javax.persistence.EnumType.STRING;
 public class CostCenterTotal extends ImmutableEntity {
 
     @Getter
-    @Column(name = "financial_period_id")
-    private Long financialPeriodId;
-    @Getter
-    @Column(name = "financial_period")
-    private String financialPeriod;
-    @Getter
     @Enumerated(STRING)
     @Column(name = "direction")
     private MovementClassType direction;
