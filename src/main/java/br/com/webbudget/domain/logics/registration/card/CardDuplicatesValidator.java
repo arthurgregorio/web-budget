@@ -72,7 +72,7 @@ public class CardDuplicatesValidator implements CardSavingLogic, CardUpdatingLog
      */
     private void validateSaved(Card value) {
         final Optional<Card> found = this.find(value.getNumber(), value.getCardType());
-        if (found.isPresent() && found.get().equals(value)) {
+        if (found.isPresent() && !found.get().equals(value)) {
             throw new BusinessLogicException("error.card.duplicated");
         }
     }
