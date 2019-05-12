@@ -52,6 +52,9 @@
     </render-kit>
 
     <application>
+
+        <resource-handler>org.omnifaces.resourcehandler.CombinedResourceHandler</resource-handler>
+
         <!-- configuracao da locale -->
         <locale-config>
             <default-locale>pt_BR</default-locale>

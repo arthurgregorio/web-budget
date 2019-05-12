@@ -12,7 +12,7 @@
     font-family: 'ReklameScript';
     font-style: normal;
     font-weight: normal;
-    src: local('ReklameScript'), url("#{resource['webbudget:font/ReklameScript.otf']}") format('truetype');
+    src: local('ReklameScript'), url("#{resource['webbudget:fonts/ReklameScript.otf']}") format('truetype');
 }
 
 .wb-font {
