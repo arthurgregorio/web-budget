@@ -122,8 +122,8 @@ public class PeriodStatisticsBean extends AbstractBean {
             this.balance = periodResult.getBalance();
         } else {
 
-            final OpenPeriodResult openPeriodResult = this.openPeriodResultRepository.load()
-                    .orElseGet(OpenPeriodResult::new);
+            final OpenPeriodResult openPeriodResult = this.openPeriodResultRepository.findByFinancialPeriodIdAndExpired(
+                    this.financialPeriod.getId(), this.financialPeriod.isExpired()).orElseGet(OpenPeriodResult::new);
 
             this.revenues = openPeriodResult.getRevenues();
             this.expenses = openPeriodResult.getExpenses();

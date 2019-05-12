@@ -35,7 +35,7 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 3.0.0, 29/04/2019
  */
 @Entity
@@ -45,6 +45,15 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 @Table(name = "wb_view_011", schema = FINANCIAL)
 public class OpenPeriodResult extends ImmutableEntity {
 
+    @Getter
+    @Column(name = "financial_period_id")
+    private Long financialPeriodId;
+    @Getter
+    @Column(name = "financial_period")
+    private String financialPeriod;
+    @Getter
+    @Column(name = "expired")
+    private boolean expired;
     @Getter
     @Column(name = "revenues")
     private BigDecimal revenues;

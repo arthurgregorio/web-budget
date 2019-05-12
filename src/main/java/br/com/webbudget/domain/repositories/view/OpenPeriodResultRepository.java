@@ -18,7 +18,6 @@ package br.com.webbudget.domain.repositories.view;
 
 import br.com.webbudget.domain.entities.view.OpenPeriodResult;
 import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 
 import java.util.Optional;
@@ -39,6 +38,5 @@ public interface OpenPeriodResultRepository extends EntityRepository<OpenPeriodR
      *
      * @return an {@link Optional} of the {@link OpenPeriodResult}
      */
-    @Query("FROM OpenPeriodResult op WHERE op.id = (SELECT MAX(id) FROM OpenPeriodResult)")
-    Optional<OpenPeriodResult> load();
+    Optional<OpenPeriodResult> findByFinancialPeriodIdAndExpired(long financialPeriodId, boolean expired);
 }
