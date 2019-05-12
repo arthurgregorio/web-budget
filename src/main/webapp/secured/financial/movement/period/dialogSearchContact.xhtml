@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
+  Copyright (C) 2014 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -31,12 +31,12 @@
 
     <h:form id="searchGuarantorForm">
 
-        <p:focus context="inFilter" />
+        <p:focus context="inFilter"/>
         <p:defaultCommand target="btSearch"/>
 
         <div class="row">
             <div class="col-md-12">
-                <p:messages closable="true" >
+                <p:messages closable="true">
                     <p:autoUpdate/>
                 </p:messages>
             </div>
@@ -47,7 +47,7 @@
                     <p:inputText id="inFilter"
                                  styleClass="form-control"
                                  value="#{periodMovementBean.contactFilter}"
-                                 placeholder="#{messages['filter.contact']}" />
+                                 placeholder="#{messages['filter.contact']}"/>
                     <div class="input-group-btn" style="font-size: inherit">
                         <p:commandButton id="btSearch"
                                          update="itemsList"
@@ -55,7 +55,7 @@
                                          onstart="PF('blocker').show()"
                                          oncomplete="PF('blocker').hide()"
                                          styleClass="btn btn-flat btn-primary"
-                                         actionListener="#{periodMovementBean.searchContacts()}" />
+                                         actionListener="#{periodMovementBean.searchContacts()}"/>
                     </div>
                 </div>
             </div>

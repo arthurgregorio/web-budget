@@ -31,12 +31,12 @@
 
     <h:form id="searchGuarantorForm">
 
-        <p:focus context="inFilter" />
+        <p:focus context="inFilter"/>
         <p:defaultCommand target="btSearch"/>
 
         <div class="row">
             <div class="col-md-12">
-                <p:messages closable="true" >
+                <p:messages closable="true">
                     <p:autoUpdate/>
                 </p:messages>
             </div>
@@ -47,7 +47,7 @@
                     <p:inputText id="inFilter"
                                  styleClass="form-control"
                                  value="#{fixedMovementBean.contactFilter}"
-                                 placeholder="#{messages['filter.contact']}" />
+                                 placeholder="#{messages['filter.contact']}"/>
                     <div class="input-group-btn" style="font-size: inherit">
                         <p:commandButton id="btSearch"
                                          update="itemsList"
@@ -55,7 +55,7 @@
                                          onstart="PF('blocker').show()"
                                          oncomplete="PF('blocker').hide()"
                                          styleClass="btn btn-flat btn-primary"
-                                         actionListener="#{fixedMovementBean.searchContacts()}" />
+                                         actionListener="#{fixedMovementBean.searchContacts()}"/>
                     </div>
                 </div>
             </div>

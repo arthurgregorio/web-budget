@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
+  Copyright (C) 2014 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
     <ui:define name="content">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <p:messages id="messages" closable="true" />
+                <p:messages id="messages" closable="true"/>
             </div>
         </div>
         <div class="box box-#{profileBean.currentThemeColorName}">
@@ -58,14 +58,14 @@
                                 <f:selectItems var="entityStatus"
                                                itemValue="#{entityStatus}"
                                                itemLabel="#{enums[entityStatus]}"
-                                               value="#{cardBean.filter.entityStatusValues}"/> 
+                                               value="#{cardBean.filter.entityStatusValues}"/>
                             </p:selectOneMenu>
                         </div>
                         <div class="col-xs-4">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{cardBean.filter.value}"
-                                             placeholder="#{messages['filter.card']}" />
+                                             placeholder="#{messages['filter.card']}"/>
                                 <div class="input-group-btn">
                                     <p:commandButton id="btSearch"
                                                      update="itemsList"
@@ -89,7 +89,7 @@
                                 <p:commandButton immediate="true"
                                                  value="#{menu['new']}"
                                                  action="#{cardBean.changeToAdd()}"
-                                                 styleClass="btn btn-flat btn-primary" 
+                                                 styleClass="btn btn-flat btn-primary"
                                                  rendered="#{userSessionBean.isPermitted(permissions.CARD_ADD)}"/>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                                  paginator="true"
                                  rowKey="#{card.id}"
                                  sortOrder="ascending"
-                                 selectionMode="single" 
+                                 selectionMode="single"
                                  paginatorPosition="bottom"
                                  selection="#{cardBean.value}"
                                  value="#{cardBean.dataModel}"
@@ -132,7 +132,7 @@
                             <p:spacer width="5"/>
                             #{card.readableName}
                         </p:column>
-                        <p:column width="20%" 
+                        <p:column width="20%"
                                   styleClass="text-center"
                                   headerText="#{messages['card.list.owner']}">
                             #{card.owner}
@@ -142,27 +142,27 @@
                                   headerText="#{messages['card.list.type']}">
                             #{enums[card.cardType]}
                         </p:column>
-                        <p:column width="15%" 
+                        <p:column width="15%"
                                   styleClass="text-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-chart-line"
                                              title="#{menu['statistics']}"
                                              styleClass="btn btn-flat btn-default"
-                                             action="#{cardBean.changeToStatistics(card.id)}" 
+                                             action="#{cardBean.changeToStatistics(card.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.CARD_STATISTICS)}"/>
                             <p:spacer width="5"
                                       rendered="#{userSessionBean.isPermitted(permissions.CARD_STATISTICS)}"/>
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
-                                             action="#{cardBean.changeToEdit(card.id)}" 
+                                             action="#{cardBean.changeToEdit(card.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.CARD_UPDATE)}"/>
                             <p:spacer width="5"
                                       rendered="#{userSessionBean.isPermitted(permissions.CARD_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
-                                             action="#{cardBean.changeToDelete(card.id)}" 
+                                             action="#{cardBean.changeToDelete(card.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.CARD_DELETE)}"/>
                         </p:column>
                     </p:dataTable>

@@ -54,6 +54,7 @@
 
     <ui:define name="content">
         <h:form id="userForm" prependId="false">
+            <wb:blocker target="userForm"/>
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true"/>
@@ -177,6 +178,5 @@
                 </div>
             </div>
         </h:form>
-        <wb:blocker target="userForm"/>
     </ui:define>
 </ui:composition>

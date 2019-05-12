@@ -36,7 +36,7 @@
     <ui:define name="pageDescription">
         <h:outputText rendered="#{contactBean.viewState.adding}"
                       value="#{messages['contact.page-description-adding']}"/>
-        <o:outputFormat id="pageDescription" 
+        <o:outputFormat id="pageDescription"
                         rendered="#{contactBean.viewState.editing}"
                         value="#{messages['contact.page-description-editing']}">
             <f:param value="#{contactBean.value.name}"/>
@@ -54,9 +54,10 @@
 
     <ui:define name="content">
         <h:form id="contactForm" prependId="false">
+            <wb:blocker target="contactForm"/>
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" />
+                    <p:messages id="messages" closable="true"/>
                 </div>
             </div>
             <div class="box box-#{profileBean.currentThemeColorName}">
@@ -69,31 +70,31 @@
                 <div class="box-body row">
                     <div class="col-md-6 col-sm-6 col-xs-6 no-padding">
                         <div class="form-group col-md-12">
-                            <p:outputLabel for="inName" 
+                            <p:outputLabel for="inName"
                                            value="#{messages['contact.form.name']}: "/>
-                            <p:inputText id="inName" 
+                            <p:inputText id="inName"
                                          maxlength="90"
                                          styleClass="form-control"
-                                         value="#{contactBean.value.name}" />
+                                         value="#{contactBean.value.name}"/>
                         </div>
                         <div class="form-group col-md-4">
-                            <p:outputLabel for="inBirthDate" 
+                            <p:outputLabel for="inBirthDate"
                                            value="#{messages['contact.form.birth-date']}: "/>
-                            <p:calendar id="inBirthDate" 
+                            <p:calendar id="inBirthDate"
                                         mask="true"
                                         pattern="dd/MM/yyyy"
                                         converter="localDateConverter"
-                                        value="#{contactBean.value.birthDate}" />
+                                        value="#{contactBean.value.birthDate}"/>
                         </div>
                         <div class="form-group col-md-4">
-                            <p:outputLabel for="inContactType" 
+                            <p:outputLabel for="inContactType"
                                            value="#{messages['contact.form.contact-type']}: "/>
-                            <p:selectOneMenu id="inContactType" 
+                            <p:selectOneMenu id="inContactType"
                                              value="#{contactBean.value.contactType}"
                                              converter="omnifaces.GenericEnumConverter">
                                 <f:selectItem itemValue="#{null}"
                                               noSelectionOption="true"
-                                              itemLabel="#{menu['select-one']}" />
+                                              itemLabel="#{menu['select-one']}"/>
                                 <f:selectItems var="contactType"
                                                itemValue="#{contactType}"
                                                itemLabel="#{enums[contactType]}"
@@ -101,41 +102,44 @@
                             </p:selectOneMenu>
                         </div>
                         <div class="form-group col-md-4">
-                            <p:outputLabel for="inDocument" 
+                            <p:outputLabel for="inDocument"
                                            value="#{messages['contact.form.document']}: "/>
-                            <p:inputText id="inDocument" 
+                            <p:inputText id="inDocument"
                                          maxlength="45"
                                          styleClass="form-control"
-                                         value="#{contactBean.value.document}" />
+                                         value="#{contactBean.value.document}"/>
                         </div>
                         <div class="form-group col-md-12">
-                            <p:outputLabel for="inEmail" 
+                            <p:outputLabel for="inEmail"
                                            value="#{messages['contact.form.email']}: "/>
-                            <p:inputText id="inEmail" 
+                            <p:inputText id="inEmail"
                                          maxlength="90"
                                          styleClass="form-control"
-                                         value="#{contactBean.value.email}" />
+                                         value="#{contactBean.value.email}"/>
                         </div>
                         <div class="col-md-12">
-                            <p:outputLabel for="inOtherInformations" 
+                            <p:outputLabel for="inOtherInformations"
                                            value="#{messages['contact.form.other-informations']}: "/>
-                            <p:inputTextarea id="inOtherInformations" 
+                            <p:inputTextarea id="inOtherInformations"
                                              maxlength="255"
                                              autoResize="true"
                                              styleClass="form-control"
-                                             value="#{contactBean.value.otherInformation}" />
+                                             value="#{contactBean.value.otherInformation}"/>
                         </div>
                     </div>
-                    <div jsf:id="addressBox" 
+                    <div jsf:id="addressBox"
                          class="col-md-6 col-sm-6 col-xs-6 no-padding">
+
+                        <wb:blocker target="addressBox" name="adressBlocker"/>
+
                         <div class="form-group col-md-3">
-                            <p:outputLabel for="inZipcode" 
+                            <p:outputLabel for="inZipcode"
                                            value="#{messages['contact.form.zipcode']}: "/>
                             <div class="input-group">
-                                <p:inputMask id="inZipcode" 
+                                <p:inputMask id="inZipcode"
                                              mask="99999-999"
                                              styleClass="form-control"
-                                             value="#{contactBean.value.zipcode}" />
+                                             value="#{contactBean.value.zipcode}"/>
                                 <div class="input-group-btn">
                                     <p:commandButton icon="fa fa-search"
                                                      process="@this inZipcode"
@@ -147,54 +151,54 @@
                             </div>
                         </div>
                         <div class="form-group col-md-9">
-                            <p:outputLabel for="inStreet" 
+                            <p:outputLabel for="inStreet"
                                            value="#{messages['contact.form.street']}: "/>
-                            <p:inputText id="inStreet" 
+                            <p:inputText id="inStreet"
                                          maxlength="120"
                                          styleClass="form-control"
-                                         value="#{contactBean.value.street}" />
-                        </div>                        
+                                         value="#{contactBean.value.street}"/>
+                        </div>
                         <div class="form-group col-md-2">
-                            <p:outputLabel for="inNumber" 
+                            <p:outputLabel for="inNumber"
                                            value="#{messages['contact.form.number']}: "/>
-                            <p:inputText id="inNumber" 
+                            <p:inputText id="inNumber"
                                          maxlength="6"
                                          styleClass="form-control"
                                          value="#{contactBean.value.number}">
                                 <p:keyFilter mask="num"/>
                             </p:inputText>
-                        </div>                        
+                        </div>
                         <div class="form-group col-md-4">
-                            <p:outputLabel for="inComplement" 
+                            <p:outputLabel for="inComplement"
                                            value="#{messages['contact.form.complement']}: "/>
-                            <p:inputText id="inComplement" 
+                            <p:inputText id="inComplement"
                                          maxlength="120"
                                          styleClass="form-control"
-                                         value="#{contactBean.value.complement}" />
+                                         value="#{contactBean.value.complement}"/>
                         </div>
                         <div class="form-group col-md-6">
-                            <p:outputLabel for="inNeighborhood" 
+                            <p:outputLabel for="inNeighborhood"
                                            value="#{messages['contact.form.neighborhood']}: "/>
-                            <p:inputText id="inNeighborhood" 
+                            <p:inputText id="inNeighborhood"
                                          maxlength="45"
                                          styleClass="form-control"
-                                         value="#{contactBean.value.neighborhood}" />
+                                         value="#{contactBean.value.neighborhood}"/>
                         </div>
                         <div class="form-group col-md-6">
-                            <p:outputLabel for="inCity" 
+                            <p:outputLabel for="inCity"
                                            value="#{messages['contact.form.city']}: "/>
-                            <p:inputText id="inCity" 
+                            <p:inputText id="inCity"
                                          maxlength="120"
                                          styleClass="form-control"
-                                         value="#{contactBean.value.city}" />
+                                         value="#{contactBean.value.city}"/>
                         </div>
                         <div class="form-group col-md-6">
-                            <p:outputLabel for="inProvince" 
+                            <p:outputLabel for="inProvince"
                                            value="#{messages['contact.form.province']}: "/>
-                            <p:inputText id="inProvince" 
+                            <p:inputText id="inProvince"
                                          maxlength="45"
                                          styleClass="form-control"
-                                         value="#{contactBean.value.province}" />
+                                         value="#{contactBean.value.province}"/>
                         </div>
                         <div jsf:id="telephonesPanel"
                              class="col-sm-12">
@@ -204,7 +208,7 @@
                                                  styleClass="btn btn-flat btn-primary"
                                                  action="#{contactBean.showTelephoneDialog()}"/>
                             </div>
-                            <p:dataTable id="telephonesList" 
+                            <p:dataTable id="telephonesList"
                                          rows="5"
                                          var="telephone"
                                          rowHover="true"
@@ -221,14 +225,14 @@
                                           headerText="#{messages['telephone.list.type']}">
                                     #{enums[telephone.numberType]}
                                 </p:column>
-                                <p:column width="10%" 
+                                <p:column width="10%"
                                           styleClass="text-center"
                                           headerText="#{messages['list.actions']}">
                                     <p:commandButton immediate="true"
                                                      icon="fa fa-eraser"
                                                      title="#{menu['delete']}"
                                                      styleClass="btn btn-flat btn-danger"
-                                                     actionListener="#{contactBean.deleteTelephone(telephone)}" />
+                                                     actionListener="#{contactBean.deleteTelephone(telephone)}"/>
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -254,16 +258,13 @@
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
-                                     styleClass="btn btn-flat btn-primary" 
+                                     styleClass="btn btn-flat btn-primary"
                                      action="#{contactBean.changeToListing()}"/>
                 </div>
             </div>
-            <wb:blocker target="addressBox"
-                        name="adressBlocker"/>
         </h:form>
-        <wb:blocker target="contactForm"/>
     </ui:define>
     <ui:define name="popups">
-        <ui:include src="dialogTelephone.xhtml" />
+        <ui:include src="dialogTelephone.xhtml"/>
     </ui:define>
 </ui:composition>

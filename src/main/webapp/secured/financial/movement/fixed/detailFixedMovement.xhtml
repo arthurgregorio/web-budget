@@ -63,7 +63,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true">
-                        <p:autoUpdate />
+                        <p:autoUpdate/>
                     </p:messages>
                 </div>
             </div>
@@ -190,7 +190,8 @@
                                          action="#{fixedMovementBean.doDelete()}"/>
                         <p:spacer width="5"/>
                     </ui:fragment>
-                    <ui:fragment rendered="#{fixedMovementBean.viewState.detailing and not fixedMovementBean.value.finished}">
+                    <ui:fragment
+                            rendered="#{fixedMovementBean.viewState.detailing and not fixedMovementBean.value.finished}">
                         <p:commandButton immediate="true"
                                          value="#{menu['delete']}"
                                          styleClass="btn btn-flat btn-danger"

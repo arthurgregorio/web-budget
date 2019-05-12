@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true">
-                        <p:autoUpdate />
+                        <p:autoUpdate/>
                     </p:messages>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <p:outputLabel for="inActualBalance"
-                                               value="#{messages['balance-adjustment.form.actual-balance']}: " />
+                                               value="#{messages['balance-adjustment.form.actual-balance']}: "/>
                                 <p:inputText id="inActualBalance"
                                              readonly="true"
                                              styleClass="form-control"
@@ -75,7 +75,7 @@
                                                thousandSeparator="."
                                                minValue="-99999999.99"
                                                value="#{balanceAdjustmentBean.adjustmentValue}">
-                                    <f:converter converterId="javax.faces.BigDecimal" />
+                                    <f:converter converterId="javax.faces.BigDecimal"/>
                                     <p:keyFilter mask="num"/>
                                 </p:inputNumber>
                             </div>

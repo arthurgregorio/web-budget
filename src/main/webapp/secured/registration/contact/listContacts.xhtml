@@ -44,7 +44,7 @@
     <ui:define name="content">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <p:messages id="messages" closable="true" />
+                <p:messages id="messages" closable="true"/>
             </div>
         </div>
         <div class="box box-#{profileBean.currentThemeColorName}">
@@ -58,14 +58,14 @@
                                 <f:selectItems var="entityStatus"
                                                itemValue="#{entityStatus}"
                                                itemLabel="#{enums[entityStatus]}"
-                                               value="#{contactBean.filter.entityStatusValues}"/> 
+                                               value="#{contactBean.filter.entityStatusValues}"/>
                             </p:selectOneMenu>
                         </div>
                         <div class="col-xs-4">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{contactBean.filter.value}"
-                                             placeholder="#{messages['filter.contact']}" />
+                                             placeholder="#{messages['filter.contact']}"/>
                                 <div class="input-group-btn">
                                     <p:commandButton id="btSearch"
                                                      update="itemsList"
@@ -89,7 +89,7 @@
                                 <p:commandButton immediate="true"
                                                  value="#{menu['new']}"
                                                  action="#{contactBean.changeToAdd()}"
-                                                 styleClass="btn btn-flat btn-primary" 
+                                                 styleClass="btn btn-flat btn-primary"
                                                  rendered="#{userSessionBean.isPermitted(permissions.CONTACT_ADD)}"/>
                             </div>
                         </div>
@@ -98,52 +98,52 @@
             </div>
             <div jsf:id="boxBody" class="box-body">
                 <h:form id="itemsList">
-                        <p:dataTable rows="25"
-                                     var="contact"
-                                     lazy="true"
-                                     rowHover="true"
-                                     paginator="true"
-                                     sortOrder="ascending"
-                                     rowKey="#{contact.id}"
-                                     selectionMode="single" 
-                                     paginatorPosition="bottom"
-                                     paginatorAlwaysVisible="false"
-                                     selection="#{contactBean.value}"
-                                     value="#{contactBean.dataModel}"
-                                     emptyMessage="#{messages['list.empty']}">
+                    <p:dataTable rows="25"
+                                 var="contact"
+                                 lazy="true"
+                                 rowHover="true"
+                                 paginator="true"
+                                 sortOrder="ascending"
+                                 rowKey="#{contact.id}"
+                                 selectionMode="single"
+                                 paginatorPosition="bottom"
+                                 paginatorAlwaysVisible="false"
+                                 selection="#{contactBean.value}"
+                                 value="#{contactBean.dataModel}"
+                                 emptyMessage="#{messages['list.empty']}">
 
-                            <p:ajax event="rowSelect"
-                                    listener="#{contactBean.changeToDetail()}"
-                                    disabled="#{not userSessionBean.isPermitted(permissions.CONTACT_DETAIL)}"/>
+                        <p:ajax event="rowSelect"
+                                listener="#{contactBean.changeToDetail()}"
+                                disabled="#{not userSessionBean.isPermitted(permissions.CONTACT_DETAIL)}"/>
 
-                            <p:column headerText="#{messages['contact.list.name']}">
-                                <p:graphicImage width="20"
-                                                height="20"
-                                                library="webbudget"
-                                                name="images/inactive.png"
-                                                rendered="#{not contact.active}"
-                                                title="#{messages['list.inactive']}"/>
-                                <p:graphicImage width="20"
-                                                height="20"
-                                                library="webbudget"
-                                                name="images/active.png"
-                                                rendered="#{contact.active}"
-                                                title="#{messages['list.active']}"/>
-                                <p:spacer width="5"/>
+                        <p:column headerText="#{messages['contact.list.name']}">
+                            <p:graphicImage width="20"
+                                            height="20"
+                                            library="webbudget"
+                                            name="images/inactive.png"
+                                            rendered="#{not contact.active}"
+                                            title="#{messages['list.inactive']}"/>
+                            <p:graphicImage width="20"
+                                            height="20"
+                                            library="webbudget"
+                                            name="images/active.png"
+                                            rendered="#{contact.active}"
+                                            title="#{messages['list.active']}"/>
+                            <p:spacer width="5"/>
                             #{contact.name}
                         </p:column>
-                        <p:column width="20%" 
+                        <p:column width="20%"
                                   styleClass="text-center"
                                   headerText="#{messages['contact.list.type']}">
                             #{enums[contact.contactType]}
                         </p:column>
-                        <p:column width="20%" 
+                        <p:column width="20%"
                                   styleClass="text-center"
                                   headerText="#{messages['contact.list.document']}">
                             #{contact.documentFormatted}
                         </p:column>
 
-                        <p:column width="15%" 
+                        <p:column width="15%"
                                   style="text-align: center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-edit"

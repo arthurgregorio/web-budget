@@ -63,6 +63,7 @@
 
     <ui:define name="content">
         <h:form id="costCenterForm" prependId="false">
+            <wb:blocker target="costCenterForm"/>
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true">
@@ -183,6 +184,5 @@
                 </div>
             </div>
         </h:form>
-        <wb:blocker target="costCenterForm"/>
     </ui:define>
 </ui:composition>

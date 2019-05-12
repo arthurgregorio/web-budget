@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
+  Copyright (C) 2014 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -55,10 +55,11 @@
 
     <ui:define name="content">
         <h:form id="movementClassForm" prependId="false">
+            <wb:blocker target="movementClassForm"/>
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" >
-                        <p:autoUpdate />
+                    <p:messages id="messages" closable="true">
+                        <p:autoUpdate/>
                     </p:messages>
                 </div>
             </div>
@@ -72,23 +73,23 @@
                 </div>
                 <div class="box-body row">
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inName" 
+                        <p:outputLabel for="inName"
                                        value="#{messages['movement-class.form.name']}: "/>
-                        <p:inputText id="inName" 
+                        <p:inputText id="inName"
                                      styleClass="form-control"
                                      value="#{movementClassBean.value.name}"
                                      disabled="#{movementClassBean.viewState.editing}"/>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inMovementClassType" 
+                        <p:outputLabel for="inMovementClassType"
                                        value="#{messages['movement-class.form.movement-class-type']}: "/>
-                        <p:selectOneMenu id="inMovementClassType" 
+                        <p:selectOneMenu id="inMovementClassType"
                                          value="#{movementClassBean.value.movementClassType}"
                                          converter="omnifaces.GenericEnumConverter"
                                          disabled="#{movementClassBean.viewState.editing}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{menu['select-one']}" />
+                                          itemLabel="#{menu['select-one']}"/>
                             <f:selectItems var="movementClassType"
                                            itemValue="#{movementClassType}"
                                            itemLabel="#{enums[movementClassType]}"
@@ -96,30 +97,30 @@
                         </p:selectOneMenu>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inCostCenter" 
+                        <p:outputLabel for="inCostCenter"
                                        value="#{messages['movement-class.form.cost-center']}: "/>
-                        <p:selectOneMenu id="inCostCenter" 
+                        <p:selectOneMenu id="inCostCenter"
                                          converter="omnifaces.SelectItemsConverter"
-                                         value="#{movementClassBean.value.costCenter}" >
+                                         value="#{movementClassBean.value.costCenter}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{menu['select-one']}" />
-                            <f:selectItems var="costCenter" 
+                                          itemLabel="#{menu['select-one']}"/>
+                            <f:selectItems var="costCenter"
                                            itemValue="#{costCenter}"
                                            itemLabel="#{costCenter.name}"
-                                           value="#{movementClassBean.costCenters}" /> 
+                                           value="#{movementClassBean.costCenters}"/>
                         </p:selectOneMenu>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inBudget" 
+                        <p:outputLabel for="inBudget"
                                        value="#{messages['movement-class.form.budget']}: "/>
-                        <p:inputNumber id="inBudget" 
-                                        symbol="R$ "
-                                        decimalPlaces="2" 
-                                        decimalSeparator="," 
-                                        thousandSeparator="." 
-                                        value="#{movementClassBean.value.budget}">
-                            <f:converter converterId="javax.faces.BigDecimal" />
+                        <p:inputNumber id="inBudget"
+                                       symbol="R$ "
+                                       decimalPlaces="2"
+                                       decimalSeparator=","
+                                       thousandSeparator="."
+                                       value="#{movementClassBean.value.budget}">
+                            <f:converter converterId="javax.faces.BigDecimal"/>
                         </p:inputNumber>
                     </div>
                 </div>
@@ -159,6 +160,5 @@
                 </div>
             </div>
         </h:form>
-        <wb:blocker target="movementClassForm"/>
     </ui:define>
 </ui:composition>

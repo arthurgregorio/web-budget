@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
+  Copyright (C) 2014 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
     <ui:define name="pageDescription">
         <h:outputText rendered="#{cardBean.viewState.adding}"
                       value="#{messages['card.page-description-adding']}"/>
-        <o:outputFormat id="pageDescription" 
+        <o:outputFormat id="pageDescription"
                         rendered="#{cardBean.viewState.editing}"
                         value="#{messages['card.page-description-editing']}">
             <f:param value="#{cardBean.value.readableName}"/>
@@ -54,105 +54,106 @@
 
     <ui:define name="content">
         <h:form id="cardForm" prependId="false">
+            <wb:blocker target="cardForm"/>
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" />
+                    <p:messages id="messages" closable="true"/>
                 </div>
             </div>
             <div class="box box-#{profileBean.currentThemeColorName}">
                 <div class="box-header with-border">
                     <h3 class="box-title">
-                        <p:selectBooleanCheckbox id="inBlocked" 
+                        <p:selectBooleanCheckbox id="inBlocked"
                                                  value="#{cardBean.value.active}"
                                                  itemLabel="#{messages['form.active']}"/>
                     </h3>
                 </div>
                 <div class="box-body row">
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inName" 
+                        <p:outputLabel for="inName"
                                        value="#{messages['card.form.name']}: "/>
-                        <p:inputText id="inName" 
+                        <p:inputText id="inName"
                                      maxlength="45"
                                      styleClass="form-control"
-                                     value="#{cardBean.value.name}" />
+                                     value="#{cardBean.value.name}"/>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inCardType" 
+                        <p:outputLabel for="inCardType"
                                        value="#{messages['card.form.card-type']}: "/>
-                        <p:selectOneMenu id="inCardType" 
+                        <p:selectOneMenu id="inCardType"
                                          value="#{cardBean.value.cardType}"
                                          converter="omnifaces.GenericEnumConverter"
                                          disabled="#{cardBean.viewState.editing}">
-                            <p:ajax event="change" 
-                                    update="inCreditLimit,inExpirationDay,inWallet" />
+                            <p:ajax event="change"
+                                    update="inCreditLimit,inExpirationDay,inWallet"/>
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{menu['select-one']}" />
+                                          itemLabel="#{menu['select-one']}"/>
                             <f:selectItems var="cardType"
                                            itemValue="#{cardType}"
                                            value="#{cardBean.cardTypes}"
-                                           itemLabel="#{enums[cardType]}"/> 
+                                           itemLabel="#{enums[cardType]}"/>
                         </p:selectOneMenu>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inFlag" 
+                        <p:outputLabel for="inFlag"
                                        value="#{messages['card.form.flag']}: "/>
-                        <p:inputText id="inFlag" 
+                        <p:inputText id="inFlag"
                                      maxlength="45"
                                      styleClass="form-control"
-                                     value="#{cardBean.value.flag}" />
+                                     value="#{cardBean.value.flag}"/>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inNumber" 
+                        <p:outputLabel for="inNumber"
                                        value="#{messages['card.form.number']}: "/>
                         <p:inputMask id="inNumber"
                                      styleClass="form-control"
-                                     mask="9999-9999-9999-9999" 
-                                     value="#{cardBean.value.number}" 
+                                     mask="9999-9999-9999-9999"
+                                     value="#{cardBean.value.number}"
                                      disabled="#{cardBean.viewState.editing}"/>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inOwner" 
+                        <p:outputLabel for="inOwner"
                                        value="#{messages['card.form.owner']}: "/>
-                        <p:inputText id="inOwner" 
+                        <p:inputText id="inOwner"
                                      maxlength="45"
                                      styleClass="form-control"
-                                     value="#{cardBean.value.owner}" />
+                                     value="#{cardBean.value.owner}"/>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inCreditLimit" 
+                        <p:outputLabel for="inCreditLimit"
                                        value="#{messages['card.form.credit-limit']}: "/>
-                        <p:inputNumber id="inCreditLimit" 
-                                        symbol="R$ "
-                                        decimalPlaces="2" 
-                                        decimalSeparator="," 
-                                        thousandSeparator="." 
-                                        value="#{cardBean.value.creditLimit}"
-                                        disabled="#{cardBean.value.cardType ne 'CREDIT'}">
-                            <f:converter converterId="javax.faces.BigDecimal" />
+                        <p:inputNumber id="inCreditLimit"
+                                       symbol="R$ "
+                                       decimalPlaces="2"
+                                       decimalSeparator=","
+                                       thousandSeparator="."
+                                       value="#{cardBean.value.creditLimit}"
+                                       disabled="#{cardBean.value.cardType ne 'CREDIT'}">
+                            <f:converter converterId="javax.faces.BigDecimal"/>
                         </p:inputNumber>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inExpirationDay" 
+                        <p:outputLabel for="inExpirationDay"
                                        value="#{messages['card.form.expiration-day']}: "/>
-                        <p:inputText id="inExpirationDay" 
-                                     maxlength="2" 
+                        <p:inputText id="inExpirationDay"
+                                     maxlength="2"
                                      styleClass="form-control"
-                                     value="#{cardBean.value.expirationDay}" 
+                                     value="#{cardBean.value.expirationDay}"
                                      disabled="#{cardBean.value.cardType ne 'CREDIT'}">
                             <p:keyFilter regEx="/[0-9]/i"/>
                         </p:inputText>
                     </div>
                     <div class="form-group col-md-3">
-                        <p:outputLabel for="inWallet" 
+                        <p:outputLabel for="inWallet"
                                        value="#{messages['card.form.wallet']}: "/>
-                        <p:selectOneMenu id="inWallet" 
+                        <p:selectOneMenu id="inWallet"
                                          value="#{cardBean.value.wallet}"
                                          converter="omnifaces.SelectItemsConverter"
                                          disabled="#{cardBean.value.cardType ne 'DEBIT'}">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{menu['select-one']}" />
+                                          itemLabel="#{menu['select-one']}"/>
                             <f:selectItems var="invoice"
                                            itemValue="#{invoice}"
                                            value="#{cardBean.wallets}"
@@ -180,11 +181,10 @@
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
-                                     styleClass="btn btn-flat btn-primary" 
+                                     styleClass="btn btn-flat btn-primary"
                                      action="#{cardBean.changeToListing()}"/>
                 </div>
             </div>
         </h:form>
-        <wb:blocker target="cardForm"/>
     </ui:define>
 </ui:composition>

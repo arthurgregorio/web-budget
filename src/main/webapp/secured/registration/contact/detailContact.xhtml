@@ -55,6 +55,7 @@
 
     <ui:define name="content">
         <h:form id="contactForm" prependId="false">
+            <wb:blocker target="contactForm"/>
             <div class="row box-#{profileBean.currentThemeColorName}">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true">
@@ -251,6 +252,5 @@
                 </div>
             </div>
         </h:form>
-        <wb:blocker target="contactForm"/>
     </ui:define>
 </ui:composition>

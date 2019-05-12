@@ -27,44 +27,44 @@
           closeOnEscape="true"
           widgetVar="dialogTelephone"
           header="#{messages['telephone.dialog.title']}">
-    
+
     <h:form id="telephoneForm" prependId="false">
-        
-        <p:focus context="inTelephone" />
+
+        <p:focus context="inTelephone"/>
         <p:defaultCommand target="btAdd"/>
-        
+
         <div class="row">
             <div class="col-md-12">
-                <p:messages id="telephoneMessages" closable="true" />
-            </div> 
-        </div> 
-        
+                <p:messages id="telephoneMessages" closable="true"/>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-12 form-group">
-                <p:outputLabel for="inNumberType" 
+                <p:outputLabel for="inNumberType"
                                value="#{messages['telephone.form.type']}: "/>
-                <p:selectOneMenu id="inNumberType" 
+                <p:selectOneMenu id="inNumberType"
                                  converter="omnifaces.GenericEnumConverter"
-                                 value="#{contactBean.telephone.numberType}" >
+                                 value="#{contactBean.telephone.numberType}">
                     <f:selectItem itemValue="#{null}"
                                   noSelectionOption="true"
-                                  itemLabel="#{menu['select-one']}" />
-                    <f:selectItems var="numberType" 
+                                  itemLabel="#{menu['select-one']}"/>
+                    <f:selectItems var="numberType"
                                    itemValue="#{numberType}"
                                    itemLabel="#{enums[numberType]}"
-                                   value="#{contactBean.numberTypes}" />
+                                   value="#{contactBean.numberTypes}"/>
                 </p:selectOneMenu>
             </div>
             <div class="col-md-12 form-group">
-                <p:outputLabel for="inTelephone" 
+                <p:outputLabel for="inTelephone"
                                value="#{messages['telephone.form.number']}: "/>
                 <p:inputMask id="inTelephone"
                              mask="(99) 9999-9999?9"
                              styleClass="form-control"
                              value="#{contactBean.telephone.number}"/>
-            </div> 
-        </div> 
-        
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-12 text-right dialog-controls-box">
                 <p:commandButton id="btAdd"

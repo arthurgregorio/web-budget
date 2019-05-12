@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
+  Copyright (C) 2014 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -54,6 +54,7 @@
 
     <ui:define name="content">
         <h:form id="walletForm" prependId="false">
+            <wb:blocker target="walletForm"/>
             <div class="row">
                 <div class="col-sm-12">
                     <p:messages id="messages" closable="true"/>
@@ -189,6 +190,5 @@
                 </div>
             </div>
         </h:form>
-        <wb:blocker target="walletForm"/>
     </ui:define>
 </ui:composition>

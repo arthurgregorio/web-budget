@@ -124,24 +124,26 @@
                                                     <h4>
                                                         <h:outputText value="#{balance.oldBalance}"
                                                                       styleClass="#{balance.oldBalanceNegative ? 'text-red' : 'text-green'}">
-                                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                                                         </h:outputText>
                                                     </h4>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <p:outputLabel value="#{messages['balance-historic.movemented-value']}"/>
+                                                    <p:outputLabel
+                                                            value="#{messages['balance-historic.movemented-value']}"/>
                                                     <h4>
                                                         <h:outputText value="#{balance.transactionValue}">
-                                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                                                         </h:outputText>
                                                     </h4>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <p:outputLabel value="#{messages['balance-historic.actual-balance']}"/>
+                                                    <p:outputLabel
+                                                            value="#{messages['balance-historic.actual-balance']}"/>
                                                     <h4>
                                                         <h:outputText value="#{balance.actualBalance}"
                                                                       styleClass="#{balance.actualBalanceNegative ? 'text-red' : 'text-green'}">
-                                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                                                         </h:outputText>
                                                     </h4>
                                                 </div>
@@ -149,7 +151,8 @@
                                             <div class="row"
                                                  jsf:rendered="#{not empty balance.observations}">
                                                 <div class="col-sm-12">
-                                                    <p:outputLabel value="#{messages['balance-historic.observations']}"/>
+                                                    <p:outputLabel
+                                                            value="#{messages['balance-historic.observations']}"/>
                                                     <h4>#{balance.observations}</h4>
                                                 </div>
                                             </div>
@@ -162,6 +165,6 @@
                 </div>
             </div>
         </div>
-        <wb:backToTop />
+        <wb:backToTop/>
     </ui:define>
 </ui:composition>

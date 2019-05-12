@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
+  Copyright (C) 2016 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@
     <ui:define name="content">
         <div class="row">
             <div class="col-md-12">
-                <p:messages id="messages" closable="true" />
+                <p:messages id="messages" closable="true"/>
             </div>
         </div>
         <div class="box box-#{profileBean.currentThemeColorName}">
@@ -62,14 +62,14 @@
                                 <f:selectItems var="entityStatus"
                                                itemValue="#{entityStatus}"
                                                itemLabel="#{enums[entityStatus]}"
-                                               value="#{vehicleBean.filter.entityStatusValues}"/> 
+                                               value="#{vehicleBean.filter.entityStatusValues}"/>
                             </p:selectOneMenu>
                         </div>
                         <div class="col-xs-4">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{vehicleBean.filter.value}"
-                                             placeholder="#{messages['filter.vehicle']}" />
+                                             placeholder="#{messages['filter.vehicle']}"/>
                                 <div class="input-group-btn">
                                     <p:commandButton id="btSearch"
                                                      update="itemsList"
@@ -93,7 +93,7 @@
                                 <p:commandButton immediate="true"
                                                  value="#{menu['new']}"
                                                  action="#{vehicleBean.changeToAdd()}"
-                                                 styleClass="btn btn-flat btn-primary" 
+                                                 styleClass="btn btn-flat btn-primary"
                                                  rendered="#{userSessionBean.isPermitted(permissions.VEHICLE_ADD)}"/>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
                                  paginator="true"
                                  sortOrder="ascending"
                                  rowKey="#{vehicle.id}"
-                                 selectionMode="single" 
+                                 selectionMode="single"
                                  paginatorPosition="bottom"
                                  paginatorAlwaysVisible="false"
                                  selection="#{vehicleBean.value}"
@@ -162,14 +162,14 @@
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
-                                             action="#{vehicleBean.changeToEdit(vehicle.id)}" 
+                                             action="#{vehicleBean.changeToEdit(vehicle.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.VEHICLE_UPDATE)}"/>
                             <p:spacer width="5"
                                       rendered="#{userSessionBean.isPermitted(permissions.VEHICLE_DELETE)}"/>
                             <p:commandButton icon="fa fa-eraser"
                                              title="#{menu['delete']}"
                                              styleClass="btn btn-flat btn-danger"
-                                             action="#{vehicleBean.changeToDelete(vehicle.id)}" 
+                                             action="#{vehicleBean.changeToDelete(vehicle.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.VEHICLE_DELETE)}"/>
                         </p:column>
                     </p:dataTable>

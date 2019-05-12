@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Arthur Gregorio, AG.Software
+  Copyright (C) 2016 Arthur Gregorio, AG.Software
  
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -55,17 +55,18 @@
 
     <ui:define name="content">
         <h:form id="vehicleForm" prependId="false">
+            <wb:blocker target="vehicleForm"/>
             <div class="row">
                 <div class="col-sm-12">
-                    <p:messages id="messages" closable="true" >
-                        <p:autoUpdate />
+                    <p:messages id="messages" closable="true">
+                        <p:autoUpdate/>
                     </p:messages>
                 </div>
             </div>
             <div class="box box-#{profileBean.currentThemeColorName}">
                 <div class="box-header with-border">
                     <h3 class="box-title">
-                        <p:selectBooleanCheckbox id="inBlocked" 
+                        <p:selectBooleanCheckbox id="inBlocked"
                                                  value="#{vehicleBean.value.active}"
                                                  itemLabel="#{messages['form.active']}"/>
                     </h3>
@@ -79,7 +80,7 @@
                                          converter="omnifaces.GenericEnumConverter">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{menu['select-one']}" />
+                                          itemLabel="#{menu['select-one']}"/>
                             <f:selectItems var="vehicleType"
                                            itemValue="#{vehicleType}"
                                            itemLabel="#{enums[vehicleType]}"
@@ -92,7 +93,7 @@
                         <p:inputText id="inIdentification"
                                      maxlength="90"
                                      styleClass="form-control"
-                                     value="#{vehicleBean.value.identification}" />
+                                     value="#{vehicleBean.value.identification}"/>
                     </div>
                     <div class="form-group col-md-3">
                         <p:outputLabel for="inBrand"
@@ -100,7 +101,7 @@
                         <p:inputText id="inBrand"
                                      maxlength="90"
                                      styleClass="form-control"
-                                     value="#{vehicleBean.value.brand}" />
+                                     value="#{vehicleBean.value.brand}"/>
                     </div>
                     <div class="form-group col-md-3">
                         <p:outputLabel for="inModel"
@@ -108,7 +109,7 @@
                         <p:inputText id="inModel"
                                      maxlength="90"
                                      styleClass="form-control"
-                                     value="#{vehicleBean.value.model}" />
+                                     value="#{vehicleBean.value.model}"/>
                     </div>
                     <div class="form-group col-md-2">
                         <p:outputLabel for="inCostCenter"
@@ -118,11 +119,11 @@
                                          converter="omnifaces.SelectItemsConverter">
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
-                                          itemLabel="#{menu['select-one']}" />
+                                          itemLabel="#{menu['select-one']}"/>
                             <f:selectItems var="costCenter"
                                            itemValue="#{costCenter}"
                                            itemLabel="#{costCenter.name}"
-                                           value="#{vehicleBean.costCenters}" />
+                                           value="#{vehicleBean.costCenters}"/>
                         </p:selectOneMenu>
                     </div>
                     <div class="form-group col-md-2">
@@ -140,7 +141,7 @@
                         <p:inputText id="inYearModel"
                                      maxlength="4"
                                      styleClass="form-control"
-                                     value="#{vehicleBean.value.modelYear}" >
+                                     value="#{vehicleBean.value.modelYear}">
                             <p:keyFilter mask="num"/>
                         </p:inputText>
                     </div>
@@ -150,7 +151,7 @@
                         <p:inputText id="inManufacturingYear"
                                      maxlength="4"
                                      styleClass="form-control"
-                                     value="#{vehicleBean.value.manufacturingYear}" >
+                                     value="#{vehicleBean.value.manufacturingYear}">
                             <p:keyFilter mask="num"/>
                         </p:inputText>
                     </div>
@@ -171,7 +172,7 @@
                         <p:inputText id="inFuelCapcity"
                                      maxlength="4"
                                      styleClass="form-control"
-                                     value="#{vehicleBean.value.fuelCapacity}" >
+                                     value="#{vehicleBean.value.fuelCapacity}">
                             <p:keyFilter mask="num"/>
                         </p:inputText>
                     </div>
@@ -212,6 +213,5 @@
                 </div>
             </div>
         </h:form>
-        <wb:blocker target="vehicleForm"/>
     </ui:define>
 </ui:composition>

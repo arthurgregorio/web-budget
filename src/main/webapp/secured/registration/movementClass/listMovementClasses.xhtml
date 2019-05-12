@@ -44,7 +44,7 @@
     <ui:define name="content">
         <div class="row">
             <div class="col-sm-12">
-                <p:messages id="messages" closable="true" />
+                <p:messages id="messages" closable="true"/>
             </div>
         </div>
         <div class="box box-#{profileBean.currentThemeColorName}">
@@ -58,14 +58,14 @@
                                 <f:selectItems var="entityStatus"
                                                itemValue="#{entityStatus}"
                                                itemLabel="#{enums[entityStatus]}"
-                                               value="#{movementClassBean.filter.entityStatusValues}"/> 
+                                               value="#{movementClassBean.filter.entityStatusValues}"/>
                             </p:selectOneMenu>
                         </div>
                         <div class="col-xs-4">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{movementClassBean.filter.value}"
-                                             placeholder="#{messages['filter.movement-class']}" />
+                                             placeholder="#{messages['filter.movement-class']}"/>
                                 <div class="input-group-btn">
                                     <p:commandButton id="btSearch"
                                                      update="itemsList"
@@ -89,7 +89,7 @@
                                 <p:commandButton immediate="true"
                                                  value="#{menu['new']}"
                                                  action="#{movementClassBean.changeToAdd()}"
-                                                 styleClass="btn btn-flat btn-primary" 
+                                                 styleClass="btn btn-flat btn-primary"
                                                  rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_ADD)}"/>
                             </div>
                         </div>
@@ -132,13 +132,13 @@
                             <p:spacer width="5"/>
                             <p:graphicImage width="20"
                                             height="20"
-                                            library="webbudget" 
+                                            library="webbudget"
                                             name="images/minus.png"
                                             rendered="#{movementClass.expense}"
                                             title="#{messages['movement-class.list.expenses']}"/>
                             <p:graphicImage width="20"
                                             height="20"
-                                            library="webbudget" 
+                                            library="webbudget"
                                             name="images/plus.png"
                                             rendered="#{movementClass.revenue}"
                                             title="#{messages['movement-class.list.revenues']}"/>
@@ -150,20 +150,20 @@
                                   headerText="#{messages['movement-class.list.cost-center']}">
                             #{movementClass.costCenter.name}
                         </p:column>
-                        <p:column width="15%" 
+                        <p:column width="15%"
                                   styleClass="text-center"
                                   headerText="#{messages['movement-class.list.budget']}">
                             <h:outputText value="#{movementClass.budget}">
-                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ " />
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </p:column>
-                        <p:column width="15%" 
+                        <p:column width="15%"
                                   styleClass="text-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton icon="fa fa-edit"
                                              title="#{menu['edit']}"
                                              styleClass="btn btn-flat btn-default"
-                                             action="#{movementClassBean.changeToEdit(movementClass.id)}" 
+                                             action="#{movementClassBean.changeToEdit(movementClass.id)}"
                                              rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_UPDATE)}"/>
                             <p:spacer width="5"
                                       rendered="#{userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_DELETE)}"/>
