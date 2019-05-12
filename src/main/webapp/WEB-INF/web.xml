@@ -32,10 +32,6 @@
         <servlet-name>FacesServlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>FacesServlet</servlet-name>
-        <url-pattern>/javax.faces.resource/*</url-pattern>
-    </servlet-mapping>
 
     <!--this configuration force the application server to redirect the requests through https protocol    -->
     <security-constraint>
