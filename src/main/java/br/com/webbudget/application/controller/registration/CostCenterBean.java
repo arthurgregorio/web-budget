@@ -115,7 +115,7 @@ public class CostCenterBean extends LazyFormBean<CostCenter> {
     @Transactional
     public void doUpdate() {
         this.costCenterUpdatingLogics.forEach(logic -> logic.run(this.value));
-        this.value = this.costCenterRepository.saveAndFlushAndRefresh(this.value);
+        this.costCenterRepository.saveAndFlushAndRefresh(this.value);
         this.data = this.costCenterRepository.findAllActive();
         this.addInfo(true, "updated");
     }

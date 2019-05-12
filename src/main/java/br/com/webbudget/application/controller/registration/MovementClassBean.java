@@ -76,8 +76,7 @@ public class MovementClassBean extends LazyFormBean<MovementClass> {
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
         this.costCenters = this.costCenterRepository.findAllActive();
-        this.value = this.movementClassRepository.findById(id)
-                .orElseGet(MovementClass::new);
+        this.value = this.movementClassRepository.findById(id).orElseGet(MovementClass::new);
     }
 
     /**
@@ -125,7 +124,7 @@ public class MovementClassBean extends LazyFormBean<MovementClass> {
     @Transactional
     public void doUpdate() {
         this.updatingBusinessLogics.forEach(logic -> logic.run(this.value));
-        this.value = this.movementClassRepository.saveAndFlushAndRefresh(this.value);
+        this.movementClassRepository.saveAndFlushAndRefresh(this.value);
         this.addInfo(true, "updated");
     }
 
