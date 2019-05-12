@@ -23,6 +23,7 @@ import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.events.CardCreated;
+import br.com.webbudget.domain.logics.registration.card.CardDeletingLogic;
 import br.com.webbudget.domain.logics.registration.card.CardSavingLogic;
 import br.com.webbudget.domain.logics.registration.card.CardUpdatingLogic;
 import br.com.webbudget.domain.repositories.registration.CardRepository;
@@ -68,10 +69,13 @@ public class CardBean extends LazyFormBean<Card> {
 
     @Any
     @Inject
-    private Instance<CardSavingLogic> savingBusinessLogics;
+    private Instance<CardSavingLogic> savingLogics;
     @Any
     @Inject
-    private Instance<CardUpdatingLogic> updatingBusinessLogics;
+    private Instance<CardUpdatingLogic> updatingLogics;
+    @Any
+    @Inject
+    private Instance<CardDeletingLogic> deletingLogics;
 
     /**
      * {@inheritDoc}
@@ -118,7 +122,7 @@ public class CardBean extends LazyFormBean<Card> {
     @Override
     @Transactional
     public void doSave() {
-        this.savingBusinessLogics.forEach(logic -> logic.run(this.value));
+        this.savingLogics.forEach(logic -> logic.run(this.value));
         this.cardCreatedEvent.fire(this.cardRepository.save(this.value));
         this.value = new Card();
         this.addInfo(true, "saved");
@@ -130,7 +134,7 @@ public class CardBean extends LazyFormBean<Card> {
     @Override
     @Transactional
     public void doUpdate() {
-        this.updatingBusinessLogics.forEach(logic -> logic.run(this.value));
+        this.updatingLogics.forEach(logic -> logic.run(this.value));
         this.value = this.cardRepository.saveAndFlushAndRefresh(this.value);
         this.addInfo(true, "updated");
     }
@@ -143,6 +147,7 @@ public class CardBean extends LazyFormBean<Card> {
     @Override
     @Transactional
     public String doDelete() {
+        this.deletingLogics.forEach(logic -> logic.run(this.value));
         this.cardRepository.attachAndRemove(this.value);
         this.addInfoAndKeep("deleted");
         return this.changeToListing();
