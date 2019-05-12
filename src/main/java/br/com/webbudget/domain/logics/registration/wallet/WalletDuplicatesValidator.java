@@ -72,7 +72,7 @@ public class WalletDuplicatesValidator implements WalletSavingLogic, WalletUpdat
      */
     private void validateSaved(Wallet value) {
         final Optional<Wallet> found = this.find(value.getName(), value.getWalletType());
-        if (found.isPresent() && found.get().equals(value)) {
+        if (found.isPresent() && !found.get().equals(value)) {
             throw new BusinessLogicException("error.wallet.duplicated");
         }
     }
