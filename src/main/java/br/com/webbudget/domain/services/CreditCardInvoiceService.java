@@ -24,10 +24,7 @@ import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import br.com.webbudget.domain.events.CardCreated;
-import br.com.webbudget.domain.events.FinancialPeriodOpened;
-import br.com.webbudget.domain.events.PeriodMovementDeleted;
-import br.com.webbudget.domain.events.PeriodMovementPaid;
+import br.com.webbudget.domain.events.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.configuration.ConfigurationRepository;
 import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepository;
@@ -206,5 +203,49 @@ public class CreditCardInvoiceService {
                 .build();
 
         this.creditCardInvoiceRepository.save(creditCardInvoice);
+    }
+
+    /**
+     * After a {@link PeriodMovement} is updated, this method will listen to the event and if necessary, update the
+     * corresponding invoice for this movement
+     *
+     * @param periodMovement to get the data and update the {@link CreditCardInvoice}
+     */
+    @Transactional
+    public void updateInvoiceAfterPeriodMovementUpdate(@Observes @PeriodMovementUpdated PeriodMovement periodMovement) {
+
+        if (!periodMovement.isPaidWithCreditCard()) {
+            return;
+        }
+
+        final var movementPeriod = periodMovement.getFinancialPeriod();
+        final var invoicePeriod = periodMovement.getCreditCardInvoice().getFinancialPeriod();
+
+        if (!movementPeriod.equals(invoicePeriod)) {
+
+            final var payment = periodMovement.getPayment();
+
+            final var incorrectInvoice = periodMovement.getCreditCardInvoice();
+
+            final var correctInvoice = this.creditCardInvoiceRepository
+                    .findByCardAndFinancialPeriod(payment.getCard(), movementPeriod)
+                    .orElseThrow(() -> new BusinessLogicException("error.credit-card-invoice.no-invoice",
+                            payment.getCard().getReadableName(), movementPeriod.getIdentification()));
+
+            periodMovement.setCreditCardInvoice(correctInvoice);
+
+            this.periodMovementRepository.save(periodMovement);
+
+            // update correct invoice value
+            correctInvoice.setTotalValue(correctInvoice.getTotalValue().add(periodMovement.getValueWithDiscount()));
+
+            this.creditCardInvoiceRepository.save(correctInvoice);
+
+            // update incorrect invoice value
+            incorrectInvoice.setTotalValue(incorrectInvoice.getTotalValue()
+                    .subtract(periodMovement.getValueWithDiscount()));
+
+            this.creditCardInvoiceRepository.save(incorrectInvoice);
+        }
     }
 }
