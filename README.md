@@ -1,16 +1,25 @@
----
-description: Documentação do webBudget
----
+[![Join the chat at https://gitter.im/web-budget/Lobby](https://badges.gitter.im/web-budget/Lobby.svg)](https://gitter.im/web-budget/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-# Introdução
+# webBudget
 
-Bem vindo a documentação do **webBudget**, por aqui você encontra todas as informações necessárias para ficar por dentro de como desenvolver, instalar ou utilizar o sistema.
+Bem vindo or Welcome!
 
-Para iniciar, selecione a sua área de interesse:
+## Se você é do Brasil:
 
-* Gostaria de ver a documentação para desenvolver uma nova funcionalidade ou aprender como o sistema funciona tecnicamente, clique aqui;
-* Gostaria de instalar o sistema em minha infraestrutura, clique aqui;
-* Gostaria de acessar o manual do usuário para aprender a utilizar o sistema, clique aqui.
+Bem vindo ao repositório do webBudget! Um sistema grátis e open-source para você realizar seu controle financeiro pessoal ou da sua empresa. 
 
-Ainda não encontrou o tópico desejado? Entre em contato através do e-mail [contato@arthurgregorio.eti.br](mailto:contato@arthurgregorio.eti.br) e me conta mais sobre seu problema/necessidade!
+Para saber mais, acesse a página oficial do projeto em [http://webbudget.com.br](http://webbudget.com.br).
 
+### Se você quer apenas testar o sistema:
+
+Utilize a imagem docker! Mais informações sobre como realizar o deploy podem ser [encontradas aqui](https://github.com/arthurgregorio/web-budget-docker).
+
+## If you are not from Brazil:
+
+Welcome to the webBudget repository! A free and open-source software to control your personal finances or of your company.
+
+If you want to know more about, please, access the oficial project page in [http://webbudget.com.br](http://webbudget.com.br).
+
+### If you want to try the project:
+
+Use our docker image! More information and how-to to deploy it can be [found here](https://github.com/arthurgregorio/web-budget-docker).
