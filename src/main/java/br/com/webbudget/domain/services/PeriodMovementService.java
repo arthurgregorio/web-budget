@@ -187,8 +187,14 @@ public class PeriodMovementService {
         final WalletBalanceBuilder builder = WalletBalanceBuilder.getInstance()
                 .to(wallet)
                 .forMovement(periodMovement.getCode())
-                .withReason(ReasonType.RETURN)
-                .value(periodMovement.getPayment().getPaidValue());
+                .withReason(ReasonType.RETURN);
+
+        // if is revenue, subtract, if not, add
+        if (periodMovement.isRevenue()) {
+            builder.value(periodMovement.getPayment().getPaidValue().negate());
+        } else {
+            builder.value(periodMovement.getPayment().getPaidValue());
+        }
 
         this.updateWalletBalanceEvent.fire(builder.build());
     }
