@@ -18,6 +18,7 @@ package br.com.webbudget.infrastructure.mail;
 
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.enterprise.event.ObservesAsync;
 import javax.mail.Message;
 import javax.mail.Session;
@@ -36,7 +37,7 @@ import java.util.Date;
 @ApplicationScoped
 public class Postman {
 
-    @Resource(name = "java:/mail/webBudget")
+    @Resource(name = "java:/mail/mailService")
     private Session mailSession;
     
     /**
@@ -45,7 +46,7 @@ public class Postman {
      * @param mailMessage the message to send
      * @throws Exception if any problem occur in the process
      */
-    public void send(@ObservesAsync MailMessage mailMessage) throws Exception {
+    public void send(@Observes MailMessage mailMessage) throws Exception {
        
         final MimeMessage message = new MimeMessage(this.mailSession);
 

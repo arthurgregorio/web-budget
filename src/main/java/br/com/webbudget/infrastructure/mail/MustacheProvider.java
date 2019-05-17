@@ -31,14 +31,14 @@ import java.util.Map;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 3.0.0, 03/04/2018
  */
 public class MustacheProvider implements MailContentProvider {
 
     private final Mustache mustache;
 
-    private final Map<String, Object> data;
+    private final Map<Object, Object> data;
 
     /**
      * Constructor
@@ -59,7 +59,7 @@ public class MustacheProvider implements MailContentProvider {
      * @param key the key to use on the template
      * @param value the value to retrieve through the key in the template
      */
-    public void addContent(String key, Object value) {
+    public void addContent(Object key, Object value) {
         this.data.put(key, value);
     }
 
@@ -76,7 +76,7 @@ public class MustacheProvider implements MailContentProvider {
         try {
             this.mustache.execute(writer, this.data).flush();
         } catch (IOException ex) {
-            throw new BusinessLogicException("error.email.content-error", ex);
+            throw new BusinessLogicException("error.core.email-content-error", ex);
         }
 
         return writer.toString();
