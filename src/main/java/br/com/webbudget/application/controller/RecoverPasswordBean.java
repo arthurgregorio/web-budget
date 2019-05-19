@@ -45,7 +45,7 @@ public class RecoverPasswordBean extends AbstractBean {
     private RecoverPasswordService recoverPasswordService;
 
     /**
-     * Call the service to reset the user password
+     * Call the service to reset the password
      */
     public void recoverPassword() {
 
