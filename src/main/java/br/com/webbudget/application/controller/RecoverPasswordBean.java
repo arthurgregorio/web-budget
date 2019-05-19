@@ -49,11 +49,10 @@ public class RecoverPasswordBean extends AbstractBean {
      */
     public void recoverPassword() {
 
-        this.recoverPasswordService.recover(this.email);
+//        this.recoverPasswordService.recover(this.email);
 
         this.closeDialog("dialogRecoverPassword");
         this.addInfoAndKeep("recover-password.email-sent");
-        this.temporizeHiding("messages");
     }
 
     /**

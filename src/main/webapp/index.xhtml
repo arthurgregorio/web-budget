@@ -64,7 +64,9 @@
             <div class="login-box-body">
                 <p class="login-box-msg">#{messages['login.welcome']}</p>
                 <h:form id="loginForm" prependId="false">
-                    <p:messages id="messages" closable="true"/>
+                    <p:messages id="messages" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
                     <div class="form-group has-feedback">
                         <p:inputText pt:autocorrect="off"
                                      pt:spellcheck="false"
