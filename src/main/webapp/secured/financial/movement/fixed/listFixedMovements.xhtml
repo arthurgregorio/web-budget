@@ -167,8 +167,8 @@
                                   headerText="#{messages['fixed-movement.list.quotes']}">
                             <h:outputText rendered="#{fixedMovement.undetermined}"
                                           value="#{messages['fixed-movement.form.undetermined']}"/>
-                            <h:outputText rendered="#{not fixedMovement.undetermined}"
-                                          value="#{fixedMovement.actualQuote}/#{fixedMovement.totalQuotes}"/>
+                            <h:outputText value="#{fixedMovement.quoteState}"
+                                          rendered="#{not fixedMovement.undetermined}"/>
                         </p:column>
                         <p:column width="15%"
                                   styleClass="text-center"

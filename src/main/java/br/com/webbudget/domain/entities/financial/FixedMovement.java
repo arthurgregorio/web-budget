@@ -92,6 +92,15 @@ public class FixedMovement extends Movement {
     }
 
     /**
+     * Return a simple {@link String} representing the current quote state of this fixed movement
+     *
+     * @return a {@link String} representing actual and the total of quotes
+     */
+    public String getQuoteState() {
+        return this.actualQuote != null ? this.actualQuote + "/" + this.totalQuotes : "0/" + this.totalQuotes;
+    }
+
+    /**
      * To check if this movement is finished or not
      *
      * @return true if is, otherwise, false
