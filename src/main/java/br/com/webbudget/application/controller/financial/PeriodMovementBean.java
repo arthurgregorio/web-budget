@@ -308,7 +308,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      */
     public void onCostCenterSelect() {
         this.movementClasses = this.movementClassRepository
-                .findByActiveAndCostCenter(true, this.apportionment.getCostCenter());
+                .findByActiveAndCostCenterOrderByNameAsc(true, this.apportionment.getCostCenter());
     }
 
     /**

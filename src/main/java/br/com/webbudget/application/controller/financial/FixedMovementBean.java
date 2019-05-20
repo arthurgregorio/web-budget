@@ -321,7 +321,7 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
      */
     public void onCostCenterSelect() {
         this.movementClasses = this.movementClassRepository
-                .findByActiveAndCostCenter(true, this.apportionment.getCostCenter());
+                .findByActiveAndCostCenterOrderByNameAsc(true, this.apportionment.getCostCenter());
     }
 
     /**

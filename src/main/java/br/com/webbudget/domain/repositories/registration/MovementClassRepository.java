@@ -62,7 +62,7 @@ public interface MovementClassRepository extends LazyDefaultRepository<MovementC
      * @param costCenter the {@link CostCenter}
      * @return the list of {@link MovementClass}
      */
-    List<MovementClass> findByActiveAndCostCenter(boolean active, CostCenter costCenter);
+    List<MovementClass> findByActiveAndCostCenterOrderByNameAsc(boolean active, CostCenter costCenter);
 
     /**
      * {@inheritDoc}

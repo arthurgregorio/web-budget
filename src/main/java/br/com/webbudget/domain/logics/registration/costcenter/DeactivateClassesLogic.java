@@ -48,7 +48,7 @@ public class DeactivateClassesLogic implements CostCenterUpdatingLogic {
 
         if (!value.isActive()) {
             final List<MovementClass> movementClasses =
-                    this.movementClassRepository.findByActiveAndCostCenter(true, value);
+                    this.movementClassRepository.findByActiveAndCostCenterOrderByNameAsc(true, value);
 
             movementClasses.forEach(movementClass -> {
                 movementClass.setActive(false);
