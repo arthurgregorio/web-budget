@@ -35,6 +35,7 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
@@ -57,6 +58,11 @@ import static javax.persistence.FetchType.EAGER;
 @AuditTable(value = "credit_card_invoices", schema = FINANCIAL_AUDIT)
 public class CreditCardInvoice extends PersistentEntity {
 
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "id_financial_period")
+    public FinancialPeriod financialPeriod;
     @Getter
     @Setter
     @Column(name = "identification", nullable = false, length = 90, unique = true)
@@ -82,24 +88,16 @@ public class CreditCardInvoice extends PersistentEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "invoice_state", nullable = false, length = 45)
     private InvoiceState invoiceState;
-
     @Getter
     @Setter
     @OneToOne
     @JoinColumn(name = "id_period_movement")
     private PeriodMovement periodMovement;
-
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_card")
     private Card card;
-    @Getter
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_financial_period")
-    public FinancialPeriod financialPeriod;
-
     @OneToMany(mappedBy = "creditCardInvoice", fetch = EAGER)
     private List<PeriodMovement> periodMovements;
 
@@ -234,5 +232,12 @@ public class CreditCardInvoice extends PersistentEntity {
         this.periodMovement = null;
         this.invoiceState = InvoiceState.OPEN;
         return this;
+    }
+
+    /**
+     * Method used to apply the correct order to the {@link PeriodMovement} list
+     */
+    public void orderPeriodMovements() {
+        this.periodMovements.sort(Comparator.comparing(PeriodMovement::getPaymentDate));
     }
 }

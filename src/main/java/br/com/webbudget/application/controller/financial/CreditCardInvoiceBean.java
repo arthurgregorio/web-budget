@@ -86,6 +86,7 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
     public void initializeDetail(long invoiceId) {
         this.invoice = this.creditCardInvoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new IllegalStateException("Invoice can't be found!"));
+        this.invoice.orderPeriodMovements();
     }
 
     /**
