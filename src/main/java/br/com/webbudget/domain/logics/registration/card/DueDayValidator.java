@@ -17,6 +17,7 @@
 package br.com.webbudget.domain.logics.registration.card;
 
 import br.com.webbudget.domain.entities.registration.Card;
+import br.com.webbudget.domain.entities.registration.CardType;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 
 import javax.enterprise.context.Dependent;
@@ -39,7 +40,11 @@ public class DueDayValidator implements CardSavingLogic, CardUpdatingLogic {
      */
     @Override
     public void run(Card value) {
-        if (!value.expirationDayIsValid()) {
+
+        final CardType type = value.getCardType();
+        final Integer expirationDay = value.getExpirationDay();
+
+        if (type == CardType.CREDIT && (expirationDay == null || expirationDay == 0)) {
             throw new BusinessLogicException("error.card.invalid-expiration-day");
         }
     }

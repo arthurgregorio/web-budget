@@ -142,13 +142,4 @@ public class Card extends PersistentEntity {
 
         return secured.toString();
     }
-
-    /**
-     * Helper method used to check if this card contains a valid expiration date
-     *
-     * @return true if has false otherwise
-     */
-    public boolean expirationDayIsValid() {
-        return this.cardType == CardType.CREDIT && (this.expirationDay != null && this.expirationDay != 0);
-    }
 }
