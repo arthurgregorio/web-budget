@@ -126,6 +126,11 @@
                     <p:commandButton update="paymentForm"
                                      value="#{menu['pay']}"
                                      styleClass="btn btn-flat btn-success"
+                                     action="#{paymentBean.doPaymentAndNew()}"/>
+                    <p:spacer width="5"/>
+                    <p:commandButton update="paymentForm"
+                                     value="#{menu['pay-and-go-back']}"
+                                     styleClass="btn btn-flat btn-warning"
                                      actionListener="#{paymentBean.doPayment()}"/>
                     <p:spacer width="5"/>
                     <p:commandButton immediate="true"

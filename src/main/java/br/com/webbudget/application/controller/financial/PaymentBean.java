@@ -93,7 +93,7 @@ public class PaymentBean extends AbstractBean {
     }
 
     /**
-     * This method call the service to pay the {@link PeriodMovement} and than, go back to the listing view
+     * Pay the {@link PeriodMovement} and show a a dialog to confirm the operation
      */
     public void doPayment() {
         this.paymentService.pay(this.periodMovement, this.payment);
@@ -101,12 +101,32 @@ public class PaymentBean extends AbstractBean {
     }
 
     /**
+     * Pay the {@link PeriodMovement} and put a message in the flash scope to be displayed on the form after the redirect
+     *
+     * @return the outcome to the {@link PeriodMovement} form
+     */
+    public String doPaymentAndNew() {
+        this.paymentService.pay(this.periodMovement, this.payment);
+        this.addInfoAndKeep("info.payment.success", this.periodMovement.getIdentification());
+        return this.changeToAdd();
+    }
+
+    /**
      * Go back to the list of {@link PeriodMovement}
      *
-     * @return the outcome to the list of {@link PeriodMovement}
+     * @return outcome to {@link PeriodMovement} listing
      */
     public String changeToListing() {
         return "listPeriodMovements.xhtml?faces-redirect=true";
+    }
+
+    /**
+     * Change back to the {@link PeriodMovement} form
+     *
+     * @return outcome to {@link PeriodMovement} form
+     */
+    public String changeToAdd() {
+        return "formPeriodMovement.xhtml?faces-redirect=true&viewState=ADDING";
     }
 
     /**
