@@ -23,7 +23,7 @@
 
     <groupId>br.com.webbudget</groupId>
     <artifactId>web-budget</artifactId>
-    <version>3.0.2</version>
+    <version>3.1.0</version>
     <packaging>war</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
