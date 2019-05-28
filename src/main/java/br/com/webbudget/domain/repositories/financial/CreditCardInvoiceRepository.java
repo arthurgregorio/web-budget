@@ -143,6 +143,8 @@ public interface CreditCardInvoiceRepository extends DefaultRepository<CreditCar
             );
         }
 
+        criteria.orderAsc(CreditCardInvoice_.financialPeriod);
+
         return criteria;
     }
 }

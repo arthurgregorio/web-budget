@@ -79,6 +79,13 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
     }
 
     /**
+     * Initialize view in listing mode
+     */
+    public void initialize() {
+        this.invoiceState = InvoiceState.OPEN;
+    }
+
+    /**
      * Initialize UI to detail a {@link CreditCardInvoice}
      *
      * @param invoiceId to find the details

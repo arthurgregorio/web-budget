@@ -60,11 +60,6 @@ public class CreditCardInvoice extends PersistentEntity {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "id_financial_period")
-    public FinancialPeriod financialPeriod;
-    @Getter
-    @Setter
     @Column(name = "identification", nullable = false, length = 90, unique = true)
     private String identification;
     @Getter
@@ -88,16 +83,24 @@ public class CreditCardInvoice extends PersistentEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "invoice_state", nullable = false, length = 45)
     private InvoiceState invoiceState;
-    @Getter
-    @Setter
-    @OneToOne
-    @JoinColumn(name = "id_period_movement")
-    private PeriodMovement periodMovement;
+
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_card")
     private Card card;
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "id_financial_period")
+    public FinancialPeriod financialPeriod;
+
+    @Getter
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "id_period_movement")
+    private PeriodMovement periodMovement;
+
     @OneToMany(mappedBy = "creditCardInvoice", fetch = EAGER)
     private List<PeriodMovement> periodMovements;
 

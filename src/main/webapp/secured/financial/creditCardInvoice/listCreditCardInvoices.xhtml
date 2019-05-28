@@ -24,6 +24,10 @@
                 xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
                 template="/template/mainTemplate.xhtml">
 
+    <f:metadata>
+        <f:viewAction action="#{creditCardInvoiceBean.initialize()}"/>
+    </f:metadata>
+
     <ui:define name="pageTitle">
         #{messages['credit-card-invoice.page-title']}
     </ui:define>
