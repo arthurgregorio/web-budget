@@ -61,21 +61,6 @@ span.ui-inputnumber.ui-widget.ui-state-error {
     border-radius: 0;
 }
 
-/*wallets data grid customization*/
-#itemsList\:walletsGrid_content {
-    border: none;
-}
-#walletsGrid_content {
-    border: none;
-    background: none;
-    margin: 0 -.5em;
-}
-#walletsGrid_content.ui-datagrid-content-empty {
-    text-align: center;
-    font-size: 18px;
-    margin-top: 70px;
-}
-
 /*datascroller customization*/
 .ui-datascroller-content {
     background: none !important;

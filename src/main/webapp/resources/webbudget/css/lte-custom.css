@@ -7,7 +7,7 @@
     Created on : 26/09/2018
 */
 
-/*wallets data grid customization*/
+/*credit card invoice data grid customization*/
 #itemsList\:invoicesGrid_content {
     border: none;
 }
@@ -25,6 +25,37 @@
     position: relative;
     top: 6px;
     font-size: 14px;
+}
+
+/*period movement data grid customization*/
+#itemsList\:periodMovementGrid_content {
+    border: none;
+}
+#periodMovementGrid_content {
+    border: none;
+    background: none;
+    margin: 0 -2px;
+}
+#periodMovementGrid_content.ui-datagrid-content-empty {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 70px;
+}
+#periodMovementGrid_content span.label {
+    font-size: 100%;
+}
+.period-movement-widget {
+    margin-bottom: 5px;
+}
+.period-movement-revenue {
+    border-left: solid 3px green;
+}
+.period-movement-expense {
+    border-left: solid 3px red;
+}
+.period-badge {
+    position: relative;
+    bottom: 3px;
 }
 
 /*delete text*/
