@@ -164,8 +164,8 @@
                                                     height="20"
                                                     library="webbudget"
                                                     name="images/orange-circle.png"
-                                                    rendered="#{financialPeriod.expired}"
-                                                    title="#{messages['financial-period.list.expired']}"/>
+                                                    title="#{messages['financial-period.list.expired']}"
+                                                    rendered="#{financialPeriod.expired and not financialPeriod.closed}"/>
                                     <p:graphicImage width="20"
                                                     height="20"
                                                     library="webbudget"
@@ -186,16 +186,16 @@
                                     <p:commandButton id="btSearch"
                                                      value="#{menu['search']}"
                                                      onstart="PF('blocker').show()"
-                                                     oncomplete="PF('blocker').hide()"
                                                      styleClass="btn btn-flat btn-primary"
-                                                     update="periodMovementGrid controlsForm"/>
+                                                     update="periodMovementGrid controlsForm"
+                                                     oncomplete="PF('blocker').hide(); updateResume();"/>
                                     <p:spacer width="5"/>
                                     <p:commandButton icon="fa fa-trash"
                                                      onstart="PF('blocker').show()"
                                                      title="#{menu['filter-clear']}"
-                                                     oncomplete="PF('blocker').hide()"
                                                      styleClass="btn btn-flat btn-danger"
                                                      update="periodMovementGrid controlsForm"
+                                                     oncomplete="PF('blocker').hide(); updateResume();"
                                                      actionListener="#{periodMovementBean.clearFilters()}"/>
                                 </div>
                             </div>
@@ -322,6 +322,15 @@
                 </div>
             </div>
         </p:dataGrid>
+
+        <h:form>
+            <p:remoteCommand autoRun="true"
+                             update="resumeBox"
+                             name="updateResume"
+                             process="@this controlsForm"
+                             actionListener="#{periodMovementBean.loadResume()}"/>
+        </h:form>
+
         <wb:blocker target="periodMovementGrid"/>
     </ui:define>
 </ui:composition>

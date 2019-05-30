@@ -49,6 +49,7 @@ import javax.inject.Named;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static br.com.webbudget.application.components.ui.NavigationManager.PageType.*;
 import static br.com.webbudget.application.components.ui.NavigationManager.Parameter.of;
@@ -179,9 +180,25 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      */
     @Override
     public Page<PeriodMovement> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
-        final Page<PeriodMovement> page = this.periodMovementRepository.findAllBy(this.filter, first, pageSize);
-        this.periodMovementResume.update(page.getContent());
-        return page;
+        this.loadResume();
+        return this.periodMovementRepository.findAllBy(this.filter, first, pageSize);
+    }
+
+    /**
+     * Load the current resume for all selected {@link FinancialPeriod}
+     */
+    public void loadResume() {
+
+        final List<Long> periods = this.filter.getSelectedFinancialPeriods().stream()
+                .map(FinancialPeriod::getId)
+                .collect(Collectors.toList());
+
+        final var totalOpen = this.periodMovementRepository.calculateTotalOpen(periods);
+        final var totalPaidReceived = this.periodMovementRepository.calculateTotalPaidAndReceived(periods);
+        final var totalRevenues = this.periodMovementRepository.calculateTotalRevenues(periods);
+        final var totalExpenses = this.periodMovementRepository.calculateTotalExpenses(periods);
+
+        this.periodMovementResume.update(totalPaidReceived, totalOpen, totalRevenues, totalExpenses);
     }
 
     /**
@@ -326,7 +343,8 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      */
     public void clearFilters() {
         this.filter.clear();
-        this.updateComponent("itemsList");
+        this.filter.setSelectedFinancialPeriods(this.financialPeriodRepository.findByClosed(false));
+        this.updateComponent("periodMovementGrid");
     }
 
     /**

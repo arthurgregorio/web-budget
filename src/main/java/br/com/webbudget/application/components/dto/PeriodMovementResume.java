@@ -23,14 +23,13 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * This DTO is used in the listing of {@link PeriodMovement} to create a summary of the current movements in the list
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 3.0.0, 18/02/2019
  */
 @ToString
@@ -57,43 +56,17 @@ public final class PeriodMovementResume implements Serializable {
     }
 
     /**
-     * Constructor...
+     * Update this resume
      *
-     * Internally this constructor call the {@link #update(List)} method
-     *
-     * @param periodMovements the list of {@link PeriodMovement} to use for calculate the values
+     * @param totalOpen represents the amount open on selected periods
+     * @param totalPaidReceived represents the amount paid or received on selected periods
+     * @param totalRevenues represents the revenues of the period
+     * @param totalExpenses represents the expenses of the period
      */
-    public PeriodMovementResume(List<PeriodMovement> periodMovements) {
-        this.update(periodMovements);
-    }
-
-    /**
-     * Sum the values and update this value holder
-     *
-     * @param periodMovements the list of {@link PeriodMovement} to update the model
-     */
-    public void update(List<PeriodMovement> periodMovements) {
-
-        this.totalOpen = periodMovements.stream()
-                .filter(PeriodMovement::isOpen)
-                .map(PeriodMovement::getValueWithDiscount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        this.totalPaid = periodMovements.stream()
-                .filter(PeriodMovement::isPaid)
-                .filter(periodMovement -> !periodMovement.isPaidWithCreditCard())
-                .map(PeriodMovement::getValueWithDiscount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        this.totalRevenue = periodMovements.stream()
-                .filter(PeriodMovement::isRevenue)
-                .map(PeriodMovement::getValueWithDiscount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        this.totalExpense = periodMovements.stream()
-                .filter(PeriodMovement::isExpense)
-                .filter(periodMovement -> !periodMovement.isPaidWithCreditCard())
-                .map(PeriodMovement::getValueWithDiscount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    public void update(BigDecimal totalPaidReceived, BigDecimal totalOpen, BigDecimal totalRevenues, BigDecimal totalExpenses) {
+        this.totalOpen = totalOpen;
+        this.totalPaid = totalPaidReceived;
+        this.totalRevenue = totalRevenues;
+        this.totalExpense = totalExpenses;
     }
 }

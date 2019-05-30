@@ -26,10 +26,12 @@ import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.EntityGraph;
+import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
 import javax.persistence.criteria.JoinType;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +76,69 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
     List<PeriodMovement> findByFinancialPeriod(FinancialPeriod period);
 
     /**
+     * Calculate the total of paid or received {@link PeriodMovement} on a list of {@link FinancialPeriod}
+     *
+     * @param periods the list of {@link FinancialPeriod} to search for
+     * @return the total value of paid and received {@link PeriodMovement}
+     */
+    @Query("SELECT COALESCE(SUM(pm.paidValue), 0) " +
+            "FROM PeriodMovement mv " +
+            "         INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
+            "         INNER JOIN Payment pm ON pm.id = mv.payment.id " +
+            "    AND fp.id IN (?1) " +
+            "    AND pm.paymentMethod <> 'CREDIT_CARD' " +
+            "    AND mv.periodMovementState <> 'OPEN'")
+    BigDecimal calculateTotalPaidAndReceived(List<Long> periods);
+
+    /**
+     * Calculate the total of open {@link PeriodMovement} on a list of {@link FinancialPeriod}
+     *
+     * @param periods the list of {@link FinancialPeriod} to search for
+     * @return the total value of open {@link PeriodMovement}
+     */
+    @Query("SELECT COALESCE(SUM(mv.value), 0) " +
+            "FROM PeriodMovement mv " +
+            "         INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
+            "    AND fp.id IN (?1) " +
+            "    AND mv.periodMovementState = 'OPEN'")
+    BigDecimal calculateTotalOpen(List<Long> periods);
+
+    /**
+     * Calculate the total of expenses on a list of {@link FinancialPeriod}
+     *
+     * @param periods the list of {@link FinancialPeriod} to search for
+     * @return the total value of expenses
+     */
+    @Query("SELECT COALESCE(SUM(pm.paidValue), 0) " +
+            "FROM PeriodMovement mv " +
+            "         INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
+            "         INNER JOIN Payment pm ON pm.id = mv.payment.id " +
+            "         INNER JOIN Apportionment ap on ap.movement = mv.id " +
+            "         INNER JOIN MovementClass mc on mc.id = ap.movementClass.id " +
+            "    AND fp.id IN (?1) " +
+            "    AND pm.paymentMethod <> 'CREDIT_CARD' " +
+            "    AND mc.movementClassType = 'EXPENSE' " +
+            "    AND mv.periodMovementState <> 'OPEN'")
+    BigDecimal calculateTotalExpenses(List<Long> periods);
+
+    /**
+     * Calculate the total of revenues on a list of {@link FinancialPeriod}
+     *
+     * @param periods the list of {@link FinancialPeriod} to search for
+     * @return the total value of revenues
+     */
+    @Query("SELECT COALESCE(SUM(pm.paidValue), 0) " +
+            "FROM PeriodMovement mv " +
+            "         INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
+            "         INNER JOIN Payment pm ON pm.id = mv.payment.id " +
+            "         INNER JOIN Apportionment ap on ap.movement = mv.id " +
+            "         INNER JOIN MovementClass mc on mc.id = ap.movementClass.id " +
+            "    AND fp.id IN (?1) " +
+            "    AND mc.movementClassType = 'REVENUE' " +
+            "    AND mv.periodMovementState <> 'OPEN'")
+    BigDecimal calculateTotalRevenues(List<Long> periods);
+
+    /**
      * Use this method to find all {@link PeriodMovement} using the lazy load strategy
      *
      * @param filter the {@link PeriodMovementFilter}
@@ -87,6 +152,7 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
 
         final Criteria<PeriodMovement, PeriodMovement> criteria = this.buildCriteria(filter);
 
+        criteria.orderDesc(PeriodMovement_.financialPeriod);
         criteria.orderDesc(PeriodMovement_.createdOn);
 
         final List<PeriodMovement> data = criteria.createQuery()
