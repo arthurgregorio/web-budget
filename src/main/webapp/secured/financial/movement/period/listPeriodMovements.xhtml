@@ -187,13 +187,15 @@
                                                      value="#{menu['search']}"
                                                      onstart="PF('blocker').show()"
                                                      oncomplete="PF('blocker').hide()"
-                                                     styleClass="btn btn-flat btn-primary"/>
+                                                     styleClass="btn btn-flat btn-primary"
+                                                     update="periodMovementGrid controlsForm"/>
                                     <p:spacer width="5"/>
                                     <p:commandButton icon="fa fa-trash"
                                                      onstart="PF('blocker').show()"
                                                      title="#{menu['filter-clear']}"
                                                      oncomplete="PF('blocker').hide()"
                                                      styleClass="btn btn-flat btn-danger"
+                                                     update="periodMovementGrid controlsForm"
                                                      actionListener="#{periodMovementBean.clearFilters()}"/>
                                 </div>
                             </div>
@@ -227,36 +229,36 @@
                     emptyMessage="#{messages['list.empty']}">
 
             <div class="box box-widget period-movement-widget #{periodMovement.revenue ? 'period-movement-revenue' : 'period-movement-expense'}">
-                <div class="box-header with-border">
-                    <span class="badge bg-teal period-badge">
+                <div class="box-header with-border fix-badge">
+                    <span class="badge bg-teal">
                         #{periodMovement.financialPeriod.identification}
                     </span>
                     <p:spacer width="5"/>
                     <h3 class="box-title">#{periodMovement.identification}</h3>
                     <div class="pull-right">
-                        <span class="label label-warning"
+                        <span class="badge bg-yellow"
                               jsf:rendered="#{periodMovement.open}">
                             #{enums[periodMovement.periodMovementState]}
                         </span>
-                        <span class="label label-success"
+                        <span class="badge bg-green"
                               jsf:rendered="#{periodMovement.accounted}">
                             #{enums[periodMovement.periodMovementState]}
                         </span>
-                        <span class="label label-info"
+                        <span class="badge bg-aqua"
                               jsf:rendered="#{periodMovement.paid}">
                             #{enums[periodMovement.periodMovementState]}
                         </span>
                         <p:spacer width="5"
                                   rendered="#{periodMovement.paid or periodMovement.accounted}"/>
-                        <span class="label bg-olive"
+                        <span class="badge bg-maroon"
                               jsf:rendered="#{periodMovement.paidWithCreditCard}">
                             #{messages['period-movement.list.paid-credit-card']}
                         </span>
-                        <span class="label bg-teal"
+                        <span class="badge bg-teal"
                               jsf:rendered="#{periodMovement.paidWithDebitCard}">
                             #{messages['period-movement.list.paid-debit-card']}
                         </span>
-                        <span class="label bg-blue"
+                        <span class="badge bg-blue"
                               jsf:rendered="#{periodMovement.paidWithCash}">
                             #{messages['period-movement.list.paid-cash']}
                         </span>
@@ -320,5 +322,6 @@
                 </div>
             </div>
         </p:dataGrid>
+        <wb:blocker target="periodMovementGrid"/>
     </ui:define>
 </ui:composition>

@@ -48,12 +48,12 @@
     margin-bottom: 5px;
 }
 .period-movement-revenue {
-    border-left: solid 3px green;
+    border-left: solid 3px #00a157;
 }
 .period-movement-expense {
-    border-left: solid 3px red;
+    border-left: solid 3px #f71752;
 }
-.period-badge {
+.fix-badge > span.badge {
     position: relative;
     bottom: 3px;
 }
