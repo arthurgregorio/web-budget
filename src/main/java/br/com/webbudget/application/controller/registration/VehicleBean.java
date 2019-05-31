@@ -126,7 +126,7 @@ public class VehicleBean extends LazyFormBean<Vehicle> {
     @Override
     @Transactional
     public void doUpdate() {
-        this.value = this.vehicleRepository.saveAndFlushAndRefresh(this.value);
+        this.vehicleRepository.saveAndFlushAndRefresh(this.value);
         this.addInfo(true, "updated");
     }
 
