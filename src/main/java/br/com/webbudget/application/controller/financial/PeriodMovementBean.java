@@ -129,6 +129,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     @Override
     public void initialize() {
         super.initialize();
+        this.costCenters = this.costCenterRepository.findAllActive();
         this.financialPeriods = this.financialPeriodRepository.findAll();
         this.filter.setSelectedFinancialPeriods(this.financialPeriodRepository.findByClosed(false));
     }
@@ -334,11 +335,19 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     }
 
     /**
-     * Event to find {@link MovementClass} filtering by the selected {@link CostCenter}
+     * Event to find {@link MovementClass} filtering by the selected {@link CostCenter}. Used on the form UI
      */
-    public void onCostCenterSelect() {
+    public void onCostCenterSelectAtForm() {
         this.movementClasses = this.movementClassRepository
                 .findByActiveAndCostCenterOrderByNameAsc(true, this.apportionment.getCostCenter());
+    }
+
+    /**
+     * Event to find {@link MovementClass} filtering by the selected {@link CostCenter}. Used on the listing UI
+     */
+    public void onCostCenterSelectedAtListing() {
+        this.movementClasses = this.movementClassRepository
+                .findByActiveAndCostCenterOrderByNameAsc(true, this.filter.getCostCenter());
     }
 
     /**

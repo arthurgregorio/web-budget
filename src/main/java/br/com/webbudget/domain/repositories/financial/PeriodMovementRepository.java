@@ -18,12 +18,11 @@ package br.com.webbudget.domain.repositories.financial;
 
 import br.com.webbudget.application.components.ui.filter.PeriodMovementFilter;
 import br.com.webbudget.application.components.ui.table.Page;
+import br.com.webbudget.domain.entities.financial.Apportionment;
+import br.com.webbudget.domain.entities.financial.Apportionment_;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.PeriodMovement_;
-import br.com.webbudget.domain.entities.registration.Contact;
-import br.com.webbudget.domain.entities.registration.Contact_;
-import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import br.com.webbudget.domain.entities.registration.FinancialPeriod_;
+import br.com.webbudget.domain.entities.registration.*;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.EntityGraph;
 import org.apache.deltaspike.data.api.Query;
@@ -265,6 +264,20 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
             // if we can cast the value of the filter to decimal, use this as filter
             filter.valueToBigDecimal()
                     .ifPresent(value -> criteria.or(this.criteria().eq(PeriodMovement_.value, value)));
+        }
+
+        // put the selected cost center as a filter
+        if (filter.getCostCenter() != null) {
+            criteria.join(PeriodMovement_.apportionments,
+                    where(Apportionment.class).join(Apportionment_.costCenter,
+                            where(CostCenter.class).eq(CostCenter_.id, filter.getCostCenter().getId())));
+
+            // if we have a cost center them check if we have a movement class to filter too
+            if (filter.getMovementClass() != null) {
+                criteria.join(PeriodMovement_.apportionments,
+                        where(Apportionment.class).join(Apportionment_.movementClass,
+                                where(MovementClass.class).eq(MovementClass_.id, filter.getMovementClass().getId())));
+            }
         }
 
         // put the selected financial periods as a filter

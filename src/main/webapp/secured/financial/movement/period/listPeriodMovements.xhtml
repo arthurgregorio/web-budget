@@ -120,7 +120,7 @@
                 <h:form id="controlsForm">
                     <p:defaultCommand target="btSearch"/>
                     <div class="row">
-                        <div class="col-xs-2">
+                        <div class="col-xs-3 form-group">
                             <p:selectOneMenu converter="omnifaces.GenericEnumConverter"
                                              value="#{periodMovementBean.filter.periodMovementType}">
                                 <f:selectItem value="#{null}"
@@ -131,7 +131,7 @@
                                                value="#{periodMovementBean.filter.movementTypes}"/>
                             </p:selectOneMenu>
                         </div>
-                        <div class="col-xs-2">
+                        <div class="col-xs-3 form-group">
                             <p:selectOneMenu converter="omnifaces.GenericEnumConverter"
                                              value="#{periodMovementBean.filter.periodMovementState}">
                                 <f:selectItem value="#{null}"
@@ -142,7 +142,7 @@
                                                value="#{periodMovementBean.filter.periodMovementStates}"/>
                             </p:selectOneMenu>
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-xs-6 form-group">
                             <p:autoComplete id="inFinancialPeriod"
                                             multiple="true"
                                             queryDelay="600"
@@ -177,6 +177,37 @@
                                 </p:column>
                             </p:autoComplete>
                         </div>
+                        <div class="col-xs-3">
+                            <p:selectOneMenu id="inCostCenter"
+                                             converter="omnifaces.SelectItemsConverter"
+                                             value="#{periodMovementBean.filter.costCenter}" >
+
+                                <p:ajax event="change"
+                                        update="inMovementClass"
+                                        listener="#{periodMovementBean.onCostCenterSelectedAtListing()}" />
+
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{menu['select-one']}" />
+                                <f:selectItems var="costCenter"
+                                               itemValue="#{costCenter}"
+                                               itemLabel="#{costCenter.name}"
+                                               value="#{periodMovementBean.costCenters}" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-xs-3">
+                            <p:selectOneMenu id="inMovementClass"
+                                             converter="omnifaces.SelectItemsConverter"
+                                             value="#{periodMovementBean.filter.movementClass}" >
+                                <f:selectItem itemValue="#{null}"
+                                              noSelectionOption="true"
+                                              itemLabel="#{menu['select-one']}" />
+                                <f:selectItems var="movementClass"
+                                               itemValue="#{movementClass}"
+                                               itemLabel="#{movementClass.name}"
+                                               value="#{periodMovementBean.movementClasses}" />
+                            </p:selectOneMenu>
+                        </div>
                         <div class="col-xs-4">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
@@ -200,7 +231,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-1">
+                        <div class="col-xs-2">
                             <div class="box-tools pull-right">
                                 <p:commandButton immediate="true"
                                                  value="#{menu['new']}"

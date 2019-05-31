@@ -19,7 +19,9 @@ package br.com.webbudget.application.components.ui.filter;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.PeriodMovementState;
 import br.com.webbudget.domain.entities.financial.PeriodMovementType;
+import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.MovementClass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +47,12 @@ public final class PeriodMovementFilter extends BasicFilter {
 
     @Setter
     @Getter
+    private CostCenter costCenter;
+    @Setter
+    @Getter
+    private MovementClass movementClass;
+    @Setter
+    @Getter
     private PeriodMovementType periodMovementType;
     @Setter
     @Getter
@@ -65,6 +73,8 @@ public final class PeriodMovementFilter extends BasicFilter {
      */
     public void clear() {
         this.value = null;
+        this.costCenter = null;
+        this.movementClass = null;
         this.periodMovementType = null;
         this.periodMovementState = null;
         this.selectedFinancialPeriods = new ArrayList<>();
