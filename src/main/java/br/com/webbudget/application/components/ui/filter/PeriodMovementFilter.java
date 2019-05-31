@@ -49,8 +49,8 @@ public final class PeriodMovementFilter extends BasicFilter {
     @Setter
     @Getter
     private PeriodMovementState periodMovementState;
+
     @Setter
-    @Getter
     private List<FinancialPeriod> selectedFinancialPeriods;
 
     /**
@@ -67,6 +67,7 @@ public final class PeriodMovementFilter extends BasicFilter {
         this.value = null;
         this.periodMovementType = null;
         this.periodMovementState = null;
+        this.selectedFinancialPeriods = new ArrayList<>();
     }
 
     /**
@@ -80,6 +81,15 @@ public final class PeriodMovementFilter extends BasicFilter {
         } catch (Exception ex) {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Getter for the {@link FinancialPeriod} selected
+     *
+     * @return a {@link List} with the selected {@link FinancialPeriod}
+     */
+    public List<FinancialPeriod> getSelectedFinancialPeriods() {
+        return this.selectedFinancialPeriods == null ? List.of() : this.selectedFinancialPeriods;
     }
 
     /**

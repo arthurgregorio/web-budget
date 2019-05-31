@@ -78,64 +78,115 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
     /**
      * Calculate the total of paid or received {@link PeriodMovement} on a list of {@link FinancialPeriod}
      *
+     * @return the total value of paid and received {@link PeriodMovement}
+     */
+    @Query("SELECT COALESCE(SUM(pm.paidValue), 0) " +
+            "FROM PeriodMovement mv " +
+            "INNER JOIN Payment pm ON pm.id = mv.payment.id " +
+            "AND pm.paymentMethod <> 'CREDIT_CARD' " +
+            "AND mv.periodMovementState <> 'OPEN'")
+    BigDecimal calculateTotalPaidAndReceived();
+
+    /**
+     * Same as {@link #calculateTotalPaidAndReceived()} but filtering by {@link FinancialPeriod}
+     *
      * @param periods the list of {@link FinancialPeriod} to search for
      * @return the total value of paid and received {@link PeriodMovement}
      */
     @Query("SELECT COALESCE(SUM(pm.paidValue), 0) " +
             "FROM PeriodMovement mv " +
-            "         INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
-            "         INNER JOIN Payment pm ON pm.id = mv.payment.id " +
-            "    AND fp.id IN (?1) " +
-            "    AND pm.paymentMethod <> 'CREDIT_CARD' " +
-            "    AND mv.periodMovementState <> 'OPEN'")
+            "INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
+            "INNER JOIN Payment pm ON pm.id = mv.payment.id " +
+            "AND fp.id IN (?1) " +
+            "AND pm.paymentMethod <> 'CREDIT_CARD' " +
+            "AND mv.periodMovementState <> 'OPEN'")
     BigDecimal calculateTotalPaidAndReceived(List<Long> periods);
 
     /**
      * Calculate the total of open {@link PeriodMovement} on a list of {@link FinancialPeriod}
+     *
+     * @return the total value of open {@link PeriodMovement}
+     */
+    @Query("SELECT COALESCE(SUM(mv.value), 0) " +
+            "FROM PeriodMovement mv " +
+            "WHERE mv.periodMovementState = 'OPEN'")
+    BigDecimal calculateTotalOpen();
+
+    /**
+     * Same as {@link #calculateTotalOpen()} but filtering by {@link FinancialPeriod}
      *
      * @param periods the list of {@link FinancialPeriod} to search for
      * @return the total value of open {@link PeriodMovement}
      */
     @Query("SELECT COALESCE(SUM(mv.value), 0) " +
             "FROM PeriodMovement mv " +
-            "         INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
-            "    AND fp.id IN (?1) " +
-            "    AND mv.periodMovementState = 'OPEN'")
+            "INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
+            "AND fp.id IN (?1) " +
+            "AND mv.periodMovementState = 'OPEN'")
     BigDecimal calculateTotalOpen(List<Long> periods);
 
     /**
      * Calculate the total of expenses on a list of {@link FinancialPeriod}
+     *
+     * @return the total value of expenses
+     */
+    @Query("SELECT COALESCE(SUM(pm.paidValue), 0) " +
+            "FROM PeriodMovement mv " +
+            "INNER JOIN Payment pm ON pm.id = mv.payment.id " +
+            "INNER JOIN Apportionment ap on ap.movement = mv.id " +
+            "INNER JOIN MovementClass mc on mc.id = ap.movementClass.id " +
+            "AND pm.paymentMethod <> 'CREDIT_CARD' " +
+            "AND mc.movementClassType = 'EXPENSE' " +
+            "AND mv.periodMovementState <> 'OPEN'")
+    BigDecimal calculateTotalExpenses();
+
+    /**
+     * Same as {@link #calculateTotalExpenses()} but filtering by {@link FinancialPeriod}
      *
      * @param periods the list of {@link FinancialPeriod} to search for
      * @return the total value of expenses
      */
     @Query("SELECT COALESCE(SUM(pm.paidValue), 0) " +
             "FROM PeriodMovement mv " +
-            "         INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
-            "         INNER JOIN Payment pm ON pm.id = mv.payment.id " +
-            "         INNER JOIN Apportionment ap on ap.movement = mv.id " +
-            "         INNER JOIN MovementClass mc on mc.id = ap.movementClass.id " +
-            "    AND fp.id IN (?1) " +
-            "    AND pm.paymentMethod <> 'CREDIT_CARD' " +
-            "    AND mc.movementClassType = 'EXPENSE' " +
-            "    AND mv.periodMovementState <> 'OPEN'")
+            "INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
+            "INNER JOIN Payment pm ON pm.id = mv.payment.id " +
+            "INNER JOIN Apportionment ap on ap.movement = mv.id " +
+            "INNER JOIN MovementClass mc on mc.id = ap.movementClass.id " +
+            "AND fp.id IN (?1) " +
+            "AND pm.paymentMethod <> 'CREDIT_CARD' " +
+            "AND mc.movementClassType = 'EXPENSE' " +
+            "AND mv.periodMovementState <> 'OPEN'")
     BigDecimal calculateTotalExpenses(List<Long> periods);
 
     /**
      * Calculate the total of revenues on a list of {@link FinancialPeriod}
+     *
+     * @return the total value of revenues
+     */
+    @Query("SELECT COALESCE(SUM(pm.paidValue), 0) " +
+            "FROM PeriodMovement mv " +
+            "INNER JOIN Payment pm ON pm.id = mv.payment.id " +
+            "INNER JOIN Apportionment ap on ap.movement = mv.id " +
+            "INNER JOIN MovementClass mc on mc.id = ap.movementClass.id " +
+            "AND mc.movementClassType = 'REVENUE' " +
+            "AND mv.periodMovementState <> 'OPEN'")
+    BigDecimal calculateTotalRevenues();
+
+    /**
+     * Same as {@link #calculateTotalRevenues()} but filtering by {@link FinancialPeriod}
      *
      * @param periods the list of {@link FinancialPeriod} to search for
      * @return the total value of revenues
      */
     @Query("SELECT COALESCE(SUM(pm.paidValue), 0) " +
             "FROM PeriodMovement mv " +
-            "         INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
-            "         INNER JOIN Payment pm ON pm.id = mv.payment.id " +
-            "         INNER JOIN Apportionment ap on ap.movement = mv.id " +
-            "         INNER JOIN MovementClass mc on mc.id = ap.movementClass.id " +
-            "    AND fp.id IN (?1) " +
-            "    AND mc.movementClassType = 'REVENUE' " +
-            "    AND mv.periodMovementState <> 'OPEN'")
+            "INNER JOIN FinancialPeriod fp ON fp.id = mv.financialPeriod.id " +
+            "INNER JOIN Payment pm ON pm.id = mv.payment.id " +
+            "INNER JOIN Apportionment ap on ap.movement = mv.id " +
+            "INNER JOIN MovementClass mc on mc.id = ap.movementClass.id " +
+            "AND fp.id IN (?1) " +
+            "AND mc.movementClassType = 'REVENUE' " +
+            "AND mv.periodMovementState <> 'OPEN'")
     BigDecimal calculateTotalRevenues(List<Long> periods);
 
     /**

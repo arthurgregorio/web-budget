@@ -46,6 +46,7 @@ import javax.enterprise.inject.Instance;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -193,10 +194,22 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
                 .map(FinancialPeriod::getId)
                 .collect(Collectors.toList());
 
-        final var totalOpen = this.periodMovementRepository.calculateTotalOpen(periods);
-        final var totalPaidReceived = this.periodMovementRepository.calculateTotalPaidAndReceived(periods);
-        final var totalRevenues = this.periodMovementRepository.calculateTotalRevenues(periods);
-        final var totalExpenses = this.periodMovementRepository.calculateTotalExpenses(periods);
+        final BigDecimal totalOpen;
+        final BigDecimal totalPaidReceived;
+        final BigDecimal totalRevenues;
+        final BigDecimal totalExpenses;
+
+        if (periods.isEmpty()) {
+            totalOpen = this.periodMovementRepository.calculateTotalOpen();
+            totalPaidReceived = this.periodMovementRepository.calculateTotalPaidAndReceived();
+            totalRevenues = this.periodMovementRepository.calculateTotalRevenues();
+            totalExpenses = this.periodMovementRepository.calculateTotalExpenses();
+        } else {
+            totalOpen = this.periodMovementRepository.calculateTotalOpen(periods);
+            totalPaidReceived = this.periodMovementRepository.calculateTotalPaidAndReceived(periods);
+            totalRevenues = this.periodMovementRepository.calculateTotalRevenues(periods);
+            totalExpenses = this.periodMovementRepository.calculateTotalExpenses(periods);
+        }
 
         this.periodMovementResume.update(totalPaidReceived, totalOpen, totalRevenues, totalExpenses);
     }

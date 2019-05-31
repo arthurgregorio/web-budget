@@ -115,7 +115,7 @@
                 </div>
             </div>
         </div>
-        <div class="box box-#{profileBean.currentThemeColorName}">
+        <div class="box box-#{profileBean.currentThemeColorName}" style="margin-bottom: 10px;">
             <div class="box-header with-border">
                 <h:form id="controlsForm">
                     <p:defaultCommand target="btSearch"/>
@@ -213,116 +213,115 @@
                 </h:form>
             </div>
         </div>
-        <p:dataGrid id="periodMovementGrid"
-                    rows="25"
-                    lazy="true"
-                    columns="1"
-                    paginator="true"
-                    var="periodMovement"
-                    sortOrder="descending"
-                    selectionMode="single"
-                    paginatorPosition="bottom"
-                    rowKey="#{periodMovement.id}"
-                    paginatorAlwaysVisible="false"
-                    value="#{periodMovementBean.dataModel}"
-                    selection="#{periodMovementBean.value}"
-                    emptyMessage="#{messages['list.empty']}">
+        <div jsf:id="gridBox">
+            <p:dataGrid id="periodMovementGrid"
+                        rows="25"
+                        lazy="true"
+                        columns="1"
+                        paginator="true"
+                        var="periodMovement"
+                        paginatorPosition="bottom"
+                        rowKey="#{periodMovement.id}"
+                        paginatorAlwaysVisible="false"
+                        value="#{periodMovementBean.dataModel}"
+                        emptyMessage="#{messages['list.empty']}">
 
-            <div class="box box-widget period-movement-widget #{periodMovement.revenue ? 'period-movement-revenue' : 'period-movement-expense'}">
-                <div class="box-header with-border fix-badge">
+                <div class="box box-widget period-movement-widget #{periodMovement.revenue ? 'period-movement-revenue' : 'period-movement-expense'}">
+                    <div class="box-header with-border fix-badge">
                     <span class="badge bg-teal">
                         #{periodMovement.financialPeriod.identification}
                     </span>
-                    <p:spacer width="5"/>
-                    <h3 class="box-title">#{periodMovement.identification}</h3>
-                    <div class="pull-right">
+                        <p:spacer width="5"/>
+                        <h3 class="box-title">#{periodMovement.identification}</h3>
+                        <div class="pull-right">
                         <span class="badge bg-yellow"
                               jsf:rendered="#{periodMovement.open}">
                             #{enums[periodMovement.periodMovementState]}
                         </span>
-                        <span class="badge bg-green"
-                              jsf:rendered="#{periodMovement.accounted}">
+                            <span class="badge bg-green"
+                                  jsf:rendered="#{periodMovement.accounted}">
                             #{enums[periodMovement.periodMovementState]}
                         </span>
-                        <span class="badge bg-aqua"
-                              jsf:rendered="#{periodMovement.paid}">
+                            <span class="badge bg-aqua"
+                                  jsf:rendered="#{periodMovement.paid}">
                             #{enums[periodMovement.periodMovementState]}
                         </span>
-                        <p:spacer width="5"
-                                  rendered="#{periodMovement.paid or periodMovement.accounted}"/>
-                        <span class="badge bg-maroon"
-                              jsf:rendered="#{periodMovement.paidWithCreditCard}">
+                            <p:spacer width="5"
+                                      rendered="#{periodMovement.paid or periodMovement.accounted}"/>
+                            <span class="badge bg-maroon"
+                                  jsf:rendered="#{periodMovement.paidWithCreditCard}">
                             #{messages['period-movement.list.paid-credit-card']}
                         </span>
-                        <span class="badge bg-teal"
-                              jsf:rendered="#{periodMovement.paidWithDebitCard}">
+                            <span class="badge bg-teal"
+                                  jsf:rendered="#{periodMovement.paidWithDebitCard}">
                             #{messages['period-movement.list.paid-debit-card']}
                         </span>
-                        <span class="badge bg-blue"
-                              jsf:rendered="#{periodMovement.paidWithCash}">
+                            <span class="badge bg-blue"
+                                  jsf:rendered="#{periodMovement.paidWithCash}">
                             #{messages['period-movement.list.paid-cash']}
                         </span>
+                        </div>
+                    </div>
+                    <div class="box-body row">
+                        <div class="col-md-3">
+                            <label>#{messages['period-movement.list.contact']}:</label>
+                            <br/>
+                            <h:outputText value="#{periodMovement.contactName}"
+                                          rendered="#{not empty periodMovement.contactName}"/>
+                            <h:outputText rendered="#{empty periodMovement.contactName}"
+                                          value="#{messages['period-movement.list.no-contact']}"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label>#{messages['period-movement.list.due-date']}:</label>
+                            <br/>
+                            <h:outputText value="#{periodMovement.dueDate}">
+                                <f:converter converterId="localDateConverter"/>
+                            </h:outputText>
+                        </div>
+                        <div class="col-md-3">
+                            <label>#{messages['period-movement.list.value']}:</label>
+                            <br/>
+                            <h:outputText value="#{periodMovement.valueWithDiscount}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                            <p:spacer width="5"/>
+                            <h:outputText value="(D)"
+                                          styleClass="text-bold text-red"
+                                          rendered="#{periodMovement.discountPresent}"/>
+                        </div>
+                        <div class="col-md-3 text-right" style="padding-top: 10px">
+                            <p:commandButton title="#{menu['pay']}"
+                                             icon="fa fa-hand-holding-usd"
+                                             styleClass="btn btn-flat btn-success"
+                                             action="#{periodMovementBean.changeToPay(periodMovement.id)}"
+                                             rendered="#{periodMovement.open and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_PAY)}"/>
+                            <p:spacer width="5"
+                                      rendered="#{periodMovement.open and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_PAY)}"/>
+                            <p:commandButton icon="fa fa-info"
+                                             title="#{menu['detail']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{periodMovementBean.changeToDetail(periodMovement.id)}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DETAIL)}"/>
+                            <p:spacer width="5"
+                                      rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DETAIL)}"/>
+                            <p:commandButton icon="fa fa-edit"
+                                             title="#{menu['edit']}"
+                                             styleClass="btn btn-flat btn-default"
+                                             action="#{periodMovementBean.changeToEdit(periodMovement.id)}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
+                            <p:spacer width="5"
+                                      rendered="#{not periodMovement.accounted and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
+                            <p:commandButton icon="fa fa-eraser"
+                                             title="#{menu['delete']}"
+                                             styleClass="btn btn-flat btn-danger"
+                                             action="#{periodMovementBean.changeToDelete(periodMovement.id)}"
+                                             rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DELETE)}"/>
+                        </div>
                     </div>
                 </div>
-                <div class="box-body row">
-                    <div class="col-md-3">
-                        <label>#{messages['period-movement.list.contact']}:</label>
-                        <br/>
-                        <h:outputText value="#{periodMovement.contactName}"
-                                      rendered="#{not empty periodMovement.contactName}"/>
-                        <h:outputText rendered="#{empty periodMovement.contactName}"
-                                      value="#{messages['period-movement.list.no-contact']}"/>
-                    </div>
-                    <div class="col-md-3">
-                        <label>#{messages['period-movement.list.due-date']}:</label>
-                        <br/>
-                        <h:outputText value="#{periodMovement.dueDate}">
-                            <f:converter converterId="localDateConverter"/>
-                        </h:outputText>
-                    </div>
-                    <div class="col-md-3">
-                        <label>#{messages['period-movement.list.value']}:</label>
-                        <br/>
-                        <h:outputText value="#{periodMovement.valueWithDiscount}">
-                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
-                        </h:outputText>
-                        <p:spacer width="5"/>
-                        <h:outputText value="(D)"
-                                      styleClass="text-bold text-red"
-                                      rendered="#{periodMovement.discountPresent}"/>
-                    </div>
-                    <div class="col-md-3 text-right" style="padding-top: 10px">
-                        <p:commandButton title="#{menu['pay']}"
-                                         icon="fa fa-hand-holding-usd"
-                                         styleClass="btn btn-flat btn-success"
-                                         action="#{periodMovementBean.changeToPay(periodMovement.id)}"
-                                         rendered="#{periodMovement.open and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_PAY)}"/>
-                        <p:spacer width="5"
-                                  rendered="#{periodMovement.open and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_PAY)}"/>
-                        <p:commandButton icon="fa fa-info"
-                                         title="#{menu['detail']}"
-                                         styleClass="btn btn-flat btn-default"
-                                         action="#{periodMovementBean.changeToDetail(periodMovement.id)}"
-                                         rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DETAIL)}"/>
-                        <p:spacer width="5"
-                                  rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DETAIL)}"/>
-                        <p:commandButton icon="fa fa-edit"
-                                         title="#{menu['edit']}"
-                                         styleClass="btn btn-flat btn-default"
-                                         action="#{periodMovementBean.changeToEdit(periodMovement.id)}"
-                                         rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
-                        <p:spacer width="5"
-                                  rendered="#{not periodMovement.accounted and userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_UPDATE)}"/>
-                        <p:commandButton icon="fa fa-eraser"
-                                         title="#{menu['delete']}"
-                                         styleClass="btn btn-flat btn-danger"
-                                         action="#{periodMovementBean.changeToDelete(periodMovement.id)}"
-                                         rendered="#{userSessionBean.isPermitted(permissions.PERIOD_MOVEMENT_DELETE)}"/>
-                    </div>
-                </div>
-            </div>
-        </p:dataGrid>
-
+            </p:dataGrid>
+        </div>
+        <wb:blocker target="gridBox"/>
         <h:form>
             <p:remoteCommand autoRun="true"
                              update="resumeBox"
@@ -330,7 +329,5 @@
                              process="@this controlsForm"
                              actionListener="#{periodMovementBean.loadResume()}"/>
         </h:form>
-
-        <wb:blocker target="periodMovementGrid"/>
     </ui:define>
 </ui:composition>
