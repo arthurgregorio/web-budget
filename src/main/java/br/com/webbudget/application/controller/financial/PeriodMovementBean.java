@@ -288,6 +288,9 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
                 of("viewState", viewState));
     }
 
+    /**
+     * Show the dialog with the payment details
+     */
     public void showPaymentDetailDialog() {
         this.updateAndOpenDialog("detailPaymentDialog", "dialogDetailPayment");
     }
