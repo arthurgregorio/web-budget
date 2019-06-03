@@ -123,16 +123,25 @@
                     </div>
                 </div>
                 <div class="box-footer text-right">
-                    <p:commandButton update="paymentForm"
-                                     value="#{menu['pay']}"
-                                     styleClass="btn btn-flat btn-success"
-                                     action="#{paymentBean.doPaymentAndNew()}"/>
-                    <p:spacer width="5"/>
-                    <p:commandButton update="paymentForm"
-                                     value="#{menu['pay-and-go-back']}"
-                                     styleClass="btn btn-flat btn-warning"
-                                     actionListener="#{paymentBean.doPayment()}"/>
-                    <p:spacer width="5"/>
+                    <ui:fragment rendered="#{paymentBean.viewState.adding}">
+                        <p:commandButton update="paymentForm"
+                                         value="#{menu['pay']}"
+                                         styleClass="btn btn-flat btn-success"
+                                         action="#{paymentBean.doPaymentAndNew()}"/>
+                        <p:spacer width="5"/>
+                        <p:commandButton update="paymentForm"
+                                         value="#{menu['pay-and-go-back']}"
+                                         styleClass="btn btn-flat btn-warning"
+                                         actionListener="#{paymentBean.doPayment()}"/>
+                        <p:spacer width="5"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{paymentBean.viewState.editing}">
+                        <p:commandButton update="paymentForm"
+                                         value="#{menu['pay']}"
+                                         action="#{paymentBean.doPayment()}"
+                                         styleClass="btn btn-flat btn-success"/>
+                        <p:spacer width="5"/>
+                    </ui:fragment>
                     <p:commandButton immediate="true"
                                      value="#{menu['back']}"
                                      styleClass="btn btn-flat btn-primary"

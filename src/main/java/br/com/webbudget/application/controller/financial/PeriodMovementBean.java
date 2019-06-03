@@ -253,7 +253,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      */
     public String doSaveAndPay() {
         final PeriodMovement saved = this.periodMovementService.save(this.value);
-        return this.changeToPay(saved.getId());
+        return this.changeToPay(saved.getId(), ViewState.ADDING);
     }
 
     /**
@@ -263,7 +263,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      */
     public String doUpdateAndPay() {
         final PeriodMovement saved = this.periodMovementService.update(this.value);
-        return this.changeToPay(saved.getId());
+        return this.changeToPay(saved.getId(), ViewState.ADDING);
     }
 
     /**
@@ -273,8 +273,19 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      * @return the payment page
      */
     public String changeToPay(long idMovement) {
+        return this.changeToPay(idMovement, ViewState.EDITING);
+    }
+
+    /**
+     * Change to the payment view
+     *
+     * @param idMovement the {@link PeriodMovement} id
+     * @param viewState of the payment form, if we are coming from listing view, is editing
+     * @return the payment page
+     */
+    public String changeToPay(long idMovement, ViewState viewState) {
         return this.navigation.to("formPayment.xhtml", of("id", idMovement),
-                of("viewState", ViewState.ADDING));
+                of("viewState", viewState));
     }
 
     public void showPaymentDetailDialog() {
