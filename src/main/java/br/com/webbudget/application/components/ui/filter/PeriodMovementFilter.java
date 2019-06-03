@@ -87,7 +87,7 @@ public final class PeriodMovementFilter extends BasicFilter {
      */
     public Optional<BigDecimal> valueToBigDecimal() {
         try {
-            return Optional.of(new BigDecimal(this.value));
+            return Optional.of(new BigDecimal(this.value.replace(",", ".")));
         } catch (Exception ex) {
             return Optional.empty();
         }

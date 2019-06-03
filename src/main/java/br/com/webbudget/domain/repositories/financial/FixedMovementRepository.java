@@ -26,8 +26,10 @@ import org.apache.deltaspike.data.api.EntityGraph;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -104,7 +106,6 @@ public interface FixedMovementRepository extends DefaultRepository<FixedMovement
      * @param filter to be used
      * @return the {@link Criteria} created to search for {@link FixedMovement}
      */
-    @SuppressWarnings("unchecked")
     default Criteria<FixedMovement, FixedMovement> buildCriteria(FixedMovementFilter filter) {
 
         final Criteria<FixedMovement, FixedMovement> criteria = this.criteria();
@@ -117,12 +118,15 @@ public interface FixedMovementRepository extends DefaultRepository<FixedMovement
 
             final String anyFilter = this.likeAny(filter.getValue());
 
-            criteria.or(
-                    this.criteria().likeIgnoreCase(FixedMovement_.identification, anyFilter),
-                    this.criteria().likeIgnoreCase(FixedMovement_.description, anyFilter));
+            final Set<Criteria<FixedMovement, FixedMovement>> restrictions = new HashSet<>();
+
+            restrictions.add(this.criteria().likeIgnoreCase(FixedMovement_.identification, anyFilter));
+            restrictions.add(this.criteria().likeIgnoreCase(FixedMovement_.description, anyFilter));
 
             filter.valueToBigDecimal()
-                    .ifPresent(value -> criteria.or(this.criteria().eq(PeriodMovement_.value, value)));
+                    .ifPresent(value -> restrictions.add(this.criteria().eq(PeriodMovement_.value, value)));
+
+            criteria.or(restrictions);
         }
 
         return criteria;

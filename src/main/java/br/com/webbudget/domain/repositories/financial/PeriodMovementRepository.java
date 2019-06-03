@@ -29,10 +29,11 @@ import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
-import javax.persistence.criteria.JoinType;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -233,7 +234,6 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
      * @param filter the {@link PeriodMovementFilter}
      * @return the {@link Criteria} with the restrictions to find the {@link PeriodMovement}
      */
-    @SuppressWarnings("unchecked")
     default Criteria<PeriodMovement, PeriodMovement> buildCriteria(PeriodMovementFilter filter) {
 
         final Criteria<PeriodMovement, PeriodMovement> criteria = this.criteria();
@@ -253,17 +253,19 @@ public interface PeriodMovementRepository extends DefaultRepository<PeriodMoveme
 
             final String anyFilter = this.likeAny(filter.getValue());
 
-            criteria.or(this.criteria().eq(PeriodMovement_.code, anyFilter));
-            criteria.or(this.criteria().likeIgnoreCase(PeriodMovement_.description, anyFilter));
-            criteria.or(this.criteria().likeIgnoreCase(PeriodMovement_.identification, anyFilter));
-            criteria.or(this.criteria().join(PeriodMovement_.financialPeriod,
+            final Set<Criteria<PeriodMovement, PeriodMovement>> restrictions = new HashSet<>();
+
+            restrictions.add(this.criteria().eq(PeriodMovement_.code, anyFilter));
+            restrictions.add(this.criteria().likeIgnoreCase(PeriodMovement_.description, anyFilter));
+            restrictions.add(this.criteria().likeIgnoreCase(PeriodMovement_.identification, anyFilter));
+            restrictions.add(this.criteria().join(PeriodMovement_.financialPeriod,
                     where(FinancialPeriod.class).likeIgnoreCase(FinancialPeriod_.identification, anyFilter)));
-            criteria.or(this.criteria().join(PeriodMovement_.contact,
-                    where(Contact.class, JoinType.LEFT).likeIgnoreCase(Contact_.name, anyFilter)));
 
             // if we can cast the value of the filter to decimal, use this as filter
             filter.valueToBigDecimal()
-                    .ifPresent(value -> criteria.or(this.criteria().eq(PeriodMovement_.value, value)));
+                    .ifPresent(value -> restrictions.add(this.criteria().eq(PeriodMovement_.value, value)));
+
+            criteria.or(restrictions);
         }
 
         // put the selected cost center as a filter
