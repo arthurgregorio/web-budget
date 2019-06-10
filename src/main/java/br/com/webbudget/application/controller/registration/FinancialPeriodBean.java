@@ -168,6 +168,12 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
         this.updateAndOpenDialog("reopeningConfirmationDialog", "dialogReopeningConfirmation");
     }
 
+    public void showReopenConfirmationDialog(long periodId) {
+        this.value = this.financialPeriodRepository.findById(periodId)
+                .orElseThrow(() -> new IllegalStateException("Can't find financial period with id " + periodId));
+        this.updateAndOpenDialog("reopeningConfirmationDialog", "dialogReopeningConfirmation");
+    }
+
     /**
      * Helper method to navigate to the closing page of the selected {@link FinancialPeriod}
      *

@@ -183,6 +183,13 @@
                                              styleClass="btn btn-flat btn-default"
                                              action="#{financialPeriodBean.changeToStatistics(financialPeriod.id)}"/>
                             <p:spacer width="5"
+                                      rendered="#{financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_REOPEN)}"/>
+                            <p:commandButton icon="fa fa-sync-alt"
+                                             title="#{menu['reopen']}"
+                                             styleClass="btn btn-flat btn-warning"
+                                             action="#{financialPeriodBean.showReopenConfirmationDialog(financialPeriod.id)}"
+                                             rendered="#{financialPeriod.closed and userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_REOPEN)}"/>
+                            <p:spacer width="5"
                                       rendered="#{not financialPeriod.closed and userSessionBean.isPermitted(permissions.CLOSING_ACCESS)}"/>
                             <p:commandButton icon="fa fa-calculator"
                                              title="#{menu['close-period']}"
@@ -202,5 +209,8 @@
             </div>
         </div>
         <wb:blocker target="boxBody"/>
+    </ui:define>
+    <ui:define name="popups">
+        <ui:include src="dialogReopeningConfirmation.xhtml"/>
     </ui:define>
 </ui:composition>

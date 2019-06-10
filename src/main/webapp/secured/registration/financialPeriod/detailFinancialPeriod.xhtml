@@ -161,7 +161,7 @@
                         <p:spacer width="5"
                                   rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_REOPEN)}"/>
                         <p:commandButton value="#{menu['reopen']}"
-                                         styleClass="btn btn-flat btn-danger"
+                                         styleClass="btn btn-flat btn-warning"
                                          action="#{financialPeriodBean.showReopenConfirmationDialog()}"
                                          rendered="#{userSessionBean.isPermitted(permissions.FINANCIAL_PERIOD_REOPEN)}"/>
                     </ui:fragment>

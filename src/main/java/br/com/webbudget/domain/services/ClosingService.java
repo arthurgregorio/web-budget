@@ -20,7 +20,6 @@ import br.com.webbudget.domain.calculators.PeriodMovementCalculator;
 import br.com.webbudget.domain.entities.financial.Closing;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.logics.BusinessLogic;
 import br.com.webbudget.domain.logics.financial.closing.ClosingSavingLogic;
 import br.com.webbudget.domain.logics.financial.closing.ReopenPeriodLogic;
 import br.com.webbudget.domain.repositories.financial.ClosingRepository;
