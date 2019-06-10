@@ -19,6 +19,7 @@ package br.com.webbudget.domain.repositories.financial;
 import br.com.webbudget.application.components.ui.filter.FixedMovementFilter;
 import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.domain.entities.financial.FixedMovement;
+import br.com.webbudget.domain.entities.financial.FixedMovementState;
 import br.com.webbudget.domain.entities.financial.FixedMovement_;
 import br.com.webbudget.domain.entities.financial.PeriodMovement_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
@@ -58,9 +59,10 @@ public interface FixedMovementRepository extends DefaultRepository<FixedMovement
      * Find all {@link FixedMovement} by the auto launch flag
      *
      * @param autoLaunch true or false
+     * @param state the state that we want to get
      * @return a {@link List} of the {@link FixedMovement} found
      */
-    List<FixedMovement> findByAutoLaunch(boolean autoLaunch);
+    List<FixedMovement> findByAutoLaunchAndFixedMovementState(boolean autoLaunch, FixedMovementState state);
 
     /**
      * Method used to search for {@link FixedMovement} using pagination

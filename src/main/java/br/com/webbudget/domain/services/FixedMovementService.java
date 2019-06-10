@@ -187,6 +187,7 @@ public class FixedMovementService {
      * @param financialPeriod opened
      */
     public void onFinancialPeriodOpen(@Observes @FinancialPeriodOpened FinancialPeriod financialPeriod) {
-        this.launch(this.fixedMovementRepository.findByAutoLaunch(true), financialPeriod);
+        this.launch(this.fixedMovementRepository.findByAutoLaunchAndFixedMovementState(
+                true, FixedMovementState.ACTIVE), financialPeriod);
     }
 }
