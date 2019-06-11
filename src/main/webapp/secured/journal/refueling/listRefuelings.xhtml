@@ -111,8 +111,20 @@
                                 listener="#{refuelingBean.changeToDetail()}"
                                 disabled="#{not userSessionBean.isPermitted(permissions.REFUELING_DETAIL)}"/>
 
+                        <p:column width="10%"
+                                  styleClass="text-center"
+                                  headerText="#{messages['refueling.list.event-date']}">
+                            <h:outputText value="#{refueling.eventDate}">
+                                <f:converter converterId="localDateConverter"/>
+                            </h:outputText>
+                        </p:column>
                         <p:column headerText="#{messages['refueling.list.vehicle']}">
                             #{refueling.vehicleIdentification}
+                            <p:spacer width="5"/>
+                            <span class="badge bg-teal badge-row-fix"
+                                  jsf:rendered="#{refueling.fullTank and not refueling.firstRefueling}">
+                                #{refueling.distance} Km
+                            </span>
                         </p:column>
                         <p:column width="12%"
                                   styleClass="text-center"
@@ -142,11 +154,11 @@
                                           value="#{refueling.averageConsumption} Km/L">
                                 <f:convertNumber pattern="#0.00"/>
                             </h:outputText>
-                            <span class="text text-info text-bold"
+                            <span class="badge bg-green badge-row-fix"
                                   jsf:rendered="#{refueling.firstRefueling}">
                                 #{messages['refueling.first']}
                             </span>
-                            <span class="text text-warning text-bold"
+                            <span class="badge bg-orange badge-row-fix"
                                   jsf:rendered="#{not refueling.fullTank}">
                                 #{messages['refueling.partial']}
                             </span>
