@@ -133,33 +133,25 @@
                                   styleClass="text-center"/>
 
                         <p:column headerText="#{messages['fixed-movement.list.identification']}">
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/blue-circle.png"
-                                            title="#{messages['fixed-movement.list.launched']}"
-                                            rendered="#{fixedMovement.alreadyLaunched and fixedMovement.active}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/red-circle.png"
-                                            title="#{messages['fixed-movement.list.not-launched']}"
-                                            rendered="#{not fixedMovement.alreadyLaunched and fixedMovement.active}"/>
+                            <span class="badge bg-green badge-row-fix"
+                                  jsf:rendered="#{fixedMovement.active}">
+                                #{enums[fixedMovement.fixedMovementState]}
+                            </span>
+                            <span class="badge bg-red badge-row-fix"
+                                  jsf:rendered="#{not fixedMovement.active}">
+                                #{enums[fixedMovement.fixedMovementState]}
+                            </span>
+                            <p:spacer width="5"/>
+                            <span class="badge bg-orange badge-row-fix"
+                                  jsf:rendered="#{not fixedMovement.alreadyLaunched and fixedMovement.active}">
+                                #{messages['fixed-movement.list.not-launched']}
+                            </span>
+                            <span class="badge bg-aqua badge-row-fix"
+                                  jsf:rendered="#{fixedMovement.alreadyLaunched and fixedMovement.active}">
+                                #{messages['fixed-movement.list.launched']}
+                            </span>
                             <p:spacer width="5"
                                       rendered="#{fixedMovement.active}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/orange-circle.png"
-                                            rendered="#{fixedMovement.active}"
-                                            title="#{enums[fixedMovement.fixedMovementState]}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/green-circle.png"
-                                            rendered="#{fixedMovement.finished}"
-                                            title="#{enums[fixedMovement.fixedMovementState]}"/>
-                            <p:spacer width="5"/>
                             #{fixedMovement.identification}
                         </p:column>
                         <p:column width="10%"
