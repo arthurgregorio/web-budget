@@ -117,31 +117,23 @@
                                 disabled="#{not userSessionBean.isPermitted(permissions.MOVEMENT_CLASS_DETAIL)}"/>
 
                         <p:column headerText="#{messages['movement-class.list.name']}">
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/inactive.png"
-                                            title="#{messages['list.inactive']}"
-                                            rendered="#{not movementClass.active}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/active.png"
-                                            rendered="#{movementClass.active}"
-                                            title="#{messages['list.active']}"/>
+                            <span class="badge bg-red badge-row-fix"
+                                  jsf:rendered="#{not movementClass.active}">
+                                #{messages['list.inactive']}
+                            </span>
+                            <span class="badge bg-green badge-row-fix"
+                                  jsf:rendered="#{movementClass.active}">
+                                #{messages['list.active']}
+                            </span>
                             <p:spacer width="5"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/minus.png"
-                                            rendered="#{movementClass.expense}"
-                                            title="#{messages['movement-class.list.expenses']}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/plus.png"
-                                            rendered="#{movementClass.revenue}"
-                                            title="#{messages['movement-class.list.revenues']}"/>
+                            <span class="badge bg-orange badge-row-fix"
+                                  jsf:rendered="#{movementClass.expense}">
+                                #{messages['movement-class.list.expenses']}
+                            </span>
+                            <span class="badge bg-aqua badge-row-fix"
+                                  jsf:rendered="#{movementClass.revenue}">
+                                #{messages['movement-class.list.revenues']}
+                            </span>
                             <p:spacer width="5"/>
                             #{movementClass.name}
                         </p:column>

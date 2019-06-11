@@ -121,18 +121,14 @@
                                 disabled="#{not userSessionBean.isPermitted(permissions.VEHICLE_DETAIL)}"/>
 
                         <p:column headerText="#{messages['card.list.name']}">
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/inactive.png"
-                                            rendered="#{not vehicle.active}"
-                                            title="#{messages['list.inactive']}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/active.png"
-                                            rendered="#{vehicle.active}"
-                                            title="#{messages['list.active']}"/>
+                            <span class="badge bg-red badge-row-fix"
+                                  jsf:rendered="#{not vehicle.active}">
+                                #{messages['list.inactive']}
+                            </span>
+                            <span class="badge bg-green badge-row-fix"
+                                  jsf:rendered="#{vehicle.active}">
+                                #{messages['list.active']}
+                            </span>
                             <p:spacer width="5"/>
                             #{vehicle.identification}
                         </p:column>

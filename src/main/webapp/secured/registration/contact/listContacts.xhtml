@@ -117,18 +117,14 @@
                                 disabled="#{not userSessionBean.isPermitted(permissions.CONTACT_DETAIL)}"/>
 
                         <p:column headerText="#{messages['contact.list.name']}">
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/inactive.png"
-                                            rendered="#{not contact.active}"
-                                            title="#{messages['list.inactive']}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/active.png"
-                                            rendered="#{contact.active}"
-                                            title="#{messages['list.active']}"/>
+                            <span class="badge bg-red badge-row-fix"
+                                  jsf:rendered="#{not contact.active}">
+                                #{messages['list.inactive']}
+                            </span>
+                            <span class="badge bg-green badge-row-fix"
+                                  jsf:rendered="#{contact.active}">
+                                #{messages['list.active']}
+                            </span>
                             <p:spacer width="5"/>
                             #{contact.name}
                         </p:column>

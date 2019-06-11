@@ -117,18 +117,14 @@
                                 disabled="#{not userSessionBean.isPermitted(permissions.CARD_DETAIL)}"/>
 
                         <p:column headerText="#{messages['card.list.name']}">
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/inactive.png"
-                                            rendered="#{not card.active}"
-                                            title="#{messages['list.inactive']}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/active.png"
-                                            rendered="#{card.active}"
-                                            title="#{messages['list.active']}"/>
+                            <span class="badge bg-red badge-row-fix"
+                                  jsf:rendered="#{not card.active}">
+                                #{messages['list.inactive']}
+                            </span>
+                            <span class="badge bg-green badge-row-fix"
+                                  jsf:rendered="#{card.active}">
+                                #{messages['list.active']}
+                            </span>
                             <p:spacer width="5"/>
                             #{card.readableName}
                         </p:column>

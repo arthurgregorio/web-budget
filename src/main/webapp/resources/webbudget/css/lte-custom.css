@@ -27,6 +27,12 @@
     font-size: 14px;
 }
 
+/*when a badge is used in a datatable row, this will adjust the spaces*/
+.badge-row-fix {
+    top: -2px;
+    position: relative;
+}
+
 /*period movement data grid customization*/
 #itemsList\:periodMovementGrid_content {
     border: none;

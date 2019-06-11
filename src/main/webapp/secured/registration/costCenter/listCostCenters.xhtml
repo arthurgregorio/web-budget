@@ -117,18 +117,14 @@
                                 disabled="#{not userSessionBean.isPermitted(permissions.COST_CENTER_DETAIL)}"/>
 
                         <p:column headerText="#{messages['cost-center.list.name']}">
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/inactive.png"
-                                            rendered="#{not costCenter.active}"
-                                            title="#{messages['list.inactive']}"/>
-                            <p:graphicImage width="20"
-                                            height="20"
-                                            library="webbudget"
-                                            name="images/active.png"
-                                            rendered="#{costCenter.active}"
-                                            title="#{messages['list.active']}"/>
+                            <span class="badge bg-red badge-row-fix"
+                                  jsf:rendered="#{not costCenter.active}">
+                                #{messages['list.inactive']}
+                            </span>
+                            <span class="badge bg-green badge-row-fix"
+                                  jsf:rendered="#{costCenter.active}">
+                                #{messages['list.active']}
+                            </span>
                             <p:spacer width="5"/>
                             #{costCenter.name}
                         </p:column>
