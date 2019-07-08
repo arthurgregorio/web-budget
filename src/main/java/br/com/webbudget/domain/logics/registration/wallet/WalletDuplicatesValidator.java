@@ -59,7 +59,7 @@ public class WalletDuplicatesValidator implements WalletSavingLogic, WalletUpdat
      * @param value the value to be evaluated
      */
     private void validateNotSaved(Wallet value) {
-        final Optional<Wallet> found = this.find(value.getName(), value.getWalletType());
+        final Optional<Wallet> found = this.find(value.getName(), value.getBank(), value.getWalletType());
         found.ifPresent(movementClass -> {
             throw new BusinessLogicException("error.wallet.duplicated");
         });
@@ -71,7 +71,7 @@ public class WalletDuplicatesValidator implements WalletSavingLogic, WalletUpdat
      * @param value the value to be evaluated
      */
     private void validateSaved(Wallet value) {
-        final Optional<Wallet> found = this.find(value.getName(), value.getWalletType());
+        final Optional<Wallet> found = this.find(value.getName(), value.getBank(), value.getWalletType());
         if (found.isPresent() && !found.get().equals(value)) {
             throw new BusinessLogicException("error.wallet.duplicated");
         }
@@ -81,10 +81,11 @@ public class WalletDuplicatesValidator implements WalletSavingLogic, WalletUpdat
      * Find the value on the database to compare with the one to be validated
      *
      * @param name the name of the {@link Wallet}
+     * @param bank the bank used by this {@link Wallet}
      * @param walletType the {@link WalletType} of the {@link Wallet}
      * @return a {@link Optional} of the {@link Wallet}
      */
-    private Optional<Wallet> find(String name, WalletType walletType) {
-        return this.walletRepository.findByNameAndWalletType(name, walletType);
+    private Optional<Wallet> find(String name, String bank, WalletType walletType) {
+        return this.walletRepository.findByNameAndBankAndWalletType(name, bank, walletType);
     }
 }

@@ -40,13 +40,14 @@ import java.util.Optional;
 public interface WalletRepository extends LazyDefaultRepository<Wallet> {
 
     /**
-     * Use this method to search for a wallet by the name and type
+     * Use this method to search for a wallet by the name, bank and type
      *
-     * @param name the name of the wallet
-     * @param walletType the type of the wallet defined by the {@link WalletType} enum
-     * @return an {@link Optional} of the wallet
+     * @param name of the wallet
+     * @param bank used with this {@link Wallet}
+     * @param walletType of this {@link Wallet}
+     * @return an {@link Optional} of the {@link Wallet}
      */
-    Optional<Wallet> findByNameAndWalletType(String name, WalletType walletType);
+    Optional<Wallet> findByNameAndBankAndWalletType(String name, String bank, WalletType walletType);
 
     /**
      * {@inheritDoc}
