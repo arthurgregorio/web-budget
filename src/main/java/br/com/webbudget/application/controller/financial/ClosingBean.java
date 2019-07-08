@@ -65,7 +65,7 @@ public class ClosingBean extends AbstractBean {
      */
     public void initialize(long financialPeriodId) {
 
-        this.openFinancialPeriods = this.financialPeriodRepository.findByClosed(false);
+        this.openFinancialPeriods = this.financialPeriodRepository.findByClosedOrderByIdentificationAsc(false);
 
         if (financialPeriodId != 0) {
             this.financialPeriod = this.financialPeriodRepository.findById(financialPeriodId)
@@ -79,7 +79,7 @@ public class ClosingBean extends AbstractBean {
     public void doClosing() {
         this.closingService.close(this.financialPeriod);
         this.closing = null;
-        this.openFinancialPeriods = this.financialPeriodRepository.findByClosed(false);
+        this.openFinancialPeriods = this.financialPeriodRepository.findByClosedOrderByIdentificationAsc(false);
         this.closeDialog("dialogClosingConfirmation");
         this.addInfo(true, "info.closing.period-closed", this.financialPeriod.getIdentification());
     }

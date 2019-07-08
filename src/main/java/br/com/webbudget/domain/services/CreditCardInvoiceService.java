@@ -115,7 +115,8 @@ public class CreditCardInvoiceService {
             return;
         }
 
-        final List<FinancialPeriod> financialPeriods = this.financialPeriodRepository.findByClosed(false);
+        final List<FinancialPeriod> financialPeriods = this.financialPeriodRepository
+                .findByClosedOrderByIdentificationAsc(false);
         financialPeriods.forEach(financialPeriod -> this.createInvoice(card, financialPeriod));
     }
 

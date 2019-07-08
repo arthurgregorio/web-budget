@@ -131,7 +131,8 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
         super.initialize();
         this.costCenters = this.costCenterRepository.findAllActive();
         this.financialPeriods = this.financialPeriodRepository.findAll();
-        this.filter.setSelectedFinancialPeriods(this.financialPeriodRepository.findByClosed(false));
+        this.filter.setSelectedFinancialPeriods(this.financialPeriodRepository
+                .findByClosedOrderByIdentificationAsc(false));
     }
 
     /**
@@ -146,7 +147,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
 
         if (viewState.isEditable()) {
             this.costCenters = this.costCenterRepository.findAllActive();
-            this.financialPeriods = this.financialPeriodRepository.findByClosed(false);
+            this.financialPeriods = this.financialPeriodRepository.findByClosedOrderByIdentificationAsc(false);
         } else {
             this.financialPeriods = this.financialPeriodRepository.findAll();
         }
@@ -379,7 +380,8 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      */
     public void clearFilters() {
         this.filter.clear();
-        this.filter.setSelectedFinancialPeriods(this.financialPeriodRepository.findByClosed(false));
+        this.filter.setSelectedFinancialPeriods(this.financialPeriodRepository
+                .findByClosedOrderByIdentificationAsc(false));
         this.updateComponent("periodMovementGrid");
     }
 

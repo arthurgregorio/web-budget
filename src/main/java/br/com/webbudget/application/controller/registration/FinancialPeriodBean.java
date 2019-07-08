@@ -200,7 +200,8 @@ public class FinancialPeriodBean extends FormBean<FinancialPeriod> implements La
      * This method is called in the form initialization to check if we already have an open {@link FinancialPeriod}
      */
     private void checkForOpenPeriods() {
-        final List<FinancialPeriod> periods = this.financialPeriodRepository.findByClosed(false);
+        final List<FinancialPeriod> periods = this.financialPeriodRepository
+                .findByClosedOrderByIdentificationAsc(false);
         this.hasOpenPeriod = periods.size() > 0;
     }
 

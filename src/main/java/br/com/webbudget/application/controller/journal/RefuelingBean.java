@@ -82,8 +82,7 @@ public class RefuelingBean extends LazyFormBean<Refueling> {
         this.viewState = viewState;
         
         this.vehicles = this.vehicleRepository.findAllActive();
-        this.financialPeriods = this.financialPeriodRepository
-                .findByClosed(false);
+        this.financialPeriods = this.financialPeriodRepository.findByClosedOrderByIdentificationAsc(false);
         
         this.value = this.refuelingRepository.findById(id)
                 .orElseGet(Refueling::new);

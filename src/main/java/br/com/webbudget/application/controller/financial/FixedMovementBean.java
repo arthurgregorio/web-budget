@@ -132,7 +132,7 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
     public void initialize() {
         super.initialize();
         this.selectedFixedMovements = new ArrayList<>();
-        this.openFinancialPeriods = this.financialPeriodRepository.findByClosed(false);
+        this.openFinancialPeriods = this.financialPeriodRepository.findByClosedOrderByIdentificationAsc(false);
     }
 
     /**

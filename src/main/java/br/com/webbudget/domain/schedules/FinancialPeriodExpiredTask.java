@@ -48,7 +48,7 @@ public class FinancialPeriodExpiredTask {
     @Schedule(persistent = false, info = "Everyday at midnight")
     public void markAsExpired() {
 
-        final List<FinancialPeriod> periods = this.financialPeriodRepository.findByClosed(false);
+        final List<FinancialPeriod> periods = this.financialPeriodRepository.findByClosedOrderByIdentificationAsc(false);
 
         periods.stream()
                 .filter(period -> LocalDate.now().compareTo(period.getEnd()) > 0)

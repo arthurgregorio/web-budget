@@ -65,7 +65,7 @@ public class PeriodMovementCalculator {
      * If more than one is open (or expired) it will be used too
      */
     public void load() {
-        final List<FinancialPeriod> openPeriods = this.financialPeriodRepository.findByClosed(false);
+        final List<FinancialPeriod> openPeriods = this.financialPeriodRepository.findByClosedOrderByIdentificationAsc(false);
         openPeriods.forEach(period -> this.movements.addAll(this.periodMovementRepository.findByFinancialPeriod(period)));
         this.splitByType();
     }
