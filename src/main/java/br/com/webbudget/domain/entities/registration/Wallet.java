@@ -69,6 +69,7 @@ public class Wallet extends PersistentEntity {
     @Setter
     @Column(name = "digit", length = 4)
     private String digit;
+    @Getter
     @Setter
     @Column(name = "description")
     private String description;
@@ -98,11 +99,11 @@ public class Wallet extends PersistentEntity {
     }
 
     /**
-     * Create a better description to this wallet using the bank account information if is available
+     * Create a better name to this wallet using the bank account information if available
      *
-     * @return the description of this wallet
+     * @return the full name of this wallet
      */
-    public String getDescription() {
+    public String getFullName() {
         return this.walletType == WalletType.BANK_ACCOUNT ? this.name + " - " + this.bank : this.name;
     }
 
