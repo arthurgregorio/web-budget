@@ -44,11 +44,6 @@
             <renderer-type>org.primefaces.component.MessagesRenderer</renderer-type>
             <renderer-class>br.com.webbudget.infrastructure.jsf.primefaces.AutoCloseMessages</renderer-class>
         </renderer>
-        <renderer>
-            <component-family>org.primefaces.component</component-family>
-            <renderer-type>org.primefaces.component.AutoCompleteRenderer</renderer-type>
-            <renderer-class>br.com.webbudget.infrastructure.jsf.primefaces.CustomAutoCompleteRenderer</renderer-class>
-        </renderer>
     </render-kit>
 
     <application>

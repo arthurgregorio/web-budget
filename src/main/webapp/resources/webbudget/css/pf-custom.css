@@ -25,6 +25,7 @@ div.ui-autocomplete {
 }
 ul.ui-autocomplete-multiple-container {
     width: 100% !important;
+    border-radius: 0 !important;
 }
 ul.ui-autocomplete-multiple-container.ui-state-focus {
     border-color: #3c8dbc;

@@ -154,25 +154,6 @@
                                 <o:converter converterId="omnifaces.ListConverter"
                                              list="#{periodMovementBean.financialPeriods}"/>
                                 <p:column>
-                                    <p:graphicImage width="20"
-                                                    height="20"
-                                                    library="webbudget"
-                                                    name="images/green-circle.png"
-                                                    rendered="#{not financialPeriod.closed}"
-                                                    title="#{messages['financial-period.list.open']}"/>
-                                    <p:graphicImage width="20"
-                                                    height="20"
-                                                    library="webbudget"
-                                                    name="images/orange-circle.png"
-                                                    title="#{messages['financial-period.list.expired']}"
-                                                    rendered="#{financialPeriod.expired and not financialPeriod.closed}"/>
-                                    <p:graphicImage width="20"
-                                                    height="20"
-                                                    library="webbudget"
-                                                    name="images/red-circle.png"
-                                                    rendered="#{financialPeriod.closed}"
-                                                    title="#{messages['financial-period.list.closed']}"/>
-                                    <p:spacer width="5"/>
                                     #{financialPeriod.identification}
                                 </p:column>
                             </p:autoComplete>
