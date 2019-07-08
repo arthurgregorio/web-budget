@@ -122,8 +122,8 @@
                                   jsf:rendered="#{not wallet.active}">
                                 #{messages['list.inactive']}
                             </span>
-                            <span class="badge bg-green badge-row-fix"
-                                  jsf:rendered="#{wallet.active}">
+                            <span jsf:rendered="#{wallet.active}"
+                                  class="badge bg-green badge-row-fix">
                                 #{messages['list.active']}
                             </span>
                             <p:spacer width="5"/>
@@ -132,14 +132,34 @@
                         <p:column width="15%"
                                   styleClass="text-center"
                                   headerText="#{messages['wallet.list.balance']}">
-                            <p:commandLink immediate="true"
-                                           rendered="#{userSessionBean.profile.showWalletBalances}"
-                                           action="#{walletBean.changeToBalanceHistory(wallet.id)}"
-                                           styleClass="#{wallet.balanceNegative ? 'text-red' : 'text-green'}">
-                                <h:outputText value="R$ #{wallet.actualBalance}">
-                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
-                                </h:outputText>
-                            </p:commandLink>
+                            <ui:fragment rendered="#{userSessionBean.profile.showWalletBalances}">
+                                <p:commandLink immediate="true"
+                                               action="#{walletBean.changeToBalanceHistory(wallet.id)}">
+                                    <span jsf:rendered="#{not wallet.balanceNegative}"
+                                          class="label bg-teal badge-row-fix wallet-balance-label">
+                                        <h:outputText value="R$ #{wallet.actualBalance}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </span>
+                                </p:commandLink>
+                                <p:commandLink immediate="true"
+                                               action="#{walletBean.changeToBalanceHistory(wallet.id)}">
+                                    <span jsf:rendered="#{wallet.balanceNegative}"
+                                          class="label bg-maroon badge-row-fix wallet-balance-label">
+                                        <h:outputText value="R$ #{wallet.actualBalance}">
+                                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </span>
+                                </p:commandLink>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{not userSessionBean.profile.showWalletBalances}">
+                                <p:commandLink immediate="true"
+                                               action="#{walletBean.changeToBalanceHistory(wallet.id)}">
+                                    <span class="label bg-black badge-row-fix wallet-balance-label">
+                                        #{messages['wallet.list.show-balance']}
+                                    </span>
+                                </p:commandLink>
+                            </ui:fragment>
                         </p:column>
                         <p:column width="15%"
                                   styleClass="text-center"

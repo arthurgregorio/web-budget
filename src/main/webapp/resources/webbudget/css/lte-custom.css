@@ -32,6 +32,15 @@
     top: -2px;
     position: relative;
 }
+.label-row-fix {
+    top: -2px;
+    position: relative;
+}
+
+/*label for the wallet balance*/
+.wallet-balance-label {
+    font-size: 12px !important;
+}
 
 /*period movement data grid customization*/
 #itemsList\:periodMovementGrid_content {
@@ -109,6 +118,7 @@
 .timeline-header span.label {
     top: -2px;
     position: relative;
+    padding: 5px 5px 5px 2px;
 }
 
 /*dropdown menu for bootstrap*/
