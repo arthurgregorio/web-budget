@@ -91,13 +91,12 @@
                                                 <div class="col-sm-4 form-group">
                                                     <p:outputLabel value="#{messages['transference-historic.list.origin']}:"/>
                                                     <br/>
-                                                    #{transference.origin.description}
+                                                    #{transference.origin.fullName}
                                                 </div>
                                                 <div class="col-sm-4 form-group">
-                                                    <p:outputLabel
-                                                            value="#{messages['transference-historic.list.destination']}:"/>
+                                                    <p:outputLabel value="#{messages['transference-historic.list.destination']}:"/>
                                                     <br/>
-                                                    #{transference.destination.description}
+                                                    #{transference.destination.fullName}
                                                 </div>
                                             </div>
                                             <div class="row"
