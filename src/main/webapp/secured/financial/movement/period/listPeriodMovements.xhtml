@@ -244,7 +244,13 @@
                         #{periodMovement.financialPeriod.identification}
                     </span>
                         <p:spacer width="5"/>
-                        <h3 class="box-title">#{periodMovement.identification}</h3>
+                        <h3 class="box-title">
+                            <p:link outcome="detailPeriodMovement.xhtml"
+                                    value="#{periodMovement.identification}">
+                                <f:param name="viewState" value="DETAILING"/>
+                                <f:param name="id" value="#{periodMovement.id}"/>
+                            </p:link>
+                        </h3>
                         <div class="pull-right">
                         <span class="badge bg-yellow"
                               jsf:rendered="#{periodMovement.open}">
