@@ -126,10 +126,14 @@
                     <ui:fragment rendered="#{paymentBean.viewState.adding}">
                         <p:commandButton update="paymentForm"
                                          value="#{menu['pay']}"
+                                         onstart="PF('blocker').show()"
+                                         oncomplete="PF('blocker').hide()"
                                          styleClass="btn btn-flat btn-success"
                                          action="#{paymentBean.doPaymentAndNew()}"/>
                         <p:spacer width="5"/>
                         <p:commandButton update="paymentForm"
+                                         onstart="PF('blocker').show()"
+                                         oncomplete="PF('blocker').hide()"
                                          value="#{menu['pay-and-go-back']}"
                                          styleClass="btn btn-flat btn-warning"
                                          actionListener="#{paymentBean.doPayment()}"/>
@@ -138,6 +142,8 @@
                     <ui:fragment rendered="#{paymentBean.viewState.editing}">
                         <p:commandButton update="paymentForm"
                                          value="#{menu['pay']}"
+                                         onstart="PF('blocker').show()"
+                                         oncomplete="PF('blocker').hide()"
                                          action="#{paymentBean.doPayment()}"
                                          styleClass="btn btn-flat btn-success"/>
                         <p:spacer width="5"/>
@@ -148,6 +154,7 @@
                                      action="#{paymentBean.changeToListing()}"/>
                 </div>
             </div>
+            <wb:blocker target="paymentForm"/>
         </h:form>
     </ui:define>
     <ui:define name="popups">
