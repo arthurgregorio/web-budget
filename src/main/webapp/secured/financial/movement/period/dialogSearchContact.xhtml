@@ -29,7 +29,7 @@
           widgetVar="dialogSearchContact"
           header="#{messages['contact.dialog.title']}">
 
-    <h:form id="searchGuarantorForm">
+    <h:form id="searchContactForm">
 
         <p:focus context="inFilter"/>
         <p:defaultCommand target="btSearch"/>
@@ -52,9 +52,9 @@
                         <p:commandButton id="btSearch"
                                          update="itemsList"
                                          icon="fa fa-search"
-                                         onstart="PF('blocker').show()"
-                                         oncomplete="PF('blocker').hide()"
                                          styleClass="btn btn-flat btn-primary"
+                                         onstart="PF('searchContactBlocker').show()"
+                                         oncomplete="PF('searchContactBlocker').hide()"
                                          actionListener="#{periodMovementBean.searchContacts()}"/>
                     </div>
                 </div>
@@ -93,6 +93,7 @@
                 </p:dataTable>
             </div>
         </div>
-        <wb:blocker target="searchGuarantorForm"/>
+        <wb:blocker target="searchContactForm"
+                    name="searchContactBlocker"/>
     </h:form>
 </p:dialog>
