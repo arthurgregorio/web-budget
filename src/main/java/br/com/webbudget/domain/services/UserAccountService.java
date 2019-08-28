@@ -19,14 +19,15 @@ package br.com.webbudget.domain.services;
 import br.com.webbudget.application.controller.configuration.ProfileBean.PasswordChangeDTO;
 import br.com.webbudget.domain.entities.configuration.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
-import br.com.webbudget.domain.repositories.configuration.*;
 import br.com.webbudget.domain.logics.tools.group.GroupDeletingLogic;
 import br.com.webbudget.domain.logics.tools.user.UserDeletingLogic;
 import br.com.webbudget.domain.logics.tools.user.UserSavingLogic;
 import br.com.webbudget.domain.logics.tools.user.UserUpdatingLogic;
+import br.com.webbudget.domain.repositories.configuration.*;
 import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetails;
 import br.eti.arthurgregorio.shiroee.config.jdbc.UserDetailsProvider;
+import org.apache.shiro.authc.UnknownAccountException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
@@ -34,7 +35,6 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The service to manage all the operations of the {@link User} account control and the {@link Group}, {@link Grant} or
@@ -218,13 +218,13 @@ public class UserAccountService implements UserDetailsProvider {
     }
 
     /**
-     * Find the {@link UserDetails} of a given username from an {@link User}
      *
-     * @param username the username to search for the details
-     * @return an {@link Optional} of the {@link UserDetails} for the username
+     * @param username
+     * @return
+     * @throws UnknownAccountException
      */
     @Override
-    public Optional<UserDetails> findUserDetailsByUsername(String username) {
-        return Optional.ofNullable(this.userRepository.findByUsername(username).orElse(null));
+    public UserDetails findByUsername(String username) throws UnknownAccountException {
+        return this.userRepository.findByUsername(username).orElseThrow(UnknownAccountException::new);
     }
 }
