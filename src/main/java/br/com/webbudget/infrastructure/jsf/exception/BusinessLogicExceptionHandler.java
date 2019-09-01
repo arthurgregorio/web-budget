@@ -18,7 +18,7 @@ package br.com.webbudget.infrastructure.jsf.exception;
 
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.infrastructure.jsf.FacesUtils;
-import br.com.webbudget.infrastructure.utils.MessageSource;
+import br.com.webbudget.infrastructure.i18n.MessageSource;
 import org.omnifaces.util.Exceptions;
 import org.omnifaces.util.Messages;
 

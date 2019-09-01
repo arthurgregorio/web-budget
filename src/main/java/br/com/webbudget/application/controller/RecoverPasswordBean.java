@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * The controller of the recover password process
+ * Recover password controller
  *
  * @author Arthur Gregorio
  *

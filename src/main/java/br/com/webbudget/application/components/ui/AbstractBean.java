@@ -17,7 +17,7 @@
 package br.com.webbudget.application.components.ui;
 
 import br.com.webbudget.infrastructure.jsf.FacesUtils;
-import br.com.webbudget.infrastructure.utils.MessageSource;
+import br.com.webbudget.infrastructure.i18n.MessageSource;
 import org.omnifaces.util.Messages;
 import org.slf4j.Logger;
 

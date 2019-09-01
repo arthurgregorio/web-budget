@@ -21,7 +21,7 @@ import br.com.webbudget.domain.entities.PersistentEntity;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
 import br.com.webbudget.domain.entities.registration.MovementClass;
-import br.com.webbudget.infrastructure.utils.MessageSource;
+import br.com.webbudget.infrastructure.i18n.MessageSource;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

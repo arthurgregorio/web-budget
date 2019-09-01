@@ -20,11 +20,9 @@ import br.com.webbudget.domain.entities.configuration.StoreType;
 import br.com.webbudget.domain.entities.configuration.User;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.configuration.UserRepository;
-import br.com.webbudget.infrastructure.mail.MailContentProvider;
-import br.com.webbudget.infrastructure.mail.MailMessage;
-import br.com.webbudget.infrastructure.mail.MustacheProvider;
-import br.com.webbudget.infrastructure.mail.SimpleMailMessage;
-import br.com.webbudget.infrastructure.utils.MessageSource;
+import br.com.webbudget.infrastructure.mail.*;
+import br.com.webbudget.infrastructure.utils.Configurations;
+import br.com.webbudget.infrastructure.i18n.MessageSource;
 import br.com.webbudget.infrastructure.utils.RandomCode;
 import br.eti.arthurgregorio.shiroee.auth.PasswordEncoder;
 
@@ -36,13 +34,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * The service responsible for all the operations about the password recovery
- * process
+ * Service used to run the process of password recovering
  *
  * @author Arthur Gregorio
  *
  * @version 1.0.0
- * @since 1.0.0, 02/04/2018
+ * @since 3.0.0, 02/04/2018
  */
 @ApplicationScoped
 public class RecoverPasswordService {
@@ -75,7 +72,7 @@ public class RecoverPasswordService {
         this.userRepository.saveAndFlushAndRefresh(user);
 
         final MailMessage mailMessage = SimpleMailMessage.getBuilder()
-                .from("no-reply@webbudget.com.br", "webBudget")
+                .from(Configurations.get("email.no-reply-address"), "webBudget")
                 .to(user.getEmail())
                 .withTitle(MessageSource.get("recover-password.email.title"))
                 .withContent(this.buildContent(user, newPassword))
@@ -95,12 +92,9 @@ public class RecoverPasswordService {
 
         final MustacheProvider provider = new MustacheProvider("recoverPassword.mustache");
 
-        final String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm"));
-
-        provider.addContent("title", MessageSource.get("recover-password.email.title"));
-        provider.addContent("detail", MessageSource.get("recover-password.email.detail", date));
-        provider.addContent("greetings", MessageSource.get("recover-password.email.greetings", user.getName()));
-        provider.addContent("message", MessageSource.get("recover-password.email.message", newPassword));
+        provider.addContent("translate", MailUtils.translateFunction());
+        provider.addContent("user", user.getName());
+        provider.addContent("newPassword", newPassword);
 
         return provider;
     }

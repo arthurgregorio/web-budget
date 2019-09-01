@@ -33,7 +33,7 @@ import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepositor
 import br.com.webbudget.domain.repositories.registration.CardRepository;
 import br.com.webbudget.domain.repositories.view.CardConsumeDetailedRepository;
 import br.com.webbudget.domain.repositories.view.CardConsumeRepository;
-import br.com.webbudget.infrastructure.utils.MessageSource;
+import br.com.webbudget.infrastructure.i18n.MessageSource;
 import lombok.Getter;
 
 import javax.faces.view.ViewScoped;

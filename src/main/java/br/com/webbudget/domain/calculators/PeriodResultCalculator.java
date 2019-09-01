@@ -21,7 +21,7 @@ import br.com.webbudget.application.components.ui.chart.LineChartDataset;
 import br.com.webbudget.application.components.ui.chart.LineChartModel;
 import br.com.webbudget.domain.entities.view.PeriodResult;
 import br.com.webbudget.domain.repositories.view.PeriodResultRepository;
-import br.com.webbudget.infrastructure.utils.MessageSource;
+import br.com.webbudget.infrastructure.i18n.MessageSource;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;

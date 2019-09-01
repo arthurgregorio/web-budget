@@ -19,7 +19,7 @@ package br.com.webbudget.application.components.builder;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.registration.Card;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
-import br.com.webbudget.infrastructure.utils.MessageSource;
+import br.com.webbudget.infrastructure.i18n.MessageSource;
 
 import java.time.LocalDate;
 

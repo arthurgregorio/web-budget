@@ -59,7 +59,7 @@ public final class Configurations {
      * @return the value for this configuration
      */
     public static boolean getAsBoolean(String configuration) {
-        return Boolean.valueOf(Objects.requireNonNull(get(configuration)));
+        return Boolean.parseBoolean(Objects.requireNonNull(get(configuration)));
     }
 
     /**
@@ -69,7 +69,7 @@ public final class Configurations {
      * @return the value for this configuration
      */
     public static int getAsInteger(String configuration) {
-        return Integer.valueOf(Objects.requireNonNull(get(configuration)));
+        return Integer.parseInt(Objects.requireNonNull(get(configuration)));
     }
 
     /**
@@ -81,8 +81,7 @@ public final class Configurations {
 
         final FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        final HttpServletRequest request = (HttpServletRequest)
-                facesContext.getExternalContext().getRequest();
+        final HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
 
         final StringBuilder builder = new StringBuilder();
 

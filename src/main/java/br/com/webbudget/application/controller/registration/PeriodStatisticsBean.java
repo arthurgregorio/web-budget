@@ -29,7 +29,7 @@ import br.com.webbudget.domain.entities.view.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.registration.FinancialPeriodRepository;
 import br.com.webbudget.domain.repositories.view.*;
-import br.com.webbudget.infrastructure.utils.MessageSource;
+import br.com.webbudget.infrastructure.i18n.MessageSource;
 import lombok.Getter;
 
 import javax.faces.view.ViewScoped;
