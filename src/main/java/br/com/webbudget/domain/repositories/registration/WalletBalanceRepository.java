@@ -48,9 +48,10 @@ public interface WalletBalanceRepository extends DefaultRepository<WalletBalance
     List<WalletBalance> findByWallet_id(long walletId);
 
     /**
+     * Find the {@link WalletBalance} by a given filter
      *
-     * @param filter
-     * @return
+     * @param filter to be used on the search process
+     * @return a {@link List} of the {@link WalletBalance} found
      */
     default List<WalletBalance> findByFilter(WalletBalanceFilter filter) {
 

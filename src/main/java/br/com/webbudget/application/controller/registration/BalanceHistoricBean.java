@@ -44,10 +44,10 @@ import java.util.stream.Collectors;
 @ViewScoped
 public class BalanceHistoricBean extends AbstractBean {
 
+    private List<WalletBalance> walletBalances;
+
     @Getter
     private WalletBalanceFilter filter;
-
-    private List<WalletBalance> walletBalances;
 
     @Getter
     private Wallet wallet;

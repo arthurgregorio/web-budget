@@ -17,6 +17,7 @@
 package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.components.ui.AbstractBean;
+import br.com.webbudget.application.components.ui.filter.TransferenceFilter;
 import br.com.webbudget.domain.entities.financial.Transference;
 import br.com.webbudget.domain.repositories.financial.TransferenceRepository;
 import lombok.Getter;
@@ -44,6 +45,9 @@ public class TransferenceHistoricBean extends AbstractBean {
     private List<Transference> transfers;
 
     @Getter
+    private TransferenceFilter filter;
+
+    @Getter
     private List<LocalDate> transferenceDates;
 
     @Inject
@@ -53,7 +57,15 @@ public class TransferenceHistoricBean extends AbstractBean {
      * Initialize this controller
      */
     public void initialize() {
-        this.transfers = this.transferenceRepository.findAll();
+        this.filter = new TransferenceFilter();
+        this.filterList();
+    }
+
+    /**
+     * Filter all transference according to the filter selection
+     */
+    public void filterList() {
+        this.transfers = this.transferenceRepository.findByFilter(this.filter);
         this.processTransferenceDates();
     }
 
@@ -80,5 +92,14 @@ public class TransferenceHistoricBean extends AbstractBean {
                 .filter(balance -> balance.getTransferDate().equals(transferenceDate))
                 .sorted(Comparator.comparing(Transference::getTransferDate).reversed())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Change back to the transference form
+     *
+     * @return outcome to the transference form
+     */
+    public String changeToForm() {
+        return "formTransference.xhtml?faces-redirect=true";
     }
 }

@@ -16,9 +16,13 @@
  */
 package br.com.webbudget.domain.repositories.financial;
 
+import br.com.webbudget.application.components.ui.filter.TransferenceFilter;
 import br.com.webbudget.domain.entities.financial.Transference;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
+import org.apache.deltaspike.data.api.criteria.Criteria;
+
+import java.util.List;
 
 /**
  * The {@link Transference} repository
@@ -29,4 +33,20 @@ import org.apache.deltaspike.data.api.Repository;
  * @since 3.0.0, 03/10/2018
  */
 @Repository
-public interface TransferenceRepository extends DefaultRepository<Transference> { }
+public interface TransferenceRepository extends DefaultRepository<Transference> {
+
+    /**
+     * Find all transference using a given filter
+     *
+     * @param filter used to search for {@link Transference}
+     * @return a list of {@link Transference} found
+     */
+    default List<Transference> findByFilter(TransferenceFilter filter) {
+
+        final Criteria<Transference, Transference> criteria = this.criteria();
+
+        // TODO search here
+
+        return criteria.getResultList();
+    }
+}
