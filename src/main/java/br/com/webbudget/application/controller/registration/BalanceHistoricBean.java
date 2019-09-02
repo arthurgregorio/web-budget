@@ -17,8 +17,9 @@
 package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.ui.AbstractBean;
-import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.application.components.ui.filter.WalletBalanceFilter;
 import br.com.webbudget.domain.entities.financial.WalletBalance;
+import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.registration.WalletBalanceRepository;
 import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import lombok.Getter;
@@ -43,6 +44,9 @@ import java.util.stream.Collectors;
 @ViewScoped
 public class BalanceHistoricBean extends AbstractBean {
 
+    @Getter
+    private WalletBalanceFilter filter;
+
     private List<WalletBalance> walletBalances;
 
     @Getter
@@ -60,8 +64,24 @@ public class BalanceHistoricBean extends AbstractBean {
      */
     public void initialize(long walletId) {
         this.wallet = this.walletRepository.findById(walletId).orElseGet(Wallet::new);
-        this.walletBalances = this.walletBalanceRepository.findByWallet_id(walletId);
+        this.filter = new WalletBalanceFilter(this.wallet);
+        this.filterList();
+    }
+
+    /**
+     * Filter the balance list
+     */
+    public void filterList() {
+        this.walletBalances = this.walletBalanceRepository.findByFilter(this.filter);
         this.processBalanceDates();
+    }
+
+    /**
+     * Clear the filter selection on the UI
+     */
+    public void clearFilter() {
+        this.filter.clear();
+        this.filterList();
     }
 
     /**
@@ -87,5 +107,14 @@ public class BalanceHistoricBean extends AbstractBean {
                 .filter(balance -> balance.getMovementDate().equals(movementDate))
                 .sorted(Comparator.comparing(WalletBalance::getMovementDateTime).reversed())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Return to the {@link Wallet} listing
+     *
+     * @return the outcome to the {@link Wallet} listing
+     */
+    public String changeToWalletsListing() {
+        return "listWallets.xhtml?faces-redirect=true";
     }
 }

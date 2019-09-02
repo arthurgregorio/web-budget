@@ -16,11 +16,16 @@
  */
 package br.com.webbudget.domain.repositories.registration;
 
-import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.application.components.ui.filter.WalletBalanceFilter;
 import br.com.webbudget.domain.entities.financial.WalletBalance;
+import br.com.webbudget.domain.entities.financial.WalletBalance_;
+import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.entities.registration.Wallet_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
+import org.apache.deltaspike.data.api.criteria.Criteria;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +33,7 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0, 04/03/2013
  */
 @Repository
@@ -41,4 +46,41 @@ public interface WalletBalanceRepository extends DefaultRepository<WalletBalance
      * @return the list of {@link WalletBalance} for this wallet
      */
     List<WalletBalance> findByWallet_id(long walletId);
+
+    /**
+     *
+     * @param filter
+     * @return
+     */
+    default List<WalletBalance> findByFilter(WalletBalanceFilter filter) {
+
+        final Criteria<WalletBalance, WalletBalance> criteria = this.criteria();
+
+        final List<Criteria<WalletBalance, WalletBalance>> restrictions = new ArrayList<>();
+
+        if (filter.getReasonType() != null) {
+            restrictions.add(this.criteria().eq(WalletBalance_.reasonType, filter.getReasonType()));
+        }
+
+        if (filter.getBalanceType() != null) {
+            restrictions.add(this.criteria().eq(WalletBalance_.balanceType, filter.getBalanceType()));
+        }
+
+        if (filter.getOperationDate() != null) {
+
+            final var start = filter.getOperationDate().atTime(0, 0);
+            final var end = filter.getOperationDate().atTime(23, 59);
+
+            restrictions.add(this.criteria().between(WalletBalance_.movementDateTime, start, end));
+        }
+
+        if (!restrictions.isEmpty()) {
+            criteria.or(restrictions);
+        }
+
+        criteria.join(WalletBalance_.wallet,
+                where(Wallet.class).eq(Wallet_.id, filter.getWallet().getId()));
+
+        return criteria.getResultList();
+    }
 }

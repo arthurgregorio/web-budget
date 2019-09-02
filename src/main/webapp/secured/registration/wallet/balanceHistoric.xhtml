@@ -46,21 +46,61 @@
     </ui:define>
 
     <ui:define name="content">
-        <div class="box box-#{profileBean.currentThemeColorName}">
-            <div class="box-header with-border">
-                <div class="row">
-                    <div class="col-md-6">
-
-                    </div>
-                    <div class="col-md-6 text-right">
-                        <p:commandButton value="#{menu['back']}"
-                                         styleClass="btn btn-flat btn-primary"
-                                         action="#{walletBean.changeToListing()}"/>
+        <h:form>
+            <div class="box box-#{profileBean.currentThemeColorName}">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <p:selectOneMenu converter="omnifaces.GenericEnumConverter"
+                                             value="#{balanceHistoricBean.filter.reasonType}">
+                                <f:selectItem value="#{null}"
+                                              itemLabel="#{menu['select-one.all']}"/>
+                                <f:selectItems var="reasonType"
+                                               itemValue="#{reasonType}"
+                                               itemLabel="#{enums[reasonType]}"
+                                               value="#{balanceHistoricBean.filter.reasonTypes}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-xs-3">
+                            <p:selectOneMenu converter="omnifaces.GenericEnumConverter"
+                                             value="#{balanceHistoricBean.filter.balanceType}">
+                                <f:selectItem value="#{null}"
+                                              itemLabel="#{menu['select-one.all']}"/>
+                                <f:selectItems var="balanceType"
+                                               itemValue="#{balanceType}"
+                                               itemLabel="#{enums[balanceType]}"
+                                               value="#{balanceHistoricBean.filter.balanceTypes}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-md-3">
+                            <p:calendar id="inOperationDate"
+                                        mask="true"
+                                        pattern="dd/MM/yyyy"
+                                        converter="localDateConverter"
+                                        value="#{balanceHistoricBean.filter.operationDate}"
+                                        placeholder="#{messages['balance-historic.operation-date']}"/>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <p:commandButton update="boxBody"
+                                             value="#{menu['filter']}"
+                                             styleClass="btn btn-flat btn-success"
+                                             action="#{balanceHistoricBean.filterList()}"/>
+                            <p:spacer width="5"/>
+                            <p:commandButton update="boxBody"
+                                             title="#{menu['filter-clear']}"
+                                             icon="fa fa-trash"
+                                             styleClass="btn btn-flat btn-danger"
+                                             action="#{balanceHistoricBean.clearFilter()}"/>
+                            <p:spacer width="5"/>
+                            <p:commandButton value="#{menu['back']}"
+                                             styleClass="btn btn-flat btn-primary"
+                                             action="#{balanceHistoricBean.changeToWalletsListing()}"/>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="box-empty">
+        </h:form>
+        <div jsf:id="boxBody" class="box-empty">
             <div class="row">
                 <div class="col-md-12 text-center"
                      jsf:rendered="#{empty balanceHistoricBean.walletBalanceDates}">
