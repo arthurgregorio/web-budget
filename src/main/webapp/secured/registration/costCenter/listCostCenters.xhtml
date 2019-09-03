@@ -52,7 +52,7 @@
                 <h:form id="controlsForm">
                     <p:defaultCommand target="btSearch"/>
                     <div class="row">
-                        <div class="col-xs-2">
+                        <div class="col-md-3">
                             <p:selectOneMenu converter="omnifaces.GenericEnumConverter"
                                              value="#{costCenterBean.filter.entityStatus}">
                                 <f:selectItems var="entityStatus"
@@ -61,7 +61,7 @@
                                                value="#{costCenterBean.filter.entityStatusValues}"/> 
                             </p:selectOneMenu>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-md-7">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{costCenterBean.filter.value}"
@@ -84,7 +84,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-md-2">
                             <div class="box-tools pull-right">
                                 <p:commandButton immediate="true"
                                                  value="#{menu['new']}"

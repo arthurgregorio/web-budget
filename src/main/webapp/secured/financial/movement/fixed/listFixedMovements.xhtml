@@ -57,7 +57,7 @@
                 <h:form id="controlsForm">
                     <p:defaultCommand target="btSearch"/>
                     <div class="row">
-                        <div class="col-xs-2">
+                        <div class="col-md-3">
                             <p:selectOneMenu converter="omnifaces.GenericEnumConverter"
                                              value="#{fixedMovementBean.filter.fixedMovementState}">
                                 <f:selectItem value="#{null}"
@@ -68,7 +68,7 @@
                                                value="#{fixedMovementBean.filter.fixedMovementStates}"/>
                             </p:selectOneMenu>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-md-7">
                             <div class="input-group">
                                 <p:inputText styleClass="form-control"
                                              value="#{fixedMovementBean.filter.value}"
@@ -91,7 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-6 text-right">
+                        <div class="col-md-2 text-right">
                             <p:commandButton update="messages"
                                              value="#{menu['launch']}"
                                              onclick="submitSelected()"
@@ -154,7 +154,7 @@
                                       rendered="#{fixedMovement.active}"/>
                             #{fixedMovement.identification}
                         </p:column>
-                        <p:column width="10%"
+                        <p:column width="12%"
                                   styleClass="text-center"
                                   headerText="#{messages['fixed-movement.list.quotes']}">
                             <h:outputText rendered="#{fixedMovement.undetermined}"
@@ -169,7 +169,7 @@
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </p:column>
-                        <p:column width="10%"
+                        <p:column width="13%"
                                   styleClass="text-center"
                                   headerText="#{messages['list.actions']}">
                             <p:commandButton process="@this"

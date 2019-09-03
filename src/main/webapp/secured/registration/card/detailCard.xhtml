@@ -157,10 +157,10 @@
                             <f:selectItem itemValue="#{null}"
                                           noSelectionOption="true"
                                           itemLabel="#{menu['select-one']}"/>
-                            <f:selectItems var="invoice"
-                                           itemValue="#{invoice}"
+                            <f:selectItems var="wallet"
+                                           itemValue="#{wallet}"
                                            value="#{cardBean.wallets}"
-                                           itemLabel="#{invoice.description}"/>
+                                           itemLabel="#{wallet.fullName}"/>
                         </p:selectOneMenu>
                     </div>
                 </div>

@@ -81,15 +81,7 @@
                 <div class="box-body row">
                     <div class="col-sm-6">
                         <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <p:outputLabel for="inIdentification"
-                                               value="#{messages['fixed-movement.form.identification']}: "/>
-                                <p:inputText id="inIdentification"
-                                             maxlength="45"
-                                             styleClass="form-control"
-                                             value="#{fixedMovementBean.value.identification}"/>
-                            </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-12">
                                 <p:outputLabel for="inContact"
                                                value="#{messages['fixed-movement.form.contact']}: "/>
                                 <p:inputText id="inContact"
@@ -97,14 +89,13 @@
                                              styleClass="form-control"
                                              value="#{fixedMovementBean.value.contactName}"/>
                             </div>
-                            <div class="col-sm-3 form-group">
-                                <p:outputLabel for="inStartDate"
-                                               value="#{messages['fixed-movement.form.start-date']}: "/>
-                                <p:calendar id="inStartDate"
-                                            mask="true"
-                                            pattern="dd/MM/yyyy"
-                                            converter="localDateConverter"
-                                            value="#{fixedMovementBean.value.startDate}"/>
+                            <div class="col-sm-9 form-group">
+                                <p:outputLabel for="inIdentification"
+                                               value="#{messages['fixed-movement.form.identification']}: "/>
+                                <p:inputText id="inIdentification"
+                                             maxlength="45"
+                                             styleClass="form-control"
+                                             value="#{fixedMovementBean.value.identification}"/>
                             </div>
                             <div class="col-sm-3 form-group">
                                 <p:outputLabel for="inValue"
@@ -118,7 +109,16 @@
                                     <f:converter converterId="javax.faces.BigDecimal"/>
                                 </p:inputNumber>
                             </div>
-                            <div jsf:id="quotesBox" class="col-sm-6">
+                            <div class="col-sm-3 form-group">
+                                <p:outputLabel for="inStartDate"
+                                               value="#{messages['fixed-movement.form.start-date']}: "/>
+                                <p:calendar id="inStartDate"
+                                            mask="true"
+                                            pattern="dd/MM/yyyy"
+                                            converter="localDateConverter"
+                                            value="#{fixedMovementBean.value.startDate}"/>
+                            </div>
+                            <div jsf:id="quotesBox" class="col-sm-9">
                                 <div class="row">
                                     <div class="col-sm-4 form-group">
                                         <p:outputLabel for="inTotalQuotes"

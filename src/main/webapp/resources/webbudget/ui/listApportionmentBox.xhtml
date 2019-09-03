@@ -46,7 +46,7 @@
 
     <c:implementation>
         <div class="row">
-            <div class="col-sm-12 form-group">
+            <div class="col-sm-12">
                 <h4 style="display: inline-flex">
                     #{messages['apportionment.apportionments']}:
                 </h4>
@@ -60,7 +60,7 @@
                                      actionListener="#{cc.attrs.showDialogAction}"/>
                 </div>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-12 margin-t-10">
                 <p:dataTable id="apportionmentList"
                              rows="15"
                              rowHover="true"
@@ -86,7 +86,7 @@
                             <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                         </h:outputText>
                     </p:column>
-                    <p:column width="10%"
+                    <p:column width="12%"
                               styleClass="text-center"
                               rendered="#{cc.attrs.renderButtons}"
                               headerText="#{messages['list.actions']}">

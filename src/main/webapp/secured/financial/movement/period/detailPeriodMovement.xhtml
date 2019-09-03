@@ -83,7 +83,23 @@
                 <div class="box-body row">
                     <div class="col-sm-6">
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-12">
+                                <p:outputLabel for="inContact"
+                                               value="#{messages['period-movement.form.contact']}: "/>
+                                <p:inputText id="inContact"
+                                             readonly="true"
+                                             styleClass="form-control"
+                                             value="#{periodMovementBean.value.contactName}"/>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <p:outputLabel for="inIdentification"
+                                               value="#{messages['period-movement.form.identification']}: "/>
+                                <p:inputText id="inIdentification"
+                                             maxlength="90"
+                                             styleClass="form-control"
+                                             value="#{periodMovementBean.value.identification}"/>
+                            </div>
+                            <div class="form-group col-md-5">
                                 <p:outputLabel for="inPeriod"
                                                value="#{messages['period-movement.form.financial-period']}: "/>
                                 <p:selectOneMenu id="inPeriod"
@@ -95,22 +111,6 @@
                                                    itemLabel="#{not period.expired ? period.identification : period.identification.concat(' - ').concat(messages['period-movement.form.expired'])}"/>
                                 </p:selectOneMenu>
                             </div>
-                            <div class="form-group col-md-6">
-                                <p:outputLabel for="inIdentification"
-                                               value="#{messages['period-movement.form.identification']}: "/>
-                                <p:inputText id="inIdentification"
-                                             maxlength="90"
-                                             styleClass="form-control"
-                                             value="#{periodMovementBean.value.identification}"/>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <p:outputLabel for="inContact"
-                                               value="#{messages['period-movement.form.contact']}: "/>
-                                <p:inputText id="inContact"
-                                             readonly="true"
-                                             styleClass="form-control"
-                                             value="#{periodMovementBean.value.contactName}"/>
-                            </div>
                             <div class="form-group col-md-3">
                                 <p:outputLabel for="inDueDate"
                                                value="#{messages['period-movement.form.due-date']}: "/>
@@ -120,7 +120,7 @@
                                             converter="localDateConverter"
                                             value="#{periodMovementBean.value.dueDate}"/>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <p:outputLabel for="inValue"
                                                value="#{messages['period-movement.form.value']}: "/>
                                 <p:inputNumber id="inValue"

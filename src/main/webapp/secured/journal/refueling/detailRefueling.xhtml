@@ -71,226 +71,225 @@
                     </h3>
                 </div>
                 <div class="box-body row">
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <p:outputLabel for="inVehicle"
-                                               value="#{messages['refueling.form.vehicle']}: "/>
-                                <p:selectOneMenu id="inVehicle"
-                                                 value="#{refuelingBean.value.vehicle}"
-                                                 converter="omnifaces.SelectItemsConverter">
-                                    <p:ajax event="change"
-                                            update="inMovementClass"
-                                            listener="#{refuelingBean.onVehicleSelect()}"/>
-                                    <f:selectItem itemValue="#{null}"
-                                                  noSelectionOption="true"
-                                                  itemLabel="#{menu['select-one']}"/>
-                                    <f:selectItems var="vehicle"
-                                                   itemValue="#{vehicle}"
-                                                   value="#{refuelingBean.vehicles}"
-                                                   itemLabel="#{vehicle.identification}"/>
-                                </p:selectOneMenu>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <p:outputLabel for="inMovementClass"
-                                               value="#{messages['refueling.form.movement-class']}: "/>
-                                <p:selectOneMenu id="inMovementClass"
-                                                 converter="omnifaces.SelectItemsConverter"
-                                                 value="#{refuelingBean.value.movementClass}">
-                                    <f:selectItem itemValue="#{null}"
-                                                  noSelectionOption="true"
-                                                  itemLabel="#{menu['select-one']}"/>
-                                    <f:selectItems var="movementClass"
-                                                   itemValue="#{movementClass}"
-                                                   itemLabel="#{movementClass.name}"
-                                                   value="#{refuelingBean.movementClasses}"/>
-                                </p:selectOneMenu>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <p:outputLabel for="inPeriod"
-                                               value="#{messages['refueling.form.launch-period']}: "/>
-                                <p:selectOneMenu id="inPeriod"
-                                                 converter="omnifaces.SelectItemsConverter"
-                                                 value="#{refuelingBean.value.financialPeriod}">
-                                    <f:selectItems var="period"
-                                                   itemValue="#{period}"
-                                                   value="#{refuelingBean.financialPeriods}"
-                                                   itemLabel="#{period.expired  
-                                                                ? period.identification.concat(' - ')
-                                                                .concat(messages['refueling.form.expired']) 
-                                                                : period.identification}"/>
-                                </p:selectOneMenu>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <p:outputLabel for="inEventDate"
-                                               value="#{messages['refueling.form.refueling-date']}: "/>
-                                <p:calendar id="inEventDate"
-                                            mask="true"
-                                            pattern="dd/MM/yyyy"
-                                            converter="localDateConverter"
-                                            value="#{refuelingBean.value.eventDate}"/>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <p:outputLabel for="inOdometer"
-                                               value="#{messages['refueling.form.odometer']}: "/>
-                                <p:inputText id="inOdometer"
-                                             maxlength="8"
-                                             styleClass="form-control"
-                                             value="#{refuelingBean.value.odometer}">
-                                    <p:keyFilter mask="num"/>
-                                </p:inputText>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <p:outputLabel for="inPlace"
-                                               value="#{messages['refueling.form.place']}: "/>
-                                <p:inputText id="inPlace"
-                                             maxlength="90"
-                                             styleClass="form-control"
-                                             value="#{refuelingBean.value.place}"/>
-                            </div>
-                            <p:fragment id="totalsBox">
-                                <div class="form-group col-md-4">
-                                    <p:outputLabel for="inTotalCost"
-                                                   value="#{messages['refueling.form.total-cost']}: "/>
-                                    <p:inputText id="inTotalCost"
-                                                 readonly="true"
-                                                 styleClass="form-control"
-                                                 value="#{refuelingBean.value.cost}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
-                                    </p:inputText>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <p:outputLabel for="inCostPerLiter"
-                                                   value="#{messages['refueling.form.cost-liter']}: "/>
-                                    <p:inputText id="inCostPerLiter"
-                                                 readonly="true"
-                                                 styleClass="form-control"
-                                                 value="#{refuelingBean.value.costPerLiter}">
-                                        <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
-                                    </p:inputText>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <p:outputLabel for="inLiters"
-                                                   value="#{messages['refueling.form.liters']}: "/>
-                                    <p:inputText id="inLiters"
-                                                 readonly="true"
-                                                 styleClass="form-control"
-                                                 value="#{refuelingBean.value.liters}">
-                                        <f:convertNumber pattern="#0.00"/>
-                                    </p:inputText>
-                                </div>
-                            </p:fragment>
-                        </div>
+                    <div class="form-group col-md-2">
+                        <p:outputLabel for="inEventDate"
+                                       value="#{messages['refueling.form.refueling-date']}: "/>
+                        <p:calendar id="inEventDate"
+                                    mask="true"
+                                    pattern="dd/MM/yyyy"
+                                    converter="localDateConverter"
+                                    value="#{refuelingBean.value.eventDate}"/>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group col-md-8">
-                            <h4>#{messages['refueling.form.fuels']}:</h4>
-                        </div>
-                        <div class="form-group col-md-4 text-right">
+                    <div class="form-group col-md-2">
+                        <p:outputLabel for="inOdometer"
+                                       value="#{messages['refueling.form.odometer']}: "/>
+                        <p:inputText id="inOdometer"
+                                     maxlength="8"
+                                     styleClass="form-control"
+                                     value="#{refuelingBean.value.odometer}">
+                            <p:keyFilter mask="num"/>
+                        </p:inputText>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inVehicle"
+                                       value="#{messages['refueling.form.vehicle']}: "/>
+                        <p:selectOneMenu id="inVehicle"
+                                         value="#{refuelingBean.value.vehicle}"
+                                         converter="omnifaces.SelectItemsConverter">
+                            <p:ajax event="change"
+                                    update="inMovementClass"
+                                    listener="#{refuelingBean.onVehicleSelect()}"/>
+                            <f:selectItem itemValue="#{null}"
+                                          noSelectionOption="true"
+                                          itemLabel="#{menu['select-one']}"/>
+                            <f:selectItems var="vehicle"
+                                           itemValue="#{vehicle}"
+                                           value="#{refuelingBean.vehicles}"
+                                           itemLabel="#{vehicle.identification}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inPlace"
+                                       value="#{messages['refueling.form.place']}: "/>
+                        <p:inputText id="inPlace"
+                                     maxlength="90"
+                                     styleClass="form-control"
+                                     value="#{refuelingBean.value.place}"/>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inMovementClass"
+                                       value="#{messages['refueling.form.movement-class']}: "/>
+                        <p:selectOneMenu id="inMovementClass"
+                                         converter="omnifaces.SelectItemsConverter"
+                                         value="#{refuelingBean.value.movementClass}">
+                            <f:selectItem itemValue="#{null}"
+                                          noSelectionOption="true"
+                                          itemLabel="#{menu['select-one']}"/>
+                            <f:selectItems var="movementClass"
+                                           itemValue="#{movementClass}"
+                                           itemLabel="#{movementClass.name}"
+                                           value="#{refuelingBean.movementClasses}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <p:outputLabel for="inPeriod"
+                                       value="#{messages['refueling.form.launch-period']}: "/>
+                        <p:selectOneMenu id="inPeriod"
+                                         converter="omnifaces.SelectItemsConverter"
+                                         value="#{refuelingBean.value.financialPeriod}">
+                            <f:selectItems var="period"
+                                           itemValue="#{period}"
+                                           value="#{refuelingBean.financialPeriods}"
+                                           itemLabel="#{period.expired
+                                                                ? period.identification.concat(' - ')
+                                                                .concat(messages['refueling.form.expired'])
+                                                                : period.identification}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>#{messages['refueling.form.fuels']}:</h4>
+                            </div>
+                            <div class="col-md-4 text-right">
 
-                        </div>
-                        <div class="form-group col-md-12">
-                            <p:dataTable id="fuelsList"
-                                         rows="15"
-                                         var="fuel"
-                                         rowHover="true"
-                                         editMode="cell"
-                                         paginator="true"
-                                         paginatorPosition="bottom"
-                                         paginatorAlwaysVisible="false"
-                                         value="#{refuelingBean.value.fuels}"
-                                         emptyMessage="#{messages['list.empty']}"
-                                         editable="#{refuelingBean.viewState.adding}">
+                            </div>
+                            <div class="col-md-12 margin-t-10">
+                                <p:dataTable id="fuelsList"
+                                             rows="15"
+                                             var="fuel"
+                                             rowHover="true"
+                                             editMode="cell"
+                                             paginator="true"
+                                             paginatorPosition="bottom"
+                                             paginatorAlwaysVisible="false"
+                                             value="#{refuelingBean.value.fuels}"
+                                             emptyMessage="#{messages['list.empty']}"
+                                             editable="#{refuelingBean.viewState.adding}">
 
-                                <p:ajax process="@this"
-                                        event="cellEdit"
-                                        update="totalsBox"
-                                        listener="#{refuelingBean.value.totalize()}"/>
+                                    <p:ajax process="@this"
+                                            event="cellEdit"
+                                            update="totalsBox"
+                                            listener="#{refuelingBean.value.totalsFuels()}"/>
 
-                                <p:column styleClass="text-center"
-                                          headerText="#{messages['fuel.list.type']}">
-                                    <p:cellEditor>
-                                        <f:facet name="input">
-                                            <p:selectOneMenu id="cbType"
-                                                             value="#{fuel.fuelType}"
-                                                             converter="omnifaces.GenericEnumConverter">
-                                                <f:selectItems var="fuelType"
-                                                               itemValue="#{fuelType}"
-                                                               itemLabel="#{enums[fuelType]}"
-                                                               value="#{refuelingBean.fuelTypes}"/>
-                                            </p:selectOneMenu>
-                                        </f:facet>
-                                        <f:facet name="output">
-                                            #{enums[fuel.fuelType]}
-                                        </f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column styleClass="text-center"
-                                          headerText="#{messages['fuel.list.value-liter']}">
-                                    <p:cellEditor>
-                                        <f:facet name="input">
-                                            <p:inputNumber symbol="R$ "
-                                                           decimalPlaces="2"
-                                                           decimalSeparator=","
-                                                           thousandSeparator="."
-                                                           value="#{fuel.valuePerLiter}">
-                                                <f:converter converterId="javax.faces.BigDecimal"/>
-                                            </p:inputNumber>
-                                        </f:facet>
-                                        <f:facet name="output">
-                                            <h:outputText value="#{fuel.valuePerLiter}">
-                                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
-                                            </h:outputText>
-                                        </f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column styleClass="text-center"
-                                          headerText="#{messages['fuel.list.liters']}">
-                                    <p:cellEditor>
-                                        <f:facet name="input">
-                                            <p:inputNumber decimalPlaces="2"
-                                                           decimalSeparator=","
-                                                           thousandSeparator="."
-                                                           value="#{fuel.liters}">
-                                                <f:converter converterId="javax.faces.BigDecimal"/>
-                                            </p:inputNumber>
-                                        </f:facet>
-                                        <f:facet name="output">
-                                            <h:outputText value="#{fuel.liters}">
-                                                <f:convertNumber pattern="#0.00"/>
-                                            </h:outputText>
-                                        </f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                            </p:dataTable>
+                                    <p:column styleClass="text-center"
+                                              headerText="#{messages['fuel.list.type']}">
+                                        <p:cellEditor>
+                                            <f:facet name="input">
+                                                <p:selectOneMenu id="cbType"
+                                                                 value="#{fuel.fuelType}"
+                                                                 converter="omnifaces.GenericEnumConverter">
+                                                    <f:selectItems var="fuelType"
+                                                                   itemValue="#{fuelType}"
+                                                                   itemLabel="#{enums[fuelType]}"
+                                                                   value="#{refuelingBean.fuelTypes}"/>
+                                                </p:selectOneMenu>
+                                            </f:facet>
+                                            <f:facet name="output">
+                                                #{enums[fuel.fuelType]}
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column styleClass="text-center"
+                                              headerText="#{messages['fuel.list.value-liter']}">
+                                        <p:cellEditor>
+                                            <f:facet name="input">
+                                                <p:inputNumber symbol="R$ "
+                                                               decimalPlaces="2"
+                                                               decimalSeparator=","
+                                                               thousandSeparator="."
+                                                               value="#{fuel.valuePerLiter}">
+                                                    <f:converter converterId="javax.faces.BigDecimal"/>
+                                                </p:inputNumber>
+                                            </f:facet>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{fuel.valuePerLiter}">
+                                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                                                </h:outputText>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column styleClass="text-center"
+                                              headerText="#{messages['fuel.list.liters']}">
+                                        <p:cellEditor>
+                                            <f:facet name="input">
+                                                <p:inputNumber decimalPlaces="2"
+                                                               decimalSeparator=","
+                                                               thousandSeparator="."
+                                                               value="#{fuel.liters}">
+                                                    <f:converter converterId="javax.faces.BigDecimal"/>
+                                                </p:inputNumber>
+                                            </f:facet>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{fuel.liters}">
+                                                    <f:convertNumber pattern="#0.00"/>
+                                                </h:outputText>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column width="15%"
+                                              styleClass="text-center"
+                                              headerText="#{messages['list.actions']}">
+                                        <p:commandButton immediate="true"
+                                                         icon="fa fa-trash"
+                                                         title="#{menu['delete']}"
+                                                         update="fuelsList totalsBox"
+                                                         styleClass="btn btn-flat btn-danger"
+                                                         actionListener="#{refuelingBean.value.deleteFuel(fuel)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="box-footer text-right">
-                    <h:outputText styleClass="text-red text-bold"
-                                  value="#{messages['info.delete-confirmation']}"
-                                  rendered="#{refuelingBean.viewState.deleting}"/>
-                    <p:spacer width="5"/>
-                    <p:commandButton value="#{menu['yes']}"
-                                     onstart="PF('blocker').show()"
-                                     oncomplete="PF('blocker').hide()"
-                                     action="#{refuelingBean.doDelete()}"
-                                     styleClass="btn btn-flat btn-danger"
-                                     rendered="#{refuelingBean.viewState.deleting}"/>
-                    <p:spacer width="5"
-                              rendered="#{refuelingBean.viewState.deleting}"/>
-                    <ui:fragment rendered="#{refuelingBean.viewState.detailing}">
-                        <p:commandButton immediate="true"
-                                         value="#{menu['delete']}"
-                                         styleClass="btn btn-flat btn-danger"
-                                         action="#{refuelingBean.changeToDelete(refuelingBean.value.id)}"
-                                         rendered="#{userSessionBean.isPermitted(permissions.REFUELING_DELETE)}"/>
-                        <p:spacer width="5"/>
-                    </ui:fragment>
-                    <p:commandButton immediate="true"
-                                     styleClass="btn btn-flat btn-primary"
-                                     action="#{refuelingBean.changeToListing()}"
-                                     value="#{refuelingBean.viewState.deleting ? menu['no'] : menu['back']}"/>
+                <div class="box-footer margin-t-10">
+                    <div class="row">
+                        <div jsf:id="totalsBox" class="col-md-8 padding-t-10">
+                            <p:outputLabel value="#{messages['refueling.form.total-cost']}: "/>
+                            <p:spacer width="5"/>
+                            <h:outputText value="#{refuelingBean.value.cost}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                            <p:spacer width="15"/>
+                            <p:outputLabel value="#{messages['refueling.form.cost-liter']}: "/>
+                            <p:spacer width="5"/>
+                            <h:outputText value="#{refuelingBean.value.costPerLiter}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
+                            </h:outputText>
+                            <p:spacer width="15"/>
+                            <p:outputLabel value="#{messages['refueling.form.liters']}: "/>
+                            <p:spacer width="5"/>
+                            <h:outputText value="#{refuelingBean.value.liters}">
+                                <f:convertNumber pattern="#0.00"/>
+                            </h:outputText>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <h:outputText styleClass="text-red text-bold"
+                                          value="#{messages['info.delete-confirmation']}"
+                                          rendered="#{refuelingBean.viewState.deleting}"/>
+                            <p:spacer width="5"/>
+                            <p:commandButton value="#{menu['yes']}"
+                                             onstart="PF('blocker').show()"
+                                             oncomplete="PF('blocker').hide()"
+                                             action="#{refuelingBean.doDelete()}"
+                                             styleClass="btn btn-flat btn-danger"
+                                             rendered="#{refuelingBean.viewState.deleting}"/>
+                            <p:spacer width="5"
+                                      rendered="#{refuelingBean.viewState.deleting}"/>
+                            <ui:fragment rendered="#{refuelingBean.viewState.detailing}">
+                                <p:commandButton immediate="true"
+                                                 value="#{menu['delete']}"
+                                                 styleClass="btn btn-flat btn-danger"
+                                                 action="#{refuelingBean.changeToDelete(refuelingBean.value.id)}"
+                                                 rendered="#{userSessionBean.isPermitted(permissions.REFUELING_DELETE)}"/>
+                                <p:spacer width="5"/>
+                            </ui:fragment>
+                            <p:commandButton immediate="true"
+                                             styleClass="btn btn-flat btn-primary"
+                                             action="#{refuelingBean.changeToListing()}"
+                                             value="#{refuelingBean.viewState.deleting ? menu['no'] : menu['back']}"/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </h:form>

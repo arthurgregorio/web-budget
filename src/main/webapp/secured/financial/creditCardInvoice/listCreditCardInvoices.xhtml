@@ -96,9 +96,9 @@
             </div>
         </div>
         <p:dataGrid id="invoicesGrid"
-                    rows="16"
+                    rows="6"
                     lazy="true"
-                    columns="4"
+                    columns="3"
                     var="invoice"
                     layout="grid"
                     paginator="true"
@@ -121,28 +121,28 @@
                 </div>
                 <div class="box-body">
                     <div class="row" style="margin-bottom: 5px">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             #{messages['credit-card-invoice.list.card']}:
                         </div>
-                        <div class="col-md-8 text-right">
+                        <div class="col-md-9 text-right">
                             #{invoice.card.readableName}
                         </div>
                     </div>
                     <div class="row" style="margin-bottom: 5px">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             #{messages['credit-card-invoice.list.total-value']}:
                         </div>
-                        <div class="col-md-8 text-right">
+                        <div class="col-md-9 text-right">
                             <h:outputText value="#{invoice.totalValue}">
                                 <f:convertNumber pattern="¤#,##0.00" currencySymbol="R$ "/>
                             </h:outputText>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             #{messages['credit-card-invoice.list.due-date']}:
                         </div>
-                        <div class="col-md-8 text-right">
+                        <div class="col-md-9 text-right">
                             <h:outputText value="#{invoice.dueDate}"
                                           converter="localDateConverter"/>
                         </div>
