@@ -19,7 +19,9 @@ package br.com.webbudget.application.controller.financial;
 import br.com.webbudget.application.components.ui.AbstractBean;
 import br.com.webbudget.application.components.ui.filter.TransferenceFilter;
 import br.com.webbudget.domain.entities.financial.Transference;
+import br.com.webbudget.domain.entities.registration.Wallet;
 import br.com.webbudget.domain.repositories.financial.TransferenceRepository;
+import br.com.webbudget.domain.repositories.registration.WalletRepository;
 import lombok.Getter;
 
 import javax.faces.view.ViewScoped;
@@ -48,8 +50,12 @@ public class TransferenceHistoricBean extends AbstractBean {
     private TransferenceFilter filter;
 
     @Getter
+    private List<Wallet> wallets;
+    @Getter
     private List<LocalDate> transferenceDates;
 
+    @Inject
+    private WalletRepository walletRepository;
     @Inject
     private TransferenceRepository transferenceRepository;
 
@@ -58,6 +64,7 @@ public class TransferenceHistoricBean extends AbstractBean {
      */
     public void initialize() {
         this.filter = new TransferenceFilter();
+        this.wallets = this.walletRepository.findAll();
         this.filterList();
     }
 
@@ -67,6 +74,14 @@ public class TransferenceHistoricBean extends AbstractBean {
     public void filterList() {
         this.transfers = this.transferenceRepository.findByFilter(this.filter);
         this.processTransferenceDates();
+    }
+
+    /**
+     * Clear the filter selection on the UI
+     */
+    public void clearFilter() {
+        this.filter.clear();
+        this.filterList();
     }
 
     /**

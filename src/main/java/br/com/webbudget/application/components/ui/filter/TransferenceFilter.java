@@ -22,10 +22,10 @@ public class TransferenceFilter extends BasicFilter {
 
     @Getter
     @Setter
-    private Wallet source;
+    private Wallet originWallet;
     @Getter
     @Setter
-    private Wallet target;
+    private Wallet destinationWallet;
 
     @Getter
     @Setter
@@ -35,8 +35,8 @@ public class TransferenceFilter extends BasicFilter {
      * Clear this filter
      */
     public void clear() {
-        this.source = null;
-        this.target = null;
+        this.originWallet = null;
+        this.destinationWallet = null;
         this.operationDate = null;
     }
 }

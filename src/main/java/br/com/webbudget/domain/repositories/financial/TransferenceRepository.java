@@ -18,10 +18,14 @@ package br.com.webbudget.domain.repositories.financial;
 
 import br.com.webbudget.application.components.ui.filter.TransferenceFilter;
 import br.com.webbudget.domain.entities.financial.Transference;
+import br.com.webbudget.domain.entities.financial.Transference_;
+import br.com.webbudget.domain.entities.registration.Wallet;
+import br.com.webbudget.domain.entities.registration.Wallet_;
 import br.com.webbudget.domain.repositories.DefaultRepository;
 import org.apache.deltaspike.data.api.Repository;
 import org.apache.deltaspike.data.api.criteria.Criteria;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +49,25 @@ public interface TransferenceRepository extends DefaultRepository<Transference> 
 
         final Criteria<Transference, Transference> criteria = this.criteria();
 
-        // TODO search here
+        final List<Criteria<Transference, Transference>> restrictions = new ArrayList<>();
+
+        if (filter.getOriginWallet() != null) {
+            restrictions.add(this.criteria().join(Transference_.origin,
+                    where(Wallet.class).eq(Wallet_.id, filter.getOriginWallet().getId())));
+        }
+
+        if (filter.getDestinationWallet() != null) {
+            restrictions.add(this.criteria().join(Transference_.destination,
+                    where(Wallet.class).eq(Wallet_.id, filter.getDestinationWallet().getId())));
+        }
+
+        if (filter.getOperationDate() != null) {
+            restrictions.add(this.criteria().eq(Transference_.transferDate, filter.getOperationDate()));
+        }
+
+        if (!restrictions.isEmpty()) {
+            criteria.or(restrictions);
+        }
 
         return criteria.getResultList();
     }
