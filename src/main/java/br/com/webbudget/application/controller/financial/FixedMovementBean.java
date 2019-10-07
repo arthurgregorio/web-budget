@@ -25,6 +25,7 @@ import br.com.webbudget.application.components.ui.table.Page;
 import br.com.webbudget.application.validator.apportionment.ApportionmentValidator;
 import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.financial.FixedMovement;
+import br.com.webbudget.domain.entities.financial.FixedMovementState;
 import br.com.webbudget.domain.entities.financial.Launch;
 import br.com.webbudget.domain.entities.registration.Contact;
 import br.com.webbudget.domain.entities.registration.CostCenter;
@@ -334,5 +335,14 @@ public class FixedMovementBean extends FormBean<FixedMovement> implements LazyDa
         }
 
         this.updateAndOpenDialog("periodSelectDialog", "dialogPeriodSelect");
+    }
+
+    /**
+     * Get the {@link FixedMovementState} list
+     *
+     * @return array with all possible {@link FixedMovement} states
+     */
+    public FixedMovementState[] getFixedMovementStates() {
+        return FixedMovementState.values();
     }
 }

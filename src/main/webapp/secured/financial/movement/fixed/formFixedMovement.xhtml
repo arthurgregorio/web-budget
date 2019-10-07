@@ -92,7 +92,23 @@
                 <div class="box-body row">
                     <div class="col-sm-6">
                         <div class="row">
-                            <div jsf:id="contactBox" class="form-group col-md-12">
+                            <div class="form-group col-md-3">
+                                <p:outputLabel for="inMovementState"
+                                               value="#{messages['fixed-movement.form.movement-state']}: "/>
+                                <p:selectOneMenu id="inMovementState"
+                                                 converter="omnifaces.GenericEnumConverter"
+                                                 disabled="#{fixedMovementBean.viewState.adding}"
+                                                 value="#{fixedMovementBean.value.fixedMovementState}">
+                                    <f:selectItem itemValue="#{null}"
+                                                  noSelectionOption="true"
+                                                  itemLabel="#{menu['select-one']}"/>
+                                    <f:selectItems var="fixedMovementState"
+                                                   itemValue="#{fixedMovementState}"
+                                                   itemLabel="#{enums[fixedMovementState]}"
+                                                   value="#{fixedMovementBean.fixedMovementStates}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div jsf:id="contactBox" class="form-group col-md-9">
                                 <p:outputLabel for="inContact"
                                                value="#{messages['fixed-movement.form.contact']}: "/>
                                 <div class="input-group">
