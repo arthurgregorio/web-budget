@@ -26,7 +26,7 @@
                 template="/template/mainTemplate.xhtml">
 
     <f:metadata>
-        <f:viewAction action="#{periodMovementBean.initialize()}"/>
+        <f:viewAction action="#{periodMovementBean.initialize(param.periodId, param.costCenterId, param.movementClassId)}"/>
     </f:metadata>
 
     <ui:define name="pageTitle">

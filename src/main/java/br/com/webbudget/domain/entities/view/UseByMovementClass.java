@@ -58,8 +58,14 @@ public class UseByMovementClass extends ImmutableEntity {
     @Convert(converter = ColorConverter.class)
     private Color costCenterColor;
     @Getter
+    @Column(name = "cost_center_id")
+    private Long costCenterId;
+    @Getter
     @Column(name = "cost_center")
     private String costCenter;
+    @Getter
+    @Column(name = "movement_class_id")
+    private Long movementClassId;
     @Getter
     @Column(name = "movement_class")
     private String movementClass;

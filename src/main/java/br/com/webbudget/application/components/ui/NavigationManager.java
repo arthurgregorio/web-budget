@@ -79,13 +79,23 @@ public final class NavigationManager {
     }
 
     /**
-     * Navigate to page specified in the paramters of this method with the parameters passed in the call
+     * Make a redirect through the external context to the given page
+     *
+     * @param pageType the {@link PageType} to go
+     * @param parameters the parameters to use on the redirect
+     */
+    public void redirect(PageType pageType, Parameter... parameters) {
+        NavigationManager.redirect(this.to(pageType, parameters));
+    }
+
+    /**
+     * Navigate to page specified in the parameters of this method with the parameters passed in the call
      *
      * @param page the page to navigate
      * @param parameters the parameters to be used
      * @return the navigation rule
      */
-    public String to(String page, Parameter... parameters) {
+    public static String to(String page, Parameter... parameters) {
 
         final StringBuilder builder = new StringBuilder(page);
 
@@ -99,19 +109,16 @@ public final class NavigationManager {
     }
 
     /**
-     * Make a redirect throug the external context to the given page
+     * Perform a simple redirect to the provided URL
      *
-     * @param pageType the {@link PageType} to go
-     * @param parameters the parameters to use on the redirect
+     * @param page to be redirected
+     * @param parameters used to redirect
      */
-    public void redirect(PageType pageType, Parameter... parameters) {
-
-        final String url = this.to(pageType, parameters);
-
+    public static void redirect(String page, Parameter... parameters) {
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(NavigationManager.to(page, parameters));
         } catch (IOException ex) {
-            throw new RuntimeException(String.format("Can't redirect to url %s", url));
+            throw new RuntimeException(String.format("Can't redirect to url %s", page));
         }
     }
 

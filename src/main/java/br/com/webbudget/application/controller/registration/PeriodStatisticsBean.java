@@ -18,12 +18,15 @@ package br.com.webbudget.application.controller.registration;
 
 import br.com.webbudget.application.components.dto.Color;
 import br.com.webbudget.application.components.ui.AbstractBean;
+import br.com.webbudget.application.components.ui.NavigationManager;
 import br.com.webbudget.application.components.ui.chart.LineChartDataset;
 import br.com.webbudget.application.components.ui.chart.LineChartModel;
 import br.com.webbudget.application.components.ui.chart.PieChartDataset;
 import br.com.webbudget.application.components.ui.chart.PieChartModel;
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.registration.CostCenter;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
+import br.com.webbudget.domain.entities.registration.MovementClass;
 import br.com.webbudget.domain.entities.registration.MovementClassType;
 import br.com.webbudget.domain.entities.view.*;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
@@ -31,16 +34,17 @@ import br.com.webbudget.domain.repositories.registration.FinancialPeriodReposito
 import br.com.webbudget.domain.repositories.view.*;
 import br.com.webbudget.infrastructure.i18n.MessageSource;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static br.com.webbudget.application.components.ui.NavigationManager.Parameter.of;
 import static br.com.webbudget.application.components.ui.chart.ChartUtils.percentageOf;
 
 /**
@@ -57,6 +61,10 @@ public class PeriodStatisticsBean extends AbstractBean {
 
     @Getter
     private boolean loaded;
+
+    @Getter
+    @Setter
+    private UseByMovementClass selectedUse;
 
     @Getter
     private BigDecimal revenues;
@@ -270,5 +278,19 @@ public class PeriodStatisticsBean extends AbstractBean {
      */
     public String getEndAsString() {
         return this.financialPeriod.getEnd().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    /**
+     * Redirect to the {@link PeriodMovement} list filtered by the {@link FinancialPeriod}, {@link CostCenter} and
+     * {@link MovementClass}
+     */
+    public void changeToPeriodMovements() {
+
+        final long periodId = this.financialPeriod.getId();
+        final long costCenterId = this.selectedUse.getCostCenterId();
+        final long movementClassId = this.selectedUse.getMovementClassId();
+
+        NavigationManager.redirect("/secured/financial/movement/period/listPeriodMovements.xhtml", of("periodId", periodId),
+                of("costCenterId", costCenterId), of("movementClassId", movementClassId));
     }
 }

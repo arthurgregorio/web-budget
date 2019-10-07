@@ -18,6 +18,7 @@ package br.com.webbudget.application.controller.financial;
 
 import br.com.webbudget.application.components.dto.PeriodMovementResume;
 import br.com.webbudget.application.components.ui.FormBean;
+import br.com.webbudget.application.components.ui.NavigationManager;
 import br.com.webbudget.application.components.ui.ViewState;
 import br.com.webbudget.application.components.ui.filter.PeriodMovementFilter;
 import br.com.webbudget.application.components.ui.table.LazyDataProvider;
@@ -129,10 +130,38 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
     @Override
     public void initialize() {
         super.initialize();
-        this.costCenters = this.costCenterRepository.findAllActive();
+
+        this.costCenters = this.costCenterRepository.findAll();
         this.financialPeriods = this.financialPeriodRepository.findAll();
+
         this.filter.setSelectedFinancialPeriods(this.financialPeriodRepository
                 .findByClosedOrderByIdentificationAsc(false));
+    }
+
+    /**
+     * This initializer method take as parameter the filters to search all {@link PeriodMovement} by a given
+     * {@link FinancialPeriod}, {@link CostCenter} and {@link MovementClass}
+     *
+     * @param periodId to use as {@link PeriodMovement} filter
+     * @param costCenterId to use as {@link CostCenter} filter
+     * @param movementClassId to use as {@link MovementClass} filter
+     */
+    public void initialize(long periodId, long costCenterId, long movementClassId) {
+        this.initialize();
+
+        // apply filters
+        this.financialPeriodRepository.findById(periodId)
+                .ifPresent(period -> this.filter.setSelectedFinancialPeriods(List.of(period)));
+        this.costCenterRepository.findById(costCenterId)
+                .ifPresent(costCenter -> this.filter.setCostCenter(costCenter));
+
+        if (movementClassId != 0) {
+            this.movementClasses = this.movementClassRepository
+                    .findByCostCenterOrderByNameAsc(this.filter.getCostCenter());
+            this.movementClassRepository.findById(movementClassId)
+                    .ifPresent(movementClass -> this.filter.setMovementClass(movementClass));
+        }
+
     }
 
     /**
@@ -285,7 +314,7 @@ public class PeriodMovementBean extends FormBean<PeriodMovement> implements Lazy
      * @return the payment page
      */
     public String changeToPay(long idMovement, ViewState viewState) {
-        return this.navigation.to("formPayment.xhtml", of("id", idMovement),
+        return NavigationManager.to("formPayment.xhtml", of("id", idMovement),
                 of("viewState", viewState));
     }
 

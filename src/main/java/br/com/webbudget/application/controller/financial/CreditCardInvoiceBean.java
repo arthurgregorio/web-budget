@@ -16,11 +16,11 @@
  */
 package br.com.webbudget.application.controller.financial;
 
+import br.com.webbudget.application.components.ui.AbstractBean;
+import br.com.webbudget.application.components.ui.NavigationManager;
 import br.com.webbudget.application.components.ui.table.LazyDataProvider;
 import br.com.webbudget.application.components.ui.table.LazyModel;
 import br.com.webbudget.application.components.ui.table.Page;
-import br.com.webbudget.application.components.ui.AbstractBean;
-import br.com.webbudget.application.components.ui.NavigationManager;
 import br.com.webbudget.domain.entities.financial.CreditCardInvoice;
 import br.com.webbudget.domain.entities.financial.InvoiceState;
 import br.com.webbudget.domain.repositories.financial.CreditCardInvoiceRepository;
@@ -68,14 +68,11 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
     @Inject
     private CreditCardInvoiceRepository creditCardInvoiceRepository;
 
-    private final NavigationManager navigationManager;
-
     /**
      * Constructor...
      */
     public CreditCardInvoiceBean() {
         this.dataModel = new LazyModel<>(this);
-        this.navigationManager = new NavigationManager();
     }
 
     /**
@@ -144,7 +141,7 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
      * @return the outcome to the detail page
      */
     public String changeToDetail(long invoiceId) {
-        return this.navigationManager.to("detailCreditCardInvoice.xhtml", of("id", invoiceId));
+        return NavigationManager.to("detailCreditCardInvoice.xhtml", of("id", invoiceId));
     }
 
     /**
@@ -153,7 +150,7 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
      * @return the outcome to the listing view
      */
     public String changeToListing() {
-        return this.navigationManager.to("listCreditCardInvoices.xhtml");
+        return NavigationManager.to("listCreditCardInvoices.xhtml");
     }
 
     /**
@@ -163,6 +160,6 @@ public class CreditCardInvoiceBean extends AbstractBean implements LazyDataProvi
      */
     public String changeToPrintInvoice() {
         Faces.setFlashAttribute("creditCardInvoice", this.invoice);
-        return this.navigationManager.to("cardInvoicePrint.xhtml");
+        return NavigationManager.to("cardInvoicePrint.xhtml");
     }
 }
