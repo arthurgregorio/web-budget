@@ -37,7 +37,7 @@ public class LoggerProducer {
     /**
      * The producer of the logger object
      *
-     * @param injectionPoint the injection point for class dicovery
+     * @param injectionPoint the injection point for class discovery
      * @return the logger object
      */
     @Produces
