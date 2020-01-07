@@ -79,16 +79,6 @@ public final class NavigationManager {
     }
 
     /**
-     * Make a redirect through the external context to the given page
-     *
-     * @param pageType the {@link PageType} to go
-     * @param parameters the parameters to use on the redirect
-     */
-    public void redirect(PageType pageType, Parameter... parameters) {
-        NavigationManager.redirect(this.to(pageType, parameters));
-    }
-
-    /**
      * Navigate to page specified in the parameters of this method with the parameters passed in the call
      *
      * @param page the page to navigate
@@ -106,6 +96,20 @@ public final class NavigationManager {
         }
 
         return builder.toString();
+    }
+
+    /**
+     * Make a redirect through the external context to the given page
+     *
+     * @param pageType the {@link PageType} to go
+     * @param parameters the parameters to use on the redirect
+     */
+    public void redirect(PageType pageType, Parameter... parameters) {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(this.to(pageType, parameters));
+        } catch (IOException ex) {
+            throw new RuntimeException(String.format("Can't redirect to url %s", this.pages.get(pageType)));
+        }
     }
 
     /**
