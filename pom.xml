@@ -66,7 +66,7 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>8.0</version>
+            <version>8.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.faces</artifactId>
-            <version>2.3.3</version>
+            <version>2.3.9</version>
             <scope>provided</scope>
         </dependency>
 
@@ -278,6 +278,13 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.22</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!--webjars-->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>5.10.1</version>
         </dependency>
 
         <!--jax-b for XML, need to here since java 9+-->
