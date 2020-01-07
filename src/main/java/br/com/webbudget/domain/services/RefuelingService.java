@@ -63,7 +63,7 @@ public class RefuelingService {
         }
 
         // get the last odometer to calculate the distance traveled
-        final Long lastOdometer = this.refuelingRepository
+        final long lastOdometer = this.refuelingRepository
                 .findLastOdometerByVehicle(refueling.getVehicle())
                 .orElse(0L);
 
@@ -72,22 +72,21 @@ public class RefuelingService {
         refueling.calculateDistance(lastOdometer);
 
         // get a list of unaccounted refueling
-        final List<Refueling> unaccounteds = this.refuelingRepository.findUnaccountedByVehicle(refueling.getVehicle());
+        final List<Refueling> unaccountedItems = this.refuelingRepository.findUnaccountedByVehicle(refueling.getVehicle());
 
         // if its not a full tank, don't calculate the performance, if is full
         // tank start the process for performance calculation
         if (refueling.isFullTank()) {
 
-            // calculate the last odometer by the unaccounted refueling or with
-            // the last full tank refueling
-            if (!unaccounteds.isEmpty()) {
-                final long totalDistance = unaccounteds.
-                        stream()
+            // calculate the last odometer by the unaccounted refueling or with the last full tank refueling
+            if (!unaccountedItems.isEmpty()) {
+                final long totalDistance = unaccountedItems
+                        .stream()
                         .mapToLong(Refueling::getDistance)
                         .sum() + refueling.getDistance();
 
                 // get total utilized in liters
-                final BigDecimal liters = unaccounteds.stream()
+                final BigDecimal liters = unaccountedItems.stream()
                         .map(Refueling::getLiters)
                         .reduce(BigDecimal.ZERO, BigDecimal::add)
                         .add(refueling.getLiters());
@@ -99,7 +98,7 @@ public class RefuelingService {
             }
 
             // set the unaccounted to accounted and save
-            unaccounteds.forEach(unaccounted -> {
+            unaccountedItems.forEach(unaccounted -> {
                 unaccounted.setAccounted(true);
                 unaccounted.setAccountedBy(refueling.getCode());
                 this.refuelingRepository.save(unaccounted);
@@ -143,22 +142,22 @@ public class RefuelingService {
             throw new BusinessLogicException("error.refueling.not-last");
         }
 
-        // list the accounted refuelings by this refueling to change his status
-        final List<Refueling> accounteds = this.refuelingRepository.findByAccountedBy(refueling.getCode());
+        // list all accounted refueling by this refueling to change his status
+        final List<Refueling> accountedItems = this.refuelingRepository.findByAccountedBy(refueling.getCode());
 
-        accounteds.forEach(accounted -> {
+        accountedItems.forEach(accounted -> {
             accounted.setAccounted(false);
             accounted.setAccountedBy(null);
             this.refuelingRepository.save(refueling);
         });
 
+        // delete the refueling
+        this.refuelingRepository.attachAndRemove(refueling);
+
         // delete the linked period movement just if he is not accounted yet
         if (!refueling.getPeriodMovement().isAccounted()) {
             this.periodMovementService.delete(refueling.getPeriodMovement());
         }
-
-        // delete the refueling
-        this.refuelingRepository.attachAndRemove(refueling);
     }
 
     /**
