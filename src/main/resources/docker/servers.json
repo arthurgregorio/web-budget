@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "postgres_local",
+      "Group": "Servers",
+      "Port": 5432,
+      "Username": "sa_webbudget",
+      "Host": "postgres_local",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "webbudget"
+    }
+  }
+}
