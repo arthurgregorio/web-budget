@@ -1,4 +1,20 @@
-### Importing PgAdmin4 configurations
+### Development environment configurations
+
+To help developers who are familiar with docker environments, use this docker-compose script to
+build a local environment with an instance of Postgres and PgAdmin4, ready to use.
+
+Simply run: 
+
+```docker-compose up```
+
+And you will get: 
+
+- **Postgres 12** running at *localhost:5432*
+- **PgAdmin4** running at *localhost:6060*
+
+Database: _webbudget_ with username and password set to _sa_webbudget_ 
+
+#### Importing PgAdmin4 configurations
 
 Write your configurations at the *servers.json* file and them:
 
