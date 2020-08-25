@@ -17,27 +17,30 @@
 package br.com.webbudget.application.components.ui.table;
 
 import br.com.webbudget.domain.entities.PersistentEntity;
-import static com.google.common.base.Preconditions.checkNotNull;
-import java.util.List;
-import java.util.Map;
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * This abstraction when used enable lazy loading on primefaces datatable
  *
- * @param <T> the type of this datamodel
+ * @param <T> the type of this data model
  *
  * @author Arthur Gregorio
  *
- * @version 2.0.0
+ * @version 3.0.0
  * @since 2.1.0, 05/09/2015
  */
 public class LazyModel<T extends PersistentEntity> extends LazyDataModel<T> {
 
     private final LazyDataProvider<T> provider;
-    
+
     /**
      * Constructor...
      *
@@ -48,33 +51,33 @@ public class LazyModel<T extends PersistentEntity> extends LazyDataModel<T> {
     }
 
     /**
-     * {@inheritDoc }
+     * {@inheritDoc}
      *
      * @param first
      * @param pageSize
-     * @param multiSortMeta
-     * @param filters
+     * @param sortBy
+     * @param filterBy
      * @return
      */
     @Override
-    public List<T> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
-        final Page<T> page = this.provider.load(first, pageSize, multiSortMeta);
+    public List<T> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+        final Page<T> page = this.provider.load(first, pageSize, sortBy);
         this.setRowCount(page.getTotalPages());
         return page.getContent();
     }
 
     /**
-     * {@inheritDoc }
+     * {@inheritDoc}
      *
      * @param first
      * @param pageSize
      * @param sortField
      * @param sortOrder
-     * @param filters
+     * @param filterBy
      * @return
      */
     @Override
-    public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
         final Page<T> page = this.provider.load(first, pageSize, sortField, sortOrder);
         this.setRowCount(page.getTotalPages());
         return page.getContent();

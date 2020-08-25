@@ -20,7 +20,7 @@ import br.com.webbudget.domain.entities.PersistentEntity;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * The data provider for better use of lazy data model with Primefaces
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author Arthur Gregorio
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 3.0.0, 20/03/2018
  */
 public interface LazyDataProvider<T extends PersistentEntity> {
@@ -44,7 +44,7 @@ public interface LazyDataProvider<T extends PersistentEntity> {
      * @return the page to be paginated on the {@link org.primefaces.model.LazyDataModel}
      */
     Page<T> load(int first, int pageSize, String sortField, SortOrder sortOrder);
-    
+
     /**
      * Used to retrieve data from database with multi-sorting from data component
      *
@@ -53,10 +53,10 @@ public interface LazyDataProvider<T extends PersistentEntity> {
      *
      * @param first the start of the pagination
      * @param pageSize the maximum size of the page
-     * @param sortFields the fields to sort
+     * @param sortBy the fields to sort
      * @return the page to be paginated on the {@link org.primefaces.model.LazyDataModel}
      */
-    default Page<T> load(int first, int pageSize, List<SortMeta> sortFields) {
+    default Page<T> load(int first, int pageSize, Map<String, SortMeta> sortBy) {
         return Page.empty();
     }
 }

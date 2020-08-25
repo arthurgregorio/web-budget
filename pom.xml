@@ -56,9 +56,9 @@
 
         <!--dependencies versions-->
         <feign.version>10.10.0</feign.version>
-        <jackson.version>2.10.1</jackson.version>
-        <deltaspike.version>1.9.1</deltaspike.version>
-        <hibernate.version>5.4.14.Final</hibernate.version>
+        <jackson.version>2.11.2</jackson.version>
+        <deltaspike.version>1.9.4</deltaspike.version>
+        <hibernate.version>5.3.17.Final</hibernate.version>
     </properties>
 
     <dependencies>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>8.0</version>
+            <version>8.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -117,7 +117,7 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>6.1.0.Final</version>
+            <version>6.0.20.Final</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -158,7 +158,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>6.3.3</version>
+            <version>6.4.4</version>
         </dependency>
 
         <!--deltaspike-->
@@ -189,12 +189,12 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>7.0</version>
+            <version>8.0</version>
         </dependency>
         <dependency>
             <groupId>org.primefaces.extensions</groupId>
             <artifactId>primefaces-extensions</artifactId>
-            <version>7.0</version>
+            <version>8.0.4</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.primefaces</groupId>
@@ -207,7 +207,7 @@
         <dependency>
             <groupId>org.omnifaces</groupId>
             <artifactId>omnifaces</artifactId>
-            <version>3.3</version>
+            <version>3.7.1</version>
         </dependency>
 
         <!--jackson-->
@@ -245,17 +245,17 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
+            <version>1.18.12</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
+            <version>3.10</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>28.1-jre</version>
+            <version>29.0-jre</version>
         </dependency>
 
         <!--mustache-->
@@ -269,14 +269,14 @@
         <dependency>
             <groupId>br.eti.arthurgregorio</groupId>
             <artifactId>shiro-ee</artifactId>
-            <version>1.5.0</version>
+            <version>1.5.1</version>
         </dependency>
 
         <!--SL4J-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.22</version>
+            <version>1.7.30</version>
             <scope>provided</scope>
         </dependency>
 
@@ -377,8 +377,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>14</source>
+                    <target>14</target>
                 </configuration>
             </plugin>
             <plugin>
