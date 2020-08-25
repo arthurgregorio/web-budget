@@ -14,6 +14,14 @@ And you will get:
 
 Database: _webbudget_ with username and password set to _sa_webbudget_ 
 
+#### Restoring a previous dump
+
+Just use the following command:
+
+```cat your-dump.sql | docker exec -i wb_postgres psql -d webbudget -U sa_webbudget```
+
+This command works on Windows (10+) and Linux systems
+
 #### Importing PgAdmin4 configurations
 
 Write your configurations at the *servers.json* file and them:
