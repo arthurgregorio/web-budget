@@ -207,7 +207,7 @@
         <dependency>
             <groupId>org.omnifaces</groupId>
             <artifactId>omnifaces</artifactId>
-            <version>3.3</version>
+            <version>3.7.1</version>
         </dependency>
 
         <!--jackson-->
