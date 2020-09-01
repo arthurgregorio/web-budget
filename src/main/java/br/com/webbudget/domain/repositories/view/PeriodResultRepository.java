@@ -40,7 +40,7 @@ public interface PeriodResultRepository extends EntityRepository<PeriodResult, L
      *
      * @return a {@link List} with the first six results
      */
-    List<PeriodResult> findTop6OrderById();
+    List<PeriodResult> findTop6OrderByIdDesc();
 
     /**
      * Find the result for a specific {@link FinancialPeriod}

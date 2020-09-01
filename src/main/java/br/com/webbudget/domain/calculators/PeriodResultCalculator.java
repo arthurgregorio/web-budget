@@ -49,7 +49,7 @@ public class PeriodResultCalculator {
      * Load this calculator with some data
      */
     public void load() {
-        this.results = this.periodResultRepository.findTop6OrderById();
+        this.results = this.periodResultRepository.findTop6OrderByIdDesc();
     }
 
     /**

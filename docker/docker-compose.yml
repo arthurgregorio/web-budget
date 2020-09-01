@@ -1,8 +1,8 @@
-version: "3.8"
+version: "3"
 
 services:
-  postgres_local:
-    container_name: wb_postgres
+  webbudget_postgres:
+    container_name: webbudget_postgres
     image: "postgres:12-alpine"
     ports:
       - "5432:5432"
@@ -12,32 +12,28 @@ services:
       - POSTGRES_PASSWORD=sa_webbudget
     volumes:
       - ./create-schemas.sql:/docker-entrypoint-initdb.d/1-create-schemas.sql
-      - postgres_data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "log_statement=all", "-c", "log_destination=stderr"]
     networks:
-      wb_network:
+      webbudget_network:
         aliases:
-          - postgres
+          - webbudget_postgres
 
-  pgadmin_local:
-    container_name: wb_pgadmin
-    image: "dpage/pgadmin4:latest"
+  webbudget_pgadmin4:
+    container_name: webbudget_pgadmin4
+    image: "dpage/pgadmin4"
     ports:
       - "6060:80"
     environment:
       - PGADMIN_DEFAULT_EMAIL=webbudget@localhost
       - PGADMIN_DEFAULT_PASSWORD=webbudget
+      - GUNICORN_ACCESS_LOGFILE=/tmp/access-log.log
     depends_on:
-      - postgres_local
-    logging:
-      driver: none
+      - webbudget_postgres
     networks:
-      wb_network:
+      webbudget_network:
         aliases:
-          - pgadmin
-
-volumes:
-  postgres_data:
+          - webbudget_pgadmin4
 
 networks:
-  wb_network:
+  webbudget_network:
     driver: bridge
