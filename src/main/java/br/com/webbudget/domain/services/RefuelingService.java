@@ -21,11 +21,13 @@ import br.com.webbudget.domain.entities.financial.Apportionment;
 import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.financial.PeriodMovementType;
 import br.com.webbudget.domain.entities.journal.Refueling;
+import br.com.webbudget.domain.events.PeriodMovementDeleted;
 import br.com.webbudget.domain.exceptions.BusinessLogicException;
 import br.com.webbudget.domain.repositories.journal.RefuelingRepository;
 import br.com.webbudget.domain.repositories.registration.VehicleRepository;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -54,9 +56,10 @@ public class RefuelingService {
      * Method to save the {@link Refueling}
      *
      * @param refueling the {@link Refueling} to be saved
+     * @param shouldCreateMovement indicate if we should create the financial movement or not
      */
     @Transactional
-    public void save(Refueling refueling) {
+    public void save(Refueling refueling, boolean shouldCreateMovement) {
 
         if (!refueling.isFuelsValid()) {
             throw new BusinessLogicException("error.refueling.invalid-fuels");
@@ -111,9 +114,10 @@ public class RefuelingService {
         }
 
         // create the period movement for this refueling
-        final PeriodMovement periodMovement = this.periodMovementService.save(this.createPeriodMovementFor(refueling));
-
-        refueling.setPeriodMovement(periodMovement);
+        if (shouldCreateMovement) {
+            final PeriodMovement periodMovement = this.periodMovementService.save(this.createPeriodMovementFor(refueling));
+            refueling.setPeriodMovement(periodMovement);
+        }
 
         // finally, save the refueling
         this.refuelingRepository.save(refueling);
@@ -155,9 +159,42 @@ public class RefuelingService {
         this.refuelingRepository.attachAndRemove(refueling);
 
         // delete the linked period movement just if he is not accounted yet
-        if (!refueling.getPeriodMovement().isAccounted()) {
+        if (refueling.isFinancialMovementPresent() && !refueling.getPeriodMovement().isAccounted()) {
             this.periodMovementService.delete(refueling.getPeriodMovement());
         }
+    }
+
+    /**
+     * Listen to events about the deletion of a {@link PeriodMovement}, in this case, remove the link between both
+     * entities preventing the constraint violation
+     *
+     * @param periodMovement to be deleted
+     */
+    @Transactional
+    public void removeRefuelingLinkWithPeriodMovement(@Observes @PeriodMovementDeleted PeriodMovement periodMovement) {
+        this.refuelingRepository.findByPeriodMovement(periodMovement)
+                .ifPresent(refueling -> {
+                    refueling.setPeriodMovement(null);
+                    this.refuelingRepository.save(refueling);
+                });
+    }
+
+    /**
+     * This method should create the {@link PeriodMovement} for the given {@link Refueling}
+     *
+     * @param refueling to be launched as {@link PeriodMovement}
+     */
+    @Transactional
+    public void createFinancialMovement(Refueling refueling) {
+
+        if (refueling.getFinancialPeriod().isClosed()) {
+            throw new BusinessLogicException("error.refueling.closed-financial-period");
+        }
+
+        final var periodMovement = this.periodMovementService.save(this.createPeriodMovementFor(refueling));
+        refueling.setPeriodMovement(periodMovement);
+
+        this.refuelingRepository.save(refueling);
     }
 
     /**

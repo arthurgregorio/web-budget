@@ -94,7 +94,6 @@ public interface FixedMovementRepository extends DefaultRepository<FixedMovement
      * @param filter used to find and count the pages
      * @return number of pages for the given filter
      */
-    @SuppressWarnings("unchecked")
     default int countPages(FixedMovementFilter filter) {
         return this.buildCriteria(filter)
                 .select(Long.class, count(FixedMovement_.id))

@@ -1,0 +1,57 @@
+<!--
+  Copyright (C) 2020 Arthur Gregorio, AG.Software
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p:dialog xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:p="http://primefaces.org/ui"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:wb="http://xmlns.jcp.org/jsf/composite/webbudget/ui"
+          id="createMovementConfirmationDialog"
+          width="500"
+          modal="true"
+          closable="true"
+          resizable="false"
+          closeOnEscape="true"
+          widgetVar="dialogCreateMovementConfirmation"
+          header="#{messages['create-movement.dialog.title']}">
+
+    <h:form id="createMovementForm">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <p:messages id="messages" closable="true" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <h4>#{messages['create-movement.dialog.message']}</h4>
+            </div>
+            <div class="col-sm-12 text-right">
+                <p:commandButton value="#{menu['yes']}"
+                                 update="createMovementForm"
+                                 styleClass="btn btn-flat btn-success"
+                                 onstart="PF('confirmationBlocker').show()"
+                                 action="#{refuelingBean.doCreateMovement()}"
+                                 oncomplete="PF('confirmationBlocker').hide()"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="#{menu['no']}"
+                                 styleClass="btn btn-flat btn-primary"
+                                 onclick="PF('dialogCreateMovementConfirmation').hide()"/>
+            </div>
+        </div>
+    </h:form>
+    <wb:blocker name="confirmationBlocker"
+                target="createMovementForm"/>
+</p:dialog>

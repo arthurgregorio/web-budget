@@ -168,6 +168,9 @@ public class Permissions implements Serializable {
     @Getter
     @PermissionGrouper("refueling")
     private final String REFUELING_DETAIL = "refueling:detail";
+    @Getter
+    @PermissionGrouper("refueling")
+    private final String REFUELING_CREATE_MOVEMENT = "refueling:create-movement";
 
     @Getter
     @PermissionGrouper("transference")

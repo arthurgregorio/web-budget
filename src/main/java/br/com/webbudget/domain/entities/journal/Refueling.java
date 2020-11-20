@@ -291,4 +291,13 @@ public class Refueling extends PersistentEntity {
     public void calculateDistance(long lastOdometer) {
         this.distance = this.firstRefueling ? 0 : this.odometer - lastOdometer;
     }
+
+    /**
+     * To check if this refueling is linked with a movement
+     *
+     * @return true if is, false otherwise
+     */
+    public boolean isFinancialMovementPresent() {
+        return this.periodMovement != null;
+    }
 }

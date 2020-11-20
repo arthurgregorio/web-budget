@@ -16,6 +16,7 @@
  */
 package br.com.webbudget.domain.repositories.journal;
 
+import br.com.webbudget.domain.entities.financial.PeriodMovement;
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.journal.Refueling_;
 import br.com.webbudget.domain.entities.registration.*;
@@ -73,6 +74,11 @@ public interface RefuelingRepository extends LazyDefaultRepository<Refueling> {
      */
     @Query("FROM Refueling re WHERE re.id = (SELECT MAX(re.id) FROM Refueling re WHERE re.vehicle = ?1)")
     Refueling findLastByVehicle(Vehicle vehicle);
+
+    /**
+     * @param periodMovement
+     */
+    Optional<Refueling> findByPeriodMovement(PeriodMovement periodMovement);
 
     /**
      * {@inheritDoc}

@@ -16,9 +16,9 @@
  */
 package br.com.webbudget.application.controller.journal;
 
+import br.com.webbudget.application.components.ui.LazyFormBean;
 import br.com.webbudget.application.components.ui.ViewState;
 import br.com.webbudget.application.components.ui.table.Page;
-import br.com.webbudget.application.components.ui.LazyFormBean;
 import br.com.webbudget.domain.entities.journal.FuelType;
 import br.com.webbudget.domain.entities.journal.Refueling;
 import br.com.webbudget.domain.entities.registration.FinancialPeriod;
@@ -31,6 +31,7 @@ import br.com.webbudget.domain.repositories.registration.MovementClassRepository
 import br.com.webbudget.domain.repositories.registration.VehicleRepository;
 import br.com.webbudget.domain.services.RefuelingService;
 import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.model.SortOrder;
 
 import javax.faces.view.ViewScoped;
@@ -59,9 +60,13 @@ public class RefuelingBean extends LazyFormBean<Refueling> {
     @Getter
     private List<FinancialPeriod> financialPeriods;
 
+    @Getter
+    @Setter
+    private boolean shouldCreateMovement;
+
     @Inject
     private RefuelingService refuelingService;
-    
+
     @Inject
     private VehicleRepository vehicleRepository;
     @Inject
@@ -73,26 +78,28 @@ public class RefuelingBean extends LazyFormBean<Refueling> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param
-     * @param viewState 
+     * @param viewState
      */
     @Override
     public void initialize(long id, ViewState viewState) {
         this.viewState = viewState;
-        
+
         this.vehicles = this.vehicleRepository.findAllActive();
         this.financialPeriods = this.financialPeriodRepository.findByClosedOrderByIdentificationAsc(false);
-        
+
         this.value = this.refuelingRepository.findById(id)
                 .orElseGet(Refueling::new);
-        
+
+        this.shouldCreateMovement = this.value.getPeriodMovement() == null;
+
         // if detailing or deleting, list the classes to fill up the field
         if (this.viewState != ViewState.ADDING) {
             this.onVehicleSelect();
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -104,15 +111,15 @@ public class RefuelingBean extends LazyFormBean<Refueling> {
         this.navigation.addPage(DETAIL_PAGE, "detailRefueling.xhtml");
         this.navigation.addPage(DELETE_PAGE, "detailRefueling.xhtml");
     }
-    
+
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param first
      * @param pageSize
      * @param sortField
      * @param sortOrder
-     * @return 
+     * @return
      */
     @Override
     public Page<Refueling> load(int first, int pageSize, String sortField, SortOrder sortOrder) {
@@ -125,7 +132,7 @@ public class RefuelingBean extends LazyFormBean<Refueling> {
      */
     @Override
     public void doSave() {
-        this.refuelingService.save(this.value);
+        this.refuelingService.save(this.value, this.shouldCreateMovement);
         this.value = new Refueling();
         this.addInfo(true, "saved");
     }
@@ -140,13 +147,24 @@ public class RefuelingBean extends LazyFormBean<Refueling> {
 
     /**
      * {@inheritDoc}
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String doDelete() {
         this.refuelingService.delete(this.value);
         this.addInfoAndKeep("deleted");
+        return this.changeToListing();
+    }
+
+    /**
+     * Create the refueling financial movement and go back to the listing view
+     *
+     * @return the listing view outcome
+     */
+    public String doCreateMovement() {
+        this.refuelingService.createFinancialMovement(this.value);
+        this.addInfoAndKeep("refueling.info.movement-created");
         return this.changeToListing();
     }
 
@@ -157,7 +175,14 @@ public class RefuelingBean extends LazyFormBean<Refueling> {
         this.movementClasses = this.movementClassRepository
                 .findByMovementClassTypeAndCostCenter(MovementClassType.EXPENSE, this.value.getCostCenter());
     }
-    
+
+    /**
+     * Show the confirmation dialog
+     */
+    public void showCreateMovementConfirmationDialog() {
+        this.updateAndOpenDialog("createMovementConfirmationDialog", "dialogCreateMovementConfirmation");
+    }
+
     /**
      * Use this method to list all the types of fuel
      *

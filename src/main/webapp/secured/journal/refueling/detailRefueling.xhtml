@@ -68,6 +68,8 @@
                     <h3 class="box-title">
                         <p:selectBooleanCheckbox value="#{refuelingBean.value.fullTank}"
                                                  itemLabel="#{messages['refueling.form.full-tank']}"/>
+                        <p:selectBooleanCheckbox value="#{refuelingBean.shouldCreateMovement}"
+                                                 itemLabel="#{messages['refueling.form.should-create-movement']}"/>
                     </h3>
                 </div>
                 <div class="box-body row">
@@ -277,6 +279,12 @@
                             <p:spacer width="5"
                                       rendered="#{refuelingBean.viewState.deleting}"/>
                             <ui:fragment rendered="#{refuelingBean.viewState.detailing}">
+                                <p:commandButton styleClass="btn btn-default"
+                                                 value="#{menu['refueling.list.create-movement']}"
+                                                 action="#{refuelingBean.showCreateMovementConfirmationDialog()}"
+                                                 rendered="#{refuelingBean.value.periodMovement eq null
+                                                                and userSessionBean.isPermitted(permissions.REFUELING_CREATE_MOVEMENT)}"/>
+                                <p:spacer width="5"/>
                                 <p:commandButton immediate="true"
                                                  value="#{menu['delete']}"
                                                  styleClass="btn btn-flat btn-danger"
@@ -293,5 +301,8 @@
                 </div>
             </div>
         </h:form>
+    </ui:define>
+    <ui:define name="popups">
+        <ui:include src="dialogCreateMovementConfirmation.xhtml"/>
     </ui:define>
 </ui:composition>
