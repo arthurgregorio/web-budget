@@ -26,6 +26,7 @@ import br.com.webbudget.infrastructure.i18n.MessageSource;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,7 @@ public class PeriodResultCalculator {
      */
     public void load() {
         this.results = this.periodResultRepository.findTop6OrderByIdDesc();
+        Collections.reverse(this.results);
     }
 
     /**

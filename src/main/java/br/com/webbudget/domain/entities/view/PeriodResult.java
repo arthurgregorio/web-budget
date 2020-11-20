@@ -42,7 +42,7 @@ import static br.com.webbudget.infrastructure.utils.DefaultSchemes.FINANCIAL;
 @Immutable
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "wb_view_005", schema = FINANCIAL)
+@Table(name = "closing_results", schema = FINANCIAL)
 public class PeriodResult extends ImmutableEntity {
 
     @Getter
