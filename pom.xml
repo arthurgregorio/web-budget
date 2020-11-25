@@ -158,7 +158,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>6.4.4</version>
+            <version>6.5.7</version>
         </dependency>
 
         <!--deltaspike-->
