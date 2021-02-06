@@ -11,7 +11,7 @@ services:
       - POSTGRES_USER=sa_webbudget
       - POSTGRES_PASSWORD=sa_webbudget
     volumes:
-      - ./create-schemas.sql:/docker-entrypoint-initdb.d/1-create-schemas.sql
+      - ./create-schemas.sql:/docker-entrypoint-initdb.d/create-schemas.sql
     command: ["postgres", "-c", "log_statement=all", "-c", "log_destination=stderr"]
     networks:
       webbudget_network:
