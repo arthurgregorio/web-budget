@@ -1,5 +1,9 @@
 [![Join the chat at https://gitter.im/web-budget/Lobby](https://badges.gitter.im/web-budget/Lobby.svg)](https://gitter.im/web-budget/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+> ### 📢 o webBudget esta mudando! Uma nova e melhorada versão esta em construção, acesse nosso novo repositório aqui: [https://github.com/web-budget](https://github.com/web-budget) e também saiba que a v3 esta em modo de manutenção, ou seja, todo o trabalho para novas funcionalidades esta sendo concentrado na v4 no novo repositório
+
+> ### 📢 webBudget is changing! A new and improved version will be available soon! check out our brand new repository here: [https://github.com/web-budget](https://github.com/web-budget) and keep in mind that v3 is under maintenance mode, work for new features now is done at the new repo to build and will be available in v4
+
 # webBudget
 
 Bem vindo or Welcome!
