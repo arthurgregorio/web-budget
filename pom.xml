@@ -58,7 +58,7 @@
         <feign.version>10.10.0</feign.version>
         <jackson.version>2.11.2</jackson.version>
         <deltaspike.version>1.9.4</deltaspike.version>
-        <hibernate.version>5.3.17.Final</hibernate.version>
+        <hibernate.version>5.4.24.Final</hibernate.version>
     </properties>
 
     <dependencies>
