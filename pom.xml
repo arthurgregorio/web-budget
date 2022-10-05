@@ -55,8 +55,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!--dependencies versions-->
-        <feign.version>10.10.0</feign.version>
-        <jackson.version>2.11.2</jackson.version>
+        <feign.version>11.10</feign.version>
+        <jackson.version>2.13.4</jackson.version>
         <deltaspike.version>1.9.4</deltaspike.version>
         <hibernate.version>5.3.17.Final</hibernate.version>
     </properties>
