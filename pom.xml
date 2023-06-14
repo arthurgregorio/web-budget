@@ -255,7 +255,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>30.0-android</version>
+            <version>32.0.0-android</version>
         </dependency>
 
         <!--mustache-->
